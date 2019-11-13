@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import toDoApp from './store/reducers';
+import createSagaMiddleware from 'redux-saga';
+import { createStore, applyMiddleware } from 'redux';
 
 // Reset CSS
 import './reset.css';
@@ -12,9 +12,19 @@ import 'semantic-ui-css/semantic.min.css';
 import './index.css';
 
 import App from './App';
+import { loadToDoList } from './store/actions';
+import toDoApp from './store/reducers';
+import rootSaga from './store/sagas';
+
 import * as serviceWorker from './serviceWorker';
 
-const store = createStore(toDoApp);
+const sagaMiddleware = createSagaMiddleware();
+
+const store = createStore(toDoApp, applyMiddleware(sagaMiddleware));
+
+sagaMiddleware.run(rootSaga);
+
+store.dispatch(loadToDoList());
 
 ReactDOM.render(
   <Provider store={store}>
