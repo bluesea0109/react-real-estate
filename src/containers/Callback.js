@@ -10,10 +10,10 @@ const mapStateToProps = state => {
 };
 
 let Callback = ({ dispatch, user }) => {
-  if (user) return <Redirect to="/" />;
+  if (user) return <Redirect to="/dashboard" />;
   dispatch(handleAuthenticationCallback());
 
-  return <div className="text-center">Loading user profile.</div>;
+  return <div className="text-center">Loading user profile...</div>;
 };
 Callback = connect(mapStateToProps)(Callback);
 
