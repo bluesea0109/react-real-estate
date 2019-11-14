@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import { BrowserRouter } from 'react-router-dom';
 import { createStore, applyMiddleware } from 'redux';
+import { far } from '@fortawesome/free-regular-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
 
 // Reset CSS
 import './reset.css';
@@ -13,19 +15,18 @@ import 'semantic-ui-css/semantic.min.css';
 import './index.css';
 
 import App from './App';
-import { loadToDoList } from './store/actions';
-import toDoApp from './store/reducers';
+import rootReducer from './store/reducers';
 import rootSaga from './store/sagas';
 
 import * as serviceWorker from './serviceWorker';
 
 const sagaMiddleware = createSagaMiddleware();
 
-const store = createStore(toDoApp, applyMiddleware(sagaMiddleware));
+const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
+
+library.add(far);
 
 sagaMiddleware.run(rootSaga);
-
-store.dispatch(loadToDoList());
 
 ReactDOM.render(
   <Provider store={store}>
