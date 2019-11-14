@@ -6,7 +6,7 @@ const auth0Client = new auth0.WebAuth({
   domain: config.auth0.domain,
   audience: `https://${config.auth0.domain}/userinfo`,
   clientID: config.auth0.clientId,
-  redirectUri: 'http://localhost:3000/callback',
+  redirectUri: 'http://localhost:8082/callback',
   responseType: 'id_token',
   scope: 'openid profile email',
 });
@@ -38,7 +38,7 @@ export function signIn() {
 
 export function signOut() {
   auth0Client.logout({
-    returnTo: 'http://localhost:3000',
+    returnTo: 'http://localhost:8082',
     clientID: config.auth0.clientId,
   });
 }
