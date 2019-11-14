@@ -3,14 +3,15 @@ import { Route } from 'react-router-dom';
 import { Container, Header, Grid, Segment } from 'semantic-ui-react';
 
 import AddToDo from './containers/AddToDo';
-import Navigation from './components/Navigation';
 import ToDoListContainer from './containers/ToDoListContainer';
 import CustomGridExample from './components/CustomGridExample';
+import Callback from './containers/Callback';
+import NavigationContainer from './containers/NavigationContainer';
 
 function App() {
   return (
     <Fragment>
-      <Navigation />
+      <NavigationContainer />
       <Container>
         <Grid>
           <Grid.Column>
@@ -19,6 +20,7 @@ function App() {
               <Route exact path="/" component={ToDoListContainer} />
               <Route exact path="/new-item" component={AddToDo} />
               <Route exact path="/custom-grid" component={CustomGridExample} />
+              <Route exact path="/callback" component={Callback} />
             </Segment>
           </Grid.Column>
         </Grid>
