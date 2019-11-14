@@ -1,28 +1,20 @@
-import React, { Fragment } from 'react';
-import { Route } from 'react-router-dom';
-import { Container, Grid, Segment } from 'semantic-ui-react';
+import React from 'react';
 
-import EmptyPage from './components/EmptyPage';
-import IndexPage from './containers/IndexPage';
-import Callback from './containers/Callback';
-import NavigationContainer from './containers/NavigationContainer';
+import { MainLayout, HeaderLayout, SidebarLayout, ContentLayout } from './layouts';
+import TopBarContainer from './containers/TopBarContainer';
+import Router from './Router';
 
 function App() {
   return (
-    <Fragment>
-      <NavigationContainer />
-      <Container>
-        <Grid>
-          <Grid.Column>
-            <Segment>
-              <Route exact path="/" component={IndexPage} />
-              <Route exact path="/callback" component={Callback} />
-              <Route exact path="/dashboard" component={EmptyPage} />
-            </Segment>
-          </Grid.Column>
-        </Grid>
-      </Container>
-    </Fragment>
+    <MainLayout>
+      <HeaderLayout>
+        <TopBarContainer />
+      </HeaderLayout>
+      <SidebarLayout></SidebarLayout>
+      <ContentLayout>
+        <Router />
+      </ContentLayout>
+    </MainLayout>
   );
 }
 
