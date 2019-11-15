@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-require('events').EventEmitter.defaultMaxListeners = 50;
+require('events').EventEmitter.defaultMaxListeners = 0;
 
 const child_process = require('child_process');
 
