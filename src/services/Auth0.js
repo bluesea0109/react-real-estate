@@ -1,12 +1,14 @@
 import auth0 from 'auth0-js';
 import config from '../config';
 
+const siteRoot = process.env.NODE_ENV === 'production' ? 'https://beta.brivitymarketer.com' : 'http://localhost:8082';
+
 const auth0Client = new auth0.WebAuth({
   // the following three lines MUST be updated
   domain: config.auth0.domain,
   audience: `https://${config.auth0.domain}/userinfo`,
   clientID: config.auth0.clientId,
-  redirectUri: 'http://localhost:8082/callback',
+  redirectUri: `${siteRoot}/callback`,
   responseType: 'id_token',
   scope: 'openid profile email',
 });
@@ -38,7 +40,7 @@ export function signIn() {
 
 export function signOut() {
   auth0Client.logout({
-    returnTo: 'http://localhost:8082',
+    returnTo: `${siteRoot}`,
     clientID: config.auth0.clientId,
   });
 }
