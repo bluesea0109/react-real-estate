@@ -9,12 +9,12 @@ build:
   image: node:12.9.0
   script:
       - export API_URL="examplex.com"
-      - npm install --silent
+      - npm run cli-install --silent
       - npm run build
       - echo "BUILD SUCCESSFULLY"
   artifacts:
     paths:
-      - dist/
+      - build/
     expire_in: 30 mins
   environment:
     name: production
