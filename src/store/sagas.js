@@ -1,20 +1,9 @@
-import { all } from 'redux-saga/effects';
+import { all, fork } from 'redux-saga/effects';
 
-import { authSagas } from './modules/user/sagas';
+const req = require.context('.', true, /\.\/.+\/sagas\.js$/);
 
-// TODO: Automate the saga adding
-// const req = require.context('.', true, /\.\/.+\/sagas\.js$/);
+const sagas = req.keys().map(key => req(key).default);
 
-// const sagas = req.keys().map(key => req(key).default);
-
-// console.log('sagas', sagas);
-
-// // replace the current rootSaga generator
-// export default function* rootSaga() {
-//   yield all([sagas.map(saga => saga)]);
-// }
-
-// replace the current rootSaga generator
-export default function* rootSaga() {
-  yield all([authSagas()]);
+export default function*(services = {}) {
+  yield all(sagas.map(saga => fork(saga, services)));
 }
