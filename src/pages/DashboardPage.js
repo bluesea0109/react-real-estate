@@ -5,7 +5,7 @@ import { Page, Segment } from '../components/Base';
 const EmptyPage = () => (
   <Page basic>
     <Segment>
-      <h1>Empty Page</h1>
+      <h1>Dashboard Page</h1>
     </Segment>
   </Page>
 );

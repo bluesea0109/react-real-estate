@@ -2,12 +2,12 @@ import React from 'react';
 
 import { Page, Segment } from '../components/Base';
 
-const EmptyPage = () => (
+const ProfilePage = () => (
   <Page basic>
     <Segment>
-      <h1>Empty Page</h1>
+      <h1>Profile Page</h1>
     </Segment>
   </Page>
 );
 
-export default EmptyPage;
+export default ProfilePage;

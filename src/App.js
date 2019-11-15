@@ -2,6 +2,7 @@ import React from 'react';
 
 import { MainLayout, HeaderLayout, SidebarLayout, ContentLayout } from './layouts';
 import TopBarContainer from './containers/TopBarContainer';
+import Navigation from './components/Navigation';
 import Router from './Router';
 
 function App() {
@@ -10,7 +11,9 @@ function App() {
       <HeaderLayout>
         <TopBarContainer />
       </HeaderLayout>
-      <SidebarLayout></SidebarLayout>
+      <SidebarLayout>
+        <Navigation />
+      </SidebarLayout>
       <ContentLayout>
         <Router />
       </ContentLayout>
