@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { signIn, signOut } from '../services/Auth0';
+import { signOut } from '../services/Auth0';
 import { Button, Menu } from './Base';
 import LogoImage from './LogoImage';
 
@@ -11,11 +11,6 @@ export default ({ user }) => (
       <LogoImage />
     </Menu.Item>
     <Menu.Menu position="right">
-      {!user && (
-        <Button basic onClick={signIn}>
-          Login
-        </Button>
-      )}
       {user && (
         <Fragment>
           <Button basic onClick={signOut}>

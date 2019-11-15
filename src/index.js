@@ -1,32 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import createSagaMiddleware from 'redux-saga';
 import { BrowserRouter } from 'react-router-dom';
-import { createStore, applyMiddleware } from 'redux';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 
-// Reset CSS
 import './reset.css';
-// Add Semantic-UI CSS
 import 'semantic-ui-css/semantic.min.css';
-// Add Global CSS
 import './index.css';
 
 import App from './App';
-import rootReducer from './store/reducers';
-import rootSaga from './store/sagas';
-
 import * as serviceWorker from './serviceWorker';
+import configureStore from './store/configure';
 
-const sagaMiddleware = createSagaMiddleware();
-
-const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
-
+const store = configureStore();
 library.add(fas);
-
-sagaMiddleware.run(rootSaga);
 
 ReactDOM.render(
   <Provider store={store}>

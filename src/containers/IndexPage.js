@@ -12,7 +12,7 @@ const mapStateToProps = state => {
 let IndexPage = ({ user }) => {
   if (user) return <Redirect to="/dashboard" />;
 
-  return signIn();
+  return <div>{signIn()}</div>;
 };
 IndexPage = connect(mapStateToProps)(IndexPage);
 
