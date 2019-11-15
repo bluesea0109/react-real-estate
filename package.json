@@ -7,8 +7,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "./node_modules/.bin/eslint --ext .js,.jsx --ignore-pattern public tmp artifacts .",
-    "format": "prettier --write 'src/**/*.{js,jsx,json}'",
-    "cli-install": "node cli-install.js"
+    "format": "prettier --write 'src/**/*.{js,jsx,json}'"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "1.2.25",

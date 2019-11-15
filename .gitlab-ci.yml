@@ -6,10 +6,10 @@ stages:
 
 build:
   stage: build
-  image: node:12.9.0
+  image: node:12.9.1
   script:
       - export API_URL="examplex.com"
-      - npm run cli-install --silent
+      - npm install --silent
       - npm run build
       - echo "BUILD SUCCESSFULLY"
   artifacts:
