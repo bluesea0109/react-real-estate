@@ -1,14 +1,17 @@
-import { all, put, call, takeLatest } from 'redux-saga/effects';
+import { put, call, takeLatest } from 'redux-saga/effects';
 
-import { handleAuthentication } from '../../../services/Auth0';
+import AuthService from '../../../services/auth';
 import { HANDLE_AUTHENTICATION_CALLBACK, USER_PROFILE_LOADED } from './actions';
 
 export function* parseHash() {
-  const user = yield call(handleAuthentication);
+  const auth0User = yield call(AuthService.handleAuthentication);
+  AuthService.localLogin(auth0User);
+
+  const user = Object.assign({}, auth0User);
 
   yield put({ type: USER_PROFILE_LOADED, user });
 }
 
-export function* authSagas() {
-  yield all([yield takeLatest(HANDLE_AUTHENTICATION_CALLBACK, parseHash)]);
+export default function*() {
+  yield takeLatest(HANDLE_AUTHENTICATION_CALLBACK, parseHash);
 }

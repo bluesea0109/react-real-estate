@@ -13,7 +13,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import configureStore from './store/configure';
 
-const store = configureStore();
+const store = configureStore({});
 library.add(fas);
 
 ReactDOM.render(

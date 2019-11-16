@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
-import { signIn } from '../services/Auth0';
+import AuthService from '../services/auth';
 
 const mapStateToProps = state => {
   return {
@@ -10,9 +10,9 @@ const mapStateToProps = state => {
 };
 
 let IndexPage = ({ user }) => {
-  if (user) return <Redirect to="/dashboard" />;
+  if (user && user.authenticated) return <Redirect to="/dashboard" />;
 
-  return <div>{signIn()}</div>;
+  return <div>{AuthService.signIn()}</div>;
 };
 IndexPage = connect(mapStateToProps)(IndexPage);
 

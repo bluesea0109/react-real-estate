@@ -5,7 +5,7 @@ import middleware from './middleware';
 import rootReducer from './reducers';
 import rootSaga from './sagas';
 
-const configureStore = () => {
+const configureStore = initialState => {
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
         // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
@@ -18,7 +18,7 @@ const configureStore = () => {
     // other store enhancers if any
   );
 
-  const store = createStore(rootReducer, {}, enhancer);
+  const store = createStore(rootReducer, initialState, enhancer);
 
   let sagaTask = sagaMiddleware.run(rootSaga);
 

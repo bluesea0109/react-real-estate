@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { signOut } from '../services/Auth0';
+import AuthService from '../services/auth';
 import { Button, Menu } from './Base';
 import LogoImage from './LogoImage';
 
@@ -13,7 +13,7 @@ export default ({ user }) => (
     <Menu.Menu position="right">
       {user && (
         <Fragment>
-          <Button basic onClick={signOut}>
+          <Button basic onClick={AuthService.signOut}>
             Log Out <FontAwesomeIcon icon="sign-out-alt" style={{ marginLeft: '0.5em' }} />
           </Button>
         </Fragment>
