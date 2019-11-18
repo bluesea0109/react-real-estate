@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
-
-import { Route, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
+import React, { useEffect } from 'react';
+import { Route, useHistory } from 'react-router-dom';
+
+import Loading from '../components/Loading';
 
 const PrivateRoute = ({ component: Component, path, user, ...rest }) => {
   let history = useHistory();
@@ -14,7 +15,7 @@ const PrivateRoute = ({ component: Component, path, user, ...rest }) => {
     fn();
   }, [user, history]);
 
-  const render = props => (user && user.authenticated === true ? <Component {...props} /> : <div>loading...</div>);
+  const render = props => (user && user.authenticated === true ? <Component {...props} /> : <Loading />);
 
   return <Route path={path} render={render} {...rest} />;
 };

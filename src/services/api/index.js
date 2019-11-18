@@ -1,6 +1,17 @@
 import auth from '../auth';
 
-const apiPath = '';
+async function handleResponse(response) {
+  if (response.ok) {
+    const data = await response.json();
+
+    return data;
+  } else {
+    const error = new Error(`${response.status} ${response.statusText}`);
+    error.response = response;
+
+    throw error;
+  }
+}
 
 function scrubEmptyStrings(obj) {
   return JSON.parse(
@@ -20,24 +31,17 @@ async function get(path, query = {}, sendToken = true) {
   const accessToken = await auth.getAccessToken();
   if (sendToken) headers['authorization'] = `Bearer ${accessToken}`;
 
-  try {
-    path = apiPath + path;
-
-    if (Object.keys(query).length > 0) {
-      const params = new URLSearchParams();
-      for (let key in query) {
-        params.set(key, query[key]);
-      }
-      path += '?' + params.toString();
+  if (Object.keys(query).length > 0) {
+    const params = new URLSearchParams();
+    for (let key in query) {
+      params.set(key, query[key]);
     }
-
-    const response = await fetch(path, { headers, method: 'get', credentials: 'include' });
-    const data = await response.json();
-
-    return data;
-  } catch (err) {
-    return { error: err };
+    path += '?' + params.toString();
   }
+
+  const response = await fetch(path, { headers, method: 'get', credentials: 'include' });
+
+  return await handleResponse(response);
 }
 
 async function post(path, body = {}, sendToken = true) {
@@ -50,17 +54,11 @@ async function post(path, body = {}, sendToken = true) {
   const accessToken = await auth.getAccessToken();
   if (sendToken) headers['authorization'] = `Bearer ${accessToken}`;
 
-  try {
-    path = apiPath + path;
-    body = JSON.stringify(body);
+  body = JSON.stringify(body);
 
-    const response = await fetch(path, { headers, method: 'post', body, credentials: 'include' });
-    const data = await response.json();
+  const response = await fetch(path, { headers, method: 'post', body, credentials: 'include' });
 
-    return data;
-  } catch (err) {
-    return { error: err };
-  }
+  return await handleResponse(response);
 }
 
 async function postBlob(path, body, sendToken = true) {
@@ -70,16 +68,9 @@ async function postBlob(path, body, sendToken = true) {
   const accessToken = await auth.getAccessToken();
   if (sendToken) headers['authorization'] = `Bearer ${accessToken}`;
 
-  try {
-    path = apiPath + path;
+  const response = await fetch(path, { headers, method: 'post', body, credentials: 'include' });
 
-    const response = await fetch(path, { headers, method: 'post', body, credentials: 'include' });
-    const data = await response.json();
-
-    return data;
-  } catch (err) {
-    return { error: err };
-  }
+  return await handleResponse(response);
 }
 
 async function put(path, body = {}, sendToken = true) {
@@ -92,17 +83,11 @@ async function put(path, body = {}, sendToken = true) {
   const accessToken = await auth.getAccessToken();
   if (sendToken) headers['authorization'] = `Bearer ${accessToken}`;
 
-  try {
-    path = apiPath + path;
-    body = JSON.stringify(body);
+  body = JSON.stringify(body);
 
-    const response = await fetch(path, { headers, method: 'put', body, credentials: 'include' });
-    const data = await response.json();
+  const response = await fetch(path, { headers, method: 'put', body, credentials: 'include' });
 
-    return data;
-  } catch (err) {
-    return { error: err };
-  }
+  return await handleResponse(response);
 }
 
 async function del(path, sendToken = true) {
@@ -113,173 +98,100 @@ async function del(path, sendToken = true) {
   const accessToken = await auth.getAccessToken();
   if (sendToken) headers['authorization'] = `Bearer ${accessToken}`;
 
-  try {
-    path = apiPath + path;
+  const response = await fetch(path, { headers, method: 'delete', credentials: 'include' });
 
-    const response = await fetch(path, { headers, method: 'delete', credentials: 'include' });
-    const data = await response.json();
-
-    return data;
-  } catch (err) {
-    return { errors: [err.stack] };
-  }
+  return await handleResponse(response);
 }
 
-export default {
-  boards: {
-    async get() {
-      const response = await get(`/api/boards`);
-      return response;
-    },
-  },
+const directory = {
+  boards: () => ({ path: `/api/boards`, props: {}, method: 'get' }),
 
-  states: {
-    async get() {
-      const response = await get(`/api/states`);
-      return response;
-    },
-  },
+  states: () => ({ path: `/api/states`, props: {}, method: 'get' }),
 
   user: {
-    onLogin: {
-      async get() {
-        const response = await get(`/api/user/onLogin`);
-        return response;
-      },
-    },
+    onLogin: () => ({ path: `/api/user/onLogin`, props: {}, method: 'get' }),
 
     mailouts: {
-      async list(page = 1, limit = 100) {
-        const response = await get(`/api/user/mailout`, { page, limit });
-        return response;
-      },
+      list: (page = 1, limit = 100) => ({ path: `/api/user/mailout`, props: { page, limit }, method: 'get' }),
 
-      async get(mailoutId) {
-        const response = await get(`/api/user/mailout/${mailoutId}?include_destinations=true`);
-        return response;
-      },
+      get: mailoutId => ({ path: `/api/user/mailout/${mailoutId}?include_destinations=true`, props: {}, method: 'get' }),
 
-      async cancel(mailoutId) {
-        const response = await del(`/api/user/mailout/${mailoutId}`);
-        return response;
-      },
+      cancel: mailoutId => ({ path: `/api/user/mailout/${mailoutId}`, props: {}, method: 'del' }),
 
-      async approve(mailoutId) {
-        const response = await post(`/api/user/mailout/${mailoutId}/submit`);
-        return response;
-      },
-      async needsUpdate(mailoutId) {
-        const response = await get(`/api/user/mailout/${mailoutId}/needsUpdate`);
-        return response;
-      },
-      async regenerate(mailoutId) {
-        const response = await post(`/api/user/mailout/${mailoutId}/update`);
-        return response;
-      },
-      async initialize() {
-        const response = await post(`/api/user/listing/mailout/initial`);
-        return response;
-      },
+      approve: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/submit`, props: {}, method: 'post' }),
+
+      needsUpdate: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/needsUpdate`, props: {}, method: 'get' }),
+
+      regenerate: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/update`, props: {}, method: 'post' }),
+
+      initialize: () => ({ path: `/api/user/listing/mailout/initial`, props: {}, method: 'post' }),
     },
 
     subscription: {
-      async get() {
-        const response = await get(`/api/user/subscription`);
-        return response;
-      },
+      get: () => ({ path: `/api/user/subscription`, props: {}, method: 'get' }),
 
-      async create(token) {
-        const response = await post(`/api/user/subscription`, {
-          chargify_token: token,
-        });
-        return response;
-      },
+      create: token => ({ path: `/api/user/mailout`, props: { chargify_token: token }, method: 'post' }),
     },
 
     profile: {
-      async get() {
-        const response = await get(`/api/user/profile`);
-        return response;
-      },
+      get: () => ({ path: `/api/user/profile`, props: {}, method: 'get' }),
 
-      async save(payload) {
-        //payload = payload || store.state.user.profile
-        const response = await put(`/api/user/profile`, payload);
-
-        return response;
-      },
+      save: payload => ({ path: `/api/user/profile`, props: payload, method: 'put' }),
 
       branding: {
-        async get() {
-          const response = await get(`/api/user/profile/branding`);
-          return response;
-        },
+        get: () => ({ path: `/api/user/profile/branding`, props: {}, method: 'get' }),
 
-        async save(payload) {
-          //payload = payload || store.state.user.branding
-          const response = await put(`/api/user/profile/branding`, payload);
-          return response;
-        },
+        save: payload => ({ path: `/api/user/profile/branding`, props: payload, method: 'put' }),
 
         logos: {
-          async get() {
-            const response = await get(`/api/user/profile/branding/logos`);
-            return response;
-          },
+          get: () => ({ path: `/api/user/profile/branding/logos`, props: {}, method: 'get' }),
         },
 
         preview: {
-          async get() {
-            const response = await get(`/api/user/profile/branding/preview`);
-            return response;
-          },
+          get: () => ({ path: `/api/user/profile/branding/preview`, props: {}, method: 'get' }),
 
-          async generate() {
-            const response = await post(`/api/user/profile/branding/preview`);
-            return response;
-          },
+          generate: () => ({ path: `/api/user/profile/branding/preview`, props: {}, method: 'post' }),
         },
 
         teamLogo: {
-          async set(file) {
+          set: file => {
             const formData = new FormData();
             formData.append('teamLogo', file);
-            const response = await postBlob(`/api/user/profile/branding/teamLogo`, formData);
-            return response;
+            return { path: `/api/user/profile/branding/teamLogo`, props: formData, method: 'postBlob' };
           },
         },
 
         brokerageLogo: {
-          async set(file) {
+          set: file => {
             const formData = new FormData();
             formData.append('brokerageLogo', file);
-            const response = await postBlob(`/api/user/profile/branding/brokerageLogo`, formData);
-            return response;
+            return { path: `/api/user/profile/branding/brokerageLogo`, props: formData, method: 'postBlob' };
           },
         },
 
         realtorPhoto: {
-          async set(file) {
+          set: file => {
             const formData = new FormData();
             formData.append('realtorPhoto', file);
-            const response = await postBlob(`/api/user/profile/branding/realtorPhoto`, formData);
-            return response;
+            return { path: `/api/user/profile/branding/realtorPhoto`, props: formData, method: 'postBlob' };
           },
         },
       },
 
       automation: {
-        async get() {
-          const response = await get(`/api/user/profile/automation`);
-          return response;
-        },
+        get: () => ({ path: `/api/user/profile/automation`, props: {}, method: 'get' }),
 
-        async save(payload) {
-          //payload = payload || store.state.user.automation
-          const response = await put(`/api/user/profile/automation`, payload);
-          return response;
-        },
+        save: payload => ({ path: `/api/user/profile/automation`, props: {}, method: 'put' }),
       },
     },
   },
+};
+
+export default {
+  get,
+  post,
+  postBlob,
+  put,
+  del,
+  directory,
 };
