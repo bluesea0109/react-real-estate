@@ -11,7 +11,7 @@ import Loading from '../components/Loading';
 const useFetching = (someFetchActionCreator, dispatch) => {
   useEffect(() => {
     dispatch(someFetchActionCreator());
-  }, []);
+  }, [someFetchActionCreator, dispatch]);
 };
 
 const Dashboard = () => {

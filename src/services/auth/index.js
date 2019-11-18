@@ -91,16 +91,16 @@ class AuthService extends EventEmitter {
   signOut() {
     localStorage.removeItem(localStorageKey);
 
-    this.idToken = null;
-    this.tokenExpiry = null;
-    this.profile = null;
+    // this.idToken = null;
+    // this.tokenExpiry = null;
+    // this.profile = null;
 
     webAuth.logout({
       returnTo: `${siteRoot}`,
       clientID: config.auth0.clientId,
     });
 
-    this.emit(loginEvent, { loggedIn: false });
+    // this.emit(loginEvent, { loggedIn: false });
   }
 
   isAccessTokenValid() {
