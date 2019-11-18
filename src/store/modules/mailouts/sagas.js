@@ -7,7 +7,7 @@ export function* fetchMailout() {
     const { path } = ApiService.directory.user.mailouts.list();
     const response = yield call(ApiService.get, path);
 
-    yield put(fetchMailoutsSuccess(response.results));
+    yield put(fetchMailoutsSuccess(response));
   } catch (err) {
     yield put(fetchMailoutsError(err.message));
   }

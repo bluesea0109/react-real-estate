@@ -1,7 +1,7 @@
 import { put, call, takeLatest } from 'redux-saga/effects';
 
 import AuthService from '../../../services/auth';
-import ApiService from '../../../services/api';
+// import ApiService from '../../../services/api';
 import { HANDLE_AUTHENTICATION_CALLBACK, USER_PROFILE_LOADED } from './actions';
 
 export function* parseHash() {
