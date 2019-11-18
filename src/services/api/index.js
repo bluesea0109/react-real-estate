@@ -141,6 +141,13 @@ export default {
   },
 
   user: {
+    onLogin: {
+      async get() {
+        const response = await get(`/api/user/onLogin`);
+        return response;
+      },
+    },
+
     mailouts: {
       async list(page = 1, limit = 100) {
         const response = await get(`/api/user/mailout`, { page, limit });
