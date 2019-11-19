@@ -17,6 +17,7 @@
     "auth0-js": "9.11.3",
     "date-fns": "2.7.0",
     "dinero.js": "1.6.0",
+    "google-maps-react": "2.0.2",
     "lodash": "4.17.15",
     "prop-types": "15.7.2",
     "react": "^16.11.0",
