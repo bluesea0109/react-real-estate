@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { fetchMailoutDetailsPending } from '../store/modules/mailout/actions';
@@ -12,12 +12,11 @@ import { useHistory, useParams } from 'react-router';
 const useFetching = (fetchActionCreator, dispatch, mailoutId) => {
   useEffect(() => {
     dispatch(fetchActionCreator(mailoutId));
-  }, [fetchActionCreator, dispatch]);
+  }, [fetchActionCreator, dispatch, mailoutId]);
 };
 
 const MailoutDetails = () => {
   let history = useHistory();
-  const dispatch = useDispatch();
 
   const isLoading = useSelector(store => store.mailout.pending);
   const details = useSelector(store => store.mailout.details);
