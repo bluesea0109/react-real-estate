@@ -13,9 +13,6 @@ export function* fetchMailout() {
     const limit = yield select(getMailoutsLimit);
     const response = yield call(ApiService.get, path, { page, limit });
 
-    // TODO: Figure how to best implement pagination
-    console.log('response.length === page', response.length === page);
-
     yield put(fetchMailoutsSuccess(response));
   } catch (err) {
     yield put(fetchMailoutsError(err.message));
