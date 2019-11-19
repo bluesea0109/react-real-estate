@@ -7,4 +7,17 @@ import NavigationLayout from './NavigationLayout';
 import MobileDisabledLayout from './MobileDisabledLayout';
 import MobileEnabledLayout from './MobileEnabledLayout';
 
-export { MainLayout, HeaderLayout, SidebarLayout, ContentLayout, NavigationLayout, MobileDisabledLayout, MobileEnabledLayout };
+import ItemHeaderLayout from './ItemHeaderLayout';
+import ItemHeaderMenuLayout from './ItemHeaderMenuLayout';
+
+export {
+  MainLayout,
+  HeaderLayout,
+  SidebarLayout,
+  ContentLayout,
+  NavigationLayout,
+  MobileDisabledLayout,
+  MobileEnabledLayout,
+  ItemHeaderLayout,
+  ItemHeaderMenuLayout,
+};

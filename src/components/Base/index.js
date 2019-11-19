@@ -6,6 +6,7 @@ import Header from './Header';
 import Icon from './Icon';
 import Image from './Image';
 import Input from './Input';
+import Item from './Item';
 import List from './List';
 import Loader from './Loader';
 import Menu from './Menu';
@@ -17,4 +18,4 @@ import Responsive from './Responsive';
 import Segment from './Segment';
 import Select from './Select';
 
-export { Button, Container, Dimmer, Grid, Header, Icon, Image, Input, List, Loader, Menu, Message, Page, Pagination, Popup, Responsive, Segment, Select };
+export { Button, Container, Dimmer, Grid, Header, Icon, Image, Input, Item, List, Loader, Menu, Message, Page, Pagination, Popup, Responsive, Segment, Select };

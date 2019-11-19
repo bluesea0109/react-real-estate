@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import React, { Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { MobileDisabledLayout, MobileEnabledLayout } from '../../layouts';
+import { MobileDisabledLayout, MobileEnabledLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import { canDelete, canSend, resizeLongText, resolveLabelStatus } from './helpers';
-import { Button, Header, Menu } from '../Base';
+import { Button } from '../Base';
 import { Label } from 'semantic-ui-react';
 
 const ApproveAndSendButton = ({ data, edit }) => {
@@ -16,13 +16,7 @@ const ApproveAndSendButton = ({ data, edit }) => {
       <Fragment>
         {canSend(data.mailoutStatus) && (
           <Link to={`dashboard/${data._id}`}>
-            <Button
-              color="teal"
-              style={{
-                marginLeft: '-2em',
-                marginRight: '-2em',
-              }}
-            >
+            <Button color="teal">
               <MobileDisabledLayout>
                 <Fragment>Approve & Send</Fragment>
               </MobileDisabledLayout>
@@ -39,13 +33,7 @@ const ApproveAndSendButton = ({ data, edit }) => {
   return (
     <Fragment>
       {canSend(data.mailoutStatus) && (
-        <Button
-          color="teal"
-          style={{
-            marginLeft: '-2em',
-            marginRight: '-2em',
-          }}
-        >
+        <Button color="teal">
           <MobileDisabledLayout>
             <Fragment>Approve & Send</Fragment>
           </MobileDisabledLayout>
@@ -90,31 +78,28 @@ const ListHeader = ({ data, edit }) => {
   if (!data) return;
 
   return (
-    <Header attached="top" block>
-      <Menu borderless fluid secondary>
-        <Label as="a" color={resolveLabelStatus(data.listingStatus)} ribbon style={{ textTransform: 'capitalize' }}>
+    <ItemHeaderLayout attached="top" block>
+      <span style={{ gridArea: 'label' }}>
+        <Label size="big" color={resolveLabelStatus(data.listingStatus)} ribbon style={{ textTransform: 'capitalize', top: '-0.7em', left: '-2.4em' }}>
           {data.listingStatus}
         </Label>
-        {!edit && (
-          <Link to={`dashboard/${data._id}`}>
-            <Menu.Item>{resizeLongText(data.details.displayAddress)}</Menu.Item>
-          </Link>
-        )}
-        {edit && <Menu.Item>{resizeLongText(data.details.displayAddress)}</Menu.Item>}
-
-        <Menu.Menu position="right">
-          <Menu.Item>
-            {edit && (
-              <Button basic color="teal">
-                Edit
-              </Button>
-            )}
-          </Menu.Item>
-          <Menu.Item>{ApproveAndSendButton({ data, edit })}</Menu.Item>
-          <Menu.Item>{DeleteButton({ data, edit })}</Menu.Item>
-        </Menu.Menu>
-      </Menu>
-    </Header>
+      </span>
+      <span style={{ gridArea: 'address' }}>
+        {!edit && <Link to={`dashboard/${data._id}`}>{resizeLongText(data.details.displayAddress)}</Link>}
+        {edit && resizeLongText(data.details.displayAddress)}
+      </span>
+      <ItemHeaderMenuLayout>
+        <span>
+          {edit && (
+            <Button basic color="teal">
+              Edit
+            </Button>
+          )}
+        </span>
+        <span>{ApproveAndSendButton({ data, edit })}</span>
+        <span>{DeleteButton({ data, edit })}</span>
+      </ItemHeaderMenuLayout>
+    </ItemHeaderLayout>
   );
 };
 

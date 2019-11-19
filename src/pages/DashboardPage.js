@@ -66,15 +66,13 @@ const Dashboard = () => {
 
           {!isLoading && !error && list.length > 0 && (
             <Grid.Row>
-              <Grid.Column width={16} style={{ margin: 0, padding: 0 }}>
-                {list.map(item => MailoutListItem(item))}
-              </Grid.Column>
+              <Grid.Column width={16}>{list.map(item => MailoutListItem(item))}</Grid.Column>
             </Grid.Row>
           )}
 
           {!isLoading && !error && list.length > 0 && canLoadMore && (
             <Grid.Row>
-              <Grid.Column width={16} style={{ margin: 0, padding: 0 }}>
+              <Grid.Column width={16}>
                 <Grid centered columns={2}>
                   <Grid.Column>
                     <Button id="loadMoreButton" attached="bottom" content="Load More" onClick={handleClick} onKeyPress={handleKeyPress} />
@@ -86,7 +84,7 @@ const Dashboard = () => {
 
           {!isLoading && !error && list.length === 0 && (
             <Grid.Row>
-              <Grid.Column width={16} style={{ margin: 0, padding: 0 }}>
+              <Grid.Column width={16}>
                 <EmptyItem />
               </Grid.Column>
             </Grid.Row>

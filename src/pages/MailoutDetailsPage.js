@@ -52,7 +52,7 @@ const MailoutDetails = () => {
             </Menu>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column width={16} style={{ margin: 0, padding: 0 }}>
+            <Grid.Column width={16}>
               {!isLoading && !error && details && ListHeader({ data: details, edit: true })}
               <Segment basic>
                 {!isLoading && !error && details && ItemTable({ data: details })}
