@@ -58,7 +58,7 @@ const MailoutDetails = () => {
                 {!isLoading && !error && details && ItemTable({ data: details })}
                 {!isLoading && !error && details && ImageGroup({ img1src: details.sampleBackLargeUrl, img2src: details.sampleFrontLargeUrl, size: 'big' })}
               </Segment>
-              <GoogleMapItem />
+              {!isLoading && !error && details && <GoogleMapItem data={details} />}
             </Grid.Column>
           </Grid.Row>
         </Grid>
