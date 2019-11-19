@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { fetchMailoutsPending, fetchMoreMailoutsPending } from '../store/modules/mailouts/actions';
-import { Button, Grid, Menu, Page, Segment } from '../components/Base';
+import { Button, Grid, Menu, Message, Page, Segment } from '../components/Base';
 import { MobileDisabledLayout, MobileEnabledLayout } from '../layouts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import MailoutListItem from '../components/MailoutListItem';
@@ -94,6 +94,7 @@ const Dashboard = () => {
         </Grid>
       </Segment>
       {isLoading && !error && Loading()}
+      {error && <Message error>Oh snap! {error}.</Message>}
     </Page>
   );
 };
