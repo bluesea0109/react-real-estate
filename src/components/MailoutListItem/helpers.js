@@ -75,5 +75,8 @@ export const resolveMailoutStatusColor = mailoutStatus => {
 };
 
 export const resolveLabelStatus = listingStatus => {
+  if (listingStatus === 'sold') return 'blue';
+  if (listingStatus === 'listed') return 'teal';
+
   return 'red';
 };
