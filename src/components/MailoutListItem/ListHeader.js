@@ -8,6 +8,84 @@ import { canDelete, canSend, resizeLongText, resolveLabelStatus } from './helper
 import { Button, Header, Menu } from '../Base';
 import { Label } from 'semantic-ui-react';
 
+const ApproveAndSendButton = ({ data, edit }) => {
+  if (!data) return;
+
+  if (!edit) {
+    return (
+      <Fragment>
+        {canSend(data.mailoutStatus) && (
+          <Link to={`dashboard/${data._id}`}>
+            <Button
+              color="teal"
+              style={{
+                marginLeft: '-2em',
+                marginRight: '-2em',
+              }}
+            >
+              <MobileDisabledLayout>
+                <Fragment>Approve & Send</Fragment>
+              </MobileDisabledLayout>
+              <MobileEnabledLayout>
+                <FontAwesomeIcon icon="thumbs-up" />
+              </MobileEnabledLayout>
+            </Button>
+          </Link>
+        )}
+      </Fragment>
+    );
+  }
+
+  return (
+    <Fragment>
+      {canSend(data.mailoutStatus) && (
+        <Button
+          color="teal"
+          style={{
+            marginLeft: '-2em',
+            marginRight: '-2em',
+          }}
+        >
+          <MobileDisabledLayout>
+            <Fragment>Approve & Send</Fragment>
+          </MobileDisabledLayout>
+          <MobileEnabledLayout>
+            <FontAwesomeIcon icon="thumbs-up" />
+          </MobileEnabledLayout>
+        </Button>
+      )}
+    </Fragment>
+  );
+};
+
+const DeleteButton = ({ data, edit }) => {
+  if (!data) return;
+
+  if (!edit) {
+    return (
+      <Fragment>
+        {canDelete(data.mailoutStatus) && (
+          <Link to={`dashboard/${data._id}`}>
+            <Button basic color="teal">
+              <FontAwesomeIcon icon="trash-alt" />
+            </Button>
+          </Link>
+        )}
+      </Fragment>
+    );
+  }
+
+  return (
+    <Fragment>
+      {canDelete(data.mailoutStatus) && (
+        <Button basic color="teal">
+          <FontAwesomeIcon icon="trash-alt" />
+        </Button>
+      )}
+    </Fragment>
+  );
+};
+
 const ListHeader = ({ data, edit }) => {
   if (!data) return;
 
@@ -32,31 +110,8 @@ const ListHeader = ({ data, edit }) => {
               </Button>
             )}
           </Menu.Item>
-          <Menu.Item>
-            {canSend(data.mailoutStatus) && (
-              <Button
-                color="teal"
-                style={{
-                  marginLeft: '-2em',
-                  marginRight: '-2em',
-                }}
-              >
-                <MobileDisabledLayout>
-                  <Fragment>Approve & Send</Fragment>
-                </MobileDisabledLayout>
-                <MobileEnabledLayout>
-                  <FontAwesomeIcon icon="thumbs-up" />
-                </MobileEnabledLayout>
-              </Button>
-            )}
-          </Menu.Item>
-          <Menu.Item>
-            {canDelete(data.mailoutStatus) && (
-              <Button basic color="teal">
-                <FontAwesomeIcon icon="trash-alt" />
-              </Button>
-            )}
-          </Menu.Item>
+          <Menu.Item>{ApproveAndSendButton({ data, edit })}</Menu.Item>
+          <Menu.Item>{DeleteButton({ data, edit })}</Menu.Item>
         </Menu.Menu>
       </Menu>
     </Header>
