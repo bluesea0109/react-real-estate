@@ -16,10 +16,6 @@ const ItemList = ({ data }) => {
         <Grid.Column>
           <List>
             <List.Item>
-              <List.Header>Trigger</List.Header>
-              <List.Content style={{ textTransform: 'capitalize' }}>{data.listingStatus}</List.Content>
-            </List.Item>
-            <List.Item>
               <List.Header>Recipients</List.Header>
               <List.Content>{data.recipientCount}</List.Content>
             </List.Item>

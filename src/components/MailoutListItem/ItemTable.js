@@ -13,7 +13,6 @@ const ItemTable = ({ data }) => {
     <Table basic="very">
       <Table.Header>
         <Table.Row>
-          <Table.HeaderCell>Trigger</Table.HeaderCell>
           <Table.HeaderCell>Recipients</Table.HeaderCell>
           <Table.HeaderCell>Cost</Table.HeaderCell>
           <Table.HeaderCell>
@@ -31,7 +30,6 @@ const ItemTable = ({ data }) => {
 
       <Table.Body>
         <Table.Row>
-          <Table.Cell style={{ textTransform: 'capitalize' }}>{data.listingStatus}</Table.Cell>
           <Table.Cell>{data.recipientCount}</Table.Cell>
           <Table.Cell>{calculateCost(data.recipientCount)}</Table.Cell>
           <Table.Cell style={{ color: resolveMailoutStatusColor(data.mailoutStatus) }}>

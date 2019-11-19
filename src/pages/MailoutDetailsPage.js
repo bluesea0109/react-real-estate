@@ -33,8 +33,6 @@ const MailoutDetails = () => {
     history.goBack();
   }
 
-  console.log('mailoutId', mailoutId);
-
   return (
     <Page basic>
       <Segment>

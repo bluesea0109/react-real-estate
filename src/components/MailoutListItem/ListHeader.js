@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import React, { Fragment } from 'react';
-
-import { Button, Header, Menu } from '../Base';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { MobileDisabledLayout, MobileEnabledLayout } from '../../layouts';
-import { canDelete, canSend, resizeLongText } from './helpers';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { canDelete, canSend, resizeLongText, resolveLabelStatus } from './helpers';
+import { Button, Header, Menu } from '../Base';
+import { Label } from 'semantic-ui-react';
 
 const ListHeader = ({ data, edit }) => {
   if (!data) return;
@@ -13,7 +14,16 @@ const ListHeader = ({ data, edit }) => {
   return (
     <Header attached="top" block>
       <Menu borderless fluid secondary>
-        <Menu.Item>{resizeLongText(data.details.displayAddress)}</Menu.Item>
+        <Label as="a" color={resolveLabelStatus(data.listingStatus)} ribbon style={{ textTransform: 'capitalize' }}>
+          {data.listingStatus}
+        </Label>
+        {!edit && (
+          <Link to={`dashboard/${data._id}`}>
+            <Menu.Item>{resizeLongText(data.details.displayAddress)}</Menu.Item>
+          </Link>
+        )}
+        {edit && <Menu.Item>{resizeLongText(data.details.displayAddress)}</Menu.Item>}
+
         <Menu.Menu position="right">
           <Menu.Item>
             {edit && (

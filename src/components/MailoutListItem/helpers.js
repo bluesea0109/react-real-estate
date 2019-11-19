@@ -73,3 +73,7 @@ export const resolveMailoutStatusColor = mailoutStatus => {
 
   return '#59c4c4';
 };
+
+export const resolveLabelStatus = listingStatus => {
+  return 'red';
+};
