@@ -17,10 +17,10 @@ const limit = 25;
 
 export function* fetchMailoutSaga() {
   try {
-    const { path } = ApiService.directory.user.mailouts.list();
+    const { path, method } = ApiService.directory.user.mailouts.list();
     yield put(resetMailouts());
     const page = yield select(getMailoutsPage);
-    const response = yield call(ApiService.get, path, { page, limit });
+    const response = yield call(ApiService[method], path, { page, limit });
 
     if (response.length === 0 || response.length < limit) {
       yield put(setCanFetchMore(false));
@@ -36,9 +36,9 @@ export function* fetchMailoutSaga() {
 
 export function* fetchMoreMailoutSaga() {
   try {
-    const { path } = ApiService.directory.user.mailouts.list();
+    const { path, method } = ApiService.directory.user.mailouts.list();
     const page = yield select(getMailoutsPage);
-    const response = yield call(ApiService.get, path, { page, limit });
+    const response = yield call(ApiService[method], path, { page, limit });
 
     if (response.length === 0 || response.length < limit) {
       yield put(setCanFetchMore(false));
