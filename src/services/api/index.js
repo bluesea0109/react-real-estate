@@ -112,7 +112,7 @@ const directory = {
     onLogin: () => ({ path: `/api/user/onLogin`, props: {}, method: 'get' }),
 
     mailouts: {
-      list: (page = 1, limit = 100) => ({ path: `/api/user/mailout`, props: { page, limit }, method: 'get' }),
+      list: (page = 1, limit = 1) => ({ path: `/api/user/mailout`, props: { page, limit }, method: 'get' }),
 
       get: mailoutId => ({ path: `/api/user/mailout/${mailoutId}?include_destinations=true`, props: {}, method: 'get' }),
 

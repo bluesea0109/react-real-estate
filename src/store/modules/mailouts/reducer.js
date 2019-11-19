@@ -1,7 +1,9 @@
-import { FETCH_MAILOUT_PENDING, FETCH_MAILOUT_SUCCESS, FETCH_MAILOUT_ERROR } from './actions';
+import { FETCH_MAILOUT_PENDING, FETCH_MAILOUT_SUCCESS, FETCH_MAILOUT_ERROR, CHANGE_FETCH_MAILOUT_LIMIT, CHANGE_FETCH_MAILOUT_PAGE } from './actions';
 
 const initialState = {
   pending: false,
+  page: 1,
+  limit: 5,
   list: [],
   error: null,
 };
@@ -26,6 +28,18 @@ export default function mailouts(state = initialState, action) {
         ...state,
         pending: false,
         error: action.error,
+      };
+
+    case CHANGE_FETCH_MAILOUT_LIMIT:
+      return {
+        ...state,
+        limit: action.payload,
+      };
+
+    case CHANGE_FETCH_MAILOUT_PAGE:
+      return {
+        ...state,
+        page: action.payload,
       };
 
     default:
