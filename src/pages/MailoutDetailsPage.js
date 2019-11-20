@@ -80,7 +80,7 @@ const MailoutDetails = () => {
                 details &&
                 ListHeader({
                   data: details,
-                  edit: true,
+                  mailoutDetailPage: true,
                   onClickEdit: toggleModalState,
                   onClickApproveAndSend: handleApproveAndSendMailoutDetailsClick,
                   onClickDelete: handleDeleteMailoutDetailsClick,

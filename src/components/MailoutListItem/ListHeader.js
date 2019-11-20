@@ -8,10 +8,10 @@ import { canDelete, canSend, resizeLongText, resolveLabelStatus } from './helper
 import { Button } from '../Base';
 import { Label } from 'semantic-ui-react';
 
-const ApproveAndSendButton = ({ data, edit, onClickApproveAndSend }) => {
+const ApproveAndSendButton = ({ data, mailoutDetailPage, onClickApproveAndSend }) => {
   if (!data) return;
 
-  if (!edit) {
+  if (!mailoutDetailPage) {
     return (
       <Fragment>
         {canSend(data.mailoutStatus) && (
@@ -46,10 +46,10 @@ const ApproveAndSendButton = ({ data, edit, onClickApproveAndSend }) => {
   );
 };
 
-const DeleteButton = ({ data, edit, onClickDelete }) => {
+const DeleteButton = ({ data, mailoutDetailPage, onClickDelete }) => {
   if (!data) return;
 
-  if (!edit) {
+  if (!mailoutDetailPage) {
     return (
       <Fragment>
         {canDelete(data.mailoutStatus) && (
@@ -74,7 +74,7 @@ const DeleteButton = ({ data, edit, onClickDelete }) => {
   );
 };
 
-const ListHeader = ({ data, edit, onClickEdit, onClickApproveAndSend, onClickDelete }) => {
+const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickApproveAndSend, onClickDelete }) => {
   if (!data) return;
 
   return (
@@ -85,19 +85,19 @@ const ListHeader = ({ data, edit, onClickEdit, onClickApproveAndSend, onClickDel
         </Label>
       </span>
       <span style={{ gridArea: 'address' }}>
-        {!edit && <Link to={`dashboard/${data._id}`}>{resizeLongText(data.details.displayAddress)}</Link>}
-        {edit && resizeLongText(data.details.displayAddress)}
+        {!mailoutDetailPage && <Link to={`dashboard/${data._id}`}>{resizeLongText(data.details.displayAddress)}</Link>}
+        {mailoutDetailPage && resizeLongText(data.details.displayAddress)}
       </span>
       <ItemHeaderMenuLayout>
         <span>
-          {edit && (
+          {mailoutDetailPage && (
             <Button basic color="teal" onClick={onClickEdit}>
               Edit
             </Button>
           )}
         </span>
-        <span>{ApproveAndSendButton({ data, edit, onClickApproveAndSend })}</span>
-        <span>{DeleteButton({ data, edit, onClickDelete })}</span>
+        <span>{ApproveAndSendButton({ data, mailoutDetailPage, onClickApproveAndSend })}</span>
+        <span>{DeleteButton({ data, mailoutDetailPage, onClickDelete })}</span>
       </ItemHeaderMenuLayout>
     </ItemHeaderLayout>
   );
