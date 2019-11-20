@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
-import { Segment } from 'semantic-ui-react';
-import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
+import React, { Fragment, Component } from 'react';
+import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'google-maps-react';
 
+import { Header, Segment } from './Base';
 import config from '../config';
 
 const containerStyle = {
@@ -11,56 +11,89 @@ const containerStyle = {
   height: '100%',
 };
 
-const GoogleMapItem = ({ data, loaded, google }) => {
-  if (!data || !google || !loaded || !data.destinations) return;
+export class GoogleMapItem extends Component {
+  state = {
+    showingInfoWindow: false,
+    activeMarker: {},
+    selectedPlace: {},
+  };
 
-  const displayMarkers = () => {
-    if (!data.destinations) return;
+  onMarkerClick = (props, marker, e) =>
+    this.setState({
+      selectedPlace: props,
+      activeMarker: marker,
+      showingInfoWindow: true,
+    });
 
-    return data.destinations.map((dest, index) => {
+  onMapClicked = props => {
+    if (this.state.showingInfoWindow) {
+      this.setState({
+        showingInfoWindow: false,
+        activeMarker: null,
+      });
+    }
+  };
+
+  render() {
+    const { data, google } = this.props;
+
+    const displayMarkers = () => {
+      if (!data.destinations) return;
+
+      return data.destinations.map((dest, index) => {
+        return (
+          <Marker
+            key={index}
+            id={index}
+            icon={{ url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png' }}
+            position={{
+              lat: dest.lat,
+              lng: dest.lon,
+            }}
+            title={dest.value && dest.value.deliveryLine}
+            onClick={this.onMarkerClick}
+          />
+        );
+      });
+    };
+
+    const mainMarker = () => {
+      if (!data.details) return;
+
       return (
         <Marker
-          key={index}
-          id={index}
-          icon={{ url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png' }}
+          icon={{ url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' }}
           position={{
-            lat: dest.lat,
-            lng: dest.lon,
+            lat: data.details.latitude,
+            lng: data.details.longitude,
           }}
-          title={dest.value && dest.value.deliveryLine}
-          // onClick={() => console.log("You clicked on one of the destination markers!")}
-        />
+          title={data.details.displayAddress}
+          onClick={this.onMarkerClick}
+        ></Marker>
       );
-    });
-  };
-
-  const mainMarker = () => {
-    if (!data.details) return;
+    };
 
     return (
-      <Marker
-        icon={{ url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' }}
-        position={{
-          lat: data.details.latitude,
-          lng: data.details.longitude,
-        }}
-        title={data.details.displayAddress}
-        // onClick={() => console.log("You clicked on the main marker!")}
-      />
+      <Fragment>
+        <Segment basic style={{ height: '50vh' }}>
+          <Map
+            google={google}
+            zoom={12}
+            containerStyle={containerStyle}
+            initialCenter={{ lat: data.details.latitude, lng: data.details.longitude }}
+            onClick={this.onMapClicked}
+          >
+            {displayMarkers()}
+            {mainMarker()}
+            <InfoWindow marker={this.state.activeMarker} visible={this.state.showingInfoWindow}>
+              <Header as="h5">{this.state.selectedPlace.title}</Header>
+            </InfoWindow>
+          </Map>
+        </Segment>
+      </Fragment>
     );
-  };
-
-  return (
-    <Fragment>
-      <Segment basic style={{ height: '50vh' }}>
-        <Map google={google} zoom={12} containerStyle={containerStyle} initialCenter={{ lat: data.details.latitude, lng: data.details.longitude }}>
-          {displayMarkers()}
-          {mainMarker()}
-        </Map>
-      </Segment>
-    </Fragment>
-  );
-};
+  }
+}
 
 GoogleMapItem.propTypes = {
   props: PropTypes.object,
