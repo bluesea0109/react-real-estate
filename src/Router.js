@@ -10,6 +10,11 @@ import CustomizationPage from './pages/CustomizationPage';
 import ProfilePage from './pages/ProfilePage';
 import SettingsPage from './pages/SettingsPage';
 import EmptyPage from './pages/EmptyPage';
+// import onRouteChanges from './onRouteChange';
+//
+// onRouteChanges(route => {
+//   console.log(`route changed to "${route}"`);
+// });
 
 export default () => {
   return (
