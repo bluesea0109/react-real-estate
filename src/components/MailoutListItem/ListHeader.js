@@ -8,7 +8,7 @@ import { canDelete, canSend, resizeLongText, resolveLabelStatus } from './helper
 import { Button } from '../Base';
 import { Label } from 'semantic-ui-react';
 
-const ApproveAndSendButton = ({ data, edit }) => {
+const ApproveAndSendButton = ({ data, edit, onClickApproveAndSend }) => {
   if (!data) return;
 
   if (!edit) {
@@ -33,7 +33,7 @@ const ApproveAndSendButton = ({ data, edit }) => {
   return (
     <Fragment>
       {canSend(data.mailoutStatus) && (
-        <Button color="teal">
+        <Button color="teal" onClick={onClickApproveAndSend}>
           <MobileDisabledLayout>
             <Fragment>Approve & Send</Fragment>
           </MobileDisabledLayout>
@@ -46,7 +46,7 @@ const ApproveAndSendButton = ({ data, edit }) => {
   );
 };
 
-const DeleteButton = ({ data, edit }) => {
+const DeleteButton = ({ data, edit, onClickDelete }) => {
   if (!data) return;
 
   if (!edit) {
@@ -66,7 +66,7 @@ const DeleteButton = ({ data, edit }) => {
   return (
     <Fragment>
       {canDelete(data.mailoutStatus) && (
-        <Button basic color="teal">
+        <Button basic color="teal" onClick={onClickDelete}>
           <FontAwesomeIcon icon="trash-alt" />
         </Button>
       )}
@@ -74,7 +74,7 @@ const DeleteButton = ({ data, edit }) => {
   );
 };
 
-const ListHeader = ({ data, edit }) => {
+const ListHeader = ({ data, edit, onClickEdit, onClickApproveAndSend, onClickDelete }) => {
   if (!data) return;
 
   return (
@@ -91,13 +91,13 @@ const ListHeader = ({ data, edit }) => {
       <ItemHeaderMenuLayout>
         <span>
           {edit && (
-            <Button basic color="teal">
+            <Button basic color="teal" onClick={onClickEdit}>
               Edit
             </Button>
           )}
         </span>
-        <span>{ApproveAndSendButton({ data, edit })}</span>
-        <span>{DeleteButton({ data, edit })}</span>
+        <span>{ApproveAndSendButton({ data, edit, onClickApproveAndSend })}</span>
+        <span>{DeleteButton({ data, edit, onClickDelete })}</span>
       </ItemHeaderMenuLayout>
     </ItemHeaderLayout>
   );
