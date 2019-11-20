@@ -24,6 +24,8 @@ export function* fetchMailoutDetailsSaga() {
     const { path, method } = ApiService.directory.user.mailouts.get(mailoutId);
     const response = yield call(ApiService[method], path);
 
+    console.log('response', response);
+
     yield put(fetchMailoutDetailsSuccess(response));
   } catch (err) {
     yield put(fetchMailoutDetailsError(err.message));

@@ -1,7 +1,7 @@
 import {
-  FETCH_MAILOUT_PENDING,
-  FETCH_MAILOUT_SUCCESS,
-  FETCH_MAILOUT_ERROR,
+  FETCH_MAILOUTS_PENDING,
+  FETCH_MAILOUTS_SUCCESS,
+  FETCH_MAILOUTS_ERROR,
   TOGGLE_CAN_FETCH_MORE,
   FETCH_MORE_MAILOUTS_PENDING,
   FETCH_MORE_MAILOUTS_SUCCESS,
@@ -19,20 +19,20 @@ const initialState = {
 
 export default function mailouts(state = initialState, action) {
   switch (action.type) {
-    case FETCH_MAILOUT_PENDING:
+    case FETCH_MAILOUTS_PENDING:
       return {
         ...state,
         pending: true,
       };
 
-    case FETCH_MAILOUT_SUCCESS:
+    case FETCH_MAILOUTS_SUCCESS:
       return {
         ...state,
         pending: false,
         list: action.payload,
       };
 
-    case FETCH_MAILOUT_ERROR:
+    case FETCH_MAILOUTS_ERROR:
       return {
         ...state,
         pending: false,
