@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { fetchMailoutDetailsPending } from '../store/modules/mailout/actions';
 import { Button, Grid, Menu, Message, Page, Segment } from '../components/Base';
+import { fetchMailoutDetailsPending } from '../store/modules/mailout/actions';
 import ListHeader from '../components/MailoutListItem/ListHeader';
-import ItemTable from '../components/MailoutListItem/ItemTable';
 import ImageGroup from '../components/MailoutListItem/ImageGroup';
+import ItemTable from '../components/MailoutListItem/ItemTable';
+import MailoutEditModal from '../components/MailoutEditModal';
 import GoogleMapItem from '../components/GoogleMapItem';
 import { useHistory, useParams } from 'react-router';
 import Loading from '../components/Loading';
@@ -20,12 +21,8 @@ const useFetching = (fetchActionCreator, dispatch, mailoutId) => {
 const MailoutDetails = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-
-  // The <Route> that rendered this component has a
-  // path of `/topics/:topicId`. The `:topicId` portion
-  // of the URL indicates a placeholder that we can
-  // get from `useParams()`.
   const { mailoutId } = useParams();
+  const [modalOpen, setModalOpen] = useState(false);
 
   const isLoading = useSelector(store => store.mailout.pending);
   const details = useSelector(store => store.mailout.details);
@@ -42,9 +39,8 @@ const MailoutDetails = () => {
     history.goBack();
   };
 
-  const handleEditClick = () => {
-    console.log('yay!');
-    // TODO: Create Edit Modal
+  const toggleModalState = () => {
+    setModalOpen(!modalOpen);
   };
 
   const handleApproveAndSendMailoutDetailsClick = () => {
@@ -85,7 +81,7 @@ const MailoutDetails = () => {
                 ListHeader({
                   data: details,
                   edit: true,
-                  onClickEdit: handleEditClick,
+                  onClickEdit: toggleModalState,
                   onClickApproveAndSend: handleApproveAndSendMailoutDetailsClick,
                   onClickDelete: handleDeleteMailoutDetailsClick,
                 })}
@@ -100,6 +96,7 @@ const MailoutDetails = () => {
       </Segment>
       {isLoading && !error && Loading()}
       {error && <Message error>Oh snap! {error}.</Message>}
+      <MailoutEditModal modalOpen={modalOpen} handleClose={toggleModalState} />
     </Page>
   );
 };
