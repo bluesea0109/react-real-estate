@@ -12,8 +12,9 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import configureStore from './store/configure';
+import AuthService from './services/auth';
 
-const store = configureStore({});
+const store = configureStore({ initialState: {}, AuthService });
 library.add(fas);
 
 ReactDOM.render(

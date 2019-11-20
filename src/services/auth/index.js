@@ -17,61 +17,45 @@ const webAuth = new auth0.WebAuth({
 
 class AuthService extends EventEmitter {
   idToken = null;
-  profile = null;
-  tokenExpiry = null;
-
+  idTokenPayload = null;
   accessToken = null;
   accessTokenExpiry = null;
 
-  signIn(customState) {
+  signIn = customState => {
     webAuth.authorize({
       appState: customState,
     });
-  }
+  };
 
-  localLogin(authResult) {
+  localLogin = authResult => {
     this.idToken = authResult.idToken;
-    this.profile = authResult.idTokenPayload;
-
-    // NEW - Save the Access Token and expiry time in memory
+    this.idTokenPayload = authResult.idTokenPayload;
     this.accessToken = authResult.accessToken;
-    this.tokenExpiry = authResult.expiresAtDate;
+    this.accessTokenExpiry = new Date(authResult.idTokenPayload.exp * 1000);
 
     localStorage.setItem(localStorageKey, 'true');
 
     this.emit(loginEvent, {
       loggedIn: true,
-      profile: authResult.idTokenPayload,
+      idTokenPayload: authResult.idTokenPayload,
       state: authResult.appState || {},
     });
-  }
+  };
 
-  handleAuthentication() {
+  handleAuthentication = () => {
     return new Promise((resolve, reject) => {
       webAuth.parseHash((err, authResult) => {
-        if (err) return reject(err);
-        if (!authResult || !authResult.idToken) {
+        if (err) {
           return reject(err);
+        } else {
+          this.localLogin(authResult);
+          resolve(authResult);
         }
-        const accessToken = authResult.accessToken;
-        const idToken = authResult.idToken;
-        // set the time that the id token will expire at
-        const expiresAt = authResult.idTokenPayload.exp * 1000;
-        // make the time human readable
-        const expiresAtDate = new Date(expiresAt).toString();
-
-        resolve({
-          authenticated: true,
-          accessToken,
-          idToken,
-          expiresAt,
-          expiresAtDate,
-        });
       });
     });
-  }
+  };
 
-  renewTokens() {
+  renewTokens = () => {
     return new Promise((resolve, reject) => {
       if (localStorage.getItem(localStorageKey) !== 'true') {
         return reject('Not logged in');
@@ -86,28 +70,29 @@ class AuthService extends EventEmitter {
         }
       });
     });
-  }
+  };
 
-  signOut() {
+  signOut = () => {
     localStorage.removeItem(localStorageKey);
 
-    // this.idToken = null;
-    // this.tokenExpiry = null;
-    // this.profile = null;
+    this.idToken = null;
+    this.idTokenPayload = null;
+    this.accessToken = null;
+    this.accessTokenExpiry = null;
 
     webAuth.logout({
       returnTo: `${siteRoot}`,
       clientID: config.auth0.clientId,
     });
 
-    // this.emit(loginEvent, { loggedIn: false });
-  }
+    this.emit(loginEvent, { loggedIn: false });
+  };
 
   isAccessTokenValid() {
     return this.accessToken && this.accessTokenExpiry && Date.now() < this.accessTokenExpiry;
   }
 
-  getAccessToken() {
+  getAccessToken = () => {
     return new Promise((resolve, reject) => {
       if (this.isAccessTokenValid()) {
         resolve(this.accessToken);
@@ -117,11 +102,11 @@ class AuthService extends EventEmitter {
         }, reject);
       }
     });
-  }
+  };
 
-  isAuthenticated() {
-    return Date.now() < this.tokenExpiry && localStorage.getItem(localStorageKey) === 'true';
-  }
+  isAuthenticated = () => {
+    return this.isAccessTokenValid() && localStorage.getItem(localStorageKey) === 'true';
+  };
 }
 
 export default new AuthService();
