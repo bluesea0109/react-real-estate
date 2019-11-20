@@ -5,7 +5,7 @@ import middleware from './middleware';
 import rootReducer from './reducers';
 import rootSaga from './sagas';
 
-const configureStore = initialState => {
+const configureStore = ({ initialState, AuthService }) => {
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
         // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
@@ -20,7 +20,8 @@ const configureStore = initialState => {
 
   const store = createStore(rootReducer, initialState, enhancer);
 
-  let sagaTask = sagaMiddleware.run(rootSaga);
+  const services = { AuthService };
+  let sagaTask = sagaMiddleware.run(rootSaga, services);
 
   if (module.hot) {
     module.hot.accept('./reducers', () => {
