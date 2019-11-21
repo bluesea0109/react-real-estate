@@ -1,6 +1,8 @@
 import Button from './Button';
 import Container from './Container';
 import Dimmer from './Dimmer';
+import Divider from './Divider';
+import Form from './Form';
 import Grid from './Grid';
 import Header from './Header';
 import Icon from './Icon';
@@ -23,6 +25,8 @@ export {
   Button,
   Container,
   Dimmer,
+  Divider,
+  Form,
   Grid,
   Header,
   Icon,
