@@ -74,7 +74,7 @@ const MailoutDetails = () => {
             </Menu>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column width={16}>
+            <Grid.Column width={16} style={{ paddingLeft: '0', paddingRight: '0' }}>
               {!isLoading &&
                 !error &&
                 details &&
