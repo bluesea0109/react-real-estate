@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom';
 
 import { Image } from '../Base';
 
-const ImageGroup = ({ img1src, img2src, size = 'small', linkTo }) => {
+const ImageGroup = ({ img1src, img2src, linkTo }) => {
   if (!img1src || !img2src) return;
 
   if (linkTo) {
     return (
-      <Image.Group size={size}>
+      <Image.Group style={{ minWidth: '200px' }}>
         <Link to={linkTo}>
           <Image src={img1src} />
         </Link>
@@ -21,7 +21,7 @@ const ImageGroup = ({ img1src, img2src, size = 'small', linkTo }) => {
   }
 
   return (
-    <Image.Group size={size}>
+    <Image.Group size="big">
       <Image src={img1src} />
       <Image src={img2src} />
     </Image.Group>

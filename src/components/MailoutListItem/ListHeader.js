@@ -4,8 +4,8 @@ import React, { Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { MobileDisabledLayout, MobileEnabledLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
-import { canDelete, canSend, resizeLongText, resolveLabelStatus } from './helpers';
-import { Button } from '../Base';
+import { canDelete, canSend, resolveLabelStatus } from './helpers';
+import { Button, Header } from '../Base';
 import { Label } from 'semantic-ui-react';
 
 const ApproveAndSendButton = ({ data, mailoutDetailPage, onClickApproveAndSend }) => {
@@ -80,13 +80,17 @@ const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickAppro
   return (
     <ItemHeaderLayout attached="top" block>
       <span style={{ gridArea: 'label' }}>
-        <Label size="big" color={resolveLabelStatus(data.listingStatus)} ribbon style={{ textTransform: 'capitalize', top: '-0.7em', left: '-2.4em' }}>
+        <Label size="large" color={resolveLabelStatus(data.listingStatus)} ribbon style={{ textTransform: 'capitalize', top: '-0.9em', left: '-2.7em' }}>
           {data.listingStatus}
         </Label>
       </span>
-      <span style={{ gridArea: 'address' }}>
-        {!mailoutDetailPage && <Link to={`dashboard/${data._id}`}>{resizeLongText(data.details.displayAddress)}</Link>}
-        {mailoutDetailPage && resizeLongText(data.details.displayAddress)}
+      <span style={{ gridArea: 'address', alignSelf: 'center' }}>
+        {!mailoutDetailPage && (
+          <Link to={`dashboard/${data._id}`} className="ui header">
+            <Header as="h3">{data.details.displayAddress}</Header>
+          </Link>
+        )}
+        {mailoutDetailPage && <Header as="h3">{data.details.displayAddress}</Header>}
       </span>
       <ItemHeaderMenuLayout>
         <span>

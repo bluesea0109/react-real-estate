@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { Button, Grid, Menu, Message, Page, Segment } from '../components/Base';
+import { Button, Header, Grid, Menu, Message, Page, Segment } from '../components/Base';
 import { fetchMailoutDetailsPending } from '../store/modules/mailout/actions';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ImageGroup from '../components/MailoutListItem/ImageGroup';
@@ -62,7 +62,7 @@ const MailoutDetails = () => {
           <Grid.Row>
             <Menu borderless fluid secondary>
               <Menu.Item>
-                <h1>Campaign Details</h1>
+                <Header as="h3">Campaign Details</Header>
               </Menu.Item>
               <Menu.Menu position="right">
                 <Menu.Item>
@@ -87,7 +87,7 @@ const MailoutDetails = () => {
                 })}
               <Segment basic>
                 {!isLoading && !error && details && ItemTable({ data: details })}
-                {!isLoading && !error && details && ImageGroup({ img1src: details.sampleBackLargeUrl, img2src: details.sampleFrontLargeUrl, size: 'big' })}
+                {!isLoading && !error && details && ImageGroup({ img1src: details.sampleBackLargeUrl, img2src: details.sampleFrontLargeUrl })}
               </Segment>
               {!isLoading && !error && details && <GoogleMapItem data={details} />}
             </Grid.Column>

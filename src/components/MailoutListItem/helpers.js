@@ -1,21 +1,5 @@
-import React from 'react';
 import Dinero from 'dinero.js/build/esm/dinero.js';
 import { format } from 'date-fns';
-
-import { Header } from '../Base';
-
-/*
- * This function is used to prevent long address text from shifting buttons out of user view on mobile/tablet platforms
- */
-export const resizeLongText = text => {
-  if (!text) return;
-
-  if (text.length >= 32 && window.innerWidth < 600) {
-    return <Header as="h6">{text}</Header>;
-  }
-
-  return <Header as="h4">{text}</Header>;
-};
 
 export const calculateCost = recipientCount => {
   if (!recipientCount || typeof recipientCount !== 'number') return '-';

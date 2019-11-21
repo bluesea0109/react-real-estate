@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { fetchMailoutsPending, fetchMoreMailoutsPending } from '../store/modules/mailouts/actions';
-import { Button, Grid, Menu, Message, Page, Segment } from '../components/Base';
+import { Button, Header, Grid, Menu, Message, Page, Segment } from '../components/Base';
 import { MobileDisabledLayout, MobileEnabledLayout } from '../layouts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import MailoutListItem from '../components/MailoutListItem';
@@ -47,7 +47,7 @@ const Dashboard = () => {
           <Grid.Row>
             <Menu borderless fluid secondary>
               <Menu.Item>
-                <h1>Dashboard</h1>
+                <Header as="h3">Dashboard</Header>
               </Menu.Item>
               <Menu.Menu position="right">
                 <Menu.Item>
