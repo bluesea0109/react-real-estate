@@ -1,11 +1,9 @@
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { ItemLayout, ItemBodyLayout } from '../../layouts';
-
 import ImageGroup from './ImageGroup';
 import ListHeader from './ListHeader';
-
 import ItemList from './ItemList';
 
 const MailoutListItem = data => {

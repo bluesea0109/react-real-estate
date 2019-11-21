@@ -12,6 +12,7 @@ import ItemHeaderMenuLayout from './ItemHeaderMenuLayout';
 
 import ItemLayout from './ItemLayout';
 import ItemBodyLayout from './ItemBodyLayout';
+import ItemBodyLayoutV2 from './ItemBodyLayoutV2';
 import ItemBodyPicturesLayout from './ItemBodyPicturesLayout';
 import ItemBodyDataLayout from './ItemBodyDataLayout';
 
@@ -27,6 +28,7 @@ export {
   ItemHeaderMenuLayout,
   ItemLayout,
   ItemBodyLayout,
+  ItemBodyLayoutV2,
   ItemBodyPicturesLayout,
   ItemBodyDataLayout,
 };

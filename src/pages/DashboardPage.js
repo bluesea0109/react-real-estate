@@ -6,8 +6,8 @@ import { Button, Header, Grid, Menu, Message, Page, Segment } from '../component
 import { MobileDisabledLayout, MobileEnabledLayout } from '../layouts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import MailoutListItem from '../components/MailoutListItem';
-import Loading from '../components/Loading';
 import EmptyItem from '../components/EmptyItem';
+import Loading from '../components/Loading';
 
 const useFetching = (fetchActionCreator, dispatch) => {
   useEffect(() => {

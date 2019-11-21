@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { approveAndSendMailoutDetailsPending, deleteMailoutDetailsPending, resetMailoutDetails } from '../store/modules/mailout/actions';
 import { Button, Header, Grid, Menu, Message, Page, Segment } from '../components/Base';
 import { fetchMailoutDetailsPending } from '../store/modules/mailout/actions';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ImageGroup from '../components/MailoutListItem/ImageGroup';
 import MailoutEditModal from '../components/MailoutEditModal';
+import ItemList from '../components/MailoutListItem/ItemList';
 import GoogleMapItem from '../components/GoogleMapItem';
+import { ItemBodyLayoutV2, ItemLayout } from '../layouts';
 import { useHistory, useParams } from 'react-router';
 import Loading from '../components/Loading';
-import { approveAndSendMailoutDetailsPending, deleteMailoutDetailsPending, resetMailoutDetails } from '../store/modules/mailout/actions';
-import ItemList from '../components/MailoutListItem/ItemList';
-import { ItemBodyLayout, ItemLayout } from '../layouts';
 
 const useFetching = (fetchActionCreator, dispatch, mailoutId) => {
   useEffect(() => {
@@ -85,11 +85,11 @@ const MailoutDetails = () => {
                     onClickApproveAndSend: handleApproveAndSendMailoutDetailsClick,
                     onClickDelete: handleDeleteMailoutDetailsClick,
                   })}
-                  <ItemBodyLayout attached style={{ padding: 10 }}>
+                  <ItemBodyLayoutV2 attached style={{ padding: 10 }}>
                     {ImageGroup({ img1src: details.sampleBackLargeUrl, img2src: details.sampleFrontLargeUrl })}
 
                     {ItemList({ data: details })}
-                  </ItemBodyLayout>
+                  </ItemBodyLayoutV2>
                 </ItemLayout>
               )}
               {!isLoading && !error && details && <GoogleMapItem data={details} />}

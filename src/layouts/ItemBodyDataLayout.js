@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 export default styled(List)`
   grid-area: data;
+  justify-items: center;
 
   display: grid;
   grid-template-rows: 1fr;
