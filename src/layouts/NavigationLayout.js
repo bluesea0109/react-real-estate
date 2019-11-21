@@ -8,7 +8,7 @@ export default styled(Menu)`
 
   height: 160px;
 
-  @media (max-width: 700px) {
+  @media (max-width: 768px) {
     grid-template-rows: 1fr;
     grid-template-columns: 1fr 1fr 1fr 1fr;
 

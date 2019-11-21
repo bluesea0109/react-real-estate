@@ -5,12 +5,13 @@ import { Button, Header, Grid, Menu, Message, Page, Segment } from '../component
 import { fetchMailoutDetailsPending } from '../store/modules/mailout/actions';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ImageGroup from '../components/MailoutListItem/ImageGroup';
-import ItemTable from '../components/MailoutListItem/ItemTable';
 import MailoutEditModal from '../components/MailoutEditModal';
 import GoogleMapItem from '../components/GoogleMapItem';
 import { useHistory, useParams } from 'react-router';
 import Loading from '../components/Loading';
 import { approveAndSendMailoutDetailsPending, deleteMailoutDetailsPending, resetMailoutDetails } from '../store/modules/mailout/actions';
+import ItemList from '../components/MailoutListItem/ItemList';
+import { ItemBodyLayout, ItemLayout } from '../layouts';
 
 const useFetching = (fetchActionCreator, dispatch, mailoutId) => {
   useEffect(() => {
@@ -74,21 +75,23 @@ const MailoutDetails = () => {
             </Menu>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column width={16} style={{ paddingLeft: '0', paddingRight: '0' }}>
-              {!isLoading &&
-                !error &&
-                details &&
-                ListHeader({
-                  data: details,
-                  mailoutDetailPage: true,
-                  onClickEdit: toggleModalState,
-                  onClickApproveAndSend: handleApproveAndSendMailoutDetailsClick,
-                  onClickDelete: handleDeleteMailoutDetailsClick,
-                })}
-              <Segment basic>
-                {!isLoading && !error && details && ItemTable({ data: details })}
-                {!isLoading && !error && details && ImageGroup({ img1src: details.sampleBackLargeUrl, img2src: details.sampleFrontLargeUrl })}
-              </Segment>
+            <Grid.Column width={16}>
+              {!isLoading && !error && details && (
+                <ItemLayout fluid key={details._id}>
+                  {ListHeader({
+                    data: details,
+                    mailoutDetailPage: true,
+                    onClickEdit: toggleModalState,
+                    onClickApproveAndSend: handleApproveAndSendMailoutDetailsClick,
+                    onClickDelete: handleDeleteMailoutDetailsClick,
+                  })}
+                  <ItemBodyLayout attached style={{ padding: 10 }}>
+                    {ImageGroup({ img1src: details.sampleBackLargeUrl, img2src: details.sampleFrontLargeUrl })}
+
+                    {ItemList({ data: details })}
+                  </ItemBodyLayout>
+                </ItemLayout>
+              )}
               {!isLoading && !error && details && <GoogleMapItem data={details} />}
             </Grid.Column>
           </Grid.Row>

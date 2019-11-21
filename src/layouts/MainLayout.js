@@ -10,7 +10,7 @@ export default styled.div`
     'header header'
     'sidebar content';
 
-  @media (max-width: 700px) {
+  @media (max-width: 768px) {
     grid-template-rows: [header] 60px [sidebar] 60px [body] auto;
     grid-template-columns: [content] 1fr;
     grid-template-areas:

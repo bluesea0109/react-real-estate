@@ -10,6 +10,11 @@ import MobileEnabledLayout from './MobileEnabledLayout';
 import ItemHeaderLayout from './ItemHeaderLayout';
 import ItemHeaderMenuLayout from './ItemHeaderMenuLayout';
 
+import ItemLayout from './ItemLayout';
+import ItemBodyLayout from './ItemBodyLayout';
+import ItemBodyPicturesLayout from './ItemBodyPicturesLayout';
+import ItemBodyDataLayout from './ItemBodyDataLayout';
+
 export {
   MainLayout,
   HeaderLayout,
@@ -20,4 +25,8 @@ export {
   MobileEnabledLayout,
   ItemHeaderLayout,
   ItemHeaderMenuLayout,
+  ItemLayout,
+  ItemBodyLayout,
+  ItemBodyPicturesLayout,
+  ItemBodyDataLayout,
 };

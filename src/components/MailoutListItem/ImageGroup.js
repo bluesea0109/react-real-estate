@@ -2,29 +2,33 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
+import { ItemBodyPicturesLayout } from '../../layouts';
 import { Image } from '../Base';
+
+const mql = window.matchMedia('(max-width: 599px)');
+const resizePictures = () => (mql.matches ? { width: '100%' } : { width: '48%' });
 
 const ImageGroup = ({ img1src, img2src, linkTo }) => {
   if (!img1src || !img2src) return;
 
   if (linkTo) {
     return (
-      <Image.Group style={{ minWidth: '200px' }}>
+      <ItemBodyPicturesLayout>
         <Link to={linkTo}>
-          <Image src={img1src} />
+          <Image src={img1src} style={resizePictures()} />
         </Link>
         <Link to={linkTo}>
-          <Image src={img2src} />
+          <Image src={img2src} style={resizePictures()} />
         </Link>
-      </Image.Group>
+      </ItemBodyPicturesLayout>
     );
   }
 
   return (
-    <Image.Group size="big">
-      <Image src={img1src} />
-      <Image src={img2src} />
-    </Image.Group>
+    <ItemBodyPicturesLayout>
+      <Image src={img1src} style={resizePictures()} />
+      <Image src={img2src} style={resizePictures()} />
+    </ItemBodyPicturesLayout>
   );
 };
 
