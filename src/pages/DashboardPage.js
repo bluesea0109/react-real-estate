@@ -3,8 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { fetchMailoutsPending, fetchMoreMailoutsPending } from '../store/modules/mailouts/actions';
 import { Button, Header, Grid, Menu, Message, Page, Segment } from '../components/Base';
-import { MobileDisabledLayout, MobileEnabledLayout } from '../layouts';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import MailoutListItem from '../components/MailoutListItem';
 import EmptyItem from '../components/EmptyItem';
 import Loading from '../components/Loading';
@@ -30,8 +28,6 @@ const Dashboard = () => {
 
   useFetching(fetchMailoutsPending, useDispatch());
 
-  const boundRefetch = () => dispatch(fetchMailoutsPending());
-
   const boundFetchMoreMailouts = value => dispatch(fetchMoreMailoutsPending(value));
 
   const handleClick = e => {
@@ -53,18 +49,6 @@ const Dashboard = () => {
               <Menu.Item>
                 <Header as="h3">Dashboard</Header>
               </Menu.Item>
-              <Menu.Menu position="right">
-                <Menu.Item>
-                  <Button basic color="teal" onClick={() => boundRefetch()}>
-                    <MobileDisabledLayout>
-                      Get My Properties <FontAwesomeIcon icon="sync-alt" style={{ marginLeft: '.5em' }} />
-                    </MobileDisabledLayout>
-                    <MobileEnabledLayout>
-                      <FontAwesomeIcon icon="sync-alt" />
-                    </MobileEnabledLayout>
-                  </Button>
-                </Menu.Item>
-              </Menu.Menu>
             </Menu>
           </Grid.Row>
 
