@@ -11,7 +11,11 @@ import Loading from '../components/Loading';
 
 const useFetching = (fetchActionCreator, dispatch) => {
   useEffect(() => {
-    dispatch(fetchActionCreator());
+    // In order to prevent unnecessary call to the api when we are expecting an redirect,
+    // we check for the existence of routerDestination used by the PrivatePath to route to a specific URL
+    if (!localStorage.getItem('routerDestination')) {
+      dispatch(fetchActionCreator());
+    }
   }, [fetchActionCreator, dispatch]);
 };
 

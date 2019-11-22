@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
+
 import { authenticate } from '../store/modules/auth0/actions';
+import Loading from '../components/Loading';
 
 const mapStateToProps = state => {
   return {
@@ -14,7 +16,7 @@ let Callback = ({ dispatch, auth0 }) => {
 
   if (!auth0.pending) dispatch(authenticate());
 
-  return <div className="text-center">Loading user profile...</div>;
+  return <Loading />;
 };
 Callback = connect(mapStateToProps)(Callback);
 
