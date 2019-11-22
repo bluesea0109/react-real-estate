@@ -75,7 +75,7 @@ export class GoogleMapItem extends Component {
 
     return (
       <Fragment>
-        <Segment basic style={{ height: '50vh' }}>
+        <Segment attached style={{ height: '50vh', top: '-1px' }}>
           <Map
             google={google}
             zoom={12}
