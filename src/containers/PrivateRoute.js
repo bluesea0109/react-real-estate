@@ -10,7 +10,17 @@ const PrivateRoute = ({ component: Component, path, user, ...rest }) => {
 
   useEffect(() => {
     const fn = async () => {
-      if (!user) await history.push('/');
+      if (history.location.pathname !== '/callback' && history.location.pathname !== '/dashboard' && history.location.pathname !== '/') {
+        await localStorage.setItem('routerDestination', history.location.pathname);
+      }
+
+      if (!user) {
+        await history.push('/');
+      } else if (localStorage.getItem('routerDestination')) {
+        const routerDestination = await localStorage.getItem('routerDestination');
+        await localStorage.removeItem('routerDestination');
+        await history.push(routerDestination);
+      }
     };
     fn();
   }, [user, history]);
