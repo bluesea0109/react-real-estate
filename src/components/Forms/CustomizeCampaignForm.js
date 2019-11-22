@@ -1,16 +1,27 @@
 import React, { Fragment } from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { Form } from '../Base';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const renderRadio = field => (
-  <Form.Radio
-    checked={field.input.value === field.radioValue}
-    label={field.label}
-    name={field.input.name}
-    onChange={(e, { checked }) => field.input.onChange(field.radioValue)}
-  />
-);
+import { Form, Image, Segment, Dimmer } from '../Base';
 
+import { ButtonBack, ButtonNext, CarouselProvider, Slide, Slider } from 'pure-react-carousel';
+
+const renderRadio = field => {
+  return (
+    <Slide tag="a" index={field.radioValue}>
+      <Form.Radio
+        checked={field.input.value === field.radioValue}
+        name={field.input.name}
+        onChange={(e, { checked }) => field.input.onChange(field.radioValue)}
+        style={{ visibility: 'hidden' }}
+      />
+      <Dimmer.Dimmable dimmed={field.input.value === field.radioValue}>
+        <Image onClick={e => field.input.onChange(field.radioValue)} src={field.src} />
+        <Dimmer inverted active={field.input.value === field.radioValue} onClickOutside={e => field.input.onChange(field.radioValue)} />
+      </Dimmer.Dimmable>
+    </Slide>
+  );
+};
 const renderSelect = field => (
   <Form.Select
     label={field.label}
@@ -75,11 +86,50 @@ const CustomizeCampaignForm = props => {
           />
         </Form.Group>
         <label>Choose template for New Listing</label>
-        <Form.Group widths="equal">
-          <Field component={renderRadio} label="One" name="quantity" radioValue={1} />
-          <Field component={renderRadio} label="Two" name="quantity" radioValue={2} />
-          <Field component={renderRadio} label="Three" name="quantity" radioValue={3} />
-        </Form.Group>
+        <Segment attached="bottom">
+          <CarouselProvider
+            visibleSlides={3}
+            totalSlides={6}
+            step={3}
+            naturalSlideWidth={360}
+            naturalSlideHeight={240}
+            style={{
+              marginBottom: '-3em',
+            }}
+          >
+            <Slider
+              style={{
+                top: '-2em',
+              }}
+            >
+              <Field component={renderRadio} name="quantity" radioValue={1} src="https://lorempixel.com/800/800/cats/1" />
+              <Field component={renderRadio} name="quantity" radioValue={2} src="https://lorempixel.com/800/800/cats/2" />
+              <Field component={renderRadio} name="quantity" radioValue={3} src="https://lorempixel.com/800/800/cats/3" />
+              <Field component={renderRadio} name="quantity" radioValue={4} src="https://lorempixel.com/800/800/cats/4" />
+              <Field component={renderRadio} name="quantity" radioValue={5} src="https://lorempixel.com/800/800/cats/5" />
+              <Field component={renderRadio} name="quantity" radioValue={6} src="https://lorempixel.com/800/800/cats/6" />
+            </Slider>
+            <ButtonBack
+              style={{
+                position: 'relative',
+                top: '-6.5em',
+                left: '-1.5em',
+              }}
+            >
+              <FontAwesomeIcon icon="angle-left" />
+            </ButtonBack>
+            <ButtonNext
+              style={{
+                position: 'relative',
+                right: '-42.5em',
+                top: '-6.5em',
+              }}
+            >
+              <FontAwesomeIcon icon="angle-right" />
+            </ButtonNext>
+          </CarouselProvider>
+        </Segment>
+
         <Form.Group inline>
           <Form.Button primary>Submit</Form.Button>
           <Form.Button onClick={reset}>Reset</Form.Button>

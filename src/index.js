@@ -7,6 +7,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 
 import './reset.css';
 import 'semantic-ui-css/semantic.min.css';
+import 'pure-react-carousel/dist/react-carousel.es.css';
 import './index.css';
 
 import App from './App';
