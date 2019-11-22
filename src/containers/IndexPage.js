@@ -5,12 +5,12 @@ import AuthService from '../services/auth';
 
 const mapStateToProps = state => {
   return {
-    user: state.user,
+    auth0: state.auth0,
   };
 };
 
-let IndexPage = ({ user }) => {
-  if (user && user.authenticated) return <Redirect to="/dashboard" />;
+let IndexPage = ({ auth0 }) => {
+  if (auth0.authenticated) return <Redirect to="/dashboard" />;
 
   return <div>{AuthService.signIn()}</div>;
 };

@@ -5,7 +5,7 @@ import { Route, useHistory } from 'react-router-dom';
 
 import Loading from '../components/Loading';
 
-const PrivateRoute = ({ component: Component, path, user, ...rest }) => {
+const PrivateRoute = ({ component: Component, path, auth0, ...rest }) => {
   let history = useHistory();
 
   useEffect(() => {
@@ -14,7 +14,7 @@ const PrivateRoute = ({ component: Component, path, user, ...rest }) => {
         await localStorage.setItem('routerDestination', history.location.pathname);
       }
 
-      if (!user) {
+      if (!auth0.authenticated) {
         await history.push('/');
       } else if (localStorage.getItem('routerDestination')) {
         const routerDestination = await localStorage.getItem('routerDestination');
@@ -23,9 +23,9 @@ const PrivateRoute = ({ component: Component, path, user, ...rest }) => {
       }
     };
     fn();
-  }, [user, history]);
+  }, [auth0, history]);
 
-  const render = props => (user && user.authenticated === true ? <Component {...props} /> : <Loading />);
+  const render = props => (auth0.authenticated ? <Component {...props} /> : <Loading />);
 
   return <Route path={path} render={render} {...rest} />;
 };
@@ -37,7 +37,7 @@ PrivateRoute.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    user: state.user,
+    auth0: state.auth0,
   };
 };
 
