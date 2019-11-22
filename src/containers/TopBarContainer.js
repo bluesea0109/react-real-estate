@@ -3,7 +3,7 @@ import TopBar from '../components/TopBar';
 
 const mapStateToProps = state => {
   return {
-    user: state.user,
+    auth0: state.auth0,
   };
 };
 

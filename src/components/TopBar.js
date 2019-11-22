@@ -5,13 +5,13 @@ import AuthService from '../services/auth';
 import { Button, Menu } from './Base';
 import LogoImage from './LogoImage';
 
-export default ({ user }) => (
+export default ({ auth0 }) => (
   <Menu fluid fixed="top">
     <Menu.Item as="a" header>
       <LogoImage />
     </Menu.Item>
     <Menu.Menu position="right">
-      {user && (
+      {auth0.authenticated && (
         <Fragment>
           <Button basic onClick={AuthService.signOut}>
             Log Out <FontAwesomeIcon icon="sign-out-alt" style={{ marginLeft: '0.5em' }} />
