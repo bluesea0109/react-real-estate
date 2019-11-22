@@ -103,54 +103,95 @@ async function del(path, sendToken = true) {
   return await handleResponse(response);
 }
 
-const directory = {
-  boards: () => ({ path: `/api/boards`, props: {}, method: 'get' }),
+/*
 
-  states: () => ({ path: `/api/states`, props: {}, method: 'get' }),
+
+
+
+
+
+
+
+
+ */
+const directory = {
+  boards: () => ({ path: `/api/boards`, method: 'get' }),
+  states: () => ({ path: `/api/states`, method: 'get' }),
 
   user: {
-    onLogin: () => ({ path: `/api/user/onLogin`, props: {}, method: 'get' }),
+    onLogin: () => ({ path: `/api/user/onLogin`, method: 'get' }),
+
+    team: {
+      list: () => ({ path: `/api/user/team/list`, method: 'get' }),
+      settings: {
+        branding: {
+          get: () => ({ path: `/api/user/team/settings/branding`, method: 'get' }),
+          save: () => ({ path: `/api/user/team/settings/branding`, method: 'put' }),
+        },
+        photos: {
+          brokerageLogo: {
+            set: () => ({ path: `/api/user/team/settings/photos/brokerageLogo`, method: 'post' }),
+            delete: () => ({ path: `/api/user/team/settings/photos/brokerageLogo`, method: 'delete' }),
+          },
+          teamLogo: {
+            set: () => ({ path: `/api/user/team/settings/photos/teamLogo`, method: 'post' }),
+            delete: () => ({ path: `/api/user/team/settings/photos/teamLogo`, method: 'delete' }),
+          },
+        },
+        profile: {
+          get: () => ({ path: `/api/user/team/settings/profile`, method: 'get' }),
+          save: () => ({ path: `/api/user/team/settings/profile`, method: 'put' }),
+        },
+      },
+    },
+
+    peer: {
+      settings: {
+        branding: {
+          get: peerId => ({ path: `/api/user/peer/${peerId}/settings/branding`, method: 'get' }),
+          save: peerId => ({ path: `/api/user/peer/${peerId}/settings/branding`, method: 'put' }),
+        },
+        photos: {
+          get: peerId => ({ path: `/api/user/peer/${peerId}/settings/photos/realtorPhoto`, method: 'get' }),
+          set: peerId => ({ path: `/api/user/peer/${peerId}/settings/photos/realtorPhoto`, method: 'post' }),
+        },
+        profile: {
+          get: peerId => ({ path: `/api/user/peer/${peerId}/settings/branding`, method: 'get' }),
+          save: peerId => ({ path: `/api/user/peer/${peerId}/settings/branding`, method: 'put' }),
+        },
+      },
+    },
 
     mailouts: {
-      list: (page = 1, limit = 1) => ({ path: `/api/user/mailout`, props: { page, limit }, method: 'get' }),
-
-      get: mailoutId => ({ path: `/api/user/mailout/${mailoutId}?include_destinations=true`, props: {}, method: 'get' }),
-
-      cancel: mailoutId => ({ path: `/api/user/mailout/${mailoutId}`, props: {}, method: 'del' }),
-
-      approve: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/submit`, props: {}, method: 'post' }),
-
-      needsUpdate: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/needsUpdate`, props: {}, method: 'get' }),
-
-      regenerate: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/update`, props: {}, method: 'post' }),
-
-      initialize: () => ({ path: `/api/user/listing/mailout/initial`, props: {}, method: 'post' }),
+      list: () => ({ path: `/api/user/mailout`, method: 'get' }),
+      get: mailoutId => ({ path: `/api/user/mailout/${mailoutId}?include_destinations=true`, method: 'get' }),
+      cancel: mailoutId => ({ path: `/api/user/mailout/${mailoutId}`, method: 'del' }),
+      approve: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/submit`, method: 'post' }),
+      needsUpdate: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/needsUpdate`, method: 'get' }),
+      regenerate: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/update`, method: 'post' }),
+      initialize: () => ({ path: `/api/user/listing/mailout/initial`, method: 'post' }),
     },
 
     subscription: {
-      get: () => ({ path: `/api/user/subscription`, props: {}, method: 'get' }),
-
+      get: () => ({ path: `/api/user/subscription`, method: 'get' }),
       create: token => ({ path: `/api/user/mailout`, props: { chargify_token: token }, method: 'post' }),
     },
 
     profile: {
-      get: () => ({ path: `/api/user/profile`, props: {}, method: 'get' }),
-
+      get: () => ({ path: `/api/user/profile`, method: 'get' }),
       save: payload => ({ path: `/api/user/profile`, props: payload, method: 'put' }),
 
       branding: {
-        get: () => ({ path: `/api/user/profile/branding`, props: {}, method: 'get' }),
-
+        get: () => ({ path: `/api/user/profile/branding`, method: 'get' }),
         save: payload => ({ path: `/api/user/profile/branding`, props: payload, method: 'put' }),
 
         logos: {
-          get: () => ({ path: `/api/user/profile/branding/logos`, props: {}, method: 'get' }),
+          get: () => ({ path: `/api/user/profile/branding/logos`, method: 'get' }),
         },
 
         preview: {
-          get: () => ({ path: `/api/user/profile/branding/preview`, props: {}, method: 'get' }),
-
-          generate: () => ({ path: `/api/user/profile/branding/preview`, props: {}, method: 'post' }),
+          get: () => ({ path: `/api/user/profile/branding/preview`, method: 'get' }),
+          generate: () => ({ path: `/api/user/profile/branding/preview`, method: 'post' }),
         },
 
         teamLogo: {
@@ -179,9 +220,8 @@ const directory = {
       },
 
       automation: {
-        get: () => ({ path: `/api/user/profile/automation`, props: {}, method: 'get' }),
-
-        save: payload => ({ path: `/api/user/profile/automation`, props: {}, method: 'put' }),
+        get: () => ({ path: `/api/user/profile/automation`, method: 'get' }),
+        save: payload => ({ path: `/api/user/profile/automation`, props: payload, method: 'put' }),
       },
     },
   },
