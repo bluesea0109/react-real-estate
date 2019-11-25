@@ -17,11 +17,13 @@ import {
 
 const initialState = {
   pending: false,
-  error: null,
+  error: [],
   branding: null,
   photos: null,
   profile: null,
 };
+
+const formatError = (action, error) => ({ action, error });
 
 export default function settings(state = initialState, action) {
   switch (action.type) {
@@ -29,6 +31,7 @@ export default function settings(state = initialState, action) {
       return {
         ...state,
         pending: true,
+        error: [],
         branding: null,
         photos: null,
         profile: null,
@@ -42,10 +45,11 @@ export default function settings(state = initialState, action) {
       };
 
     case GET_USER_SETTINGS_BRANDING_ERROR:
+      state.error.push(formatError(action.type, action.error));
+
       return {
         ...state,
         pending: false,
-        error: action.error,
         branding: null,
       };
 
@@ -57,10 +61,11 @@ export default function settings(state = initialState, action) {
       };
 
     case GET_USER_SETTINGS_PHOTO_ERROR:
+      state.error.push(formatError(action.type, action.error));
+
       return {
         ...state,
         pending: false,
-        error: action.error,
         photos: null,
       };
 
@@ -72,16 +77,18 @@ export default function settings(state = initialState, action) {
       };
 
     case GET_USER_SETTINGS_PROFILE_ERROR:
+      state.error.push(formatError(action.type, action.error));
+
       return {
         ...state,
         pending: false,
-        error: action.error,
         profile: null,
       };
 
     case GET_PEER_SETTINGS_PENDING:
       return {
         ...state,
+        error: [],
         pending: true,
         branding: null,
         photos: null,
@@ -96,10 +103,11 @@ export default function settings(state = initialState, action) {
       };
 
     case GET_PEER_SETTINGS_BRANDING_ERROR:
+      state.error.push(formatError(action.type, action.error));
+
       return {
         ...state,
         pending: false,
-        error: action.error,
         branding: null,
       };
 
@@ -111,10 +119,11 @@ export default function settings(state = initialState, action) {
       };
 
     case GET_PEER_SETTINGS_PHOTO_ERROR:
+      state.error.push(formatError(action.type, action.error));
+
       return {
         ...state,
         pending: false,
-        error: action.error,
         photos: null,
       };
 
@@ -126,10 +135,11 @@ export default function settings(state = initialState, action) {
       };
 
     case GET_PEER_SETTINGS_PROFILE_ERROR:
+      state.error.push(formatError(action.type, action.error));
+
       return {
         ...state,
         pending: false,
-        error: action.error,
         profile: null,
       };
 

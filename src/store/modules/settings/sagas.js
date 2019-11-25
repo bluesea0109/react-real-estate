@@ -19,86 +19,78 @@ import {
 import ApiService from '../../../services/api/index';
 
 export function* userSettingsBrandingSaga() {
-  console.log('User Settings Branding Saga Start');
   try {
     const { path, method } = ApiService.directory.user.settings.branding.get();
     const response = yield call(ApiService[method], path);
 
     yield put(getUserSettingsBrandingSuccess(response));
   } catch (err) {
-    yield put(getUserSettingsBrandingError(err));
+    yield put(getUserSettingsBrandingError(err.message));
   }
 }
 
 export function* userSettingsPhotosSaga() {
-  console.log('User Settings Photos Saga Start');
   try {
     const { path, method } = ApiService.directory.user.settings.photos.get();
     const response = yield call(ApiService[method], path);
 
     yield put(getUserSettingsPhotoSuccess(response));
   } catch (err) {
-    yield put(getUserSettingsPhotoError(err));
+    yield put(getUserSettingsPhotoError(err.message));
   }
 }
 
 export function* userSettingsProfileSaga() {
-  console.log('User Settings Profile Saga Start');
   try {
-    const { path, method } = ApiService.directory.user.settings.profile;
+    const { path, method } = ApiService.directory.user.settings.profile.get();
     const response = yield call(ApiService[method], path);
 
     yield put(getUserSettingsProfileSuccess(response));
   } catch (err) {
-    yield put(getUserSettingsProfileError(err));
+    yield put(getUserSettingsProfileError(err.message));
   }
 }
 
 export function* userSettingsSaga() {
-  console.log('User Settings Saga Start');
   yield userSettingsBrandingSaga();
   yield userSettingsPhotosSaga();
   yield userSettingsProfileSaga();
 }
 
 export function* peerSettingsBrandingSaga() {
-  console.log('Peer Settings Branding Saga Start');
   try {
     const { path, method } = ApiService.directory.user.peer.settings.branding.get();
     const response = yield call(ApiService[method], path);
 
     yield put(getPeerSettingsBrandingSuccess(response));
   } catch (err) {
-    yield put(getPeerSettingsBrandingError(err));
+    yield put(getPeerSettingsBrandingError(err.message));
   }
 }
 
 export function* peerSettingsPhotosSaga() {
-  console.log('Peer Settings Photos Saga Start');
   try {
     const { path, method } = ApiService.directory.user.peer.settings.photos.get();
     const response = yield call(ApiService[method], path);
 
     yield put(getPeerSettingsPhotoSuccess(response));
   } catch (err) {
-    yield put(getPeerSettingsPhotoError(err));
+    yield put(getPeerSettingsPhotoError(err.message));
   }
 }
 
 export function* peerSettingsProfileSaga() {
-  console.log('Peer Settings Profile Saga Start');
   try {
-    const { path, method } = ApiService.directory.user.peer.settings.profile;
+    const { path, method } = ApiService.directory.user.peer.settings.profile.get();
     const response = yield call(ApiService[method], path);
 
     yield put(getPeerSettingsProfileSuccess(response));
   } catch (err) {
-    yield put(getPeerSettingsProfileError(err));
+    yield put(getPeerSettingsProfileError(err.message));
   }
 }
 
 export function* peerSettingsSaga() {
-  console.log('User Settings Saga Start');
   yield peerSettingsBrandingSaga();
   yield peerSettingsPhotosSaga();
   yield peerSettingsProfileSaga();
