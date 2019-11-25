@@ -1,10 +1,11 @@
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 import { Dropdown, Header } from 'semantic-ui-react';
+import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { NavigationLayout, MobileDisabledLayout, MobileEnabledLayout } from '../layouts';
+import { selectPeerId, deselectPeerId } from '../store/modules/peer/actions';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, Image, Icon } from './Base';
 
@@ -29,6 +30,7 @@ const mql = window.matchMedia('(max-width: 599px)');
 const menuSpacing = () => (mql.matches ? {} : { marginLeft: '2.5em' });
 
 export default () => {
+  const dispatch = useDispatch();
   const [activeItem, setActiveItem] = useState('');
   const [activeUser, setActiveUser] = useState('');
 
@@ -69,8 +71,12 @@ export default () => {
   }
 
   useEffect(() => {
-    if (!activeUser && loggedInUser) {
+    if (loggedInUser && !activeUser) {
       setActiveUser(loggedInUser._id);
+    } else if (loggedInUser && activeUser !== loggedInUser._id) {
+      dispatch(selectPeerId(activeUser));
+    } else if (loggedInUser && activeUser === loggedInUser._id) {
+      dispatch(deselectPeerId());
     }
   }, [loggedInUser, activeUser]);
 
