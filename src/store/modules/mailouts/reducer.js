@@ -1,11 +1,11 @@
 import {
-  FETCH_MAILOUTS_PENDING,
-  FETCH_MAILOUTS_SUCCESS,
-  FETCH_MAILOUTS_ERROR,
-  TOGGLE_CAN_FETCH_MORE,
-  FETCH_MORE_MAILOUTS_PENDING,
-  FETCH_MORE_MAILOUTS_SUCCESS,
-  FETCH_MORE_MAILOUTS_ERROR,
+  GET_MAILOUTS_PENDING,
+  GET_MAILOUTS_SUCCESS,
+  GET_MAILOUTS_ERROR,
+  TOGGLE_CAN_GET_MORE,
+  GET_MORE_MAILOUTS_PENDING,
+  GET_MORE_MAILOUTS_SUCCESS,
+  GET_MORE_MAILOUTS_ERROR,
   RESET_MAILOUTS,
 } from './actions';
 
@@ -19,40 +19,40 @@ const initialState = {
 
 export default function mailouts(state = initialState, action) {
   switch (action.type) {
-    case FETCH_MAILOUTS_PENDING:
+    case GET_MAILOUTS_PENDING:
       return {
         ...state,
         pending: true,
       };
 
-    case FETCH_MAILOUTS_SUCCESS:
+    case GET_MAILOUTS_SUCCESS:
       return {
         ...state,
         pending: false,
         list: action.payload,
       };
 
-    case FETCH_MAILOUTS_ERROR:
+    case GET_MAILOUTS_ERROR:
       return {
         ...state,
         pending: false,
         error: action.error,
       };
 
-    case TOGGLE_CAN_FETCH_MORE:
+    case TOGGLE_CAN_GET_MORE:
       return {
         ...state,
         canLoadMore: action.payload,
       };
 
-    case FETCH_MORE_MAILOUTS_PENDING:
+    case GET_MORE_MAILOUTS_PENDING:
       return {
         ...state,
         pending: true,
         page: action.payload,
       };
 
-    case FETCH_MORE_MAILOUTS_SUCCESS:
+    case GET_MORE_MAILOUTS_SUCCESS:
       const newList = state.list.concat(action.payload);
       return {
         ...state,
@@ -60,7 +60,7 @@ export default function mailouts(state = initialState, action) {
         list: newList,
       };
 
-    case FETCH_MORE_MAILOUTS_ERROR:
+    case GET_MORE_MAILOUTS_ERROR:
       return {
         ...state,
         pending: false,

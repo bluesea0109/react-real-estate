@@ -1,7 +1,7 @@
 import { put, call, select, takeLatest } from 'redux-saga/effects';
 
 import { fetchTeamPending, fetchTeamSuccess, fetchTeamError } from './actions';
-import { FETCH_ON_LOGIN_SUCCESS } from '../onLogin/actions';
+import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
 
 import ApiService from '../../../services/api/index';
 
@@ -29,5 +29,5 @@ export function* checkIfMultiUser() {
 }
 
 export default function*() {
-  yield takeLatest(FETCH_ON_LOGIN_SUCCESS, checkIfMultiUser);
+  yield takeLatest(GET_ON_LOGIN_SUCCESS, checkIfMultiUser);
 }

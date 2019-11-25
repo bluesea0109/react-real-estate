@@ -1,8 +1,8 @@
 import { createAction, createErrorAction } from '../../helpers';
 
-export const FETCH_MAILOUT_DETAILS_PENDING = 'FETCH_MAILOUT_DETAILS_PENDING';
-export const FETCH_MAILOUT_DETAILS_SUCCESS = 'FETCH_MAILOUT_DETAILS_SUCCESS';
-export const FETCH_MAILOUT_DETAILS_ERROR = 'FETCH_MAILOUT_DETAILS_ERROR';
+export const GET_MAILOUT_DETAILS_PENDING = 'GET_MAILOUT_DETAILS_PENDING';
+export const GET_MAILOUT_DETAILS_SUCCESS = 'GET_MAILOUT_DETAILS_SUCCESS';
+export const GET_MAILOUT_DETAILS_ERROR = 'GET_MAILOUT_DETAILS_ERROR';
 
 export const NEEDS_UPDATE_MAILOUT_DETAILS_PENDING = 'NEEDS_UPDATE_MAILOUT_DETAILS_PENDING';
 export const NEEDS_UPDATE_MAILOUT_DETAILS_SUCCESS = 'NEEDS_UPDATE_MAILOUT_DETAILS_SUCCESS';
@@ -19,15 +19,15 @@ export const DELETE_MAILOUT_DETAILS_ERROR = 'DELETE_MAILOUT_DETAILS_ERROR';
 export const RESET_MAILOUT_DETAILS = 'RESET_MAILOUT_DETAILS';
 
 export function fetchMailoutDetailsPending(payload) {
-  return createAction(FETCH_MAILOUT_DETAILS_PENDING, payload);
+  return createAction(GET_MAILOUT_DETAILS_PENDING, payload);
 }
 
 export function fetchMailoutDetailsSuccess(payload) {
-  return createAction(FETCH_MAILOUT_DETAILS_SUCCESS, payload);
+  return createAction(GET_MAILOUT_DETAILS_SUCCESS, payload);
 }
 
 export function fetchMailoutDetailsError(error) {
-  return createErrorAction(FETCH_MAILOUT_DETAILS_ERROR, error);
+  return createErrorAction(GET_MAILOUT_DETAILS_ERROR, error);
 }
 
 export function needsUpdateMailoutDetailsPending(payload) {

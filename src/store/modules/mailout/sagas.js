@@ -1,7 +1,7 @@
 import { call, put, select, takeEvery } from '@redux-saga/core/effects';
 
 import {
-  FETCH_MAILOUT_DETAILS_PENDING,
+  GET_MAILOUT_DETAILS_PENDING,
   fetchMailoutDetailsSuccess,
   fetchMailoutDetailsError,
   NEEDS_UPDATE_MAILOUT_DETAILS_PENDING,
@@ -67,7 +67,7 @@ export function* deleteMailoutDetailsSaga() {
 }
 
 export default function*() {
-  yield takeEvery(FETCH_MAILOUT_DETAILS_PENDING, fetchMailoutDetailsSaga);
+  yield takeEvery(GET_MAILOUT_DETAILS_PENDING, fetchMailoutDetailsSaga);
   yield takeEvery(NEEDS_UPDATE_MAILOUT_DETAILS_PENDING, needsUpdateMailoutDetailsSaga);
   yield takeEvery(APPROVE_AND_SEND_MAILOUT_DETAILS_PENDING, approveAndSendMailoutDetailsSaga);
   yield takeEvery(DELETE_MAILOUT_DETAILS_PENDING, deleteMailoutDetailsSaga);

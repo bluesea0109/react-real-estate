@@ -1,4 +1,4 @@
-import { FETCH_TEAM_PENDING, FETCH_TEAM_SUCCESS, FETCH_TEAM_ERROR } from './actions';
+import { GET_TEAM_PENDING, GET_TEAM_SUCCESS, GET_TEAM_ERROR } from './actions';
 
 const initialState = {
   pending: false,
@@ -8,20 +8,20 @@ const initialState = {
 
 export default function team(state = initialState, action) {
   switch (action.type) {
-    case FETCH_TEAM_PENDING:
+    case GET_TEAM_PENDING:
       return {
         ...state,
         pending: true,
       };
 
-    case FETCH_TEAM_SUCCESS:
+    case GET_TEAM_SUCCESS:
       return {
         ...state,
         pending: false,
         profiles: action.payload,
       };
 
-    case FETCH_TEAM_ERROR:
+    case GET_TEAM_ERROR:
       return {
         ...state,
         pending: false,

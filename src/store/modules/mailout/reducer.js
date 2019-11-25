@@ -1,7 +1,7 @@
 import {
-  FETCH_MAILOUT_DETAILS_PENDING,
-  FETCH_MAILOUT_DETAILS_SUCCESS,
-  FETCH_MAILOUT_DETAILS_ERROR,
+  GET_MAILOUT_DETAILS_PENDING,
+  GET_MAILOUT_DETAILS_SUCCESS,
+  GET_MAILOUT_DETAILS_ERROR,
   NEEDS_UPDATE_MAILOUT_DETAILS_PENDING,
   NEEDS_UPDATE_MAILOUT_DETAILS_SUCCESS,
   NEEDS_UPDATE_MAILOUT_DETAILS_ERROR,
@@ -23,14 +23,14 @@ const initialState = {
 
 export default function mailouts(state = initialState, action) {
   switch (action.type) {
-    case FETCH_MAILOUT_DETAILS_PENDING:
+    case GET_MAILOUT_DETAILS_PENDING:
       return {
         ...state,
         pending: true,
         mailoutId: action.payload,
       };
 
-    case FETCH_MAILOUT_DETAILS_SUCCESS:
+    case GET_MAILOUT_DETAILS_SUCCESS:
       return {
         ...state,
         pending: false,
@@ -58,7 +58,7 @@ export default function mailouts(state = initialState, action) {
         details: action.payload,
       };
 
-    case FETCH_MAILOUT_DETAILS_ERROR:
+    case GET_MAILOUT_DETAILS_ERROR:
       return {
         ...state,
         pending: false,
