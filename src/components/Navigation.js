@@ -42,6 +42,7 @@ export default () => {
   const [activeUser, setActiveUser] = useState('');
 
   const isMultimode = useSelector(store => store.onLogin.mode === 'multiuser');
+  const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
   const loggedInUser = useSelector(store => store.onLogin.user);
   const selectedPeerId = useSelector(store => store.peer.peerId);
   const teammates = useSelector(store => store.team.profiles);
@@ -78,7 +79,7 @@ export default () => {
   useEffect(() => {
     if (loggedInUser && !activeUser) {
       setActiveUser(loggedInUser._id);
-    } else if (loggedInUser && activeUser !== loggedInUser._id) {
+    } else if (loggedInUser && activeUser !== loggedInUser._id && !selectedPeerId) {
       dispatch(selectPeerId(activeUser));
     } else if (loggedInUser && activeUser === loggedInUser._id && selectedPeerId) {
       dispatch(deselectPeerId());
@@ -179,12 +180,11 @@ export default () => {
           <FontAwesomeIcon icon="tachometer-alt" style={iconWithTextStyle} /> Dashboard
         </MobileDisabledLayout>
       </Menu.Item>
-      {isMultimode && (
+      {isMultimode && isAdmin && !selectedPeerId ? (
         <Menu.Item color="teal" name="customization" active={activeItem === '/customization'}>
           {renderCustomizationDropdown()}
         </Menu.Item>
-      )}
-      {!isMultimode && (
+      ) : (
         <Menu.Item as={Link} color="teal" name="customization" active={activeItem === '/customization'} to="/customization">
           <MobileEnabledLayout style={iconOnlyStyle}>
             <FontAwesomeIcon icon="paint-brush" />
