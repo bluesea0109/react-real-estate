@@ -1,20 +1,20 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { fetchMailoutsPending, fetchMoreMailoutsPending } from '../store/modules/mailouts/actions';
+import { getMailoutsPending, getMoreMailoutsPending } from '../store/modules/mailouts/actions';
 import { Button, Header, Grid, Menu, Message, Page, Segment } from '../components/Base';
 import MailoutListItem from '../components/MailoutListItem';
 import EmptyItem from '../components/EmptyItem';
 import Loading from '../components/Loading';
 
-const useFetching = (fetchActionCreator, dispatch) => {
+const useFetching = (getActionCreator, dispatch) => {
   useEffect(() => {
     // In order to prevent unnecessary call to the api when we are expecting an redirect,
     // we check for the existence of routerDestination used by the PrivatePath to route to a specific URL
     if (!localStorage.getItem('routerDestination')) {
-      dispatch(fetchActionCreator());
+      dispatch(getActionCreator());
     }
-  }, [fetchActionCreator, dispatch]);
+  }, [getActionCreator, dispatch]);
 };
 
 const Dashboard = () => {
@@ -26,9 +26,9 @@ const Dashboard = () => {
   const list = useSelector(store => store.mailouts.list);
   const error = useSelector(store => store.mailouts.error);
 
-  useFetching(fetchMailoutsPending, useDispatch());
+  useFetching(getMailoutsPending, useDispatch());
 
-  const boundFetchMoreMailouts = value => dispatch(fetchMoreMailoutsPending(value));
+  const boundFetchMoreMailouts = value => dispatch(getMoreMailoutsPending(value));
 
   const handleClick = e => {
     boundFetchMoreMailouts(page + 1);

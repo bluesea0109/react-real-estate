@@ -2,8 +2,8 @@ import { call, put, select, takeEvery } from '@redux-saga/core/effects';
 
 import {
   GET_MAILOUT_DETAILS_PENDING,
-  fetchMailoutDetailsSuccess,
-  fetchMailoutDetailsError,
+  getMailoutDetailsSuccess,
+  getMailoutDetailsError,
   NEEDS_UPDATE_MAILOUT_DETAILS_PENDING,
   needsUpdateMailoutDetailsSuccess,
   needsUpdateMailoutDetailsError,
@@ -18,15 +18,15 @@ import ApiService from '../../../services/api/index';
 
 export const getMailoutId = state => state.mailout.mailoutId;
 
-export function* fetchMailoutDetailsSaga() {
+export function* getMailoutDetailsSaga() {
   try {
     const mailoutId = yield select(getMailoutId);
     const { path, method } = ApiService.directory.user.mailouts.get(mailoutId);
     const response = yield call(ApiService[method], path);
 
-    yield put(fetchMailoutDetailsSuccess(response));
+    yield put(getMailoutDetailsSuccess(response));
   } catch (err) {
-    yield put(fetchMailoutDetailsError(err.message));
+    yield put(getMailoutDetailsError(err.message));
   }
 }
 
@@ -67,7 +67,7 @@ export function* deleteMailoutDetailsSaga() {
 }
 
 export default function*() {
-  yield takeEvery(GET_MAILOUT_DETAILS_PENDING, fetchMailoutDetailsSaga);
+  yield takeEvery(GET_MAILOUT_DETAILS_PENDING, getMailoutDetailsSaga);
   yield takeEvery(NEEDS_UPDATE_MAILOUT_DETAILS_PENDING, needsUpdateMailoutDetailsSaga);
   yield takeEvery(APPROVE_AND_SEND_MAILOUT_DETAILS_PENDING, approveAndSendMailoutDetailsSaga);
   yield takeEvery(DELETE_MAILOUT_DETAILS_PENDING, deleteMailoutDetailsSaga);

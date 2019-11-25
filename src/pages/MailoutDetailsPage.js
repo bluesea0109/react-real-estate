@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { approveAndSendMailoutDetailsPending, deleteMailoutDetailsPending, resetMailoutDetails } from '../store/modules/mailout/actions';
 import { Button, Header, Grid, Menu, Message, Page, Segment } from '../components/Base';
-import { fetchMailoutDetailsPending } from '../store/modules/mailout/actions';
+import { getMailoutDetailsPending } from '../store/modules/mailout/actions';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ImageGroup from '../components/MailoutListItem/ImageGroup';
 import MailoutEditModal from '../components/MailoutEditModal';
@@ -13,10 +13,10 @@ import { ItemBodyLayoutV2, ItemLayout } from '../layouts';
 import { useHistory, useParams } from 'react-router';
 import Loading from '../components/Loading';
 
-const useFetching = (fetchActionCreator, dispatch, mailoutId) => {
+const useFetching = (getActionCreator, dispatch, mailoutId) => {
   useEffect(() => {
-    dispatch(fetchActionCreator(mailoutId));
-  }, [fetchActionCreator, dispatch, mailoutId]);
+    dispatch(getActionCreator(mailoutId));
+  }, [getActionCreator, dispatch, mailoutId]);
 };
 
 const MailoutDetails = () => {
@@ -33,7 +33,7 @@ const MailoutDetails = () => {
   const boundDeleteMailoutDetails = () => dispatch(deleteMailoutDetailsPending(mailoutId));
   const boundResetMailoutDetails = () => dispatch(resetMailoutDetails());
 
-  useFetching(fetchMailoutDetailsPending, useDispatch(), mailoutId);
+  useFetching(getMailoutDetailsPending, useDispatch(), mailoutId);
 
   const handleBackClick = () => {
     boundResetMailoutDetails();

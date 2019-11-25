@@ -18,15 +18,15 @@ export const DELETE_MAILOUT_DETAILS_ERROR = 'DELETE_MAILOUT_DETAILS_ERROR';
 
 export const RESET_MAILOUT_DETAILS = 'RESET_MAILOUT_DETAILS';
 
-export function fetchMailoutDetailsPending(payload) {
+export function getMailoutDetailsPending(payload) {
   return createAction(GET_MAILOUT_DETAILS_PENDING, payload);
 }
 
-export function fetchMailoutDetailsSuccess(payload) {
+export function getMailoutDetailsSuccess(payload) {
   return createAction(GET_MAILOUT_DETAILS_SUCCESS, payload);
 }
 
-export function fetchMailoutDetailsError(error) {
+export function getMailoutDetailsError(error) {
   return createErrorAction(GET_MAILOUT_DETAILS_ERROR, error);
 }
 

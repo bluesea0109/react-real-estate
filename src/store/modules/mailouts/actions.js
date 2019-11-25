@@ -10,15 +10,15 @@ export const GET_MORE_MAILOUTS_ERROR = 'GET_MORE_MAILOUTS_ERROR';
 
 export const RESET_MAILOUTS = 'RESET_MAILOUTS';
 
-export function fetchMailoutsPending() {
+export function getMailoutsPending() {
   return createAction(GET_MAILOUTS_PENDING);
 }
 
-export function fetchMailoutsSuccess(payload) {
+export function getMailoutsSuccess(payload) {
   return createAction(GET_MAILOUTS_SUCCESS, payload);
 }
 
-export function fetchMailoutsError(error) {
+export function getMailoutsError(error) {
   return createErrorAction(GET_MAILOUTS_ERROR, error);
 }
 
@@ -26,15 +26,15 @@ export function setCanFetchMore(payload) {
   return createAction(TOGGLE_CAN_GET_MORE, payload);
 }
 
-export function fetchMoreMailoutsPending(payload) {
+export function getMoreMailoutsPending(payload) {
   return createAction(GET_MORE_MAILOUTS_PENDING, payload);
 }
 
-export function fetchMoreMailoutsSuccess(payload) {
+export function getMoreMailoutsSuccess(payload) {
   return createAction(GET_MORE_MAILOUTS_SUCCESS, payload);
 }
 
-export function fetchMoreMailoutsError(error) {
+export function getMoreMailoutsError(error) {
   return createErrorAction(GET_MORE_MAILOUTS_ERROR, error);
 }
 

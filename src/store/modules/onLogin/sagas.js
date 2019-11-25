@@ -1,19 +1,19 @@
 import { put, call, takeLatest } from 'redux-saga/effects';
 
 import { AUTHENTICATION_SUCCESS } from '../auth0/actions';
-import { fetchOnLoginPending, fetchOnLoginSuccess, fetchOnLoginError } from './actions';
+import { getOnLoginPending, getOnLoginSuccess, getOnLoginError } from './actions';
 import ApiService from '../../../services/api/index';
 
 export function* onLoginSaga() {
   try {
-    yield put(fetchOnLoginPending());
+    yield put(getOnLoginPending());
 
     const { path, method } = ApiService.directory.user.onLogin();
     const response = yield call(ApiService[method], path);
 
-    yield put(fetchOnLoginSuccess(response));
+    yield put(getOnLoginSuccess(response));
   } catch (err) {
-    yield put(fetchOnLoginError(err));
+    yield put(getOnLoginError(err));
   }
 }
 
