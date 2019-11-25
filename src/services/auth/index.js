@@ -1,6 +1,6 @@
 import auth0 from 'auth0-js';
 import EventEmitter from 'events';
-import config from '../../../src/config';
+import config from '../../config';
 
 const localStorageKey = 'loggedIn';
 const loginEvent = 'loginEvent';
