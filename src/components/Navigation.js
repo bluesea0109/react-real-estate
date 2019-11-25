@@ -1,12 +1,12 @@
 import styled from 'styled-components';
-import { Dropdown } from 'semantic-ui-react';
-import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { Dropdown, Header } from 'semantic-ui-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { NavigationLayout, MobileDisabledLayout, MobileEnabledLayout } from '../layouts';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, Header } from './Base';
+import { Menu, Image, Icon } from './Base';
 
 const iconOnlyStyle = {
   margin: '0 auto 0 auto',
@@ -20,6 +20,13 @@ const StyledDropdown = styled(Dropdown)`
   min-width: 8.3em !important;
   max-width: 8.3em !important;
 `;
+const StyledHeader = styled(Header)`
+  min-width: 18em;
+  display: inline-block;
+`;
+
+const mql = window.matchMedia('(max-width: 599px)');
+const menuSpacing = () => (mql.matches ? {} : { marginLeft: '2.5em' });
 
 export default () => {
   const [activeItem, setActiveItem] = useState('');
@@ -41,11 +48,22 @@ export default () => {
 
   if (teammates.length > 0) {
     teammates.map((profile, index) => {
+      // console.log('profile: ', profile);
+
       return profiles.push({
         key: index,
         text: profile.last,
         value: profile.userId,
-        content: <Header content={profile.first} subheader={profile.last} />,
+        content: (
+          <StyledHeader as="h4">
+            <Image size="mini" inline circular src="https://react.semantic-ui.com/images/avatar/large/patrick.png" />
+            &nbsp;
+            {profile.first}&nbsp;
+            {profile.last}&nbsp;
+            {profile.permissions && profile.permissions.teamAdmin ? '(Admin)' : '(Agent)'}&nbsp;
+            <Icon name="check circle" />
+          </StyledHeader>
+        ),
       });
     });
   }
@@ -61,27 +79,13 @@ export default () => {
     content: `${label.text2}`,
   });
 
-  const handleProfileSelect = (e, { value }) => {
-    console.log('profile value: ', value);
-
-    return setActiveUser(value);
-  };
+  const handleProfileSelect = (e, { value }) => setActiveUser(value);
 
   return (
     <NavigationLayout text>
       {isMultimode && (
-        <Menu.Item style={{ marginLeft: '2.5em' }}>
-          <StyledDropdown
-            placeholder="Profile"
-            search
-            floating
-            scrolling
-            selection
-            options={profiles}
-            onChange={handleProfileSelect}
-            value={activeUser}
-            renderLabel={renderLabel}
-          />
+        <Menu.Item style={menuSpacing()}>
+          <StyledDropdown search floating scrolling selection options={profiles} onChange={handleProfileSelect} value={activeUser} renderLabel={renderLabel} />
         </Menu.Item>
       )}
 
