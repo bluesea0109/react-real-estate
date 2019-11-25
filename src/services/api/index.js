@@ -145,6 +145,22 @@ const directory = {
       },
     },
 
+    settings: {
+      branding: {
+        get: () => ({ path: `/api/user/peer/settings/branding`, method: 'get' }),
+        save: () => ({ path: `/api/user/peer/settings/branding`, method: 'put' }),
+      },
+      photos: {
+        get: () => ({ path: `/api/user/peer/settings/photos/realtorPhoto`, method: 'get' }),
+        set: () => ({ path: `/api/user/peer/settings/photos/realtorPhoto`, method: 'post' }),
+        setUrl: url => ({ path: `/api/user/peer/settings/photos/realtorPhoto/${url}`, method: 'post' }),
+      },
+      profile: {
+        get: () => ({ path: `/api/user/peer/settings/profile`, method: 'get' }),
+        save: () => ({ path: `/api/user/peer/settings/profile`, method: 'put' }),
+      },
+    },
+
     peer: {
       settings: {
         branding: {
@@ -156,8 +172,8 @@ const directory = {
           set: peerId => ({ path: `/api/user/peer/${peerId}/settings/photos/realtorPhoto`, method: 'post' }),
         },
         profile: {
-          get: peerId => ({ path: `/api/user/peer/${peerId}/settings/branding`, method: 'get' }),
-          save: peerId => ({ path: `/api/user/peer/${peerId}/settings/branding`, method: 'put' }),
+          get: peerId => ({ path: `/api/user/peer/${peerId}/settings/profile`, method: 'get' }),
+          save: peerId => ({ path: `/api/user/peer/${peerId}/settings/profile`, method: 'put' }),
         },
       },
     },
