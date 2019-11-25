@@ -7,6 +7,7 @@ import Callback from './containers/Callback';
 import DashboardPage from './pages/DashboardPage';
 import MailoutDetails from './pages/MailoutDetailsPage';
 import CustomizationPage from './pages/CustomizationPage';
+import CustomizationTeamPage from './pages/CustomizationTeamPage';
 import ProfilePage from './pages/ProfilePage';
 import SettingsPage from './pages/SettingsPage';
 import EmptyPage from './pages/EmptyPage';
@@ -23,7 +24,8 @@ export default () => {
       <Route path="/callback" component={Callback} />
       <PrivateRoute exact path="/dashboard" component={DashboardPage} />
       <PrivateRoute path="/dashboard/:mailoutId" component={MailoutDetails} />
-      <PrivateRoute path="/customization" component={CustomizationPage} />
+      <PrivateRoute exact path="/customization" component={CustomizationPage} />
+      <PrivateRoute path="/customization/team" component={CustomizationTeamPage} />
       <PrivateRoute path="/profile" component={ProfilePage} />
       <PrivateRoute path="/settings" component={SettingsPage} />
       <Route path="*" component={EmptyPage} />

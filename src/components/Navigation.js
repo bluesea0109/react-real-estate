@@ -17,13 +17,19 @@ const iconWithTextStyle = {
   margin: '0 .5em 0 2.5em',
 };
 
-const StyledDropdown = styled(Dropdown)`
+const StyledUserSelectorDropdown = styled(Dropdown)`
   min-width: 8.3em !important;
   max-width: 8.3em !important;
 `;
+
 const StyledHeader = styled(Header)`
   min-width: 18em;
   display: inline-block;
+`;
+
+const StyledCustomizationDropdown = styled(Dropdown)`
+  min-width: 8.3em !important;
+  max-width: 8.3em !important;
 `;
 
 const mql = window.matchMedia('(max-width: 599px)');
@@ -31,22 +37,21 @@ const menuSpacing = () => (mql.matches ? {} : { marginLeft: '2.5em' });
 
 export default () => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const [activeItem, setActiveItem] = useState('');
   const [activeUser, setActiveUser] = useState('');
 
-  let location = useLocation();
-  React.useEffect(() => {
+  const isMultimode = useSelector(store => store.onLogin.mode === 'multiuser');
+  const loggedInUser = useSelector(store => store.onLogin.user);
+  const selectedPeerId = useSelector(store => store.peer.peerId);
+  const teammates = useSelector(store => store.team.profiles);
+  const profiles = [];
+
+  useEffect(() => {
     // TODO: Add google page tracking
     // ga.send(["pageview", location.pathname]);
     setActiveItem(location.pathname);
   }, [location]);
-
-  const handleItemClick = (e, { name }) => setActiveItem(name);
-
-  const isMultimode = useSelector(store => store.onLogin.mode === 'multiuser');
-  const loggedInUser = useSelector(store => store.onLogin.user);
-  const teammates = useSelector(store => store.team.profiles);
-  const profiles = [];
 
   if (teammates.length > 0) {
     teammates.map((profile, index) => {
@@ -75,7 +80,7 @@ export default () => {
       setActiveUser(loggedInUser._id);
     } else if (loggedInUser && activeUser !== loggedInUser._id) {
       dispatch(selectPeerId(activeUser));
-    } else if (loggedInUser && activeUser === loggedInUser._id) {
+    } else if (loggedInUser && activeUser === loggedInUser._id && selectedPeerId) {
       dispatch(deselectPeerId());
     }
   }, [loggedInUser, activeUser, dispatch]);
@@ -87,15 +92,86 @@ export default () => {
 
   const handleProfileSelect = (e, { value }) => setActiveUser(value);
 
+  const handleCustomizationDropdown = (e, { value }) => {
+    // console.log('handleCustomizationDropdown');
+    // console.log('value: ', value);
+    // return setActiveCustomizationItem(value);
+  };
+
+  const renderCustomizationDropdown = () => {
+    if (mql.matches) {
+      return (
+        <span style={{ display: 'inline-flex' }}>
+          <FontAwesomeIcon icon="paint-brush" style={{ marginLeft: '0.5em', marginRight: '-0.5em' }} />
+          <Dropdown floating>
+            <Dropdown.Menu>
+              <Dropdown.Item
+                as={Link}
+                text="Team Default"
+                value="team"
+                onClick={handleCustomizationDropdown}
+                to="/customization/team"
+                active={activeItem === '/customization/team'}
+              />
+              <Dropdown.Item
+                as={Link}
+                text="My Defaults"
+                value="mine"
+                onClick={handleCustomizationDropdown}
+                to="/customization"
+                active={activeItem === '/customization'}
+              />
+            </Dropdown.Menu>
+          </Dropdown>
+        </span>
+      );
+    } else {
+      return (
+        <span>
+          <FontAwesomeIcon icon="paint-brush" style={iconWithTextStyle} />
+          <StyledCustomizationDropdown floating text="Customization">
+            <Dropdown.Menu>
+              <Dropdown.Item
+                as={Link}
+                text="Team Default"
+                value="team"
+                onClick={handleCustomizationDropdown}
+                to="/customization/team"
+                active={activeItem === '/customization/team'}
+              />
+              <Dropdown.Item
+                as={Link}
+                text="My Defaults"
+                value="mine"
+                onClick={handleCustomizationDropdown}
+                to="/customization"
+                active={activeItem === '/customization'}
+              />
+            </Dropdown.Menu>
+          </StyledCustomizationDropdown>
+        </span>
+      );
+    }
+  };
+
   return (
     <NavigationLayout text>
       {isMultimode && (
         <Menu.Item style={menuSpacing()}>
-          <StyledDropdown search floating scrolling selection options={profiles} onChange={handleProfileSelect} value={activeUser} renderLabel={renderLabel} />
+          <StyledUserSelectorDropdown
+            search
+            floating
+            scrolling
+            selection
+            options={profiles}
+            onChange={handleProfileSelect}
+            value={activeUser}
+            renderLabel={renderLabel}
+          />
         </Menu.Item>
       )}
 
-      <Menu.Item as={Link} color="teal" name="dashboard" active={activeItem === '/dashboard'} onClick={handleItemClick} to="/dashboard">
+      <Menu.Item as={Link} color="teal" name="dashboard" active={activeItem === '/dashboard'} to="/dashboard">
         <MobileEnabledLayout style={iconOnlyStyle}>
           <FontAwesomeIcon icon="tachometer-alt" />
         </MobileEnabledLayout>
@@ -103,15 +179,22 @@ export default () => {
           <FontAwesomeIcon icon="tachometer-alt" style={iconWithTextStyle} /> Dashboard
         </MobileDisabledLayout>
       </Menu.Item>
-      <Menu.Item as={Link} color="teal" name="customization" active={activeItem === '/customization'} onClick={handleItemClick} to="/customization">
-        <MobileEnabledLayout style={iconOnlyStyle}>
-          <FontAwesomeIcon icon="paint-brush" />
-        </MobileEnabledLayout>
-        <MobileDisabledLayout>
-          <FontAwesomeIcon icon="paint-brush" style={iconWithTextStyle} /> Customization
-        </MobileDisabledLayout>
-      </Menu.Item>
-      <Menu.Item as={Link} color="teal" name="profile" active={activeItem === '/profile'} onClick={handleItemClick} to="/profile">
+      {isMultimode && (
+        <Menu.Item color="teal" name="customization" active={activeItem === '/customization'}>
+          {renderCustomizationDropdown()}
+        </Menu.Item>
+      )}
+      {!isMultimode && (
+        <Menu.Item as={Link} color="teal" name="customization" active={activeItem === '/customization'} to="/customization">
+          <MobileEnabledLayout style={iconOnlyStyle}>
+            <FontAwesomeIcon icon="paint-brush" />
+          </MobileEnabledLayout>
+          <MobileDisabledLayout>
+            <FontAwesomeIcon icon="paint-brush" style={iconWithTextStyle} /> Customization
+          </MobileDisabledLayout>
+        </Menu.Item>
+      )}
+      <Menu.Item as={Link} color="teal" name="profile" active={activeItem === '/profile'} to="/profile">
         <MobileEnabledLayout style={iconOnlyStyle}>
           <FontAwesomeIcon icon="user" />
         </MobileEnabledLayout>
@@ -119,7 +202,7 @@ export default () => {
           <FontAwesomeIcon icon="user" style={iconWithTextStyle} /> Profile
         </MobileDisabledLayout>
       </Menu.Item>
-      <Menu.Item as={Link} color="teal" name="settings" active={activeItem === '/settings'} onClick={handleItemClick} to="/settings">
+      <Menu.Item as={Link} color="teal" name="settings" active={activeItem === '/settings'} to="/settings">
         <MobileEnabledLayout style={iconOnlyStyle}>
           <FontAwesomeIcon icon="cog" />
         </MobileEnabledLayout>
