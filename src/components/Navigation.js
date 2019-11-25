@@ -83,7 +83,7 @@ export default () => {
     } else if (loggedInUser && activeUser === loggedInUser._id && selectedPeerId) {
       dispatch(deselectPeerId());
     }
-  }, [loggedInUser, activeUser, dispatch]);
+  }, [loggedInUser, activeUser, selectedPeerId, dispatch]);
 
   const renderLabel = label => ({
     color: 'blue',
