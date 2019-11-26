@@ -8,7 +8,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "./node_modules/.bin/eslint --ext .js,.jsx --ignore-pattern public tmp artifacts .",
-    "format": "prettier --write 'src/**/*.{js,jsx,json}'"
+    "format": "prettier --write 'src/**/*.{js,jsx,json}'",
+    "generate-artifacts": "node utils/generate-testing-artifacts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "1.2.25",
@@ -36,8 +37,11 @@
     "styled-components": "4.4.1"
   },
   "devDependencies": {
+    "alf-commons": "git+ssh://git@gitlab.rmcloud.com/gabby/alf-common.git",
     "http-proxy-middleware": "0.20.0",
     "husky": "3.0.9",
+    "joi-to-json-schema": "5.1.0",
+    "json-schema-faker": "0.5.0-rc23",
     "lint-staged": "9.4.2",
     "prettier": "1.19.1"
   },
