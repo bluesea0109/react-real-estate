@@ -9,8 +9,7 @@ build:
   image: node:12.9.1
   script:
       - export API_URL="examplex.com"
-      - echo -e "machine gitlab.com\nlogin gitlab-ci-token\npassword ${CI_JOB_TOKEN}" > ~/.netrc
-      - npm install
+      - npm install --silent
       - npm run build
       - echo "BUILD SUCCESSFULLY"
   artifacts:

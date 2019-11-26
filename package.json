@@ -37,14 +37,16 @@
     "styled-components": "4.4.1"
   },
   "devDependencies": {
-    "alf-commons": "git+ssh://git@gitlab.rmcloud.com/gabby/alf-common.git",
     "http-proxy-middleware": "0.20.0",
     "husky": "3.0.9",
-    "joi-to-json-schema": "5.1.0",
-    "json-schema-faker": "0.5.0-rc23",
     "lint-staged": "9.4.2",
     "prettier": "1.19.1",
     "react-test-renderer": "16.12.0"
+  },
+  "optionalDependencies": {
+    "alf-commons": "git+ssh://git@gitlab.rmcloud.com/gabby/alf-common.git",
+    "joi-to-json-schema": "5.1.0",
+    "json-schema-faker": "0.5.0-rc23"
   },
   "eslintConfig": {
     "extends": "react-app"
