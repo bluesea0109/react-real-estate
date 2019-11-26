@@ -1,0 +1,439 @@
+[
+  {
+    "_id": "ck34pkmza003t01qwnqwnyg4d",
+    "_rev": "1-81da1720db1485e59f083cce39d7d8bc",
+    "type": "mailout",
+    "userId": "cd08e72676c683ae9b02182cf74da962",
+    "mlsNum": "21918210",
+    "board": "245",
+    "blueroofMlsId": 436,
+    "listingStatus": "listed",
+    "createdBy": "user",
+    "created": 1574098446934,
+    "mailoutSize": 1,
+    "mailoutStatus": "scheduled",
+    "statusHistory": [],
+    "details": {
+      "latitude": 46.88218,
+      "longitude": -113.904591,
+      "displayAddress": "1305 Thibodeau Ln",
+      "city": "Missoula",
+      "state": "MT",
+      "postalCode": "59802",
+      "squareFeet": 1696,
+      "baths": 2,
+      "beds": 4,
+      "price": 219900,
+      "listDate": "2019-11-14T13:02:47.000Z",
+      "coverPhoto": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/0.jpg?v=1"
+    },
+    "raw": {
+      "blossorId": "245-21918210",
+      "blueroofMlsId": 436,
+      "mlsNum": "21918210",
+      "standardStatus": "Active",
+      "mlsStatus": "Active",
+      "openhouses": [],
+      "history": [],
+      "lotSize": 1,
+      "streetAddress": "1305 Thibodeau Ln",
+      "city": "Missoula",
+      "state": "MT",
+      "postalCode": "59802",
+      "county": "Missoula",
+      "listAgentId": "20160111120730978636000000",
+      "listAgentName": "Jason Baker",
+      "listAgentEmail": "jason@jasonbakerteam.com",
+      "listAgentPhone": "(406) 552-4111",
+      "hasHoa": false,
+      "hoaFee": 0,
+      "hoaFeeYn": false,
+      "squareFeet": 1696,
+      "bedrooms": 4,
+      "bathsTotalDecimal": 2,
+      "fullBaths": 2,
+      "halfBaths": 0,
+      "threeQuarterBaths": 0,
+      "garageSpaces": 0,
+      "hasBasement": true,
+      "hasGarage": false,
+      "hasWaterfront": false,
+      "poolFeatures": [],
+      "parkingFeatures": [],
+      "interiorFeatures": ["Utilities Main Floor", "Basement: Under addition", "Basement: Crawl Space"],
+      "exteriorFeatures": ["Porch", "Moved to Site", "Wood"],
+      "communityFeatures": [],
+      "propertyFeatures": ["1500 - 1750", "Moved to Site", "Wood"],
+      "greenFeatures": [],
+      "view": ["Mountains"],
+      "heating": [],
+      "cooling": ["A/C Central Air", "Gas Forced Air", "Gas Hot Water"],
+      "lotFeatures": ["1500 - 1750"],
+      "homeStyle": ["Single Wide"],
+      "financialInformation": ["Cash"],
+      "propertySubTypes": ["Manufactured Home"],
+      "lat": 46.88218,
+      "lng": -113.904591,
+      "dimensions": ".51-1.0",
+      "listDate": "2019-11-14T13:02:47.000Z",
+      "updateDate": "2019-11-15T10:43:23.000Z",
+      "hideAddress": false,
+      "hideListing": false,
+      "photos": [
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/0.jpg?v=1",
+          "order": 1
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/1.jpg?v=1",
+          "order": 2
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/2.jpg?v=1",
+          "order": 3
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/3.jpg?v=1",
+          "order": 4
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/4.jpg?v=1",
+          "order": 5
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/5.jpg?v=1",
+          "order": 6
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/6.jpg?v=1",
+          "order": 7
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/7.jpg?v=1",
+          "order": 8
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/8.jpg?v=1",
+          "order": 9
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/9.jpg?v=1",
+          "order": 10
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/10.jpg?v=1",
+          "order": 11
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/11.jpg?v=1",
+          "order": 12
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/12.jpg?v=1",
+          "order": 13
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/13.jpg?v=1",
+          "order": 14
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/14.jpg?v=1",
+          "order": 15
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/15.jpg?v=1",
+          "order": 16
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/16.jpg?v=1",
+          "order": 17
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/17.jpg?v=1",
+          "order": 18
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/18.jpg?v=1",
+          "order": 19
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/19.jpg?v=1",
+          "order": 20
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/20.jpg?v=1",
+          "order": 21
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/21.jpg?v=1",
+          "order": 22
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/22.jpg?v=1",
+          "order": 23
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/23.jpg?v=1",
+          "order": 24
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/24.jpg?v=1",
+          "order": 25
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/25.jpg?v=1",
+          "order": 26
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/26.jpg?v=1",
+          "order": 27
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/27.jpg?v=1",
+          "order": 28
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/28.jpg?v=1",
+          "order": 29
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/29.jpg?v=1",
+          "order": 30
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/30.jpg?v=1",
+          "order": 31
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/31.jpg?v=1",
+          "order": 32
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/32.jpg?v=1",
+          "order": 33
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/33.jpg?v=1",
+          "order": 34
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/34.jpg?v=1",
+          "order": 35
+        }
+      ],
+      "photosAvailable": 35,
+      "photoVersion": 1,
+      "price": 219900,
+      "leasePrice": 219900,
+      "mlsPropertyType": "Manufactured Home",
+      "propertyType": "Manufactured Home",
+      "standardPropertyType": "Manufactured Home",
+      "remarks": "Located on a quiet road, surrounded by pine trees, and only minutes from downtown Missoula and U of M, is this 1987 4 bedroom manufactured home with lots of updates inside! This 1696 SF single wide with an addition is located on an acre with NO covenants! The inside is open and bright, and has been recently refreshed with new flooring, paint, and kitchen cabinets.  Spacious bedrooms, 2 full bathrooms, and a laundry room complete the interior. Outside, the backyard is fenced, and has a shed for storage, a fire pit and a well house for the 25 gpm well. Walking distance to the Clark Fork River and Milltown State Park, and close to Kettlehouse Amphitheater, Marshall Canyon Trailheads, and Mountain Line bus stops. Call Jason Baker at 406-552-4111 or your real estate professional.",
+      "year": 1987,
+      "zoning": "UZ",
+      "taxAmount": 1419.8,
+      "taxYear": 2019
+    },
+    "frontTemplateId": "tmpl_7361e2ddc856e17",
+    "backTemplateId": "tmpl_4e76cb950e3d0b2",
+    "recipientCount": 100,
+    "generatedAssetRevs": {},
+    "sampleFrontLargeUrl": "https://lob-assets.com/postcards/psc_c7c818dae0be2c24_thumb_large_1.png?version=v1&expires=1576690772&signature=zoqOEZ5XXSL0MPWivtWrmri0B_JEsvKOh2tcXPukiKG3U_tRwibbz9wmTzZOL17rr-4RRWOJMB3rg06hEfOADw",
+    "sampleBackLargeUrl": "https://lob-assets.com/postcards/psc_c7c818dae0be2c24_thumb_large_2.png?version=v1&expires=1576690772&signature=Slb3d3xMzrMAiJVNRW4yHEhDIZbgK33oXqWwn-3ytIaVk8gXsWEYtBE_otaiFFoc1H7h04REiFpZfRoKlEYGDg",
+    "sampleFrontUrl": "https://lob-assets.com/postcards/psc_c7c818dae0be2c24_thumb_small_1.png?version=v1&expires=1576690772&signature=uhf_j9vM9uhdEyfh8t3P9nM1VV06KBg7ddcMbBTnil7NMHxycZSp6t0InoQEVcVovYUNuGJNFQTMtzJcj6LGCw",
+    "sampleBackUrl": "https://lob-assets.com/postcards/psc_c7c818dae0be2c24_thumb_small_2.png?version=v1&expires=1576690772&signature=tGLXsEq-sDHS5qXOdEPo6VSNFR4yBtRRX-rcXDQxnxUDkwSeRBSwPoOsZN-89DenOL5PeQ-R1T41lCGQfd5kAw",
+    "expected_delivery_date": "2019-11-26"
+  },
+  {
+    "_id": "ck30csg5n001o01qww0xd56nk",
+    "_rev": "7-8e7fabaed7ea2d9cd694383392002468",
+    "type": "mailout",
+    "userId": "cd08e72676c683ae9b02182cf74da962",
+    "mlsNum": "1524011",
+    "board": "21",
+    "blueroofMlsId": 101,
+    "listingStatus": "listed",
+    "createdBy": "user",
+    "created": 1573835111627,
+    "mailoutSize": 1,
+    "mailoutStatus": "calculated",
+    "statusHistory": [],
+    "details": {
+      "latitude": 47.09062,
+      "longitude": -122.196476,
+      "displayAddress": "836 Harman Way S Unit 21",
+      "city": "Orting",
+      "state": "WA",
+      "postalCode": "98360",
+      "squareFeet": 1332,
+      "baths": 2,
+      "beds": 2,
+      "price": 69000,
+      "listDate": "2019-09-25T15:15:22.000Z",
+      "coverPhoto": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/0.jpg"
+    },
+    "raw": {
+      "blossorId": "21-1524011",
+      "blueroofMlsId": 101,
+      "mlsNum": "1524011",
+      "standardStatus": "Active",
+      "mlsStatus": "Active",
+      "openhouses": [],
+      "history": [],
+      "lotSize": 0,
+      "streetAddress": "836 Harman Way S Unit 21",
+      "city": "Orting",
+      "state": "WA",
+      "postalCode": "98360",
+      "county": "Pierce",
+      "area": "Orting",
+      "neighborhood": "Orting",
+      "listAgentId": "33587",
+      "listAgentName": "John Hurlbut",
+      "listAgentPhone": "2538485304",
+      "hasHoa": false,
+      "hoaFeeYn": false,
+      "squareFeet": 1332,
+      "bedrooms": 2,
+      "bathsTotalDecimal": 2,
+      "fullBaths": 2,
+      "halfBaths": 0,
+      "threeQuarterBaths": 0,
+      "quarterBaths": 0,
+      "hasBasement": false,
+      "hasGarage": false,
+      "hasWaterfront": false,
+      "hasView": true,
+      "poolFeatures": [],
+      "parkingFeatures": ["Carport"],
+      "interiorFeatures": ["Vinyl", "Wall to Wall Carpet"],
+      "exteriorFeatures": ["Wood Products"],
+      "communityFeatures": [],
+      "propertyFeatures": ["Paved Street", "Public"],
+      "greenFeatures": [],
+      "view": ["Mountain"],
+      "heating": ["Forced Air", "Electric"],
+      "cooling": ["Central A/C"],
+      "lotFeatures": ["Paved Street"],
+      "homeStyle": ["Manuf-Double Wide"],
+      "financialInformation": ["Cash Out"],
+      "propertySubTypes": [],
+      "foreclosure": false,
+      "shortSale": false,
+      "lat": 47.09062,
+      "lng": -122.196476,
+      "listDate": "2019-09-25T15:15:22.000Z",
+      "updateDate": "2019-10-07T15:57:34.000Z",
+      "hideAddress": false,
+      "hideListing": false,
+      "photos": [
+        {
+          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/0.jpg",
+          "order": 1
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/1.jpg",
+          "order": 2
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/2.jpg",
+          "order": 3
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/3.jpg",
+          "order": 4
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/4.jpg",
+          "order": 5
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/5.jpg",
+          "order": 6
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/6.jpg",
+          "order": 7
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/7.jpg",
+          "order": 8
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/8.jpg",
+          "order": 9
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/9.jpg",
+          "order": 10
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/10.jpg",
+          "order": 11
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/11.jpg",
+          "order": 12
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/12.jpg",
+          "order": 13
+        },
+        {
+          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/13.jpg",
+          "order": 14
+        }
+      ],
+      "photosAvailable": 14,
+      "price": 69000,
+      "leasePrice": 69000,
+      "mlsPropertyType": "Manufactured Home",
+      "propertyType": "Manufactured Home",
+      "standardPropertyType": "Manufactured Home",
+      "remarks": "You'll know if the mountain is out or not with this one! Great manufactured home in 55+ park with an amazing view of Mt Rainier! You'll truly feel like it's YOUR mountain with this one!  Spacious family room, dining room, kitchen with breakfast bar and 2 bedrooms with 2 bathrooms round out this great home! master bedroom has attached bath & large walk in closet. LARGE covered carport for 2 cars +, Generous sized shop as well. Great back yard and did we mention the view! Don't pass this one up!",
+      "schoolDistrict": "Orting",
+      "highSchool": "Orting High",
+      "middleSchool": "Orting Middle",
+      "water": "Public",
+      "year": 1989,
+      "taxAmount": 0,
+      "taxYear": 2019,
+      "originatingSystemName": "WA_NWMLS"
+    },
+    "frontTemplateId": "tmpl_7361e2ddc856e17",
+    "backTemplateId": "tmpl_4e76cb950e3d0b2",
+    "recipientCount": 1,
+    "generatedAssetRevs": {},
+    "sampleFrontLargeUrl": "https://alf-gabbi-uploads.s3.amazonaws.com/eaf3d721c183f8dda74083f48a865777/ck30csg5n001o01qww0xd56nk/psc_fb906cb5151013ad_thumb_large_1.png",
+    "sampleBackLargeUrl": "https://alf-gabbi-uploads.s3.amazonaws.com/eaf3d721c183f8dda74083f48a865777/ck30csg5n001o01qww0xd56nk/psc_fb906cb5151013ad_thumb_large_2.png",
+    "sampleFrontUrl": "https://alf-gabbi-uploads.s3.amazonaws.com/eaf3d721c183f8dda74083f48a865777/ck30csg5n001o01qww0xd56nk/psc_fb906cb5151013ad_thumb_small_1.png",
+    "sampleBackUrl": "https://alf-gabbi-uploads.s3.amazonaws.com/eaf3d721c183f8dda74083f48a865777/ck30csg5n001o01qww0xd56nk/psc_fb906cb5151013ad_thumb_small_2.png"
+  },
+  {
+    "_id": "cjz4ev2070000ycw6koum5vd1",
+    "_rev": "2-f6179f14719ee74c931b54032689f358",
+    "type": "mailout",
+    "userId": "cd08e72676c683ae9b02182cf74da962",
+    "mlsNum": "414401",
+    "board": "446",
+    "listingStatus": "sold",
+    "createdBy": "listing-feed",
+    "created": 1565373327847,
+    "mailoutStatus": "excluded",
+    "statusHistory": [],
+    "details": {
+      "latitude": 48.448324,
+      "longitude": -123.428762,
+      "displayAddress": "121 Aldersmith Pl Unit 203",
+      "city": "View Royal",
+      "state": "BC",
+      "postalCode": "V9A 7M7",
+      "neighborhood": "Glentana",
+      "squareFeet": 1120,
+      "baths": 2,
+      "beds": 2,
+      "price": 349000,
+      "listDate": "2019-08-07T00:00:00"
+    }
+  }
+]

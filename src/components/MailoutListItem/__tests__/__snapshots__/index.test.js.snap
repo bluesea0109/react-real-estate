@@ -1,0 +1,239 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="ui fluid container sc-dnqmqq hrZLex"
+>
+  <div
+    className="ui block top attached header sc-gzVnrw ecvOFU"
+  >
+    <span
+      style={
+        Object {
+          "gridArea": "label",
+        }
+      }
+    >
+      <div
+        className="ui teal large ribbon label"
+        onClick={[Function]}
+        style={
+          Object {
+            "left": "-2.7em",
+            "textTransform": "capitalize",
+            "top": "-0.9em",
+          }
+        }
+      >
+        listed
+      </div>
+    </span>
+    <span
+      style={
+        Object {
+          "alignSelf": "center",
+          "gridArea": "address",
+        }
+      }
+    >
+      <a
+        className="ui header"
+        href="/dashboard/ck34pkmza003t01qwnqwnyg4d"
+        onClick={[Function]}
+      >
+        <h3
+          className="sc-kgoBCf kVSTZj bm-color-effect"
+        >
+          1305 Thibodeau Ln
+        </h3>
+      </a>
+    </span>
+    <span
+      className="sc-htoDjs cnqDiZ"
+    >
+      <span />
+      <span />
+      <span />
+    </span>
+  </div>
+  <div
+    className="ui attached segment sc-iwsKbI gVIoui"
+    style={
+      Object {
+        "padding": 10,
+      }
+    }
+  >
+    <div
+      className="ui sc-gqjmRU hALeKB images"
+    >
+      <a
+        href="/dashboard/ck34pkmza003t01qwnqwnyg4d"
+        onClick={[Function]}
+      >
+        <img
+          className="ui image sc-kpOJdX kAzjOl bm-transform-effect"
+          src="https://lob-assets.com/postcards/psc_c7c818dae0be2c24_thumb_large_2.png?version=v1&expires=1576690772&signature=Slb3d3xMzrMAiJVNRW4yHEhDIZbgK33oXqWwn-3ytIaVk8gXsWEYtBE_otaiFFoc1H7h04REiFpZfRoKlEYGDg"
+          style={
+            Object {
+              "width": "48%",
+            }
+          }
+        />
+      </a>
+      <a
+        href="/dashboard/ck34pkmza003t01qwnqwnyg4d"
+        onClick={[Function]}
+      >
+        <img
+          className="ui image sc-kpOJdX kAzjOl bm-transform-effect"
+          src="https://lob-assets.com/postcards/psc_c7c818dae0be2c24_thumb_large_1.png?version=v1&expires=1576690772&signature=zoqOEZ5XXSL0MPWivtWrmri0B_JEsvKOh2tcXPukiKG3U_tRwibbz9wmTzZOL17rr-4RRWOJMB3rg06hEfOADw"
+          style={
+            Object {
+              "width": "48%",
+            }
+          }
+        />
+      </a>
+    </div>
+    <div
+      className="ui relaxed list sc-VigVT jDcUJV"
+      role="list"
+    >
+      <div
+        className="item"
+        onClick={[Function]}
+        role="listitem"
+      >
+        <div
+          className="content"
+        >
+          <div
+            className="header"
+          >
+            Recipients
+          </div>
+          <div
+            className="description"
+          >
+            100
+          </div>
+        </div>
+      </div>
+      <div
+        className="item"
+        onClick={[Function]}
+        role="listitem"
+      >
+        <div
+          className="content"
+        >
+          <div
+            className="header"
+          >
+            Cost
+          </div>
+          <div
+            className="description"
+          >
+            $59.00
+          </div>
+        </div>
+      </div>
+      <div
+        className="item"
+        onClick={[Function]}
+        role="listitem"
+      >
+        <div
+          className="content"
+        >
+          <div
+            className="header"
+          >
+            Status
+            <svg
+              aria-hidden="true"
+              className="svg-inline--fa fa-info-circle fa-w-16 "
+              data-icon="info-circle"
+              data-prefix="fas"
+              focusable="false"
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onMouseEnter={[Function]}
+              onMouseLeave={[Function]}
+              role="img"
+              style={
+                Object {
+                  "color": "#2DB5AD",
+                  "marginLeft": ".5em",
+                }
+              }
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"
+                fill="currentColor"
+                style={Object {}}
+              />
+            </svg>
+          </div>
+          <div
+            className="description"
+            style={
+              Object {
+                "color": "#59c4c4",
+              }
+            }
+          >
+            <svg
+              aria-hidden="true"
+              className="svg-inline--fa fa-check fa-w-16 "
+              data-icon="check"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              style={
+                Object {
+                  "marginRight": ".5em",
+                }
+              }
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"
+                fill="currentColor"
+                style={Object {}}
+              />
+            </svg>
+            Sent
+          </div>
+        </div>
+      </div>
+      <div
+        className="item"
+        onClick={[Function]}
+        role="listitem"
+      >
+        <div
+          className="content"
+        >
+          <div
+            className="header"
+          >
+            Created
+          </div>
+          <div
+            className="description"
+          >
+            11/18/2019
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
