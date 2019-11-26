@@ -16,10 +16,10 @@ const ImageGroup = ({ img1src, img2src, linkTo }) => {
     return (
       <ItemBodyPicturesLayout>
         <Link to={linkTo}>
-          <Image src={img1src} style={resizePictures()} className="bm-effect" />
+          <Image src={img1src} style={resizePictures()} className="bm-transform-effect" />
         </Link>
         <Link to={linkTo}>
-          <Image src={img2src} style={resizePictures()} className="bm-effect" />
+          <Image src={img2src} style={resizePictures()} className="bm-transform-effect" />
         </Link>
       </ItemBodyPicturesLayout>
     );

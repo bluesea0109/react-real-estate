@@ -7,6 +7,7 @@ import { MobileDisabledLayout, MobileEnabledLayout, ItemHeaderLayout, ItemHeader
 import { canDelete, canSend, resolveLabelStatus } from './helpers';
 import { Button, Header } from '../Base';
 import { Label } from 'semantic-ui-react';
+import './hover.css';
 
 const ApproveAndSendButton = ({ data, mailoutDetailPage, onClickApproveAndSend }) => {
   if (!data) return;
@@ -87,7 +88,9 @@ const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickAppro
       <span style={{ gridArea: 'address', alignSelf: 'center' }}>
         {!mailoutDetailPage && (
           <Link to={`dashboard/${data._id}`} className="ui header">
-            <Header as="h3">{data.details.displayAddress}</Header>
+            <Header as="h3" className="bm-color-effect">
+              {data.details.displayAddress}
+            </Header>
           </Link>
         )}
         {mailoutDetailPage && <Header as="h3">{data.details.displayAddress}</Header>}
