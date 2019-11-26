@@ -1,0 +1,8 @@
+.bm-effect {
+  transform: scale(1, 1);
+  transition: 1s;
+}
+
+.bm-effect:hover {
+  transform: scale(1.1, 1.1);
+}
