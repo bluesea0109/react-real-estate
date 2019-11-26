@@ -10,7 +10,7 @@ build:
   script:
       - export API_URL="examplex.com"
       - echo -e "machine gitlab.rmcloud.com\nlogin gitlab-ci-token\npassword ${CI_JOB_TOKEN}" > ~/.netrc
-      - npm install --silent
+      - npm install
       - npm run build
       - echo "BUILD SUCCESSFULLY"
   artifacts:
