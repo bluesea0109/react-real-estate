@@ -20,6 +20,7 @@ import Popup from './Popup';
 import Responsive from './Responsive';
 import Segment from './Segment';
 import Select from './Select';
+import Step from './Step';
 
 export {
   Button,
@@ -44,4 +45,5 @@ export {
   Responsive,
   Segment,
   Select,
+  Step,
 };

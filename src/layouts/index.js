@@ -3,6 +3,8 @@ import HeaderLayout from './HeaderLayout';
 import SidebarLayout from './SidebarLayout';
 import ContentLayout from './ContentLayout';
 
+import StepLayout from './StepLayout';
+import StepsLayout from './StepsLayout';
 import NavigationLayout from './NavigationLayout';
 import MobileDisabledLayout from './MobileDisabledLayout';
 import MobileEnabledLayout from './MobileEnabledLayout';
@@ -21,6 +23,8 @@ export {
   HeaderLayout,
   SidebarLayout,
   ContentLayout,
+  StepLayout,
+  StepsLayout,
   NavigationLayout,
   MobileDisabledLayout,
   MobileEnabledLayout,

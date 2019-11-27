@@ -4,10 +4,11 @@ import { Dropdown, Header } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { NavigationLayout, MobileDisabledLayout, MobileEnabledLayout } from '../layouts';
+import { StepLayout, StepsLayout, NavigationLayout, MobileDisabledLayout, MobileEnabledLayout } from '../layouts';
 import { selectPeerId, deselectPeerId } from '../store/modules/peer/actions';
+import { setOnboardedStatus } from '../store/modules/onboarded/actions';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, Image, Icon } from './Base';
+import { Menu, Image, Icon, Step } from './Base';
 
 const iconOnlyStyle = {
   margin: '0 auto 0 auto',
@@ -41,6 +42,8 @@ export default () => {
   const [activeItem, setActiveItem] = useState('');
   const [activeUser, setActiveUser] = useState('');
 
+  const onboarded = useSelector(store => store.onboarded.status);
+  const step = useSelector(store => store.onboarded.step);
   const isMultimode = useSelector(store => store.onLogin.mode === 'multiuser');
   const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
   const loggedInUser = useSelector(store => store.onLogin.user);
@@ -154,6 +157,39 @@ export default () => {
       );
     }
   };
+
+  if (!onboarded) {
+    return (
+      <StepsLayout vertical={!mql.matches}>
+        <StepLayout active={step === 0} completed={step >= 1}>
+          <Icon name="edit" />
+          {mql.matches ? null : (
+            <Step.Content>
+              <Step.Title>Fill in your profile</Step.Title>
+            </Step.Content>
+          )}
+        </StepLayout>
+
+        <StepLayout active={step === 1} completed={step >= 2}>
+          <Icon name="configure" />
+          {mql.matches ? null : (
+            <Step.Content>
+              <Step.Title>Customize</Step.Title>
+            </Step.Content>
+          )}
+        </StepLayout>
+
+        <StepLayout active={step === 2} completed={step >= 3}>
+          <Icon name="payment" />
+          {mql.matches ? null : (
+            <Step.Content>
+              <Step.Title>Automation & Billing</Step.Title>
+            </Step.Content>
+          )}
+        </StepLayout>
+      </StepsLayout>
+    );
+  }
 
   return (
     <NavigationLayout text>

@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router';
 import PrivateRoute from './containers/PrivateRoute';
 import IndexPage from './containers/IndexPage';
 import Callback from './containers/Callback';
+import OnboardPage from './pages/OnboardPage';
 import DashboardPage from './pages/DashboardPage';
 import MailoutDetails from './pages/MailoutDetailsPage';
 import CustomizationPage from './pages/CustomizationPage';
@@ -22,6 +23,7 @@ export default () => {
     <Switch>
       <Route exact path="/" component={IndexPage} />
       <Route path="/callback" component={Callback} />
+      <Route path="/onboard" component={OnboardPage} />
       <PrivateRoute exact path="/dashboard" component={DashboardPage} />
       <PrivateRoute path="/dashboard/:mailoutId" component={MailoutDetails} />
       <PrivateRoute exact path="/customization" component={CustomizationPage} />

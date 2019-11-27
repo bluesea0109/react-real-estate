@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { getMailoutsPending, getMoreMailoutsPending } from '../store/modules/mailouts/actions';
@@ -7,26 +8,34 @@ import MailoutListItem from '../components/MailoutListItem';
 import EmptyItem from '../components/EmptyItem';
 import Loading from '../components/Loading';
 
-const useFetching = (getActionCreator, dispatch) => {
+const useFetching = (getActionCreator, onboarded, dispatch) => {
   useEffect(() => {
     // In order to prevent unnecessary call to the api when we are expecting an redirect,
     // we check for the existence of routerDestination used by the PrivatePath to route to a specific URL
-    if (!localStorage.getItem('routerDestination')) {
+    if (!localStorage.getItem('routerDestination') && onboarded) {
       dispatch(getActionCreator());
     }
-  }, [getActionCreator, dispatch]);
+  }, [getActionCreator, onboarded, dispatch]);
 };
 
 const Dashboard = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
 
+  const onboarded = useSelector(store => store.onboarded.status);
   const isLoading = useSelector(store => store.mailouts.pending);
   const canLoadMore = useSelector(store => store.mailouts.canLoadMore);
   const page = useSelector(store => store.mailouts.page);
   const list = useSelector(store => store.mailouts.list);
   const error = useSelector(store => store.mailouts.error);
 
-  useFetching(getMailoutsPending, useDispatch());
+  useEffect(() => {
+    if (!onboarded) {
+      history.push('/onboard');
+    }
+  }, [onboarded, history]);
+
+  useFetching(getMailoutsPending, onboarded, useDispatch());
 
   const boundFetchMoreMailouts = value => dispatch(getMoreMailoutsPending(value));
 
