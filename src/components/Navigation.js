@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { StepLayout, StepsLayout, NavigationLayout, MobileDisabledLayout, MobileEnabledLayout } from '../layouts';
 import { selectPeerId, deselectPeerId } from '../store/modules/peer/actions';
-import { setOnboardedStatus } from '../store/modules/onboarded/actions';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, Image, Icon, Step } from './Base';
 
