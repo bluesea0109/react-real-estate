@@ -3,10 +3,10 @@ import { Route, Switch } from 'react-router';
 
 import PrivateRoute from './containers/PrivateRoute';
 import IndexPage from './containers/IndexPage';
-import Callback from './containers/Callback';
+import CallbackPage from './containers/CallbackPage';
 import OnboardPage from './pages/OnboardPage';
 import DashboardPage from './pages/DashboardPage';
-import MailoutDetails from './pages/MailoutDetailsPage';
+import MailoutDetailsPage from './pages/MailoutDetailsPage';
 import CustomizationPage from './pages/CustomizationPage';
 import CustomizationTeamPage from './pages/CustomizationTeamPage';
 import ProfilePage from './pages/ProfilePage';
@@ -22,10 +22,10 @@ export default () => {
   return (
     <Switch>
       <Route exact path="/" component={IndexPage} />
-      <Route path="/callback" component={Callback} />
+      <Route path="/callback" component={CallbackPage} />
       <PrivateRoute path="/onboard" component={OnboardPage} />
       <PrivateRoute exact path="/dashboard" component={DashboardPage} />
-      <PrivateRoute path="/dashboard/:mailoutId" component={MailoutDetails} />
+      <PrivateRoute path="/dashboard/:mailoutId" component={MailoutDetailsPage} />
       <PrivateRoute exact path="/customization" component={CustomizationPage} />
       <PrivateRoute path="/customization/team" component={CustomizationTeamPage} />
       <PrivateRoute path="/profile" component={ProfilePage} />

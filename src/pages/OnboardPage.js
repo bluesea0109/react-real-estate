@@ -1,4 +1,3 @@
-import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,13 +8,17 @@ import { incrementStep, setOnboardedStatus } from '../store/modules/onboarded/ac
 import CustomizeNewListingForm from '../components/Forms/CustomizeNewListingForm';
 import CustomizeSoldListingForm from '../components/Forms/CustomizeSoldListingForm';
 
-const OnboardPage = props => {
-  const { newListingFormValues, newListingFormSubmitSucceeded, soldListingFormValues, soldListingFormSubmitSucceeded } = props;
+const OnboardPage = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
   const [listingNewOrSold, setListingNewOrSold] = useState('new');
   const step = useSelector(store => store.onboarded.step);
+
+  const newListingFormValues = useSelector(store => store.form.customizeNewListing && store.form.customizeNewListing.values);
+  const newListingFormSubmitSucceeded = useSelector(store => store.form.customizeNewListing && store.form.customizeNewListing.submitSucceeded);
+  const soldListingFormValues = useSelector(store => store.form.customizeSoldListing && store.form.customizeSoldListing.values);
+  const soldListingFormSubmitSucceeded = useSelector(store => store.form.customizeSoldListing && store.form.customizeSoldListing.submitSucceeded);
 
   useEffect(() => {
     if (step === 3) {
@@ -88,26 +91,4 @@ const OnboardPage = props => {
   );
 };
 
-export default connect(
-  state => ({
-    newListingFormValues: state.form.customizeNewListing ? state.form.customizeNewListing.values : {},
-    newListingFormSubmitSucceeded: state.form.customizeNewListing ? state.form.customizeNewListing.submitSucceeded : {},
-    soldListingFormValues: state.form.customizeSoldListing ? state.form.customizeSoldListing.values : {},
-    soldListingFormSubmitSucceeded: state.form.customizeSoldListing ? state.form.customizeSoldListing.submitSucceeded : {},
-  }),
-  dispatch => ({})
-)(OnboardPage);
-
-/*
-state.form.customizeNewListing
-    ? {
-        values: state.form.customizeNewListing.values,
-        submitSucceeded: state.form.customizeNewListing.submitSucceeded,
-      }
-    : state.form.customizeSoldListing
-    ? {
-      values: state.form.customizeSoldListing.values,
-      submitSucceeded: state.form.customizeSoldListing.submitSucceeded,
-    }
-    : {}
- */
+export default OnboardPage;

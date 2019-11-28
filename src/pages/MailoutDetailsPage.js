@@ -19,7 +19,7 @@ const useFetching = (getActionCreator, dispatch, mailoutId) => {
   }, [getActionCreator, dispatch, mailoutId]);
 };
 
-const MailoutDetails = () => {
+const MailoutDetailsPage = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const { mailoutId } = useParams();
@@ -104,4 +104,4 @@ const MailoutDetails = () => {
   );
 };
 
-export default MailoutDetails;
+export default MailoutDetailsPage;
