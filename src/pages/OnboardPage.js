@@ -50,6 +50,7 @@ const OnboardPage = props => {
             <Message>
               <Message.Header>Form data:</Message.Header>
               <pre>{JSON.stringify(newListingFormValues, null, 2)}</pre>
+              Submit Succeeded: <pre>{JSON.stringify(newListingFormSubmitSucceeded, null, 2)}</pre>
             </Message>
           </Segment>
         )}
@@ -59,6 +60,7 @@ const OnboardPage = props => {
             <Message>
               <Message.Header>Form data:</Message.Header>
               <pre>{JSON.stringify(soldListingFormValues, null, 2)}</pre>
+              Submit Succeeded: <pre>{JSON.stringify(soldListingFormSubmitSucceeded, null, 2)}</pre>
             </Message>
           </Segment>
         )}
