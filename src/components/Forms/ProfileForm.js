@@ -53,6 +53,7 @@ const renderDreNumberField = () =>
 
 const ProfileForm = () => {
   const [initiated, setInitiated] = useState(false);
+  const auth0 = useSelector(store => store.auth0 && store.auth0.details);
   const boards = useSelector(store => store.boards && store.boards.available);
   const states = useSelector(store => store.states && store.states.available);
 
@@ -60,6 +61,12 @@ const ProfileForm = () => {
     <Fragment>
       <FinalForm
         onSubmit={onSubmit}
+        initialValues={{
+          firstName: auth0.idTokenPayload && auth0.idTokenPayload['http://firstname'],
+          lastName: auth0.idTokenPayload && auth0.idTokenPayload['http://lastname'],
+          email: auth0.idTokenPayload && auth0.idTokenPayload.email,
+          phoneNumber: auth0.idTokenPayload && auth0.idTokenPayload['http://phonenumber'],
+        }}
         mutators={{
           ...arrayMutators,
         }}
