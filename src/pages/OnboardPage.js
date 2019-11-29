@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Header, Menu, Message, Page, Segment } from '../components/Base';
 import { incrementStep, setOnboardedStatus } from '../store/modules/onboarded/actions';
 
+import ProfileForm from '../components/Forms/ProfileForm';
 import CustomizeNewListingForm from '../components/Forms/CustomizeNewListingForm';
 import CustomizeSoldListingForm from '../components/Forms/CustomizeSoldListingForm';
 
@@ -15,6 +16,8 @@ const OnboardPage = () => {
   const [listingNewOrSold, setListingNewOrSold] = useState('new');
   const step = useSelector(store => store.onboarded.step);
 
+  const profileFormValues = useSelector(store => store.form.profile && store.form.profile.values);
+  const profileFormSubmitSucceeded = useSelector(store => store.form.profile && store.form.profile.submitSucceeded);
   const newListingFormValues = useSelector(store => store.form.customizeNewListing && store.form.customizeNewListing.values);
   const newListingFormSubmitSucceeded = useSelector(store => store.form.customizeNewListing && store.form.customizeNewListing.submitSucceeded);
   const soldListingFormValues = useSelector(store => store.form.customizeSoldListing && store.form.customizeSoldListing.values);
@@ -31,8 +34,15 @@ const OnboardPage = () => {
 
   const renderFillInYourProfile = () => {
     return (
-      <Segment>
-        <Header as="h1">Profile</Header>
+      <Segment basic>
+        <ProfileForm onSubmit={() => console.log('ProfileForm was submitted')} validate={() => console.log('Validate ProfileForm')} />
+
+        <Message>
+          <Message.Header>Form data:</Message.Header>
+          <pre>{JSON.stringify(profileFormValues, null, 2)}</pre>
+          Submit Succeeded: <pre>{JSON.stringify(profileFormSubmitSucceeded, null, 2)}</pre>
+        </Message>
+
         <Button onClick={() => dispatch(incrementStep(1))}>Stage 1 Completed</Button>
       </Segment>
     );
