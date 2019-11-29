@@ -1,3 +1,4 @@
+/*
 import React, { Fragment } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -149,3 +150,4 @@ export default reduxForm({
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true,
 })(CustomizeNewListingForm);
+*/

@@ -1,3 +1,4 @@
+/*
 import React, { Fragment } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -149,20 +150,4 @@ export default reduxForm({
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true,
 })(CustomizeSoldListingForm);
-
-/*
-<Grid>
-          <Grid.Row>
-            <Menu borderless fluid secondary>
-              <Menu.Item>
-                <h1>Dashboard</h1>
-              </Menu.Item>
-              <Menu.Menu position="right">
-                <Menu.Item>
-
-
-                </Menu.Item>
-              </Menu.Menu>
-            </Menu>
-          </Grid.Row>
- */
+*/

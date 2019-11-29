@@ -1,3 +1,4 @@
+/*
 import React, { Fragment } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -141,3 +142,4 @@ const CustomizeCampaignForm = props => {
 export default reduxForm({
   form: 'customizeCampaign',
 })(CustomizeCampaignForm);
+*/

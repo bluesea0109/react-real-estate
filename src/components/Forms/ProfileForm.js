@@ -147,7 +147,10 @@ const ProfileForm = () => {
 
                 <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridColumnGap: '2em' }}>
                   {renderField({ name: 'city', label: 'City', type: 'text', validate: required })}
-                  {renderField({ name: 'state', label: 'State', type: 'text', validate: required })}
+                  <div>
+                    <label>State</label>
+                    <Field name="states" component="select" options={states} />
+                  </div>
                   {renderField({ name: 'zipCode', label: 'Zip Code', type: 'text', validate: required })}
                 </div>
 
