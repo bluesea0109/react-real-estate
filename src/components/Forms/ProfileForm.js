@@ -159,14 +159,22 @@ const ProfileForm = () => {
                 <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridColumnGap: '2em' }}>
                   {renderField({ name: 'city', label: 'City', type: 'text', validate: required })}
 
-                  <Field name="state" component="select" label="State">
-                    <option />
-                    {states &&
-                      states.map(state => (
-                        <option key={state.key} value={state.value}>
-                          {state.text}
-                        </option>
-                      ))}
+                  <Field name="state">
+                    {({ input, meta }) => (
+                      <Form.Field>
+                        <label>State</label>
+                        <Field name="state" component="select" label="State">
+                          <option />
+                          {states &&
+                            states.map(state => (
+                              <option key={state.key} value={state.value}>
+                                {state.text}
+                              </option>
+                            ))}
+                        </Field>
+                        {meta.touched && meta.error && <span>{meta.error}</span>}
+                      </Form.Field>
+                    )}
                   </Field>
 
                   {renderField({ name: 'zipCode', label: 'Zip Code', type: 'text', validate: required })}
