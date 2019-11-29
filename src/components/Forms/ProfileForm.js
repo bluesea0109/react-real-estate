@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import arrayMutators from 'final-form-arrays';
 import React, { Fragment, useState } from 'react';
 import { FieldArray } from 'react-final-form-arrays';
@@ -7,13 +7,7 @@ import { Form as FinalForm, Field } from 'react-final-form';
 
 import { Button, Icon, Segment } from '../Base';
 import { isMobile, email, required, composeValidators, requiredOnlyInCalifornia } from './helpers';
-
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-
-const onSubmit = async values => {
-  await sleep(300);
-  window.alert(JSON.stringify(values, 0, 2));
-};
+import { saveProfilePending } from '../../store/modules/profile/actions';
 
 const renderSelectField = ({ name, label, type, options, validate }) => (
   <Field name={name} validate={validate}>
@@ -52,21 +46,41 @@ const renderDreNumberField = () =>
   );
 
 const ProfileForm = () => {
+  const dispatch = useDispatch();
   const [initiated, setInitiated] = useState(false);
   const auth0 = useSelector(store => store.auth0 && store.auth0.details);
+  const profile = useSelector(store => store.profile && store.profile.available);
+  const profileError = useSelector(store => store.profile && store.profile.error);
   const boards = useSelector(store => store.boards && store.boards.available);
   const states = useSelector(store => store.states && store.states.available);
+
+  const saveProfile = profile => dispatch(saveProfilePending(profile));
+
+  const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+  const onSubmit = async values => {
+    await sleep(300);
+    saveProfile(values);
+  };
+
+  let profileValues;
+
+  if (profileError === '410 Gone') {
+    profileValues = {
+      firstName: auth0.idTokenPayload && auth0.idTokenPayload['http://firstname'],
+      lastName: auth0.idTokenPayload && auth0.idTokenPayload['http://lastname'],
+      email: auth0.idTokenPayload && auth0.idTokenPayload.email,
+      phoneNumber: auth0.idTokenPayload && auth0.idTokenPayload['http://phonenumber'],
+    };
+  } else {
+    profileValues = profile;
+  }
 
   return (
     <Fragment>
       <FinalForm
         onSubmit={onSubmit}
-        initialValues={{
-          firstName: auth0.idTokenPayload && auth0.idTokenPayload['http://firstname'],
-          lastName: auth0.idTokenPayload && auth0.idTokenPayload['http://lastname'],
-          email: auth0.idTokenPayload && auth0.idTokenPayload.email,
-          phoneNumber: auth0.idTokenPayload && auth0.idTokenPayload['http://phonenumber'],
-        }}
+        initialValues={profileValues}
         mutators={{
           ...arrayMutators,
         }}

@@ -103,17 +103,6 @@ async function del(path, sendToken = true) {
   return await handleResponse(response);
 }
 
-/*
-
-
-
-
-
-
-
-
-
- */
 const directory = {
   boards: () => ({ path: `/api/boards`, method: 'get' }),
   states: () => ({ path: `/api/states`, method: 'get' }),
@@ -147,17 +136,17 @@ const directory = {
 
     settings: {
       branding: {
-        get: () => ({ path: `/api/user/peer/settings/branding`, method: 'get' }),
-        save: () => ({ path: `/api/user/peer/settings/branding`, method: 'put' }),
+        get: () => ({ path: `/api/user/settings/branding`, method: 'get' }),
+        save: () => ({ path: `/api/user/settings/branding`, method: 'put' }),
       },
       photos: {
-        get: () => ({ path: `/api/user/peer/settings/photos/realtorPhoto`, method: 'get' }),
-        set: () => ({ path: `/api/user/peer/settings/photos/realtorPhoto`, method: 'post' }),
-        setUrl: url => ({ path: `/api/user/peer/settings/photos/realtorPhoto/${url}`, method: 'post' }),
+        get: () => ({ path: `/api/user/settings/photos/realtorPhoto`, method: 'get' }),
+        set: () => ({ path: `/api/user/settings/photos/realtorPhoto`, method: 'post' }),
+        setUrl: url => ({ path: `/api/user/settings/photos/realtorPhoto/${url}`, method: 'post' }),
       },
       profile: {
-        get: () => ({ path: `/api/user/peer/settings/profile`, method: 'get' }),
-        save: () => ({ path: `/api/user/peer/settings/profile`, method: 'put' }),
+        get: () => ({ path: `/api/user/settings/profile`, method: 'get' }),
+        save: () => ({ path: `/api/user/settings/profile`, method: 'put' }),
       },
     },
 
