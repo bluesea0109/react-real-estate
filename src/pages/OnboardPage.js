@@ -2,7 +2,7 @@ import { useHistory } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Button, Header, Menu, Message, Page, Segment } from '../components/Base';
+import { Button, Header, Menu, /*Message,*/ Page, Segment } from '../components/Base';
 import { incrementStep, setOnboardedStatus } from '../store/modules/onboarded/actions';
 
 import ProfileForm from '../components/Forms/ProfileForm';
