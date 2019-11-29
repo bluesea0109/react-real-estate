@@ -22,6 +22,18 @@ const minValue = min => value => (isNaN(value) || value >= min ? undefined : `Sh
 
 const composeValidators = (...validators) => value => validators.reduce((error, validator) => error || validator(value), undefined);
 
+const renderSelectField = ({ name, label, type, options, validate }) => {
+  return (
+    <Field name={name} validate={validate}>
+      {({ input, meta }) => (
+        <Form.Field>
+          <Form.Input {...input} type={type} label={label} error={meta.error && meta.touched && { content: `${meta.error}` }} />
+        </Form.Field>
+      )}
+    </Field>
+  );
+};
+
 const renderField = ({ name, label, type, validate }) => {
   return (
     <Field name={name} validate={validate}>
@@ -45,11 +57,10 @@ const renderDreNumberField = () =>
 
 const ProfileForm = () => {
   const [initiated, setInitiated] = useState(false);
-  const boards = useSelector(store => store.boards && store.boards.pending && store.boards.available);
-  const states = useSelector(store => store.states && store.states.pending && store.states.available);
+  const boards = useSelector(store => store.boards && store.boards.available);
+  const states = useSelector(store => store.states && store.states.available);
 
   console.log('boards', boards);
-  console.log('states', states);
 
   return (
     <Fragment>
@@ -147,10 +158,17 @@ const ProfileForm = () => {
 
                 <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridColumnGap: '2em' }}>
                   {renderField({ name: 'city', label: 'City', type: 'text', validate: required })}
-                  <div>
-                    <label>State</label>
-                    <Field name="states" component="select" options={states} />
-                  </div>
+
+                  <Field name="states" component="select" label="State">
+                    <option />
+                    {states &&
+                      states.map(state => (
+                        <option key={state.key} value={state.value}>
+                          {state.text}
+                        </option>
+                      ))}
+                  </Field>
+
                   {renderField({ name: 'zipCode', label: 'Zip Code', type: 'text', validate: required })}
                 </div>
 
