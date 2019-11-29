@@ -22,17 +22,17 @@ const minValue = min => value => (isNaN(value) || value >= min ? undefined : `Sh
 
 const composeValidators = (...validators) => value => validators.reduce((error, validator) => error || validator(value), undefined);
 
-const renderSelectField = ({ name, label, type, options, validate }) => {
-  return (
-    <Field name={name} validate={validate}>
-      {({ input, meta }) => (
-        <Form.Field>
-          <Form.Input {...input} type={type} label={label} error={meta.error && meta.touched && { content: `${meta.error}` }} />
-        </Form.Field>
-      )}
-    </Field>
-  );
-};
+// const renderSelectField = ({ name, label, type, options, validate }) => {
+//   return (
+//     <Field name={name} validate={validate}>
+//       {({ input, meta }) => (
+//         <Form.Field>
+//           <Form.Input {...input} type={type} label={label} error={meta.error && meta.touched && { content: `${meta.error}` }} />
+//         </Form.Field>
+//       )}
+//     </Field>
+//   );
+// };
 
 const renderField = ({ name, label, type, validate }) => {
   return (
