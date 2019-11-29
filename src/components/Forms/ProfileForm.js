@@ -60,8 +60,6 @@ const ProfileForm = () => {
   const boards = useSelector(store => store.boards && store.boards.available);
   const states = useSelector(store => store.states && store.states.available);
 
-  console.log('boards', boards);
-
   return (
     <Fragment>
       <FinalForm
@@ -80,7 +78,6 @@ const ProfileForm = () => {
           values,
         }) => {
           if (!initiated) {
-            console.log('First Pass');
             setInitiated(true);
             push('mls', undefined);
           }
@@ -215,7 +212,26 @@ const ProfileForm = () => {
                                 }
                           }
                         >
-                          {renderField({ name: `${name}.mls`, label: 'MLS', type: 'text', validate: required })}
+                          {/*{renderField({ name: `${name}.mls`, label: 'MLS', type: 'text', validate: required })}*/}
+
+                          <Field name={`${name}.mls`}>
+                            {({ input, meta }) => (
+                              <Form.Field>
+                                <label>MLS</label>
+                                <Field name={`${name}.mls`} component="select" label="MLS">
+                                  <option />
+                                  {boards &&
+                                    boards.map(board => (
+                                      <option key={board.mlsId} value={board.name}>
+                                        {board.name}
+                                      </option>
+                                    ))}
+                                </Field>
+                                {meta.touched && meta.error && <span>{meta.error}</span>}
+                              </Form.Field>
+                            )}
+                          </Field>
+
                           {renderField({
                             name: `${name}.mlsAgentId`,
                             label: 'MLS Agent ID',
