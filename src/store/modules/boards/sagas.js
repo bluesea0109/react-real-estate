@@ -11,7 +11,18 @@ export function* onLoginSaga() {
     const { path, method } = ApiService.directory.boards();
     const response = yield call(ApiService[method], path);
 
-    yield put(getBoardsSuccess(response));
+    const normalize = Object.keys(response).map((s, v) => {
+      return {
+        key: s,
+        mlsid: s,
+        text: response[s].name,
+        value: response[s].name,
+        name: response[s].name,
+        shortname: response[s].shortName ? response[s].shortName : undefined,
+      };
+    });
+
+    yield put(getBoardsSuccess(normalize));
   } catch (err) {
     yield put(getBoardsError(err.message));
   }

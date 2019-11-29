@@ -5,9 +5,8 @@ import { FieldArray } from 'react-final-form-arrays';
 import { Header, Divider, Form } from 'semantic-ui-react';
 import { Form as FinalForm, Field } from 'react-final-form';
 
-//  import { Button, Icon, Input, Image, Segment, Menu } from '../Base';
 import { Button, Icon, Segment } from '../Base';
-import { isMobile } from './helpers';
+import { isMobile, email, required, composeValidators, requiredOnlyInCalifornia } from './helpers';
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -16,35 +15,32 @@ const onSubmit = async values => {
   window.alert(JSON.stringify(values, 0, 2));
 };
 
-const required = value => (value ? undefined : 'Required');
-const mustBeNumber = value => (isNaN(value) ? 'Must be a number' : undefined);
-const minValue = min => value => (isNaN(value) || value >= min ? undefined : `Should be greater than ${min}`);
+const renderSelectField = ({ name, label, type, options, validate }) => (
+  <Field name={name} validate={validate}>
+    {({ input, meta }) => (
+      <Form.Field>
+        <Form.Select
+          onChange={(param, data) => input.onChange(data.value)}
+          options={options}
+          name={name}
+          label={label}
+          type={type}
+          error={meta.error && meta.touched && { content: `${meta.error}` }}
+        />
+      </Form.Field>
+    )}
+  </Field>
+);
 
-const composeValidators = (...validators) => value => validators.reduce((error, validator) => error || validator(value), undefined);
-
-// const renderSelectField = ({ name, label, type, options, validate }) => {
-//   return (
-//     <Field name={name} validate={validate}>
-//       {({ input, meta }) => (
-//         <Form.Field>
-//           <Form.Input {...input} type={type} label={label} error={meta.error && meta.touched && { content: `${meta.error}` }} />
-//         </Form.Field>
-//       )}
-//     </Field>
-//   );
-// };
-
-const renderField = ({ name, label, type, validate }) => {
-  return (
-    <Field name={name} validate={validate}>
-      {({ input, meta }) => (
-        <Form.Field>
-          <Form.Input {...input} type={type} label={label} error={meta.error && meta.touched && { content: `${meta.error}` }} />
-        </Form.Field>
-      )}
-    </Field>
-  );
-};
+const renderField = ({ name, label, type, validate }) => (
+  <Field name={name} validate={validate}>
+    {({ input, meta }) => (
+      <Form.Field>
+        <Form.Input {...input} type={type} label={label} error={meta.error && meta.touched && { content: `${meta.error}` }} />
+      </Form.Field>
+    )}
+  </Field>
+);
 
 const renderDreNumberField = () =>
   isMobile() ? (
@@ -93,46 +89,17 @@ const ProfileForm = () => {
                 <Divider style={{ margin: '1em -1em' }} />
 
                 <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridColumnGap: '2em' }}>
-                  <Field name="firstName" validate={required}>
-                    {({ input, meta }) => (
-                      <Form.Field>
-                        <Form.Input {...input} type="text" label="First Name" error={meta.error && meta.touched && { content: `${meta.error}` }} />
-                      </Form.Field>
-                    )}
-                  </Field>
-                  <Field name="lastName" validate={required}>
-                    {({ input, meta }) => (
-                      <Form.Field>
-                        <Form.Input {...input} type="text" label="Last Name" error={meta.error && meta.touched && { content: `${meta.error}` }} />
-                      </Form.Field>
-                    )}
-                  </Field>
-                  <Field name="age" validate={composeValidators(required, mustBeNumber, minValue(18))}>
-                    {({ input, meta }) => (
-                      <Form.Field>
-                        <Form.Input {...input} type="text" label="Email" error={meta.error && meta.touched && { content: `${meta.error}` }} />
-                      </Form.Field>
-                    )}
-                  </Field>
+                  {renderField({ name: 'firstName', label: 'First Name', type: 'text', validate: required })}
+                  {renderField({ name: 'lastName', label: 'Last Name', type: 'text', validate: required })}
+
+                  {renderField({ name: 'email', label: 'Email', type: 'text', validate: composeValidators(required, email) })}
                 </div>
 
                 <br />
 
                 <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr 1fr', gridColumnGap: '2em' }}>
-                  <Field name="phoneNumber" validate={required}>
-                    {({ input, meta }) => (
-                      <Form.Field>
-                        <Form.Input {...input} type="text" label="Phone Number" error={meta.error && meta.touched && { content: `${meta.error}` }} />
-                      </Form.Field>
-                    )}
-                  </Field>
-                  <Field name="dreNumber" validate={required}>
-                    {({ input, meta }) => (
-                      <Form.Field>
-                        <Form.Input {...input} type="text" label={renderDreNumberField()} error={meta.error && meta.touched && { content: `${meta.error}` }} />
-                      </Form.Field>
-                    )}
-                  </Field>
+                  {renderField({ name: 'phoneNumber', label: 'Phone Number', type: 'text', validate: required })}
+                  {renderField({ name: 'dreNumber', label: renderDreNumberField(), type: 'text', validate: requiredOnlyInCalifornia })}
                 </div>
               </Segment>
 
@@ -155,25 +122,7 @@ const ProfileForm = () => {
 
                 <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridColumnGap: '2em' }}>
                   {renderField({ name: 'city', label: 'City', type: 'text', validate: required })}
-
-                  <Field name="state">
-                    {({ input, meta }) => (
-                      <Form.Field>
-                        <label>State</label>
-                        <Field name="state" component="select" label="State">
-                          <option />
-                          {states &&
-                            states.map(state => (
-                              <option key={state.key} value={state.value}>
-                                {state.text}
-                              </option>
-                            ))}
-                        </Field>
-                        {meta.touched && meta.error && <span>{meta.error}</span>}
-                      </Form.Field>
-                    )}
-                  </Field>
-
+                  {renderSelectField({ name: 'state', label: 'State', type: 'text', validate: required, options: states ? states : [] })}
                   {renderField({ name: 'zipCode', label: 'Zip Code', type: 'text', validate: required })}
                 </div>
 
@@ -193,51 +142,16 @@ const ProfileForm = () => {
 
                 <FieldArray name="mls">
                   {({ fields }) => {
-                    // TODO: Determine if this should be  used
+                    // TODO: Determine if this should be used
                     if (fields.length === 0) {
-                      console.log('No MLS!!!!!');
                       push('mls', undefined);
                     }
 
                     return fields.map((name, index) => (
                       <Segment secondary key={name}>
-                        <div
-                          style={
-                            isMobile()
-                              ? { display: 'grid' }
-                              : {
-                                  display: 'grid',
-                                  gridTemplateColumns: '1fr 1fr 45px',
-                                  gridColumnGap: '2em',
-                                }
-                          }
-                        >
-                          {/*{renderField({ name: `${name}.mls`, label: 'MLS', type: 'text', validate: required })}*/}
-
-                          <Field name={`${name}.mls`}>
-                            {({ input, meta }) => (
-                              <Form.Field>
-                                <label>MLS</label>
-                                <Field name={`${name}.mls`} component="select" label="MLS">
-                                  <option />
-                                  {boards &&
-                                    boards.map(board => (
-                                      <option key={board.mlsId} value={board.name}>
-                                        {board.name}
-                                      </option>
-                                    ))}
-                                </Field>
-                                {meta.touched && meta.error && <span>{meta.error}</span>}
-                              </Form.Field>
-                            )}
-                          </Field>
-
-                          {renderField({
-                            name: `${name}.mlsAgentId`,
-                            label: 'MLS Agent ID',
-                            type: 'text',
-                            validate: required,
-                          })}
+                        <div style={isMobile() ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 1fr 45px', gridColumnGap: '2em' }}>
+                          {renderSelectField({ name: `${name}.mls`, label: 'MLS', type: 'text', validate: required, options: boards ? boards : [] })}
+                          {renderField({ name: `${name}.mlsAgentId`, label: 'MLS Agent ID', type: 'text', validate: required })}
                           <Button
                             basic
                             icon
@@ -245,15 +159,7 @@ const ProfileForm = () => {
                             // TODO: Alternatively we can do this
                             disabled={fields.length === 1}
                             onClick={() => fields.remove(index)}
-                            style={
-                              isMobile()
-                                ? { cursor: 'pointer' }
-                                : {
-                                    maxHeight: '45px',
-                                    margin: '1.7em 0',
-                                    cursor: 'pointer',
-                                  }
-                            }
+                            style={isMobile() ? { cursor: 'pointer' } : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }}
                             aria-label="remove mls"
                           >
                             <Icon name="trash" />
