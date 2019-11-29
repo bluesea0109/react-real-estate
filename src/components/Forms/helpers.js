@@ -2,6 +2,8 @@
 import * as isURL from 'validator/lib/isURL';
 import * as isEmail from 'validator/lib/isEmail';
 
+// export const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 const isEmpty = value => value === undefined || value === null || value === '';
 export const email = value => !isEmpty(value) && !isEmail(value) && 'Invalid email address';
 export const required = value => isEmpty(value) && 'Required field';

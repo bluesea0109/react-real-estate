@@ -15,6 +15,7 @@ const renderSelectField = ({ name, label, type, options, validate }) => (
       <Form.Field>
         <Form.Select
           onChange={(param, data) => input.onChange(data.value)}
+          value={input.value}
           options={options}
           name={name}
           label={label}
@@ -56,10 +57,7 @@ const ProfileForm = () => {
 
   const saveProfile = profile => dispatch(saveProfilePending(profile));
 
-  const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-
-  const onSubmit = async values => {
-    await sleep(300);
+  const onSubmit = values => {
     saveProfile(values);
   };
 
@@ -71,6 +69,7 @@ const ProfileForm = () => {
       lastName: auth0.idTokenPayload && auth0.idTokenPayload['http://lastname'],
       email: auth0.idTokenPayload && auth0.idTokenPayload.email,
       phoneNumber: auth0.idTokenPayload && auth0.idTokenPayload['http://phonenumber'],
+      mls: [null],
     };
   } else {
     profileValues = profile;
@@ -162,13 +161,8 @@ const ProfileForm = () => {
                 <Divider style={{ margin: '1em -1em' }} />
 
                 <FieldArray name="mls">
-                  {({ fields }) => {
-                    // TODO: Determine if this should be used
-                    if (fields.length === 0) {
-                      push('mls', undefined);
-                    }
-
-                    return fields.map((name, index) => (
+                  {({ fields }) =>
+                    fields.map((name, index) => (
                       <Segment secondary key={name}>
                         <div style={isMobile() ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 1fr 45px', gridColumnGap: '2em' }}>
                           {renderSelectField({ name: `${name}.mls`, label: 'MLS', type: 'text', validate: required, options: boards ? boards : [] })}
@@ -177,7 +171,6 @@ const ProfileForm = () => {
                             basic
                             icon
                             color="teal"
-                            // TODO: Alternatively we can do this
                             disabled={fields.length === 1}
                             onClick={() => fields.remove(index)}
                             style={isMobile() ? { cursor: 'pointer' } : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }}
@@ -187,8 +180,8 @@ const ProfileForm = () => {
                           </Button>
                         </div>
                       </Segment>
-                    ));
-                  }}
+                    ))
+                  }
                 </FieldArray>
 
                 <div className="buttons">
@@ -208,7 +201,6 @@ const ProfileForm = () => {
                   </Button>
                 </span>
               </div>
-              <pre>{JSON.stringify(values, 0, 2)}</pre>
             </Form>
           );
         }}

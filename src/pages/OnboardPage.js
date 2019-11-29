@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Button, Header, Menu, /*Message,*/ Page, Segment } from '../components/Base';
 import { incrementStep, setOnboardedStatus } from '../store/modules/onboarded/actions';
+import Loading from '../components/Loading';
 
 import ProfileForm from '../components/Forms/ProfileForm';
 // import CustomizeNewListingForm from '../components/Forms/CustomizeNewListingForm';
@@ -15,29 +16,32 @@ const OnboardPage = () => {
 
   const [listingNewOrSold, setListingNewOrSold] = useState('new');
   const step = useSelector(store => store.onboarded.step);
-
-  // const profileFormValues = useSelector(store => store.form.profile && store.form.profile.values);
-  // const profileFormSubmitSucceeded = useSelector(store => store.form.profile && store.form.profile.submitSucceeded);
-  // const newListingFormValues = useSelector(store => store.form.customizeNewListing && store.form.customizeNewListing.values);
-  // const newListingFormSubmitSucceeded = useSelector(store => store.form.customizeNewListing && store.form.customizeNewListing.submitSucceeded);
-  // const soldListingFormValues = useSelector(store => store.form.customizeSoldListing && store.form.customizeSoldListing.values);
-  // const soldListingFormSubmitSucceeded = useSelector(store => store.form.customizeSoldListing && store.form.customizeSoldListing.submitSucceeded);
+  const profileSuppliedOnLogin = useSelector(store => store.onLogin && store.onLogin.userProfile);
+  const profileAvailable = useSelector(store => store.profile && store.profile.available);
+  const isLoadingOnLogin = useSelector(store => store.onLogin && store.profile.pending);
+  const isLoadingProfile = useSelector(store => store.profile && store.profile.pending);
 
   useEffect(() => {
+    if (profileAvailable || profileSuppliedOnLogin) {
+      if (step <= 1) {
+        dispatch(incrementStep(1));
+      }
+    }
+
     if (step === 3) {
       dispatch(setOnboardedStatus(true));
       history.push('/dashboard');
     }
-  }, [step, dispatch, history]);
+  }, [step, profileAvailable, profileSuppliedOnLogin, dispatch, history]);
 
   const handleListingToggle = (e, { name }) => setListingNewOrSold(name);
 
   const renderFillInYourProfile = () => {
+    if (isLoadingOnLogin || isLoadingProfile) return Loading;
+
     return (
       <Segment basic>
-        <ProfileForm onSubmit={() => console.log('ProfileForm was submitted')} validate={() => console.log('Validate ProfileForm')} />
-
-        <Button onClick={() => dispatch(incrementStep(1))}>Stage 1 Completed</Button>
+        <ProfileForm />
       </Segment>
     );
   };
