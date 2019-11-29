@@ -159,7 +159,7 @@ const ProfileForm = () => {
                 <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridColumnGap: '2em' }}>
                   {renderField({ name: 'city', label: 'City', type: 'text', validate: required })}
 
-                  <Field name="states" component="select" label="State">
+                  <Field name="state" component="select" label="State">
                     <option />
                     {states &&
                       states.map(state => (
