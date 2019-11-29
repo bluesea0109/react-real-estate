@@ -1,5 +1,5 @@
+import React, { Fragment } from 'react';
 import arrayMutators from 'final-form-arrays';
-import React, { Fragment, useState } from 'react';
 import { FieldArray } from 'react-final-form-arrays';
 import { Form as FinalForm } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,7 +20,6 @@ const renderDreNumberField = () =>
 
 const ProfileForm = () => {
   const dispatch = useDispatch();
-  const [initiated, setInitiated] = useState(false);
   const auth0 = useSelector(store => store.auth0 && store.auth0.details);
   const profile = useSelector(store => store.profile && store.profile.available);
   const profileError = useSelector(store => store.profile && store.profile.error);
@@ -63,118 +62,111 @@ const ProfileForm = () => {
           submitting,
           pristine,
           values,
-        }) => {
-          if (!initiated) {
-            setInitiated(true);
-            push('mls', undefined);
-          }
+        }) => (
+          <Form onSubmit={handleSubmit}>
+            <Segment>
+              <Header as="h1">
+                Profile
+                <Header.Subheader>Your information will be shown on your postcards and will enable recipients to reach you.</Header.Subheader>
+              </Header>
 
-          return (
-            <Form onSubmit={handleSubmit}>
-              <Segment>
-                <Header as="h1">
-                  Profile
-                  <Header.Subheader>Your information will be shown on your postcards and will enable recipients to reach you.</Header.Subheader>
-                </Header>
+              <Divider style={{ margin: '1em -1em' }} />
 
-                <Divider style={{ margin: '1em -1em' }} />
+              <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridColumnGap: '2em' }}>
+                {renderField({ name: 'firstName', label: 'First Name', type: 'text', validate: required })}
+                {renderField({ name: 'lastName', label: 'Last Name', type: 'text', validate: required })}
 
-                <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridColumnGap: '2em' }}>
-                  {renderField({ name: 'firstName', label: 'First Name', type: 'text', validate: required })}
-                  {renderField({ name: 'lastName', label: 'Last Name', type: 'text', validate: required })}
-
-                  {renderField({ name: 'email', label: 'Email', type: 'text', validate: composeValidators(required, email) })}
-                </div>
-
-                <br />
-
-                <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr 1fr', gridColumnGap: '2em' }}>
-                  {renderField({ name: 'phoneNumber', label: 'Phone Number', type: 'text', validate: required })}
-                  {renderField({ name: 'dreNumber', label: renderDreNumberField(), type: 'text', validate: requiredOnlyInCalifornia })}
-                </div>
-              </Segment>
-
-              <Segment>
-                <Header as="h1">
-                  Business
-                  <Header.Subheader>Enter your company details for branding purposes and for the return addresss of your mailers.</Header.Subheader>
-                </Header>
-
-                <Divider style={{ margin: '1em -1em' }} />
-
-                <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr 1fr', gridColumnGap: '2em' }}>
-                  {renderField({ name: 'teamName', label: 'Team name', type: 'text', validate: required })}
-                  {renderField({ name: 'brokerageName', label: 'Brokerage name', type: 'text', validate: required })}
-                </div>
-
-                <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr', gridColumnGap: '2em' }}>
-                  {renderField({ name: 'address', label: 'Address', type: 'text', validate: required })}
-                </div>
-
-                <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridColumnGap: '2em' }}>
-                  {renderField({ name: 'city', label: 'City', type: 'text', validate: required })}
-                  {renderSelectField({ name: 'state', label: 'State', type: 'text', validate: required, options: states ? states : [] })}
-                  {renderField({ name: 'zipCode', label: 'Zip Code', type: 'text', validate: required })}
-                </div>
-
-                <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr 1fr', gridColumnGap: '2em' }}>
-                  {renderField({ name: 'officePhone', label: 'Office phone (Optional)', type: 'text' })}
-                  {renderField({ name: 'website', label: 'Website (Optional)', type: 'text' })}
-                </div>
-              </Segment>
-
-              <Segment>
-                <Header as="h1">
-                  MLS
-                  <Header.Subheader>Enter your MLS information so we can generate postcards for your listings.</Header.Subheader>
-                </Header>
-
-                <Divider style={{ margin: '1em -1em' }} />
-
-                <FieldArray name="mls">
-                  {({ fields }) =>
-                    fields.map((name, index) => (
-                      <Segment secondary key={name}>
-                        <div style={isMobile() ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 1fr 45px', gridColumnGap: '2em' }}>
-                          {renderSelectField({ name: `${name}.mls`, label: 'MLS', type: 'text', validate: required, options: boards ? boards : [] })}
-                          {renderField({ name: `${name}.mlsAgentId`, label: 'MLS Agent ID', type: 'text', validate: required })}
-                          <Button
-                            basic
-                            icon
-                            color="teal"
-                            disabled={fields.length === 1}
-                            onClick={() => fields.remove(index)}
-                            style={isMobile() ? { cursor: 'pointer' } : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }}
-                            aria-label="remove mls"
-                          >
-                            <Icon name="trash" />
-                          </Button>
-                        </div>
-                      </Segment>
-                    ))
-                  }
-                </FieldArray>
-
-                <div className="buttons">
-                  <Button basic onClick={() => push('mls', undefined)} color="teal">
-                    Add MLS
-                  </Button>
-                </div>
-              </Segment>
-
-              <div style={{ display: 'grid', justifyContent: 'end' }}>
-                <span>
-                  <Button basic type="button" onClick={form.reset} disabled={submitting || pristine} color="teal">
-                    Discard
-                  </Button>
-                  <Button type="submit" disabled={submitting} color="teal">
-                    Submit
-                  </Button>
-                </span>
+                {renderField({ name: 'email', label: 'Email', type: 'text', validate: composeValidators(required, email) })}
               </div>
-            </Form>
-          );
-        }}
+
+              <br />
+
+              <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr 1fr', gridColumnGap: '2em' }}>
+                {renderField({ name: 'phoneNumber', label: 'Phone Number', type: 'text', validate: required })}
+                {renderField({ name: 'dreNumber', label: renderDreNumberField(), type: 'text', validate: requiredOnlyInCalifornia })}
+              </div>
+            </Segment>
+
+            <Segment>
+              <Header as="h1">
+                Business
+                <Header.Subheader>Enter your company details for branding purposes and for the return addresss of your mailers.</Header.Subheader>
+              </Header>
+
+              <Divider style={{ margin: '1em -1em' }} />
+
+              <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr 1fr', gridColumnGap: '2em' }}>
+                {renderField({ name: 'teamName', label: 'Team name', type: 'text', validate: required })}
+                {renderField({ name: 'brokerageName', label: 'Brokerage name', type: 'text', validate: required })}
+              </div>
+
+              <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr', gridColumnGap: '2em' }}>
+                {renderField({ name: 'address', label: 'Address', type: 'text', validate: required })}
+              </div>
+
+              <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridColumnGap: '2em' }}>
+                {renderField({ name: 'city', label: 'City', type: 'text', validate: required })}
+                {renderSelectField({ name: 'state', label: 'State', type: 'text', validate: required, options: states ? states : [] })}
+                {renderField({ name: 'zipCode', label: 'Zip Code', type: 'text', validate: required })}
+              </div>
+
+              <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr 1fr', gridColumnGap: '2em' }}>
+                {renderField({ name: 'officePhone', label: 'Office phone (Optional)', type: 'text' })}
+                {renderField({ name: 'website', label: 'Website (Optional)', type: 'text' })}
+              </div>
+            </Segment>
+
+            <Segment>
+              <Header as="h1">
+                MLS
+                <Header.Subheader>Enter your MLS information so we can generate postcards for your listings.</Header.Subheader>
+              </Header>
+
+              <Divider style={{ margin: '1em -1em' }} />
+
+              <FieldArray name="mls">
+                {({ fields }) =>
+                  fields.map((name, index) => (
+                    <Segment secondary key={name}>
+                      <div style={isMobile() ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 1fr 45px', gridColumnGap: '2em' }}>
+                        {renderSelectField({ name: `${name}.mls`, label: 'MLS', type: 'text', validate: required, options: boards ? boards : [] })}
+                        {renderField({ name: `${name}.mlsAgentId`, label: 'MLS Agent ID', type: 'text', validate: required })}
+                        <Button
+                          basic
+                          icon
+                          color="teal"
+                          disabled={fields.length === 1}
+                          onClick={() => fields.remove(index)}
+                          style={isMobile() ? { cursor: 'pointer' } : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }}
+                          aria-label="remove mls"
+                        >
+                          <Icon name="trash" />
+                        </Button>
+                      </div>
+                    </Segment>
+                  ))
+                }
+              </FieldArray>
+
+              <div className="buttons">
+                <Button basic onClick={() => push('mls', undefined)} color="teal">
+                  Add MLS
+                </Button>
+              </div>
+            </Segment>
+
+            <div style={{ display: 'grid', justifyContent: 'end' }}>
+              <span>
+                <Button basic type="button" onClick={form.reset} disabled={submitting || pristine} color="teal">
+                  Discard
+                </Button>
+                <Button type="submit" disabled={submitting} color="teal">
+                  Submit
+                </Button>
+              </span>
+            </div>
+          </Form>
+        )}
       />
     </Fragment>
   );
