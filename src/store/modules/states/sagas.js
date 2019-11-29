@@ -11,7 +11,9 @@ export function* onLoginSaga() {
     const { path, method } = ApiService.directory.states();
     const response = yield call(ApiService[method], path);
 
-    yield put(getStatesSuccess(response));
+    const normalize = Object.keys(response).map((s, v) => ({ key: s, text: response[s], value: response[s] }));
+
+    yield put(getStatesSuccess(normalize));
   } catch (err) {
     yield put(getStatesError(err.message));
   }

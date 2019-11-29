@@ -3,7 +3,7 @@ import { GET_STATES_PENDING, GET_STATES_SUCCESS, GET_STATES_ERROR } from './acti
 const initialState = {
   pending: false,
   error: null,
-  states: null,
+  available: null,
 };
 
 export default function user(state = initialState, action) {
@@ -18,7 +18,7 @@ export default function user(state = initialState, action) {
       return {
         ...state,
         pending: false,
-        states: action.payload,
+        available: action.payload,
       };
 
     case GET_STATES_ERROR:

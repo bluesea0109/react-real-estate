@@ -3,7 +3,7 @@ import { GET_BOARDS_PENDING, GET_BOARDS_SUCCESS, GET_BOARDS_ERROR } from './acti
 const initialState = {
   pending: false,
   error: null,
-  boards: null,
+  available: [],
 };
 
 export default function user(state = initialState, action) {
@@ -18,7 +18,7 @@ export default function user(state = initialState, action) {
       return {
         ...state,
         pending: false,
-        boards: action.payload,
+        available: action.payload,
       };
 
     case GET_BOARDS_ERROR:
