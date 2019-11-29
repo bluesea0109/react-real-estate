@@ -1,41 +1,13 @@
-import { useDispatch, useSelector } from 'react-redux';
 import arrayMutators from 'final-form-arrays';
 import React, { Fragment, useState } from 'react';
 import { FieldArray } from 'react-final-form-arrays';
+import { Form as FinalForm } from 'react-final-form';
+import { useDispatch, useSelector } from 'react-redux';
 import { Header, Divider, Form } from 'semantic-ui-react';
-import { Form as FinalForm, Field } from 'react-final-form';
 
+import { isMobile, email, required, composeValidators, requiredOnlyInCalifornia, renderSelectField, renderField } from './helpers';
 import { Button, Icon, Segment } from '../Base';
-import { isMobile, email, required, composeValidators, requiredOnlyInCalifornia } from './helpers';
 import { saveProfilePending } from '../../store/modules/profile/actions';
-
-const renderSelectField = ({ name, label, type, options, validate }) => (
-  <Field name={name} validate={validate}>
-    {({ input, meta }) => (
-      <Form.Field>
-        <Form.Select
-          onChange={(param, data) => input.onChange(data.value)}
-          value={input.value}
-          options={options}
-          name={name}
-          label={label}
-          type={type}
-          error={meta.error && meta.touched && { content: `${meta.error}` }}
-        />
-      </Form.Field>
-    )}
-  </Field>
-);
-
-const renderField = ({ name, label, type, validate }) => (
-  <Field name={name} validate={validate}>
-    {({ input, meta }) => (
-      <Form.Field>
-        <Form.Input {...input} type={type} label={label} error={meta.error && meta.touched && { content: `${meta.error}` }} />
-      </Form.Field>
-    )}
-  </Field>
-);
 
 const renderDreNumberField = () =>
   isMobile() ? (
@@ -56,7 +28,6 @@ const ProfileForm = () => {
   const states = useSelector(store => store.states && store.states.available);
 
   const saveProfile = profile => dispatch(saveProfilePending(profile));
-
   const onSubmit = values => {
     saveProfile(values);
   };

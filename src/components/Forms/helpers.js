@@ -1,6 +1,9 @@
 // import * as isInt from 'validator/lib/isInt';
 import * as isURL from 'validator/lib/isURL';
 import * as isEmail from 'validator/lib/isEmail';
+import { Field } from 'react-final-form';
+import { Form } from 'semantic-ui-react';
+import React from 'react';
 
 // export const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -26,3 +29,31 @@ const mql = window.matchMedia('(max-width: 599px)');
 export const isMobile = () => mql.matches;
 
 // composeValidators(required, mustBeNumber, minValue(18))
+
+export const renderSelectField = ({ name, label, type, options, validate }) => (
+  <Field name={name} validate={validate}>
+    {({ input, meta }) => (
+      <Form.Field>
+        <Form.Select
+          onChange={(param, data) => input.onChange(data.value)}
+          value={input.value}
+          options={options}
+          name={name}
+          label={label}
+          type={type}
+          error={meta.error && meta.touched && { content: `${meta.error}` }}
+        />
+      </Form.Field>
+    )}
+  </Field>
+);
+
+export const renderField = ({ name, label, type, validate }) => (
+  <Field name={name} validate={validate}>
+    {({ input, meta }) => (
+      <Form.Field>
+        <Form.Input {...input} type={type} label={label} error={meta.error && meta.touched && { content: `${meta.error}` }} />
+      </Form.Field>
+    )}
+  </Field>
+);
