@@ -1,8 +1,9 @@
 import { put, call, takeLatest } from 'redux-saga/effects';
 
-import { AUTHENTICATION_SUCCESS } from '../auth0/actions';
 import { getBoardsPending, getBoardsSuccess, getBoardsError } from './actions';
+import { AUTHENTICATION_SUCCESS } from '../auth0/actions';
 import ApiService from '../../../services/api/index';
+import { normalizeBoards } from '../../helpers';
 
 export function* onLoginSaga() {
   try {
@@ -11,16 +12,7 @@ export function* onLoginSaga() {
     const { path, method } = ApiService.directory.boards();
     const response = yield call(ApiService[method], path);
 
-    const normalize = Object.keys(response).map((s, v) => {
-      return {
-        key: s,
-        mlsid: s,
-        text: response[s].name,
-        value: response[s].name,
-        name: response[s].name,
-        shortname: response[s].shortName ? response[s].shortName : undefined,
-      };
-    });
+    const normalize = normalizeBoards(response);
 
     yield put(getBoardsSuccess(normalize));
   } catch (err) {
