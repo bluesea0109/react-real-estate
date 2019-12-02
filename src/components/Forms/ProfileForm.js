@@ -177,8 +177,6 @@ const ProfileForm = () => {
                 </Button>
               </span>
             </div>
-
-            <pre>{JSON.stringify(values, 0, 2)}</pre>
           </Form>
         )}
       />
