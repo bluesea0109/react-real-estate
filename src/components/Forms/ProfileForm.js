@@ -43,7 +43,7 @@ const ProfileForm = () => {
       last: auth0.idTokenPayload && auth0.idTokenPayload['http://lastname'],
       email: auth0.idTokenPayload && auth0.idTokenPayload.email,
       phone: auth0.idTokenPayload && auth0.idTokenPayload['http://phonenumber'],
-      mls: [null],
+      boards: [null],
     };
   } else {
     const onLoginUserProfileBoards = onLoginUserProfile && onLoginUserProfile.boards;
@@ -51,10 +51,10 @@ const ProfileForm = () => {
     onLoginUserProfileBoards &&
       onLoginUserProfileBoards.forEach(board => {
         const userBoard = boards.filter(boardObj => boardObj.mlsid === board.name);
-        mlsArr.push({ mls: userBoard[0] && userBoard[0].value, mlsAgentId: board.mlsId });
+        mlsArr.push({ name: userBoard[0] && userBoard[0].value, mlsId: board.mlsId });
       });
 
-    profileValues = Object.assign({}, onLoginUserProfile, onLoginTeamProfile, { mls: mlsArr });
+    profileValues = Object.assign({}, onLoginUserProfile, onLoginTeamProfile, { boards: mlsArr });
   }
 
   return (
@@ -136,13 +136,13 @@ const ProfileForm = () => {
 
               <Divider style={{ margin: '1em -1em' }} />
 
-              <FieldArray name="mls">
+              <FieldArray name="boards">
                 {({ fields }) =>
                   fields.map((name, index) => (
                     <Segment secondary key={index}>
                       <div style={isMobile() ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 1fr 45px', gridColumnGap: '2em' }}>
-                        {renderSelectField({ name: `${name}.mls`, label: 'MLS', type: 'text', validate: required, options: boards ? boards : [] })}
-                        {renderField({ name: `${name}.mlsAgentId`, label: 'MLS Agent ID', type: 'text', validate: required })}
+                        {renderSelectField({ name: `${name}.name`, label: 'MLS', type: 'text', validate: required, options: boards ? boards : [] })}
+                        {renderField({ name: `${name}.mlsId`, label: 'MLS Agent ID', type: 'text', validate: required })}
                         <Button
                           basic
                           icon
@@ -161,7 +161,7 @@ const ProfileForm = () => {
               </FieldArray>
 
               <div className="buttons">
-                <Button basic onClick={() => push('mls', undefined)} color="teal">
+                <Button basic onClick={() => push('boards', undefined)} color="teal">
                   Add MLS
                 </Button>
               </div>
@@ -177,6 +177,8 @@ const ProfileForm = () => {
                 </Button>
               </span>
             </div>
+
+            <pre>{JSON.stringify(values, 0, 2)}</pre>
           </Form>
         )}
       />
