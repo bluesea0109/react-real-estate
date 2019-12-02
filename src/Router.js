@@ -5,10 +5,6 @@ import PrivateRoute from './containers/PrivateRoute';
 import IndexPage from './containers/IndexPage';
 import CallbackPage from './containers/CallbackPage';
 import OnboardPage from './pages/OnboardPage';
-import OnboardPageProfile from './pages/OnboardPageProfile';
-import OnboardPageCustomizeTeam from './pages/OnboardPageCustomizeTeam';
-import OnboardPageCustomize from './pages/OnboardPageCustomize';
-import OnboardPageInviteTeammates from './pages/OnboardPageInviteTeammates';
 import DashboardPage from './pages/DashboardPage';
 import MailoutDetailsPage from './pages/MailoutDetailsPage';
 import CustomizationPage from './pages/CustomizationPage';
@@ -27,11 +23,7 @@ export default () => {
     <Switch>
       <Route exact path="/" component={IndexPage} />
       <Route path="/callback" component={CallbackPage} />
-      <PrivateRoute exact path="/onboard" component={OnboardPage} />
-      <PrivateRoute path="/onboard/profile" component={OnboardPageProfile} />
-      <PrivateRoute path="/onboard/customization/team" component={OnboardPageCustomizeTeam} />
-      <PrivateRoute exact path="/onboard/customization" component={OnboardPageCustomize} />
-      <PrivateRoute path="/onboard/invite" component={OnboardPageInviteTeammates} />
+      <PrivateRoute path="/onboard" component={OnboardPage} />
       <PrivateRoute exact path="/dashboard" component={DashboardPage} />
       <PrivateRoute path="/dashboard/:mailoutId" component={MailoutDetailsPage} />
       <PrivateRoute exact path="/customization" component={CustomizationPage} />

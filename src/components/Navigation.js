@@ -8,6 +8,7 @@ import { StepLayout, StepsLayout, NavigationLayout, MobileDisabledLayout, Mobile
 import { selectPeerId, deselectPeerId } from '../store/modules/peer/actions';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, Image, Icon, Step } from './Base';
+import Loading from './Loading';
 
 const iconOnlyStyle = {
   margin: '0 auto 0 auto',
@@ -42,8 +43,10 @@ export default () => {
   const [activeUser, setActiveUser] = useState('');
 
   const onboarded = useSelector(store => store.onboarded.status);
+  const isAuthenticating = useSelector(store => store.auth0.pending);
   const step = useSelector(store => store.onboarded.step);
   const isMultimode = useSelector(store => store.onLogin.mode === 'multiuser');
+  const isLoading = useSelector(store => store.onLogin.pending);
   const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
   const loggedInUser = useSelector(store => store.onLogin.user);
   const selectedPeerId = useSelector(store => store.peer.peerId);
@@ -157,37 +160,72 @@ export default () => {
     }
   };
 
+  if (isAuthenticating || isLoading) return <Loading />;
+
   if (!onboarded) {
-    return (
-      <StepsLayout vertical={!mql.matches}>
-        <StepLayout active={step === 0} completed={step >= 1}>
-          <Icon name="edit" />
-          {mql.matches ? null : (
-            <Step.Content>
-              <Step.Title>Fill in your profile</Step.Title>
-            </Step.Content>
-          )}
-        </StepLayout>
+    if (isMultimode) {
+      return (
+        <StepsLayout vertical={!mql.matches}>
+          <StepLayout active={step === 0} completed={step >= 1}>
+            <Icon name="edit" />
+            {mql.matches ? null : (
+              <Step.Content>
+                <Step.Title>Fill in your profile</Step.Title>
+              </Step.Content>
+            )}
+          </StepLayout>
 
-        <StepLayout active={step === 1} completed={step >= 2}>
-          <Icon name="configure" />
-          {mql.matches ? null : (
-            <Step.Content>
-              <Step.Title>Customize</Step.Title>
-            </Step.Content>
-          )}
-        </StepLayout>
+          <StepLayout active={step === 1} completed={step >= 2}>
+            <Icon name="cogs" />
+            {mql.matches ? null : (
+              <Step.Content>
+                <Step.Title>Customize Team</Step.Title>
+              </Step.Content>
+            )}
+          </StepLayout>
 
-        <StepLayout active={step === 2} completed={step >= 3}>
-          <Icon name="payment" />
-          {mql.matches ? null : (
-            <Step.Content>
-              <Step.Title>Automation & Billing</Step.Title>
-            </Step.Content>
-          )}
-        </StepLayout>
-      </StepsLayout>
-    );
+          <StepLayout active={step === 2} completed={step >= 3}>
+            <Icon name="cog" />
+            {mql.matches ? null : (
+              <Step.Content>
+                <Step.Title>Customize</Step.Title>
+              </Step.Content>
+            )}
+          </StepLayout>
+
+          <StepLayout active={step === 3} completed={step >= 4}>
+            <Icon name="paper plane" />
+            {mql.matches ? null : (
+              <Step.Content>
+                <Step.Title>Invite Teammates</Step.Title>
+              </Step.Content>
+            )}
+          </StepLayout>
+        </StepsLayout>
+      );
+    } else {
+      return (
+        <StepsLayout vertical={!mql.matches}>
+          <StepLayout active={step === 0} completed={step >= 1}>
+            <Icon name="edit" />
+            {mql.matches ? null : (
+              <Step.Content>
+                <Step.Title>Fill in your profile</Step.Title>
+              </Step.Content>
+            )}
+          </StepLayout>
+
+          <StepLayout active={step === 1} completed={step >= 2}>
+            <Icon name="cog" />
+            {mql.matches ? null : (
+              <Step.Content>
+                <Step.Title>Customize</Step.Title>
+              </Step.Content>
+            )}
+          </StepLayout>
+        </StepsLayout>
+      );
+    }
   }
 
   return (
