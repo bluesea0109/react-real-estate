@@ -1,153 +1,90 @@
-/*
+import arrayMutators from 'final-form-arrays';
 import React, { Fragment } from 'react';
-import { Field, reduxForm } from 'redux-form';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Form as FinalForm } from 'react-final-form';
+import { Form } from 'semantic-ui-react';
 
-import { Form, Image, Segment, Dimmer, Menu } from '../Base';
+import { isMobile, required, renderField } from './helpers';
+import { Button, Segment } from '../Base';
 
-import { ButtonBack, ButtonNext, CarouselProvider, Slide, Slider } from 'pure-react-carousel';
-
-const renderRadio = field => {
-  return (
-    <Slide tag="a" index={field.radioValue}>
-      <Form.Radio
-        checked={field.input.value === field.radioValue}
-        name={field.input.name}
-        onChange={(e, { checked }) => field.input.onChange(field.radioValue)}
-        style={{ visibility: 'hidden' }}
-      />
-      <Dimmer.Dimmable dimmed={field.input.value === field.radioValue}>
-        <Image onClick={e => field.input.onChange(field.radioValue)} src={field.src} />
-        <Dimmer inverted active={field.input.value === field.radioValue} onClickOutside={e => field.input.onChange(field.radioValue)} />
-      </Dimmer.Dimmable>
-    </Slide>
-  );
-};
-const renderSelect = field => (
-  <Form.Select
-    label={field.label}
-    name={field.input.name}
-    onChange={(e, { value }) => field.input.onChange(value)}
-    options={field.options}
-    placeholder={field.placeholder}
-    value={field.input.value}
-  />
-);
-
-const CustomizeNewListingForm = props => {
-  const { handleSubmit, reset } = props;
+const CustomizeNewListingForm = () => {
+  // const dispatch = useDispatch();
+  // const [initiated, setInitiated] = useState(false);
+  // const auth0 = useSelector(store => store.auth0 && store.auth0.details);
+  // const profile = useSelector(store => store.profile && store.profile.available);
+  // const profileError = useSelector(store => store.profile && store.profile.error);
+  // const boards = useSelector(store => store.boards && store.boards.available);
+  // const states = useSelector(store => store.states && store.states.available);
+  //
+  // const saveProfile = profile => dispatch(saveProfilePending(profile));
+  const onSubmit = values => {
+    console.log('submitted: ', values);
+    // saveProfile(values);
+  };
 
   return (
     <Fragment>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group widths="equal">
-          <Field
-            component={renderSelect}
-            label="Choose agent to display on postcards"
-            name="gender"
-            options={[
-              { key: 'o1', text: 'Option 1', value: 'option1' },
-              { key: 'o2', text: 'Option 2', value: 'option2' },
-            ]}
-            placeholder="Josiah Ubben"
-          />
-        </Form.Group>
-        <Form.Group widths="equal">
-          <Field
-            component={renderSelect}
-            label="New listing headline"
-            name="gender"
-            options={[
-              { key: 'o1', text: 'Option 1', value: 'option1' },
-              { key: 'o2', text: 'Option 2', value: 'option2' },
-            ]}
-            placeholder="Just Listed"
-          />
-          <Field
-            component={renderSelect}
-            label="Number of postcards to send per listing"
-            name="gender"
-            options={[
-              { key: 'o1', text: 'Option 1', value: 'option1' },
-              { key: 'o2', text: 'Option 2', value: 'option2' },
-            ]}
-            placeholder="500"
-          />
-        </Form.Group>
-        <Form.Group widths="equal">
-          <Field
-            component={renderSelect}
-            label="New listing call to action URL"
-            name="gender"
-            options={[
-              { key: 'o1', text: 'Option 1', value: 'option1' },
-              { key: 'o2', text: 'Option 2', value: 'option2' },
-            ]}
-            placeholder="benkinney.com/home_value"
-          />
-        </Form.Group>
-        <label>Choose template for New Listing</label>
-        <Segment attached="bottom">
-          <CarouselProvider
-            visibleSlides={3}
-            totalSlides={6}
-            step={3}
-            naturalSlideWidth={360}
-            naturalSlideHeight={240}
-            style={{
-              marginBottom: '-3em',
-            }}
-          >
-            <Slider
-              style={{
-                top: '-2em',
-              }}
-            >
-              <Field component={renderRadio} name="quantity" radioValue={1} src="https://lorempixel.com/800/800/cats/1" />
-              <Field component={renderRadio} name="quantity" radioValue={2} src="https://lorempixel.com/800/800/cats/2" />
-              <Field component={renderRadio} name="quantity" radioValue={3} src="https://lorempixel.com/800/800/cats/3" />
-              <Field component={renderRadio} name="quantity" radioValue={4} src="https://lorempixel.com/800/800/cats/4" />
-              <Field component={renderRadio} name="quantity" radioValue={5} src="https://lorempixel.com/800/800/cats/5" />
-              <Field component={renderRadio} name="quantity" radioValue={6} src="https://lorempixel.com/800/800/cats/6" />
-            </Slider>
-            <ButtonBack
-              style={{
-                position: 'relative',
-                top: '-6.5em',
-                left: '-1.5em',
-              }}
-            >
-              <FontAwesomeIcon icon="angle-left" />
-            </ButtonBack>
-            <ButtonNext
-              style={{
-                position: 'relative',
-                right: '-42.5em',
-                top: '-6.5em',
-              }}
-            >
-              <FontAwesomeIcon icon="angle-right" />
-            </ButtonNext>
-          </CarouselProvider>
-        </Segment>
+      <FinalForm
+        onSubmit={onSubmit}
+        // initialValues={profileValues}
+        mutators={{
+          ...arrayMutators,
+        }}
+        render={({
+          handleSubmit,
+          form: {
+            mutators: { push, pop },
+          },
+          form,
+          submitting,
+          pristine,
+          values,
+        }) => (
+          <Form onSubmit={handleSubmit}>
+            <Segment>
+              <div
+                style={
+                  isMobile()
+                    ? {}
+                    : {
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr 1fr 1fr',
+                        gridTemplateRows: '1fr 1fr 1fr 1fr',
+                        gridTemplateAreas: `"Agent Agent BrandColor BrandColor" "Headline NumberOfPostcards BrandColor BrandColor" "CallToAction CallToAction ChooseTemplate ChooseTemplate" "ShortenedURL ShortenedURL ChooseTemplate ChooseTemplate"`,
+                        gridColumnGap: '2em',
+                      }
+                }
+              >
+                <div style={{ gridArea: 'Agent' }}>
+                  {renderField({ name: 'agent', label: 'Choose agent to display on postcards', type: 'text', validate: required })}
+                </div>
+                <div style={{ gridArea: 'BrandColor' }}></div>
+                <div style={{ gridArea: 'ChooseTemplate' }}></div>
+                <div style={{ gridArea: 'Headline' }}>{renderField({ name: 'headline', label: 'Headline', type: 'text', validate: required })}</div>
+                <div style={{ gridArea: 'NumberOfPostcards' }}>
+                  {renderField({ name: 'numberOfPostcards', label: 'Number of postcards to send per listing', type: 'text', validate: required })}
+                </div>
+                <div style={{ gridArea: 'CallToAction' }}>
+                  {renderField({ name: 'actionURL', label: 'Call to action URL', type: 'text', validate: required })}
+                </div>
+                <div style={{ gridArea: 'ShortenedURL' }}>Shortened URL: briv.it/12a</div>
+              </div>
+            </Segment>
 
-        <Form.Group inline>
-          <Menu borderless fluid secondary>
-            <Menu.Menu position="right">
-              <Menu.Item>
-                <Form.Button primary>Submit</Form.Button>
-                <Form.Button onClick={reset}>Reset</Form.Button>
-              </Menu.Item>
-            </Menu.Menu>
-          </Menu>
-        </Form.Group>
-      </Form>
+            <div style={{ display: 'grid', justifyContent: 'end' }}>
+              <span>
+                <Button basic type="button" onClick={form.reset} disabled={submitting || pristine} color="teal">
+                  Discard
+                </Button>
+                <Button type="submit" disabled={submitting} color="teal">
+                  Save
+                </Button>
+              </span>
+            </div>
+          </Form>
+        )}
+      />
     </Fragment>
   );
 };
-export default reduxForm({
-  form: 'customizeNewListing',
-  destroyOnUnmount: false,
-  forceUnregisterOnUnmount: true,
-})(CustomizeNewListingForm);
-*/
+
+export default CustomizeNewListingForm;
