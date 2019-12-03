@@ -68,8 +68,6 @@ async function postBlob(path, body, sendToken = true) {
   const accessToken = await auth.getAccessToken();
   if (sendToken) headers['authorization'] = `Bearer ${accessToken}`;
 
-  console.log('body', body);
-
   const response = await fetch(path, { headers, method: 'post', body, credentials: 'include' });
 
   return await handleResponse(response);
