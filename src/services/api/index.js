@@ -68,6 +68,8 @@ async function postBlob(path, body, sendToken = true) {
   const accessToken = await auth.getAccessToken();
   if (sendToken) headers['authorization'] = `Bearer ${accessToken}`;
 
+  console.log('body', body);
+
   const response = await fetch(path, { headers, method: 'post', body, credentials: 'include' });
 
   return await handleResponse(response);
@@ -118,12 +120,13 @@ const directory = {
           save: () => ({ path: `/api/user/team/settings/branding`, method: 'put' }),
         },
         photos: {
+          get: () => ({ path: `/api/user/team/settings/photos/all`, method: 'get' }),
           brokerageLogo: {
-            set: () => ({ path: `/api/user/team/settings/photos/brokerageLogo`, method: 'post' }),
+            set: () => ({ path: `/api/user/team/settings/photos/brokerageLogo`, method: 'postBlob' }),
             delete: () => ({ path: `/api/user/team/settings/photos/brokerageLogo`, method: 'delete' }),
           },
           teamLogo: {
-            set: () => ({ path: `/api/user/team/settings/photos/teamLogo`, method: 'post' }),
+            set: () => ({ path: `/api/user/team/settings/photos/teamLogo`, method: 'postBlob' }),
             delete: () => ({ path: `/api/user/team/settings/photos/teamLogo`, method: 'delete' }),
           },
         },

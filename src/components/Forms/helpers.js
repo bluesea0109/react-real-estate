@@ -64,8 +64,7 @@ export const renderField = ({ name, label, type, validate }) => (
 
 export const renderPicturePickerField = ({ name, label, dispatch, validate }) => {
   const onChangeHandler = event => {
-    const data = new FormData();
-    data.append(name, event.target.files[0]);
+    const data = [name, event.target.files[0]];
     dispatch(uploadPhotoPending(data));
   };
 

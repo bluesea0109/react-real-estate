@@ -1,34 +1,46 @@
 import { put, call, select, takeLatest } from 'redux-saga/effects';
 
-import { UPLOAD_PHOTO_PENDING, uploadPhotoSuccess, uploadPhotoError } from './actions';
+import { getAllPhotosPending, getAllPhotosSuccess, getAllPhotosError, UPLOAD_PHOTO_PENDING, uploadPhotoSuccess, uploadPhotoError } from './actions';
 
 import ApiService from '../../../services/api/index';
 
 export const getPhotoSrc = state => state.pictures.binarySource;
 
+export function* getAllPhotosSaga() {
+  try {
+    yield put(getAllPhotosPending());
+
+    const { path, method } = ApiService.directory.user.team.settings.photos.get();
+    const response = yield call(ApiService[method], path);
+
+    yield put(getAllPhotosSuccess(response));
+  } catch (err) {
+    yield put(getAllPhotosError(err.message));
+  }
+}
+
 export function* uploadPhotoSaga() {
   try {
-    const file = yield select(getPhotoSrc);
+    const targetArr = yield select(getPhotoSrc);
 
-    const formData = [...file];
-    const formDataKeyName = formData[0][0];
+    const targetKey = targetArr[0];
+    const targetFile = targetArr[1];
 
-    console.log('formDataKeyName', formDataKeyName);
+    const { path, method } = yield targetKey === 'realtorPhoto'
+      ? ApiService.directory.user.settings.photos.set()
+      : targetKey === 'teamLogo'
+      ? ApiService.directory.user.team.settings.photos.teamLogo.set()
+      : targetKey === 'brokerageLogo'
+      ? ApiService.directory.user.team.settings.photos.brokerageLogo.set()
+      : {};
 
-    // type: realtorPhoto /
+    const data = yield new FormData();
+    data.append(targetKey, targetFile);
 
-    const { path, method } =
-      formDataKeyName === 'realtorPhoto'
-        ? ApiService.directory.user.settings.photos.set()
-        : formDataKeyName === 'teamLogo'
-        ? ApiService.directory.user.profile.branding.teamLogo.set()
-        : formDataKeyName === 'brokerageLogo'
-        ? ApiService.directory.user.profile.branding.brokerageLogo.set()
-        : {};
-
-    const response = yield call(ApiService[method], path, file);
+    const response = yield call(ApiService[method], path, data);
 
     yield put(uploadPhotoSuccess(response));
+    yield getAllPhotosSaga();
   } catch (err) {
     yield put(uploadPhotoError(err.message));
   }
