@@ -1,4 +1,5 @@
 import Button from './Button';
+import Card from './Card';
 import Container from './Container';
 import Dimmer from './Dimmer';
 import Divider from './Divider';
@@ -24,6 +25,7 @@ import Step from './Step';
 
 export {
   Button,
+  Card,
   Container,
   Dimmer,
   Divider,

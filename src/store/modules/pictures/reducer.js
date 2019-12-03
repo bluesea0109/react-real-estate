@@ -1,12 +1,13 @@
-import { UPLOAD_PHOTO_PENDING, UPLOAD_PHOTO_SUCCESS, UPLOAD_PHOTO_ERROR } from './actions';
+import { UPLOAD_PHOTO_PENDING, UPLOAD_PHOTO_SUCCESS, UPLOAD_PHOTO_ERROR, DELETE_PHOTO_PENDING, DELETE_PHOTO_SUCCESS, DELETE_PHOTO_ERROR } from './actions';
 
 const initialState = {
   pending: false,
   error: null,
-  binarySource: null,
+  toUpload: null,
   realtorPhoto: null,
   teamLogo: null,
   brokerageLogo: null,
+  toDelete: null,
 };
 
 export default function team(state = initialState, action) {
@@ -15,7 +16,7 @@ export default function team(state = initialState, action) {
       return {
         ...state,
         pending: true,
-        binarySource: action.payload,
+        toUpload: action.payload,
       };
 
     case UPLOAD_PHOTO_SUCCESS:
@@ -36,7 +37,7 @@ export default function team(state = initialState, action) {
       return {
         ...state,
         pending: false,
-        binarySource: null,
+        toUpload: null,
         ...newData,
       };
 
@@ -44,7 +45,36 @@ export default function team(state = initialState, action) {
       return {
         ...state,
         pending: false,
-        binarySource: null,
+        toUpload: null,
+        error: action.error,
+      };
+
+    case DELETE_PHOTO_PENDING:
+      return {
+        ...state,
+        pending: true,
+        toDelete: action.payload,
+      };
+
+    case DELETE_PHOTO_SUCCESS:
+      let removeData;
+
+      if (action.payload.target === 'teamLogo') {
+        removeData = { teamLogo: null };
+      }
+
+      return {
+        ...state,
+        pending: false,
+        toDelete: null,
+        ...removeData,
+      };
+
+    case DELETE_PHOTO_ERROR:
+      return {
+        ...state,
+        pending: false,
+        toDelete: null,
         error: action.error,
       };
 

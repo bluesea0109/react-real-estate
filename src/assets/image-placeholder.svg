@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50px" height="40px" viewBox="0 0 50 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>icons8-image</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icons8-image" fill="#E0E0E0" fill-rule="nonzero">
+            <polygon id="Path" points="36.68 30 29.68 25 23.586 25 19.671 21.085 14.539 22.112 10.845 16.57 0 27.414 0 40 50 40 50 30"></polygon>
+            <path d="M11.155,13.43 L15.461,19.888 L20.329,18.914 L24.414,23 L30.32,23 L37.32,28 L50,28 L50,0 L0,0 L0,24.586 L11.155,13.43 Z M37.5,9 C39.433,9 41,10.567 41,12.5 C41,14.433 39.433,16 37.5,16 C35.567,16 34,14.433 34,12.5 C34,10.567 35.567,9 37.5,9 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>

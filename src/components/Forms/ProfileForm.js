@@ -131,7 +131,7 @@ const ProfileForm = () => {
                           display: 'grid',
                           gridTemplateColumns: '1fr 1fr 1fr 1fr',
                           gridTemplateRows: '1fr 1fr 1fr',
-                          gridTemplateAreas: `"First Last Headshot Picture" "Phone Email Headshot Picture" "Dre OfficePhone Website Picture"`,
+                          gridTemplateAreas: `"First Last Headshot Picture" "Phone Email Headshot Picture" "NotificationEmail  Dre OfficePhone Website"`,
                           gridColumnGap: '2em',
                         }
                   }
@@ -144,6 +144,13 @@ const ProfileForm = () => {
                   <div style={{ gridArea: 'Phone' }}>{renderField({ name: 'phone', label: 'Phone Number', type: 'text', validate: required })}</div>
                   <div style={{ gridArea: 'Email' }}>
                     {renderField({ name: 'email', label: 'Email', type: 'text', validate: composeValidators(required, email) })}
+                  </div>
+                  <div style={{ gridArea: 'NotificationEmail' }}>
+                    {renderField({
+                      name: 'personalNotificationEmail',
+                      label: renderLabelWithSubHeader('Notification Email', '( Optional, defaults to Business Notification Email if not set )'),
+                      type: 'text',
+                    })}
                   </div>
                   <div style={{ gridArea: 'Dre' }}>
                     {renderField({
@@ -190,9 +197,7 @@ const ProfileForm = () => {
                   <div style={{ gridArea: 'BrokerageName' }}>
                     {renderField({ name: 'brokerageName', label: 'Brokerage name', type: 'text', validate: required })}
                   </div>
-                  <div style={{ gridArea: 'TeamLogo' }}>
-                    {renderPicturePickerField({ name: 'teamLogo', label: 'Team Logo', dispatch: dispatch, validate: required })}
-                  </div>
+                  <div style={{ gridArea: 'TeamLogo' }}>{renderPicturePickerField({ name: 'teamLogo', label: 'Team Logo', dispatch: dispatch })}</div>
                   <div style={{ gridArea: 'BrokerageLogo' }}>
                     {renderPicturePickerField({ name: 'brokerageLogo', label: 'Brokerage Logo', dispatch: dispatch, validate: required })}
                   </div>

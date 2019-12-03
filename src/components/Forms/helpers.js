@@ -6,7 +6,7 @@ import * as isEmail from 'validator/lib/isEmail';
 // import * as isInt from 'validator/lib/isInt';
 
 import { Card, Form, Header, Image, Item } from '../Base';
-import { uploadPhotoPending } from '../../store/modules/pictures/actions';
+import { uploadPhotoPending, deletePhotoPending } from '../../store/modules/pictures/actions';
 
 // export const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -71,33 +71,62 @@ export const renderPicturePickerField = ({ name, label, dispatch, validate }) =>
     dispatch(uploadPhotoPending(data));
   };
 
+  const onClickHandler = target => {
+    dispatch(deletePhotoPending(target));
+  };
+
   return (
     <Field name={name} validate={validate}>
       {({ input, meta }) => (
         <Form.Field>
           <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '2fr 1fr',
-              gridTemplateAreas: `"Label Func" "Image Image"`,
-              width: '12em',
-            }}
+            style={
+              name === 'teamLogo'
+                ? {
+                    display: 'grid',
+                    gridTemplateColumns: '2fr 1fr 1fr',
+                    gridTemplateAreas: `"Label Func Func2" "Image Image Image"`,
+                    width: '12em',
+                  }
+                : {
+                    display: 'grid',
+                    gridTemplateColumns: '2fr 1fr',
+                    gridTemplateAreas: `"Label Func" "Image Image"`,
+                    width: '12em',
+                  }
+            }
           >
             <div style={{ gridArea: 'Label' }}>
               <Header as="h4">{label}</Header>
             </div>
             <div style={{ gridArea: 'Func', justifySelf: 'end' }}>
               <Item as="label" htmlFor={name} style={{ cursor: 'pointer' }}>
-                <Header as="h4" color={meta.error && meta.touched ? 'red' : 'teal'}>
+                <Header as="h4" style={meta.error && meta.touched ? { color: 'red' } : { color: 'teal' }}>
                   Upload
                 </Header>
                 <input hidden id={name} type="file" onChange={onChangeHandler} />
               </Item>
             </div>
 
-            <div style={{ gridArea: 'Image', margin: '.4em 0' }}>
+            {name === 'teamLogo' && (
+              <div style={{ gridArea: 'Func2', justifySelf: 'end' }}>
+                <Item as="label" style={{ cursor: 'pointer' }}>
+                  <Header as="h4" style={meta.error && meta.touched ? { color: 'red' } : { color: 'teal' }} onClick={() => onClickHandler(name)}>
+                    Delete
+                  </Header>
+                </Item>
+              </div>
+            )}
+
+            <div style={{ gridArea: 'Image', margin: '-.8em 0' }}>
               <Card style={meta.error && meta.touched ? { border: '3px solid red' } : {}}>
-                <Image size="small" src={input.value} wrapped ui={false} />
+                {input.value ? (
+                  <Image size="tiny" src={input.value} wrapped ui={false} />
+                ) : name === 'realtorPhoto' ? (
+                  <Image size="tiny" src={require('../../assets/photo-placeholder.svg')} wrapped ui={false} />
+                ) : (
+                  <Image size="tiny" src={require('../../assets/image-placeholder.svg')} wrapped ui={false} />
+                )}
               </Card>
               {meta.error && meta.touched && (
                 <Label basic color="red" pointing>

@@ -121,11 +121,10 @@ const directory = {
           get: () => ({ path: `/api/user/team/settings/photos/all`, method: 'get' }),
           brokerageLogo: {
             set: () => ({ path: `/api/user/team/settings/photos/brokerageLogo`, method: 'postBlob' }),
-            delete: () => ({ path: `/api/user/team/settings/photos/brokerageLogo`, method: 'delete' }),
           },
           teamLogo: {
             set: () => ({ path: `/api/user/team/settings/photos/teamLogo`, method: 'postBlob' }),
-            delete: () => ({ path: `/api/user/team/settings/photos/teamLogo`, method: 'delete' }),
+            delete: () => ({ path: `/api/user/team/settings/photos/teamLogo`, method: 'del' }),
           },
         },
         profile: {

@@ -1,15 +1,16 @@
 import { put, call, select, takeLatest } from 'redux-saga/effects';
 
-import { UPLOAD_PHOTO_PENDING, uploadPhotoSuccess, uploadPhotoError } from './actions';
+import { UPLOAD_PHOTO_PENDING, uploadPhotoSuccess, uploadPhotoError, DELETE_PHOTO_PENDING, deletePhotoSuccess, deletePhotoError } from './actions';
 
 import ApiService from '../../../services/api/index';
 
-export const getPhotoSrc = state => state.pictures.binarySource;
+export const getPhotoToUpload = state => state.pictures.toUpload;
+export const getPhotoToDelete = state => state.pictures.toDelete;
 const s3BucketURL = 'https://alf-gabbi-uploads.s3.amazonaws.com/';
 
 export function* uploadPhotoSaga() {
   try {
-    const targetArr = yield select(getPhotoSrc);
+    const targetArr = yield select(getPhotoToUpload);
 
     const targetKey = targetArr[0];
     const targetFile = targetArr[1];
@@ -34,6 +35,21 @@ export function* uploadPhotoSaga() {
   }
 }
 
+export function* deletePhotoSaga() {
+  try {
+    const target = yield select(getPhotoToDelete);
+
+    const { path, method } = yield target === 'teamLogo' ? ApiService.directory.user.team.settings.photos.teamLogo.delete() : {};
+
+    yield call(ApiService[method], path);
+
+    yield put(deletePhotoSuccess({ target: target }));
+  } catch (err) {
+    yield put(deletePhotoError(err.message));
+  }
+}
+
 export default function*() {
   yield takeLatest(UPLOAD_PHOTO_PENDING, uploadPhotoSaga);
+  yield takeLatest(DELETE_PHOTO_PENDING, deletePhotoSaga);
 }
