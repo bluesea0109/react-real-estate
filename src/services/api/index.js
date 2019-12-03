@@ -141,7 +141,7 @@ const directory = {
       },
       photos: {
         get: () => ({ path: `/api/user/settings/photos/realtorPhoto`, method: 'get' }),
-        set: () => ({ path: `/api/user/settings/photos/realtorPhoto`, method: 'post' }),
+        set: () => ({ path: `/api/user/settings/photos/realtorPhoto`, method: 'postBlob' }),
         setUrl: url => ({ path: `/api/user/settings/photos/realtorPhoto/${url}`, method: 'post' }),
       },
       profile: {
@@ -200,27 +200,15 @@ const directory = {
         },
 
         teamLogo: {
-          set: file => {
-            const formData = new FormData();
-            formData.append('teamLogo', file);
-            return { path: `/api/user/profile/branding/teamLogo`, props: formData, method: 'postBlob' };
-          },
+          set: () => ({ path: `/api/user/profile/branding/teamLogo`, method: 'postBlob' }),
         },
 
         brokerageLogo: {
-          set: file => {
-            const formData = new FormData();
-            formData.append('brokerageLogo', file);
-            return { path: `/api/user/profile/branding/brokerageLogo`, props: formData, method: 'postBlob' };
-          },
+          set: () => ({ path: `/api/user/profile/branding/brokerageLogo`, method: 'postBlob' }),
         },
 
         realtorPhoto: {
-          set: file => {
-            const formData = new FormData();
-            formData.append('realtorPhoto', file);
-            return { path: `/api/user/profile/branding/realtorPhoto`, props: formData, method: 'postBlob' };
-          },
+          set: () => ({ path: `/api/user/profile/branding/realtorPhoto`, method: 'postBlob' }),
         },
       },
 

@@ -3,19 +3,19 @@ import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
 import { Form as FinalForm } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { Header, Divider, Form } from 'semantic-ui-react';
+import { Header, Divider, Form, Image } from 'semantic-ui-react';
 
-import { isMobile, email, required, composeValidators, requiredOnlyInCalifornia, renderSelectField, renderField } from './helpers';
-import { saveProfilePending } from '../../store/modules/profile/actions';
-import { incrementStep } from '../../store/modules/onboarded/actions';
+import { isMobile, email, required, composeValidators, requiredOnlyInCalifornia, renderSelectField, renderField, renderPicturePickerField } from './helpers';
 import { Button, Icon, Segment } from '../Base';
+import { incrementStep } from '../../store/modules/onboarded/actions';
+import { saveProfilePending } from '../../store/modules/profile/actions';
 
-const renderDreNumberField = () =>
+const renderLabelWithSubHeader = (label, subHeader) =>
   isMobile() ? (
-    <Header as={'label'} content="DRE Number" subheader="( Required in California )" />
+    <Header as={'label'} content={label} subheader={subHeader} />
   ) : (
     <label>
-      DRE Number <span style={{ fontWeight: 300 }}>( Required in California )</span>
+      {label} <span style={{ fontWeight: 300 }}>{subHeader}</span>
     </label>
   );
 
@@ -90,18 +90,45 @@ const ProfileForm = () => {
 
                 <Divider style={{ margin: '1em -1em' }} />
 
-                <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridColumnGap: '2em' }}>
-                  {renderField({ name: 'first', label: 'First Name', type: 'text', validate: required })}
-                  {renderField({ name: 'last', label: 'Last Name', type: 'text', validate: required })}
-
-                  {renderField({ name: 'email', label: 'Email', type: 'text', validate: composeValidators(required, email) })}
-                </div>
-
-                <br />
-
-                <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr 1fr', gridColumnGap: '2em' }}>
-                  {renderField({ name: 'phone', label: 'Phone Number', type: 'text', validate: required })}
-                  {renderField({ name: 'dreNumber', label: renderDreNumberField(), type: 'text', validate: requiredOnlyInCalifornia })}
+                <div
+                  style={
+                    isMobile()
+                      ? {}
+                      : {
+                          display: 'grid',
+                          gridTemplateColumns: '1fr 1fr 1fr 1fr',
+                          gridTemplateRows: '1fr 1fr 1fr',
+                          gridTemplateAreas: `"First Last Headshot Picture" "Phone Email Headshot Picture" "Dre OfficePhone Website Picture"`,
+                          gridColumnGap: '2em',
+                        }
+                  }
+                >
+                  <div style={{ gridArea: 'Headshot' }}>
+                    {renderPicturePickerField({ name: 'realtorPhoto', label: 'Headshot', dispatch: dispatch, validate: required })}
+                  </div>
+                  <div style={{ gridArea: 'First' }}>{renderField({ name: 'first', label: 'First Name', type: 'text', validate: required })}</div>
+                  <div style={{ gridArea: 'Last' }}>{renderField({ name: 'last', label: 'Last Name', type: 'text', validate: required })}</div>
+                  <div style={{ gridArea: 'Phone' }}>{renderField({ name: 'phone', label: 'Phone Number', type: 'text', validate: required })}</div>
+                  <div style={{ gridArea: 'Email' }}>
+                    {renderField({ name: 'email', label: 'Email', type: 'text', validate: composeValidators(required, email) })}
+                  </div>
+                  <div style={{ gridArea: 'Dre' }}>
+                    {renderField({
+                      name: 'dreNumber',
+                      label: renderLabelWithSubHeader('DRE Number', '( Required in California )'),
+                      type: 'text',
+                      validate: requiredOnlyInCalifornia,
+                    })}
+                  </div>
+                  <div style={{ gridArea: 'OfficePhone' }}>
+                    {renderField({ name: 'officePhone', label: renderLabelWithSubHeader('Office Number', '( Optional )'), type: 'text' })}
+                  </div>
+                  <div style={{ gridArea: 'Website' }}>
+                    {renderField({ name: 'personalWebsite', label: renderLabelWithSubHeader('Website', '( Optional )'), type: 'text' })}
+                  </div>
+                  <div style={{ gridArea: 'Picture' }}>
+                    <Image size="large" src={require('../../assets/onboard-profile.png')} alt="Brivity Marketer Mailout" />
+                  </div>
                 </div>
               </Segment>
 
@@ -113,9 +140,29 @@ const ProfileForm = () => {
 
                 <Divider style={{ margin: '1em -1em' }} />
 
-                <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr 1fr', gridColumnGap: '2em' }}>
-                  {renderField({ name: 'teamName', label: 'Team name', type: 'text', validate: required })}
-                  {renderField({ name: 'brokerageName', label: 'Brokerage name', type: 'text', validate: required })}
+                <div
+                  style={
+                    isMobile()
+                      ? {}
+                      : {
+                          display: 'grid',
+                          gridTemplateColumns: '1fr 1fr 1fr 1fr',
+                          gridTemplateRows: '1fr 1fr',
+                          gridTemplateAreas: `"TeamName TeamName TeamLogo BrokerageLogo" "BrokerageName BrokerageName TeamLogo BrokerageLogo"`,
+                          gridColumnGap: '2em',
+                        }
+                  }
+                >
+                  <div style={{ gridArea: 'TeamName' }}>{renderField({ name: 'teamName', label: 'Team name', type: 'text', validate: required })}</div>
+                  <div style={{ gridArea: 'BrokerageName' }}>
+                    {renderField({ name: 'brokerageName', label: 'Brokerage name', type: 'text', validate: required })}
+                  </div>
+                  <div style={{ gridArea: 'TeamLogo' }}>
+                    {renderPicturePickerField({ name: 'teamLogo', label: 'Team Logo', dispatch: dispatch, validate: required })}
+                  </div>
+                  <div style={{ gridArea: 'BrokerageLogo' }}>
+                    {renderPicturePickerField({ name: 'brokerageLogo', label: 'Brokerage Logo', dispatch: dispatch, validate: required })}
+                  </div>
                 </div>
 
                 <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr', gridColumnGap: '2em' }}>

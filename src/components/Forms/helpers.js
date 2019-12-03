@@ -5,6 +5,10 @@ import { Field } from 'react-final-form';
 import { Form } from 'semantic-ui-react';
 import React from 'react';
 
+import { Card, Header, Image, Button, Label, Item, Input, Segment } from 'semantic-ui-react';
+
+import { uploadPhotoPending } from '../../store/modules/pictures/actions';
+
 // export const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 const isEmpty = value => value === undefined || value === null || value === '';
@@ -57,3 +61,53 @@ export const renderField = ({ name, label, type, validate }) => (
     )}
   </Field>
 );
+
+export const renderPicturePickerField = ({ name, label, dispatch, validate }) => {
+  const onChangeHandler = event => {
+    const data = new FormData();
+    data.append(name, event.target.files[0]);
+    dispatch(uploadPhotoPending(data));
+  };
+
+  return (
+    <Field name={name} validate={validate}>
+      {({ input, meta }) => {
+        return (
+          <Form.Field>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '2fr 1fr',
+                gridTemplateAreas: `"Label Func" "Image Image"`,
+                width: '12em',
+              }}
+            >
+              <div style={{ gridArea: 'Label' }}>
+                <Header as="h4">{label}</Header>
+              </div>
+              <div style={{ gridArea: 'Func', justifySelf: 'end' }}>
+                <Item as="label" htmlFor={name} style={{ cursor: 'pointer' }}>
+                  <Header as="h4" color={meta.error && meta.touched ? 'red' : 'teal'}>
+                    Upload
+                  </Header>
+                  <input hidden id={name} type="file" onChange={onChangeHandler} />
+                </Item>
+              </div>
+
+              <div style={{ gridArea: 'Image', margin: '.4em 0' }}>
+                <Card style={meta.error && meta.touched ? { border: '3px solid red' } : {}}>
+                  <Image size="small" src="https://react.semantic-ui.com/images/avatar/large/matthew.png" wrapped ui={false} />
+                </Card>
+                {meta.error && meta.touched && (
+                  <Label basic color="red" pointing>
+                    {meta.error}
+                  </Label>
+                )}
+              </div>
+            </div>
+          </Form.Field>
+        );
+      }}
+    </Field>
+  );
+};
