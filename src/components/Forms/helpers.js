@@ -1,9 +1,10 @@
 import React from 'react';
-import { Field } from 'react-final-form';
 import { Label } from 'semantic-ui-react';
 import * as isURL from 'validator/lib/isURL';
-import * as isEmail from 'validator/lib/isEmail';
 // import * as isInt from 'validator/lib/isInt';
+import * as isEmail from 'validator/lib/isEmail';
+import { Field, FormSpy } from 'react-final-form';
+import { OnChange } from 'react-final-form-listeners';
 
 import { Card, Form, Header, Image, Item } from '../Base';
 import { uploadPhotoPending, deletePhotoPending } from '../../store/modules/pictures/actions';
@@ -140,3 +141,24 @@ export const renderPicturePickerField = ({ name, label, dispatch, validate }) =>
     </Field>
   );
 };
+
+export const WhenFieldChanges = ({ field, becomes, set, to }) => (
+  <Field name={set} subscription={{}}>
+    {(
+      // No subscription. We only use Field to get to the change function
+      { input: { onChange } }
+    ) => (
+      <FormSpy subscription={{}}>
+        {({ form }) => (
+          <OnChange name={field}>
+            {value => {
+              if (value === becomes) {
+                onChange(to);
+              }
+            }}
+          </OnChange>
+        )}
+      </FormSpy>
+    )}
+  </Field>
+);

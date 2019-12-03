@@ -11,6 +11,7 @@ import {
   required,
   renderField,
   objectIsEmpty,
+  WhenFieldChanges,
   composeValidators,
   renderSelectField,
   renderPicturePickerField,
@@ -104,6 +105,7 @@ const ProfileForm = () => {
           valid,
           visited,
           dirty,
+          values,
         }) => {
           if (submitSucceeded) {
             dispatch(incrementStep(1));
@@ -115,6 +117,13 @@ const ProfileForm = () => {
 
           return (
             <Form onSubmit={handleSubmit}>
+              <WhenFieldChanges
+                field="businessNotificationEmail"
+                becomes={values.businessNotificationEmail}
+                set="personalNotificationEmail"
+                to={values.businessNotificationEmail}
+              />
+
               <Segment>
                 <Header as="h1">
                   Profile
@@ -130,8 +139,8 @@ const ProfileForm = () => {
                       : {
                           display: 'grid',
                           gridTemplateColumns: '1fr 1fr 1fr 1fr',
-                          gridTemplateRows: '1fr 1fr 1fr',
-                          gridTemplateAreas: `"First Last Headshot Picture" "Phone Email Headshot Picture" "NotificationEmail  Dre OfficePhone Website"`,
+                          gridTemplateRows: '1fr 1fr 1fr 1fr',
+                          gridTemplateAreas: `"First Last Headshot Picture" "Phone Email Headshot Picture" "Dre OfficePhone Headshot Picture" "NotificationEmail NotificationEmail Website Website"`,
                           gridColumnGap: '2em',
                         }
                   }
@@ -164,7 +173,7 @@ const ProfileForm = () => {
                     {renderField({ name: 'officePhone', label: renderLabelWithSubHeader('Office Number', '( Optional )'), type: 'text' })}
                   </div>
                   <div style={{ gridArea: 'Website' }}>
-                    {renderField({ name: 'personalWebsite', label: renderLabelWithSubHeader('Website', '( Optional )'), type: 'text' })}
+                    {renderField({ name: 'personalWebsite', label: renderLabelWithSubHeader('Personal Website', '( Optional )'), type: 'text' })}
                   </div>
                   <div style={{ gridArea: 'Picture' }}>
                     <Image size="large" src={require('../../assets/onboard-profile.png')} alt="Brivity Marketer Mailout" />
@@ -187,35 +196,39 @@ const ProfileForm = () => {
                       : {
                           display: 'grid',
                           gridTemplateColumns: '1fr 1fr 1fr 1fr',
-                          gridTemplateRows: '1fr 1fr',
-                          gridTemplateAreas: `"TeamName TeamName TeamLogo BrokerageLogo" "BrokerageName BrokerageName TeamLogo BrokerageLogo"`,
+                          gridTemplateRows: '1fr 1fr 1fr 1fr 1fr 1fr',
+                          gridTemplateAreas: `"TeamName TeamName TeamLogo BrokerageLogo" "BrokerageName BrokerageName TeamLogo BrokerageLogo" "OfficePhone OfficePhone TeamLogo BrokerageLogo" "Address Address City City" "State State ZipCode ZipCode" "BusinessNotificationEmail BusinessNotificationEmail BusinessWebsite BusinessWebsite"`,
+                          gridRowGap: '1em',
                           gridColumnGap: '2em',
                         }
                   }
                 >
-                  <div style={{ gridArea: 'TeamName' }}>{renderField({ name: 'teamName', label: 'Team name', type: 'text', validate: required })}</div>
-                  <div style={{ gridArea: 'BrokerageName' }}>
-                    {renderField({ name: 'brokerageName', label: 'Brokerage name', type: 'text', validate: required })}
-                  </div>
+                  <div style={{ gridArea: 'TeamName' }}>{renderField({ name: 'teamName', label: 'Team Name', type: 'text', validate: required })}</div>
                   <div style={{ gridArea: 'TeamLogo' }}>{renderPicturePickerField({ name: 'teamLogo', label: 'Team Logo', dispatch: dispatch })}</div>
+                  <div style={{ gridArea: 'BrokerageName' }}>
+                    {renderField({ name: 'brokerageName', label: 'Brokerage Name', type: 'text', validate: required })}
+                  </div>
                   <div style={{ gridArea: 'BrokerageLogo' }}>
                     {renderPicturePickerField({ name: 'brokerageLogo', label: 'Brokerage Logo', dispatch: dispatch, validate: required })}
                   </div>
-                </div>
-
-                <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr', gridColumnGap: '2em' }}>
-                  {renderField({ name: 'address', label: 'Address', type: 'text', validate: required })}
-                </div>
-
-                <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridColumnGap: '2em' }}>
-                  {renderField({ name: 'city', label: 'City', type: 'text', validate: required })}
-                  {renderSelectField({ name: 'state', label: 'State', type: 'text', validate: required, options: states ? states : [] })}
-                  {renderField({ name: 'zip', label: 'Zip Code', type: 'text', validate: required })}
-                </div>
-
-                <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr 1fr', gridColumnGap: '2em' }}>
-                  {renderField({ name: 'officePhone', label: 'Office phone (Optional)', type: 'text' })}
-                  {renderField({ name: 'website', label: 'Website (Optional)', type: 'text' })}
+                  <div style={{ gridArea: 'OfficePhone' }}>{renderField({ name: 'officePhone', label: 'Office Phone (Optional)', type: 'text' })}</div>
+                  <div style={{ gridArea: 'Address' }}>{renderField({ name: 'address', label: 'Address', type: 'text', validate: required })}</div>
+                  <div style={{ gridArea: 'City' }}>{renderField({ name: 'city', label: 'City', type: 'text', validate: required })}</div>
+                  <div style={{ gridArea: 'State' }}>
+                    {renderSelectField({ name: 'state', label: 'State', type: 'text', validate: required, options: states ? states : [] })}
+                  </div>
+                  <div style={{ gridArea: 'ZipCode' }}>{renderField({ name: 'zip', label: 'Zip Code', type: 'text', validate: required })}</div>
+                  <div style={{ gridArea: 'BusinessNotificationEmail' }}>
+                    {renderField({
+                      name: 'businessNotificationEmail',
+                      label: renderLabelWithSubHeader('Business Notification Email', '( Required )'),
+                      type: 'text',
+                      validate: composeValidators(required, email),
+                    })}
+                  </div>
+                  <div style={{ gridArea: 'BusinessWebsite' }}>
+                    {renderField({ name: 'businessWebsite', label: 'Business Website (Optional)', type: 'text' })}
+                  </div>
                 </div>
               </Segment>
 
@@ -268,6 +281,8 @@ const ProfileForm = () => {
                   </Button>
                 </span>
               </div>
+
+              <pre>{JSON.stringify(values, 0, 2)}</pre>
             </Form>
           );
         }}
