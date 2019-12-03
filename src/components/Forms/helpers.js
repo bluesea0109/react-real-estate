@@ -1,12 +1,11 @@
-// import * as isInt from 'validator/lib/isInt';
+import React from 'react';
+import { Field } from 'react-final-form';
+import { Label } from 'semantic-ui-react';
 import * as isURL from 'validator/lib/isURL';
 import * as isEmail from 'validator/lib/isEmail';
-import { Field } from 'react-final-form';
-import { Form } from 'semantic-ui-react';
-import React from 'react';
+// import * as isInt from 'validator/lib/isInt';
 
-import { Card, Header, Image, Button, Label, Item, Input, Segment } from 'semantic-ui-react';
-
+import { Card, Form, Header, Image, Item } from '../Base';
 import { uploadPhotoPending } from '../../store/modules/pictures/actions';
 
 // export const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -15,7 +14,7 @@ const isEmpty = value => value === undefined || value === null || value === '';
 export const email = value => !isEmpty(value) && !isEmail(value) && 'Invalid email address';
 export const required = value => isEmpty(value) && 'Required field';
 export const requiredOnlyInCalifornia = (value, condition) => {
-  if (condition && condition.state === 'California') {
+  if (condition && condition.state === 'CA') {
     return value ? undefined : 'Required by state of California';
   }
   return undefined;
@@ -33,6 +32,10 @@ const mql = window.matchMedia('(max-width: 599px)');
 export const isMobile = () => mql.matches;
 
 // composeValidators(required, mustBeNumber, minValue(18))
+
+export function objectIsEmpty(obj) {
+  return !obj || Object.keys(obj).length === 0;
+}
 
 export const renderSelectField = ({ name, label, type, options, validate }) => (
   <Field name={name} validate={validate}>
@@ -70,43 +73,41 @@ export const renderPicturePickerField = ({ name, label, dispatch, validate }) =>
 
   return (
     <Field name={name} validate={validate}>
-      {({ input, meta }) => {
-        return (
-          <Form.Field>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '2fr 1fr',
-                gridTemplateAreas: `"Label Func" "Image Image"`,
-                width: '12em',
-              }}
-            >
-              <div style={{ gridArea: 'Label' }}>
-                <Header as="h4">{label}</Header>
-              </div>
-              <div style={{ gridArea: 'Func', justifySelf: 'end' }}>
-                <Item as="label" htmlFor={name} style={{ cursor: 'pointer' }}>
-                  <Header as="h4" color={meta.error && meta.touched ? 'red' : 'teal'}>
-                    Upload
-                  </Header>
-                  <input hidden id={name} type="file" onChange={onChangeHandler} />
-                </Item>
-              </div>
-
-              <div style={{ gridArea: 'Image', margin: '.4em 0' }}>
-                <Card style={meta.error && meta.touched ? { border: '3px solid red' } : {}}>
-                  <Image size="small" src="https://react.semantic-ui.com/images/avatar/large/matthew.png" wrapped ui={false} />
-                </Card>
-                {meta.error && meta.touched && (
-                  <Label basic color="red" pointing>
-                    {meta.error}
-                  </Label>
-                )}
-              </div>
+      {({ input, meta }) => (
+        <Form.Field>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '2fr 1fr',
+              gridTemplateAreas: `"Label Func" "Image Image"`,
+              width: '12em',
+            }}
+          >
+            <div style={{ gridArea: 'Label' }}>
+              <Header as="h4">{label}</Header>
             </div>
-          </Form.Field>
-        );
-      }}
+            <div style={{ gridArea: 'Func', justifySelf: 'end' }}>
+              <Item as="label" htmlFor={name} style={{ cursor: 'pointer' }}>
+                <Header as="h4" color={meta.error && meta.touched ? 'red' : 'teal'}>
+                  Upload
+                </Header>
+                <input hidden id={name} type="file" onChange={onChangeHandler} />
+              </Item>
+            </div>
+
+            <div style={{ gridArea: 'Image', margin: '.4em 0' }}>
+              <Card style={meta.error && meta.touched ? { border: '3px solid red' } : {}}>
+                <Image size="small" src={input.value} wrapped ui={false} />
+              </Card>
+              {meta.error && meta.touched && (
+                <Label basic color="red" pointing>
+                  {meta.error}
+                </Label>
+              )}
+            </div>
+          </div>
+        </Form.Field>
+      )}
     </Field>
   );
 };

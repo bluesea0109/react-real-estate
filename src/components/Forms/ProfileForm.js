@@ -5,7 +5,17 @@ import { Form as FinalForm } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { Header, Divider, Form, Image } from 'semantic-ui-react';
 
-import { isMobile, email, required, composeValidators, requiredOnlyInCalifornia, renderSelectField, renderField, renderPicturePickerField } from './helpers';
+import {
+  email,
+  isMobile,
+  required,
+  renderField,
+  objectIsEmpty,
+  composeValidators,
+  renderSelectField,
+  renderPicturePickerField,
+  requiredOnlyInCalifornia,
+} from './helpers';
 import { Button, Icon, Segment } from '../Base';
 import { incrementStep } from '../../store/modules/onboarded/actions';
 import { saveProfilePending } from '../../store/modules/profile/actions';
@@ -29,6 +39,14 @@ const ProfileForm = () => {
 
   const onLoginUserProfile = useSelector(store => store.onLogin && store.onLogin.userProfile);
   const onLoginTeamProfile = useSelector(store => store.onLogin && store.onLogin.teamProfile);
+
+  const realtorPhoto = useSelector(store => store.onLogin && store.onLogin.realtorPhoto && store.onLogin.realtorPhoto.resized);
+  const teamLogo = useSelector(store => store.onLogin && store.onLogin.teamLogo && store.onLogin.teamLogo.resized);
+  const brokerageLogo = useSelector(store => store.onLogin && store.onLogin.brokerageLogo && store.onLogin.brokerageLogo.resized);
+
+  const picturesRealtorPhoto = useSelector(store => store.pictures && store.pictures.realtorPhoto && store.pictures.realtorPhoto.resized);
+  const picturesTeamLogo = useSelector(store => store.pictures && store.pictures.teamLogo && store.pictures.teamLogo.resized);
+  const picturesBrokerageLogo = useSelector(store => store.pictures && store.pictures.brokerageLogo && store.pictures.brokerageLogo.resized);
 
   const saveProfile = profile => dispatch(saveProfilePending(profile));
   const onSubmit = values => {
@@ -55,7 +73,15 @@ const ProfileForm = () => {
         mlsArr.push({ name: userBoard[0] && userBoard[0].value, mlsId: board.mlsId });
       });
 
-    profileValues = Object.assign({}, onLoginUserProfile, onLoginTeamProfile, { boards: mlsArr });
+    profileValues = Object.assign(
+      {},
+      onLoginUserProfile,
+      onLoginTeamProfile,
+      { boards: mlsArr },
+      { realtorPhoto: picturesRealtorPhoto || realtorPhoto },
+      { teamLogo: picturesTeamLogo || teamLogo },
+      { brokerageLogo: picturesBrokerageLogo || brokerageLogo }
+    );
   }
 
   return (
@@ -75,8 +101,15 @@ const ProfileForm = () => {
           submitting,
           pristine,
           submitSucceeded,
+          valid,
+          visited,
+          dirty,
         }) => {
           if (submitSucceeded) {
+            dispatch(incrementStep(1));
+          }
+
+          if (valid && !objectIsEmpty(visited) && !dirty) {
             dispatch(incrementStep(1));
           }
 
