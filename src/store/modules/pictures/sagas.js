@@ -1,23 +1,11 @@
 import { put, call, select, takeLatest } from 'redux-saga/effects';
 
-import { getAllPhotosPending, getAllPhotosSuccess, getAllPhotosError, UPLOAD_PHOTO_PENDING, uploadPhotoSuccess, uploadPhotoError } from './actions';
+import { UPLOAD_PHOTO_PENDING, uploadPhotoSuccess, uploadPhotoError } from './actions';
 
 import ApiService from '../../../services/api/index';
 
 export const getPhotoSrc = state => state.pictures.binarySource;
-
-export function* getAllPhotosSaga() {
-  try {
-    yield put(getAllPhotosPending());
-
-    const { path, method } = ApiService.directory.user.team.settings.photos.get();
-    const response = yield call(ApiService[method], path);
-
-    yield put(getAllPhotosSuccess(response));
-  } catch (err) {
-    yield put(getAllPhotosError(err.message));
-  }
-}
+const s3BucketURL = 'https://alf-gabbi-uploads.s3.amazonaws.com/';
 
 export function* uploadPhotoSaga() {
   try {
@@ -38,9 +26,9 @@ export function* uploadPhotoSaga() {
     data.append(targetKey, targetFile);
 
     const response = yield call(ApiService[method], path, data);
+    const normalizedResponse = Object.assign({}, response, { resized: `${s3BucketURL}${response.resized}`, original: `${s3BucketURL}${response.original}` });
 
-    yield put(uploadPhotoSuccess(response));
-    yield getAllPhotosSaga();
+    yield put(uploadPhotoSuccess({ target: targetKey, data: normalizedResponse }));
   } catch (err) {
     yield put(uploadPhotoError(err.message));
   }

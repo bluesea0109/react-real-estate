@@ -1,41 +1,16 @@
-import {
-  GET_ALL_PHOTOS_PENDING,
-  GET_ALL_PHOTOS_SUCCESS,
-  GET_ALL_PHOTOS_ERROR,
-  UPLOAD_PHOTO_PENDING,
-  UPLOAD_PHOTO_SUCCESS,
-  UPLOAD_PHOTO_ERROR,
-} from './actions';
+import { UPLOAD_PHOTO_PENDING, UPLOAD_PHOTO_SUCCESS, UPLOAD_PHOTO_ERROR } from './actions';
 
 const initialState = {
   pending: false,
   error: null,
   binarySource: null,
-  allPictures: null,
+  realtorPhoto: null,
+  teamLogo: null,
+  brokerageLogo: null,
 };
 
 export default function team(state = initialState, action) {
   switch (action.type) {
-    case GET_ALL_PHOTOS_PENDING:
-      return {
-        ...state,
-        pending: true,
-      };
-
-    case GET_ALL_PHOTOS_SUCCESS:
-      return {
-        ...state,
-        pending: false,
-        allPictures: action.payload,
-      };
-
-    case GET_ALL_PHOTOS_ERROR:
-      return {
-        ...state,
-        pending: false,
-        error: action.error,
-      };
-
     case UPLOAD_PHOTO_PENDING:
       return {
         ...state,
@@ -44,10 +19,25 @@ export default function team(state = initialState, action) {
       };
 
     case UPLOAD_PHOTO_SUCCESS:
+      let newData;
+
+      if (action.payload.target === 'realtorPhoto') {
+        newData = { realtorPhoto: action.payload.data };
+      }
+
+      if (action.payload.target === 'teamLogo') {
+        newData = { teamLogo: action.payload.data };
+      }
+
+      if (action.payload.target === 'brokerageLogo') {
+        newData = { brokerageLogo: action.payload.data };
+      }
+
       return {
         ...state,
         pending: false,
         binarySource: null,
+        ...newData,
       };
 
     case UPLOAD_PHOTO_ERROR:
