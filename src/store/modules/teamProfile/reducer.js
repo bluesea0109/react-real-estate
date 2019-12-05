@@ -1,4 +1,4 @@
-import { SAVE_PROFILE_PENDING, SAVE_PROFILE_SUCCESS, SAVE_PROFILE_ERROR } from './actions';
+import { SAVE_TEAM_PROFILE_PENDING, SAVE_TEAM_PROFILE_SUCCESS, SAVE_TEAM_PROFILE_ERROR } from './actions';
 
 const initialState = {
   pending: false,
@@ -7,9 +7,9 @@ const initialState = {
   toSave: null,
 };
 
-export default function profile(state = initialState, action) {
+export default function teamProfile(state = initialState, action) {
   switch (action.type) {
-    case SAVE_PROFILE_PENDING:
+    case SAVE_TEAM_PROFILE_PENDING:
       return {
         ...state,
         error: null,
@@ -17,7 +17,7 @@ export default function profile(state = initialState, action) {
         toSave: action.payload,
       };
 
-    case SAVE_PROFILE_SUCCESS:
+    case SAVE_TEAM_PROFILE_SUCCESS:
       return {
         ...state,
         pending: false,
@@ -25,7 +25,7 @@ export default function profile(state = initialState, action) {
         toSave: null,
       };
 
-    case SAVE_PROFILE_ERROR:
+    case SAVE_TEAM_PROFILE_ERROR:
       return {
         ...state,
         pending: false,

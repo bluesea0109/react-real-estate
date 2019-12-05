@@ -20,6 +20,7 @@ import {
 import { Button, Icon, Segment } from '../Base';
 import { incrementStep } from '../../store/modules/onboarded/actions';
 import { saveProfilePending } from '../../store/modules/profile/actions';
+import { saveTeamProfilePending } from '../../store/modules/teamProfile/actions';
 
 const renderLabelWithSubHeader = (label, subHeader) =>
   isMobile() ? (
@@ -50,8 +51,38 @@ const ProfileForm = () => {
   const picturesBrokerageLogo = useSelector(store => store.pictures && store.pictures.brokerageLogo && store.pictures.brokerageLogo.resized);
 
   const saveProfile = profile => dispatch(saveProfilePending(profile));
+  const saveTeamProfile = teamProfile => dispatch(saveTeamProfilePending(teamProfile));
   const onSubmit = values => {
-    saveProfile(values);
+    // const date = (new Date()).toISOString().split('T')[0]; // but should be valid timestamp or number of milliseconds
+
+    const profile = {
+      notificationEmail: values.notificationEmail,
+      first: values.first,
+      last: values.last,
+      email: values.email,
+      phone: values.phone,
+      dre: values.dre,
+      teamId: values.teamId,
+      // setupComplete: date,
+      boards: values.boards,
+      // website: values.personalWebsite
+    };
+
+    const business = {
+      teamProfile: true,
+      notificationEmail: values.businessNotificationEmail,
+      teamName: values.teamName,
+      brokerageName: values.brokerageName,
+      address: values.address,
+      city: values.city,
+      state: values.state,
+      zip: values.zip,
+      phone: values.officePhone,
+      website: values.businessWebsite,
+    };
+
+    saveProfile(profile);
+    saveTeamProfile(business);
   };
 
   let profileValues;
@@ -120,7 +151,7 @@ const ProfileForm = () => {
               <WhenFieldChanges
                 field="businessNotificationEmail"
                 becomes={values.businessNotificationEmail}
-                set="personalNotificationEmail"
+                set="notificationEmail"
                 to={values.businessNotificationEmail}
               />
 
@@ -156,21 +187,21 @@ const ProfileForm = () => {
                   </div>
                   <div style={{ gridArea: 'NotificationEmail' }}>
                     {renderField({
-                      name: 'personalNotificationEmail',
+                      name: 'notificationEmail',
                       label: renderLabelWithSubHeader('Notification Email', '( Optional, defaults to Business Notification Email if not set )'),
                       type: 'text',
                     })}
                   </div>
                   <div style={{ gridArea: 'Dre' }}>
                     {renderField({
-                      name: 'dreNumber',
+                      name: 'dre',
                       label: renderLabelWithSubHeader('DRE Number', '( Required in California )'),
                       type: 'text',
                       validate: requiredOnlyInCalifornia,
                     })}
                   </div>
                   <div style={{ gridArea: 'OfficePhone' }}>
-                    {renderField({ name: 'officePhone', label: renderLabelWithSubHeader('Office Number', '( Optional )'), type: 'text' })}
+                    {renderField({ name: 'officePhone', label: renderLabelWithSubHeader('Office Phone Number', '( Optional )'), type: 'text' })}
                   </div>
                   <div style={{ gridArea: 'Website' }}>
                     {renderField({ name: 'personalWebsite', label: renderLabelWithSubHeader('Personal Website', '( Optional )'), type: 'text' })}
@@ -211,7 +242,7 @@ const ProfileForm = () => {
                   <div style={{ gridArea: 'BrokerageLogo' }}>
                     {renderPicturePickerField({ name: 'brokerageLogo', label: 'Brokerage Logo', dispatch: dispatch, validate: required })}
                   </div>
-                  <div style={{ gridArea: 'OfficePhone' }}>{renderField({ name: 'officePhone', label: 'Office Phone (Optional)', type: 'text' })}</div>
+                  <div style={{ gridArea: 'OfficePhone' }}>{renderField({ name: 'officePhone', label: 'Office Phone Number (Optional)', type: 'text' })}</div>
                   <div style={{ gridArea: 'Address' }}>{renderField({ name: 'address', label: 'Address', type: 'text', validate: required })}</div>
                   <div style={{ gridArea: 'City' }}>{renderField({ name: 'city', label: 'City', type: 'text', validate: required })}</div>
                   <div style={{ gridArea: 'State' }}>

@@ -11,7 +11,7 @@ export function* getTeamSaga() {
   try {
     yield put(getTeamPending());
 
-    const { path, method } = ApiService.directory.user.team.list();
+    const { path, method } = ApiService.directory.team.list();
     const response = yield call(ApiService[method], path);
 
     yield put(getTeamSuccess(response));

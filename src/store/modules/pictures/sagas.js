@@ -16,11 +16,11 @@ export function* uploadPhotoSaga() {
     const targetFile = targetArr[1];
 
     const { path, method } = yield targetKey === 'realtorPhoto'
-      ? ApiService.directory.user.settings.photos.set()
+      ? ApiService.directory.onboard.fillInYourProfile.photos.realtorPhoto.set()
       : targetKey === 'teamLogo'
-      ? ApiService.directory.user.team.settings.photos.teamLogo.set()
+      ? ApiService.directory.onboard.fillInYourProfile.photos.teamLogo.set()
       : targetKey === 'brokerageLogo'
-      ? ApiService.directory.user.team.settings.photos.brokerageLogo.set()
+      ? ApiService.directory.onboard.fillInYourProfile.photos.brokerageLogo.set()
       : {};
 
     const data = yield new FormData();
@@ -39,7 +39,7 @@ export function* deletePhotoSaga() {
   try {
     const target = yield select(getPhotoToDelete);
 
-    const { path, method } = yield target === 'teamLogo' ? ApiService.directory.user.team.settings.photos.teamLogo.delete() : {};
+    const { path, method } = yield target === 'teamLogo' ? ApiService.directory.onboard.fillInYourProfile.photos.teamLogo.delete() : {};
 
     yield call(ApiService[method], path);
 

@@ -106,6 +106,40 @@ async function del(path, sendToken = true) {
 const directory = {
   boards: () => ({ path: `/api/boards`, method: 'get' }),
   states: () => ({ path: `/api/states`, method: 'get' }),
+  onLogin: () => ({ path: `/api/user/onLogin`, method: 'get' }),
+
+  onboard: {
+    fillInYourProfile: {
+      profile: {
+        save: () => ({ path: `/api/user/settings/profile`, method: 'put' }),
+      },
+      teamProfile: {
+        save: teamId => ({ path: `/api/user/team/${teamId}/settings/profile`, method: 'put' }),
+      },
+      pictures: {
+        realtorPhoto: {
+          set: () => ({ path: `/api/user/settings/photos/realtorPhoto`, method: 'postBlob' }),
+        },
+        brokerageLogo: {
+          set: () => ({ path: `/api/user/team/settings/photos/brokerageLogo`, method: 'postBlob' }),
+        },
+        teamLogo: {
+          set: () => ({ path: `/api/user/team/settings/photos/teamLogo`, method: 'postBlob' }),
+          delete: () => ({ path: `/api/user/team/settings/photos/teamLogo`, method: 'del' }),
+        },
+      },
+    },
+  },
+
+  team: {
+    list: () => ({ path: `/api/user/team/list`, method: 'get' }),
+  },
+};
+
+/*
+const directory = {
+  boards: () => ({ path: `/api/boards`, method: 'get' }),
+  states: () => ({ path: `/api/states`, method: 'get' }),
 
   user: {
     onLogin: () => ({ path: `/api/user/onLogin`, method: 'get' }),
@@ -219,6 +253,7 @@ const directory = {
     },
   },
 };
+*/
 
 export default {
   get,

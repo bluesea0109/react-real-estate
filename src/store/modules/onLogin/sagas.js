@@ -8,7 +8,7 @@ export function* onLoginSaga() {
   try {
     yield put(getOnLoginPending());
 
-    const { path, method } = ApiService.directory.user.onLogin();
+    const { path, method } = ApiService.directory.onLogin();
     const response = yield call(ApiService[method], path);
 
     yield put(getOnLoginSuccess(response));
