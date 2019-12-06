@@ -116,7 +116,7 @@ const directory = {
       teamProfile: {
         save: teamId => ({ path: `/api/user/team/${teamId}/settings/profile`, method: 'put' }),
       },
-      pictures: {
+      photos: {
         realtorPhoto: {
           set: () => ({ path: `/api/user/settings/photos/realtorPhoto`, method: 'postBlob' }),
         },
@@ -128,6 +128,14 @@ const directory = {
           delete: () => ({ path: `/api/user/team/settings/photos/teamLogo`, method: 'del' }),
         },
       },
+    },
+    teamCustomization: {
+      get: () => ({ path: `/api/user/team/settings/branding`, method: 'get' }),
+      save: () => ({ path: `/api/user/team/settings/branding`, method: 'put' }),
+    },
+    customization: {
+      get: () => ({ path: `/api/user/settings/branding`, method: 'get' }),
+      save: () => ({ path: `/api/user/settings/branding`, method: 'put' }),
     },
   },
 
