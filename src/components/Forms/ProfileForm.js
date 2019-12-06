@@ -254,7 +254,15 @@ const ProfileForm = () => {
                   </div>
                   <div style={{ gridArea: 'City' }}>{renderField({ name: 'city', label: 'City', type: 'text', required: true, validate: required })}</div>
                   <div style={{ gridArea: 'State' }}>
-                    {renderSelectField({ name: 'state', label: 'State', type: 'text', required: true, validate: required, options: states ? states : [] })}
+                    {renderSelectField({
+                      name: 'state',
+                      label: 'State',
+                      type: 'text',
+                      required: true,
+                      validate: required,
+                      options: states ? states : [],
+                      search: true,
+                    })}
                   </div>
                   <div style={{ gridArea: 'ZipCode' }}>{renderField({ name: 'zip', label: 'Zip Code', type: 'text', required: true, validate: required })}</div>
                   <div style={{ gridArea: 'BusinessNotificationEmail' }}>

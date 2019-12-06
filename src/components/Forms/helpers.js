@@ -1,5 +1,6 @@
 import React from 'react';
 import { Label } from 'semantic-ui-react';
+import { Dropdown } from 'semantic-ui-react';
 import * as isURL from 'validator/lib/isURL';
 // import * as isInt from 'validator/lib/isInt';
 import * as isEmail from 'validator/lib/isEmail';
@@ -40,19 +41,27 @@ export function objectIsEmpty(obj) {
   return !obj || Object.keys(obj).length === 0;
 }
 
-export const renderSelectField = ({ name, label, type, options, required = undefined, validate }) => (
+export const renderSelectField = ({ name, label, type, options, required = undefined, validate, search = undefined }) => (
   <Field name={name} validate={validate}>
     {({ input, meta }) => (
-      <Form.Select
-        onChange={(param, data) => input.onChange(data.value)}
-        value={input.value}
-        options={options}
-        name={name}
-        label={label}
-        type={type}
-        required={required}
-        error={meta.error && meta.touched && { content: `${meta.error}` }}
-      />
+      <Form.Field>
+        <Header as="h4" style={{ margin: '0 0 .28571429rem 0' }}>
+          {label}
+          {required ? <span style={{ margin: '-.2em 0 0 .2em', color: '#db2828' }}>*</span> : null}
+        </Header>
+        <Dropdown
+          onChange={(param, data) => input.onChange(data.value)}
+          value={input.value}
+          options={options}
+          name={name}
+          label={label}
+          type={type}
+          required={required}
+          search={search}
+          selection
+          error={meta.error && meta.touched && { content: `${meta.error}` }}
+        />
+      </Form.Field>
     )}
   </Field>
 );
