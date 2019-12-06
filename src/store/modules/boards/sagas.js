@@ -12,7 +12,11 @@ export function* onLoginSaga() {
     const { path, method } = ApiService.directory.boards();
     const response = yield call(ApiService[method], path);
 
-    const normalize = normalizeBoards(response);
+    const sortedResponse = response.sort(function(a, b) {
+      return a.name.localeCompare(b.name);
+    });
+
+    const normalize = normalizeBoards(sortedResponse);
 
     yield put(getBoardsSuccess(normalize));
   } catch (err) {

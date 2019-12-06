@@ -40,30 +40,29 @@ export function objectIsEmpty(obj) {
   return !obj || Object.keys(obj).length === 0;
 }
 
-export const renderSelectField = ({ name, label, type, options, validate }) => (
+export const renderSelectField = ({ name, label, type, options, required = undefined, validate }) => (
   <Field name={name} validate={validate}>
     {({ input, meta }) => (
-      <Form.Field>
-        <Form.Select
-          onChange={(param, data) => input.onChange(data.value)}
-          value={input.value}
-          options={options}
-          name={name}
-          label={label}
-          type={type}
-          error={meta.error && meta.touched && { content: `${meta.error}` }}
-        />
-      </Form.Field>
+      <Form.Select
+        onChange={(param, data) => input.onChange(data.value)}
+        value={input.value}
+        options={options}
+        name={name}
+        label={label}
+        type={type}
+        required={required}
+        error={meta.error && meta.touched && { content: `${meta.error}` }}
+      />
     )}
   </Field>
 );
 
-export const renderField = ({ name, label, type, validate }) => {
+export const renderField = ({ name, label, type, required = undefined, validate }) => {
   if (typeof label !== 'string') {
     return (
       <Field name={name} validate={validate}>
         {({ input, meta }) => (
-          <Form.Field>
+          <Form.Field required={required}>
             {label}
             <Input {...input} type={type} error={meta.error && meta.touched && { content: `${meta.error}` }} />
           </Form.Field>
@@ -73,13 +72,15 @@ export const renderField = ({ name, label, type, validate }) => {
   } else {
     return (
       <Field name={name} validate={validate}>
-        {({ input, meta }) => <Form.Input {...input} type={type} label={label} error={meta.error && meta.touched && { content: `${meta.error}` }} />}
+        {({ input, meta }) => (
+          <Form.Input required={required} {...input} type={type} label={label} error={meta.error && meta.touched && { content: `${meta.error}` }} />
+        )}
       </Field>
     );
   }
 };
 
-export const renderPicturePickerField = ({ name, label, dispatch, validate }) => {
+export const renderPicturePickerField = ({ name, label, dispatch, required = undefined, validate }) => {
   const onChangeHandler = event => {
     const data = [name, event.target.files[0]];
     dispatch(uploadPhotoPending(data));
@@ -92,7 +93,7 @@ export const renderPicturePickerField = ({ name, label, dispatch, validate }) =>
   return (
     <Field name={name} validate={validate}>
       {({ input, meta }) => (
-        <Form.Field>
+        <Form.Field required={required}>
           <div
             style={
               name === 'teamLogo'
@@ -100,18 +101,21 @@ export const renderPicturePickerField = ({ name, label, dispatch, validate }) =>
                     display: 'grid',
                     gridTemplateColumns: '2fr 1fr 1fr',
                     gridTemplateAreas: `"Label Func Func2" "Image Image Image"`,
-                    width: '12em',
+                    width: '14em',
                   }
                 : {
                     display: 'grid',
                     gridTemplateColumns: '2fr 1fr',
                     gridTemplateAreas: `"Label Func" "Image Image"`,
-                    width: '12em',
+                    width: '14em',
                   }
             }
           >
             <div style={{ gridArea: 'Label' }}>
-              <Header as="h4">{label}</Header>
+              <Header as="h4">
+                {label}
+                {required ? <span style={{ margin: '-.2em 0 0 .2em', color: '#db2828' }}>*</span> : null}
+              </Header>
             </div>
             <div style={{ gridArea: 'Func', justifySelf: 'end' }}>
               <Item as="label" htmlFor={name} style={{ cursor: 'pointer' }}>
@@ -240,7 +244,7 @@ const renderImageRadio = field => {
   );
 };
 
-export const renderCarouselField = ({ name, label, type, validate }) => {
+export const renderCarouselField = ({ name, label, type, required = undefined, validate }) => {
   // console.log();
 
   const resolveVisibleSlides = type => {
@@ -286,7 +290,7 @@ export const renderCarouselField = ({ name, label, type, validate }) => {
   return (
     <Field name={name} validate={validate}>
       {({ input, meta }) => (
-        <Form.Field>
+        <Form.Field required={required}>
           <label>{label}</label>
           <Segment
             style={{
