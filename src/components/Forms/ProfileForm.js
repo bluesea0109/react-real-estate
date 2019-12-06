@@ -300,6 +300,7 @@ const ProfileForm = () => {
                             required: true,
                             validate: required,
                             options: boards ? boards : [],
+                            search: true,
                           })}
                           {renderField({ name: `${name}.mlsId`, label: 'MLS Agent ID', type: 'text', required: true, validate: required })}
                           <Button
