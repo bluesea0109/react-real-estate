@@ -40,7 +40,7 @@ const CustomizeSoldListingForm = () => {
           values,
         }) => (
           <Form onSubmit={handleSubmit}>
-            <Segment>
+            <Segment style={{ borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
               <div style={isMobile() ? {} : { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridColumnGap: '2em' }}>
                 {renderField({ name: 'firstName', label: 'First Name', type: 'text', validate: required })}
                 {renderField({ name: 'lastName', label: 'Last Name', type: 'text', validate: required })}

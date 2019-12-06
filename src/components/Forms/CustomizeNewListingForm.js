@@ -1,9 +1,9 @@
-import arrayMutators from 'final-form-arrays';
 import React, { Fragment } from 'react';
-import { Form as FinalForm } from 'react-final-form';
 import { Form } from 'semantic-ui-react';
+import arrayMutators from 'final-form-arrays';
+import { Form as FinalForm } from 'react-final-form';
 
-import { isMobile, required, renderField } from './helpers';
+import { isMobile, required, renderField, renderCarouselField, popup, labelWithPopup } from './helpers';
 import { Button, Segment } from '../Base';
 
 const CustomizeNewListingForm = () => {
@@ -40,7 +40,7 @@ const CustomizeNewListingForm = () => {
           values,
         }) => (
           <Form onSubmit={handleSubmit}>
-            <Segment>
+            <Segment style={{ borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
               <div
                 style={
                   isMobile()
@@ -48,25 +48,41 @@ const CustomizeNewListingForm = () => {
                     : {
                         display: 'grid',
                         gridTemplateColumns: '1fr 1fr 1fr 1fr',
-                        gridTemplateRows: '1fr 1fr 1fr 1fr',
-                        gridTemplateAreas: `"Agent Agent BrandColor BrandColor" "Headline NumberOfPostcards BrandColor BrandColor" "CallToAction CallToAction ChooseTemplate ChooseTemplate" "ShortenedURL ShortenedURL ChooseTemplate ChooseTemplate"`,
+                        gridTemplateRows: '1fr 1fr 1fr 1fr 1fr',
+                        gridTemplateAreas: `
+                          "Agent Agent BrandColor BrandColor"
+                          "Headline Headline BrandColor BrandColor"
+                          "NumberOfPostcards NumberOfPostcards ChooseTemplate ChooseTemplate"
+                          "CallToAction CallToAction ChooseTemplate ChooseTemplate"
+                          "ShortenedURL ShortenedURL . ."
+                        `,
+                        gridRowGap: '1em',
                         gridColumnGap: '2em',
                       }
                 }
               >
                 <div style={{ gridArea: 'Agent' }}>
-                  {renderField({ name: 'agent', label: 'Choose agent to display on postcards', type: 'text', validate: required })}
+                  {renderField({
+                    name: 'agent',
+                    label: labelWithPopup('Choose agent to display on postcards', popup('Some message')),
+                    type: 'text',
+                    validate: required,
+                  })}
                 </div>
-                <div style={{ gridArea: 'BrandColor' }}></div>
-                <div style={{ gridArea: 'ChooseTemplate' }}></div>
-                <div style={{ gridArea: 'Headline' }}>{renderField({ name: 'headline', label: 'Headline', type: 'text', validate: required })}</div>
+                <div style={{ gridArea: 'BrandColor' }}>{renderCarouselField({ name: 'color', label: 'Brand color', type: 'color', validate: required })}</div>
+                <div style={{ gridArea: 'ChooseTemplate' }}>
+                  {renderCarouselField({ name: 'template', label: 'Choose template', type: 'template', validate: required })}
+                </div>
+                <div style={{ gridArea: 'Headline' }}>
+                  {renderField({ name: 'headline', label: labelWithPopup('Headline', popup('Some message')), type: 'text', validate: required })}
+                </div>
                 <div style={{ gridArea: 'NumberOfPostcards' }}>
                   {renderField({ name: 'numberOfPostcards', label: 'Number of postcards to send per listing', type: 'text', validate: required })}
                 </div>
                 <div style={{ gridArea: 'CallToAction' }}>
-                  {renderField({ name: 'actionURL', label: 'Call to action URL', type: 'text', validate: required })}
+                  {renderField({ name: 'actionURL', label: labelWithPopup('Call to action URL', popup('Some message')), type: 'text', validate: required })}
                 </div>
-                <div style={{ gridArea: 'ShortenedURL' }}>Shortened URL: briv.it/12a</div>
+                <div style={{ gridArea: 'ShortenedURL' }}>Shortened URL: briv.it/12a {popup('Some message')}</div>
               </div>
             </Segment>
 
@@ -80,6 +96,8 @@ const CustomizeNewListingForm = () => {
                 </Button>
               </span>
             </div>
+
+            <pre>{JSON.stringify(values, null, 2)}</pre>
           </Form>
         )}
       />
