@@ -177,13 +177,17 @@ const ProfileForm = () => {
                   }
                 >
                   <div style={{ gridArea: 'Headshot' }}>
-                    {renderPicturePickerField({ name: 'realtorPhoto', label: 'Headshot', dispatch: dispatch, validate: required })}
+                    {renderPicturePickerField({ name: 'realtorPhoto', label: 'Headshot', dispatch: dispatch, required: true, validate: required })}
                   </div>
-                  <div style={{ gridArea: 'First' }}>{renderField({ name: 'first', label: 'First Name', type: 'text', validate: required })}</div>
-                  <div style={{ gridArea: 'Last' }}>{renderField({ name: 'last', label: 'Last Name', type: 'text', validate: required })}</div>
-                  <div style={{ gridArea: 'Phone' }}>{renderField({ name: 'phone', label: 'Phone Number', type: 'text', validate: required })}</div>
+                  <div style={{ gridArea: 'First' }}>
+                    {renderField({ name: 'first', label: 'First Name', type: 'text', required: true, validate: required })}
+                  </div>
+                  <div style={{ gridArea: 'Last' }}>{renderField({ name: 'last', label: 'Last Name', type: 'text', required: true, validate: required })}</div>
+                  <div style={{ gridArea: 'Phone' }}>
+                    {renderField({ name: 'phone', label: 'Phone Number', type: 'text', required: true, validate: required })}
+                  </div>
                   <div style={{ gridArea: 'Email' }}>
-                    {renderField({ name: 'email', label: 'Email', type: 'text', validate: composeValidators(required, email) })}
+                    {renderField({ name: 'email', label: 'Email', type: 'text', required: true, validate: composeValidators(required, email) })}
                   </div>
                   <div style={{ gridArea: 'NotificationEmail' }}>
                     {renderField({
@@ -234,26 +238,31 @@ const ProfileForm = () => {
                         }
                   }
                 >
-                  <div style={{ gridArea: 'TeamName' }}>{renderField({ name: 'teamName', label: 'Team Name', type: 'text', validate: required })}</div>
+                  <div style={{ gridArea: 'TeamName' }}>
+                    {renderField({ name: 'teamName', label: 'Team Name', type: 'text', required: true, validate: required })}
+                  </div>
                   <div style={{ gridArea: 'TeamLogo' }}>{renderPicturePickerField({ name: 'teamLogo', label: 'Team Logo', dispatch: dispatch })}</div>
                   <div style={{ gridArea: 'BrokerageName' }}>
-                    {renderField({ name: 'brokerageName', label: 'Brokerage Name', type: 'text', validate: required })}
+                    {renderField({ name: 'brokerageName', label: 'Brokerage Name', type: 'text', required: true, validate: required })}
                   </div>
                   <div style={{ gridArea: 'BrokerageLogo' }}>
-                    {renderPicturePickerField({ name: 'brokerageLogo', label: 'Brokerage Logo', dispatch: dispatch, validate: required })}
+                    {renderPicturePickerField({ name: 'brokerageLogo', label: 'Brokerage Logo', dispatch: dispatch, required: true, validate: required })}
                   </div>
                   <div style={{ gridArea: 'OfficePhone' }}>{renderField({ name: 'officePhone', label: 'Office Phone Number (Optional)', type: 'text' })}</div>
-                  <div style={{ gridArea: 'Address' }}>{renderField({ name: 'address', label: 'Address', type: 'text', validate: required })}</div>
-                  <div style={{ gridArea: 'City' }}>{renderField({ name: 'city', label: 'City', type: 'text', validate: required })}</div>
-                  <div style={{ gridArea: 'State' }}>
-                    {renderSelectField({ name: 'state', label: 'State', type: 'text', validate: required, options: states ? states : [] })}
+                  <div style={{ gridArea: 'Address' }}>
+                    {renderField({ name: 'address', label: 'Address', type: 'text', required: true, validate: required })}
                   </div>
-                  <div style={{ gridArea: 'ZipCode' }}>{renderField({ name: 'zip', label: 'Zip Code', type: 'text', validate: required })}</div>
+                  <div style={{ gridArea: 'City' }}>{renderField({ name: 'city', label: 'City', type: 'text', required: true, validate: required })}</div>
+                  <div style={{ gridArea: 'State' }}>
+                    {renderSelectField({ name: 'state', label: 'State', type: 'text', required: true, validate: required, options: states ? states : [] })}
+                  </div>
+                  <div style={{ gridArea: 'ZipCode' }}>{renderField({ name: 'zip', label: 'Zip Code', type: 'text', required: true, validate: required })}</div>
                   <div style={{ gridArea: 'BusinessNotificationEmail' }}>
                     {renderField({
                       name: 'businessNotificationEmail',
                       label: renderLabelWithSubHeader('Business Notification Email', '( Required )'),
                       type: 'text',
+                      required: true,
                       validate: composeValidators(required, email),
                     })}
                   </div>
@@ -276,8 +285,15 @@ const ProfileForm = () => {
                     fields.map((name, index) => (
                       <Segment secondary key={index}>
                         <div style={isMobile() ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 1fr 45px', gridColumnGap: '2em' }}>
-                          {renderSelectField({ name: `${name}.name`, label: 'MLS', type: 'text', validate: required, options: boards ? boards : [] })}
-                          {renderField({ name: `${name}.mlsId`, label: 'MLS Agent ID', type: 'text', validate: required })}
+                          {renderSelectField({
+                            name: `${name}.name`,
+                            label: 'MLS',
+                            type: 'text',
+                            required: true,
+                            validate: required,
+                            options: boards ? boards : [],
+                          })}
+                          {renderField({ name: `${name}.mlsId`, label: 'MLS Agent ID', type: 'text', required: true, validate: required })}
                           <Button
                             basic
                             icon
