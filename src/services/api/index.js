@@ -107,6 +107,7 @@ const directory = {
   boards: () => ({ path: `/api/boards`, method: 'get' }),
   states: () => ({ path: `/api/states`, method: 'get' }),
   onLogin: () => ({ path: `/api/user/onLogin`, method: 'get' }),
+  templates: () => ({ path: `/api/templates`, method: 'get' }),
 
   onboard: {
     fillInYourProfile: {
