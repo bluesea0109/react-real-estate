@@ -37,9 +37,9 @@ const renderButton = ({leftOnClick, rightOnClick, disableLeft, disableRight}) =>
 
 export default ({ label, minValue, setMinValue, defaultValue, setDefaultValue, maxValue, setMaxValue }) => {
   const onChange = index => {
-    if (index[0] !== minValue) setMinValue(index[0]);
-    if (index[1] !== defaultValue) setDefaultValue(index[1]);
-    if (index[2] !== maxValue) setMaxValue(index[2]);
+    setMinValue(index[0]);
+    setDefaultValue(index[1]);
+    setMaxValue(index[2]);
   };
 
   return (
@@ -80,6 +80,12 @@ export default ({ label, minValue, setMinValue, defaultValue, setDefaultValue, m
         </Input>
 
         <div className="slider" style={{ gridArea: 'Slider', padding: '0 0.5em' }}>
+          {isMobile() && (
+            <br>
+              {' '}
+              <br />{' '}
+            </br>
+          )}
           <Nouislider
             style={{ height: '3px' }}
             range={{
@@ -96,7 +102,7 @@ export default ({ label, minValue, setMinValue, defaultValue, setDefaultValue, m
             // Show a scale with the slider
             pips={{
               mode: 'values',
-              values: [250, 500, 1000],
+              values: [100, 250, 500, 1000, 2000],
               stepped: true,
               density: 3,
             }}
@@ -106,6 +112,12 @@ export default ({ label, minValue, setMinValue, defaultValue, setDefaultValue, m
             }}
             onChange={onChange}
           />
+          {isMobile() && (
+            <br>
+              {' '}
+              <br />{' '}
+            </br>
+          )}
         </div>
       </div>
     </div>
