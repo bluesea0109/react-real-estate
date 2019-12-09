@@ -22,6 +22,7 @@
     "final-form-arrays": "3.0.2",
     "google-maps-react": "2.0.2",
     "lodash": "4.17.15",
+    "nouislider": "14.1.0",
     "prop-types": "15.7.2",
     "pure-react-carousel": "1.17.0",
     "react": "^16.11.0",

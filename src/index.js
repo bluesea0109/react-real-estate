@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import './reset.css';
 import 'semantic-ui-css/semantic.min.css';
 import 'pure-react-carousel/dist/react-carousel.es.css';
+import 'nouislider/distribute/nouislider.css';
 import './index.css';
 
 import App from './App';
