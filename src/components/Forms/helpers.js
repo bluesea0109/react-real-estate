@@ -8,7 +8,7 @@ import { Field, FormSpy } from 'react-final-form';
 import { OnChange } from 'react-final-form-listeners';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Card, Form, Header, Image, Input, Item, Popup, Segment } from '../Base';
+import { Card, Form, Header, Image, Item, Popup, Segment } from '../Base';
 import { ButtonBack, ButtonNext, CarouselProvider, Slide, Slider } from 'pure-react-carousel';
 import { uploadPhotoPending, deletePhotoPending } from '../../store/modules/pictures/actions';
 

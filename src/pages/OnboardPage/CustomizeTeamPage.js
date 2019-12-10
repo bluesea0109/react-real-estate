@@ -2,7 +2,7 @@ import { Header, Radio, Icon, Confirm } from 'semantic-ui-react';
 import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import Wizard from './Wizard';
+// import Wizard from './Wizard';
 import { incrementStep } from '../../store/modules/onboarded/actions';
 import { Button, Menu, Page, Segment } from '../../components/Base';
 import CustomizeForm from '../../components/Forms/CustomizeForm';
