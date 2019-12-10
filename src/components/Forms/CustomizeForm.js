@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { Form } from 'semantic-ui-react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form as FinalForm } from 'react-final-form';
 
 import {
@@ -15,12 +15,14 @@ import {
   colors,
   templates,
   composeValidators,
+  url,
+  renderUrlField,
 } from './helpers';
 import { Button, Segment } from '../Base';
 import RangeSlider from '../RangeSlider';
 
 const CustomizeForm = ({ onboard = undefined, formType = undefined }) => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [minValue, setMinValue] = useState(200);
   const [defaultValue, setDefaultValue] = useState(300);
   const [maxValue, setMaxValue] = useState(1000);
@@ -32,6 +34,8 @@ const CustomizeForm = ({ onboard = undefined, formType = undefined }) => {
   const bookmarkTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.bookmark);
   const ribbonTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.ribbon);
   const stackTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.stack);
+  const newListingShortenedURL = useSelector(store => store.teamShortcode && store.teamShortcode.listed);
+  const soldListingShortenedURL = useSelector(store => store.teamShortcode && store.teamShortcode.sold);
 
   const resolveTemplate = type => {
     const types = {
@@ -45,7 +49,7 @@ const CustomizeForm = ({ onboard = undefined, formType = undefined }) => {
 
   const templateDefaults = resolveTemplate(selectedTemplate);
 
-  const resolveListedOrSold = type => {
+  const resolveListedOrSoldDefaults = type => {
     const types = {
       newListing: templateDefaults && templateDefaults.listed,
       soldListing: templateDefaults && templateDefaults.sold,
@@ -54,9 +58,20 @@ const CustomizeForm = ({ onboard = undefined, formType = undefined }) => {
     return type ? types[type] : types['undefined'];
   };
 
-  const formDefaults = resolveListedOrSold(formType);
+  const formDefaults = resolveListedOrSoldDefaults(formType);
 
   const frontHeadline = formDefaults && formDefaults.fields.filter(field => field.name === 'frontHeadline')[0];
+
+  const resolveListedOrSoldURL = type => {
+    const types = {
+      newListing: newListingShortenedURL,
+      soldListing: soldListingShortenedURL,
+      undefined: undefined,
+    };
+    return type ? types[type] : types['undefined'];
+  };
+
+  const shortenedURL = resolveListedOrSoldURL(formType);
 
   const agents = [];
 
@@ -107,7 +122,7 @@ const CustomizeForm = ({ onboard = undefined, formType = undefined }) => {
                       : {
                           display: 'grid',
                           gridTemplateColumns: '1fr 1fr',
-                          gridTemplateRows: onboard ? '2fr 1fr 1fr 1fr 1fr' : '2fr 1fr 1fr 1fr',
+                          gridTemplateRows: onboard ? '4fr 3fr 1fr 1fr' : '4fr 3fr 1fr 1fr 1fr',
                           gridTemplateAreas: onboard
                             ? `
                           "ChooseTemplate BrandColor"
@@ -127,9 +142,7 @@ const CustomizeForm = ({ onboard = undefined, formType = undefined }) => {
                         }
                   }
                 >
-                  {onboard ? (
-                    undefined
-                  ) : (
+                  {!onboard ? (
                     <div style={{ gridArea: 'Agent' }}>
                       {renderSelectField({
                         name: 'agent',
@@ -140,6 +153,8 @@ const CustomizeForm = ({ onboard = undefined, formType = undefined }) => {
                         search: true,
                       })}
                     </div>
+                  ) : (
+                    undefined
                   )}
 
                   <div style={{ gridArea: 'BrandColor' }}>
@@ -168,9 +183,18 @@ const CustomizeForm = ({ onboard = undefined, formType = undefined }) => {
                     })}
                   </div>
                   <div style={{ gridArea: 'CallToAction' }}>
-                    {renderField({ name: 'actionURL', label: labelWithPopup('Call to action URL', popup('Some message')), type: 'text', validate: required })}
+                    {renderUrlField({
+                      name: 'actionURL',
+                      label: labelWithPopup('Call to action URL', popup('Some message')),
+                      type: 'text',
+                      dispatch: dispatch,
+                      validate: composeValidators(required, url),
+                      target: formType,
+                    })}
                   </div>
-                  <div style={{ gridArea: 'ShortenedURL' }}>Shortened URL: briv.it/12a {popup('Some message')}</div>
+                  <div style={{ gridArea: 'ShortenedURL' }}>
+                    Shortened URL: {shortenedURL} {popup('Some message')}
+                  </div>
                 </div>
               </Segment>
 

@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, Form, Header, Image, Item, Popup, Segment } from '../Base';
 import { ButtonBack, ButtonNext, CarouselProvider, Slide, Slider } from 'pure-react-carousel';
 import { uploadPhotoPending, deletePhotoPending } from '../../store/modules/pictures/actions';
+import { saveTeamListedShortcodePending, saveTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
 
 // export const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -87,6 +88,32 @@ export const renderField = ({ name, label, type, required = undefined, validate 
       </Field>
     );
   }
+};
+
+export const renderUrlField = ({ name, label, type, dispatch, required = undefined, validate, target }) => {
+  const onBlurHandler = e => {
+    const eURL = e.target.value;
+    console.log(target);
+    if (target === 'newListing' && isURL(eURL)) dispatch(saveTeamListedShortcodePending(eURL));
+    if (target === 'soldListing' && isURL(eURL)) dispatch(saveTeamSoldShortcodePending(eURL));
+
+    return null;
+  };
+
+  return (
+    <Field name={name} validate={validate}>
+      {({ input, meta }) => (
+        <Form.Input
+          required={required}
+          {...input}
+          type={type}
+          label={label}
+          error={meta.error && meta.touched && { content: `${meta.error}` }}
+          onBlur={onBlurHandler}
+        />
+      )}
+    </Field>
+  );
 };
 
 export const renderPicturePickerField = ({ name, label, dispatch, required = undefined, validate }) => {
