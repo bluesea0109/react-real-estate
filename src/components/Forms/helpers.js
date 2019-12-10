@@ -145,7 +145,7 @@ export const renderPicturePickerField = ({ name, label, dispatch, required = und
               </div>
             )}
 
-            <div style={{ gridArea: 'Image', margin: '-.8em 0' }}>
+            <div style={{ gridArea: 'Image' /*margin: '-.8em 0'*/ }}>
               <Card
                 style={
                   meta.error && meta.touched ? { maxHeight: '15em', overflow: 'hidden', border: '3px solid red' } : { maxHeight: '15em', overflow: 'hidden' }
