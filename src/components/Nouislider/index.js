@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import nouislider from 'nouislider';
 
@@ -32,41 +32,32 @@ const Nouislider = props => {
         instanceRef.current = null;
       }
     };
-  }, [sliderContainer, props]);
+  }, [sliderContainer]);
 
-  const clickOnPip = useCallback(
-    pip => {
-      const value = Number(pip.target.getAttribute('data-value'));
-      if (slider) {
-        slider.set(value);
+  const clickOnPip = pip => {
+    const value = Number(pip.target.getAttribute('data-value'));
+    if (slider) {
+      slider.set(value);
+    }
+  };
+
+  const toggleDisable = disabled => {
+    const sliderHTML = sliderContainer.current;
+    if (sliderHTML) {
+      if (!disabled) {
+        sliderHTML.removeAttribute('disabled');
+      } else {
+        sliderHTML.setAttribute('disabled', true);
       }
-    },
-    [slider]
-  );
+    }
+  };
 
-  const toggleDisable = useCallback(
-    disabled => {
-      const sliderHTML = sliderContainer.current;
-      if (sliderHTML) {
-        if (!disabled) {
-          sliderHTML.removeAttribute('disabled');
-        } else {
-          sliderHTML.setAttribute('disabled', true);
-        }
-      }
-    },
-    [sliderContainer]
-  );
+  const updateRange = range => {
+    const sliderHTML = sliderContainer.current;
+    sliderHTML.noUiSlider.updateOptions({ range });
+  };
 
-  const updateRange = useCallback(
-    range => {
-      const sliderHTML = sliderContainer.current;
-      sliderHTML.noUiSlider.updateOptions({ range });
-    },
-    [sliderContainer]
-  );
-
-  const createSlider = useCallback(() => {
+  const createSlider = () => {
     const { onUpdate, onChange, onSlide, onStart, onEnd, onSet } = props;
     const sliderComponent = nouislider.create(sliderContainer.current, {
       ...props,
@@ -97,7 +88,7 @@ const Nouislider = props => {
     }
 
     setSlider(sliderComponent);
-  }, [props, sliderContainer]);
+  };
 
   useEffect(() => {
     const { disabled } = props;
@@ -106,19 +97,18 @@ const Nouislider = props => {
       toggleDisable(disabled);
       createSlider();
     }
-  }, [createSlider, props, sliderContainer, toggleDisable]);
+  }, []);
 
   useEffect(() => {
-    const sliderHTML = sliderContainer.current;
     if (props.clickablePips) {
-      // const sliderHTML = sliderContainer.current;
+      const sliderHTML = sliderContainer.current;
       sliderHTML.querySelectorAll('.noUi-value').forEach(pip => {
         pip.style.cursor = 'pointer';
         pip.addEventListener('click', clickOnPip);
       });
     }
     return () => {
-      // const sliderHTML = sliderContainer.current;
+      const sliderHTML = sliderContainer.current;
       if (slider) slider.destroy();
       if (sliderHTML) {
         sliderHTML.querySelectorAll('.noUi-value').forEach(pip => {
@@ -126,7 +116,7 @@ const Nouislider = props => {
         });
       }
     };
-  }, [slider, clickOnPip, props.clickablePips, sliderContainer]);
+  }, [slider]);
 
   const { start, disabled, range } = props;
 
@@ -136,7 +126,7 @@ const Nouislider = props => {
       slider.set(start);
     }
     toggleDisable(disabled);
-  }, [start, disabled, range, slider, toggleDisable, updateRange]);
+  }, [start, disabled, range]);
 
   const { id, className, style } = props;
   const options = {};
