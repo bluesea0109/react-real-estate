@@ -109,6 +109,10 @@ const directory = {
   onLogin: () => ({ path: `/api/user/onLogin`, method: 'get' }),
   templates: () => ({ path: `/api/templates`, method: 'get' }),
 
+  team: {
+    list: () => ({ path: `/api/user/team/list`, method: 'get' }),
+  },
+
   onboard: {
     fillInYourProfile: {
       profile: {
@@ -133,15 +137,21 @@ const directory = {
     teamCustomization: {
       get: () => ({ path: `/api/user/team/settings/branding`, method: 'get' }),
       save: () => ({ path: `/api/user/team/settings/branding`, method: 'put' }),
+      shortcode: {
+        listed: {
+          get: () => ({ path: `/api/user/team/settings/shortcode/listed/example`, method: 'get' }),
+          save: () => ({ path: `/api/user/team/settings/shortcode/listed/example`, method: 'put' }),
+        },
+        sold: {
+          get: () => ({ path: `/api/user/team/settings/shortcode/sold/example`, method: 'get' }),
+          save: () => ({ path: `/api/user/team/settings/shortcode/sold/example`, method: 'put' }),
+        },
+      },
     },
     customization: {
       get: () => ({ path: `/api/user/settings/branding`, method: 'get' }),
       save: () => ({ path: `/api/user/settings/branding`, method: 'put' }),
     },
-  },
-
-  team: {
-    list: () => ({ path: `/api/user/team/list`, method: 'get' }),
   },
 };
 
