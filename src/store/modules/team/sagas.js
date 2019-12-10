@@ -12,7 +12,7 @@ export function* getTeamSaga() {
     yield put(getTeamPending());
 
     const { path, method } = ApiService.directory.team.list();
-    const response = yield call(ApiService[method], path);
+    const response = yield call(ApiService[method], path, { include_docs: true });
 
     yield put(getTeamSuccess(response));
   } catch (err) {

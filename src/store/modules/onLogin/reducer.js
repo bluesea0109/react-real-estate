@@ -7,7 +7,7 @@ const initialState = {
   permissions: undefined,
 };
 
-export default function user(state = initialState, action) {
+export default function onLogin(state = initialState, action) {
   switch (action.type) {
     case GET_ON_LOGIN_PENDING:
       return {

@@ -1,18 +1,38 @@
-import React, { useState } from 'react';
+import { Header, Radio, Icon, Confirm } from 'semantic-ui-react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Header } from 'semantic-ui-react';
+
+import Wizard from './Wizard';
 import { incrementStep } from '../../store/modules/onboarded/actions';
-
-import CustomizeNewListingForm from '../../components/Forms/CustomizeNewListingForm';
-import CustomizeSoldListingForm from '../../components/Forms/CustomizeSoldListingForm';
-
 import { Button, Menu, Page, Segment } from '../../components/Base';
+import CustomizeForm from '../../components/Forms/CustomizeForm';
 
-const OnboardPage = () => {
+const CustomizeTeamPage = () => {
   const dispatch = useDispatch();
-  const [listingNewOrSold, setListingNewOrSold] = useState('new');
+  const [listingNewOrSold, setListingNewOrSold] = useState('newListing');
+  const [newListingEnabled, setNewListingEnabled] = useState(true);
+  const [soldListingEnabled, setSoldListingEnabled] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
 
   const handleListingToggle = (e, { name }) => setListingNewOrSold(name);
+  const handleNewListingEnableToggle = () => setNewListingEnabled(!newListingEnabled);
+  const handleSoldListingEnableToggle = () => setSoldListingEnabled(!soldListingEnabled);
+
+  useEffect(() => {
+    if (!newListingEnabled && !soldListingEnabled) {
+      setShowAlert(true);
+    } else {
+      setShowAlert(false);
+    }
+
+    if (!newListingEnabled && soldListingEnabled) {
+      setListingNewOrSold('soldListing');
+    }
+
+    if (newListingEnabled && !soldListingEnabled) {
+      setListingNewOrSold('newListing');
+    }
+  }, [newListingEnabled, soldListingEnabled, setShowAlert, setListingNewOrSold]);
 
   return (
     <Page basic>
@@ -28,13 +48,62 @@ const OnboardPage = () => {
 
         <Segment style={{ margin: '0 0 -1px 0', borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
           <Menu pointing secondary>
-            <Menu.Item name="new" active={listingNewOrSold === 'new'} onClick={handleListingToggle} />
-            <Menu.Item name="sold" active={listingNewOrSold === 'sold'} onClick={handleListingToggle} />
+            <Menu.Item name="newListing" active={listingNewOrSold === 'newListing'} onClick={handleListingToggle} />
+            <Menu.Item name="soldListing" active={listingNewOrSold === 'soldListing'} onClick={handleListingToggle} />
           </Menu>
         </Segment>
 
-        {listingNewOrSold === 'new' && <CustomizeNewListingForm />}
-        {listingNewOrSold === 'sold' && <CustomizeSoldListingForm />}
+        <Confirm
+          open={showAlert}
+          content="In order to use Bravity Marketing platform, you must select at least one"
+          cancelButton="Enable new listings"
+          confirmButton="Enable sold listings"
+          onCancel={() => setNewListingEnabled(true)}
+          onConfirm={() => setSoldListingEnabled(true)}
+        />
+
+        {listingNewOrSold === 'newListing' && (
+          <Fragment>
+            <Segment>
+              <Header size="medium">
+                Target on new: &nbsp;
+                <Radio toggle onChange={handleNewListingEnableToggle} checked={newListingEnabled} style={{ verticalAlign: 'bottom' }} />
+              </Header>
+            </Segment>
+
+            {newListingEnabled ? (
+              <CustomizeForm onboard={true} formType="newListing" />
+            ) : (
+              <Segment placeholder>
+                <Header icon>
+                  <Icon name="exclamation triangle" />
+                  Campaign will not be enabled for new listings
+                </Header>
+              </Segment>
+            )}
+          </Fragment>
+        )}
+        {listingNewOrSold === 'soldListing' && (
+          <Fragment>
+            <Segment>
+              <Header size="medium">
+                Target on sold: &nbsp;
+                <Radio toggle onChange={handleSoldListingEnableToggle} checked={soldListingEnabled} style={{ verticalAlign: 'bottom' }} />
+              </Header>
+            </Segment>
+
+            {soldListingEnabled ? (
+              <CustomizeForm onboard={true} formType="soldListing" />
+            ) : (
+              <Segment placeholder>
+                <Header icon>
+                  <Icon name="exclamation triangle" />
+                  Campaign will not be enabled for sold listings
+                </Header>
+              </Segment>
+            )}
+          </Fragment>
+        )}
 
         <Button onClick={() => dispatch(incrementStep(2))}>Stage 2 Completed</Button>
       </Segment>
@@ -42,4 +111,4 @@ const OnboardPage = () => {
   );
 };
 
-export default OnboardPage;
+export default CustomizeTeamPage;

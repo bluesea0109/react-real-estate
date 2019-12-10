@@ -6,7 +6,7 @@ const initialState = {
   available: [],
 };
 
-export default function user(state = initialState, action) {
+export default function boards(state = initialState, action) {
   switch (action.type) {
     case GET_BOARDS_PENDING:
       return {

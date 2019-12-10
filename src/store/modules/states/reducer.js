@@ -6,7 +6,7 @@ const initialState = {
   available: null,
 };
 
-export default function user(state = initialState, action) {
+export default function states(state = initialState, action) {
   switch (action.type) {
     case GET_STATES_PENDING:
       return {

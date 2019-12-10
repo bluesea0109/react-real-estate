@@ -10,7 +10,7 @@ const initialState = {
   toDelete: null,
 };
 
-export default function team(state = initialState, action) {
+export default function pictures(state = initialState, action) {
   switch (action.type) {
     case UPLOAD_PHOTO_PENDING:
       return {

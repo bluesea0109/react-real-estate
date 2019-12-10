@@ -21,7 +21,7 @@ const initialState = {
   error: null,
 };
 
-export default function mailouts(state = initialState, action) {
+export default function mailout(state = initialState, action) {
   switch (action.type) {
     case GET_MAILOUT_DETAILS_PENDING:
       return {

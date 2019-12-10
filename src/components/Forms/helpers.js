@@ -26,7 +26,7 @@ export const requiredOnlyInCalifornia = (value, condition) => {
 export const url = value => !isEmpty(value) && !isURL(value) && 'Invalid URL';
 
 // export const minLength = min => value => !isEmpty(value) && value.length < min && `Must be at least ${min} characters`;
-// export const maxLength = max => value => !isEmpty(value) && value.length > max && `Must be no more than ${max} characters`;
+export const maxLength = max => value => !isEmpty(value) && value.length > max && `Must be no more than ${max} characters`;
 // export const integer = value => !isInt(value) && 'Must be an integer';
 // export const mustBeNumber = value => (isNaN(value) ? 'Must be a number' : undefined);
 // export const minValue = min => value => (isNaN(value) || value >= min ? undefined : `Should be greater than ${min}`);
@@ -73,7 +73,7 @@ export const renderField = ({ name, label, type, required = undefined, validate 
         {({ input, meta }) => (
           <Form.Field required={required}>
             {label}
-            <Input {...input} type={type} error={meta.error && meta.touched && { content: `${meta.error}` }} />
+            <Form.Input {...input} type={type} error={meta.error && meta.touched && { content: `${meta.error}` }} />
           </Form.Field>
         )}
       </Field>
@@ -193,12 +193,12 @@ export const WhenFieldChanges = ({ field, becomes, set, to }) => (
   </Field>
 );
 
-const colors = ['#b40101', '#f2714d', '#f4b450', '#79c34d', '#2d9a2c', '#59c4c4', '#009ee7', '#0e2b5b', '#ee83ee', '#8b288f', '#808080', '#000000'];
+export const colors = ['#b40101', '#f2714d', '#f4b450', '#79c34d', '#2d9a2c', '#59c4c4', '#009ee7', '#0e2b5b', '#ee83ee', '#8b288f', '#808080', '#000000'];
 
-const templates = [
-  { key: 'ribbon', value: require('../../assets/ribbon-preview.png') },
-  { key: 'bookmark', value: require('../../assets/bookmark-preview.png') },
-  { key: 'stack', value: require('../../assets/stack-preview.png') },
+export const templates = [
+  { key: 'alf-theme-ribbon', value: require('../../assets/ribbon-preview.png') },
+  { key: 'alf-theme-bookmark', value: require('../../assets/bookmark-preview.png') },
+  { key: 'alf-theme-stack', value: require('../../assets/stack-preview.png') },
 ];
 
 const renderColorRadio = field => {
