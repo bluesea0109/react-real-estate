@@ -3,8 +3,8 @@ import { Label } from 'semantic-ui-react';
 
 import { isMobile } from './Forms/helpers';
 import { Header, Input } from './Base';
-import Nouislider from './Nouislider';
-import './Nouislider/thin.css';
+import Nouislider from 'nouislider-react';
+import './thin.css';
 
 const MIN = 100;
 const MAX = 2000;
