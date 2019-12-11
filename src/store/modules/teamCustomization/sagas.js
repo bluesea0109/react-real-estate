@@ -8,11 +8,13 @@ import {
   saveTeamCustomizationSuccess,
   saveTeamCustomizationError,
 } from './actions';
+import { incrementStep } from '../onboarded/actions';
 import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
 
 import ApiService from '../../../services/api/index';
 
 export const getOnLoginMode = state => state.onLogin.mode;
+export const getOnboardedStatus = state => state.onboarded.status;
 export const teamCustomizationToSave = state => state.teamCustomization.toSave;
 
 export function* getTeamCustomizationSaga() {
@@ -22,10 +24,9 @@ export function* getTeamCustomizationSaga() {
     const { path, method } = ApiService.directory.onboard.teamCustomization.get();
     const response = yield call(ApiService[method], path);
 
-    delete response._id;
-    delete response._rev;
-
     yield put(getTeamCustomizationSuccess(response));
+    const isOnboarded = yield select(getOnboardedStatus);
+    if (!isOnboarded) yield put(incrementStep(2));
   } catch (err) {
     yield put(getTeamCustomizationError(err.message));
   }
@@ -38,10 +39,10 @@ export function* saveTeamCustomizationSaga() {
     const { path, method } = ApiService.directory.onboard.teamCustomization.save();
     const response = yield call(ApiService[method], path, teamCustomization);
 
-    delete response._id;
-    delete response._rev;
-
     yield put(saveTeamCustomizationSuccess(response));
+
+    const isOnboarded = yield select(getOnboardedStatus);
+    if (!isOnboarded) yield put(incrementStep(2));
   } catch (err) {
     yield put(saveTeamCustomizationError(err.message));
   }

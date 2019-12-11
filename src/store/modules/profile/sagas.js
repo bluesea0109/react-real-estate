@@ -12,9 +12,6 @@ export function* saveProfileSaga() {
     const { path, method } = ApiService.directory.onboard.fillInYourProfile.profile.save();
     const response = yield call(ApiService[method], path, profile);
 
-    delete response._id;
-    delete response._rev;
-
     yield put(saveProfileSuccess(response));
   } catch (err) {
     yield put(saveProfileError(err.message));

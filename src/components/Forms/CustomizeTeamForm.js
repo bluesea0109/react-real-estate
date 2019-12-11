@@ -21,7 +21,6 @@ import {
 } from './helpers';
 import { Input, Segment } from '../Base';
 import CustomizationWizard from './CustomizationWizard';
-import { incrementStep } from '../../store/modules/onboarded/actions';
 import { saveTeamCustomizationPending } from '../../store/modules/teamCustomization/actions';
 import { getTeamListedShortcodePending, getTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
 
@@ -56,8 +55,8 @@ const CustomizeTeamForm = () => {
   const shortenedNewListingURL = useSelector(store => store.teamShortcode && store.teamShortcode.listed);
   const shortenedSoldListingURL = useSelector(store => store.teamShortcode && store.teamShortcode.sold);
 
-  const tcError = useSelector(store => store.customization && store.customization.error);
-  const tc = useSelector(store => store.customization && store.customization.available);
+  const tcError = useSelector(store => store.teamCustomization && store.teamCustomization.error);
+  const tc = useSelector(store => store.teamCustomization && store.teamCustomization.available);
 
   const resolveTemplate = type => {
     const types = {
@@ -364,9 +363,9 @@ const CustomizeTeamForm = () => {
     <Fragment>
       <Segment>
         <Header as="h1">
-          My Customization
+          Team Customization
           <Header.Subheader>
-            Set the default template customization options for your campaigns. Changes made here will overwrite existing team customization.
+            Set the default template customization options for your team. Changes made here will not overwrite existing user-specific customization.
           </Header.Subheader>
         </Header>
       </Segment>

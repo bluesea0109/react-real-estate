@@ -35,36 +35,36 @@ const CustomizationWizard = ({ children, initialValues = {}, onSubmit }) => {
 
   return (
     <FinalForm initialValues={values} validate={validate} onSubmit={handleSubmit}>
-      {({ handleSubmit, submitting, values }) => (
-        <Form onSubmit={handleSubmit}>
-          <Segment style={{ margin: '0 0 -1px 0', borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
-            <Menu pointing secondary>
-              <Menu.Item name="newListing" active={!isLastPage} onClick={previous} />
-              <Menu.Item name="soldListing" active={page > 0} onClick={handleSubmit} />
-            </Menu>
-          </Segment>
+      {({ handleSubmit, submitting, values }) => {
+        return (
+          <Form onSubmit={handleSubmit}>
+            <Segment style={{ margin: '0 0 -1px 0', borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
+              <Menu pointing secondary>
+                <Menu.Item name="newListing" active={!isLastPage} onClick={previous} />
+                <Menu.Item name="soldListing" active={page > 0} onClick={handleSubmit} />
+              </Menu>
+            </Segment>
 
-          {activePage}
+            {activePage}
 
-          <div style={{ display: 'grid', justifyContent: 'end' }}>
-            <span>
-              {page > 0 && (
-                <Button type="button" onClick={previous}>
-                  « Previous
-                </Button>
-              )}
-              {!isLastPage && <Button type="submit">Next »</Button>}
-              {isLastPage && (
-                <Button type="submit" disabled={submitting}>
-                  Submit
-                </Button>
-              )}
-            </span>
-          </div>
-
-          <pre>{JSON.stringify(values, 0, 2)}</pre>
-        </Form>
-      )}
+            <div style={{ display: 'grid', justifyContent: 'end' }}>
+              <span>
+                {page > 0 && (
+                  <Button type="button" onClick={previous}>
+                    « Previous
+                  </Button>
+                )}
+                {!isLastPage && <Button type="submit">Next »</Button>}
+                {isLastPage && (
+                  <Button type="submit" disabled={submitting}>
+                    Submit
+                  </Button>
+                )}
+              </span>
+            </div>
+          </Form>
+        );
+      }}
     </FinalForm>
   );
 };

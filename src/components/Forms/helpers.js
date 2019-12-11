@@ -280,8 +280,6 @@ const renderImageRadio = field => {
 };
 
 export const renderCarouselField = ({ name, label, type, required = undefined, validate }) => {
-  // console.log();
-
   const resolveVisibleSlides = type => {
     const types = {
       template: 3,

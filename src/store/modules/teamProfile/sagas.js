@@ -6,10 +6,6 @@ import ApiService from '../../../services/api/index';
 export const teamProfileToSave = state => state.teamProfile.toSave;
 export const userProfileTeamId = state => state.onLogin.userProfile && state.onLogin.userProfile.teamId;
 
-/*
-onLogin.userProfile.teamId
- */
-
 export function* saveTeamProfileSaga() {
   try {
     const teamProfile = yield select(teamProfileToSave);
@@ -17,9 +13,6 @@ export function* saveTeamProfileSaga() {
 
     const { path, method } = ApiService.directory.onboard.fillInYourProfile.teamProfile.save(teamId);
     const response = yield call(ApiService[method], path, teamProfile);
-
-    delete response._id;
-    delete response._rev;
 
     yield put(saveTeamProfileSuccess(response));
   } catch (err) {

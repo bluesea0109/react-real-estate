@@ -21,9 +21,6 @@ export function* getCustomizationSaga() {
     const { path, method } = ApiService.directory.onboard.customization.get();
     const response = yield call(ApiService[method], path);
 
-    delete response._id;
-    delete response._rev;
-
     yield put(getCustomizationSuccess(response));
   } catch (err) {
     yield put(getCustomizationError(err.message));
@@ -36,9 +33,6 @@ export function* saveCustomizationSaga() {
 
     const { path, method } = ApiService.directory.onboard.customization.save();
     const response = yield call(ApiService[method], path, customization);
-
-    delete response._id;
-    delete response._rev;
 
     yield put(saveCustomizationSuccess(response));
   } catch (err) {
