@@ -151,6 +151,16 @@ const directory = {
     customization: {
       get: () => ({ path: `/api/user/settings/branding`, method: 'get' }),
       save: () => ({ path: `/api/user/settings/branding`, method: 'put' }),
+      shortcode: {
+        listed: {
+          get: () => ({ path: `/api/user/settings/shortcode/listed/example`, method: 'get' }),
+          save: () => ({ path: `/api/user/settings/shortcode/listed/example`, method: 'put' }),
+        },
+        sold: {
+          get: () => ({ path: `/api/user/settings/shortcode/sold/example`, method: 'get' }),
+          save: () => ({ path: `/api/user/settings/shortcode/sold/example`, method: 'put' }),
+        },
+      },
     },
   },
 };
