@@ -93,7 +93,6 @@ export const renderField = ({ name, label, type, required = undefined, validate 
 export const renderUrlField = ({ name, label, type, dispatch, required = undefined, validate, target }) => {
   const onBlurHandler = e => {
     const eURL = e.target.value;
-    console.log(target);
     if (target === 'newListing' && isURL(eURL)) dispatch(saveTeamListedShortcodePending(eURL));
     if (target === 'soldListing' && isURL(eURL)) dispatch(saveTeamSoldShortcodePending(eURL));
 
@@ -392,4 +391,10 @@ export const labelWithPopup = (label, popup) => (
   <span>
     <span style={{ fontWeight: 700, fontSize: '.92857143em' }}>{label}</span> {popup}
   </span>
+);
+
+export const Condition = ({ when, is, children }) => (
+  <Field name={when} subscription={{ value: true }}>
+    {({ input: { value } }) => (value === is ? children : null)}
+  </Field>
 );

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
 import { Form as FinalForm } from 'react-final-form';
@@ -117,231 +117,227 @@ const ProfileForm = () => {
   }
 
   return (
-    <Fragment>
-      <FinalForm
-        onSubmit={onSubmit}
-        initialValues={profileValues}
-        mutators={{
-          ...arrayMutators,
-        }}
-        render={({
-          handleSubmit,
-          form: {
-            mutators: { push, pop },
-          },
-          form,
-          submitting,
-          pristine,
-          submitSucceeded,
-          valid,
-          visited,
-          dirty,
-          values,
-        }) => {
-          if (submitSucceeded) {
-            dispatch(incrementStep(1));
-          }
+    <FinalForm
+      onSubmit={onSubmit}
+      initialValues={profileValues}
+      mutators={{
+        ...arrayMutators,
+      }}
+      render={({
+        handleSubmit,
+        form: {
+          mutators: { push, pop },
+        },
+        form,
+        submitting,
+        pristine,
+        submitSucceeded,
+        valid,
+        visited,
+        dirty,
+        values,
+      }) => {
+        if (submitSucceeded) {
+          dispatch(incrementStep(1));
+        }
 
-          if (valid && !objectIsEmpty(visited) && !dirty) {
-            dispatch(incrementStep(1));
-          }
+        if (valid && !objectIsEmpty(visited) && !dirty) {
+          dispatch(incrementStep(1));
+        }
 
-          return (
-            <Form onSubmit={handleSubmit}>
-              <WhenFieldChanges
-                field="businessNotificationEmail"
-                becomes={values.businessNotificationEmail}
-                set="notificationEmail"
-                to={values.businessNotificationEmail}
-              />
+        return (
+          <Form onSubmit={handleSubmit}>
+            <WhenFieldChanges
+              field="businessNotificationEmail"
+              becomes={values.businessNotificationEmail}
+              set="notificationEmail"
+              to={values.businessNotificationEmail}
+            />
 
-              <Segment>
-                <Header as="h1">
-                  Profile
-                  <Header.Subheader>Your information will be shown on your postcards and will enable recipients to reach you.</Header.Subheader>
-                </Header>
+            <Segment>
+              <Header as="h1">
+                Profile
+                <Header.Subheader>Your information will be shown on your postcards and will enable recipients to reach you.</Header.Subheader>
+              </Header>
 
-                <Divider style={{ margin: '1em -1em' }} />
+              <Divider style={{ margin: '1em -1em' }} />
 
-                <div
-                  style={
-                    isMobile()
-                      ? {}
-                      : {
-                          display: 'grid',
-                          gridTemplateColumns: '1fr 1fr 1fr 1fr',
-                          gridTemplateRows: '1fr 1fr 1fr 1fr',
-                          gridTemplateAreas: `"First Last Headshot Picture" "Phone Email Headshot Picture" "Dre OfficePhone Headshot Picture" "NotificationEmail NotificationEmail Website Website"`,
-                          gridColumnGap: '2em',
-                        }
-                  }
-                >
-                  <div style={{ gridArea: 'Headshot' }}>
-                    {renderPicturePickerField({ name: 'realtorPhoto', label: 'Headshot', dispatch: dispatch, required: true, validate: required })}
-                  </div>
-                  <div style={{ gridArea: 'First' }}>
-                    {renderField({ name: 'first', label: 'First Name', type: 'text', required: true, validate: required })}
-                  </div>
-                  <div style={{ gridArea: 'Last' }}>{renderField({ name: 'last', label: 'Last Name', type: 'text', required: true, validate: required })}</div>
-                  <div style={{ gridArea: 'Phone' }}>
-                    {renderField({ name: 'phone', label: 'Phone Number', type: 'text', required: true, validate: required })}
-                  </div>
-                  <div style={{ gridArea: 'Email' }}>
-                    {renderField({ name: 'email', label: 'Email', type: 'text', required: true, validate: composeValidators(required, email) })}
-                  </div>
-                  <div style={{ gridArea: 'NotificationEmail' }}>
-                    {renderField({
-                      name: 'notificationEmail',
-                      label: renderLabelWithSubHeader('Notification Email', '( Optional, defaults to Business Notification Email if not set )'),
-                      type: 'text',
-                    })}
-                  </div>
-                  <div style={{ gridArea: 'Dre' }}>
-                    {renderField({
-                      name: 'dre',
-                      label: renderLabelWithSubHeader('DRE Number', '( Required in California )'),
-                      type: 'text',
-                      validate: requiredOnlyInCalifornia,
-                    })}
-                  </div>
-                  <div style={{ gridArea: 'OfficePhone' }}>
-                    {renderField({ name: 'officePhone', label: renderLabelWithSubHeader('Office Phone Number', '( Optional )'), type: 'text' })}
-                  </div>
-                  <div style={{ gridArea: 'Website' }}>
-                    {renderField({ name: 'personalWebsite', label: renderLabelWithSubHeader('Personal Website', '( Optional )'), type: 'text' })}
-                  </div>
-                  <div style={{ gridArea: 'Picture' }}>
-                    <Image size="large" src={require('../../assets/onboard-profile.png')} alt="Brivity Marketer Mailout" />
-                  </div>
+              <div
+                style={
+                  isMobile()
+                    ? {}
+                    : {
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr 1fr 1fr',
+                        gridTemplateRows: '1fr 1fr 1fr 1fr',
+                        gridTemplateAreas: `"First Last Headshot Picture" "Phone Email Headshot Picture" "Dre OfficePhone Headshot Picture" "NotificationEmail NotificationEmail Website Website"`,
+                        gridColumnGap: '2em',
+                      }
+                }
+              >
+                <div style={{ gridArea: 'Headshot' }}>
+                  {renderPicturePickerField({ name: 'realtorPhoto', label: 'Headshot', dispatch: dispatch, required: true, validate: required })}
                 </div>
-              </Segment>
-
-              <Segment>
-                <Header as="h1">
-                  Business
-                  <Header.Subheader>Enter your company details for branding purposes and for the return addresss of your mailers.</Header.Subheader>
-                </Header>
-
-                <Divider style={{ margin: '1em -1em' }} />
-
-                <div
-                  style={
-                    isMobile()
-                      ? {}
-                      : {
-                          display: 'grid',
-                          gridTemplateColumns: '1fr 1fr 1fr 1fr',
-                          gridTemplateRows: '1fr 1fr 1fr 1fr 1fr 1fr',
-                          gridTemplateAreas: `"TeamName TeamName TeamLogo BrokerageLogo" "BrokerageName BrokerageName TeamLogo BrokerageLogo" "OfficePhone OfficePhone TeamLogo BrokerageLogo" "Address Address City City" "State State ZipCode ZipCode" "BusinessNotificationEmail BusinessNotificationEmail BusinessWebsite BusinessWebsite"`,
-                          gridRowGap: '1em',
-                          gridColumnGap: '2em',
-                        }
-                  }
-                >
-                  <div style={{ gridArea: 'TeamName' }}>
-                    {renderField({ name: 'teamName', label: 'Team Name', type: 'text', required: true, validate: required })}
-                  </div>
-                  <div style={{ gridArea: 'TeamLogo' }}>{renderPicturePickerField({ name: 'teamLogo', label: 'Team Logo', dispatch: dispatch })}</div>
-                  <div style={{ gridArea: 'BrokerageName' }}>
-                    {renderField({ name: 'brokerageName', label: 'Brokerage Name', type: 'text', required: true, validate: required })}
-                  </div>
-                  <div style={{ gridArea: 'BrokerageLogo' }}>
-                    {renderPicturePickerField({ name: 'brokerageLogo', label: 'Brokerage Logo', dispatch: dispatch, required: true, validate: required })}
-                  </div>
-                  <div style={{ gridArea: 'OfficePhone' }}>{renderField({ name: 'officePhone', label: 'Office Phone Number (Optional)', type: 'text' })}</div>
-                  <div style={{ gridArea: 'Address' }}>
-                    {renderField({ name: 'address', label: 'Address', type: 'text', required: true, validate: required })}
-                  </div>
-                  <div style={{ gridArea: 'City' }}>{renderField({ name: 'city', label: 'City', type: 'text', required: true, validate: required })}</div>
-                  <div style={{ gridArea: 'State' }}>
-                    {renderSelectField({
-                      name: 'state',
-                      label: 'State',
-                      type: 'text',
-                      required: true,
-                      validate: required,
-                      options: states ? states : [],
-                      search: true,
-                    })}
-                  </div>
-                  <div style={{ gridArea: 'ZipCode' }}>{renderField({ name: 'zip', label: 'Zip Code', type: 'text', required: true, validate: required })}</div>
-                  <div style={{ gridArea: 'BusinessNotificationEmail' }}>
-                    {renderField({
-                      name: 'businessNotificationEmail',
-                      label: renderLabelWithSubHeader('Business Notification Email', '( Required )'),
-                      type: 'text',
-                      required: true,
-                      validate: composeValidators(required, email),
-                    })}
-                  </div>
-                  <div style={{ gridArea: 'BusinessWebsite' }}>
-                    {renderField({ name: 'businessWebsite', label: 'Business Website (Optional)', type: 'text' })}
-                  </div>
+                <div style={{ gridArea: 'First' }}>{renderField({ name: 'first', label: 'First Name', type: 'text', required: true, validate: required })}</div>
+                <div style={{ gridArea: 'Last' }}>{renderField({ name: 'last', label: 'Last Name', type: 'text', required: true, validate: required })}</div>
+                <div style={{ gridArea: 'Phone' }}>
+                  {renderField({ name: 'phone', label: 'Phone Number', type: 'text', required: true, validate: required })}
                 </div>
-              </Segment>
-
-              <Segment>
-                <Header as="h1">
-                  MLS
-                  <Header.Subheader>Enter your MLS information so we can generate postcards for your listings.</Header.Subheader>
-                </Header>
-
-                <Divider style={{ margin: '1em -1em' }} />
-
-                <FieldArray name="boards">
-                  {({ fields }) =>
-                    fields.map((name, index) => (
-                      <Segment secondary key={index}>
-                        <div style={isMobile() ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 1fr 45px', gridColumnGap: '2em' }}>
-                          {renderSelectField({
-                            name: `${name}.name`,
-                            label: 'MLS',
-                            type: 'text',
-                            required: true,
-                            validate: required,
-                            options: boards ? boards : [],
-                            search: true,
-                          })}
-                          {renderField({ name: `${name}.mlsId`, label: 'MLS Agent ID', type: 'text', required: true, validate: required })}
-                          <Button
-                            basic
-                            icon
-                            color="teal"
-                            disabled={fields.length === 1}
-                            onClick={() => fields.remove(index)}
-                            style={isMobile() ? { cursor: 'pointer' } : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }}
-                            aria-label="remove mls"
-                          >
-                            <Icon name="trash" />
-                          </Button>
-                        </div>
-                      </Segment>
-                    ))
-                  }
-                </FieldArray>
-
-                <div className="buttons">
-                  <Button basic onClick={() => push('boards', undefined)} color="teal">
-                    Add MLS
-                  </Button>
+                <div style={{ gridArea: 'Email' }}>
+                  {renderField({ name: 'email', label: 'Email', type: 'text', required: true, validate: composeValidators(required, email) })}
                 </div>
-              </Segment>
-
-              <div style={{ display: 'grid', justifyContent: 'end' }}>
-                <span>
-                  <Button basic type="button" onClick={form.reset} disabled={submitting || pristine} color="teal">
-                    Discard
-                  </Button>
-                  <Button type="submit" disabled={submitting} color="teal">
-                    Save
-                  </Button>
-                </span>
+                <div style={{ gridArea: 'NotificationEmail' }}>
+                  {renderField({
+                    name: 'notificationEmail',
+                    label: renderLabelWithSubHeader('Notification Email', '( Optional, defaults to Business Notification Email if not set )'),
+                    type: 'text',
+                  })}
+                </div>
+                <div style={{ gridArea: 'Dre' }}>
+                  {renderField({
+                    name: 'dre',
+                    label: renderLabelWithSubHeader('DRE Number', '( Required in California )'),
+                    type: 'text',
+                    validate: requiredOnlyInCalifornia,
+                  })}
+                </div>
+                <div style={{ gridArea: 'OfficePhone' }}>
+                  {renderField({ name: 'officePhone', label: renderLabelWithSubHeader('Office Phone Number', '( Optional )'), type: 'text' })}
+                </div>
+                <div style={{ gridArea: 'Website' }}>
+                  {renderField({ name: 'personalWebsite', label: renderLabelWithSubHeader('Personal Website', '( Optional )'), type: 'text' })}
+                </div>
+                <div style={{ gridArea: 'Picture' }}>
+                  <Image size="large" src={require('../../assets/onboard-profile.png')} alt="Brivity Marketer Mailout" />
+                </div>
               </div>
-            </Form>
-          );
-        }}
-      />
-    </Fragment>
+            </Segment>
+
+            <Segment>
+              <Header as="h1">
+                Business
+                <Header.Subheader>Enter your company details for branding purposes and for the return addresss of your mailers.</Header.Subheader>
+              </Header>
+
+              <Divider style={{ margin: '1em -1em' }} />
+
+              <div
+                style={
+                  isMobile()
+                    ? {}
+                    : {
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr 1fr 1fr',
+                        gridTemplateRows: '1fr 1fr 1fr 1fr 1fr 1fr',
+                        gridTemplateAreas: `"TeamName TeamName TeamLogo BrokerageLogo" "BrokerageName BrokerageName TeamLogo BrokerageLogo" "OfficePhone OfficePhone TeamLogo BrokerageLogo" "Address Address City City" "State State ZipCode ZipCode" "BusinessNotificationEmail BusinessNotificationEmail BusinessWebsite BusinessWebsite"`,
+                        gridRowGap: '1em',
+                        gridColumnGap: '2em',
+                      }
+                }
+              >
+                <div style={{ gridArea: 'TeamName' }}>
+                  {renderField({ name: 'teamName', label: 'Team Name', type: 'text', required: true, validate: required })}
+                </div>
+                <div style={{ gridArea: 'TeamLogo' }}>{renderPicturePickerField({ name: 'teamLogo', label: 'Team Logo', dispatch: dispatch })}</div>
+                <div style={{ gridArea: 'BrokerageName' }}>
+                  {renderField({ name: 'brokerageName', label: 'Brokerage Name', type: 'text', required: true, validate: required })}
+                </div>
+                <div style={{ gridArea: 'BrokerageLogo' }}>
+                  {renderPicturePickerField({ name: 'brokerageLogo', label: 'Brokerage Logo', dispatch: dispatch, required: true, validate: required })}
+                </div>
+                <div style={{ gridArea: 'OfficePhone' }}>{renderField({ name: 'officePhone', label: 'Office Phone Number (Optional)', type: 'text' })}</div>
+                <div style={{ gridArea: 'Address' }}>
+                  {renderField({ name: 'address', label: 'Address', type: 'text', required: true, validate: required })}
+                </div>
+                <div style={{ gridArea: 'City' }}>{renderField({ name: 'city', label: 'City', type: 'text', required: true, validate: required })}</div>
+                <div style={{ gridArea: 'State' }}>
+                  {renderSelectField({
+                    name: 'state',
+                    label: 'State',
+                    type: 'text',
+                    required: true,
+                    validate: required,
+                    options: states ? states : [],
+                    search: true,
+                  })}
+                </div>
+                <div style={{ gridArea: 'ZipCode' }}>{renderField({ name: 'zip', label: 'Zip Code', type: 'text', required: true, validate: required })}</div>
+                <div style={{ gridArea: 'BusinessNotificationEmail' }}>
+                  {renderField({
+                    name: 'businessNotificationEmail',
+                    label: renderLabelWithSubHeader('Business Notification Email', '( Required )'),
+                    type: 'text',
+                    required: true,
+                    validate: composeValidators(required, email),
+                  })}
+                </div>
+                <div style={{ gridArea: 'BusinessWebsite' }}>
+                  {renderField({ name: 'businessWebsite', label: 'Business Website (Optional)', type: 'text' })}
+                </div>
+              </div>
+            </Segment>
+
+            <Segment>
+              <Header as="h1">
+                MLS
+                <Header.Subheader>Enter your MLS information so we can generate postcards for your listings.</Header.Subheader>
+              </Header>
+
+              <Divider style={{ margin: '1em -1em' }} />
+
+              <FieldArray name="boards">
+                {({ fields }) =>
+                  fields.map((name, index) => (
+                    <Segment secondary key={index}>
+                      <div style={isMobile() ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 1fr 45px', gridColumnGap: '2em' }}>
+                        {renderSelectField({
+                          name: `${name}.name`,
+                          label: 'MLS',
+                          type: 'text',
+                          required: true,
+                          validate: required,
+                          options: boards ? boards : [],
+                          search: true,
+                        })}
+                        {renderField({ name: `${name}.mlsId`, label: 'MLS Agent ID', type: 'text', required: true, validate: required })}
+                        <Button
+                          basic
+                          icon
+                          color="teal"
+                          disabled={fields.length === 1}
+                          onClick={() => fields.remove(index)}
+                          style={isMobile() ? { cursor: 'pointer' } : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }}
+                          aria-label="remove mls"
+                        >
+                          <Icon name="trash" />
+                        </Button>
+                      </div>
+                    </Segment>
+                  ))
+                }
+              </FieldArray>
+
+              <div className="buttons">
+                <Button basic onClick={() => push('boards', undefined)} color="teal">
+                  Add MLS
+                </Button>
+              </div>
+            </Segment>
+
+            <div style={{ display: 'grid', justifyContent: 'end' }}>
+              <span>
+                <Button basic type="button" onClick={form.reset} disabled={submitting || pristine} color="teal">
+                  Discard
+                </Button>
+                <Button type="submit" disabled={submitting} color="teal">
+                  Save
+                </Button>
+              </span>
+            </div>
+          </Form>
+        );
+      }}
+    />
   );
 };
 

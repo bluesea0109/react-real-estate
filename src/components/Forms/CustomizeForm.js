@@ -1,41 +1,55 @@
-import React, { Fragment, useState } from 'react';
-import { Form } from 'semantic-ui-react';
+import Nouislider from 'nouislider-react';
+import { Field, FormSpy } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form as FinalForm } from 'react-final-form';
+import React, { Fragment, useEffect, useState } from 'react';
+import { Confirm, Header, Icon, Label, Radio } from 'semantic-ui-react';
 
 import {
+  url,
+  popup,
+  colors,
   isMobile,
   required,
-  maxLength,
-  renderField,
-  renderCarouselField,
-  popup,
-  labelWithPopup,
-  renderSelectField,
-  colors,
   templates,
-  composeValidators,
-  url,
+  maxLength,
+  Condition,
+  renderField,
+  labelWithPopup,
   renderUrlField,
+  composeValidators,
+  renderCarouselField,
 } from './helpers';
-import { Button, Segment } from '../Base';
-import RangeSlider from '../RangeSlider';
+import { Input, Segment } from '../Base';
+import CustomizationWizard from './CustomizationWizard';
+import './thin.css';
 
-const CustomizeForm = ({ onboard = undefined, formType = undefined }) => {
+const NEW_LISTING = 'newListing';
+const SOLD_LISTING = 'soldListing';
+
+const MIN = 100;
+const MAX = 2000;
+const INCREMENT = 10;
+const STEPS = INCREMENT;
+const MARGIN = INCREMENT;
+const SLIDER_INITIAL_VALUES = [200, 300, 1000];
+
+const CustomizeForm = () => {
   const dispatch = useDispatch();
-  const [minValue, setMinValue] = useState(200);
-  const [defaultValue, setDefaultValue] = useState(300);
-  const [maxValue, setMaxValue] = useState(1000);
-  const [selectedTemplate, setSelectedTemplate] = useState(templates[0].key);
-  const [selectedColor, setSelectedColor] = useState(colors[0]);
+  const [newListingEnabled, setNewListingEnabled] = useState(true);
+  const [soldListingEnabled, setSoldListingEnabled] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
 
-  const teammates = useSelector(store => store.team.profiles);
-  const teamCustomizationError = useSelector(store => store.teamCustomization && store.teamCustomization.error);
+  const [selectedNewListingTemplate, setSelectedNewListingTemplate] = useState(templates[0].key);
+  const [selectedSoldListingTemplate, setSelectedSoldListingTemplate] = useState(templates[0].key);
+  const [selectedNewListingColor, setSelectedNewListingColor] = useState(colors[0]);
+  const [selectedSoldListingColor, setSelectedSoldListingColor] = useState(colors[0]);
+
   const bookmarkTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.bookmark);
   const ribbonTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.ribbon);
   const stackTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.stack);
-  const newListingShortenedURL = useSelector(store => store.teamShortcode && store.teamShortcode.listed);
-  const soldListingShortenedURL = useSelector(store => store.teamShortcode && store.teamShortcode.sold);
+
+  const shortenedNewListingURL = useSelector(store => store.teamShortcode && store.teamShortcode.listed);
+  const shortenedSoldListingURL = useSelector(store => store.teamShortcode && store.teamShortcode.sold);
 
   const resolveTemplate = type => {
     const types = {
@@ -47,173 +61,255 @@ const CustomizeForm = ({ onboard = undefined, formType = undefined }) => {
     return type ? types[type] : types['undefined'];
   };
 
-  const templateDefaults = resolveTemplate(selectedTemplate);
+  const templateNewListing = resolveTemplate(selectedNewListingTemplate);
+  const templateSoldListing = resolveTemplate(selectedSoldListingTemplate);
+  const templateDefaultsNewListing = templateNewListing && templateNewListing.listed;
+  const templateDefaultsSoldListing = templateSoldListing && templateSoldListing.sold;
 
-  const resolveListedOrSoldDefaults = type => {
-    const types = {
-      newListing: templateDefaults && templateDefaults.listed,
-      soldListing: templateDefaults && templateDefaults.sold,
-      undefined: undefined,
-    };
-    return type ? types[type] : types['undefined'];
-  };
+  const frontHeadlineNewListing = templateDefaultsNewListing && templateDefaultsNewListing.fields.filter(field => field.name === 'frontHeadline')[0];
+  const frontHeadlineSoldListing = templateDefaultsSoldListing && templateDefaultsSoldListing.fields.filter(field => field.name === 'frontHeadline')[0];
 
-  const formDefaults = resolveListedOrSoldDefaults(formType);
-
-  const frontHeadline = formDefaults && formDefaults.fields.filter(field => field.name === 'frontHeadline')[0];
-
-  const resolveListedOrSoldURL = type => {
-    const types = {
-      newListing: newListingShortenedURL,
-      soldListing: soldListingShortenedURL,
-      undefined: undefined,
-    };
-    return type ? types[type] : types['undefined'];
-  };
-
-  const shortenedURL = resolveListedOrSoldURL(formType);
-
-  const agents = [];
-
-  if (!onboard && teammates.length > 0) {
-    teammates.map((agent, index) => {
-      return agents.push({
-        key: index,
-        text: `${agent.first} ${agent.last}`,
-        value: agent.userId,
-      });
-    });
-  }
+  useEffect(() => {
+    if (!newListingEnabled && !soldListingEnabled) {
+      setShowAlert(true);
+    } else {
+      setShowAlert(false);
+    }
+  }, [newListingEnabled, soldListingEnabled, setShowAlert]);
 
   const onSubmit = values => {
-    console.log('submitted: ', values);
-    // saveProfile(values);
+    console.log('form values: ', values);
+    // await sleep(300);
+    // window.alert(JSON.stringify(values, 0, 2));
   };
 
-  let initialValues;
-  if (teamCustomizationError === '410 Gone') {
-    initialValues = {
-      color: selectedColor,
-      template: selectedTemplate,
-      headline: frontHeadline && frontHeadline.default,
-    };
-  }
+  const formPage = ({ listingType }) => {
+    const radioToggleFx = value => (listingType === NEW_LISTING ? setNewListingEnabled(value) : setSoldListingEnabled(value));
+    const radioValue = listingType === NEW_LISTING ? newListingEnabled : soldListingEnabled;
+    const headingMaxValue =
+      listingType === NEW_LISTING ? frontHeadlineNewListing && frontHeadlineNewListing.max : frontHeadlineSoldListing && frontHeadlineSoldListing.max;
+    const setSelectedTemplate = value => (listingType === NEW_LISTING ? setSelectedNewListingTemplate(value) : setSelectedSoldListingTemplate(value));
+    const setSelectedColor = value => (listingType === NEW_LISTING ? setSelectedNewListingColor(value) : setSelectedSoldListingColor(value));
+    const shortenedURL = listingType === NEW_LISTING ? shortenedNewListingURL : shortenedSoldListingURL;
+    const placeholder = listingType === NEW_LISTING ? 'Campaign will not be enabled for new listings' : 'Campaign will not be enabled for sold listings';
 
-  return (
-    <Fragment>
-      <FinalForm
-        onSubmit={onSubmit}
-        initialValues={initialValues}
-        render={({ handleSubmit, form, submitting, pristine, values }) => {
-          values.mailoutSizeMin = minValue;
-          values.mailoutSize = defaultValue;
-          values.mailoutSizeMax = maxValue;
-
-          if (values.template) setSelectedTemplate(values.template);
-          if (values.color) setSelectedColor(values.color);
-
-          return (
-            <Form onSubmit={handleSubmit}>
-              <Segment style={{ borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
+    return (
+      <Segment>
+        <Header size="medium">
+          Target on new: &nbsp;
+          <Field name={`${listingType}_createMailoutsOfThisType`} type="checkbox">
+            {props => (
+              <Radio
+                toggle
+                name={props.input.name}
+                onChange={(param, data) => [props.input.onChange(data.checked), radioToggleFx(data.checked)]}
+                checked={radioValue}
+                // checked={props.input.checked}
+                style={{ verticalAlign: 'bottom' }}
+              />
+            )}
+          </Field>
+        </Header>
+        <Condition when={`${listingType}_createMailoutsOfThisType`} is={true}>
+          <div
+            style={
+              isMobile()
+                ? {}
+                : {
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr',
+                    gridTemplateRows: '4fr 3fr 1fr 1fr',
+                    gridTemplateAreas: `
+                      "ChooseTemplate BrandColor"
+                      "Headline NumberOfPostcards"
+                      "CallToAction CallToAction"
+                      "ShortenedURL ShortenedURL"
+                        `,
+                    gridRowGap: '1em',
+                    gridColumnGap: '2em',
+                  }
+            }
+          >
+            <div style={{ gridArea: 'BrandColor' }}>
+              {renderCarouselField({ name: `${listingType}_color`, label: 'Brand color', type: 'color', validate: required })}
+            </div>
+            <div style={{ gridArea: 'ChooseTemplate' }}>
+              {renderCarouselField({ name: `${listingType}_template`, label: 'Choose template', type: 'template', validate: required })}
+            </div>
+            <div style={{ gridArea: 'Headline' }}>
+              {renderField({
+                name: `${listingType}_headline`,
+                label: labelWithPopup('Headline', popup('Some message')),
+                type: 'text',
+                validate: composeValidators(required, maxLength(headingMaxValue)),
+              })}
+            </div>
+          </div>
+          <div style={{ gridArea: 'NumberOfPostcards' }}>
+            {
+              <div>
+                <Header as="h4" style={{ marginBottom: 0 }}>
+                  Number of postcards to send per listing
+                </Header>
                 <div
                   style={
                     isMobile()
                       ? {}
                       : {
                           display: 'grid',
-                          gridTemplateColumns: '1fr 1fr',
-                          gridTemplateRows: onboard ? '4fr 3fr 1fr 1fr' : '4fr 3fr 1fr 1fr 1fr',
-                          gridTemplateAreas: onboard
-                            ? `
-                          "ChooseTemplate BrandColor"
-                          "Headline NumberOfPostcards"
-                          "CallToAction CallToAction"
-                          "ShortenedURL ShortenedURL"
-                        `
-                            : `
-                          "ChooseTemplate BrandColor"
-                          "Agent Agent"
-                          "Headline NumberOfPostcards"
-                          "CallToAction CallToAction"
-                          "ShortenedURL ShortenedURL"
-                        `,
-                          gridRowGap: '1em',
+                          gridTemplateColumns: '1fr 1fr 1fr',
+                          gridTemplateRows: '1fr 2fr',
+                          gridTemplateAreas: `
+                            "Min Target Max"
+                            "Slider Slider Slider"
+                          `,
+                          gridRowGap: '3em',
                           gridColumnGap: '2em',
                         }
                   }
                 >
-                  {!onboard ? (
-                    <div style={{ gridArea: 'Agent' }}>
-                      {renderSelectField({
-                        name: 'agent',
-                        label: labelWithPopup('Choose agent to display on postcards', popup('Some message')),
-                        type: 'text',
-                        validate: required,
-                        options: agents,
-                        search: true,
-                      })}
-                    </div>
-                  ) : (
-                    undefined
-                  )}
+                  <FormSpy>
+                    {props => {
+                      const values = props.values[`${listingType}_numberOfPostcardsDefaults`];
 
-                  <div style={{ gridArea: 'BrandColor' }}>
-                    {renderCarouselField({ name: 'color', label: 'Brand color', type: 'color', validate: required })}
-                  </div>
-                  <div style={{ gridArea: 'ChooseTemplate' }}>
-                    {renderCarouselField({ name: 'template', label: 'Choose template', type: 'template', validate: required })}
-                  </div>
-                  <div style={{ gridArea: 'Headline' }}>
-                    {renderField({
-                      name: 'headline',
-                      label: labelWithPopup('Headline', popup('Some message')),
-                      type: 'text',
-                      validate: composeValidators(required, maxLength(frontHeadline && frontHeadline.max)),
-                    })}
-                  </div>
-                  <div style={{ gridArea: 'NumberOfPostcards' }}>
-                    {RangeSlider({
-                      label: 'Number of postcards to send per listing',
-                      minValue,
-                      setMinValue,
-                      defaultValue,
-                      setDefaultValue,
-                      maxValue,
-                      setMaxValue,
-                    })}
-                  </div>
-                  <div style={{ gridArea: 'CallToAction' }}>
-                    {renderUrlField({
-                      name: 'actionURL',
-                      label: labelWithPopup('Call to action URL', popup('Some message')),
-                      type: 'text',
-                      dispatch: dispatch,
-                      validate: composeValidators(required, url),
-                      target: formType,
-                    })}
-                  </div>
-                  <div style={{ gridArea: 'ShortenedURL' }}>
-                    Shortened URL: {shortenedURL} {popup('Some message')}
-                  </div>
+                      const template = props.values[`${listingType}_template`];
+                      const color = props.values[`${listingType}_color`];
+                      setSelectedTemplate(template);
+                      setSelectedColor(color);
+
+                      return (
+                        <Fragment>
+                          <Input style={{ gridArea: 'Min', opacity: 1, userSelect: 'none' }} labelPosition="right" disabled>
+                            <input style={{ width: 'unset' }} value={values[0]} readOnly />
+                            <Label>Min</Label>
+                          </Input>
+
+                          <Input style={{ gridArea: 'Target', opacity: 1, userSelect: 'none' }} labelPosition="right" disabled>
+                            <input style={{ width: 'unset' }} value={values[1]} readOnly />
+                            <Label>Default</Label>
+                          </Input>
+
+                          <Input style={{ gridArea: 'Max', opacity: 1, userSelect: 'none' }} labelPosition="right" disabled>
+                            <input style={{ width: 'unset' }} value={values[2]} readOnly />
+                            <Label>Max</Label>
+                          </Input>
+                        </Fragment>
+                      );
+                    }}
+                  </FormSpy>
+
+                  <Field name={`${listingType}_numberOfPostcardsDefaults`}>
+                    {props => (
+                      <div className="slider" style={{ gridArea: 'Slider', padding: '0 0.5em' }}>
+                        {isMobile() && (
+                          <br>
+                            {' '}
+                            <br />{' '}
+                          </br>
+                        )}
+                        <Nouislider
+                          style={{ height: '3px' }}
+                          range={{
+                            min: MIN,
+                            max: MAX,
+                          }}
+                          step={STEPS}
+                          start={SLIDER_INITIAL_VALUES}
+                          margin={MARGIN}
+                          connect={true}
+                          behaviour="tap-drag"
+                          tooltips={true}
+                          pips={{
+                            mode: 'values',
+                            values: [100, 250, 500, 1000, 2000],
+                            stepped: true,
+                            density: 3,
+                          }}
+                          format={{
+                            to: value => Math.round(parseInt(value, 10) / 10) * 10,
+                            from: value => value,
+                          }}
+                          onChange={props.input.onChange}
+                        />
+                        {isMobile() && (
+                          <br>
+                            {' '}
+                            <br />{' '}
+                          </br>
+                        )}
+                      </div>
+                    )}
+                  </Field>
                 </div>
-              </Segment>
-
-              <div style={{ display: 'grid', justifyContent: 'end' }}>
-                <span>
-                  <Button basic type="button" onClick={form.reset} disabled={submitting || pristine} color="teal">
-                    Discard
-                  </Button>
-                  <Button type="submit" disabled={submitting} color="teal">
-                    Save
-                  </Button>
-                </span>
               </div>
+            }
+          </div>
+          <div style={{ gridArea: 'CallToAction' }}>
+            {renderUrlField({
+              name: `${listingType}_actionURL`,
+              label: labelWithPopup('Call to action URL', popup('Some message')),
+              type: 'text',
+              dispatch: dispatch,
+              validate: composeValidators(required, url),
+              target: listingType,
+            })}
+          </div>
+          <div style={{ gridArea: 'ShortenedURL' }}>
+            Shortened URL: {shortenedURL} {popup('Some message')}
+          </div>
+        </Condition>
+        <Condition when={`${listingType}_createMailoutsOfThisType`} is={false}>
+          <Segment placeholder>
+            <Header icon>
+              <Icon name="exclamation triangle" />
+              {placeholder}
+            </Header>
+          </Segment>
+        </Condition>
+      </Segment>
+    );
+  };
 
-              <pre>{JSON.stringify(values, null, 2)}</pre>
-            </Form>
-          );
-        }}
+  return (
+    <Fragment>
+      <Segment>
+        <Header as="h1">
+          Team Customization
+          <Header.Subheader>
+            Set the default template customization options for your team. Changes made here will not overwrite existing user-specific customization.
+          </Header.Subheader>
+        </Header>
+      </Segment>
+
+      <Confirm
+        open={showAlert}
+        content="In order to use Bravity Marketing platform, you must select at least one"
+        cancelButton="Enable new listings"
+        confirmButton="Enable sold listings"
+        onCancel={() => setNewListingEnabled(true)}
+        onConfirm={() => setSoldListingEnabled(true)}
       />
+
+      <CustomizationWizard
+        initialValues={{
+          [`${NEW_LISTING}_createMailoutsOfThisType`]: newListingEnabled,
+          [`${NEW_LISTING}_template`]: selectedNewListingTemplate,
+          [`${NEW_LISTING}_color`]: selectedNewListingColor,
+          [`${NEW_LISTING}_headline`]: frontHeadlineNewListing && frontHeadlineNewListing.default,
+          [`${NEW_LISTING}_numberOfPostcardsDefaults`]: SLIDER_INITIAL_VALUES,
+
+          [`${SOLD_LISTING}_createMailoutsOfThisType`]: soldListingEnabled,
+          [`${SOLD_LISTING}_template`]: selectedSoldListingTemplate,
+          [`${SOLD_LISTING}_color`]: selectedSoldListingColor,
+          [`${SOLD_LISTING}_headline`]: frontHeadlineSoldListing && frontHeadlineSoldListing.default,
+          [`${SOLD_LISTING}_numberOfPostcardsDefaults`]: SLIDER_INITIAL_VALUES,
+        }}
+        onSubmit={onSubmit}
+      >
+        {formPage({ listingType: NEW_LISTING })}
+
+        {formPage({ listingType: SOLD_LISTING })}
+      </CustomizationWizard>
     </Fragment>
   );
 };
