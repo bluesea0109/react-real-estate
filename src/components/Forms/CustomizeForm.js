@@ -21,8 +21,8 @@ import {
 } from './helpers';
 import { Input, Segment } from '../Base';
 import CustomizationWizard from './CustomizationWizard';
-import { incrementStep } from '../../store/modules/onboarded/actions';
-import { saveTeamCustomizationPending } from '../../store/modules/teamCustomization/actions';
+
+import { saveCustomizationPending } from '../../store/modules/customization/actions';
 import { getTeamListedShortcodePending, getTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
 
 import './thin.css';
@@ -30,12 +30,13 @@ import './thin.css';
 const NEW_LISTING = 'newListing';
 const SOLD_LISTING = 'soldListing';
 
-const MIN = 100;
-const MAX = 2000;
 const INCREMENT = 10;
 const STEPS = INCREMENT;
 const MARGIN = INCREMENT;
-const SLIDER_INITIAL_VALUES = [200, 300, 1000];
+
+let MIN = 100;
+let MAX = 2000;
+let SLIDER_INITIAL_VALUES = [300];
 
 const CustomizeTeamForm = () => {
   const dispatch = useDispatch();
@@ -56,8 +57,12 @@ const CustomizeTeamForm = () => {
   const shortenedNewListingURL = useSelector(store => store.teamShortcode && store.teamShortcode.listed);
   const shortenedSoldListingURL = useSelector(store => store.teamShortcode && store.teamShortcode.sold);
 
-  const tcError = useSelector(store => store.customization && store.customization.error);
-  const tc = useSelector(store => store.customization && store.customization.available);
+  const tcError = useSelector(store => store.teamCustomization && store.teamCustomization.error);
+  const tc = useSelector(store => store.teamCustomization && store.teamCustomization.available);
+
+  const isMultimode = useSelector(store => store.onLogin.mode === 'multiuser');
+  const custError = useSelector(store => store.customization && store.customization.error);
+  const cust = useSelector(store => store.customization && store.customization.available);
 
   const resolveTemplate = type => {
     const types = {
@@ -86,42 +91,66 @@ const CustomizeTeamForm = () => {
   }, [newListingEnabled, soldListingEnabled, setShowSelectionAlert]);
 
   if (!frontHeadlineNewListing || !frontHeadlineSoldListing) return null;
-  if (!(tcError === '410 Gone') && !tc) return null;
+  if (!(custError === '410 Gone') && !cust) return null;
+
+  const returnIfNotEqual = (x, y) => (x !== y ? x : undefined);
 
   const onSubmit = values => {
-    const data = {
-      listed: {
-        createMailoutsOfThisType: values.newListing_createMailoutsOfThisType,
-        mailoutSize: values.newListing_numberOfPostcardsDefaults[1],
-        mailoutSizeMin: values.newListing_numberOfPostcardsDefaults[0],
-        mailoutSizeMax: values.newListing_numberOfPostcardsDefaults[2],
-        templateTheme: values.newListing_template,
-        brandColor: values.newListing_color,
-        cta: values.newListing_actionURL,
-        shortenCTA: true,
-        // kwkly: "string",
-        frontHeadline: values.newListing_headline,
-      },
-      sold: {
-        createMailoutsOfThisType: values.soldListing_createMailoutsOfThisType,
-        mailoutSize: values.soldListing_numberOfPostcardsDefaults[1],
-        mailoutSizeMin: values.soldListing_numberOfPostcardsDefaults[0],
-        mailoutSizeMax: values.soldListing_numberOfPostcardsDefaults[2],
-        templateTheme: values.soldListing_template,
-        brandColor: values.soldListing_color,
-        cta: values.soldListing_actionURL,
-        shortenCTA: true,
-        // kwkly: "string",
-        frontHeadline: values.soldListing_headline,
-      },
-    };
+    let data;
+    if (isMultimode) {
+      data = {
+        listed: {
+          createMailoutsOfThisType: returnIfNotEqual(values.newListing_createMailoutsOfThisType, tc.listed.createMailoutsOfThisType),
+          mailoutSize: returnIfNotEqual(values.newListing_numberOfPostcardsDefaults[0], tc.listed.mailoutSize),
+          templateTheme: returnIfNotEqual(values.newListing_template, tc.listed.templateTheme),
+          brandColor: returnIfNotEqual(values.newListing_color, tc.listed.brandColor),
+          cta: returnIfNotEqual(values.newListing_actionURL, tc.listed.cta),
+          shortenCTA: values.newListing_actionURL !== tc.listed.cta ? true : undefined,
+          // kwkly: "string",
+          frontHeadline: returnIfNotEqual(values.newListing_headline, tc.listed.frontHeadline),
+        },
+        sold: {
+          createMailoutsOfThisType: returnIfNotEqual(values.soldListing_createMailoutsOfThisType, tc.sold.createMailoutsOfThisType),
+          mailoutSize: returnIfNotEqual(values.soldListing_numberOfPostcardsDefaults[0], tc.sold.mailoutSize),
+          templateTheme: returnIfNotEqual(values.soldListing_template, tc.sold.templateTheme),
+          brandColor: returnIfNotEqual(values.soldListing_color, tc.sold.brandColor),
+          cta: returnIfNotEqual(values.soldListing_actionURL, tc.sold.cta),
+          shortenCTA: values.soldListing_actionURL !== tc.sold.cta ? true : undefined,
+          // kwkly: "string",
+          frontHeadline: returnIfNotEqual(values.soldListing_headline, tc.sold.frontHeadline),
+        },
+      };
+    } else {
+      data = {
+        listed: {
+          createMailoutsOfThisType: values.newListing_createMailoutsOfThisType,
+          mailoutSize: values.newListing_numberOfPostcardsDefaults[0],
+          templateTheme: values.newListing_template,
+          brandColor: values.newListing_color,
+          cta: values.newListing_actionURL,
+          shortenCTA: true,
+          // kwkly: "string",
+          frontHeadline: values.newListing_headline,
+        },
+        sold: {
+          createMailoutsOfThisType: values.soldListing_createMailoutsOfThisType,
+          mailoutSize: values.soldListing_numberOfPostcardsDefaults[0],
+          templateTheme: values.soldListing_template,
+          brandColor: values.soldListing_color,
+          cta: values.soldListing_actionURL,
+          shortenCTA: true,
+          // kwkly: "string",
+          frontHeadline: values.soldListing_headline,
+        },
+      };
+    }
 
-    dispatch(saveTeamCustomizationPending(data));
+    dispatch(saveCustomizationPending(data));
   };
 
   let initialValues;
 
-  if (tcError === '410 Gone') {
+  if (!isMultimode) {
     initialValues = {
       [`${NEW_LISTING}_createMailoutsOfThisType`]: newListingEnabled,
       [`${NEW_LISTING}_template`]: selectedNewListingTemplate,
@@ -142,15 +171,15 @@ const CustomizeTeamForm = () => {
         [`${NEW_LISTING}_template`]: tc.listed.templateTheme,
         [`${NEW_LISTING}_color`]: tc.listed.brandColor,
         [`${NEW_LISTING}_headline`]: tc.listed.frontHeadline,
-        [`${NEW_LISTING}_numberOfPostcardsDefaults`]: [tc.listed.mailoutSizeMin, tc.listed.mailoutSize, tc.listed.mailoutSizeMax],
-        [`${NEW_LISTING}_actionURL`]: tc.listed && tc.listed.cta,
+        [`${NEW_LISTING}_numberOfPostcardsDefaults`]: [tc.listed.mailoutSize],
+        [`${NEW_LISTING}_actionURL`]: tc.listed.cta,
 
         [`${SOLD_LISTING}_createMailoutsOfThisType`]: tc.sold.createMailoutsOfThisType,
         [`${SOLD_LISTING}_template`]: tc.sold.templateTheme,
         [`${SOLD_LISTING}_color`]: tc.sold.brandColor,
         [`${SOLD_LISTING}_headline`]: tc.sold.frontHeadline,
-        [`${SOLD_LISTING}_numberOfPostcardsDefaults`]: [tc.sold.mailoutSizeMin, tc.sold.mailoutSize, tc.sold.mailoutSizeMax],
-        [`${SOLD_LISTING}_actionURL`]: tc.sold && tc.sold.cta,
+        [`${SOLD_LISTING}_numberOfPostcardsDefaults`]: [tc.sold.mailoutSize],
+        [`${SOLD_LISTING}_actionURL`]: tc.sold.cta,
       };
     }
   }
@@ -176,6 +205,12 @@ const CustomizeTeamForm = () => {
     const setSelectedColor = value => (listingType === NEW_LISTING ? setSelectedNewListingColor(value) : setSelectedSoldListingColor(value));
     const shortenedURL = listingType === NEW_LISTING ? shortenedNewListingURL : shortenedSoldListingURL;
     const placeholder = listingType === NEW_LISTING ? 'Campaign will not be enabled for new listings' : 'Campaign will not be enabled for sold listings';
+
+    if (tc) {
+      MIN = listingType === NEW_LISTING ? tc.listed.mailoutSizeMin : tc.sold.mailoutSizeMin;
+      MAX = listingType === NEW_LISTING ? tc.listed.mailoutSizeMax : tc.sold.mailoutSizeMax;
+      SLIDER_INITIAL_VALUES = listingType === NEW_LISTING ? [tc.listed.mailoutSize] : [tc.sold.mailoutSize];
+    }
 
     return (
       <Segment>
@@ -246,11 +281,11 @@ const CustomizeTeamForm = () => {
                         ? {}
                         : {
                             display: 'grid',
-                            gridTemplateColumns: '1fr 1fr 1fr',
+                            gridTemplateColumns: '1fr',
                             gridTemplateRows: '1fr 2fr',
                             gridTemplateAreas: `
-                            "PostcardsMin PostcardsTarget PostcardsMax"
-                            "PostcardsSlider PostcardsSlider PostcardsSlider"
+                            "PostcardsTarget"
+                            "PostcardsSlider"
                           `,
                             gridRowGap: '3em',
                             gridColumnGap: '2em',
@@ -267,67 +302,59 @@ const CustomizeTeamForm = () => {
                         setSelectedColor(color);
 
                         return (
-                          <Fragment>
-                            <Input style={{ gridArea: 'PostcardsMin', opacity: 1, userSelect: 'none' }} labelPosition="right" disabled>
-                              <input style={{ width: 'unset' }} value={values[0]} readOnly />
-                              <Label>Min</Label>
-                            </Input>
-
-                            <Input style={{ gridArea: 'PostcardsTarget', opacity: 1, userSelect: 'none' }} labelPosition="right" disabled>
-                              <input style={{ width: 'unset' }} value={values[1]} readOnly />
-                              <Label>Default</Label>
-                            </Input>
-
-                            <Input style={{ gridArea: 'PostcardsMax', opacity: 1, userSelect: 'none' }} labelPosition="right" disabled>
-                              <input style={{ width: 'unset' }} value={values[2]} readOnly />
-                              <Label>Max</Label>
-                            </Input>
-                          </Fragment>
+                          <Input style={{ gridArea: 'PostcardsTarget', opacity: 1, userSelect: 'none' }} labelPosition="right" disabled>
+                            <input style={{ width: 'unset' }} value={values[0]} readOnly />
+                            <Label>Default</Label>
+                          </Input>
                         );
                       }}
                     </FormSpy>
 
                     <Field name={`${listingType}_numberOfPostcardsDefaults`}>
-                      {props => (
-                        <div className="slider" style={{ gridArea: 'PostcardsSlider', padding: '0 0.5em' }}>
-                          {isMobile() && (
-                            <br>
-                              {' '}
-                              <br />{' '}
-                            </br>
-                          )}
-                          <Nouislider
-                            style={{ height: '3px' }}
-                            range={{
-                              min: MIN,
-                              max: MAX,
-                            }}
-                            step={STEPS}
-                            start={SLIDER_INITIAL_VALUES}
-                            margin={MARGIN}
-                            connect={true}
-                            behaviour="tap-drag"
-                            tooltips={true}
-                            pips={{
-                              mode: 'values',
-                              values: [100, 250, 500, 1000, 2000],
-                              stepped: true,
-                              density: 3,
-                            }}
-                            format={{
-                              to: value => Math.round(parseInt(value, 10) / 10) * 10,
-                              from: value => value,
-                            }}
-                            onChange={props.input.onChange}
-                          />
-                          {isMobile() && (
-                            <br>
-                              {' '}
-                              <br />{' '}
-                            </br>
-                          )}
-                        </div>
-                      )}
+                      {props => {
+                        if (SLIDER_INITIAL_VALUES !== props.input.value) SLIDER_INITIAL_VALUES = props.input.value;
+
+                        return (
+                          <div className="slider" style={{ gridArea: 'PostcardsSlider', padding: '0 0.5em' }}>
+                            {isMobile() && (
+                              <br>
+                                {' '}
+                                <br />{' '}
+                              </br>
+                            )}
+                            <Nouislider
+                              style={{ height: '3px' }}
+                              range={{
+                                min: MIN,
+                                max: MAX,
+                              }}
+                              step={STEPS}
+                              start={SLIDER_INITIAL_VALUES}
+                              margin={MARGIN}
+                              connect={true}
+                              behaviour="tap-drag"
+                              tooltips={true}
+                              pips={{
+                                mode: 'values',
+                                values: [MIN, MAX],
+                                stepped: true,
+                                density: 3,
+                              }}
+                              format={{
+                                to: value => Math.round(parseInt(value, 10) / 10) * 10,
+                                from: value => value,
+                              }}
+                              onChange={props.input.onChange}
+                            />
+                            {isMobile() && (
+                              <br>
+                                {' '}
+                                <br />{' '}
+                              </br>
+                            )}
+                          </div>
+                        );
+                      }}
                     </Field>
                   </div>
                 </div>
