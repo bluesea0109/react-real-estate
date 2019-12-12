@@ -44,6 +44,7 @@ const CustomizeTeamForm = () => {
   const [soldListingEnabled, setSoldListingEnabled] = useState(false);
   const [showSelectionAlert, setShowSelectionAlert] = useState(false);
   const [onlyOnce, setOnlyOnce] = useState(false);
+  const [togglePages, setTogglePages] = useState('');
 
   const [selectedNewListingTemplate, setSelectedNewListingTemplate] = useState(templates[0].key);
   const [selectedSoldListingTemplate, setSelectedSoldListingTemplate] = useState(templates[0].key);
@@ -403,11 +404,11 @@ const CustomizeTeamForm = () => {
         content="In order to use Bravity Marketing platform, you must select at least one"
         cancelButton="Enable new listings"
         confirmButton="Enable sold listings"
-        onCancel={() => setNewListingEnabled(true)}
-        onConfirm={() => setSoldListingEnabled(true)}
+        onCancel={() => [setNewListingEnabled(true), setTogglePages('first')]}
+        onConfirm={() => [setSoldListingEnabled(true), setTogglePages('last')]}
       />
 
-      <CustomizationWizard initialValues={initialValues} onSubmit={onSubmit}>
+      <CustomizationWizard initialValues={initialValues} onSubmit={onSubmit} togglePages={togglePages} setTogglePages={setTogglePages}>
         {formPage({ listingType: NEW_LISTING })}
 
         {formPage({ listingType: SOLD_LISTING })}

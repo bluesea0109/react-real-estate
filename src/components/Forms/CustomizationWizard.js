@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form } from 'semantic-ui-react';
 import { Form as FinalForm } from 'react-final-form';
 
 import { Button, Menu, Segment } from '../../components/Base';
 
-const CustomizationWizard = ({ children, initialValues = {}, onSubmit }) => {
+const CustomizationWizard = ({ children, initialValues = {}, onSubmit, togglePages, setTogglePages }) => {
   const [page, setPage] = useState(0);
   const [values, setValues] = useState(initialValues);
 
@@ -32,6 +32,17 @@ const CustomizationWizard = ({ children, initialValues = {}, onSubmit }) => {
 
   const activePage = React.Children.toArray(children)[page];
   const isLastPage = page === React.Children.count(children) - 1;
+
+  useEffect(() => {
+    if (togglePages === 'first') {
+      setTogglePages(null);
+      previous();
+    }
+    if (togglePages === 'last') {
+      setTogglePages(null);
+      handleSubmit(values);
+    }
+  }, [togglePages, setTogglePages, previous, handleSubmit]);
 
   return (
     <FinalForm initialValues={values} validate={validate} onSubmit={handleSubmit}>
