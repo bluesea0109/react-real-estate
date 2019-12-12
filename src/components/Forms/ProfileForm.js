@@ -10,7 +10,6 @@ import {
   isMobile,
   required,
   renderField,
-  objectIsEmpty,
   WhenFieldChanges,
   composeValidators,
   renderSelectField,
@@ -18,7 +17,6 @@ import {
   requiredOnlyInCalifornia,
 } from './helpers';
 import { Button, Icon, Segment } from '../Base';
-import { setCompletedProfile } from '../../store/modules/onboarded/actions';
 import { saveProfilePending } from '../../store/modules/profile/actions';
 import { saveTeamProfilePending } from '../../store/modules/teamProfile/actions';
 
@@ -39,6 +37,7 @@ const ProfileForm = () => {
   const boards = useSelector(store => store.boards && store.boards.available);
   const states = useSelector(store => store.states && store.states.available);
   const isMultimode = useSelector(store => store.onLogin.mode === 'multiuser');
+  const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
 
   const onLoginUserProfile = useSelector(store => store.onLogin && store.onLogin.userProfile);
   const onLoginTeamProfile = useSelector(store => store.onLogin && store.onLogin.teamProfile);
@@ -55,8 +54,15 @@ const ProfileForm = () => {
   const saveTeamProfile = teamProfile => dispatch(saveTeamProfilePending(teamProfile));
   const onSubmit = values => {
     // const date = (new Date()).toISOString().split('T')[0]; // but should be valid timestamp or number of milliseconds
+    const date = Date.now();
+
+    console.log('date', date);
+    console.log('date typeof', typeof date);
 
     const profile = {
+      _id: onLoginUserProfile && onLoginUserProfile._id,
+      _rev: onLoginUserProfile && onLoginUserProfile._rev,
+      brivitySync: onLoginUserProfile && onLoginUserProfile.brivitySync,
       notificationEmail: values.notificationEmail,
       first: values.first,
       last: values.last,
@@ -64,26 +70,31 @@ const ProfileForm = () => {
       phone: values.phone,
       dre: values.dre,
       teamId: values.teamId,
-      // setupComplete: date,
+      setupComplete: date,
       boards: values.boards,
-      // website: values.personalWebsite
-    };
-
-    const business = {
-      teamProfile: true,
-      notificationEmail: values.businessNotificationEmail,
-      teamName: values.teamName,
-      brokerageName: values.brokerageName,
-      address: values.address,
-      city: values.city,
-      state: values.state,
-      zip: values.zip,
-      phone: values.officePhone,
-      website: values.businessWebsite,
+      website: values.personalWebsite,
     };
 
     saveProfile(profile);
-    saveTeamProfile(business);
+
+    if (isAdmin) {
+      const business = {
+        _id: onLoginTeamProfile && onLoginTeamProfile._id,
+        _rev: onLoginTeamProfile && onLoginTeamProfile._rev,
+        teamProfile: true,
+        notificationEmail: values.businessNotificationEmail,
+        teamName: values.teamName,
+        brokerageName: values.brokerageName,
+        address: values.address,
+        city: values.city,
+        state: values.state,
+        zip: values.zip,
+        phone: values.officePhone,
+        website: values.businessWebsite,
+      };
+
+      saveTeamProfile(business);
+    }
   };
 
   let profileValues;
@@ -106,8 +117,8 @@ const ProfileForm = () => {
         mlsArr.push({ name: userBoard[0] && userBoard[0].value, mlsId: board.mlsId });
       });
 
-    const notificationEmail = onLoginUserProfile && onLoginUserProfile.notificationEmail ? onLoginUserProfile.notificationEmail : null;
     const businessNotificationEmail = onLoginTeamProfile && onLoginTeamProfile.notificationEmail ? onLoginTeamProfile.notificationEmail : null;
+    const notificationEmail = onLoginUserProfile && onLoginUserProfile.notificationEmail ? onLoginUserProfile.notificationEmail : businessNotificationEmail;
 
     profileValues = Object.assign(
       {},
@@ -132,27 +143,13 @@ const ProfileForm = () => {
       render={({
         handleSubmit,
         form: {
-          mutators: { push, pop },
+          mutators: { push },
         },
         form,
         submitting,
         pristine,
-        submitSucceeded,
-        valid,
-        visited,
-        dirty,
         values,
       }) => {
-        if (submitSucceeded) {
-          console.log('submitSucceeded');
-          // dispatch(setCompletedProfile(true));
-        }
-
-        if (valid && !objectIsEmpty(visited) && !dirty) {
-          console.log('is completed');
-          // dispatch(setCompletedProfile(true));
-        }
-
         return (
           <Form onSubmit={handleSubmit}>
             <WhenFieldChanges
@@ -190,7 +187,6 @@ const ProfileForm = () => {
                     dispatch: dispatch,
                     required: true,
                     validate: required,
-                    disabled: isMultimode,
                   })}
                 </div>
                 <div style={{ gridArea: 'First' }}>
@@ -239,83 +235,84 @@ const ProfileForm = () => {
               </div>
             </Segment>
 
-            <Segment>
-              <Header as="h1">
-                Business
-                <Header.Subheader>Enter your company details for branding purposes and for the return addresss of your mailers.</Header.Subheader>
-              </Header>
+            {isAdmin && (
+              <Segment>
+                <Header as="h1">
+                  Business
+                  <Header.Subheader>Enter your company details for branding purposes and for the return addresss of your mailers.</Header.Subheader>
+                </Header>
 
-              <Divider style={{ margin: '1em -1em' }} />
+                <Divider style={{ margin: '1em -1em' }} />
 
-              <div
-                style={
-                  isMobile()
-                    ? {}
-                    : {
-                        display: 'grid',
-                        gridTemplateColumns: '1fr 1fr 1fr 1fr',
-                        gridTemplateRows: '1fr 1fr 1fr 1fr 1fr 1fr',
-                        gridTemplateAreas: `"TeamName TeamName TeamLogo BrokerageLogo" "BrokerageName BrokerageName TeamLogo BrokerageLogo" "OfficePhone OfficePhone TeamLogo BrokerageLogo" "Address Address City City" "State State ZipCode ZipCode" "BusinessNotificationEmail BusinessNotificationEmail BusinessWebsite BusinessWebsite"`,
-                        gridRowGap: '1em',
-                        gridColumnGap: '2em',
-                      }
-                }
-              >
-                <div style={{ gridArea: 'TeamName' }}>
-                  {renderField({ name: 'teamName', label: 'Team Name', type: 'text', required: true, validate: required, disabled: isMultimode })}
+                <div
+                  style={
+                    isMobile()
+                      ? {}
+                      : {
+                          display: 'grid',
+                          gridTemplateColumns: '1fr 1fr 1fr 1fr',
+                          gridTemplateRows: '1fr 1fr 1fr 1fr 1fr 1fr',
+                          gridTemplateAreas: `"TeamName TeamName TeamLogo BrokerageLogo" "BrokerageName BrokerageName TeamLogo BrokerageLogo" "OfficePhone OfficePhone TeamLogo BrokerageLogo" "Address Address City City" "State State ZipCode ZipCode" "BusinessNotificationEmail BusinessNotificationEmail BusinessWebsite BusinessWebsite"`,
+                          gridRowGap: '1em',
+                          gridColumnGap: '2em',
+                        }
+                  }
+                >
+                  <div style={{ gridArea: 'TeamName' }}>
+                    {renderField({ name: 'teamName', label: 'Team Name', type: 'text', required: true, validate: required, disabled: isMultimode })}
+                  </div>
+                  <div style={{ gridArea: 'TeamLogo' }}>
+                    {renderPicturePickerField({ name: 'teamLogo', label: 'Team Logo', dispatch: dispatch, disabled: isMultimode })}
+                  </div>
+                  <div style={{ gridArea: 'BrokerageName' }}>
+                    {renderField({ name: 'brokerageName', label: 'Brokerage Name', type: 'text', required: true, validate: required })}
+                  </div>
+                  <div style={{ gridArea: 'BrokerageLogo' }}>
+                    {renderPicturePickerField({
+                      name: 'brokerageLogo',
+                      label: 'Brokerage Logo',
+                      dispatch: dispatch,
+                      required: true,
+                      validate: required,
+                    })}
+                  </div>
+                  <div style={{ gridArea: 'OfficePhone' }}>{renderField({ name: 'officePhone', label: 'Office Phone Number (Optional)', type: 'text' })}</div>
+                  <div style={{ gridArea: 'Address' }}>
+                    {renderField({ name: 'address', label: 'Address', type: 'text', required: true, validate: required, disabled: isMultimode })}
+                  </div>
+                  <div style={{ gridArea: 'City' }}>
+                    {renderField({ name: 'city', label: 'City', type: 'text', required: true, validate: required, disabled: isMultimode })}
+                  </div>
+                  <div style={{ gridArea: 'State' }}>
+                    {renderSelectField({
+                      name: 'state',
+                      label: 'State',
+                      type: 'text',
+                      required: true,
+                      validate: required,
+                      options: states ? states : [],
+                      search: true,
+                      disabled: isMultimode,
+                    })}
+                  </div>
+                  <div style={{ gridArea: 'ZipCode' }}>
+                    {renderField({ name: 'zip', label: 'Zip Code', type: 'text', required: true, validate: required, disabled: isMultimode })}
+                  </div>
+                  <div style={{ gridArea: 'BusinessNotificationEmail' }}>
+                    {renderField({
+                      name: 'businessNotificationEmail',
+                      label: renderLabelWithSubHeader('Business Notification Email', '( Required )'),
+                      type: 'text',
+                      required: true,
+                      validate: composeValidators(required, email),
+                    })}
+                  </div>
+                  <div style={{ gridArea: 'BusinessWebsite' }}>
+                    {renderField({ name: 'businessWebsite', label: 'Business Website (Optional)', type: 'text' })}
+                  </div>
                 </div>
-                <div style={{ gridArea: 'TeamLogo' }}>
-                  {renderPicturePickerField({ name: 'teamLogo', label: 'Team Logo', dispatch: dispatch, disabled: isMultimode })}
-                </div>
-                <div style={{ gridArea: 'BrokerageName' }}>
-                  {renderField({ name: 'brokerageName', label: 'Brokerage Name', type: 'text', required: true, validate: required, disabled: isMultimode })}
-                </div>
-                <div style={{ gridArea: 'BrokerageLogo' }}>
-                  {renderPicturePickerField({
-                    name: 'brokerageLogo',
-                    label: 'Brokerage Logo',
-                    dispatch: dispatch,
-                    required: true,
-                    validate: required,
-                    disabled: isMultimode,
-                  })}
-                </div>
-                <div style={{ gridArea: 'OfficePhone' }}>{renderField({ name: 'officePhone', label: 'Office Phone Number (Optional)', type: 'text' })}</div>
-                <div style={{ gridArea: 'Address' }}>
-                  {renderField({ name: 'address', label: 'Address', type: 'text', required: true, validate: required, disabled: isMultimode })}
-                </div>
-                <div style={{ gridArea: 'City' }}>
-                  {renderField({ name: 'city', label: 'City', type: 'text', required: true, validate: required, disabled: isMultimode })}
-                </div>
-                <div style={{ gridArea: 'State' }}>
-                  {renderSelectField({
-                    name: 'state',
-                    label: 'State',
-                    type: 'text',
-                    required: true,
-                    validate: required,
-                    options: states ? states : [],
-                    search: true,
-                    disabled: isMultimode,
-                  })}
-                </div>
-                <div style={{ gridArea: 'ZipCode' }}>
-                  {renderField({ name: 'zip', label: 'Zip Code', type: 'text', required: true, validate: required, disabled: isMultimode })}
-                </div>
-                <div style={{ gridArea: 'BusinessNotificationEmail' }}>
-                  {renderField({
-                    name: 'businessNotificationEmail',
-                    label: renderLabelWithSubHeader('Business Notification Email', '( Required )'),
-                    type: 'text',
-                    required: true,
-                    validate: composeValidators(required, email),
-                  })}
-                </div>
-                <div style={{ gridArea: 'BusinessWebsite' }}>
-                  {renderField({ name: 'businessWebsite', label: 'Business Website (Optional)', type: 'text' })}
-                </div>
-              </div>
-            </Segment>
+              </Segment>
+            )}
 
             <Segment>
               <Header as="h1">

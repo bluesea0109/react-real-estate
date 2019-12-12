@@ -129,7 +129,7 @@ export const renderUrlField = ({ name, label, type, dispatch, required = undefin
   );
 };
 
-export const renderPicturePickerField = ({ name, label, dispatch, required = undefined, validate, disabled = undefined }) => {
+export const renderPicturePickerField = ({ name, label, dispatch, required = undefined, validate }) => {
   const onChangeHandler = event => {
     const data = [name, event.target.files[0]];
     dispatch(uploadPhotoPending(data));
@@ -167,25 +167,21 @@ export const renderPicturePickerField = ({ name, label, dispatch, required = und
               </Header>
             </div>
             <div style={{ gridArea: 'Func', justifySelf: 'end' }}>
-              {!disabled && (
-                <Item as="label" htmlFor={name} style={{ cursor: 'pointer' }}>
-                  <Header as="h4" style={meta.error && meta.touched ? { color: 'red' } : { color: 'teal' }}>
-                    Upload
-                  </Header>
-                  <input hidden id={name} type="file" onChange={onChangeHandler} />
-                </Item>
-              )}
+              <Item as="label" htmlFor={name} style={{ cursor: 'pointer' }}>
+                <Header as="h4" style={meta.error && meta.touched ? { color: 'red' } : { color: 'teal' }}>
+                  Upload
+                </Header>
+                <input hidden id={name} type="file" onChange={onChangeHandler} />
+              </Item>
             </div>
 
             {name === 'teamLogo' && (
               <div style={{ gridArea: 'Func2', justifySelf: 'end' }}>
-                {!disabled && (
-                  <Item as="label" style={{ cursor: 'pointer' }}>
-                    <Header as="h4" style={meta.error && meta.touched ? { color: 'red' } : { color: 'teal' }} onClick={() => onClickHandler(name)}>
-                      Delete
-                    </Header>
-                  </Item>
-                )}
+                <Item as="label" style={{ cursor: 'pointer' }}>
+                  <Header as="h4" style={meta.error && meta.touched ? { color: 'red' } : { color: 'teal' }} onClick={() => onClickHandler(name)}>
+                    Delete
+                  </Header>
+                </Item>
               </div>
             )}
 
