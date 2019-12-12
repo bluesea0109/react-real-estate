@@ -18,7 +18,6 @@ import {
   renderUrlField,
   composeValidators,
   renderCarouselField,
-  sleep,
 } from './helpers';
 
 import { Input, Segment } from '../Base';
@@ -85,8 +84,6 @@ const CustomizeTeamForm = () => {
       setShowSelectionAlert(false);
     }
   }, [newListingEnabled, soldListingEnabled, setShowSelectionAlert]);
-
-  if (!frontHeadlineNewListing || !frontHeadlineSoldListing) sleep(1000);
 
   const onSubmit = values => {
     const data = {

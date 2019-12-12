@@ -5,7 +5,7 @@ import { Route, useHistory } from 'react-router-dom';
 
 import Loading from '../components/Loading';
 
-const PrivateRoute = ({ component: Component, path, auth0, ...rest }) => {
+const PrivateRoute = ({ component: Component, path, auth0, onLogin, templates, states, boards, ...rest }) => {
   let history = useHistory();
 
   useEffect(() => {
@@ -25,7 +25,12 @@ const PrivateRoute = ({ component: Component, path, auth0, ...rest }) => {
     fn();
   }, [auth0, history]);
 
-  const render = props => (auth0.authenticated ? <Component {...props} /> : <Loading />);
+  const render = props =>
+    auth0.authenticated && !onLogin.pending && !onLogin.error && templates.available && states.available && boards.available ? (
+      <Component {...props} />
+    ) : (
+      <Loading />
+    );
 
   return <Route path={path} render={render} {...rest} />;
 };
@@ -38,6 +43,10 @@ PrivateRoute.propTypes = {
 const mapStateToProps = state => {
   return {
     auth0: state.auth0,
+    onLogin: state.onLogin,
+    templates: state.templates,
+    states: state.states,
+    boards: state.boards,
   };
 };
 

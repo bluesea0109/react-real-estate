@@ -13,7 +13,7 @@ import { ButtonBack, ButtonNext, CarouselProvider, Slide, Slider } from 'pure-re
 import { uploadPhotoPending, deletePhotoPending } from '../../store/modules/pictures/actions';
 import { saveTeamListedShortcodePending, saveTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
 
-export const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+// export const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 const isEmpty = value => value === undefined || value === null || value === '';
 export const email = value => !isEmpty(value) && !isEmail(value) && 'Invalid email address';
