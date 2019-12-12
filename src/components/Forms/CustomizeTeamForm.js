@@ -18,6 +18,7 @@ import {
   renderUrlField,
   composeValidators,
   renderCarouselField,
+  objectIsEmpty,
 } from './helpers';
 import { Input, Segment } from '../Base';
 import CustomizationWizard from './CustomizationWizard';
@@ -259,35 +260,27 @@ const CustomizeTeamForm = () => {
                   >
                     <FormSpy>
                       {props => {
-                        let values = props.values[`${listingType}_numberOfPostcardsDefaults`];
-
-                        console.log('values 1', values);
-
-                        if (!values) values = SLIDER_INITIAL_VALUES;
-
-                        console.log('values 2', values);
+                        const values = props.values[`${listingType}_numberOfPostcardsDefaults`];
 
                         const template = props.values[`${listingType}_template`];
                         const color = props.values[`${listingType}_color`];
                         setSelectedTemplate(template);
                         setSelectedColor(color);
 
-                        if (!!values[0] || !!values[1] || !!values[2]) return null;
-
                         return (
                           <Fragment>
                             <Input style={{ gridArea: 'PostcardsMin', opacity: 1, userSelect: 'none' }} labelPosition="right" disabled>
-                              <input style={{ width: 'unset' }} value={values && values[0]} readOnly />
+                              <input style={{ width: 'unset' }} value={values[0]} readOnly />
                               <Label>Min</Label>
                             </Input>
 
                             <Input style={{ gridArea: 'PostcardsTarget', opacity: 1, userSelect: 'none' }} labelPosition="right" disabled>
-                              <input style={{ width: 'unset' }} value={values && values[1]} readOnly />
+                              <input style={{ width: 'unset' }} value={values[1]} readOnly />
                               <Label>Default</Label>
                             </Input>
 
                             <Input style={{ gridArea: 'PostcardsMax', opacity: 1, userSelect: 'none' }} labelPosition="right" disabled>
-                              <input style={{ width: 'unset' }} value={values && values[2]} readOnly />
+                              <input style={{ width: 'unset' }} value={values[2]} readOnly />
                               <Label>Max</Label>
                             </Input>
                           </Fragment>
@@ -371,6 +364,12 @@ const CustomizeTeamForm = () => {
       </Segment>
     );
   };
+
+  console.log('objectIsEmpty', objectIsEmpty(initialValues));
+
+  if (objectIsEmpty(initialValues)) return null;
+
+  console.log('initialValues', initialValues);
 
   return (
     <Fragment>
