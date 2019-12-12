@@ -18,8 +18,9 @@ import {
   renderUrlField,
   composeValidators,
   renderCarouselField,
-  objectIsEmpty,
+  sleep,
 } from './helpers';
+
 import { Input, Segment } from '../Base';
 import CustomizationWizard from './CustomizationWizard';
 import { saveTeamCustomizationPending } from '../../store/modules/teamCustomization/actions';
@@ -35,7 +36,7 @@ const MAX = 2000;
 const INCREMENT = 10;
 const STEPS = INCREMENT;
 const MARGIN = INCREMENT;
-let SLIDER_INITIAL_VALUES = [200, 300, 1000];
+const SLIDER_INITIAL_VALUES = [200, 300, 1000];
 
 const CustomizeTeamForm = () => {
   const dispatch = useDispatch();
@@ -57,7 +58,6 @@ const CustomizeTeamForm = () => {
   const shortenedNewListingURL = useSelector(store => store.teamShortcode && store.teamShortcode.listed);
   const shortenedSoldListingURL = useSelector(store => store.teamShortcode && store.teamShortcode.sold);
 
-  const tcError = useSelector(store => store.teamCustomization && store.teamCustomization.error);
   const tc = useSelector(store => store.teamCustomization && store.teamCustomization.available);
 
   const resolveTemplate = type => {
@@ -86,8 +86,7 @@ const CustomizeTeamForm = () => {
     }
   }, [newListingEnabled, soldListingEnabled, setShowSelectionAlert]);
 
-  // if (!frontHeadlineNewListing || !frontHeadlineSoldListing) return null;
-  // if (!(tcError === '410 Gone') && !tc) return null;
+  if (!frontHeadlineNewListing || !frontHeadlineSoldListing) sleep(1000);
 
   const onSubmit = values => {
     const data = {
@@ -120,43 +119,37 @@ const CustomizeTeamForm = () => {
     dispatch(saveTeamCustomizationPending(data));
   };
 
-  let initialValues;
+  let initialValues = {
+    [`${NEW_LISTING}_createMailoutsOfThisType`]: newListingEnabled,
+    [`${NEW_LISTING}_template`]: selectedNewListingTemplate,
+    [`${NEW_LISTING}_color`]: selectedNewListingColor,
+    [`${NEW_LISTING}_headline`]: frontHeadlineNewListing && frontHeadlineNewListing.default,
+    [`${NEW_LISTING}_numberOfPostcardsDefaults`]: SLIDER_INITIAL_VALUES,
 
-  if (tcError === '410 Gone') {
+    [`${SOLD_LISTING}_createMailoutsOfThisType`]: soldListingEnabled,
+    [`${SOLD_LISTING}_template`]: selectedSoldListingTemplate,
+    [`${SOLD_LISTING}_color`]: selectedSoldListingColor,
+    [`${SOLD_LISTING}_headline`]: frontHeadlineSoldListing && frontHeadlineSoldListing.default,
+    [`${SOLD_LISTING}_numberOfPostcardsDefaults`]: SLIDER_INITIAL_VALUES,
+  };
+
+  if (tc) {
     initialValues = {
-      [`${NEW_LISTING}_createMailoutsOfThisType`]: newListingEnabled,
-      [`${NEW_LISTING}_template`]: selectedNewListingTemplate,
-      [`${NEW_LISTING}_color`]: selectedNewListingColor,
-      [`${NEW_LISTING}_headline`]: frontHeadlineNewListing && frontHeadlineNewListing.default,
-      [`${NEW_LISTING}_numberOfPostcardsDefaults`]: SLIDER_INITIAL_VALUES,
+      [`${NEW_LISTING}_createMailoutsOfThisType`]: tc.listed.createMailoutsOfThisType,
+      [`${NEW_LISTING}_template`]: tc.listed.templateTheme,
+      [`${NEW_LISTING}_color`]: tc.listed.brandColor,
+      [`${NEW_LISTING}_headline`]: tc.listed.frontHeadline,
+      [`${NEW_LISTING}_numberOfPostcardsDefaults`]: [tc.listed.mailoutSizeMin, tc.listed.mailoutSize, tc.listed.mailoutSizeMax],
+      [`${NEW_LISTING}_actionURL`]: tc.listed && tc.listed.cta,
 
-      [`${SOLD_LISTING}_createMailoutsOfThisType`]: soldListingEnabled,
-      [`${SOLD_LISTING}_template`]: selectedSoldListingTemplate,
-      [`${SOLD_LISTING}_color`]: selectedSoldListingColor,
-      [`${SOLD_LISTING}_headline`]: frontHeadlineSoldListing && frontHeadlineSoldListing.default,
-      [`${SOLD_LISTING}_numberOfPostcardsDefaults`]: SLIDER_INITIAL_VALUES,
+      [`${SOLD_LISTING}_createMailoutsOfThisType`]: tc.sold.createMailoutsOfThisType,
+      [`${SOLD_LISTING}_template`]: tc.sold.templateTheme,
+      [`${SOLD_LISTING}_color`]: tc.sold.brandColor,
+      [`${SOLD_LISTING}_headline`]: tc.sold.frontHeadline,
+      [`${SOLD_LISTING}_numberOfPostcardsDefaults`]: [tc.sold.mailoutSizeMin, tc.sold.mailoutSize, tc.sold.mailoutSizeMax],
+      [`${SOLD_LISTING}_actionURL`]: tc.sold && tc.sold.cta,
     };
-  } else {
-    if (tc) {
-      initialValues = {
-        [`${NEW_LISTING}_createMailoutsOfThisType`]: tc.listed.createMailoutsOfThisType,
-        [`${NEW_LISTING}_template`]: tc.listed.templateTheme,
-        [`${NEW_LISTING}_color`]: tc.listed.brandColor,
-        [`${NEW_LISTING}_headline`]: tc.listed.frontHeadline,
-        [`${NEW_LISTING}_numberOfPostcardsDefaults`]: [tc.listed.mailoutSizeMin, tc.listed.mailoutSize, tc.listed.mailoutSizeMax],
-        [`${NEW_LISTING}_actionURL`]: tc.listed && tc.listed.cta,
 
-        [`${SOLD_LISTING}_createMailoutsOfThisType`]: tc.sold.createMailoutsOfThisType,
-        [`${SOLD_LISTING}_template`]: tc.sold.templateTheme,
-        [`${SOLD_LISTING}_color`]: tc.sold.brandColor,
-        [`${SOLD_LISTING}_headline`]: tc.sold.frontHeadline,
-        [`${SOLD_LISTING}_numberOfPostcardsDefaults`]: [tc.sold.mailoutSizeMin, tc.sold.mailoutSize, tc.sold.mailoutSizeMax],
-        [`${SOLD_LISTING}_actionURL`]: tc.sold && tc.sold.cta,
-      };
-    }
-  }
-
-  if (!(tcError === '410 Gone') && tc) {
     if (!onlyOnce) {
       setOnlyOnce(true);
 
@@ -267,20 +260,24 @@ const CustomizeTeamForm = () => {
                         setSelectedTemplate(template);
                         setSelectedColor(color);
 
+                        const postcardsMin = (values && values[0]) || SLIDER_INITIAL_VALUES[0];
+                        const postcardsTarget = (values && values[1]) || SLIDER_INITIAL_VALUES[1];
+                        const postcardsMax = (values && values[2]) || SLIDER_INITIAL_VALUES[2];
+
                         return (
                           <Fragment>
                             <Input style={{ gridArea: 'PostcardsMin', opacity: 1, userSelect: 'none' }} labelPosition="right" disabled>
-                              <input style={{ width: 'unset' }} value={values[0]} readOnly />
+                              <input style={{ width: 'unset' }} value={postcardsMin} readOnly />
                               <Label>Min</Label>
                             </Input>
 
                             <Input style={{ gridArea: 'PostcardsTarget', opacity: 1, userSelect: 'none' }} labelPosition="right" disabled>
-                              <input style={{ width: 'unset' }} value={values[1]} readOnly />
+                              <input style={{ width: 'unset' }} value={postcardsTarget} readOnly />
                               <Label>Default</Label>
                             </Input>
 
                             <Input style={{ gridArea: 'PostcardsMax', opacity: 1, userSelect: 'none' }} labelPosition="right" disabled>
-                              <input style={{ width: 'unset' }} value={values[2]} readOnly />
+                              <input style={{ width: 'unset' }} value={postcardsMax} readOnly />
                               <Label>Max</Label>
                             </Input>
                           </Fragment>
@@ -289,50 +286,46 @@ const CustomizeTeamForm = () => {
                     </FormSpy>
 
                     <Field name={`${listingType}_numberOfPostcardsDefaults`}>
-                      {props => {
-                        if (SLIDER_INITIAL_VALUES !== props.input.value) SLIDER_INITIAL_VALUES = props.input.value;
-
-                        return (
-                          <div className="slider" style={{ gridArea: 'PostcardsSlider', padding: '0 0.5em' }}>
-                            {isMobile() && (
-                              <br>
-                                {' '}
-                                <br />{' '}
-                              </br>
-                            )}
-                            <Nouislider
-                              style={{ height: '3px' }}
-                              range={{
-                                min: MIN,
-                                max: MAX,
-                              }}
-                              step={STEPS}
-                              start={SLIDER_INITIAL_VALUES}
-                              margin={MARGIN}
-                              connect={true}
-                              behaviour="tap-drag"
-                              tooltips={true}
-                              pips={{
-                                mode: 'values',
-                                values: [100, 250, 500, 1000, 2000],
-                                stepped: true,
-                                density: 3,
-                              }}
-                              format={{
-                                to: value => Math.round(parseInt(value, 10) / 10) * 10,
-                                from: value => value,
-                              }}
-                              onChange={props.input.onChange}
-                            />
-                            {isMobile() && (
-                              <br>
-                                {' '}
-                                <br />{' '}
-                              </br>
-                            )}
-                          </div>
-                        );
-                      }}
+                      {props => (
+                        <div className="slider" style={{ gridArea: 'PostcardsSlider', padding: '0 0.5em' }}>
+                          {isMobile() && (
+                            <br>
+                              {' '}
+                              <br />{' '}
+                            </br>
+                          )}
+                          <Nouislider
+                            style={{ height: '3px' }}
+                            range={{
+                              min: MIN,
+                              max: MAX,
+                            }}
+                            step={STEPS}
+                            start={props.input.value || SLIDER_INITIAL_VALUES}
+                            margin={MARGIN}
+                            connect={true}
+                            behaviour="tap-drag"
+                            tooltips={true}
+                            pips={{
+                              mode: 'values',
+                              values: [100, 250, 500, 1000, 2000],
+                              stepped: true,
+                              density: 3,
+                            }}
+                            format={{
+                              to: value => Math.round(parseInt(value, 10) / 10) * 10,
+                              from: value => value,
+                            }}
+                            onChange={props.input.onChange}
+                          />
+                          {isMobile() && (
+                            <br>
+                              {' '}
+                              <br />{' '}
+                            </br>
+                          )}
+                        </div>
+                      )}
                     </Field>
                   </div>
                 </div>
@@ -364,12 +357,6 @@ const CustomizeTeamForm = () => {
       </Segment>
     );
   };
-
-  console.log('objectIsEmpty', objectIsEmpty(initialValues));
-
-  if (objectIsEmpty(initialValues)) return null;
-
-  console.log('initialValues', initialValues);
 
   return (
     <Fragment>
