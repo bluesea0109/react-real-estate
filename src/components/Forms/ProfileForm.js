@@ -145,12 +145,12 @@ const ProfileForm = () => {
       }) => {
         if (submitSucceeded) {
           console.log('submitSucceeded');
-          dispatch(setCompletedProfile(true));
+          // dispatch(setCompletedProfile(true));
         }
 
         if (valid && !objectIsEmpty(visited) && !dirty) {
           console.log('is completed');
-          dispatch(setCompletedProfile(true));
+          // dispatch(setCompletedProfile(true));
         }
 
         return (
