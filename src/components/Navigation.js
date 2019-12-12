@@ -44,7 +44,12 @@ export default () => {
 
   const onboarded = useSelector(store => store.onboarded.status);
   const isAuthenticating = useSelector(store => store.auth0.pending);
-  const step = useSelector(store => store.onboarded.step);
+
+  const completedProfile = useSelector(store => store.onboarded.completedProfile);
+  const completedTeamCustomization = useSelector(store => store.onboarded.completedTeamCustomization);
+  const completedCustomization = useSelector(store => store.onboarded.completedCustomization);
+  const completedInviteTeammates = useSelector(store => store.onboarded.completedInviteTeammates);
+
   const isMultimode = useSelector(store => store.onLogin.mode === 'multiuser');
   const isLoading = useSelector(store => store.onLogin.pending);
   const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
@@ -162,11 +167,19 @@ export default () => {
 
   if (isAuthenticating || isLoading) return <Loading />;
 
+  const onProfile = !completedProfile;
+  const onTeamCustomization = !completedTeamCustomization && completedProfile;
+  const onCustomization = !completedCustomization && completedTeamCustomization && completedProfile;
+  const onInviteTeammates = !completedInviteTeammates && completedCustomization && completedTeamCustomization && completedProfile;
+
+  const onProfileSingleUser = !completedProfile;
+  const onCustomizationSingleUser = !completedCustomization && completedProfile;
+
   if (!onboarded) {
     if (isMultimode) {
       return (
         <StepsLayout vertical={!mql.matches}>
-          <StepLayout active={step === 0} completed={step >= 1}>
+          <StepLayout active={onProfile} completed={completedProfile}>
             <Icon name="edit" />
             {mql.matches ? null : (
               <Step.Content>
@@ -175,7 +188,7 @@ export default () => {
             )}
           </StepLayout>
 
-          <StepLayout active={step === 1} completed={step >= 2}>
+          <StepLayout active={onTeamCustomization} completed={completedTeamCustomization}>
             <Icon name="cogs" />
             {mql.matches ? null : (
               <Step.Content>
@@ -184,7 +197,7 @@ export default () => {
             )}
           </StepLayout>
 
-          <StepLayout active={step === 2} completed={step >= 3}>
+          <StepLayout active={onCustomization} completed={completedCustomization}>
             <Icon name="cog" />
             {mql.matches ? null : (
               <Step.Content>
@@ -193,7 +206,7 @@ export default () => {
             )}
           </StepLayout>
 
-          <StepLayout active={step === 3} completed={step >= 4}>
+          <StepLayout active={onInviteTeammates} completed={completedInviteTeammates}>
             <Icon name="paper plane" />
             {mql.matches ? null : (
               <Step.Content>
@@ -206,7 +219,7 @@ export default () => {
     } else {
       return (
         <StepsLayout vertical={!mql.matches}>
-          <StepLayout active={step === 0} completed={step >= 1}>
+          <StepLayout active={onProfileSingleUser} completed={completedProfile}>
             <Icon name="edit" />
             {mql.matches ? null : (
               <Step.Content>
@@ -215,7 +228,7 @@ export default () => {
             )}
           </StepLayout>
 
-          <StepLayout active={step === 1} completed={step >= 2}>
+          <StepLayout active={onCustomizationSingleUser} completed={completedCustomization}>
             <Icon name="cog" />
             {mql.matches ? null : (
               <Step.Content>

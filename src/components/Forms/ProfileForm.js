@@ -18,7 +18,7 @@ import {
   requiredOnlyInCalifornia,
 } from './helpers';
 import { Button, Icon, Segment } from '../Base';
-import { incrementStep } from '../../store/modules/onboarded/actions';
+import { setCompletedProfile } from '../../store/modules/onboarded/actions';
 import { saveProfilePending } from '../../store/modules/profile/actions';
 import { saveTeamProfilePending } from '../../store/modules/teamProfile/actions';
 
@@ -138,11 +138,11 @@ const ProfileForm = () => {
         values,
       }) => {
         if (submitSucceeded) {
-          dispatch(incrementStep(1));
+          dispatch(setCompletedProfile(true));
         }
 
         if (valid && !objectIsEmpty(visited) && !dirty) {
-          dispatch(incrementStep(1));
+          dispatch(setCompletedProfile(true));
         }
 
         return (

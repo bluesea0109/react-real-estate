@@ -1,8 +1,17 @@
-import { SET_ONBOARDED_STATUS, INCREMENT_STEP } from './actions';
+import {
+  SET_ONBOARDED_STATUS,
+  SET_COMPLETED_PROFILE,
+  SET_COMPLETED_TEAM_CUSTOMIZATION,
+  SET_COMPLETED_CUSTOMIZATION,
+  SET_COMPLETED_INVITE_TEAMMATES,
+} from './actions';
 
 const initialState = {
   status: false,
-  step: 0,
+  completedProfile: null,
+  completedTeamCustomization: null,
+  completedCustomization: null,
+  completedInviteTeammates: null,
 };
 
 export default function onboarded(state = initialState, action) {
@@ -13,10 +22,28 @@ export default function onboarded(state = initialState, action) {
         status: action.payload,
       };
 
-    case INCREMENT_STEP:
+    case SET_COMPLETED_PROFILE:
       return {
         ...state,
-        step: action.payload,
+        completedProfile: action.payload,
+      };
+
+    case SET_COMPLETED_TEAM_CUSTOMIZATION:
+      return {
+        ...state,
+        completedTeamCustomization: action.payload,
+      };
+
+    case SET_COMPLETED_CUSTOMIZATION:
+      return {
+        ...state,
+        completedCustomization: action.payload,
+      };
+
+    case SET_COMPLETED_INVITE_TEAMMATES:
+      return {
+        ...state,
+        completedInviteTeammates: action.payload,
       };
 
     default:

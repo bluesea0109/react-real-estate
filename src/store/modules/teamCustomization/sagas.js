@@ -8,7 +8,7 @@ import {
   saveTeamCustomizationSuccess,
   saveTeamCustomizationError,
 } from './actions';
-import { incrementStep } from '../onboarded/actions';
+import { setCompletedTeamCustomization } from '../onboarded/actions';
 import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
 
 import ApiService from '../../../services/api/index';
@@ -26,7 +26,7 @@ export function* getTeamCustomizationSaga() {
 
     yield put(getTeamCustomizationSuccess(response));
     const isOnboarded = yield select(getOnboardedStatus);
-    if (!isOnboarded) yield put(incrementStep(2));
+    if (!isOnboarded) yield put(setCompletedTeamCustomization(true));
   } catch (err) {
     yield put(getTeamCustomizationError(err.message));
   }
@@ -42,7 +42,7 @@ export function* saveTeamCustomizationSaga() {
     yield put(saveTeamCustomizationSuccess(response));
 
     const isOnboarded = yield select(getOnboardedStatus);
-    if (!isOnboarded) yield put(incrementStep(2));
+    if (!isOnboarded) yield put(setCompletedTeamCustomization(true));
   } catch (err) {
     yield put(saveTeamCustomizationError(err.message));
   }

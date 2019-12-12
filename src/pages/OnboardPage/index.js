@@ -17,46 +17,72 @@ const OnboardPage = () => {
   const pathname = location.pathname;
 
   const isMultimode = useSelector(store => store.onLogin.mode === 'multiuser');
-  const step = useSelector(store => store.onboarded.step);
+  const completedProfile = useSelector(store => store.onboarded.completedProfile);
+  const completedTeamCustomization = useSelector(store => store.onboarded.completedTeamCustomization);
+  const completedCustomization = useSelector(store => store.onboarded.completedCustomization);
+  const completedInviteTeammates = useSelector(store => store.onboarded.completedInviteTeammates);
 
   const onBoardProfilePath = '/onboard/profile';
   const onBoardCustomizationTeamPath = '/onboard/customization/team';
   const onBoardCustomizationPath = '/onboard/customization';
   const onBoardInvitePath = '/onboard/invite';
 
+  const onProfile = !completedProfile;
+  const onTeamCustomization = !completedTeamCustomization && completedProfile;
+  const onCustomization = !completedCustomization && completedTeamCustomization && completedProfile;
+  const onInviteTeammates = !completedInviteTeammates && completedCustomization && completedTeamCustomization && completedProfile;
+  const onboardingCompleted = completedInviteTeammates && completedCustomization && completedTeamCustomization && completedProfile;
+
+  const onProfileSingleUser = !completedProfile;
+  const onCustomizationSingleUser = !completedCustomization && completedProfile;
+  const onboardingCompletedSingleUser = completedCustomization && completedProfile;
+
   useEffect(() => {
     if (!isMultimode) {
-      if (step === 0 && pathname !== onBoardProfilePath) {
+      if (onProfileSingleUser && pathname !== onBoardProfilePath) {
         history.push(onBoardProfilePath);
       }
-      if (step === 1 && pathname !== onBoardCustomizationPath) {
+      if (onCustomizationSingleUser && pathname !== onBoardCustomizationPath) {
         history.push(onBoardCustomizationPath);
       }
-      if (step === 2) {
+      if (onboardingCompletedSingleUser) {
         dispatch(setOnboardedStatus(true));
         history.push('/dashboard');
       }
     }
 
     if (isMultimode) {
-      if (step === 0 && pathname !== onBoardProfilePath) {
+      if (onProfile && pathname !== onBoardProfilePath) {
         history.push(onBoardProfilePath);
       }
-      if (step === 1 && pathname !== onBoardCustomizationTeamPath) {
+      if (onTeamCustomization && pathname !== onBoardCustomizationTeamPath) {
         history.push(onBoardCustomizationTeamPath);
       }
-      if (step === 2 && pathname !== onBoardCustomizationPath) {
+      if (onCustomization && pathname !== onBoardCustomizationPath) {
         history.push(onBoardCustomizationPath);
       }
-      if (step === 3 && pathname !== onBoardInvitePath) {
+      if (onInviteTeammates && pathname !== onBoardInvitePath) {
         history.push(onBoardInvitePath);
       }
-      if (step === 4) {
+      if (onboardingCompleted) {
         dispatch(setOnboardedStatus(true));
         history.push('/dashboard');
       }
     }
-  }, [step, pathname, isMultimode, dispatch, history]);
+  }, [
+    onProfile,
+    onTeamCustomization,
+    onCustomization,
+    onInviteTeammates,
+    onboardingCompleted,
+    onProfileSingleUser,
+    onCustomizationSingleUser,
+    onboardingCompletedSingleUser,
+    pathname,
+    isMultimode,
+    dispatch,
+    history,
+  ]);
 
   return (
     <Switch>

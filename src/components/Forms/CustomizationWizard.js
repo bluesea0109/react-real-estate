@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Form } from 'semantic-ui-react';
 import { Form as FinalForm } from 'react-final-form';
 
@@ -9,26 +9,32 @@ const CustomizationWizard = ({ children, initialValues = {}, onSubmit, togglePag
   const [page, setPage] = useState(0);
   const [values, setValues] = useState(initialValues);
 
-  const next = values => {
-    setPage(Math.min(page + 1, children.length - 1));
-    setValues(values);
-  };
+  const next = useCallback(
+    values => {
+      setPage(Math.min(page + 1, children.length - 1));
+      setValues(values);
+    },
+    [page, children]
+  );
 
-  const previous = () => setPage(Math.max(page - 1, 0));
+  const previous = useCallback(() => setPage(Math.max(page - 1, 0)), [page]);
 
   const validate = values => {
     const activePage = React.Children.toArray(children)[page];
     return activePage.props.validate ? activePage.props.validate(values) : {};
   };
 
-  const handleSubmit = values => {
-    const isLastPage = page === React.Children.count(children) - 1;
-    if (isLastPage) {
-      return onSubmit(values);
-    } else {
-      next(values);
-    }
-  };
+  const handleSubmit = useCallback(
+    values => {
+      const isLastPage = page === React.Children.count(children) - 1;
+      if (isLastPage) {
+        return onSubmit(values);
+      } else {
+        next(values);
+      }
+    },
+    [onSubmit, next, page, children]
+  );
 
   const activePage = React.Children.toArray(children)[page];
   const isLastPage = page === React.Children.count(children) - 1;
@@ -42,7 +48,7 @@ const CustomizationWizard = ({ children, initialValues = {}, onSubmit, togglePag
       setTogglePages(null);
       handleSubmit(values);
     }
-  }, [togglePages, setTogglePages, previous, handleSubmit]);
+  }, [togglePages, setTogglePages, values, previous, handleSubmit]);
 
   return (
     <FinalForm initialValues={values} validate={validate} onSubmit={handleSubmit}>
