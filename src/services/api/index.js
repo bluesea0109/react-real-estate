@@ -119,7 +119,7 @@ const directory = {
         save: () => ({ path: `/api/user/settings/profile`, method: 'put' }),
       },
       teamProfile: {
-        save: teamId => ({ path: `/api/user/team/${teamId}/settings/profile`, method: 'put' }),
+        save: () => ({ path: `/api/user/team/settings/profile`, method: 'put' }),
       },
       photos: {
         realtorPhoto: {
