@@ -42,7 +42,12 @@ export function objectIsEmpty(obj) {
   return !obj || Object.keys(obj).length === 0;
 }
 
-export const renderSelectField = ({ name, label, type, options, required = undefined, validate, search = undefined }) => (
+const disabledCss = {
+  pointerEvents: 'none',
+  opacity: 0.5,
+};
+
+export const renderSelectField = ({ name, label, type, options, required = undefined, validate, search = undefined, disabled = undefined }) => (
   <Field name={name} validate={validate}>
     {({ input, meta }) => (
       <Form.Field>
@@ -61,20 +66,21 @@ export const renderSelectField = ({ name, label, type, options, required = undef
           search={search}
           selection
           error={meta.error && meta.touched && { content: `${meta.error}` }}
+          style={disabled ? disabledCss : {}}
         />
       </Form.Field>
     )}
   </Field>
 );
 
-export const renderField = ({ name, label, type, required = undefined, validate }) => {
+export const renderField = ({ name, label, type, required = undefined, validate, disabled = undefined }) => {
   if (typeof label !== 'string') {
     return (
       <Field name={name} validate={validate}>
         {({ input, meta }) => (
           <Form.Field required={required}>
             {label}
-            <Form.Input {...input} type={type} error={meta.error && meta.touched && { content: `${meta.error}` }} />
+            <Form.Input {...input} type={type} error={meta.error && meta.touched && { content: `${meta.error}` }} style={disabled ? disabledCss : {}} />
           </Form.Field>
         )}
       </Field>
@@ -83,14 +89,21 @@ export const renderField = ({ name, label, type, required = undefined, validate 
     return (
       <Field name={name} validate={validate}>
         {({ input, meta }) => (
-          <Form.Input required={required} {...input} type={type} label={label} error={meta.error && meta.touched && { content: `${meta.error}` }} />
+          <Form.Input
+            required={required}
+            {...input}
+            type={type}
+            label={label}
+            error={meta.error && meta.touched && { content: `${meta.error}` }}
+            style={disabled ? disabledCss : {}}
+          />
         )}
       </Field>
     );
   }
 };
 
-export const renderUrlField = ({ name, label, type, dispatch, required = undefined, validate, target }) => {
+export const renderUrlField = ({ name, label, type, dispatch, required = undefined, validate, target, disabled = undefined }) => {
   const onBlurHandler = e => {
     const eURL = e.target.value;
     if (target === 'newListing' && isURL(eURL)) dispatch(saveTeamListedShortcodePending(eURL));
@@ -109,13 +122,14 @@ export const renderUrlField = ({ name, label, type, dispatch, required = undefin
           label={label}
           error={meta.error && meta.touched && { content: `${meta.error}` }}
           onBlur={onBlurHandler}
+          style={disabled ? disabledCss : {}}
         />
       )}
     </Field>
   );
 };
 
-export const renderPicturePickerField = ({ name, label, dispatch, required = undefined, validate }) => {
+export const renderPicturePickerField = ({ name, label, dispatch, required = undefined, validate, disabled = undefined }) => {
   const onChangeHandler = event => {
     const data = [name, event.target.files[0]];
     dispatch(uploadPhotoPending(data));
@@ -153,21 +167,25 @@ export const renderPicturePickerField = ({ name, label, dispatch, required = und
               </Header>
             </div>
             <div style={{ gridArea: 'Func', justifySelf: 'end' }}>
-              <Item as="label" htmlFor={name} style={{ cursor: 'pointer' }}>
-                <Header as="h4" style={meta.error && meta.touched ? { color: 'red' } : { color: 'teal' }}>
-                  Upload
-                </Header>
-                <input hidden id={name} type="file" onChange={onChangeHandler} />
-              </Item>
+              {!disabled && (
+                <Item as="label" htmlFor={name} style={{ cursor: 'pointer' }}>
+                  <Header as="h4" style={meta.error && meta.touched ? { color: 'red' } : { color: 'teal' }}>
+                    Upload
+                  </Header>
+                  <input hidden id={name} type="file" onChange={onChangeHandler} />
+                </Item>
+              )}
             </div>
 
             {name === 'teamLogo' && (
               <div style={{ gridArea: 'Func2', justifySelf: 'end' }}>
-                <Item as="label" style={{ cursor: 'pointer' }}>
-                  <Header as="h4" style={meta.error && meta.touched ? { color: 'red' } : { color: 'teal' }} onClick={() => onClickHandler(name)}>
-                    Delete
-                  </Header>
-                </Item>
+                {!disabled && (
+                  <Item as="label" style={{ cursor: 'pointer' }}>
+                    <Header as="h4" style={meta.error && meta.touched ? { color: 'red' } : { color: 'teal' }} onClick={() => onClickHandler(name)}>
+                      Delete
+                    </Header>
+                  </Item>
+                )}
               </div>
             )}
 
