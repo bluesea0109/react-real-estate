@@ -53,12 +53,6 @@ const ProfileForm = () => {
   const saveProfile = profile => dispatch(saveProfilePending(profile));
   const saveTeamProfile = teamProfile => dispatch(saveTeamProfilePending(teamProfile));
   const onSubmit = values => {
-    // const date = (new Date()).toISOString().split('T')[0]; // but should be valid timestamp or number of milliseconds
-    const date = Date.now();
-
-    console.log('date', date);
-    console.log('date typeof', typeof date);
-
     const profile = {
       _id: onLoginUserProfile && onLoginUserProfile._id,
       _rev: onLoginUserProfile && onLoginUserProfile._rev,
@@ -70,7 +64,7 @@ const ProfileForm = () => {
       phone: values.phone,
       dre: values.dre,
       teamId: values.teamId,
-      setupComplete: date,
+      setupComplete: Date.now(),
       boards: values.boards,
       website: values.personalWebsite,
     };
