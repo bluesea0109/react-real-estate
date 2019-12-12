@@ -259,14 +259,20 @@ const CustomizeTeamForm = () => {
                   >
                     <FormSpy>
                       {props => {
-                        const values = props.values[`${listingType}_numberOfPostcardsDefaults`];
+                        let values = props.values[`${listingType}_numberOfPostcardsDefaults`];
+
+                        console.log('values 1', values);
+
+                        if (!values) values = SLIDER_INITIAL_VALUES;
+
+                        console.log('values 2', values);
 
                         const template = props.values[`${listingType}_template`];
                         const color = props.values[`${listingType}_color`];
                         setSelectedTemplate(template);
                         setSelectedColor(color);
 
-                        if (!values[0] || !values[1] || !values[2]) return null;
+                        if (!!values[0] || !!values[1] || !!values[2]) return null;
 
                         return (
                           <Fragment>
