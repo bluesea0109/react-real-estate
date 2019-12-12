@@ -106,6 +106,9 @@ const ProfileForm = () => {
         mlsArr.push({ name: userBoard[0] && userBoard[0].value, mlsId: board.mlsId });
       });
 
+    const notificationEmail = onLoginUserProfile && onLoginUserProfile.notificationEmail ? onLoginUserProfile.notificationEmail : null;
+    const businessNotificationEmail = onLoginTeamProfile && onLoginTeamProfile.notificationEmail ? onLoginTeamProfile.notificationEmail : null;
+
     profileValues = Object.assign(
       {},
       onLoginUserProfile,
@@ -113,7 +116,9 @@ const ProfileForm = () => {
       { boards: mlsArr },
       { realtorPhoto: picturesRealtorPhoto || realtorPhoto },
       { teamLogo: picturesTeamLogo || teamLogo },
-      { brokerageLogo: picturesBrokerageLogo || brokerageLogo }
+      { brokerageLogo: picturesBrokerageLogo || brokerageLogo },
+      { notificationEmail: notificationEmail },
+      { businessNotificationEmail: businessNotificationEmail }
     );
   }
 
@@ -139,10 +144,12 @@ const ProfileForm = () => {
         values,
       }) => {
         if (submitSucceeded) {
+          console.log('submitSucceeded');
           dispatch(setCompletedProfile(true));
         }
 
         if (valid && !objectIsEmpty(visited) && !dirty) {
+          console.log('is completed');
           dispatch(setCompletedProfile(true));
         }
 
