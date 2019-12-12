@@ -34,7 +34,7 @@ const MAX = 2000;
 const INCREMENT = 10;
 const STEPS = INCREMENT;
 const MARGIN = INCREMENT;
-const SLIDER_INITIAL_VALUES = [200, 300, 1000];
+let SLIDER_INITIAL_VALUES = [200, 300, 1000];
 
 const CustomizeTeamForm = () => {
   const dispatch = useDispatch();
@@ -287,46 +287,50 @@ const CustomizeTeamForm = () => {
                     </FormSpy>
 
                     <Field name={`${listingType}_numberOfPostcardsDefaults`}>
-                      {props => (
-                        <div className="slider" style={{ gridArea: 'PostcardsSlider', padding: '0 0.5em' }}>
-                          {isMobile() && (
-                            <br>
-                              {' '}
-                              <br />{' '}
-                            </br>
-                          )}
-                          <Nouislider
-                            style={{ height: '3px' }}
-                            range={{
-                              min: MIN,
-                              max: MAX,
-                            }}
-                            step={STEPS}
-                            start={SLIDER_INITIAL_VALUES}
-                            margin={MARGIN}
-                            connect={true}
-                            behaviour="tap-drag"
-                            tooltips={true}
-                            pips={{
-                              mode: 'values',
-                              values: [100, 250, 500, 1000, 2000],
-                              stepped: true,
-                              density: 3,
-                            }}
-                            format={{
-                              to: value => Math.round(parseInt(value, 10) / 10) * 10,
-                              from: value => value,
-                            }}
-                            onChange={props.input.onChange}
-                          />
-                          {isMobile() && (
-                            <br>
-                              {' '}
-                              <br />{' '}
-                            </br>
-                          )}
-                        </div>
-                      )}
+                      {props => {
+                        if (SLIDER_INITIAL_VALUES !== props.input.value) SLIDER_INITIAL_VALUES = props.input.value;
+
+                        return (
+                          <div className="slider" style={{ gridArea: 'PostcardsSlider', padding: '0 0.5em' }}>
+                            {isMobile() && (
+                              <br>
+                                {' '}
+                                <br />{' '}
+                              </br>
+                            )}
+                            <Nouislider
+                              style={{ height: '3px' }}
+                              range={{
+                                min: MIN,
+                                max: MAX,
+                              }}
+                              step={STEPS}
+                              start={SLIDER_INITIAL_VALUES}
+                              margin={MARGIN}
+                              connect={true}
+                              behaviour="tap-drag"
+                              tooltips={true}
+                              pips={{
+                                mode: 'values',
+                                values: [100, 250, 500, 1000, 2000],
+                                stepped: true,
+                                density: 3,
+                              }}
+                              format={{
+                                to: value => Math.round(parseInt(value, 10) / 10) * 10,
+                                from: value => value,
+                              }}
+                              onChange={props.input.onChange}
+                            />
+                            {isMobile() && (
+                              <br>
+                                {' '}
+                                <br />{' '}
+                              </br>
+                            )}
+                          </div>
+                        );
+                      }}
                     </Field>
                   </div>
                 </div>
