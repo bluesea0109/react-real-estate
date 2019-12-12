@@ -266,7 +266,7 @@ const CustomizeTeamForm = () => {
                         setSelectedTemplate(template);
                         setSelectedColor(color);
 
-                        if (!!values[0] || !!values[1] || !!values[2]) return null;
+                        if (!values[0] || !values[1] || !values[2]) return null;
 
                         return (
                           <Fragment>
