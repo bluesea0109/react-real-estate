@@ -85,8 +85,8 @@ const CustomizeTeamForm = () => {
     }
   }, [newListingEnabled, soldListingEnabled, setShowSelectionAlert]);
 
-  if (!frontHeadlineNewListing || !frontHeadlineSoldListing) return null;
-  if (!(tcError === '410 Gone') && !tc) return null;
+  // if (!frontHeadlineNewListing || !frontHeadlineSoldListing) return null;
+  // if (!(tcError === '410 Gone') && !tc) return null;
 
   const onSubmit = values => {
     const data = {
