@@ -30,13 +30,12 @@ import './thin.css';
 const NEW_LISTING = 'newListing';
 const SOLD_LISTING = 'soldListing';
 
+const MIN = 100;
+const MAX = 2000;
 const INCREMENT = 10;
 const STEPS = INCREMENT;
 const MARGIN = INCREMENT;
-
-let MIN = 100;
-let MAX = 2000;
-let SLIDER_INITIAL_VALUES = [300];
+const SLIDER_INITIAL_VALUES = [300];
 
 const CustomizeTeamForm = () => {
   const dispatch = useDispatch();
@@ -58,12 +57,11 @@ const CustomizeTeamForm = () => {
   const shortenedNewListingURL = useSelector(store => store.teamShortcode && store.teamShortcode.listed);
   const shortenedSoldListingURL = useSelector(store => store.teamShortcode && store.teamShortcode.sold);
 
-  const tcError = useSelector(store => store.teamCustomization && store.teamCustomization.error);
   const tc = useSelector(store => store.teamCustomization && store.teamCustomization.available);
 
   const isMultimode = useSelector(store => store.onLogin.mode === 'multiuser');
-  const custError = useSelector(store => store.customization && store.customization.error);
-  const cust = useSelector(store => store.customization && store.customization.available);
+  // const custError = useSelector(store => store.customization && store.customization.error);
+  // const cust = useSelector(store => store.customization && store.customization.available);
 
   const resolveTemplate = type => {
     const types = {
@@ -90,9 +88,6 @@ const CustomizeTeamForm = () => {
       setShowSelectionAlert(false);
     }
   }, [newListingEnabled, soldListingEnabled, setShowSelectionAlert]);
-
-  if (!frontHeadlineNewListing || !frontHeadlineSoldListing) return null;
-  if (!(custError === '410 Gone') && !cust) return null;
 
   const returnIfNotEqual = (x, y) => (x !== y ? x : undefined);
 
@@ -149,43 +144,37 @@ const CustomizeTeamForm = () => {
     dispatch(saveCustomizationPending(data));
   };
 
-  let initialValues;
+  let initialValues = {
+    [`${NEW_LISTING}_createMailoutsOfThisType`]: newListingEnabled,
+    [`${NEW_LISTING}_template`]: selectedNewListingTemplate,
+    [`${NEW_LISTING}_color`]: selectedNewListingColor,
+    [`${NEW_LISTING}_headline`]: frontHeadlineNewListing && frontHeadlineNewListing.default,
+    [`${NEW_LISTING}_numberOfPostcardsDefaults`]: SLIDER_INITIAL_VALUES,
 
-  if (!isMultimode) {
+    [`${SOLD_LISTING}_createMailoutsOfThisType`]: soldListingEnabled,
+    [`${SOLD_LISTING}_template`]: selectedSoldListingTemplate,
+    [`${SOLD_LISTING}_color`]: selectedSoldListingColor,
+    [`${SOLD_LISTING}_headline`]: frontHeadlineSoldListing && frontHeadlineSoldListing.default,
+    [`${SOLD_LISTING}_numberOfPostcardsDefaults`]: SLIDER_INITIAL_VALUES,
+  };
+
+  if (!isMultimode && tc) {
     initialValues = {
-      [`${NEW_LISTING}_createMailoutsOfThisType`]: newListingEnabled,
-      [`${NEW_LISTING}_template`]: selectedNewListingTemplate,
-      [`${NEW_LISTING}_color`]: selectedNewListingColor,
-      [`${NEW_LISTING}_headline`]: frontHeadlineNewListing && frontHeadlineNewListing.default,
-      [`${NEW_LISTING}_numberOfPostcardsDefaults`]: SLIDER_INITIAL_VALUES,
+      [`${NEW_LISTING}_createMailoutsOfThisType`]: tc.listed.createMailoutsOfThisType,
+      [`${NEW_LISTING}_template`]: tc.listed.templateTheme,
+      [`${NEW_LISTING}_color`]: tc.listed.brandColor,
+      [`${NEW_LISTING}_headline`]: tc.listed.frontHeadline,
+      [`${NEW_LISTING}_numberOfPostcardsDefaults`]: [tc.listed.mailoutSize],
+      [`${NEW_LISTING}_actionURL`]: tc.listed.cta,
 
-      [`${SOLD_LISTING}_createMailoutsOfThisType`]: soldListingEnabled,
-      [`${SOLD_LISTING}_template`]: selectedSoldListingTemplate,
-      [`${SOLD_LISTING}_color`]: selectedSoldListingColor,
-      [`${SOLD_LISTING}_headline`]: frontHeadlineSoldListing && frontHeadlineSoldListing.default,
-      [`${SOLD_LISTING}_numberOfPostcardsDefaults`]: SLIDER_INITIAL_VALUES,
+      [`${SOLD_LISTING}_createMailoutsOfThisType`]: tc.sold.createMailoutsOfThisType,
+      [`${SOLD_LISTING}_template`]: tc.sold.templateTheme,
+      [`${SOLD_LISTING}_color`]: tc.sold.brandColor,
+      [`${SOLD_LISTING}_headline`]: tc.sold.frontHeadline,
+      [`${SOLD_LISTING}_numberOfPostcardsDefaults`]: [tc.sold.mailoutSize],
+      [`${SOLD_LISTING}_actionURL`]: tc.sold.cta,
     };
-  } else {
-    if (tc) {
-      initialValues = {
-        [`${NEW_LISTING}_createMailoutsOfThisType`]: tc.listed.createMailoutsOfThisType,
-        [`${NEW_LISTING}_template`]: tc.listed.templateTheme,
-        [`${NEW_LISTING}_color`]: tc.listed.brandColor,
-        [`${NEW_LISTING}_headline`]: tc.listed.frontHeadline,
-        [`${NEW_LISTING}_numberOfPostcardsDefaults`]: [tc.listed.mailoutSize],
-        [`${NEW_LISTING}_actionURL`]: tc.listed.cta,
 
-        [`${SOLD_LISTING}_createMailoutsOfThisType`]: tc.sold.createMailoutsOfThisType,
-        [`${SOLD_LISTING}_template`]: tc.sold.templateTheme,
-        [`${SOLD_LISTING}_color`]: tc.sold.brandColor,
-        [`${SOLD_LISTING}_headline`]: tc.sold.frontHeadline,
-        [`${SOLD_LISTING}_numberOfPostcardsDefaults`]: [tc.sold.mailoutSize],
-        [`${SOLD_LISTING}_actionURL`]: tc.sold.cta,
-      };
-    }
-  }
-
-  if (!(tcError === '410 Gone') && tc) {
     if (!onlyOnce) {
       setOnlyOnce(true);
 
@@ -206,12 +195,6 @@ const CustomizeTeamForm = () => {
     const setSelectedColor = value => (listingType === NEW_LISTING ? setSelectedNewListingColor(value) : setSelectedSoldListingColor(value));
     const shortenedURL = listingType === NEW_LISTING ? shortenedNewListingURL : shortenedSoldListingURL;
     const placeholder = listingType === NEW_LISTING ? 'Campaign will not be enabled for new listings' : 'Campaign will not be enabled for sold listings';
-
-    if (tc) {
-      MIN = listingType === NEW_LISTING ? tc.listed.mailoutSizeMin : tc.sold.mailoutSizeMin;
-      MAX = listingType === NEW_LISTING ? tc.listed.mailoutSizeMax : tc.sold.mailoutSizeMax;
-      SLIDER_INITIAL_VALUES = listingType === NEW_LISTING ? [tc.listed.mailoutSize] : [tc.sold.mailoutSize];
-    }
 
     return (
       <Segment>
@@ -302,9 +285,11 @@ const CustomizeTeamForm = () => {
                         setSelectedTemplate(template);
                         setSelectedColor(color);
 
+                        const postcardsTarget = (values && values[0]) || SLIDER_INITIAL_VALUES[0];
+
                         return (
                           <Input style={{ gridArea: 'PostcardsTarget', opacity: 1, userSelect: 'none' }} labelPosition="right" disabled>
-                            <input style={{ width: 'unset' }} value={values[0]} readOnly />
+                            <input style={{ width: 'unset' }} value={postcardsTarget} readOnly />
                             <Label>Default</Label>
                           </Input>
                         );
@@ -313,7 +298,15 @@ const CustomizeTeamForm = () => {
 
                     <Field name={`${listingType}_numberOfPostcardsDefaults`}>
                       {props => {
-                        if (SLIDER_INITIAL_VALUES !== props.input.value) SLIDER_INITIAL_VALUES = props.input.value;
+                        let newMin = MIN;
+                        let newMax = MAX;
+                        let newInitialValues = SLIDER_INITIAL_VALUES;
+
+                        if (tc) {
+                          newMin = listingType === NEW_LISTING ? tc.listed.mailoutSizeMin : tc.sold.mailoutSizeMin;
+                          newMax = listingType === NEW_LISTING ? tc.listed.mailoutSizeMax : tc.sold.mailoutSizeMax;
+                          newInitialValues = listingType === NEW_LISTING ? [tc.listed.mailoutSize] : [tc.sold.mailoutSize];
+                        }
 
                         return (
                           <div className="slider" style={{ gridArea: 'PostcardsSlider', padding: '0 0.5em' }}>
@@ -326,11 +319,11 @@ const CustomizeTeamForm = () => {
                             <Nouislider
                               style={{ height: '3px' }}
                               range={{
-                                min: MIN,
-                                max: MAX,
+                                min: newMin,
+                                max: newMax,
                               }}
                               step={STEPS}
-                              start={SLIDER_INITIAL_VALUES}
+                              start={props.input.value || newInitialValues}
                               margin={MARGIN}
                               connect={true}
                               behaviour="tap-drag"
