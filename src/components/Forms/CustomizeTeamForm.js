@@ -266,20 +266,22 @@ const CustomizeTeamForm = () => {
                         setSelectedTemplate(template);
                         setSelectedColor(color);
 
+                        if (!!values[0] || !!values[1] || !!values[2]) return null;
+
                         return (
                           <Fragment>
                             <Input style={{ gridArea: 'PostcardsMin', opacity: 1, userSelect: 'none' }} labelPosition="right" disabled>
-                              <input style={{ width: 'unset' }} value={values[0]} readOnly />
+                              <input style={{ width: 'unset' }} value={values && values[0]} readOnly />
                               <Label>Min</Label>
                             </Input>
 
                             <Input style={{ gridArea: 'PostcardsTarget', opacity: 1, userSelect: 'none' }} labelPosition="right" disabled>
-                              <input style={{ width: 'unset' }} value={values[1]} readOnly />
+                              <input style={{ width: 'unset' }} value={values && values[1]} readOnly />
                               <Label>Default</Label>
                             </Input>
 
                             <Input style={{ gridArea: 'PostcardsMax', opacity: 1, userSelect: 'none' }} labelPosition="right" disabled>
-                              <input style={{ width: 'unset' }} value={values[2]} readOnly />
+                              <input style={{ width: 'unset' }} value={values && values[2]} readOnly />
                               <Label>Max</Label>
                             </Input>
                           </Fragment>
