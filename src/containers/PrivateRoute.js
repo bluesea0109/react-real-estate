@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { Route, useHistory } from 'react-router-dom';
 
 import Loading from '../components/Loading';
+import { Message, Segment } from '../components/Base';
 
 const PrivateRoute = ({ component: Component, path, auth0, onLogin, templates, states, boards, ...rest }) => {
   let history = useHistory();
@@ -28,6 +29,13 @@ const PrivateRoute = ({ component: Component, path, auth0, onLogin, templates, s
   const render = props =>
     auth0.authenticated && !onLogin.pending && !onLogin.error && templates.available && states.available && boards.available ? (
       <Component {...props} />
+    ) : onLogin.error ? (
+      <Segment basic>
+        <Message>
+          <Message.Header>{onLogin.error}</Message.Header>
+          <p>The login process has failed, please contact the BravityMarketer Technical Support to resolve this issue!</p>
+        </Message>
+      </Segment>
     ) : (
       <Loading />
     );

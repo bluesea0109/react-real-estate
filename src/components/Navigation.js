@@ -8,7 +8,6 @@ import { StepLayout, StepsLayout, NavigationLayout, MobileDisabledLayout, Mobile
 import { selectPeerId, deselectPeerId } from '../store/modules/peer/actions';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, Image, Icon, Step } from './Base';
-import Loading from './Loading';
 
 const iconOnlyStyle = {
   margin: '0 auto 0 auto',
@@ -43,7 +42,12 @@ export default () => {
   const [activeUser, setActiveUser] = useState('');
 
   const onboarded = useSelector(store => store.onboarded.status);
-  const isAuthenticating = useSelector(store => store.auth0.pending);
+  const isAuthenticated = useSelector(store => store.auth0.authenticated);
+  const onLoginError = useSelector(store => store.onLogin.error);
+  const templatesAvailable = useSelector(store => store.templates.available);
+  const statesAvailable = useSelector(store => store.states.available);
+  const boardsAvailable = useSelector(store => store.boards.available);
+  const loadingCompleted = !!isAuthenticated && !!templatesAvailable && !!statesAvailable && !!boardsAvailable && !onLoginError;
 
   const completedProfile = useSelector(store => store.onboarded.completedProfile);
   const completedTeamCustomization = useSelector(store => store.onboarded.completedTeamCustomization);
@@ -51,7 +55,7 @@ export default () => {
   const completedInviteTeammates = useSelector(store => store.onboarded.completedInviteTeammates);
 
   const isMultimode = useSelector(store => store.onLogin.mode === 'multiuser');
-  const isLoading = useSelector(store => store.onLogin.pending);
+
   const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
   const loggedInUser = useSelector(store => store.onLogin.user);
   const selectedPeerId = useSelector(store => store.peer.peerId);
@@ -165,8 +169,6 @@ export default () => {
     }
   };
 
-  if (isAuthenticating || isLoading) return <Loading />;
-
   const onProfile = !completedProfile;
   const onTeamCustomization = !completedTeamCustomization && completedProfile;
   const onCustomization = !completedCustomization && completedTeamCustomization && completedProfile;
@@ -175,7 +177,9 @@ export default () => {
   const onProfileSingleUser = !completedProfile;
   const onCustomizationSingleUser = !completedCustomization && completedProfile;
 
-  if (!onboarded) {
+  if (!loadingCompleted) return null;
+
+  if (loadingCompleted && !onboarded) {
     if (isMultimode) {
       return (
         <StepsLayout vertical={!mql.matches}>
