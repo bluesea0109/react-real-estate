@@ -2,7 +2,7 @@ import Nouislider from 'nouislider-react';
 import { Field, FormSpy } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { Fragment, useEffect, useState } from 'react';
-import { Confirm, Header, Icon, Label, Radio } from 'semantic-ui-react';
+import { Confirm, Header, Icon, Radio } from 'semantic-ui-react';
 
 import {
   url,
@@ -19,7 +19,7 @@ import {
   composeValidators,
   renderCarouselField,
 } from './helpers';
-import { Input, Segment } from '../Base';
+import { Segment } from '../Base';
 import CustomizationWizard from './CustomizationWizard';
 
 import { saveCustomizationPending } from '../../store/modules/customization/actions';
@@ -239,6 +239,17 @@ const CustomizeTeamForm = () => {
                   }
             }
           >
+            <FormSpy>
+              {props => {
+                const template = props.values[`${listingType}_template`];
+                const color = props.values[`${listingType}_color`];
+                setSelectedTemplate(template);
+                setSelectedColor(color);
+
+                return <span> </span>;
+              }}
+            </FormSpy>
+
             <div style={{ gridArea: 'BrandColor' }}>
               {renderCarouselField({ name: `${listingType}_color`, label: 'Brand color', type: 'color', validate: required })}
             </div>
