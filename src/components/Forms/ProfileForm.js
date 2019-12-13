@@ -259,7 +259,7 @@ const ProfileForm = () => {
                     {renderPicturePickerField({ name: 'teamLogo', label: 'Team Logo', dispatch: dispatch, disabled: isMultimode })}
                   </div>
                   <div style={{ gridArea: 'BrokerageName' }}>
-                    {renderField({ name: 'brokerageName', label: 'Brokerage Name', type: 'text', required: true, validate: required })}
+                    {renderField({ name: 'brokerageName', label: 'Brokerage Name', type: 'text', required: true, validate: required, disabled: isMultimode })}
                   </div>
                   <div style={{ gridArea: 'BrokerageLogo' }}>
                     {renderPicturePickerField({
