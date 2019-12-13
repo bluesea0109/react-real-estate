@@ -158,7 +158,7 @@ const CustomizeTeamForm = () => {
     [`${SOLD_LISTING}_numberOfPostcardsDefaults`]: SLIDER_INITIAL_VALUES,
   };
 
-  if (!isMultimode && tc) {
+  if (tc) {
     initialValues = {
       [`${NEW_LISTING}_createMailoutsOfThisType`]: tc.listed.createMailoutsOfThisType,
       [`${NEW_LISTING}_template`]: tc.listed.templateTheme,
@@ -300,12 +300,10 @@ const CustomizeTeamForm = () => {
                       {props => {
                         let newMin = MIN;
                         let newMax = MAX;
-                        let newInitialValues = SLIDER_INITIAL_VALUES;
 
                         if (tc) {
                           newMin = listingType === NEW_LISTING ? tc.listed.mailoutSizeMin : tc.sold.mailoutSizeMin;
                           newMax = listingType === NEW_LISTING ? tc.listed.mailoutSizeMax : tc.sold.mailoutSizeMax;
-                          newInitialValues = listingType === NEW_LISTING ? [tc.listed.mailoutSize] : [tc.sold.mailoutSize];
                         }
 
                         return (
@@ -323,14 +321,14 @@ const CustomizeTeamForm = () => {
                                 max: newMax,
                               }}
                               step={STEPS}
-                              start={props.input.value || newInitialValues}
+                              start={props.input.value || SLIDER_INITIAL_VALUES}
                               margin={MARGIN}
                               connect={true}
                               behaviour="tap-drag"
                               tooltips={true}
                               pips={{
                                 mode: 'values',
-                                values: [MIN, MAX],
+                                values: [newMin, newMax],
                                 stepped: true,
                                 density: 3,
                               }}
