@@ -222,7 +222,7 @@ export const WhenFieldChanges = ({ field, becomes, set, to }) => (
         {({ form }) => (
           <OnChange name={field}>
             {value => {
-              if (value === becomes) {
+              if (value === becomes || becomes === undefined) {
                 onChange(to);
               }
             }}
