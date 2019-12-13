@@ -374,11 +374,8 @@ export const renderCarouselField = ({ name, label, type, required = undefined, v
               step={step}
               naturalSlideWidth={360}
               naturalSlideHeight={240}
+              dragEnabled={false}
               style={{
-                // margin: 0,
-                // padding: 0,
-                // overflow: 'hidden',
-
                 display: 'grid',
                 gridTemplateColumns: '.5fr 14fr .5fr',
                 gridTemplateRows: resolveHeight(type),
