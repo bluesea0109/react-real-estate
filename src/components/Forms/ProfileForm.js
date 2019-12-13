@@ -7,9 +7,11 @@ import { Header, Divider, Form, Image } from 'semantic-ui-react';
 
 import {
   email,
+  popup,
   isMobile,
   required,
   renderField,
+  labelWithPopup,
   WhenFieldChanges,
   composeValidators,
   renderSelectField,
@@ -28,6 +30,8 @@ const renderLabelWithSubHeader = (label, subHeader) =>
       {label} <span style={{ fontWeight: 300 }}>{subHeader}</span>
     </label>
   );
+
+const changeMsg = 'This comes from Brivity. If you want to modify this information, you will need to modify it there';
 
 const ProfileForm = () => {
   const dispatch = useDispatch();
@@ -184,18 +188,39 @@ const ProfileForm = () => {
                   })}
                 </div>
                 <div style={{ gridArea: 'First' }}>
-                  {renderField({ name: 'first', label: 'First Name', type: 'text', required: true, validate: required, disabled: isMultimode })}
+                  {renderField({
+                    name: 'first',
+                    label: isMultimode ? labelWithPopup('First Name', popup(changeMsg)) : 'First Name',
+                    type: 'text',
+                    required: true,
+                    validate: required,
+                    disabled: isMultimode,
+                  })}
                 </div>
                 <div style={{ gridArea: 'Last' }}>
-                  {renderField({ name: 'last', label: 'Last Name', type: 'text', required: true, validate: required, disabled: isMultimode })}
+                  {renderField({
+                    name: 'last',
+                    label: isMultimode ? labelWithPopup('Last Name', popup(changeMsg)) : 'Last Name',
+                    type: 'text',
+                    required: true,
+                    validate: required,
+                    disabled: isMultimode,
+                  })}
                 </div>
                 <div style={{ gridArea: 'Phone' }}>
-                  {renderField({ name: 'phone', label: 'Phone Number', type: 'text', required: true, validate: required, disabled: isMultimode })}
+                  {renderField({
+                    name: 'phone',
+                    label: isMultimode ? labelWithPopup('Phone Number', popup(changeMsg)) : 'Phone Number',
+                    type: 'text',
+                    required: true,
+                    validate: required,
+                    disabled: isMultimode,
+                  })}
                 </div>
                 <div style={{ gridArea: 'Email' }}>
                   {renderField({
                     name: 'email',
-                    label: 'Email',
+                    label: isMultimode ? labelWithPopup('Email', popup(changeMsg)) : 'Email',
                     type: 'text',
                     required: true,
                     validate: composeValidators(required, email),
@@ -253,13 +278,27 @@ const ProfileForm = () => {
                   }
                 >
                   <div style={{ gridArea: 'TeamName' }}>
-                    {renderField({ name: 'teamName', label: 'Team Name', type: 'text', required: true, validate: required, disabled: isMultimode })}
+                    {renderField({
+                      name: 'teamName',
+                      label: isMultimode ? labelWithPopup('Team Name', popup(changeMsg)) : 'Team Name',
+                      type: 'text',
+                      required: true,
+                      validate: required,
+                      disabled: isMultimode,
+                    })}
                   </div>
                   <div style={{ gridArea: 'TeamLogo' }}>
                     {renderPicturePickerField({ name: 'teamLogo', label: 'Team Logo', dispatch: dispatch, disabled: isMultimode })}
                   </div>
                   <div style={{ gridArea: 'BrokerageName' }}>
-                    {renderField({ name: 'brokerageName', label: 'Brokerage Name', type: 'text', required: true, validate: required, disabled: isMultimode })}
+                    {renderField({
+                      name: 'brokerageName',
+                      label: isMultimode ? labelWithPopup('Brokerage Name', popup(changeMsg)) : 'Brokerage Name',
+                      type: 'text',
+                      required: true,
+                      validate: required,
+                      disabled: isMultimode,
+                    })}
                   </div>
                   <div style={{ gridArea: 'BrokerageLogo' }}>
                     {renderPicturePickerField({
@@ -272,15 +311,29 @@ const ProfileForm = () => {
                   </div>
                   <div style={{ gridArea: 'OfficePhone' }}>{renderField({ name: 'officePhone', label: 'Office Phone Number (Optional)', type: 'text' })}</div>
                   <div style={{ gridArea: 'Address' }}>
-                    {renderField({ name: 'address', label: 'Address', type: 'text', required: true, validate: required, disabled: isMultimode })}
+                    {renderField({
+                      name: 'address',
+                      label: isMultimode ? labelWithPopup('Address', popup(changeMsg)) : 'Address',
+                      type: 'text',
+                      required: true,
+                      validate: required,
+                      disabled: isMultimode,
+                    })}
                   </div>
                   <div style={{ gridArea: 'City' }}>
-                    {renderField({ name: 'city', label: 'City', type: 'text', required: true, validate: required, disabled: isMultimode })}
+                    {renderField({
+                      name: 'city',
+                      label: isMultimode ? labelWithPopup('City', popup(changeMsg)) : 'City',
+                      type: 'text',
+                      required: true,
+                      validate: required,
+                      disabled: isMultimode,
+                    })}
                   </div>
                   <div style={{ gridArea: 'State' }}>
                     {renderSelectField({
                       name: 'state',
-                      label: 'State',
+                      label: isMultimode ? labelWithPopup('State', popup(changeMsg)) : 'State',
                       type: 'text',
                       required: true,
                       validate: required,
@@ -290,7 +343,14 @@ const ProfileForm = () => {
                     })}
                   </div>
                   <div style={{ gridArea: 'ZipCode' }}>
-                    {renderField({ name: 'zip', label: 'Zip Code', type: 'text', required: true, validate: required, disabled: isMultimode })}
+                    {renderField({
+                      name: 'zip',
+                      label: isMultimode ? labelWithPopup('Zip Code', popup(changeMsg)) : 'Zip Code',
+                      type: 'text',
+                      required: true,
+                      validate: required,
+                      disabled: isMultimode,
+                    })}
                   </div>
                   <div style={{ gridArea: 'BusinessNotificationEmail' }}>
                     {renderField({
