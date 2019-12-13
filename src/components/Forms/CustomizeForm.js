@@ -226,14 +226,14 @@ const CustomizeTeamForm = () => {
                 : {
                     display: 'grid',
                     gridTemplateColumns: '1fr 1fr',
-                    gridTemplateRows: '230px 120px 40px 40px 20px',
+                    gridTemplateRows: '190px 65px 35px 35px 20px',
                     gridTemplateAreas: `
                       "ChooseTemplate BrandColor"
                       "Headline NumberOfPostcards"
                       "CallToAction CallToAction"
                       "CallToAction CallToAction"
                       "ShortenedURL ShortenedURL"
-                        `,
+                    `,
                     gridRowGap: '1em',
                     gridColumnGap: '2em',
                   }
@@ -256,7 +256,7 @@ const CustomizeTeamForm = () => {
             <div style={{ gridArea: 'NumberOfPostcards' }}>
               {
                 <div>
-                  <Header as="h4" style={{ marginBottom: 0 }}>
+                  <Header as="h4" style={{ marginBottom: '38px' }}>
                     Number of postcards to send per listing
                   </Header>
                   <div
@@ -266,9 +266,8 @@ const CustomizeTeamForm = () => {
                         : {
                             display: 'grid',
                             gridTemplateColumns: '1fr',
-                            gridTemplateRows: '1fr 2fr',
+                            gridTemplateRows: '2fr',
                             gridTemplateAreas: `
-                            "PostcardsTarget"
                             "PostcardsSlider"
                           `,
                             gridRowGap: '3em',
@@ -276,26 +275,6 @@ const CustomizeTeamForm = () => {
                           }
                     }
                   >
-                    <FormSpy>
-                      {props => {
-                        const values = props.values[`${listingType}_numberOfPostcardsDefaults`];
-
-                        const template = props.values[`${listingType}_template`];
-                        const color = props.values[`${listingType}_color`];
-                        setSelectedTemplate(template);
-                        setSelectedColor(color);
-
-                        const postcardsTarget = (values && values[0]) || SLIDER_INITIAL_VALUES[0];
-
-                        return (
-                          <Input style={{ gridArea: 'PostcardsTarget', opacity: 1, userSelect: 'none' }} labelPosition="right" disabled>
-                            <input style={{ width: 'unset' }} value={postcardsTarget} readOnly />
-                            <Label>Default</Label>
-                          </Input>
-                        );
-                      }}
-                    </FormSpy>
-
                     <Field name={`${listingType}_numberOfPostcardsDefaults`}>
                       {props => {
                         let newMin = MIN;

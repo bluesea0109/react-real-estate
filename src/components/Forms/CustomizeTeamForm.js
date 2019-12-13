@@ -198,7 +198,7 @@ const CustomizeTeamForm = () => {
                 : {
                     display: 'grid',
                     gridTemplateColumns: '1fr 1fr',
-                    gridTemplateRows: '230px 120px 40px 40px 20px',
+                    gridTemplateRows: '190px 120px 40px 40px 20px',
                     gridTemplateAreas: `
                       "ChooseTemplate BrandColor"
                       "Headline NumberOfPostcards"

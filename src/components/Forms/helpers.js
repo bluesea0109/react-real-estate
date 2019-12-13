@@ -243,47 +243,65 @@ export const templates = [
 
 const renderColorRadio = field => {
   return (
-    <Slide tag="a" index={field.radioValue} style={{ minHeight: '13em' }}>
-      <Form.Radio
-        checked={field.input.value === field.radioValue}
-        name={field.input.name}
-        onChange={(e, { checked }) => field.input.onChange(field.radioValue)}
-        style={{ visibility: 'hidden' }}
-      />
-      <div>
-        <div
-          style={
-            field.input.value === field.radioValue
-              ? { border: '3px solid teal', margin: 0, padding: '0.5em' }
-              : { border: '1px solid lightgray', margin: 0, padding: '0.5em' }
+    <div>
+      <Slide
+        tag="a"
+        index={field.radioValue}
+        style={
+          {
+            /*minHeight: '13em'*/
           }
-        >
-          <svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg" onClick={e => field.input.onChange(field.radioValue)}>
-            <g color={`${field.hex}`}>
-              <rect x="35" y="50" width="150" height="100" rx="5" fill="currentColor" />
-            </g>
-          </svg>
+        }
+      >
+        <Form.Radio
+          checked={field.input.value === field.radioValue}
+          name={field.input.name}
+          onChange={(e, { checked }) => field.input.onChange(field.radioValue)}
+          style={{ visibility: 'hidden' }}
+        />
+        <div style={{ margin: '1em' }}>
+          <div
+            style={
+              field.input.value === field.radioValue
+                ? { border: '2px solid teal', margin: 0, padding: '0.5em', borderRadius: '5px' }
+                : { border: '1px solid lightgray', margin: 0, padding: '0.5em', borderRadius: '5px' }
+            }
+          >
+            <svg viewBox="0 0 220 170" xmlns="http://www.w3.org/2000/svg" onClick={e => field.input.onChange(field.radioValue)}>
+              <g color={`${field.hex}`}>
+                <rect x="5" y="5" width="210" height="165" rx="5" fill="currentColor" />
+              </g>
+            </svg>
+          </div>
         </div>
-      </div>
-    </Slide>
+      </Slide>
+    </div>
   );
 };
 
 const renderImageRadio = field => {
   return (
-    <Slide tag="a" index={field.radioValue} style={{ minHeight: '15em' }}>
+    <Slide
+      tag="a"
+      index={field.radioValue}
+      style={
+        {
+          /*minHeight: '15em'*/
+        }
+      }
+    >
       <Form.Radio
         checked={field.input.value === field.radioValue}
         name={field.input.name}
         onChange={(e, { checked }) => field.input.onChange(field.radioValue)}
         style={{ visibility: 'hidden' }}
       />
-      <div>
+      <div style={{ margin: '1em' }}>
         <div
           style={
             field.input.value === field.radioValue
-              ? { border: '3px solid teal', margin: 0, padding: '0.5em' }
-              : { border: '1px solid lightgray', margin: 0, padding: '0.5em' }
+              ? { border: '2px solid teal', margin: 0, padding: '0.5em', borderRadius: '5px' }
+              : { border: '1px solid lightgray', margin: 0, padding: '0.5em', borderRadius: '5px' }
           }
         >
           <img onClick={e => field.input.onChange(field.radioValue)} src={field.src} alt={field.radioValue} />
@@ -330,22 +348,26 @@ export const renderCarouselField = ({ name, label, type, required = undefined, v
     return type ? types[type] : types['undefined'];
   };
 
+  const resolveHeight = type => {
+    const types = {
+      template: '200px',
+      color: '155px',
+      undefined: 0,
+    };
+    return type ? types[type] : types['undefined'];
+  };
+
   const visibleSlides = resolveVisibleSlides(type);
   const totalSlides = resolveTotalSlides(type);
   const step = resolveStep(type);
 
   return (
     <Field name={name} validate={validate}>
-      {({ input, meta }) => (
-        <Form.Field required={required}>
-          <label>{label}</label>
-          <Segment
-            style={{
-              margin: 0,
-              padding: 0,
-              overflow: 'hidden',
-            }}
-          >
+      {({ input, meta }) => {
+        return (
+          <Form.Field required={required}>
+            <label style={{ marginBottom: '-2em' }}>{label}</label>
+
             <CarouselProvider
               visibleSlides={visibleSlides}
               totalSlides={totalSlides}
@@ -353,9 +375,13 @@ export const renderCarouselField = ({ name, label, type, required = undefined, v
               naturalSlideWidth={360}
               naturalSlideHeight={240}
               style={{
+                // margin: 0,
+                // padding: 0,
+                // overflow: 'hidden',
+
                 display: 'grid',
                 gridTemplateColumns: '.5fr 14fr .5fr',
-                gridTemplateRows: '1fr',
+                gridTemplateRows: resolveHeight(type),
                 gridTemplateAreas: `"ButtonBack Slider ButtonNext"`,
               }}
             >
@@ -388,16 +414,14 @@ export const renderCarouselField = ({ name, label, type, required = undefined, v
                 <FontAwesomeIcon icon="angle-right" />
               </ButtonNext>
             </CarouselProvider>
-          </Segment>
-        </Form.Field>
-      )}
+          </Form.Field>
+        );
+      }}
     </Field>
   );
 };
 
-export const popup = msg => (
-  <Popup flowing trigger={<FontAwesomeIcon icon="info-circle" style={{ marginLeft: '.5em', color: '#2DB5AD' }} />} content={msg} position="top right" />
-);
+export const popup = msg => <Popup flowing trigger={<FontAwesomeIcon icon="info-circle" style={{ color: '#2DB5AD' }} />} content={msg} position="top right" />;
 
 export const labelWithPopup = (label, popup) => (
   <span>
