@@ -336,6 +336,7 @@ const CustomizeTeamForm = () => {
                 dispatch: dispatch,
                 validate: composeValidators(required, url),
                 target: listingType,
+                form: 'team',
               })}
             </div>
             <div style={{ gridArea: 'ShortenedURL' }}>

@@ -8,9 +8,10 @@ import { Field, FormSpy } from 'react-final-form';
 import { OnChange } from 'react-final-form-listeners';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Card, Form, Header, Image, Item, Popup, Segment } from '../Base';
+import { Card, Form, Header, Image, Item, Popup } from '../Base';
 import { ButtonBack, ButtonNext, CarouselProvider, Slide, Slider } from 'pure-react-carousel';
 import { uploadPhotoPending, deletePhotoPending } from '../../store/modules/pictures/actions';
+import { saveListedShortcodePending, saveSoldShortcodePending } from '../../store/modules/shortcode/actions';
 import { saveTeamListedShortcodePending, saveTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
 
 // export const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -103,11 +104,17 @@ export const renderField = ({ name, label, type, required = undefined, validate,
   }
 };
 
-export const renderUrlField = ({ name, label, type, dispatch, required = undefined, validate, target, disabled = undefined }) => {
+export const renderUrlField = ({ name, label, type, dispatch, required = undefined, validate, target, disabled = undefined, form = undefined }) => {
   const onBlurHandler = e => {
     const eURL = e.target.value;
-    if (target === 'newListing' && isURL(eURL)) dispatch(saveTeamListedShortcodePending(eURL));
-    if (target === 'soldListing' && isURL(eURL)) dispatch(saveTeamSoldShortcodePending(eURL));
+
+    if (form === 'team') {
+      if (target === 'newListing' && isURL(eURL)) dispatch(saveTeamListedShortcodePending(eURL));
+      if (target === 'soldListing' && isURL(eURL)) dispatch(saveTeamSoldShortcodePending(eURL));
+    } else {
+      if (target === 'newListing' && isURL(eURL)) dispatch(saveListedShortcodePending(eURL));
+      if (target === 'soldListing' && isURL(eURL)) dispatch(saveSoldShortcodePending(eURL));
+    }
 
     return null;
   };
