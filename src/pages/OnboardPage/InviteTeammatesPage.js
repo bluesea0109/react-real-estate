@@ -1,15 +1,16 @@
 import React from 'react';
 
-import { Header, Page, Segment } from '../../components/Base';
+import InviteTeammatesForm from '../../components/Forms/InviteTeammatesForm';
+import { Page, Segment } from '../../components/Base';
 
-const OnboardPage = () => {
+const InviteTeammatesPage = () => {
   return (
     <Page basic>
-      <Segment>
-        <Header as="h1">Invite Teammates</Header>
+      <Segment basic>
+        <InviteTeammatesForm />
       </Segment>
     </Page>
   );
 };
 
-export default OnboardPage;
+export default InviteTeammatesPage;

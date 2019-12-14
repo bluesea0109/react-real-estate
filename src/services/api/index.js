@@ -162,6 +162,9 @@ const directory = {
         },
       },
     },
+    inviteUsers: {
+      send: () => ({ path: `/api/user/peer/invite`, method: 'post' }),
+    },
   },
 };
 

@@ -8,11 +8,12 @@ import {
   saveCustomizationSuccess,
   saveCustomizationError,
 } from './actions';
-import { setCompletedCustomization } from '../onboarded/actions';
+import { setCompletedCustomization, setOnboardedStatus } from '../onboarded/actions';
 import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
 
 import ApiService from '../../../services/api/index';
 
+export const getOnLoginMode = state => state.onLogin.mode;
 export const getOnboardedStatus = state => state.onboarded.status;
 export const customizationToSave = state => state.customization.toSave;
 
@@ -42,7 +43,9 @@ export function* saveCustomizationSaga() {
     yield put(saveCustomizationSuccess(response));
 
     const isOnboarded = yield select(getOnboardedStatus);
+    const mode = yield select(getOnLoginMode);
     if (!isOnboarded) yield put(setCompletedCustomization(true));
+    if (!isOnboarded && mode !== 'multiuser') yield put(setOnboardedStatus(true));
   } catch (err) {
     yield put(saveCustomizationError(err.message));
   }
