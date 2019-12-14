@@ -2,7 +2,7 @@ import Nouislider from 'nouislider-react';
 import { Field, FormSpy } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { Fragment, useEffect, useState } from 'react';
-import { Confirm, Header, Icon, Label, Radio } from 'semantic-ui-react';
+import { Confirm, Header, Icon, Radio } from 'semantic-ui-react';
 
 import {
   url,
@@ -20,7 +20,7 @@ import {
   renderCarouselField,
 } from './helpers';
 
-import { Input, Segment } from '../Base';
+import { Segment } from '../Base';
 import CustomizationWizard from './CustomizationWizard';
 import { saveTeamCustomizationPending } from '../../store/modules/teamCustomization/actions';
 import { getTeamListedShortcodePending, getTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
@@ -167,6 +167,7 @@ const CustomizeTeamForm = () => {
     const setSelectedColor = value => (listingType === NEW_LISTING ? setSelectedNewListingColor(value) : setSelectedSoldListingColor(value));
     const shortenedURL = listingType === NEW_LISTING ? shortenedNewListingURL : shortenedSoldListingURL;
     const placeholder = listingType === NEW_LISTING ? 'Campaign will not be enabled for new listings' : 'Campaign will not be enabled for sold listings';
+    // const targetOn = listingType === NEW_LISTING ? 'Generate new listing campaigns' : 'Generate sold listing campaigns';
 
     return (
       <Segment>
@@ -250,35 +251,18 @@ const CustomizeTeamForm = () => {
                   >
                     <FormSpy>
                       {props => {
-                        const values = props.values[`${listingType}_numberOfPostcardsDefaults`];
+                        props.values[`${listingType}_numberOfPostcardsDefaults`] = props.values[`${listingType}_numberOfPostcardsDefaults`].map(val => {
+                          let retVal = val;
+                          if (typeof val === 'string') return parseInt(val.split(': ')[1], 10);
+                          return retVal;
+                        });
 
                         const template = props.values[`${listingType}_template`];
                         const color = props.values[`${listingType}_color`];
                         setSelectedTemplate(template);
                         setSelectedColor(color);
 
-                        const postcardsMin = (values && values[0]) || SLIDER_INITIAL_VALUES[0];
-                        const postcardsTarget = (values && values[1]) || SLIDER_INITIAL_VALUES[1];
-                        const postcardsMax = (values && values[2]) || SLIDER_INITIAL_VALUES[2];
-
-                        return (
-                          <Fragment>
-                            <Input style={{ gridArea: 'PostcardsMin', opacity: 1, userSelect: 'none' }} labelPosition="right" disabled>
-                              <input style={{ width: 'unset' }} value={postcardsMin} readOnly />
-                              <Label>Min</Label>
-                            </Input>
-
-                            <Input style={{ gridArea: 'PostcardsTarget', opacity: 1, userSelect: 'none' }} labelPosition="right" disabled>
-                              <input style={{ width: 'unset' }} value={postcardsTarget} readOnly />
-                              <Label>Default</Label>
-                            </Input>
-
-                            <Input style={{ gridArea: 'PostcardsMax', opacity: 1, userSelect: 'none' }} labelPosition="right" disabled>
-                              <input style={{ width: 'unset' }} value={postcardsMax} readOnly />
-                              <Label>Max</Label>
-                            </Input>
-                          </Fragment>
-                        );
+                        return <span> </span>;
                       }}
                     </FormSpy>
 
@@ -310,8 +294,19 @@ const CustomizeTeamForm = () => {
                               density: 3,
                             }}
                             format={{
-                              to: value => Math.round(parseInt(value, 10) / 10) * 10,
-                              from: value => value,
+                              to: (value, index) => {
+                                const intValue = Math.round(parseInt(value, 10) / 10) * 10;
+
+                                if (index === 0) return 'Min: ' + intValue;
+                                if (index === 1) return 'Default: ' + intValue;
+                                if (index === 2) return 'Max: ' + intValue;
+                              },
+                              from: value => {
+                                const newValue = value.split(':');
+
+                                if (newValue.length === 1) return newValue[0];
+                                else return newValue[1];
+                              },
                             }}
                             onChange={props.input.onChange}
                           />
