@@ -96,7 +96,6 @@ const InviteTeammatesForm = () => {
 
         <FinalForm
           onSubmit={onSubmit}
-          // initialValues={{}}
           render={({ handleSubmit, form, submitting, pristine, values }) => (
             <Form onSubmit={handleSubmit}>
               <List>{profiles}</List>
