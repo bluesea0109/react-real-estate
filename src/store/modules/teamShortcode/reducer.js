@@ -42,7 +42,7 @@ export default function teamShortcode(state = initialState, action) {
       return {
         ...state,
         pending: false,
-        error: action.error,
+        error: Object.assign({}, state.error, { onGetSold: action.error }),
       };
 
     case SAVE_TEAM_SOLD_SHORTCODE_PENDING:
@@ -58,14 +58,13 @@ export default function teamShortcode(state = initialState, action) {
         ...state,
         pending: false,
         sold: action.payload,
-        soldToSave: null,
       };
 
     case SAVE_TEAM_SOLD_SHORTCODE_ERROR:
       return {
         ...state,
         pending: false,
-        error: action.error,
+        error: Object.assign({}, state.error, { onSaveSold: action.error }),
       };
 
     case GET_TEAM_LISTED_SHORTCODE_PENDING:
@@ -86,7 +85,7 @@ export default function teamShortcode(state = initialState, action) {
       return {
         ...state,
         pending: false,
-        error: action.error,
+        error: Object.assign({}, state.error, { onGetListed: action.error }),
       };
 
     case SAVE_TEAM_LISTED_SHORTCODE_PENDING:
@@ -102,14 +101,13 @@ export default function teamShortcode(state = initialState, action) {
         ...state,
         pending: false,
         listed: action.payload,
-        listedToSave: null,
       };
 
     case SAVE_TEAM_LISTED_SHORTCODE_ERROR:
       return {
         ...state,
         pending: false,
-        error: action.error,
+        error: Object.assign({}, state.error, { onSaveListed: action.error }),
       };
 
     default:

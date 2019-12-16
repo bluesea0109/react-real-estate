@@ -8,3 +8,9 @@
 .carousel :focus {
   display: none !important;
 }
+
+.noUi-tooltip {
+  font-size: 10px;
+  padding-top: 0;
+  padding-bottom: 0;
+}

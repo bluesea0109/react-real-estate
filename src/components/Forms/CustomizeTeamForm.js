@@ -247,7 +247,7 @@ const CustomizeTeamForm = () => {
                             "PostcardsMin PostcardsTarget PostcardsMax"
                             "PostcardsSlider PostcardsSlider PostcardsSlider"
                           `,
-                            gridRowGap: '3em',
+                            gridRowGap: '2em',
                             gridColumnGap: '2em',
                           }
                     }
