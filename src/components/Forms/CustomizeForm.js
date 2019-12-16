@@ -2,7 +2,7 @@ import Nouislider from 'nouislider-react';
 import { Field, FormSpy } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { Fragment, useEffect, useState } from 'react';
-import { Confirm, Header, Icon, Radio } from 'semantic-ui-react';
+import { Confirm, Header, Label, Radio } from 'semantic-ui-react';
 
 import {
   url,
@@ -19,7 +19,7 @@ import {
   composeValidators,
   renderCarouselField,
 } from './helpers';
-import { Segment } from '../Base';
+import { Button, Icon, Menu, Segment } from '../Base';
 import CustomizationWizard from './CustomizationWizard';
 
 import { saveCustomizationPending } from '../../store/modules/customization/actions';
@@ -54,8 +54,10 @@ const CustomizeTeamForm = () => {
   const ribbonTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.ribbon);
   const stackTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.stack);
 
-  const shortenedNewListingURL = useSelector(store => store.teamShortcode && store.teamShortcode.listed);
-  const shortenedSoldListingURL = useSelector(store => store.teamShortcode && store.teamShortcode.sold);
+  const shortenedNewListingTeamURL = useSelector(store => store.teamShortcode && store.teamShortcode.listed);
+  const shortenedSoldListingTeamURL = useSelector(store => store.teamShortcode && store.teamShortcode.sold);
+  const shortenedNewListingURL = useSelector(store => store.shortcode && store.shortcode.listed);
+  const shortenedSoldListingURL = useSelector(store => store.shortcode && store.shortcode.sold);
 
   const tc = useSelector(store => store.teamCustomization && store.teamCustomization.available);
 
@@ -159,6 +161,7 @@ const CustomizeTeamForm = () => {
   };
 
   if (tc) {
+    console.log('tc engaged');
     initialValues = {
       [`${NEW_LISTING}_createMailoutsOfThisType`]: tc.listed.createMailoutsOfThisType,
       [`${NEW_LISTING}_template`]: tc.listed.templateTheme,
@@ -193,13 +196,25 @@ const CustomizeTeamForm = () => {
       listingType === NEW_LISTING ? frontHeadlineNewListing && frontHeadlineNewListing.max : frontHeadlineSoldListing && frontHeadlineSoldListing.max;
     const setSelectedTemplate = value => (listingType === NEW_LISTING ? setSelectedNewListingTemplate(value) : setSelectedSoldListingTemplate(value));
     const setSelectedColor = value => (listingType === NEW_LISTING ? setSelectedNewListingColor(value) : setSelectedSoldListingColor(value));
-    const shortenedURL = listingType === NEW_LISTING ? shortenedNewListingURL : shortenedSoldListingURL;
+
+    let cta;
+    let shortenedURL;
+    if (isMultimode) {
+      shortenedURL = listingType === NEW_LISTING ? shortenedNewListingTeamURL : shortenedSoldListingTeamURL;
+      if (tc) {
+        cta = listingType === NEW_LISTING ? initialValues[`${NEW_LISTING}_actionURL`] : initialValues[`${SOLD_LISTING}_actionURL`];
+      }
+    } else {
+      shortenedURL = listingType === NEW_LISTING ? shortenedNewListingURL : shortenedSoldListingURL;
+    }
+
     const placeholder = listingType === NEW_LISTING ? 'Campaign will not be enabled for new listings' : 'Campaign will not be enabled for sold listings';
+    const targetOn = listingType === NEW_LISTING ? 'Generate new listing campaigns' : 'Generate sold listing campaigns';
 
     return (
       <Segment>
         <Header size="medium">
-          Target on new: &nbsp;
+          {targetOn}: &nbsp;
           <Field name={`${listingType}_createMailoutsOfThisType`} type="checkbox">
             {props => {
               if (props.input.checked !== radioValue) {
@@ -226,13 +241,13 @@ const CustomizeTeamForm = () => {
                 : {
                     display: 'grid',
                     gridTemplateColumns: '1fr 1fr',
-                    gridTemplateRows: '190px 65px 35px 35px 20px',
+                    gridTemplateRows: '4em 4em 4em 6em 2em',
                     gridTemplateAreas: `
-                      "ChooseTemplate BrandColor"
-                      "Headline NumberOfPostcards"
-                      "CallToAction CallToAction"
-                      "CallToAction CallToAction"
-                      "ShortenedURL ShortenedURL"
+                      "ChooseTemplate Headline"
+                      "ChooseTemplate NumberOfPostcards"
+                      "ChooseTemplate NumberOfPostcards"
+                      "BrandColor CallToAction"
+                      "BrandColor ShortenedURL"
                     `,
                     gridRowGap: '1em',
                     gridColumnGap: '2em',
@@ -246,15 +261,16 @@ const CustomizeTeamForm = () => {
                 setSelectedTemplate(template);
                 setSelectedColor(color);
 
+                if (cta) props.values[`${listingType}_actionURL`] = cta;
+
                 return <span> </span>;
               }}
             </FormSpy>
-
-            <div style={{ gridArea: 'BrandColor' }}>
-              {renderCarouselField({ name: `${listingType}_color`, label: 'Brand color', type: 'color', validate: required })}
-            </div>
             <div style={{ gridArea: 'ChooseTemplate' }}>
               {renderCarouselField({ name: `${listingType}_template`, label: 'Choose template', type: 'template', validate: required })}
+            </div>
+            <div style={{ gridArea: 'BrandColor' }}>
+              {renderCarouselField({ name: `${listingType}_color`, label: 'Brand color', type: 'color', validate: required })}
             </div>
             <div style={{ gridArea: 'Headline' }}>
               {renderField({
@@ -288,21 +304,28 @@ const CustomizeTeamForm = () => {
                   >
                     <Field name={`${listingType}_numberOfPostcardsDefaults`}>
                       {props => {
-                        let newMin = MIN;
-                        let newMax = MAX;
+                        let newMin;
+                        let newMax;
 
                         if (tc) {
                           newMin = listingType === NEW_LISTING ? tc.listed.mailoutSizeMin : tc.sold.mailoutSizeMin;
                           newMax = listingType === NEW_LISTING ? tc.listed.mailoutSizeMax : tc.sold.mailoutSizeMax;
                         }
 
+                        if (!isMultimode) {
+                          newMin = MIN;
+                          newMax = MAX;
+                        }
+
+                        if (!newMin || !newMax) return <span>Loading... </span>;
+
                         return (
                           <div className="slider" style={{ gridArea: 'PostcardsSlider', padding: '0 0.5em' }}>
                             {isMobile() && (
-                              <br>
-                                {' '}
-                                <br />{' '}
-                              </br>
+                              <Fragment>
+                                <br />
+                                <br />
+                              </Fragment>
                             )}
                             <Nouislider
                               style={{ height: '3px' }}
@@ -323,16 +346,18 @@ const CustomizeTeamForm = () => {
                                 density: 3,
                               }}
                               format={{
-                                to: value => Math.round(parseInt(value, 10) / 10) * 10,
+                                to: (value, i) => {
+                                  return Math.round(parseInt(value, 10) / 10) * 10;
+                                },
                                 from: value => value,
                               }}
                               onChange={props.input.onChange}
                             />
                             {isMobile() && (
-                              <br>
-                                {' '}
-                                <br />{' '}
-                              </br>
+                              <Fragment>
+                                <br />
+                                <br />
+                              </Fragment>
                             )}
                           </div>
                         );
@@ -353,7 +378,19 @@ const CustomizeTeamForm = () => {
               })}
             </div>
             <div style={{ gridArea: 'ShortenedURL' }}>
-              Shortened URL: {shortenedURL} {popup('Some message')}
+              {shortenedURL && (cta || !isMultimode) && (
+                <Label>
+                  <Icon name="linkify" />
+                  Shortened URL:
+                  <Label.Detail>
+                    <Menu.Item href={'https://' + shortenedURL} position="left" target="_blank">
+                      <span>
+                        {shortenedURL} {popup('Some message')}
+                      </span>
+                    </Menu.Item>
+                  </Label.Detail>
+                </Label>
+              )}
             </div>
           </div>
         </Condition>

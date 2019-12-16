@@ -2,7 +2,7 @@ import Nouislider from 'nouislider-react';
 import { Field, FormSpy } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { Fragment, useEffect, useState } from 'react';
-import { Confirm, Header, Icon, Radio } from 'semantic-ui-react';
+import { Confirm, Header, Icon, Label, Radio } from 'semantic-ui-react';
 
 import {
   url,
@@ -20,7 +20,7 @@ import {
   renderCarouselField,
 } from './helpers';
 
-import { Segment } from '../Base';
+import { Menu, Segment } from '../Base';
 import CustomizationWizard from './CustomizationWizard';
 import { saveTeamCustomizationPending } from '../../store/modules/teamCustomization/actions';
 import { getTeamListedShortcodePending, getTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
@@ -167,12 +167,12 @@ const CustomizeTeamForm = () => {
     const setSelectedColor = value => (listingType === NEW_LISTING ? setSelectedNewListingColor(value) : setSelectedSoldListingColor(value));
     const shortenedURL = listingType === NEW_LISTING ? shortenedNewListingURL : shortenedSoldListingURL;
     const placeholder = listingType === NEW_LISTING ? 'Campaign will not be enabled for new listings' : 'Campaign will not be enabled for sold listings';
-    // const targetOn = listingType === NEW_LISTING ? 'Generate new listing campaigns' : 'Generate sold listing campaigns';
+    const targetOn = listingType === NEW_LISTING ? 'Generate new listing campaigns' : 'Generate sold listing campaigns';
 
     return (
       <Segment>
         <Header size="medium">
-          Target on new: &nbsp;
+          {targetOn}: &nbsp;
           <Field name={`${listingType}_createMailoutsOfThisType`} type="checkbox">
             {props => {
               if (props.input.checked !== radioValue) {
@@ -199,24 +199,24 @@ const CustomizeTeamForm = () => {
                 : {
                     display: 'grid',
                     gridTemplateColumns: '1fr 1fr',
-                    gridTemplateRows: '190px 120px 40px 40px 20px',
+                    gridTemplateRows: '4em 4em 4em 6em 2em',
                     gridTemplateAreas: `
-                      "ChooseTemplate BrandColor"
-                      "Headline NumberOfPostcards"
-                      "CallToAction CallToAction"
-                      "CallToAction CallToAction"
-                      "ShortenedURL ShortenedURL"
+                      "ChooseTemplate Headline"
+                      "ChooseTemplate NumberOfPostcards"
+                      "ChooseTemplate NumberOfPostcards"
+                      "BrandColor CallToAction"
+                      "BrandColor ShortenedURL"
                         `,
                     gridRowGap: '1em',
                     gridColumnGap: '2em',
                   }
             }
           >
-            <div style={{ gridArea: 'BrandColor' }}>
-              {renderCarouselField({ name: `${listingType}_color`, label: 'Brand color', type: 'color', validate: required })}
-            </div>
             <div style={{ gridArea: 'ChooseTemplate' }}>
               {renderCarouselField({ name: `${listingType}_template`, label: 'Choose template', type: 'template', validate: required })}
+            </div>
+            <div style={{ gridArea: 'BrandColor' }}>
+              {renderCarouselField({ name: `${listingType}_color`, label: 'Brand color', type: 'color', validate: required })}
             </div>
             <div style={{ gridArea: 'Headline' }}>
               {renderField({
@@ -270,10 +270,10 @@ const CustomizeTeamForm = () => {
                       {props => (
                         <div className="slider" style={{ gridArea: 'PostcardsSlider', padding: '0 0.5em' }}>
                           {isMobile() && (
-                            <br>
-                              {' '}
-                              <br />{' '}
-                            </br>
+                            <Fragment>
+                              <br />
+                              <br />
+                            </Fragment>
                           )}
                           <Nouislider
                             style={{ height: '3px' }}
@@ -311,10 +311,10 @@ const CustomizeTeamForm = () => {
                             onChange={props.input.onChange}
                           />
                           {isMobile() && (
-                            <br>
-                              {' '}
-                              <br />{' '}
-                            </br>
+                            <Fragment>
+                              <br />
+                              <br />
+                            </Fragment>
                           )}
                         </div>
                       )}
@@ -335,7 +335,19 @@ const CustomizeTeamForm = () => {
               })}
             </div>
             <div style={{ gridArea: 'ShortenedURL' }}>
-              Shortened URL: {shortenedURL} {popup('Some message')}
+              {shortenedURL && (
+                <Label>
+                  <Icon name="linkify" />
+                  Shortened URL:
+                  <Label.Detail>
+                    <Menu.Item href={'https://' + shortenedURL} position="left" target="_blank">
+                      <span>
+                        {shortenedURL} {popup('Some message')}
+                      </span>
+                    </Menu.Item>
+                  </Label.Detail>
+                </Label>
+              )}
             </div>
           </div>
         </Condition>
