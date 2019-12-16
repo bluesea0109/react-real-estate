@@ -168,6 +168,9 @@ const CustomizeTeamForm = () => {
     const shortenedURL = listingType === NEW_LISTING ? shortenedNewListingURL : shortenedSoldListingURL;
     const placeholder = listingType === NEW_LISTING ? 'Campaign will not be enabled for new listings' : 'Campaign will not be enabled for sold listings';
     const targetOn = listingType === NEW_LISTING ? 'Generate new listing campaigns' : 'Generate sold listing campaigns';
+    const cta = listingType === NEW_LISTING ? initialValues[`${NEW_LISTING}_actionURL`] : initialValues[`${SOLD_LISTING}_actionURL`];
+
+    console.log('cta', cta);
 
     return (
       <Segment>
@@ -262,6 +265,8 @@ const CustomizeTeamForm = () => {
                         setSelectedTemplate(template);
                         setSelectedColor(color);
 
+                        if (cta) props.values[`${listingType}_actionURL`] = cta;
+
                         return <span> </span>;
                       }}
                     </FormSpy>
@@ -335,7 +340,7 @@ const CustomizeTeamForm = () => {
               })}
             </div>
             <div style={{ gridArea: 'ShortenedURL' }}>
-              {shortenedURL && (
+              {shortenedURL && cta && (
                 <Label>
                   <Icon name="linkify" />
                   Shortened URL:
