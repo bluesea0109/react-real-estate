@@ -56,6 +56,8 @@ const CustomizeTeamForm = () => {
 
   const shortenedNewListingURL = useSelector(store => store.teamShortcode && store.teamShortcode.listed);
   const shortenedSoldListingURL = useSelector(store => store.teamShortcode && store.teamShortcode.sold);
+  const newListingURL = useSelector(store => store.teamShortcode && store.teamShortcode.listedToSave);
+  const soldListingURL = useSelector(store => store.teamShortcode && store.teamShortcode.soldToSave);
 
   const tc = useSelector(store => store.teamCustomization && store.teamCustomization.available);
 
@@ -137,14 +139,14 @@ const CustomizeTeamForm = () => {
       [`${NEW_LISTING}_color`]: tc.listed.brandColor,
       [`${NEW_LISTING}_headline`]: tc.listed.frontHeadline,
       [`${NEW_LISTING}_numberOfPostcardsDefaults`]: [tc.listed.mailoutSizeMin, tc.listed.mailoutSize, tc.listed.mailoutSizeMax],
-      [`${NEW_LISTING}_actionURL`]: tc.listed && tc.listed.cta,
+      [`${NEW_LISTING}_actionURL`]: newListingURL || (tc.listed && tc.listed.cta),
 
       [`${SOLD_LISTING}_createMailoutsOfThisType`]: tc.sold.createMailoutsOfThisType,
       [`${SOLD_LISTING}_template`]: tc.sold.templateTheme,
       [`${SOLD_LISTING}_color`]: tc.sold.brandColor,
       [`${SOLD_LISTING}_headline`]: tc.sold.frontHeadline,
       [`${SOLD_LISTING}_numberOfPostcardsDefaults`]: [tc.sold.mailoutSizeMin, tc.sold.mailoutSize, tc.sold.mailoutSizeMax],
-      [`${SOLD_LISTING}_actionURL`]: tc.sold && tc.sold.cta,
+      [`${SOLD_LISTING}_actionURL`]: soldListingURL || (tc.sold && tc.sold.cta),
     };
 
     if (!onlyOnce) {
