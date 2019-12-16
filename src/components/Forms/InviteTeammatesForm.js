@@ -35,13 +35,14 @@ const InviteTeammatesForm = () => {
   };
 
   const onSubmit = values => {
+    console.log(values);
     dispatch(inviteUsersPending(values));
   };
 
   const profiles =
     teammates &&
     teammates.map(profile => {
-      const email = profile.doc.email;
+      const userId = profile.userId;
       const emailInviteSent = profile.doc && profile.doc.brivitySync.emailInviteSent;
       const emailClicked = profile.doc && profile.doc.brivitySync.emailClicked;
 
@@ -65,7 +66,7 @@ const InviteTeammatesForm = () => {
             }}
           >
             <div style={{ gridArea: 'InviteCheckbox' }}>
-              <Field disabled={emailClicked} checked={emailClicked} name="peers" component="input" type="checkbox" value={email} />
+              <Field disabled={emailClicked} checked={emailClicked} name="peers" component="input" type="checkbox" value={userId} />
             </div>
 
             <List.Content style={{ gridArea: 'InviteUserInfo' }}>
