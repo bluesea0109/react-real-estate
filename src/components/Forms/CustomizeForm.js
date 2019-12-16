@@ -42,7 +42,6 @@ const CustomizeTeamForm = () => {
   const [newListingEnabled, setNewListingEnabled] = useState(true);
   const [soldListingEnabled, setSoldListingEnabled] = useState(false);
   const [showSelectionAlert, setShowSelectionAlert] = useState(false);
-  const [initializeOnlyOnce, setInitializeOnlyOnce] = useState(false);
   const [onlyOnce, setOnlyOnce] = useState(false);
   const [togglePages, setTogglePages] = useState('');
 
