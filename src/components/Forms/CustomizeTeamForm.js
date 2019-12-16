@@ -58,6 +58,7 @@ const CustomizeTeamForm = () => {
   const shortenedSoldListingURL = useSelector(store => store.teamShortcode && store.teamShortcode.sold);
   const newListingURL = useSelector(store => store.teamShortcode && store.teamShortcode.listedToSave);
   const soldListingURL = useSelector(store => store.teamShortcode && store.teamShortcode.soldToSave);
+  const shortenedURLError = useSelector(store => store.teamShortcode && store.teamShortcode.error);
 
   const tc = useSelector(store => store.teamCustomization && store.teamCustomization.available);
 
@@ -201,14 +202,13 @@ const CustomizeTeamForm = () => {
                 ? {}
                 : {
                     display: 'grid',
-                    gridTemplateColumns: '1fr 1fr',
-                    gridTemplateRows: '4em 4em 4em 6em 2em',
+                    gridTemplateColumns: '2fr 1fr .75fr',
+                    gridTemplateRows: '4em 4em 2em 10em',
                     gridTemplateAreas: `
-                      "ChooseTemplate Headline"
-                      "ChooseTemplate NumberOfPostcards"
-                      "ChooseTemplate NumberOfPostcards"
-                      "BrandColor CallToAction"
-                      "BrandColor ShortenedURL"
+                      "ChooseTemplate Headline Headline"
+                      "ChooseTemplate NumberOfPostcards NumberOfPostcards"
+                      "ChooseTemplate NumberOfPostcards NumberOfPostcards"
+                      "BrandColor CallToAction ShortenedURL"
                         `,
                     gridRowGap: '1em',
                     gridColumnGap: '2em',
@@ -340,19 +340,40 @@ const CustomizeTeamForm = () => {
               })}
             </div>
             <div style={{ gridArea: 'ShortenedURL' }}>
-              {shortenedURL && cta && (
-                <Label>
-                  <Icon name="linkify" />
-                  Shortened URL:
-                  <Label.Detail>
-                    <Menu.Item href={'https://' + shortenedURL} position="left" target="_blank">
-                      <span>
-                        {shortenedURL} {popup('Some message')}
-                      </span>
-                    </Menu.Item>
-                  </Label.Detail>
-                </Label>
-              )}
+              <FormSpy>
+                {props => {
+                  let urlCallError;
+
+                  if (listingType === NEW_LISTING) {
+                    urlCallError = (shortenedURLError && shortenedURLError.onSaveListed) || (shortenedURLError && shortenedURLError.onGetListed);
+                  }
+
+                  if (listingType === SOLD_LISTING) {
+                    urlCallError = (shortenedURLError && shortenedURLError.onSaveSold) || (shortenedURLError && shortenedURLError.onGetSold);
+                  }
+
+                  if (urlCallError) props.errors[`${listingType}_actionURL`] = urlCallError;
+
+                  if (props.errors[`${listingType}_actionURL`]) return <span> </span>;
+
+                  return (
+                    shortenedURL &&
+                    cta && (
+                      <Label style={!isMobile() && { marginTop: '2em' }}>
+                        <Icon name="linkify" />
+                        Shortened URL:
+                        <Label.Detail>
+                          <Menu.Item href={'https://' + shortenedURL} position="left" target="_blank">
+                            <span>
+                              {shortenedURL} {popup('Some message')}
+                            </span>
+                          </Menu.Item>
+                        </Label.Detail>
+                      </Label>
+                    )
+                  );
+                }}
+              </FormSpy>
             </div>
           </div>
         </Condition>
