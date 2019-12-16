@@ -239,14 +239,13 @@ const CustomizeTeamForm = () => {
                 ? {}
                 : {
                     display: 'grid',
-                    gridTemplateColumns: '1fr 1fr',
-                    gridTemplateRows: '4em 4em 4em 6em 2em',
+                    gridTemplateColumns: '2fr 1fr .75fr',
+                    gridTemplateRows: '4em 4em 2em 10em',
                     gridTemplateAreas: `
-                      "ChooseTemplate Headline"
-                      "ChooseTemplate NumberOfPostcards"
-                      "ChooseTemplate NumberOfPostcards"
-                      "BrandColor CallToAction"
-                      "BrandColor ShortenedURL"
+                      "ChooseTemplate Headline Headline"
+                      "ChooseTemplate NumberOfPostcards NumberOfPostcards"
+                      "ChooseTemplate NumberOfPostcards NumberOfPostcards"
+                      "BrandColor CallToAction ShortenedURL"
                     `,
                     gridRowGap: '1em',
                     gridColumnGap: '2em',
@@ -282,7 +281,7 @@ const CustomizeTeamForm = () => {
             <div style={{ gridArea: 'NumberOfPostcards' }}>
               {
                 <div>
-                  <Header as="h4" style={{ marginBottom: '38px' }}>
+                  <Header as="h4" style={{ marginBottom: '28px' }}>
                     Number of postcards to send per listing
                   </Header>
                   <div
@@ -296,7 +295,7 @@ const CustomizeTeamForm = () => {
                             gridTemplateAreas: `
                             "PostcardsSlider"
                           `,
-                            gridRowGap: '3em',
+                            gridRowGap: '2em',
                             gridColumnGap: '2em',
                           }
                     }
@@ -378,7 +377,7 @@ const CustomizeTeamForm = () => {
             </div>
             <div style={{ gridArea: 'ShortenedURL' }}>
               {shortenedURL && (cta || !isMultimode) && (
-                <Label>
+                <Label style={!isMobile() && { marginTop: '2em' }}>
                   <Icon name="linkify" />
                   Shortened URL:
                   <Label.Detail>

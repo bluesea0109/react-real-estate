@@ -232,7 +232,7 @@ const CustomizeTeamForm = () => {
             <div style={{ gridArea: 'NumberOfPostcards' }}>
               {
                 <div>
-                  <Header as="h4" style={{ marginBottom: 0 }}>
+                  <Header as="h4" style={{ marginBottom: '28px' }}>
                     Number of postcards to send per listing
                   </Header>
                   <div
@@ -242,9 +242,8 @@ const CustomizeTeamForm = () => {
                         : {
                             display: 'grid',
                             gridTemplateColumns: '1fr 1fr 1fr',
-                            gridTemplateRows: '1fr 2fr',
+                            gridTemplateRows: '2fr',
                             gridTemplateAreas: `
-                            "PostcardsMin PostcardsTarget PostcardsMax"
                             "PostcardsSlider PostcardsSlider PostcardsSlider"
                           `,
                             gridRowGap: '2em',
