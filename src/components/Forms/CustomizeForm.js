@@ -19,7 +19,7 @@ import {
   composeValidators,
   renderCarouselField,
 } from './helpers';
-import { Button, Icon, Menu, Segment } from '../Base';
+import { Icon, Menu, Segment } from '../Base';
 import CustomizationWizard from './CustomizationWizard';
 
 import { saveCustomizationPending } from '../../store/modules/customization/actions';
@@ -161,7 +161,6 @@ const CustomizeTeamForm = () => {
   };
 
   if (tc) {
-    console.log('tc engaged');
     initialValues = {
       [`${NEW_LISTING}_createMailoutsOfThisType`]: tc.listed.createMailoutsOfThisType,
       [`${NEW_LISTING}_template`]: tc.listed.templateTheme,

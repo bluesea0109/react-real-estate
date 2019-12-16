@@ -170,8 +170,6 @@ const CustomizeTeamForm = () => {
     const targetOn = listingType === NEW_LISTING ? 'Generate new listing campaigns' : 'Generate sold listing campaigns';
     const cta = listingType === NEW_LISTING ? initialValues[`${NEW_LISTING}_actionURL`] : initialValues[`${SOLD_LISTING}_actionURL`];
 
-    console.log('cta', cta);
-
     return (
       <Segment>
         <Header size="medium">
