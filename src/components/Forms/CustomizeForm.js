@@ -42,6 +42,7 @@ const CustomizeTeamForm = () => {
   const [newListingEnabled, setNewListingEnabled] = useState(true);
   const [soldListingEnabled, setSoldListingEnabled] = useState(false);
   const [showSelectionAlert, setShowSelectionAlert] = useState(false);
+  const [initializeOnlyOnce, setInitializeOnlyOnce] = useState(false);
   const [onlyOnce, setOnlyOnce] = useState(false);
   const [togglePages, setTogglePages] = useState('');
 
@@ -56,8 +57,9 @@ const CustomizeTeamForm = () => {
 
   const shortenedNewListingTeamURL = useSelector(store => store.teamShortcode && store.teamShortcode.listed);
   const shortenedSoldListingTeamURL = useSelector(store => store.teamShortcode && store.teamShortcode.sold);
-  const shortenedNewListingURL = useSelector(store => store.shortcode && store.shortcode.listed);
-  const shortenedSoldListingURL = useSelector(store => store.shortcode && store.shortcode.sold);
+  const newListingURL = useSelector(store => store.shortcode && store.shortcode.listedToSave);
+  const soldListingURL = useSelector(store => store.shortcode && store.shortcode.soldToSave);
+  const shortenedURLError = useSelector(store => store.shortcode && store.shortcode.error);
 
   const tc = useSelector(store => store.teamCustomization && store.teamCustomization.available);
 
@@ -167,14 +169,14 @@ const CustomizeTeamForm = () => {
       [`${NEW_LISTING}_color`]: tc.listed.brandColor,
       [`${NEW_LISTING}_headline`]: tc.listed.frontHeadline,
       [`${NEW_LISTING}_numberOfPostcardsDefaults`]: [tc.listed.mailoutSize],
-      [`${NEW_LISTING}_actionURL`]: tc.listed.cta,
+      [`${NEW_LISTING}_actionURL`]: newListingURL || (tc.listed && tc.listed.cta),
 
       [`${SOLD_LISTING}_createMailoutsOfThisType`]: tc.sold.createMailoutsOfThisType,
       [`${SOLD_LISTING}_template`]: tc.sold.templateTheme,
       [`${SOLD_LISTING}_color`]: tc.sold.brandColor,
       [`${SOLD_LISTING}_headline`]: tc.sold.frontHeadline,
       [`${SOLD_LISTING}_numberOfPostcardsDefaults`]: [tc.sold.mailoutSize],
-      [`${SOLD_LISTING}_actionURL`]: tc.sold.cta,
+      [`${SOLD_LISTING}_actionURL`]: soldListingURL || (tc.sold && tc.sold.cta),
     };
 
     if (!onlyOnce) {
@@ -204,7 +206,7 @@ const CustomizeTeamForm = () => {
         cta = listingType === NEW_LISTING ? initialValues[`${NEW_LISTING}_actionURL`] : initialValues[`${SOLD_LISTING}_actionURL`];
       }
     } else {
-      shortenedURL = listingType === NEW_LISTING ? shortenedNewListingURL : shortenedSoldListingURL;
+      shortenedURL = listingType === NEW_LISTING ? newListingURL : soldListingURL;
     }
 
     const placeholder = listingType === NEW_LISTING ? 'Campaign will not be enabled for new listings' : 'Campaign will not be enabled for sold listings';
@@ -376,19 +378,40 @@ const CustomizeTeamForm = () => {
               })}
             </div>
             <div style={{ gridArea: 'ShortenedURL' }}>
-              {shortenedURL && (cta || !isMultimode) && (
-                <Label style={!isMobile() && { marginTop: '2em' }}>
-                  <Icon name="linkify" />
-                  Shortened URL:
-                  <Label.Detail>
-                    <Menu.Item href={'https://' + shortenedURL} position="left" target="_blank">
-                      <span>
-                        {shortenedURL} {popup('Some message')}
-                      </span>
-                    </Menu.Item>
-                  </Label.Detail>
-                </Label>
-              )}
+              <FormSpy>
+                {props => {
+                  let urlCallError;
+
+                  if (listingType === NEW_LISTING) {
+                    urlCallError = (shortenedURLError && shortenedURLError.onSaveListed) || (shortenedURLError && shortenedURLError.onGetListed);
+                  }
+
+                  if (listingType === SOLD_LISTING) {
+                    urlCallError = (shortenedURLError && shortenedURLError.onSaveSold) || (shortenedURLError && shortenedURLError.onGetSold);
+                  }
+
+                  if (urlCallError) props.errors[`${listingType}_actionURL`] = urlCallError;
+
+                  if (props.errors[`${listingType}_actionURL`]) return <span> </span>;
+
+                  return (
+                    shortenedURL &&
+                    (cta || !isMultimode) && (
+                      <Label style={!isMobile() && { marginTop: '2em' }}>
+                        <Icon name="linkify" />
+                        Shortened URL:
+                        <Label.Detail>
+                          <Menu.Item href={'https://' + shortenedURL} position="left" target="_blank">
+                            <span>
+                              {shortenedURL} {popup('Some message')}
+                            </span>
+                          </Menu.Item>
+                        </Label.Detail>
+                      </Label>
+                    )
+                  );
+                }}
+              </FormSpy>
             </div>
           </div>
         </Condition>
