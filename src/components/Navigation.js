@@ -180,7 +180,7 @@ export default () => {
   if (!loadingCompleted) return null;
 
   if (loadingCompleted && !onboarded) {
-    if (isMultimode) {
+    if (isMultimode && isAdmin) {
       return (
         <StepsLayout vertical={!mql.matches}>
           <StepLayout active={onProfile} completed={completedProfile}>
