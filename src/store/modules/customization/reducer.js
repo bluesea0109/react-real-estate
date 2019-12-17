@@ -5,6 +5,7 @@ import {
   SAVE_CUSTOMIZATION_PENDING,
   SAVE_CUSTOMIZATION_SUCCESS,
   SAVE_CUSTOMIZATION_ERROR,
+  REVIEW_CUSTOMIZATION_COMPLETED,
 } from './actions';
 
 const initialState = {
@@ -12,6 +13,7 @@ const initialState = {
   error: null,
   available: null,
   toSave: null,
+  reviewed: false,
 };
 
 export default function customization(state = initialState, action) {
@@ -58,6 +60,12 @@ export default function customization(state = initialState, action) {
         ...state,
         pending: false,
         error: action.error,
+      };
+
+    case REVIEW_CUSTOMIZATION_COMPLETED:
+      return {
+        ...state,
+        reviewed: action.payload,
       };
 
     default:

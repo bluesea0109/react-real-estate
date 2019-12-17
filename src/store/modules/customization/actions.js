@@ -8,6 +8,8 @@ export const SAVE_CUSTOMIZATION_PENDING = 'SAVE_CUSTOMIZATION_PENDING';
 export const SAVE_CUSTOMIZATION_SUCCESS = 'SAVE_CUSTOMIZATION_SUCCESS';
 export const SAVE_CUSTOMIZATION_ERROR = 'SAVE_CUSTOMIZATION_ERROR';
 
+export const REVIEW_CUSTOMIZATION_COMPLETED = 'REVIEW_CUSTOMIZATION_COMPLETED';
+
 export function getCustomizationPending() {
   return createAction(GET_CUSTOMIZATION_PENDING);
 }
@@ -30,4 +32,8 @@ export function saveCustomizationSuccess(payload) {
 
 export function saveCustomizationError(error) {
   return createErrorAction(SAVE_CUSTOMIZATION_ERROR, error);
+}
+
+export function reviewCustomizationCompleted(payload) {
+  return createAction(REVIEW_CUSTOMIZATION_COMPLETED, payload);
 }

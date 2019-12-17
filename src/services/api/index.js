@@ -147,6 +147,7 @@ const directory = {
           save: () => ({ path: `/api/user/team/settings/shortcode/sold/example`, method: 'put' }),
         },
       },
+      generatePostcardPreview: () => ({ path: `/api/user/team/postcard/preview`, method: 'post' }),
     },
     customization: {
       get: () => ({ path: `/api/user/settings/branding`, method: 'get' }),
@@ -161,6 +162,7 @@ const directory = {
           save: () => ({ path: `/api/user/settings/shortcode/sold/example`, method: 'put' }),
         },
       },
+      generatePostcardPreview: () => ({ path: `/api/user/postcard/preview`, method: 'post' }),
     },
     inviteUsers: {
       send: () => ({ path: `/api/user/peer/invite`, method: 'post' }),
