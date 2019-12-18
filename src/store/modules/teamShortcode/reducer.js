@@ -64,7 +64,6 @@ export default function teamShortcode(state = initialState, action) {
       return {
         ...state,
         pending: false,
-        soldToSave: null,
         error: Object.assign({}, state.error, { onSaveSold: action.error }),
       };
 
@@ -108,7 +107,6 @@ export default function teamShortcode(state = initialState, action) {
       return {
         ...state,
         pending: false,
-        listedToSave: null,
         error: Object.assign({}, state.error, { onSaveListed: action.error }),
       };
 
