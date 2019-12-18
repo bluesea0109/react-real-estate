@@ -1,8 +1,9 @@
 import { Form, Header } from 'semantic-ui-react';
 import React, { Fragment, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form as FinalForm, Field, FormSpy } from 'react-final-form';
+import { Form as FinalForm, Field } from 'react-final-form';
 
+import { setCompletedInviteTeammates, setOnboardedStatus } from '../../store/modules/onboarded/actions';
 import { inviteUsersPending } from '../../store/modules/inviteUsers/actions';
 import { Divider, List, Segment, Item, Icon, Button } from '../Base';
 import './checkbox.css';
@@ -40,6 +41,11 @@ const InviteTeammatesForm = () => {
 
   const onSubmit = values => {
     dispatch(inviteUsersPending(values));
+  };
+
+  const handleContinue = () => {
+    dispatch(setCompletedInviteTeammates(true));
+    dispatch(setOnboardedStatus(true));
   };
 
   const profiles =
@@ -147,6 +153,9 @@ const InviteTeammatesForm = () => {
                 <div>
                   <Button color="teal" type="submit" disabled={submitting}>
                     Send
+                  </Button>
+                  <Button color="teal" type="button" onClick={handleContinue}>
+                    Continue
                   </Button>
                 </div>
               </div>
