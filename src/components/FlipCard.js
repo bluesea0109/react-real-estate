@@ -20,7 +20,7 @@ const FlipCard = props => {
       setFlipped(props.isFlipped);
       setRotation(c => c + 180);
     }
-  }, [props.isFlipped]);
+  }, [props.isFlipped, isFlipped, setFlipped]);
 
   const getComponent = key => {
     if (props.children.length !== 2) {
