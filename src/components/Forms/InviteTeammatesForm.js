@@ -54,12 +54,13 @@ const InviteTeammatesForm = () => {
       const userId = profile.userId;
       const emailInviteSent = profile.doc && profile.doc.brivitySync.emailInviteSent;
       const emailClicked = profile.doc && profile.doc.brivitySync.emailClicked;
+      const isAdmin = profile.permissions.teamAdmin;
 
       let inviationStatus;
       if (emailInviteSent) inviationStatus = resolveInvitationStatus('pending');
       if (emailClicked) inviationStatus = resolveInvitationStatus('verified');
 
-      if (!emailClicked) {
+      if (!emailClicked && !emailInviteSent && !isAdmin) {
         listOfUsersToInvite.push(userId);
       }
 
@@ -95,18 +96,16 @@ const InviteTeammatesForm = () => {
                 <Field disabled={emailClicked} checked={emailClicked} name="peers" component="input" type="checkbox" value={userId} />
               ) : (
                 <Field name="peers">
-                  {props => {
-                    return (
-                      <input
-                        {...props.input}
-                        name={props.input.name}
-                        checked={props.input.value.includes(userId)}
-                        type="checkbox"
-                        value={userId}
-                        onChange={event => toggle(event.target, props.input)}
-                      />
-                    );
-                  }}
+                  {props => (
+                    <input
+                      {...props.input}
+                      name={props.input.name}
+                      checked={props.input.value.includes(userId)}
+                      type="checkbox"
+                      value={userId}
+                      onChange={event => toggle(event.target, props.input)}
+                    />
+                  )}
                 </Field>
               )}
             </div>
