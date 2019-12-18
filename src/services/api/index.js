@@ -6,9 +6,21 @@ async function handleResponse(response) {
 
     return data;
   } else {
-    const error = new Error(`${response.status} ${response.statusText}`);
-    error.response = response;
+    let err;
+    try {
+      err = await response.json();
+    } catch (e) {
+      err = response;
+    }
 
+    let error;
+    if (err.error === err.message) {
+      error = new Error(`${err.statusCode} ${err.error}`);
+    } else {
+      error = new Error(`${err.message}`);
+    }
+
+    error.response = err;
     throw error;
   }
 }

@@ -13,6 +13,7 @@ export default function postcards(state = initialState, action) {
         ...state,
         error: null,
         pending: true,
+        available: null,
       };
 
     case GENERATE_POSTCARDS_PREVIEW_SUCCESS:
@@ -27,6 +28,7 @@ export default function postcards(state = initialState, action) {
         ...state,
         pending: false,
         error: action.error,
+        available: null,
       };
 
     default:

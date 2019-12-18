@@ -22,14 +22,17 @@ const OnboardPage = () => {
   const completedCustomization = useSelector(store => store.onboarded.completedCustomization);
   const completedInviteTeammates = useSelector(store => store.onboarded.completedInviteTeammates);
 
+  const reviewTeamCustomizationCompleted = useSelector(store => store.teamCustomization.reviewed);
+  const reviewCustomizationCompleted = useSelector(store => store.customization.reviewed);
+
   const onBoardProfilePath = '/onboard/profile';
   const onBoardCustomizationTeamPath = '/onboard/customization/team';
   const onBoardCustomizationPath = '/onboard/customization';
   const onBoardInvitePath = '/onboard/invite';
 
   const onProfile = !completedProfile;
-  const onTeamCustomization = !completedTeamCustomization && completedProfile;
-  const onCustomization = !completedCustomization && completedTeamCustomization && completedProfile;
+  const onTeamCustomization = !reviewTeamCustomizationCompleted && !completedTeamCustomization && completedProfile;
+  const onCustomization = !reviewCustomizationCompleted && !completedCustomization && completedTeamCustomization && completedProfile;
   const onInviteTeammates = !completedInviteTeammates && completedCustomization && completedTeamCustomization && completedProfile;
   const onboardingCompleted = completedInviteTeammates && completedCustomization && completedTeamCustomization && completedProfile;
 

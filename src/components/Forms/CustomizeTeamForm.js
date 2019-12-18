@@ -20,11 +20,14 @@ import {
   renderCarouselField,
 } from './helpers';
 
-import { Menu, Segment } from '../Base';
+import { Menu, Segment, Image, Modal, Button } from '../Base';
 import CustomizationWizard from './CustomizationWizard';
-import { saveTeamCustomizationPending } from '../../store/modules/teamCustomization/actions';
+import { saveTeamCustomizationPending, reviewTeamCustomizationCompleted } from '../../store/modules/teamCustomization/actions';
+import { generateTeamPostcardsPreviewPending } from '../../store/modules/teamPostcards/actions';
 import { getTeamListedShortcodePending, getTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
 
+import Loading from '../Loading';
+import FlipCard from '../FlipCard';
 import './thin.css';
 
 const NEW_LISTING = 'newListing';
@@ -44,6 +47,9 @@ const CustomizeTeamForm = () => {
   const [showSelectionAlert, setShowSelectionAlert] = useState(false);
   const [onlyOnce, setOnlyOnce] = useState(false);
   const [togglePages, setTogglePages] = useState('');
+  const [displayReview, setDisplayReview] = useState(false);
+  const [listedIsFlipped, setListedIsFlipped] = useState(false);
+  const [soldIsFlipped, setSoldIsFlipped] = useState(false);
 
   const [selectedNewListingTemplate, setSelectedNewListingTemplate] = useState(templates[0].key);
   const [selectedSoldListingTemplate, setSelectedSoldListingTemplate] = useState(templates[0].key);
@@ -61,6 +67,9 @@ const CustomizeTeamForm = () => {
   const shortenedURLError = useSelector(store => store.teamShortcode && store.teamShortcode.error);
 
   const tc = useSelector(store => store.teamCustomization && store.teamCustomization.available);
+
+  const teamPostcardsPreviewIsPending = useSelector(store => store.teamPostcards && store.teamPostcards.pending);
+  const teamPostcardsPreview = useSelector(store => store.teamPostcards && store.teamPostcards.available);
 
   const resolveTemplate = type => {
     const types = {
@@ -87,6 +96,16 @@ const CustomizeTeamForm = () => {
       setShowSelectionAlert(false);
     }
   }, [newListingEnabled, soldListingEnabled, setShowSelectionAlert]);
+
+  const handleReview = () => {
+    setDisplayReview(true);
+    dispatch(generateTeamPostcardsPreviewPending());
+  };
+
+  const handleReviewComplete = () => {
+    setDisplayReview(false);
+    dispatch(reviewTeamCustomizationCompleted(true));
+  };
 
   const onSubmit = values => {
     const data = {
@@ -120,6 +139,7 @@ const CustomizeTeamForm = () => {
     };
 
     dispatch(saveTeamCustomizationPending(data));
+    handleReview();
   };
 
   let initialValues = {
@@ -413,6 +433,49 @@ const CustomizeTeamForm = () => {
 
         {formPage({ listingType: SOLD_LISTING })}
       </CustomizationWizard>
+
+      <Modal open={displayReview} basic size="tiny">
+        <Modal.Header>Preview</Modal.Header>
+
+        {teamPostcardsPreviewIsPending && <Loading />}
+
+        {newListingEnabled &&
+          teamPostcardsPreview &&
+          teamPostcardsPreview.listed &&
+          teamPostcardsPreview.listed.sampleBackLargeUrl &&
+          teamPostcardsPreview.listed.sampleFrontLargeUrl && (
+            <Modal.Content image style={{ padding: '0 45px 10px' }}>
+              <FlipCard isFlipped={listedIsFlipped}>
+                <Image wrapped size="large" src={teamPostcardsPreview.listed.sampleFrontLargeUrl} onMouseOver={() => setListedIsFlipped(!listedIsFlipped)} />
+
+                <Image wrapped size="large" src={teamPostcardsPreview.listed.sampleBackLargeUrl} onMouseOver={() => setListedIsFlipped(!listedIsFlipped)} />
+              </FlipCard>
+            </Modal.Content>
+          )}
+
+        {soldListingEnabled &&
+          teamPostcardsPreview &&
+          teamPostcardsPreview.sold &&
+          teamPostcardsPreview.sold.sampleBackLargeUrl &&
+          teamPostcardsPreview.sold.sampleFrontLargeUrl && (
+            <Modal.Content image style={{ padding: '10px 45px 0' }}>
+              <FlipCard isFlipped={soldIsFlipped}>
+                <Image wrapped size="large" src={teamPostcardsPreview.sold.sampleFrontLargeUrl} onMouseOver={() => setSoldIsFlipped(!soldIsFlipped)} />
+
+                <Image wrapped size="large" src={teamPostcardsPreview.sold.sampleBackLargeUrl} onMouseOver={() => setSoldIsFlipped(!soldIsFlipped)} />
+              </FlipCard>
+            </Modal.Content>
+          )}
+
+        <Modal.Actions>
+          <Button basic color="red" inverted onClick={() => setDisplayReview(false)}>
+            <Icon name="remove" /> Edit
+          </Button>
+          <Button color="green" inverted onClick={handleReviewComplete}>
+            <Icon name="checkmark" /> Continue
+          </Button>
+        </Modal.Actions>
+      </Modal>
     </Fragment>
   );
 };
