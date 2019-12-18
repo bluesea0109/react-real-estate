@@ -9,6 +9,10 @@ const CustomizationWizard = ({ children, initialValues = {}, onSubmit, togglePag
   const [page, setPage] = useState(0);
   const [values, setValues] = useState(initialValues);
 
+  useEffect(() => {
+    if (values !== initialValues) setValues(initialValues);
+  }, [initialValues, values, setValues]);
+
   const next = useCallback(
     values => {
       setPage(Math.min(page + 1, children.length - 1));
@@ -52,7 +56,7 @@ const CustomizationWizard = ({ children, initialValues = {}, onSubmit, togglePag
 
   return (
     <FinalForm initialValues={values} validate={validate} onSubmit={handleSubmit}>
-      {({ handleSubmit, submitting, values }) => {
+      {({ handleSubmit, submitting }) => {
         return (
           <Form onSubmit={handleSubmit}>
             <Segment style={{ margin: '0 0 -1px 0', borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>

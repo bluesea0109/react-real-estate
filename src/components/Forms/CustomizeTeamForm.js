@@ -90,6 +90,9 @@ const CustomizeTeamForm = () => {
 
   const onSubmit = values => {
     const data = {
+      _id: tc._id,
+      _rev: tc._rev,
+
       listed: {
         createMailoutsOfThisType: values.newListing_createMailoutsOfThisType,
         mailoutSize: values.newListing_numberOfPostcardsDefaults[1],
@@ -353,26 +356,23 @@ const CustomizeTeamForm = () => {
 
                   if (urlCallError) props.errors[`${listingType}_actionURL`] = urlCallError;
 
-                  if (props.errors[`${listingType}_actionURL`]) return <span> </span>;
-
-                  return (
-                    shortenedURL &&
-                    cta && (
-                      <Label style={!isMobile() && { marginTop: '2em' }}>
-                        <Icon name="linkify" />
-                        Shortened URL:
-                        <Label.Detail>
-                          <Menu.Item href={'https://' + shortenedURL} position="left" target="_blank">
-                            <span>
-                              {shortenedURL} {popup('Some message')}
-                            </span>
-                          </Menu.Item>
-                        </Label.Detail>
-                      </Label>
-                    )
-                  );
+                  return <span> </span>;
                 }}
               </FormSpy>
+
+              {shortenedURL && cta && (
+                <Label style={!isMobile() && { marginTop: '2em' }}>
+                  <Icon name="linkify" />
+                  Shortened URL:
+                  <Label.Detail>
+                    <Menu.Item href={'https://' + shortenedURL} position="left" target="_blank">
+                      <span>
+                        {shortenedURL} {popup('Some message')}
+                      </span>
+                    </Menu.Item>
+                  </Label.Detail>
+                </Label>
+              )}
             </div>
           </div>
         </Condition>
