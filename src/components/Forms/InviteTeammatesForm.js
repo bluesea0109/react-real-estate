@@ -1,15 +1,19 @@
-import React, { Fragment } from 'react';
 import { Form, Header } from 'semantic-ui-react';
+import React, { Fragment, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form as FinalForm, Field } from 'react-final-form';
+import { Form as FinalForm, Field, FormSpy } from 'react-final-form';
 
 import { inviteUsersPending } from '../../store/modules/inviteUsers/actions';
 import { Divider, List, Segment, Item, Icon, Button } from '../Base';
 import './checkbox.css';
 
 const InviteTeammatesForm = () => {
+  const [toInvite, setToInvite] = useState([]);
+  const [onlyOnce, setOnlyOnce] = useState(false);
   const dispatch = useDispatch();
   const teammates = useSelector(store => store.team.profiles);
+
+  const listOfUsersToInvite = [];
 
   const UserVerified = (
     <Item.Header style={{ color: 'teal' }}>
@@ -35,7 +39,6 @@ const InviteTeammatesForm = () => {
   };
 
   const onSubmit = values => {
-    console.log(values);
     dispatch(inviteUsersPending(values));
   };
 
@@ -49,6 +52,22 @@ const InviteTeammatesForm = () => {
       let inviationStatus;
       if (emailInviteSent) inviationStatus = resolveInvitationStatus('pending');
       if (emailClicked) inviationStatus = resolveInvitationStatus('verified');
+
+      if (!emailClicked) {
+        listOfUsersToInvite.push(userId);
+      }
+
+      const toggle = (target, input) => {
+        if (input.value.includes(target.value)) {
+          const newArr = input.value.filter(val => val !== target.value);
+          return input.onChange(newArr);
+        } else {
+          const newArr = input.value;
+          newArr.push(target.value);
+          setToInvite(newArr);
+          return input.onChange(newArr);
+        }
+      };
 
       return (
         <Fragment key={profile.doc.email}>
@@ -66,7 +85,24 @@ const InviteTeammatesForm = () => {
             }}
           >
             <div style={{ gridArea: 'InviteCheckbox' }}>
-              <Field disabled={emailClicked} checked={emailClicked} name="peers" component="input" type="checkbox" value={userId} />
+              {emailClicked ? (
+                <Field disabled={emailClicked} checked={emailClicked} name="peers" component="input" type="checkbox" value={userId} />
+              ) : (
+                <Field name="peers">
+                  {props => {
+                    return (
+                      <input
+                        {...props.input}
+                        name={props.input.name}
+                        checked={props.input.value.includes(userId)}
+                        type="checkbox"
+                        value={userId}
+                        onChange={event => toggle(event.target, props.input)}
+                      />
+                    );
+                  }}
+                </Field>
+              )}
             </div>
 
             <List.Content style={{ gridArea: 'InviteUserInfo' }}>
@@ -87,6 +123,11 @@ const InviteTeammatesForm = () => {
       );
     });
 
+  if (teammates.length > 0 && !onlyOnce) {
+    setOnlyOnce(true);
+    setToInvite(listOfUsersToInvite);
+  }
+
   return (
     <Fragment>
       <Segment>
@@ -97,13 +138,14 @@ const InviteTeammatesForm = () => {
 
         <FinalForm
           onSubmit={onSubmit}
-          render={({ handleSubmit, form, submitting, pristine, values }) => (
+          initialValues={{ peers: toInvite }}
+          render={({ handleSubmit, submitting }) => (
             <Form onSubmit={handleSubmit}>
               <List>{profiles}</List>
 
               <div style={{ display: 'grid', justifyContent: 'end' }}>
                 <div>
-                  <Button color="teal" type="submit" disabled={submitting || pristine}>
+                  <Button color="teal" type="submit" disabled={submitting}>
                     Send
                   </Button>
                 </div>
