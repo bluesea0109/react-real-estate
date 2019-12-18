@@ -14,6 +14,7 @@ import { uploadPhotoPending, deletePhotoPending } from '../../store/modules/pict
 import { saveListedShortcodePending, saveSoldShortcodePending } from '../../store/modules/shortcode/actions';
 import { saveTeamListedShortcodePending, saveTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
 
+const isValidURL = value => isURL(value, { require_protocol: true }) && isURL(value, { require_tld: true });
 // export const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 const isEmpty = value => value === undefined || value === null || value === '';
@@ -25,7 +26,7 @@ export const requiredOnlyInCalifornia = (value, condition) => {
   }
   return undefined;
 };
-export const url = value => !isEmpty(value) && !isURL(value) && 'Invalid URL';
+export const url = value => !isEmpty(value) && !isValidURL(value) && 'Invalid URL';
 
 // export const minLength = min => value => !isEmpty(value) && value.length < min && `Must be at least ${min} characters`;
 export const maxLength = max => value => !isEmpty(value) && value.length > max && `Must be no more than ${max} characters`;
@@ -109,11 +110,11 @@ export const renderUrlField = ({ name, label, type, dispatch, required = undefin
     const eURL = e.target.value;
 
     if (form === 'team') {
-      if (target === 'newListing' && isURL(eURL)) dispatch(saveTeamListedShortcodePending(eURL));
-      if (target === 'soldListing' && isURL(eURL)) dispatch(saveTeamSoldShortcodePending(eURL));
+      if (target === 'newListing' && isValidURL(eURL)) dispatch(saveTeamListedShortcodePending(eURL));
+      if (target === 'soldListing' && isValidURL(eURL)) dispatch(saveTeamSoldShortcodePending(eURL));
     } else {
-      if (target === 'newListing' && isURL(eURL)) dispatch(saveListedShortcodePending(eURL));
-      if (target === 'soldListing' && isURL(eURL)) dispatch(saveSoldShortcodePending(eURL));
+      if (target === 'newListing' && isValidURL(eURL)) dispatch(saveListedShortcodePending(eURL));
+      if (target === 'soldListing' && isValidURL(eURL)) dispatch(saveSoldShortcodePending(eURL));
     }
 
     return null;
