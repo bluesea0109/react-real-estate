@@ -1,6 +1,17 @@
 import { put, call, select, takeLatest } from 'redux-saga/effects';
 
-import { UPLOAD_PHOTO_PENDING, uploadPhotoSuccess, uploadPhotoError, DELETE_PHOTO_PENDING, deletePhotoSuccess, deletePhotoError } from './actions';
+import {
+  getPhotoPending,
+  getPhotoSuccess,
+  getPhotoError,
+  UPLOAD_PHOTO_PENDING,
+  uploadPhotoSuccess,
+  uploadPhotoError,
+  DELETE_PHOTO_PENDING,
+  deletePhotoSuccess,
+  deletePhotoError,
+} from './actions';
+import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
 
 import ApiService from '../../../services/api/index';
 
@@ -8,21 +19,34 @@ export const getPhotoToUpload = state => state.pictures.toUpload;
 export const getPhotoToDelete = state => state.pictures.toDelete;
 const s3BucketURL = 'https://alf-gabbi-uploads.s3.amazonaws.com/';
 
-export function* uploadPhotoSaga() {
+export function* getPhotoSaga() {
   try {
-    const targetArr = yield select(getPhotoToUpload);
+    yield put(getPhotoPending());
+    const { path, method } = ApiService.directory.onboard.fillInYourProfile.photos.realtorPhoto.get();
 
-    const targetKey = targetArr[0];
-    const targetFile = targetArr[1];
+    const response = yield call(ApiService[method], path);
 
-    const { path, method } = yield targetKey === 'realtorPhoto'
-      ? ApiService.directory.onboard.fillInYourProfile.photos.realtorPhoto.set()
-      : targetKey === 'teamLogo'
-      ? ApiService.directory.onboard.fillInYourProfile.photos.teamLogo.set()
-      : targetKey === 'brokerageLogo'
-      ? ApiService.directory.onboard.fillInYourProfile.photos.brokerageLogo.set()
-      : {};
+    yield put(getPhotoSuccess(response));
+  } catch (err) {
+    yield put(getPhotoError(err.message));
+  }
+}
 
+export function* uploadPhotoSaga() {
+  const targetArr = yield select(getPhotoToUpload);
+
+  const targetKey = targetArr[0];
+  const targetFile = targetArr[1];
+
+  const { path, method } = yield targetKey === 'realtorPhoto'
+    ? ApiService.directory.onboard.fillInYourProfile.photos.realtorPhoto.set()
+    : targetKey === 'teamLogo'
+    ? ApiService.directory.onboard.fillInYourProfile.photos.teamLogo.set()
+    : targetKey === 'brokerageLogo'
+    ? ApiService.directory.onboard.fillInYourProfile.photos.brokerageLogo.set()
+    : {};
+
+  try {
     const data = yield new FormData();
     data.append(targetKey, targetFile);
 
@@ -31,7 +55,7 @@ export function* uploadPhotoSaga() {
 
     yield put(uploadPhotoSuccess({ target: targetKey, data: normalizedResponse }));
   } catch (err) {
-    yield put(uploadPhotoError(err.message));
+    yield put(uploadPhotoError({ target: targetKey, data: err.message }));
   }
 }
 
@@ -50,6 +74,7 @@ export function* deletePhotoSaga() {
 }
 
 export default function*() {
+  yield takeLatest(GET_ON_LOGIN_SUCCESS, getPhotoSaga);
   yield takeLatest(UPLOAD_PHOTO_PENDING, uploadPhotoSaga);
   yield takeLatest(DELETE_PHOTO_PENDING, deletePhotoSaga);
 }

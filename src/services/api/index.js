@@ -14,10 +14,12 @@ async function handleResponse(response) {
     }
 
     let error;
-    if (err.error === err.message) {
+    if (err.error && err.message && err.error === err.message) {
       error = new Error(`${err.statusCode} ${err.error}`);
-    } else {
+    } else if (err.message) {
       error = new Error(`${err.message}`);
+    } else {
+      error = new Error(`${err.status} ${err.statusText}`);
     }
 
     error.response = err;
@@ -135,6 +137,7 @@ const directory = {
       },
       photos: {
         realtorPhoto: {
+          get: () => ({ path: `/api/user/settings/photos/realtorPhoto`, method: 'get' }),
           set: () => ({ path: `/api/user/settings/photos/realtorPhoto`, method: 'postBlob' }),
         },
         brokerageLogo: {
