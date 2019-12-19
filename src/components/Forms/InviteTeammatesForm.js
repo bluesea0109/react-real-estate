@@ -58,6 +58,7 @@ const InviteTeammatesForm = () => {
 
       let inviationStatus;
       if (emailInviteSent) inviationStatus = resolveInvitationStatus('pending');
+      if (isAdmin) inviationStatus = resolveInvitationStatus('pending');
       if (emailClicked) inviationStatus = resolveInvitationStatus('verified');
 
       if (!emailClicked && !emailInviteSent && !isAdmin) {
@@ -94,6 +95,8 @@ const InviteTeammatesForm = () => {
             <div style={{ gridArea: 'InviteCheckbox' }}>
               {emailClicked ? (
                 <Field disabled={emailClicked} checked={emailClicked} name="peers" component="input" type="checkbox" value={userId} />
+              ) : isAdmin ? (
+                <Field disabled={isAdmin} checked={isAdmin} name="peers" component="input" type="checkbox" value={userId} />
               ) : (
                 <Field name="peers">
                   {props => (
