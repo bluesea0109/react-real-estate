@@ -1,7 +1,7 @@
 import { put, call, takeLatest } from 'redux-saga/effects';
 
 import { getBoardsPending, getBoardsSuccess, getBoardsError } from './actions';
-import { AUTHENTICATION_SUCCESS } from '../auth0/actions';
+import { AUTHENTICATION_SUCCESS, COOKIE_AUTHENTICATION } from '../auth0/actions';
 import ApiService from '../../../services/api/index';
 import { normalizeBoards } from '../../helpers';
 
@@ -26,4 +26,5 @@ export function* onLoginSaga() {
 
 export default function*() {
   yield takeLatest(AUTHENTICATION_SUCCESS, onLoginSaga);
+  yield takeLatest(COOKIE_AUTHENTICATION, onLoginSaga);
 }

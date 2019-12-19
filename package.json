@@ -21,6 +21,7 @@
     "final-form": "4.18.6",
     "final-form-arrays": "3.0.2",
     "google-maps-react": "2.0.2",
+    "js-cookie": "2.2.1",
     "lodash": "4.17.15",
     "nouislider": "14.1.0",
     "nouislider-react": "3.3.5",

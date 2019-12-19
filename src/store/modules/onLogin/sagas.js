@@ -1,6 +1,6 @@
 import { put, call, takeLatest } from 'redux-saga/effects';
 
-import { AUTHENTICATION_SUCCESS } from '../auth0/actions';
+import { AUTHENTICATION_SUCCESS, COOKIE_AUTHENTICATION } from '../auth0/actions';
 import { getOnLoginPending, getOnLoginSuccess, getOnLoginError } from './actions';
 import ApiService from '../../../services/api/index';
 
@@ -19,4 +19,5 @@ export function* onLoginSaga() {
 
 export default function*() {
   yield takeLatest(AUTHENTICATION_SUCCESS, onLoginSaga);
+  yield takeLatest(COOKIE_AUTHENTICATION, onLoginSaga);
 }

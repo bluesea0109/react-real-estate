@@ -1,7 +1,7 @@
 import { put, call, takeLatest } from 'redux-saga/effects';
 
 import { getTemplatesPending, getTemplatesSuccess, getTemplatesError } from './actions';
-import { AUTHENTICATION_SUCCESS } from '../auth0/actions';
+import { AUTHENTICATION_SUCCESS, COOKIE_AUTHENTICATION } from '../auth0/actions';
 import ApiService from '../../../services/api/index';
 
 export function* getTemplatesSaga() {
@@ -19,4 +19,5 @@ export function* getTemplatesSaga() {
 
 export default function*() {
   yield takeLatest(AUTHENTICATION_SUCCESS, getTemplatesSaga);
+  yield takeLatest(COOKIE_AUTHENTICATION, getTemplatesSaga);
 }

@@ -27,6 +27,16 @@ class AuthService extends EventEmitter {
     });
   };
 
+  cookieLogin = idToken => {
+    this.idToken = idToken;
+
+    localStorage.setItem(localStorageKey, 'true');
+
+    this.emit(loginEvent, {
+      loggedIn: true,
+    });
+  };
+
   localLogin = authResult => {
     this.idToken = authResult.idToken;
     this.idTokenPayload = authResult.idTokenPayload;

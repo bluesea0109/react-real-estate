@@ -1,4 +1,4 @@
-import { AUTHENTICATION_PENDING, AUTHENTICATION_SUCCESS, AUTHENTICATION_ERROR } from './actions';
+import { AUTHENTICATION_PENDING, AUTHENTICATION_SUCCESS, AUTHENTICATION_ERROR, COOKIE_AUTHENTICATION } from './actions';
 
 const initialState = {
   pending: false,
@@ -29,6 +29,14 @@ export default function auth0(state = initialState, action) {
         pending: false,
         authenticated: false,
         error: action.error,
+      };
+
+    case COOKIE_AUTHENTICATION:
+      return {
+        ...state,
+        pending: false,
+        authenticated: true,
+        details: action.payload,
       };
 
     default:
