@@ -8,10 +8,14 @@ import { Button, Menu, Segment } from '../../components/Base';
 const CustomizationWizard = ({ children, initialValues = {}, onSubmit, togglePages, setTogglePages }) => {
   const [page, setPage] = useState(0);
   const [values, setValues] = useState(initialValues);
+  const [onlyOnce, setOnlyOnce] = useState(false);
 
   useEffect(() => {
-    if (values !== initialValues) setValues(initialValues);
-  }, [initialValues, values, setValues]);
+    if (!onlyOnce && values !== initialValues) {
+      setValues(initialValues);
+      setOnlyOnce(true);
+    }
+  }, [initialValues, values, setValues, onlyOnce, setOnlyOnce]);
 
   const next = useCallback(
     values => {
@@ -55,7 +59,7 @@ const CustomizationWizard = ({ children, initialValues = {}, onSubmit, togglePag
   }, [togglePages, setTogglePages, values, previous, handleSubmit]);
 
   return (
-    <FinalForm initialValues={values} validate={validate} onSubmit={handleSubmit}>
+    <FinalForm initialValues={values} validate={validate} onSubmit={handleSubmit} keepDirtyOnReinitialize={true}>
       {({ handleSubmit, submitting }) => {
         return (
           <Form onSubmit={handleSubmit}>
