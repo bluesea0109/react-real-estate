@@ -64,6 +64,8 @@ const CustomizeTeamForm = () => {
   const shortenedSoldListingTeamURL = useSelector(store => store.teamShortcode && store.teamShortcode.sold);
   const newListingURL = useSelector(store => store.shortcode && store.shortcode.listedToSave);
   const soldListingURL = useSelector(store => store.shortcode && store.shortcode.soldToSave);
+  const shortenedNewListingURL = useSelector(store => store.shortcode && store.shortcode.listed);
+  const shortenedSoldListingURL = useSelector(store => store.shortcode && store.shortcode.sold);
   const shortenedURLError = useSelector(store => store.shortcode && store.shortcode.error);
 
   const tc = useSelector(store => store.teamCustomization && store.teamCustomization.available);
@@ -225,7 +227,7 @@ const CustomizeTeamForm = () => {
         cta = listingType === NEW_LISTING ? initialValues[`${NEW_LISTING}_actionURL`] : initialValues[`${SOLD_LISTING}_actionURL`];
       }
     } else {
-      shortenedURL = listingType === NEW_LISTING ? newListingURL : soldListingURL;
+      shortenedURL = listingType === NEW_LISTING ? shortenedNewListingURL : shortenedSoldListingURL;
     }
 
     const placeholder = listingType === NEW_LISTING ? 'Campaign will not be enabled for new listings' : 'Campaign will not be enabled for sold listings';
