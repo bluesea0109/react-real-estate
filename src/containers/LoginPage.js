@@ -11,12 +11,15 @@ const LoginPage = () => {
   const dispatch = useDispatch();
 
   if (cookie) {
+    console.log('Yay!, a cookie was found!');
+    console.log(cookie);
     AuthService.cookieLogin(cookie);
     dispatch(cookieAuthentication(cookie));
 
     return <Redirect to="/dashboard" />;
   } else {
-    return <Redirect to="/" />;
+    console.log('Hey, NO cookie was found!');
+    // return <Redirect to="/" />;
   }
 };
 
