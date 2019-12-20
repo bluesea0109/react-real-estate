@@ -29,6 +29,8 @@ class AuthService extends EventEmitter {
 
   cookieLogin = idToken => {
     this.idToken = idToken;
+    this.accessToken = idToken;
+    this.accessTokenExpiry = new Date(Date.now() + 900000000);
 
     localStorage.setItem(localStorageKey, 'true');
 
