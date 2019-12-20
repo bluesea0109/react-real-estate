@@ -241,6 +241,15 @@ export const WhenFieldChanges = ({ field, becomes, set, to }) => (
   </Field>
 );
 
+export const ExternalChanges = ({ whenTrue, set, to }) => (
+  <Field name={set} subscription={{}}>
+    {(
+      // No subscription. We only use Field to get to the change function
+      { input: { onChange } }
+    ) => <FormSpy subscription={{}}>{({ form }) => <span>{whenTrue && onChange(to)}</span>}</FormSpy>}
+  </Field>
+);
+
 export const colors = ['#b40101', '#f2714d', '#f4b450', '#79c34d', '#2d9a2c', '#59c4c4', '#009ee7', '#0e2b5b', '#ee83ee', '#8b288f', '#808080', '#000000'];
 
 export const templates = [

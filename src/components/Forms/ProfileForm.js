@@ -12,6 +12,7 @@ import {
   required,
   renderField,
   labelWithPopup,
+  ExternalChanges,
   WhenFieldChanges,
   composeValidators,
   renderSelectField,
@@ -36,8 +37,6 @@ const changeMsg = 'This comes from Brivity. If you want to modify this informati
 const ProfileForm = () => {
   const dispatch = useDispatch();
   const auth0 = useSelector(store => store.auth0 && store.auth0.details);
-  // const profile = useSelector(store => store.profile && store.profile.available);
-  const profileError = useSelector(store => store.profile && store.profile.error);
   const boards = useSelector(store => store.boards && store.boards.available);
   const states = useSelector(store => store.states && store.states.available);
   const isMultimode = useSelector(store => store.onLogin.mode === 'multiuser');
@@ -95,19 +94,17 @@ const ProfileForm = () => {
     }
   };
 
-  let profileValues;
-  let mlsArr = [];
+  let initialValues = {
+    email: auth0.idTokenPayload && auth0.idTokenPayload.email,
+    boards: [null],
+    realtorPhoto: realtorPhoto,
+    teamLogo: teamLogo,
+    brokerageLogo: brokerageLogo,
+  };
 
-  if (profileError === '410 Gone') {
-    profileValues = {
-      first: auth0.idTokenPayload && auth0.idTokenPayload['http://firstname'],
-      last: auth0.idTokenPayload && auth0.idTokenPayload['http://lastname'],
-      email: auth0.idTokenPayload && auth0.idTokenPayload.email,
-      phone: auth0.idTokenPayload && auth0.idTokenPayload['http://phonenumber'],
-      boards: [null],
-    };
-  } else {
+  if (onLoginUserProfile) {
     const onLoginUserProfileBoards = onLoginUserProfile && onLoginUserProfile.boards;
+    const mlsArr = [];
 
     onLoginUserProfileBoards &&
       onLoginUserProfileBoards.forEach(board => {
@@ -115,26 +112,35 @@ const ProfileForm = () => {
         mlsArr.push({ name: userBoard[0] && userBoard[0].value, mlsId: board.mlsId });
       });
 
-    const businessNotificationEmail = onLoginTeamProfile && onLoginTeamProfile.notificationEmail ? onLoginTeamProfile.notificationEmail : null;
-    const notificationEmail = onLoginUserProfile && onLoginUserProfile.notificationEmail ? onLoginUserProfile.notificationEmail : businessNotificationEmail;
+    const notificationEmail = onLoginUserProfile && onLoginUserProfile.notificationEmail;
 
-    profileValues = Object.assign(
-      {},
-      onLoginUserProfile,
-      onLoginTeamProfile,
-      { boards: mlsArr },
-      { realtorPhoto: picturesRealtorPhoto || realtorPhoto },
-      { teamLogo: picturesTeamLogo || teamLogo },
-      { brokerageLogo: picturesBrokerageLogo || brokerageLogo },
-      { notificationEmail: notificationEmail },
-      { businessNotificationEmail: businessNotificationEmail }
-    );
+    initialValues = {
+      ...initialValues,
+      ...onLoginUserProfile,
+      boards: mlsArr,
+      notificationEmail: notificationEmail,
+    };
+  }
+
+  if (onLoginTeamProfile) {
+    const businessNotificationEmail = onLoginTeamProfile && onLoginTeamProfile.notificationEmail ? onLoginTeamProfile.notificationEmail : null;
+
+    if (!initialValues.notificationEmail) initialValues.notificationEmail = businessNotificationEmail;
+
+    initialValues = {
+      ...initialValues,
+      ...onLoginTeamProfile,
+      teamLogo: picturesTeamLogo,
+      brokerageLogo: picturesBrokerageLogo,
+      businessNotificationEmail: businessNotificationEmail,
+    };
   }
 
   return (
     <FinalForm
+      keepDirtyOnReinitialize={true}
       onSubmit={onSubmit}
-      initialValues={profileValues}
+      initialValues={initialValues}
       mutators={{
         ...arrayMutators,
       }}
@@ -150,13 +156,6 @@ const ProfileForm = () => {
       }) => {
         return (
           <Form onSubmit={handleSubmit}>
-            <WhenFieldChanges
-              field="businessNotificationEmail"
-              becomes={values.businessNotificationEmail}
-              set="notificationEmail"
-              to={values.businessNotificationEmail}
-            />
-
             <Segment>
               <Header as="h1">
                 Profile
@@ -164,6 +163,8 @@ const ProfileForm = () => {
               </Header>
 
               <Divider style={{ margin: '1em -1em' }} />
+
+              <ExternalChanges whenTrue={picturesRealtorPhoto} set="realtorPhoto" to={picturesRealtorPhoto} />
 
               <div
                 style={
@@ -262,6 +263,17 @@ const ProfileForm = () => {
                 </Header>
 
                 <Divider style={{ margin: '1em -1em' }} />
+
+                <WhenFieldChanges
+                  field="businessNotificationEmail"
+                  becomes={values.businessNotificationEmail}
+                  set="notificationEmail"
+                  to={values.businessNotificationEmail}
+                />
+
+                <ExternalChanges whenTrue={picturesTeamLogo} set="teamLogo" to={picturesTeamLogo} />
+
+                <ExternalChanges whenTrue={picturesBrokerageLogo} set="brokerageLogo" to={picturesBrokerageLogo} />
 
                 <div
                   style={
