@@ -25,6 +25,7 @@ import CustomizationWizard from './CustomizationWizard';
 import { saveCustomizationPending, reviewCustomizationCompleted } from '../../store/modules/customization/actions';
 import { generatePostcardsPreviewPending } from '../../store/modules/postcards/actions';
 import { getTeamListedShortcodePending, getTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
+import { getListedShortcodePending, getSoldShortcodePending } from '../../store/modules/shortcode/actions';
 
 import Loading from '../Loading';
 import FlipCard from '../FlipCard';
@@ -69,6 +70,7 @@ const CustomizeTeamForm = () => {
   const shortenedURLError = useSelector(store => store.shortcode && store.shortcode.error);
 
   const tc = useSelector(store => store.teamCustomization && store.teamCustomization.available);
+  const existingCustomization = useSelector(store => store.customization && store.customization.available);
 
   const isMultimode = useSelector(store => store.onLogin.mode === 'multiuser');
   const postcardsPreviewIsPending = useSelector(store => store.postcards && store.postcards.pending);
@@ -209,6 +211,36 @@ const CustomizeTeamForm = () => {
       dispatch(getTeamListedShortcodePending());
       dispatch(getTeamSoldShortcodePending());
     }
+  }
+
+  if (existingCustomization) {
+    const c = existingCustomization;
+    // if (onlyOnce) setOnlyOnce(false);
+    if (!onlyOnce) {
+      setOnlyOnce(true);
+
+      if (c.listed.createMailoutsOfThisType !== newListingEnabled) setNewListingEnabled(c.listed.createMailoutsOfThisType);
+      if (c.sold.createMailoutsOfThisType !== soldListingEnabled) setSoldListingEnabled(c.sold.createMailoutsOfThisType);
+
+      dispatch(getListedShortcodePending());
+      dispatch(getSoldShortcodePending());
+    }
+
+    initialValues = {
+      [`${NEW_LISTING}_createMailoutsOfThisType`]: c.listed.createMailoutsOfThisType,
+      [`${NEW_LISTING}_template`]: c.listed.templateTheme,
+      [`${NEW_LISTING}_color`]: c.listed.brandColor,
+      [`${NEW_LISTING}_headline`]: c.listed.frontHeadline,
+      [`${NEW_LISTING}_numberOfPostcardsDefaults`]: [c.listed.mailoutSize],
+      [`${NEW_LISTING}_actionURL`]: c.listed && c.listed.cta,
+
+      [`${SOLD_LISTING}_createMailoutsOfThisType`]: c.sold.createMailoutsOfThisType,
+      [`${SOLD_LISTING}_template`]: c.sold.templateTheme,
+      [`${SOLD_LISTING}_color`]: c.sold.brandColor,
+      [`${SOLD_LISTING}_headline`]: c.sold.frontHeadline,
+      [`${SOLD_LISTING}_numberOfPostcardsDefaults`]: [c.sold.mailoutSize],
+      [`${SOLD_LISTING}_actionURL`]: c.sold && c.sold.cta,
+    };
   }
 
   const formPage = ({ listingType }) => {

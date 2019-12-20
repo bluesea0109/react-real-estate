@@ -1,11 +1,12 @@
 import React from 'react';
 
+import CustomizeForm from '../components/Forms/CustomizeForm';
 import { Page, Segment } from '../components/Base';
 
 const CustomizationPage = () => (
   <Page basic>
-    <Segment>
-      <h1>Customization Page</h1>
+    <Segment basic>
+      <CustomizeForm />
     </Segment>
   </Page>
 );
