@@ -2,7 +2,7 @@
   "auth0": {
     "domain": "alf-login-p2.auth0.com",
     "clientId": "K1qGt2pZ2JIfy3l1onLhGP0abAYMkT5l",
-    "audience": "https://tobe.filled.later"
+    "audience": "https://2be.filled.later"
   },
   "googleMap": {
     "apiKey": "AIzaSyC4iBElkDK11G-6ZbxzthqMDzzx-qGiOVY"
