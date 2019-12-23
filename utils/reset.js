@@ -3,7 +3,6 @@
 
 require('events').EventEmitter.defaultMaxListeners = 50;
 
-const open = require('open-cli');
 const rp = require('request-promise');
 const dbURL = 'http://sofa.rmcloud.com:5984';
 const dbName = 'alf-dev';
