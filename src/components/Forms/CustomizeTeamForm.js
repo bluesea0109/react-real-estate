@@ -109,9 +109,6 @@ const CustomizeTeamForm = () => {
 
   const onSubmit = values => {
     const data = {
-      _id: tc && tc._id,
-      _rev: tc && tc._rev,
-
       listed: {
         createMailoutsOfThisType: values.newListing_createMailoutsOfThisType,
         mailoutSize: values.newListing_numberOfPostcardsDefaults[1],
@@ -137,6 +134,11 @@ const CustomizeTeamForm = () => {
         frontHeadline: values.soldListing_headline,
       },
     };
+
+    if (tc) {
+      data._id = tc._id;
+      data._rev = tc._rev;
+    }
 
     dispatch(saveTeamCustomizationPending(data));
     handleReview();
@@ -435,9 +437,9 @@ const CustomizeTeamForm = () => {
       </CustomizationWizard>
 
       <Modal open={displayReview} basic size="tiny">
-        <Modal.Header>Preview</Modal.Header>
+        {!teamPostcardsPreviewIsPending && <Modal.Header>Preview</Modal.Header>}
 
-        {teamPostcardsPreviewIsPending && <Loading />}
+        {teamPostcardsPreviewIsPending && <Loading msg="Please wait, loading an example preview..." />}
 
         {newListingEnabled &&
           teamPostcardsPreview &&
@@ -467,14 +469,16 @@ const CustomizeTeamForm = () => {
             </Modal.Content>
           )}
 
-        <Modal.Actions>
-          <Button basic color="red" inverted onClick={() => setDisplayReview(false)}>
-            <Icon name="remove" /> Edit
-          </Button>
-          <Button color="green" inverted onClick={handleReviewComplete}>
-            <Icon name="checkmark" /> Continue
-          </Button>
-        </Modal.Actions>
+        {!teamPostcardsPreviewIsPending && (
+          <Modal.Actions>
+            <Button basic color="red" inverted onClick={() => setDisplayReview(false)}>
+              <Icon name="remove" /> Edit
+            </Button>
+            <Button color="green" inverted onClick={handleReviewComplete}>
+              <Icon name="checkmark" /> Continue
+            </Button>
+          </Modal.Actions>
+        )}
       </Modal>
     </Fragment>
   );

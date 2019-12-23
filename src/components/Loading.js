@@ -2,9 +2,9 @@ import React from 'react';
 
 import { Dimmer, Loader } from './Base';
 
-const Loading = () => (
+const Loading = ({ msg = 'Loading...' }) => (
   <Dimmer active inverted>
-    <Loader>Loading...</Loader>
+    <Loader>{msg}</Loader>
   </Dimmer>
 );
 
