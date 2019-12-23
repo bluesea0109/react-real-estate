@@ -118,9 +118,6 @@ const CustomizeTeamForm = () => {
     let data;
     if (isMultimode) {
       data = {
-        _id: tc._id,
-        _rev: tc._rev,
-
         listed: {
           createMailoutsOfThisType: returnIfNotEqual(values.newListing_createMailoutsOfThisType, tc.listed.createMailoutsOfThisType),
           mailoutSize: returnIfNotEqual(values.newListing_numberOfPostcardsDefaults[0], tc.listed.mailoutSize),
@@ -142,6 +139,11 @@ const CustomizeTeamForm = () => {
           frontHeadline: returnIfNotEqual(values.soldListing_headline, tc.sold.frontHeadline),
         },
       };
+
+      if (tc) {
+        data._id = tc._id;
+        data._rev = tc._rev;
+      }
     } else {
       data = {
         listed: {
@@ -520,9 +522,9 @@ const CustomizeTeamForm = () => {
       </CustomizationWizard>
 
       <Modal open={displayReview} basic size="tiny">
-        <Modal.Header>Preview</Modal.Header>
+        {!postcardsPreviewIsPending && <Modal.Header>Preview</Modal.Header>}
 
-        {postcardsPreviewIsPending && <Loading />}
+        {postcardsPreviewIsPending && <Loading msg="Please wait, loading an example preview..." />}
 
         {newListingEnabled &&
           postcardsPreview &&
@@ -552,14 +554,16 @@ const CustomizeTeamForm = () => {
             </Modal.Content>
           )}
 
-        <Modal.Actions>
-          <Button basic color="red" inverted onClick={() => setDisplayReview(false)}>
-            <Icon name="remove" /> Edit
-          </Button>
-          <Button color="green" inverted onClick={handleReviewComplete}>
-            <Icon name="checkmark" /> Continue
-          </Button>
-        </Modal.Actions>
+        {!postcardsPreviewIsPending && (
+          <Modal.Actions>
+            <Button basic color="red" inverted onClick={() => setDisplayReview(false)}>
+              <Icon name="remove" /> Edit
+            </Button>
+            <Button color="green" inverted onClick={handleReviewComplete}>
+              <Icon name="checkmark" /> Continue
+            </Button>
+          </Modal.Actions>
+        )}
       </Modal>
     </Fragment>
   );
