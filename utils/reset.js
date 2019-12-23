@@ -7,6 +7,8 @@ const rp = require('request-promise');
 const dbURL = 'http://sofa.rmcloud.com:5984';
 const dbName = 'alf-dev';
 let user;
+const campaignAPIEndPoint = 'http://alf-api-dev-1239229468.us-east-1.elb.amazonaws.com';
+const campaignURL = (userId) => `${campaignAPIEndPoint}/api/user/${userId}/listing/mailout/initial?skipEmailNotification=true`;
 
 async function getUserProfile() {
   try {
@@ -105,6 +107,24 @@ async function updateUserProfile2(payload) {
   }
 }
 
+async function createCampaigns() {
+  try {
+    const options = {
+      method: 'POST',
+      uri: campaignURL(user),
+      json: true
+    };
+
+    const createCampaigns = await rp(options);
+    console.log('Create Campaigns successful');
+    console.log(createCampaigns);
+
+  } catch (err) {
+    err.message = `Something went horribly wrong during creating campaigns`;
+    throw err;
+  }
+}
+
 const run = async () => {
   try {
 
@@ -122,6 +142,8 @@ const run = async () => {
     delete newUserProfile2.brivitySync.emailInviteSent;
 
     await updateUserProfile2(newUserProfile2);
+
+    await createCampaigns();
 
   } catch (err) {
     console.log('There was an error: ');
