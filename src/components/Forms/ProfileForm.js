@@ -348,7 +348,7 @@ const ProfileForm = () => {
                       label: isMultimode ? labelWithPopup('State', popup(changeMsg)) : 'State',
                       type: 'text',
                       required: true,
-                      validate: required,
+                      validate: isMultimode ? null : required,
                       options: states ? states : [],
                       search: true,
                       disabled: isMultimode,
