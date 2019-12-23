@@ -109,8 +109,8 @@ const CustomizeTeamForm = () => {
 
   const onSubmit = values => {
     const data = {
-      _id: tc._id,
-      _rev: tc._rev,
+      _id: tc && tc._id,
+      _rev: tc && tc._rev,
 
       listed: {
         createMailoutsOfThisType: values.newListing_createMailoutsOfThisType,
