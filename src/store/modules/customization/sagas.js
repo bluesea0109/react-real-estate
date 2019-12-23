@@ -46,13 +46,6 @@ export function* saveCustomizationSaga() {
     const response = yield call(ApiService[method], path, customization);
 
     yield put(saveCustomizationSuccess(response));
-
-    const isOnboarded = yield select(getOnboardedStatus);
-    const mode = yield select(getOnLoginMode);
-    const userIsAdmin = yield select(checkIfUserIsAdmin);
-    if (!isOnboarded) yield put(setCompletedCustomization(true));
-    if (!isOnboarded && mode !== 'multiuser') yield put(setOnboardedStatus(true));
-    if (!isOnboarded && mode === 'multiuser' && !userIsAdmin) yield put(setOnboardedStatus(true));
   } catch (err) {
     yield put(saveCustomizationError(err.message));
   }

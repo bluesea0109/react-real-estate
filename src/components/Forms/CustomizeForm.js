@@ -19,16 +19,16 @@ import {
   composeValidators,
   renderCarouselField,
 } from './helpers';
-import { Button, Icon, Image, Menu, Modal, Segment } from '../Base';
-import CustomizationWizard from './CustomizationWizard';
-
-import { saveCustomizationPending, reviewCustomizationCompleted } from '../../store/modules/customization/actions';
-import { generatePostcardsPreviewPending } from '../../store/modules/postcards/actions';
-import { getTeamListedShortcodePending, getTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
-import { getListedShortcodePending, getSoldShortcodePending } from '../../store/modules/shortcode/actions';
-
 import Loading from '../Loading';
 import FlipCard from '../FlipCard';
+import CustomizationWizard from './CustomizationWizard';
+import { Button, Icon, Image, Menu, Modal, Segment } from '../Base';
+import { generatePostcardsPreviewPending } from '../../store/modules/postcards/actions';
+import { setCompletedCustomization, setOnboardedStatus } from '../../store/modules/onboarded/actions';
+import { getListedShortcodePending, getSoldShortcodePending } from '../../store/modules/shortcode/actions';
+import { saveCustomizationPending, reviewCustomizationCompleted } from '../../store/modules/customization/actions';
+import { getTeamListedShortcodePending, getTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
+
 import './thin.css';
 
 const NEW_LISTING = 'newListing';
@@ -73,6 +73,7 @@ const CustomizeTeamForm = () => {
   const existingCustomization = useSelector(store => store.customization && store.customization.available);
 
   const isMultimode = useSelector(store => store.onLogin.mode === 'multiuser');
+  const isAdmin = useSelector(store => store.onLogin && store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
   const postcardsPreviewIsPending = useSelector(store => store.postcards && store.postcards.pending);
   const postcardsPreview = useSelector(store => store.postcards && store.postcards.available);
 
@@ -112,6 +113,8 @@ const CustomizeTeamForm = () => {
   const handleReviewComplete = () => {
     setDisplayReview(false);
     dispatch(reviewCustomizationCompleted(true));
+    dispatch(setCompletedCustomization(true));
+    if (!isMultimode || (isMultimode && !isAdmin)) dispatch(setOnboardedStatus(true));
   };
 
   const onSubmit = values => {
