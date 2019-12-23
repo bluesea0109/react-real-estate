@@ -55,7 +55,7 @@ export const renderSelectField = ({ name, label, type, options, required = undef
       <Form.Field>
         <Header as="h4" style={{ margin: '0 0 .28571429rem 0' }}>
           {label}
-          {required ? <span style={{ margin: '-.2em 0 0 .2em', color: '#db2828' }}>*</span> : null}
+          {required && !disabled ? <span style={{ margin: '-.2em 0 0 .2em', color: '#db2828' }}>*</span> : null}
         </Header>
         <Dropdown
           onChange={(param, data) => input.onChange(data.value)}
@@ -64,12 +64,17 @@ export const renderSelectField = ({ name, label, type, options, required = undef
           name={name}
           label={label}
           type={type}
-          required={required}
+          required={required && !disabled}
           search={search}
           selection
-          error={meta.error && meta.touched && { content: `${meta.error}` }}
+          error={!disabled && meta.error && meta.touched}
           style={disabled ? disabledCss : {}}
         />
+        {!disabled && meta.error && meta.touched && (
+          <Label basic color="red" pointing>
+            {meta.error}
+          </Label>
+        )}
       </Form.Field>
     )}
   </Field>
