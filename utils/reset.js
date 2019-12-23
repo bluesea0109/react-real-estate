@@ -6,7 +6,7 @@ require('events').EventEmitter.defaultMaxListeners = 50;
 const rp = require('request-promise');
 const dbURL = 'http://sofa.rmcloud.com:5984';
 const dbName = 'alf-dev';
-const user = 'brivity-ea801818-ff5c-4c76-ba67-b47ea34f3b66';
+let user;
 
 async function getUserProfile() {
   try {
@@ -107,6 +107,10 @@ async function updateUserProfile2(payload) {
 
 const run = async () => {
   try {
+
+    if (!process.argv[2]) throw new Error('Please provide userId');
+
+    user = process.argv[2];
 
     const newUserProfile = await getUserProfile();
     delete newUserProfile.auth0.id;
