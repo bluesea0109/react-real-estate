@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, useLocation } from 'react-router';
 
-import { setOnboardedStatus } from '../../store/modules/onboarded/actions';
+import { finalizeOnboarding } from '../../store/modules/onboarded/actions';
 import OnboardPageProfile from './ProfilePage';
 import OnboardPageCustomizeTeam from './CustomizeTeamPage';
 import OnboardPageCustomize from './CustomizePage';
@@ -49,7 +49,7 @@ const OnboardPage = () => {
         history.push(onBoardCustomizationPath);
       }
       if (onboardingCompletedSingleUser) {
-        dispatch(setOnboardedStatus(true));
+        dispatch(finalizeOnboarding());
         history.push('/dashboard');
       }
     }
@@ -68,7 +68,7 @@ const OnboardPage = () => {
         history.push(onBoardInvitePath);
       }
       if (onboardingCompleted) {
-        dispatch(setOnboardedStatus(true));
+        dispatch(finalizeOnboarding());
         history.push('/dashboard');
       }
     }

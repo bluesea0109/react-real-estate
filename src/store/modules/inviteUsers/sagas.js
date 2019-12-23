@@ -4,7 +4,7 @@ import { INVITE_USERS_PENDING, inviteUsersSuccess, inviteUsersError } from './ac
 
 import ApiService from '../../../services/api/index';
 
-import { setCompletedInviteTeammates, setOnboardedStatus } from '../onboarded/actions';
+import { setCompletedInviteTeammates, finalizeOnboarding } from '../onboarded/actions';
 
 export const getPeersToInvite = state => state.inviteUsers.peers;
 export const getOnboardedStatus = state => state.onboarded.status;
@@ -20,7 +20,7 @@ export function* inviteUsersSaga() {
 
     const isOnboarded = yield select(getOnboardedStatus);
     if (!isOnboarded) yield put(setCompletedInviteTeammates(true));
-    if (!isOnboarded) yield put(setOnboardedStatus(true));
+    if (!isOnboarded) yield put(finalizeOnboarding());
   } catch (err) {
     yield put(inviteUsersError(err.message));
   }

@@ -24,7 +24,7 @@ import FlipCard from '../FlipCard';
 import CustomizationWizard from './CustomizationWizard';
 import { Button, Icon, Image, Menu, Modal, Segment } from '../Base';
 import { generatePostcardsPreviewPending } from '../../store/modules/postcards/actions';
-import { setCompletedCustomization, setOnboardedStatus } from '../../store/modules/onboarded/actions';
+import { setCompletedCustomization, finalizeOnboarding } from '../../store/modules/onboarded/actions';
 import { getListedShortcodePending, getSoldShortcodePending } from '../../store/modules/shortcode/actions';
 import { saveCustomizationPending, reviewCustomizationCompleted } from '../../store/modules/customization/actions';
 import { getTeamListedShortcodePending, getTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
@@ -114,7 +114,7 @@ const CustomizeTeamForm = () => {
     setDisplayReview(false);
     dispatch(reviewCustomizationCompleted(true));
     dispatch(setCompletedCustomization(true));
-    if (!isMultimode || (isMultimode && !isAdmin)) dispatch(setOnboardedStatus(true));
+    if (!isMultimode || (isMultimode && !isAdmin)) dispatch(finalizeOnboarding());
   };
 
   const onSubmit = values => {
