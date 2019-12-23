@@ -22,9 +22,10 @@ import {
 
 import { Menu, Segment, Image, Modal, Button } from '../Base';
 import CustomizationWizard from './CustomizationWizard';
-import { saveTeamCustomizationPending, reviewTeamCustomizationCompleted } from '../../store/modules/teamCustomization/actions';
+import { setCompletedTeamCustomization } from '../../store/modules/onboarded/actions';
 import { generateTeamPostcardsPreviewPending } from '../../store/modules/teamPostcards/actions';
 import { getTeamListedShortcodePending, getTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
+import { saveTeamCustomizationPending, reviewTeamCustomizationCompleted } from '../../store/modules/teamCustomization/actions';
 
 import Loading from '../Loading';
 import FlipCard from '../FlipCard';
@@ -105,6 +106,7 @@ const CustomizeTeamForm = () => {
   const handleReviewComplete = () => {
     setDisplayReview(false);
     dispatch(reviewTeamCustomizationCompleted(true));
+    dispatch(setCompletedTeamCustomization(true));
   };
 
   const onSubmit = values => {

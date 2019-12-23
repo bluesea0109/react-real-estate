@@ -40,9 +40,6 @@ export function* saveTeamCustomizationSaga() {
     const response = yield call(ApiService[method], path, teamCustomization);
 
     yield put(saveTeamCustomizationSuccess(response));
-
-    const isOnboarded = yield select(getOnboardedStatus);
-    if (!isOnboarded) yield put(setCompletedTeamCustomization(true));
   } catch (err) {
     yield put(saveTeamCustomizationError(err.message));
   }
