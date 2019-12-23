@@ -10,10 +10,21 @@ const CustomizationWizard = ({ children, initialValues = {}, onSubmit, togglePag
   const [values, setValues] = useState(initialValues);
   const [onlyOnce, setOnlyOnce] = useState(false);
 
+  // useEffect(() => {
+  //   if (!onlyOnce && values !== initialValues) {
+  //     setValues(initialValues);
+  //     setOnlyOnce(true);
+  //   }
+  // }, [initialValues, values, setValues, onlyOnce, setOnlyOnce]);
+
   useEffect(() => {
     if (!onlyOnce && values !== initialValues) {
       setValues(initialValues);
       setOnlyOnce(true);
+    }
+
+    if (values === initialValues) {
+      setOnlyOnce(false);
     }
   }, [initialValues, values, setValues, onlyOnce, setOnlyOnce]);
 

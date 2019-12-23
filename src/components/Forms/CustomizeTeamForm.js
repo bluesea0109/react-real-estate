@@ -60,8 +60,8 @@ const CustomizeTeamForm = () => {
   const ribbonTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.ribbon);
   const stackTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.stack);
 
-  const shortenedNewListingURL = useSelector(store => store.teamShortcode && store.teamShortcode.listed);
-  const shortenedSoldListingURL = useSelector(store => store.teamShortcode && store.teamShortcode.sold);
+  const shortenedNewListingTeamURL = useSelector(store => store.teamShortcode && store.teamShortcode.listed);
+  const shortenedSoldListingTeamURL = useSelector(store => store.teamShortcode && store.teamShortcode.sold);
   const newListingURL = useSelector(store => store.teamShortcode && store.teamShortcode.listedToSave);
   const soldListingURL = useSelector(store => store.teamShortcode && store.teamShortcode.soldToSave);
   const shortenedURLError = useSelector(store => store.teamShortcode && store.teamShortcode.error);
@@ -191,7 +191,7 @@ const CustomizeTeamForm = () => {
       listingType === NEW_LISTING ? frontHeadlineNewListing && frontHeadlineNewListing.max : frontHeadlineSoldListing && frontHeadlineSoldListing.max;
     const setSelectedTemplate = value => (listingType === NEW_LISTING ? setSelectedNewListingTemplate(value) : setSelectedSoldListingTemplate(value));
     const setSelectedColor = value => (listingType === NEW_LISTING ? setSelectedNewListingColor(value) : setSelectedSoldListingColor(value));
-    const shortenedURL = listingType === NEW_LISTING ? shortenedNewListingURL : shortenedSoldListingURL;
+    const shortenedURL = listingType === NEW_LISTING ? shortenedNewListingTeamURL : shortenedSoldListingTeamURL;
     const placeholder = listingType === NEW_LISTING ? 'Campaign will not be enabled for new listings' : 'Campaign will not be enabled for sold listings';
     const targetOn = listingType === NEW_LISTING ? 'Generate new listing campaigns' : 'Generate sold listing campaigns';
     const cta = listingType === NEW_LISTING ? initialValues[`${NEW_LISTING}_actionURL`] : initialValues[`${SOLD_LISTING}_actionURL`];
@@ -380,7 +380,7 @@ const CustomizeTeamForm = () => {
                 }}
               </FormSpy>
 
-              {shortenedURL && cta && (
+              {shortenedURL && (
                 <Label style={!isMobile() && { marginTop: '2em' }}>
                   <Icon name="linkify" />
                   Shortened URL:
