@@ -143,9 +143,9 @@ const CustomizeTeamForm = () => {
         },
       };
 
-      if (tc) {
-        data._id = tc._id;
-        data._rev = tc._rev;
+      if (existingCustomization) {
+        data._id = existingCustomization._id;
+        data._rev = existingCustomization._rev;
       }
     } else {
       data = {
@@ -456,6 +456,15 @@ const CustomizeTeamForm = () => {
               <FormSpy>
                 {props => {
                   let urlCallError;
+
+                  if (isMultimode) {
+                    shortenedURL = listingType === NEW_LISTING ? shortenedNewListingTeamURL : shortenedSoldListingTeamURL;
+                    if (tc) {
+                      cta = listingType === NEW_LISTING ? initialValues[`${NEW_LISTING}_actionURL`] : initialValues[`${SOLD_LISTING}_actionURL`];
+                    }
+                  } else {
+                    shortenedURL = listingType === NEW_LISTING ? shortenedNewListingURL : shortenedSoldListingURL;
+                  }
 
                   if (listingType === NEW_LISTING) {
                     urlCallError = (shortenedURLError && shortenedURLError.onSaveListed) || (shortenedURLError && shortenedURLError.onGetListed);

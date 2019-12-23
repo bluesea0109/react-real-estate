@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Label } from 'semantic-ui-react';
 import { Dropdown } from 'semantic-ui-react';
 import * as isURL from 'validator/lib/isURL';
@@ -110,6 +110,26 @@ export const renderField = ({ name, label, type, required = undefined, validate,
   }
 };
 
+/*
+  <Field name={set} subscription={{}}>
+    {(
+      // No subscription. We only use Field to get to the change function
+      { input: { onChange } }
+    ) => (
+      <FormSpy subscription={{ values: true }}>
+        {({ form, values }) => (
+          <OnChange name={field}>
+            {value => {
+              if (!values[set] && (value === becomes || becomes === undefined)) {
+                onChange(to);
+              }
+            }}
+          </OnChange>
+        )}
+      </FormSpy>
+    )}
+  </Field>
+ */
 export const renderUrlField = ({ name, label, type, dispatch, required = undefined, validate, target, disabled = undefined, form = undefined }) => {
   const onBlurHandler = e => {
     const eURL = e.target.value;
@@ -128,15 +148,28 @@ export const renderUrlField = ({ name, label, type, dispatch, required = undefin
   return (
     <Field name={name} validate={validate}>
       {({ input, meta }) => (
-        <Form.Input
-          required={required}
-          {...input}
-          type={type}
-          label={label}
-          error={meta.error && meta.touched && { content: `${meta.error}` }}
-          onBlur={onBlurHandler}
-          style={disabled ? disabledCss : {}}
-        />
+        <Fragment>
+          <Form.Input
+            required={required}
+            {...input}
+            type={type}
+            label={label}
+            error={meta.error && meta.touched && { content: `${meta.error}` }}
+            onBlur={onBlurHandler}
+            style={disabled ? disabledCss : {}}
+          />
+          <FormSpy subscription={{ values: true }}>
+            {({ form, values }) => {
+              if (!input.value && values[name]) {
+                const e = { target: {} };
+                e.target.value = values[name];
+                onBlurHandler(e);
+              }
+
+              return <span> </span>;
+            }}
+          </FormSpy>
+        </Fragment>
       )}
     </Field>
   );
