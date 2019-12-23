@@ -230,7 +230,7 @@ export const WhenFieldChanges = ({ field, becomes, set, to }) => (
         {({ form, values }) => (
           <OnChange name={field}>
             {value => {
-              if ((!values.notificationEmail || values.notificationEmail === value) && (value === becomes || becomes === undefined)) {
+              if (value.includes('@') && values[set].includes(value) && (value === becomes || becomes === undefined)) {
                 onChange(to);
               }
             }}
