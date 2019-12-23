@@ -226,11 +226,11 @@ export const WhenFieldChanges = ({ field, becomes, set, to }) => (
       // No subscription. We only use Field to get to the change function
       { input: { onChange } }
     ) => (
-      <FormSpy subscription={{}}>
-        {({ form }) => (
+      <FormSpy subscription={{ values: true }}>
+        {({ form, values }) => (
           <OnChange name={field}>
             {value => {
-              if (value === becomes || becomes === undefined) {
+              if ((!values.notificationEmail || values.notificationEmail === value) && (value === becomes || becomes === undefined)) {
                 onChange(to);
               }
             }}
