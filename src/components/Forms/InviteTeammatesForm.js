@@ -115,7 +115,7 @@ const InviteTeammatesForm = () => {
         usersToInvite.push(checkbox);
       });
 
-    dispatch(inviteUsersPending(usersToInvite));
+    dispatch(inviteUsersPending({ peers: usersToInvite }));
   };
 
   const handleContinue = () => {
@@ -236,7 +236,7 @@ const InviteTeammatesForm = () => {
                   Send
                 </Button>
                 <Button color="teal" type="button" onClick={handleContinue}>
-                  Continue
+                  Skip
                 </Button>
               </div>
             </div>
