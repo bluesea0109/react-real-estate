@@ -104,7 +104,7 @@ const ProfileForm = () => {
 
   if (onLoginUserProfile) {
     const onLoginUserProfileBoards = onLoginUserProfile && onLoginUserProfile.boards;
-    const mlsArr = [];
+    const mlsArr = [null];
 
     onLoginUserProfileBoards &&
       onLoginUserProfileBoards.forEach(board => {
