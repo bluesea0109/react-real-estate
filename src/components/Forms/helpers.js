@@ -235,7 +235,7 @@ export const WhenFieldChanges = ({ field, becomes, set, to }) => (
         {({ form, values }) => (
           <OnChange name={field}>
             {value => {
-              if (value.includes('@') && values[set].includes(value) && (value === becomes || becomes === undefined)) {
+              if (!values[set] && (value === becomes || becomes === undefined)) {
                 onChange(to);
               }
             }}
