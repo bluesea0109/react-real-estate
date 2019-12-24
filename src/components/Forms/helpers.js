@@ -291,9 +291,9 @@ export const ExternalChanges = ({ whenTrue, set, to }) => (
 export const colors = ['#b40101', '#f2714d', '#f4b450', '#79c34d', '#2d9a2c', '#59c4c4', '#009ee7', '#0e2b5b', '#ee83ee', '#8b288f', '#808080', '#000000'];
 
 export const templates = [
-  { key: 'alf-theme-ribbon', value: require('../../assets/ribbon-preview.png') },
-  { key: 'alf-theme-bookmark', value: require('../../assets/bookmark-preview.png') },
-  { key: 'alf-theme-stack', value: require('../../assets/stack-preview.png') },
+  { key: 'ribbon', value: require('../../assets/ribbon-preview.png') },
+  { key: 'bookmark', value: require('../../assets/bookmark-preview.png') },
+  { key: 'stack', value: require('../../assets/stack-preview.png') },
 ];
 
 const renderColorRadio = field => {
