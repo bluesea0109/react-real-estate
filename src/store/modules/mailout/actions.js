@@ -18,6 +18,10 @@ export const DELETE_MAILOUT_DETAILS_ERROR = 'DELETE_MAILOUT_DETAILS_ERROR';
 
 export const RESET_MAILOUT_DETAILS = 'RESET_MAILOUT_DETAILS';
 
+export const SAVE_MAILOUT_DETAILS_MAILOUT_SIZE_PENDING = 'SAVE_MAILOUT_DETAILS_MAILOUT_SIZE_PENDING';
+export const SAVE_MAILOUT_DETAILS_MAILOUT_SIZE_SUCCESS = 'SAVE_MAILOUT_DETAILS_MAILOUT_SIZE_SUCCESS';
+export const SAVE_MAILOUT_DETAILS_MAILOUT_SIZE_ERROR = 'SAVE_MAILOUT_DETAILS_MAILOUT_SIZE_ERROR';
+
 export function getMailoutDetailsPending(payload) {
   return createAction(GET_MAILOUT_DETAILS_PENDING, payload);
 }
@@ -68,4 +72,16 @@ export function deleteMailoutDetailsError(error) {
 
 export function resetMailoutDetails() {
   return createAction(RESET_MAILOUT_DETAILS);
+}
+
+export function saveMailoutDetailsMailoutSizePending(payload) {
+  return createAction(SAVE_MAILOUT_DETAILS_MAILOUT_SIZE_PENDING, payload);
+}
+
+export function saveMailoutDetailsMailoutSizeSuccess(payload) {
+  return createAction(SAVE_MAILOUT_DETAILS_MAILOUT_SIZE_SUCCESS, payload);
+}
+
+export function saveMailoutDetailsMailoutSizeError(error) {
+  return createErrorAction(SAVE_MAILOUT_DETAILS_MAILOUT_SIZE_ERROR, error);
 }

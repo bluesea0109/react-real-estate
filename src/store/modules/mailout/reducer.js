@@ -12,11 +12,15 @@ import {
   DELETE_MAILOUT_DETAILS_SUCCESS,
   DELETE_MAILOUT_DETAILS_ERROR,
   RESET_MAILOUT_DETAILS,
+  SAVE_MAILOUT_DETAILS_MAILOUT_SIZE_PENDING,
+  SAVE_MAILOUT_DETAILS_MAILOUT_SIZE_SUCCESS,
+  SAVE_MAILOUT_DETAILS_MAILOUT_SIZE_ERROR,
 } from './actions';
 
 const initialState = {
   pending: false,
   mailoutId: null,
+  mailoutSize: null,
   details: null,
   error: null,
 };
@@ -41,7 +45,6 @@ export default function mailout(state = initialState, action) {
       return {
         ...state,
         pending: false,
-        error: action.error,
       };
 
     case NEEDS_UPDATE_MAILOUT_DETAILS_SUCCESS:
@@ -55,7 +58,7 @@ export default function mailout(state = initialState, action) {
       return {
         ...state,
         pending: false,
-        details: action.payload,
+        error: action.error,
       };
 
     case GET_MAILOUT_DETAILS_ERROR:
@@ -113,6 +116,27 @@ export default function mailout(state = initialState, action) {
         mailoutId: null,
         details: null,
         error: null,
+      };
+
+    case SAVE_MAILOUT_DETAILS_MAILOUT_SIZE_PENDING:
+      return {
+        ...state,
+        pending: false,
+        mailoutSize: action.payload,
+      };
+
+    case SAVE_MAILOUT_DETAILS_MAILOUT_SIZE_SUCCESS:
+      return {
+        ...state,
+        pending: true,
+        mailoutSize: null,
+      };
+
+    case SAVE_MAILOUT_DETAILS_MAILOUT_SIZE_ERROR:
+      return {
+        ...state,
+        pending: false,
+        error: action.error,
       };
 
     default:

@@ -34,13 +34,13 @@ const MailoutEditModal = props => {
   );
 };
 
-const mapStateToProps = state => {
-  return state.form.customizeCampaign
-    ? {
-        values: state.form.customizeCampaign.values,
-        submitSucceeded: state.form.customizeCampaign.submitSucceeded,
-      }
-    : {};
-};
-
-export default connect(mapStateToProps)(MailoutEditModal);
+// const mapStateToProps = state => {
+//   return state.form.customizeCampaign
+//     ? {
+//         values: state.form.customizeCampaign.values,
+//         submitSucceeded: state.form.customizeCampaign.submitSucceeded,
+//       }
+//     : {};
+// };
+//
+// export default connect(mapStateToProps)(MailoutEditModal);

@@ -136,6 +136,7 @@ const directory = {
       needsUpdate: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/needsUpdate`, method: 'get' }),
       regenerate: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/update`, method: 'post' }),
       initialize: () => ({ path: `/api/user/listing/mailout/initial`, method: 'post' }),
+      mailoutSize: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit/mailoutSize`, method: 'put' }),
     },
   },
 
