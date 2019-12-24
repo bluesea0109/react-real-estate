@@ -7,6 +7,7 @@ const rp = require('request-promise');
 const dbURL = 'http://sofa.rmcloud.com:5984';
 const dbName = 'alf-dev';
 let user;
+let team;
 const campaignAPIEndPoint = 'http://alf-api-dev-1239229468.us-east-1.elb.amazonaws.com';
 const campaignURL = (userId) => `${campaignAPIEndPoint}/api/user/${userId}/listing/mailout/initial?skipEmailNotification=true`;
 
@@ -107,6 +108,42 @@ async function updateUserProfile2(payload) {
   }
 }
 
+async function deleteCustomization() {
+  try {
+    const options = {
+      method: 'DELETE',
+      uri: `${dbURL}/${dbName}/alf|branding|${user}|branding`,
+      json: true
+    };
+
+    const deleteCustomization = await rp(options);
+    console.log('Delete Customization successful');
+    console.log(deleteCustomization);
+
+  } catch (err) {
+    err.message = `Something went horribly wrong during deleting customization`;
+    throw err;
+  }
+}
+
+async function deleteTeamCustomization() {
+  try {
+    const options = {
+      method: 'DELETE',
+      uri: `${dbURL}/${dbName}/alf|branding|${team}|branding`,
+      json: true
+    };
+
+    const deleteTeamCustomization = await rp(options);
+    console.log('Delete Team Customization successful');
+    console.log(deleteTeamCustomization);
+
+  } catch (err) {
+    err.message = `Something went horribly wrong during deleting team customization`;
+    throw err;
+  }
+}
+
 async function createCampaigns() {
   try {
     const options = {
@@ -130,6 +167,8 @@ const run = async () => {
 
     if (!process.argv[2]) throw new Error('Please provide userId');
 
+    if (process.argv[3]) team = process.argv[3];
+
     user = process.argv[2];
 
     const newUserProfile = await getUserProfile();
@@ -143,11 +182,19 @@ const run = async () => {
 
     await updateUserProfile2(newUserProfile2);
 
+    await deleteCustomization();
+
+    if (team) await deleteTeamCustomization();
+
     await createCampaigns();
 
   } catch (err) {
-    console.log('There was an error: ');
-    console.error(err);
+    console.log();
+    console.log();
+    console.log();
+    console.log(`   Error: ${err.message}`);
+    console.log(`   ${err.options.method} ${err.options.uri}`);
+    console.error(`   ${err.name} [${err.statusCode}] ${err.error.error}: ${err.error.reason}`);
   }
 };
 
