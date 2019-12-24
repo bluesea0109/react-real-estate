@@ -16,6 +16,7 @@ const OnboardPage = () => {
   const location = useLocation();
   const pathname = location.pathname;
 
+  const isOnboarded = useSelector(store => store.onboarded.status);
   const isMultimode = useSelector(store => store.onLogin.mode === 'multiuser');
   const completedProfile = useSelector(store => store.onboarded.completedProfile);
   const completedTeamCustomization = useSelector(store => store.onboarded.completedTeamCustomization);
@@ -41,7 +42,11 @@ const OnboardPage = () => {
   const onboardingCompletedSingleUser = completedCustomization && completedProfile;
 
   useEffect(() => {
-    if (!isMultimode) {
+    if (isOnboarded) {
+      history.push('/dashboard');
+    }
+
+    if (!isOnboarded && !isMultimode) {
       if (onProfileSingleUser && pathname !== onBoardProfilePath) {
         history.push(onBoardProfilePath);
       }
@@ -54,7 +59,7 @@ const OnboardPage = () => {
       }
     }
 
-    if (isMultimode) {
+    if (!isOnboarded && isMultimode) {
       if (onProfile && pathname !== onBoardProfilePath) {
         history.push(onBoardProfilePath);
       }
@@ -85,6 +90,7 @@ const OnboardPage = () => {
     isMultimode,
     dispatch,
     history,
+    isOnboarded,
   ]);
 
   return (
