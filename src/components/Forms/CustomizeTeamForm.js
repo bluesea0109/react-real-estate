@@ -24,7 +24,6 @@ import LoadingWithMessage from '../LoadingWithMessage';
 import CustomizationWizard from './CustomizationWizard';
 import { Menu, Segment, Image, Modal, Button } from '../Base';
 import { setCompletedTeamCustomization } from '../../store/modules/onboarded/actions';
-import { generateTeamPostcardsPreviewPending } from '../../store/modules/teamPostcards/actions';
 import { getTeamListedShortcodePending, getTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
 import { saveTeamCustomizationPending, reviewTeamCustomizationCompleted } from '../../store/modules/teamCustomization/actions';
 
@@ -73,9 +72,9 @@ const CustomizeTeamForm = () => {
 
   const resolveTemplate = type => {
     const types = {
-      'alf-theme-ribbon': ribbonTemplate,
-      'alf-theme-bookmark': bookmarkTemplate,
-      'alf-theme-stack': stackTemplate,
+      ribbon: ribbonTemplate,
+      bookmark: bookmarkTemplate,
+      stack: stackTemplate,
       undefined: undefined,
     };
     return type ? types[type] : types['undefined'];
@@ -96,11 +95,6 @@ const CustomizeTeamForm = () => {
       setShowSelectionAlert(false);
     }
   }, [newListingEnabled, soldListingEnabled, setShowSelectionAlert]);
-
-  const handleReview = () => {
-    setDisplayReview(true);
-    dispatch(generateTeamPostcardsPreviewPending());
-  };
 
   const handleReviewComplete = () => {
     setDisplayReview(false);
@@ -142,7 +136,7 @@ const CustomizeTeamForm = () => {
     }
 
     dispatch(saveTeamCustomizationPending(data));
-    handleReview();
+    setDisplayReview(true);
   };
 
   let initialValues = {

@@ -23,7 +23,6 @@ import FlipCard from '../FlipCard';
 import LoadingWithMessage from '../LoadingWithMessage';
 import CustomizationWizard from './CustomizationWizard';
 import { Button, Icon, Image, Menu, Modal, Segment } from '../Base';
-import { generatePostcardsPreviewPending } from '../../store/modules/postcards/actions';
 import { setCompletedCustomization, finalizeOnboarding } from '../../store/modules/onboarded/actions';
 import { getListedShortcodePending, getSoldShortcodePending } from '../../store/modules/shortcode/actions';
 import { saveCustomizationPending, reviewCustomizationCompleted } from '../../store/modules/customization/actions';
@@ -105,11 +104,6 @@ const CustomizeTeamForm = () => {
 
   const returnIfNotEqual = (x, y) => (x !== y ? x : undefined);
 
-  const handleReview = () => {
-    setDisplayReview(true);
-    dispatch(generatePostcardsPreviewPending());
-  };
-
   const handleReviewComplete = () => {
     setDisplayReview(false);
     dispatch(reviewCustomizationCompleted(true));
@@ -173,7 +167,7 @@ const CustomizeTeamForm = () => {
     }
 
     dispatch(saveCustomizationPending(data));
-    handleReview();
+    setDisplayReview(true);
   };
 
   let initialValues = {

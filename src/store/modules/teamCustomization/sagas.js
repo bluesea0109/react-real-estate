@@ -9,6 +9,7 @@ import {
   saveTeamCustomizationError,
 } from './actions';
 import { setCompletedTeamCustomization } from '../onboarded/actions';
+import { generateTeamPostcardsPreviewPending } from '../teamPostcards/actions';
 import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
 
 import ApiService from '../../../services/api/index';
@@ -40,6 +41,7 @@ export function* saveTeamCustomizationSaga() {
     const response = yield call(ApiService[method], path, teamCustomization);
 
     yield put(saveTeamCustomizationSuccess(response));
+    yield put(generateTeamPostcardsPreviewPending());
   } catch (err) {
     yield put(saveTeamCustomizationError(err.message));
   }

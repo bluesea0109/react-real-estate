@@ -9,6 +9,7 @@ import {
   saveCustomizationError,
 } from './actions';
 import { setCompletedCustomization, finalizeOnboarding, FINALIZE_ONBOARDING } from '../onboarded/actions';
+import { generatePostcardsPreviewPending } from '../postcards/actions';
 import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
 
 import ApiService from '../../../services/api/index';
@@ -64,6 +65,7 @@ export function* saveCustomizationSaga() {
     const response = yield call(ApiService[method], path, customization);
 
     yield put(saveCustomizationSuccess(response));
+    yield put(generatePostcardsPreviewPending());
   } catch (err) {
     yield put(saveCustomizationError(err.message));
   }
