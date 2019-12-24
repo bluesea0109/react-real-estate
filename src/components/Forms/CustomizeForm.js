@@ -70,10 +70,13 @@ const CustomizeTeamForm = () => {
 
   const tc = useSelector(store => store.teamCustomization && store.teamCustomization.available);
   const existingCustomization = useSelector(store => store.customization && store.customization.available);
+  const customizationPending = useSelector(store => store.customization && store.customization.pending);
+  const customizationError = useSelector(store => store.customization && store.customization.error);
 
   const isMultimode = useSelector(store => store.onLogin.mode === 'multiuser');
   const isAdmin = useSelector(store => store.onLogin && store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
   const postcardsPreviewIsPending = useSelector(store => store.postcards && store.postcards.pending);
+  const postcardsPreviewError = useSelector(store => store.postcards && store.postcards.error);
   const postcardsPreview = useSelector(store => store.postcards && store.postcards.available);
 
   const resolveTemplate = type => {
@@ -530,7 +533,13 @@ const CustomizeTeamForm = () => {
       <Modal open={displayReview} basic size="tiny">
         {!postcardsPreviewIsPending && <Modal.Header>Preview</Modal.Header>}
 
+        {!customizationPending && (postcardsPreviewError || customizationError) && <Modal.Header>Error</Modal.Header>}
+
         {postcardsPreviewIsPending && <LoadingWithMessage message="Please wait, loading an example preview..." />}
+
+        {!customizationPending && (postcardsPreviewError || customizationError) && (
+          <Modal.Content style={{ padding: '0 45px 10px' }}>{postcardsPreviewError || customizationError}</Modal.Content>
+        )}
 
         {newListingEnabled &&
           postcardsPreview &&
@@ -567,6 +576,14 @@ const CustomizeTeamForm = () => {
             </Button>
             <Button color="green" inverted onClick={handleReviewComplete}>
               <Icon name="checkmark" /> Continue
+            </Button>
+          </Modal.Actions>
+        )}
+
+        {!customizationPending && (postcardsPreviewError || customizationError) && (
+          <Modal.Actions>
+            <Button basic color="red" inverted onClick={() => setDisplayReview(false)}>
+              <Icon name="remove" /> OK
             </Button>
           </Modal.Actions>
         )}

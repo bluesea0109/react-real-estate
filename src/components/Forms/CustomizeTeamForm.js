@@ -66,8 +66,11 @@ const CustomizeTeamForm = () => {
   const shortenedURLError = useSelector(store => store.teamShortcode && store.teamShortcode.error);
 
   const tc = useSelector(store => store.teamCustomization && store.teamCustomization.available);
+  const teamCustomizationPending = useSelector(store => store.teamCustomization && store.teamCustomization.pending);
+  const teamCustomizationError = useSelector(store => store.teamCustomization && store.teamCustomization.error);
 
   const teamPostcardsPreviewIsPending = useSelector(store => store.teamPostcards && store.teamPostcards.pending);
+  const teamPostcardsPreviewError = useSelector(store => store.teamPostcards && store.teamPostcards.error);
   const teamPostcardsPreview = useSelector(store => store.teamPostcards && store.teamPostcards.available);
 
   const resolveTemplate = type => {
@@ -434,7 +437,13 @@ const CustomizeTeamForm = () => {
       <Modal open={displayReview} basic size="tiny">
         {!teamPostcardsPreviewIsPending && <Modal.Header>Preview</Modal.Header>}
 
+        {!teamCustomizationPending && (teamPostcardsPreviewError || teamCustomizationError) && <Modal.Header>Error</Modal.Header>}
+
         {teamPostcardsPreviewIsPending && <LoadingWithMessage message="Please wait, loading an example preview..." />}
+
+        {!teamCustomizationPending && (teamPostcardsPreviewError || teamCustomizationError) && (
+          <Modal.Content style={{ padding: '0 45px 10px' }}>{teamPostcardsPreviewError || teamCustomizationError}</Modal.Content>
+        )}
 
         {newListingEnabled &&
           teamPostcardsPreview &&
@@ -471,6 +480,14 @@ const CustomizeTeamForm = () => {
             </Button>
             <Button color="green" inverted onClick={handleReviewComplete}>
               <Icon name="checkmark" /> Continue
+            </Button>
+          </Modal.Actions>
+        )}
+
+        {!teamCustomizationPending && (teamPostcardsPreviewError || teamCustomizationError) && (
+          <Modal.Actions>
+            <Button basic color="red" inverted onClick={() => setDisplayReview(false)}>
+              <Icon name="remove" /> OK
             </Button>
           </Modal.Actions>
         )}
