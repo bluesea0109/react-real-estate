@@ -57,9 +57,6 @@ const ProfileForm = () => {
   const saveTeamProfile = teamProfile => dispatch(saveTeamProfilePending(teamProfile));
   const onSubmit = values => {
     const profile = {
-      _id: onLoginUserProfile && onLoginUserProfile._id,
-      _rev: onLoginUserProfile && onLoginUserProfile._rev,
-      brivitySync: onLoginUserProfile && onLoginUserProfile.brivitySync,
       notificationEmail: values.notificationEmail,
       first: values.first,
       last: values.last,
@@ -72,12 +69,16 @@ const ProfileForm = () => {
       website: values.personalWebsite,
     };
 
+    if (onLoginUserProfile) {
+      profile._id = onLoginUserProfile._id;
+      profile._rev = onLoginUserProfile._rev;
+      profile.brivitySync = onLoginUserProfile.brivitySync;
+    }
+
     saveProfile(profile);
 
     if (isAdmin) {
       const business = {
-        _id: onLoginTeamProfile && onLoginTeamProfile._id,
-        _rev: onLoginTeamProfile && onLoginTeamProfile._rev,
         teamProfile: true,
         notificationEmail: values.businessNotificationEmail,
         teamName: values.teamName,
@@ -89,6 +90,11 @@ const ProfileForm = () => {
         phone: values.officePhone,
         website: values.businessWebsite,
       };
+
+      if (onLoginTeamProfile) {
+        business._id = onLoginTeamProfile._id;
+        business._rev = onLoginTeamProfile._rev;
+      }
 
       saveTeamProfile(business);
     }
