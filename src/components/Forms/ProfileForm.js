@@ -104,13 +104,16 @@ const ProfileForm = () => {
 
   if (onLoginUserProfile) {
     const onLoginUserProfileBoards = onLoginUserProfile && onLoginUserProfile.boards;
-    const mlsArr = [null];
+    const mlsArr = [];
 
-    onLoginUserProfileBoards &&
+    if (onLoginUserProfileBoards) {
       onLoginUserProfileBoards.forEach(board => {
         const userBoard = boards.filter(boardObj => boardObj.mlsid === board.name);
         mlsArr.push({ name: userBoard[0] && userBoard[0].value, mlsId: board.mlsId });
       });
+    } else {
+      mlsArr.push(null);
+    }
 
     const notificationEmail = onLoginUserProfile && onLoginUserProfile.notificationEmail;
 
