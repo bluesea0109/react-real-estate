@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { getMailoutsPending, getMoreMailoutsPending } from '../store/modules/mailouts/actions';
@@ -20,7 +19,6 @@ const useFetching = (getActionCreator, onboarded, dispatch) => {
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const history = useHistory();
 
   const onboarded = useSelector(store => store.onboarded.status);
   const isLoading = useSelector(store => store.mailouts.pending);
@@ -28,12 +26,6 @@ const Dashboard = () => {
   const page = useSelector(store => store.mailouts.page);
   const list = useSelector(store => store.mailouts.list);
   const error = useSelector(store => store.mailouts.error);
-
-  useEffect(() => {
-    if (!onboarded) {
-      history.push('/onboard');
-    }
-  }, [onboarded, history]);
 
   useFetching(getMailoutsPending, onboarded, useDispatch());
 

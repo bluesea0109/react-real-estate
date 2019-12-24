@@ -41,13 +41,15 @@ export default () => {
   const [activeItem, setActiveItem] = useState('');
   const [activeUser, setActiveUser] = useState('');
 
-  const onboarded = useSelector(store => store.onboarded.status);
   const isAuthenticated = useSelector(store => store.auth0.authenticated);
+  const onLoginPending = useSelector(store => store.onLogin.pending);
   const onLoginError = useSelector(store => store.onLogin.error);
+  const onLoginUserProfileSetupComplete = useSelector(store => store.onLogin.userProfile && store.onLogin.userProfile.setupComplete);
+
   const templatesAvailable = useSelector(store => store.templates.available);
   const statesAvailable = useSelector(store => store.states.available);
   const boardsAvailable = useSelector(store => store.boards.available);
-  const loadingCompleted = !!isAuthenticated && !!templatesAvailable && !!statesAvailable && !!boardsAvailable && !onLoginError;
+  const loadingCompleted = !!isAuthenticated && !!templatesAvailable && !!statesAvailable && !!boardsAvailable && !onLoginError && !onLoginPending;
 
   const completedProfile = useSelector(store => store.onboarded.completedProfile);
   const completedTeamCustomization = useSelector(store => store.onboarded.completedTeamCustomization);
@@ -179,7 +181,7 @@ export default () => {
 
   if (!loadingCompleted) return null;
 
-  if (loadingCompleted && !onboarded) {
+  if (loadingCompleted && !onLoginUserProfileSetupComplete) {
     if (isMultimode && isAdmin) {
       return (
         <StepsLayout vertical={!mql.matches}>

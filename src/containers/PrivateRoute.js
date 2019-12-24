@@ -17,6 +17,8 @@ const PrivateRoute = ({ component: Component, path, auth0, onLogin, templates, s
 
       if (!auth0.authenticated) {
         await history.push('/');
+      } else if (!onLogin.pending && !onLogin.error && onLogin.userProfile && !onLogin.userProfile.setupComplete) {
+        history.push('/onboard');
       } else if (localStorage.getItem('routerDestination')) {
         const routerDestination = await localStorage.getItem('routerDestination');
         await localStorage.removeItem('routerDestination');
@@ -24,7 +26,7 @@ const PrivateRoute = ({ component: Component, path, auth0, onLogin, templates, s
       }
     };
     fn();
-  }, [auth0, history]);
+  }, [auth0, history, onLogin]);
 
   const render = props =>
     auth0.authenticated && !onLogin.pending && !onLogin.error && templates.available && states.available && boards.available ? (
