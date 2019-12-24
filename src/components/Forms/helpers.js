@@ -110,26 +110,6 @@ export const renderField = ({ name, label, type, required = undefined, validate,
   }
 };
 
-/*
-  <Field name={set} subscription={{}}>
-    {(
-      // No subscription. We only use Field to get to the change function
-      { input: { onChange } }
-    ) => (
-      <FormSpy subscription={{ values: true }}>
-        {({ form, values }) => (
-          <OnChange name={field}>
-            {value => {
-              if (!values[set] && (value === becomes || becomes === undefined)) {
-                onChange(to);
-              }
-            }}
-          </OnChange>
-        )}
-      </FormSpy>
-    )}
-  </Field>
- */
 export const renderUrlField = ({ name, label, type, dispatch, required = undefined, validate, target, disabled = undefined, form = undefined }) => {
   const onBlurHandler = e => {
     const eURL = e.target.value;

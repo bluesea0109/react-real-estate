@@ -127,6 +127,18 @@ const directory = {
     list: () => ({ path: `/api/user/team/list`, method: 'get' }),
   },
 
+  user: {
+    mailouts: {
+      list: () => ({ path: `/api/user/mailout`, method: 'get' }),
+      get: mailoutId => ({ path: `/api/user/mailout/${mailoutId}?include_destinations=true`, method: 'get' }),
+      cancel: mailoutId => ({ path: `/api/user/mailout/${mailoutId}`, method: 'del' }),
+      approve: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/submit`, method: 'post' }),
+      needsUpdate: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/needsUpdate`, method: 'get' }),
+      regenerate: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/update`, method: 'post' }),
+      initialize: () => ({ path: `/api/user/listing/mailout/initial`, method: 'post' }),
+    },
+  },
+
   onboard: {
     fillInYourProfile: {
       profile: {
