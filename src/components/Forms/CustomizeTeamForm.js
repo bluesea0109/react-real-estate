@@ -19,16 +19,15 @@ import {
   composeValidators,
   renderCarouselField,
 } from './helpers';
-
-import { Menu, Segment, Image, Modal, Button } from '../Base';
+import FlipCard from '../FlipCard';
+import LoadingWithMessage from '../LoadingWithMessage';
 import CustomizationWizard from './CustomizationWizard';
+import { Menu, Segment, Image, Modal, Button } from '../Base';
 import { setCompletedTeamCustomization } from '../../store/modules/onboarded/actions';
 import { generateTeamPostcardsPreviewPending } from '../../store/modules/teamPostcards/actions';
 import { getTeamListedShortcodePending, getTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
 import { saveTeamCustomizationPending, reviewTeamCustomizationCompleted } from '../../store/modules/teamCustomization/actions';
 
-import Loading from '../Loading';
-import FlipCard from '../FlipCard';
 import './thin.css';
 
 const NEW_LISTING = 'newListing';
@@ -441,7 +440,7 @@ const CustomizeTeamForm = () => {
       <Modal open={displayReview} basic size="tiny">
         {!teamPostcardsPreviewIsPending && <Modal.Header>Preview</Modal.Header>}
 
-        {teamPostcardsPreviewIsPending && <Loading msg="Please wait, loading an example preview..." />}
+        {teamPostcardsPreviewIsPending && <LoadingWithMessage message="Please wait, loading an example preview..." />}
 
         {newListingEnabled &&
           teamPostcardsPreview &&

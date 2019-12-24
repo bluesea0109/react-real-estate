@@ -19,8 +19,8 @@ import {
   composeValidators,
   renderCarouselField,
 } from './helpers';
-import Loading from '../Loading';
 import FlipCard from '../FlipCard';
+import LoadingWithMessage from '../LoadingWithMessage';
 import CustomizationWizard from './CustomizationWizard';
 import { Button, Icon, Image, Menu, Modal, Segment } from '../Base';
 import { generatePostcardsPreviewPending } from '../../store/modules/postcards/actions';
@@ -536,7 +536,7 @@ const CustomizeTeamForm = () => {
       <Modal open={displayReview} basic size="tiny">
         {!postcardsPreviewIsPending && <Modal.Header>Preview</Modal.Header>}
 
-        {postcardsPreviewIsPending && <Loading msg="Please wait, loading an example preview..." />}
+        {postcardsPreviewIsPending && <LoadingWithMessage message="Please wait, loading an example preview..." />}
 
         {newListingEnabled &&
           postcardsPreview &&

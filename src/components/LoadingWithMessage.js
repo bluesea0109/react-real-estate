@@ -5,15 +5,15 @@ import { Dimmer, Icon, Segment } from './Base';
 
 import './Loading.css';
 
-const Loading = () => (
+const LoadingWithMessage = ({ message }) => (
   <Dimmer active inverted>
     <Segment loading padded="very" textAlign="center">
       <Header as="h2" icon textAlign="center">
         <Icon name="hourglass half" circular />
-        <Header.Content>Loading, please wait...</Header.Content>
+        <Header.Content>{message}</Header.Content>
       </Header>
     </Segment>
   </Dimmer>
 );
 
-export default Loading;
+export default LoadingWithMessage;
