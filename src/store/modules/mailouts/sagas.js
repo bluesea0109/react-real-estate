@@ -10,14 +10,16 @@ import {
   getMoreMailoutsError,
   resetMailouts,
 } from './actions';
+import { SELECT_PEER_ID, DESELECT_PEER_ID } from '../peer/actions';
 import ApiService from '../../../services/api/index';
 
+export const getSelectedPeerId = state => state.peer.peerId;
 export const getMailoutsPage = state => state.mailouts.page;
 const limit = 25;
 
-export function* getMailoutSaga() {
+export function* getMailoutSaga({ peerId = null }) {
   try {
-    const { path, method } = ApiService.directory.user.mailouts.list();
+    const { path, method } = peerId ? ApiService.directory.peer.mailouts.list(peerId) : ApiService.directory.user.mailouts.list();
     yield put(resetMailouts());
     const page = yield select(getMailoutsPage);
     const response = yield call(ApiService[method], path, { page, limit });
@@ -34,9 +36,9 @@ export function* getMailoutSaga() {
   }
 }
 
-export function* getMoreMailoutSaga() {
+export function* getMoreMailoutSaga({ peerId = null }) {
   try {
-    const { path, method } = ApiService.directory.user.mailouts.list();
+    const { path, method } = peerId ? ApiService.directory.peer.mailouts.list(peerId) : ApiService.directory.user.mailouts.list();
     const page = yield select(getMailoutsPage);
     const response = yield call(ApiService[method], path, { page, limit });
 
@@ -52,7 +54,29 @@ export function* getMoreMailoutSaga() {
   }
 }
 
+export function* checkIfPeerSelectedGetMailout() {
+  const peerId = yield select(getSelectedPeerId);
+
+  if (peerId) {
+    yield getMailoutSaga({ peerId });
+  } else {
+    yield getMailoutSaga({});
+  }
+}
+
+export function* checkIfPeerSelectedGetMoreMailout() {
+  const peerId = yield select(getSelectedPeerId);
+
+  if (peerId) {
+    yield getMoreMailoutSaga({ peerId });
+  } else {
+    yield getMoreMailoutSaga({});
+  }
+}
+
 export default function*() {
-  yield takeEvery(GET_MAILOUTS_PENDING, getMailoutSaga);
-  yield takeEvery(GET_MORE_MAILOUTS_PENDING, getMoreMailoutSaga);
+  yield takeEvery(GET_MAILOUTS_PENDING, checkIfPeerSelectedGetMailout);
+  yield takeEvery(GET_MORE_MAILOUTS_PENDING, checkIfPeerSelectedGetMoreMailout);
+  yield takeEvery(SELECT_PEER_ID, checkIfPeerSelectedGetMailout);
+  yield takeEvery(DESELECT_PEER_ID, checkIfPeerSelectedGetMailout);
 }

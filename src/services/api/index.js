@@ -140,6 +140,12 @@ const directory = {
     },
   },
 
+  peer: {
+    mailouts: {
+      list: peerId => ({ path: `/api/user/peer/${peerId}/mailout`, method: 'get' }),
+    },
+  },
+
   onboard: {
     fillInYourProfile: {
       profile: {
