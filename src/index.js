@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+import { LastLocationProvider } from 'react-router-last-location';
 
 import './reset.css';
 import 'semantic-ui-css/semantic.min.css';
@@ -21,7 +22,9 @@ registerIcons();
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter basename={process.env.PUBLIC_URL}>
-      <App />
+      <LastLocationProvider>
+        <App />
+      </LastLocationProvider>
     </BrowserRouter>
   </Provider>,
   document.getElementById('root')

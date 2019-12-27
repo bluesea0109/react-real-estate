@@ -2,6 +2,7 @@ import { Icon, Label } from 'semantic-ui-react';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
+import { useLastLocation } from 'react-router-last-location';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import {
@@ -36,6 +37,7 @@ const MailoutDetailsPage = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const { mailoutId } = useParams();
+  const lastLocation = useLastLocation();
   const [onlyOnce, setOnlyOnce] = useState(false);
   const [editRecipients, setEditRecipients] = useState(false);
   // const [recipientsNumber, userRecipientsNumber] = useInput({ type: "text", initalState: 0 });
@@ -64,7 +66,12 @@ const MailoutDetailsPage = () => {
 
   const handleBackClick = () => {
     boundResetMailoutDetails();
-    history.goBack();
+    if (lastLocation.pathname === `/dashboard/edit/${mailoutId}` || lastLocation.pathname === `/dashboard/${mailoutId}`) {
+      history.push(`/dashboard`);
+    }
+    if (lastLocation.pathname === `/dashboard`) {
+      history.goBack();
+    }
   };
 
   const handleApproveAndSendMailoutDetailsClick = () => {
@@ -75,11 +82,14 @@ const MailoutDetailsPage = () => {
 
   const handleDeleteMailoutDetailsClick = () => {
     boundDeleteMailoutDetails();
-    history.goBack();
-    // TODO: ^^^ This will probably prevent the issue with Google Map
+    handleBackClick();
   };
 
-  const toggleEditState = () => {
+  const handleEditMailoutDetailsClick = () => {
+    history.push(`/dashboard/edit/${details._id}`);
+  };
+
+  const toggleRecipientsEditState = () => {
     setEditRecipients(!editRecipients);
   };
 
@@ -98,7 +108,7 @@ const MailoutDetailsPage = () => {
       return (
         <Button as="div" labelPosition="left">
           <Input style={{ minWidth: '4em' }} value={numberOfRecipients} onChange={props => registerNewValues(props.target.value)} />
-          <Button icon color="orange" onClick={() => [toggleEditState(), submitNewValues()]} style={{ minWidth: '6em' }}>
+          <Button icon color="orange" onClick={() => [toggleRecipientsEditState(), submitNewValues()]} style={{ minWidth: '6em' }}>
             <Icon name="save" />
             Save
           </Button>
@@ -110,7 +120,7 @@ const MailoutDetailsPage = () => {
           <Label basic style={{ minWidth: '6em' }}>
             {details && details.recipientCount}
           </Label>
-          <Button icon color="teal" onClick={toggleEditState} style={{ minWidth: '6em' }}>
+          <Button icon color="teal" onClick={toggleRecipientsEditState} style={{ minWidth: '6em' }}>
             <Icon name="edit" />
             Edit
           </Button>
@@ -144,7 +154,7 @@ const MailoutDetailsPage = () => {
                   {ListHeader({
                     data: details,
                     mailoutDetailPage: true,
-                    onClickEdit: () => console.log('Editing will be triggered here!'),
+                    onClickEdit: handleEditMailoutDetailsClick,
                     onClickApproveAndSend: handleApproveAndSendMailoutDetailsClick,
                     onClickDelete: handleDeleteMailoutDetailsClick,
                   })}
