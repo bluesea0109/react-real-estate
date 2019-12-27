@@ -1,13 +1,15 @@
 import styled from 'styled-components';
-import React, { useEffect, useState } from 'react';
-import { Dropdown, Header } from 'semantic-ui-react';
+import React, { createRef, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Dropdown, Header, Popup } from 'semantic-ui-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { StepLayout, StepsLayout, NavigationLayout, MobileDisabledLayout, MobileEnabledLayout } from '../layouts';
 import { selectPeerId, deselectPeerId } from '../store/modules/peer/actions';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, Image, Icon, Step } from './Base';
+
+import './navigation.css';
 
 const iconOnlyStyle = {
   margin: '0 auto 0 auto',
@@ -72,20 +74,29 @@ export default () => {
 
   if (teammates.length > 0) {
     teammates.map((profile, index) => {
-      // console.log('profile: ', profile);
+      const setupComplete = profile.doc.setupComplete;
+      const currentUser = profile.userId === loggedInUser._id;
+      // const userEmail = profile.doc.email;
+
+      const contextRef = createRef();
+      const adminIconWithPopup = <Popup context={contextRef} content="Admin" trigger={<Icon name="legal" />} />;
+      const agentIconWithPopup = <Popup context={contextRef} content="Agent" trigger={<Icon name="detective" />} />;
+      const currentUserIconWithPopup = <Popup context={contextRef} content="Currently logged in user" trigger={<Icon name="user" />} />;
+      const setupCompletedIconWithPopup = <Popup context={contextRef} content="Setup Completed" trigger={<Icon name="check circle" color="teal" />} />;
 
       return profiles.push({
         key: index,
         text: profile.last,
         value: profile.userId,
         content: (
-          <StyledHeader as="h4">
+          <StyledHeader as="h4" ref={contextRef}>
             <Image size="mini" inline circular src="https://react.semantic-ui.com/images/avatar/large/patrick.png" />
             &nbsp;
             {profile.first}&nbsp;
             {profile.last}&nbsp;
-            {profile.permissions && profile.permissions.teamAdmin ? '(Admin)' : '(Agent)'}&nbsp;
-            <Icon name="check circle" />
+            {currentUser ? currentUserIconWithPopup : null}
+            {profile.permissions && profile.permissions.teamAdmin ? adminIconWithPopup : agentIconWithPopup}
+            {setupComplete ? setupCompletedIconWithPopup : null}
           </StyledHeader>
         ),
       });
