@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLastLocation } from 'react-router-last-location';
 
 import { Button, Header, Grid, Menu, Message, Page, Segment } from '../components/Base';
-import { getMailoutDetailsPending } from '../store/modules/mailout/actions';
+import { getMailoutPending } from '../store/modules/mailout/actions';
 import Loading from '../components/Loading';
 
 const MailoutDetailsPage = () => {
@@ -13,12 +13,22 @@ const MailoutDetailsPage = () => {
   const { mailoutId } = useParams();
   const lastLocation = useLastLocation();
 
+  const [currentPeerState, setCurrentPeerState] = useState(null);
+
   const isLoading = useSelector(store => store.mailout.pending);
   const details = useSelector(store => store.mailout.details);
   const error = useSelector(store => store.mailout.error);
+  const peerId = useSelector(store => store.peer.peerId);
 
   useEffect(() => {
-    if (!details) dispatch(getMailoutDetailsPending(mailoutId));
+    if (currentPeerState !== peerId) {
+      setCurrentPeerState(peerId);
+      history.push(`/dashboard`);
+    }
+  }, [peerId, currentPeerState, setCurrentPeerState, history]);
+
+  useEffect(() => {
+    if (!details) dispatch(getMailoutPending(mailoutId));
   }, [details, dispatch, mailoutId, history, lastLocation]);
 
   const handleBackClick = () => {

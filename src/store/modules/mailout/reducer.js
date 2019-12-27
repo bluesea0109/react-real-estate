@@ -1,20 +1,17 @@
 import {
-  GET_MAILOUT_DETAILS_PENDING,
-  GET_MAILOUT_DETAILS_SUCCESS,
-  GET_MAILOUT_DETAILS_ERROR,
-  NEEDS_UPDATE_MAILOUT_DETAILS_PENDING,
-  NEEDS_UPDATE_MAILOUT_DETAILS_SUCCESS,
-  NEEDS_UPDATE_MAILOUT_DETAILS_ERROR,
-  APPROVE_AND_SEND_MAILOUT_DETAILS_PENDING,
-  APPROVE_AND_SEND_MAILOUT_DETAILS_SUCCESS,
-  APPROVE_AND_SEND_MAILOUT_DETAILS_ERROR,
-  DELETE_MAILOUT_DETAILS_PENDING,
-  DELETE_MAILOUT_DETAILS_SUCCESS,
-  DELETE_MAILOUT_DETAILS_ERROR,
-  RESET_MAILOUT_DETAILS,
-  SAVE_MAILOUT_DETAILS_MAILOUT_SIZE_PENDING,
-  SAVE_MAILOUT_DETAILS_MAILOUT_SIZE_SUCCESS,
-  SAVE_MAILOUT_DETAILS_MAILOUT_SIZE_ERROR,
+  GET_MAILOUT_PENDING,
+  GET_MAILOUT_SUCCESS,
+  GET_MAILOUT_ERROR,
+  SUBMIT_MAILOUT_PENDING,
+  SUBMIT_MAILOUT_SUCCESS,
+  SUBMIT_MAILOUT_ERROR,
+  STOP_MAILOUT_PENDING,
+  STOP_MAILOUT_SUCCESS,
+  STOP_MAILOUT_ERROR,
+  RESET_MAILOUT,
+  UPDATE_MAILOUT_SIZE_PENDING,
+  UPDATE_MAILOUT_SIZE_SUCCESS,
+  UPDATE_MAILOUT_SIZE_ERROR,
 } from './actions';
 
 const initialState = {
@@ -27,90 +24,76 @@ const initialState = {
 
 export default function mailout(state = initialState, action) {
   switch (action.type) {
-    case GET_MAILOUT_DETAILS_PENDING:
+    case GET_MAILOUT_PENDING:
       return {
         ...state,
         pending: true,
         mailoutId: action.payload,
+        error: null,
       };
 
-    case GET_MAILOUT_DETAILS_SUCCESS:
+    case GET_MAILOUT_SUCCESS:
       return {
         ...state,
         pending: false,
         details: action.payload,
+        error: null,
       };
 
-    case NEEDS_UPDATE_MAILOUT_DETAILS_PENDING:
-      return {
-        ...state,
-        pending: false,
-      };
-
-    case NEEDS_UPDATE_MAILOUT_DETAILS_SUCCESS:
-      return {
-        ...state,
-        pending: true,
-        mailoutId: action.payload,
-      };
-
-    case NEEDS_UPDATE_MAILOUT_DETAILS_ERROR:
+    case GET_MAILOUT_ERROR:
       return {
         ...state,
         pending: false,
         error: action.error,
       };
 
-    case GET_MAILOUT_DETAILS_ERROR:
-      return {
-        ...state,
-        pending: false,
-        error: action.error,
-      };
-
-    case APPROVE_AND_SEND_MAILOUT_DETAILS_PENDING:
+    case SUBMIT_MAILOUT_PENDING:
       return {
         ...state,
         pending: true,
         mailoutId: action.payload,
+        error: null,
       };
 
-    case APPROVE_AND_SEND_MAILOUT_DETAILS_SUCCESS:
+    case SUBMIT_MAILOUT_SUCCESS:
       return {
         ...state,
         pending: false,
         details: action.payload,
+        error: null,
       };
 
-    case APPROVE_AND_SEND_MAILOUT_DETAILS_ERROR:
+    case SUBMIT_MAILOUT_ERROR:
       return {
         ...state,
         pending: false,
         error: action.error,
       };
 
-    case DELETE_MAILOUT_DETAILS_PENDING:
+    case STOP_MAILOUT_PENDING:
       return {
         ...state,
         pending: true,
         mailoutId: action.payload,
+        error: null,
       };
 
-    case DELETE_MAILOUT_DETAILS_SUCCESS:
+    case STOP_MAILOUT_SUCCESS:
       return {
         ...state,
         pending: false,
         details: action.payload,
+        error: null,
       };
 
-    case DELETE_MAILOUT_DETAILS_ERROR:
+    case STOP_MAILOUT_ERROR:
       return {
         ...state,
         pending: false,
         error: action.error,
       };
 
-    case RESET_MAILOUT_DETAILS:
+    case RESET_MAILOUT:
       return {
         ...state,
         mailoutId: null,
@@ -118,21 +101,23 @@ export default function mailout(state = initialState, action) {
         error: null,
       };
 
-    case SAVE_MAILOUT_DETAILS_MAILOUT_SIZE_PENDING:
+    case UPDATE_MAILOUT_SIZE_PENDING:
       return {
         ...state,
         pending: false,
         mailoutSize: action.payload,
+        error: null,
       };
 
-    case SAVE_MAILOUT_DETAILS_MAILOUT_SIZE_SUCCESS:
+    case UPDATE_MAILOUT_SIZE_SUCCESS:
       return {
         ...state,
         pending: true,
         mailoutSize: null,
+        error: null,
       };
 
-    case SAVE_MAILOUT_DETAILS_MAILOUT_SIZE_ERROR:
+    case UPDATE_MAILOUT_SIZE_ERROR:
       return {
         ...state,
         pending: false,

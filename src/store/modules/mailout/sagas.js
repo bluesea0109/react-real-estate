@@ -1,96 +1,123 @@
 import { call, put, select, takeEvery } from '@redux-saga/core/effects';
 
 import {
-  GET_MAILOUT_DETAILS_PENDING,
-  getMailoutDetailsSuccess,
-  getMailoutDetailsError,
-  NEEDS_UPDATE_MAILOUT_DETAILS_PENDING,
-  needsUpdateMailoutDetailsSuccess,
-  needsUpdateMailoutDetailsError,
-  APPROVE_AND_SEND_MAILOUT_DETAILS_PENDING,
-  approveAndSendMailoutDetailsSuccess,
-  approveAndSendMailoutDetailsError,
-  DELETE_MAILOUT_DETAILS_PENDING,
-  deleteMailoutDetailsSuccess,
-  deleteMailoutDetailsError,
-  SAVE_MAILOUT_DETAILS_MAILOUT_SIZE_PENDING,
-  saveMailoutDetailsMailoutSizeSuccess,
-  saveMailoutDetailsMailoutSizeError,
+  GET_MAILOUT_PENDING,
+  getMailoutSuccess,
+  getMailoutError,
+  SUBMIT_MAILOUT_PENDING,
+  submitMailoutSuccess,
+  submitMailoutError,
+  STOP_MAILOUT_PENDING,
+  stopMailoutSuccess,
+  stopMailoutError,
+  UPDATE_MAILOUT_SIZE_PENDING,
+  updateMailoutSizeSuccess,
+  updateMailoutSizeError,
 } from './actions';
 import ApiService from '../../../services/api/index';
 
+export const getSelectedPeerId = state => state.peer.peerId;
 export const getMailoutId = state => state.mailout.mailoutId;
 export const getMailoutSize = state => state.mailout.mailoutSize;
 
-export function* getMailoutDetailsSaga() {
+export function* getMailoutSaga({ peerId = null }) {
   try {
     const mailoutId = yield select(getMailoutId);
-    const { path, method } = ApiService.directory.user.mailouts.get(mailoutId);
+    const { path, method } = peerId ? ApiService.directory.peer.mailout.get(mailoutId, peerId) : ApiService.directory.user.mailout.get(mailoutId);
     const response = yield call(ApiService[method], path);
 
-    yield put(getMailoutDetailsSuccess(response));
+    yield put(getMailoutSuccess(response));
   } catch (err) {
-    yield put(getMailoutDetailsError(err.message));
+    yield put(getMailoutError(err.message));
   }
 }
 
-export function* needsUpdateMailoutDetailsSaga() {
+export function* submitMailoutSaga({ peerId = null }) {
   try {
     const mailoutId = yield select(getMailoutId);
-    const { path, method } = ApiService.directory.user.mailouts.needsUpdate(mailoutId);
+    const { path, method } = peerId ? ApiService.directory.peer.mailout.submit(mailoutId, peerId) : ApiService.directory.user.mailout.submit(mailoutId);
     const response = yield call(ApiService[method], path);
 
-    yield put(needsUpdateMailoutDetailsSuccess(response));
+    yield put(submitMailoutSuccess(response));
   } catch (err) {
-    yield put(needsUpdateMailoutDetailsError(err.message));
+    yield put(submitMailoutError(err.message));
   }
 }
 
-export function* approveAndSendMailoutDetailsSaga() {
+export function* stopMailoutSaga({ peerId = null }) {
   try {
     const mailoutId = yield select(getMailoutId);
-    const { path, method } = ApiService.directory.user.mailouts.approve(mailoutId);
+    const { path, method } = peerId ? ApiService.directory.peer.mailout.stop(mailoutId, peerId) : ApiService.directory.user.mailout.stop(mailoutId);
     const response = yield call(ApiService[method], path);
 
-    yield put(approveAndSendMailoutDetailsSuccess(response));
+    yield put(stopMailoutSuccess(response));
   } catch (err) {
-    yield put(approveAndSendMailoutDetailsError(err.message));
+    yield put(stopMailoutError(err.message));
   }
 }
 
-export function* deleteMailoutDetailsSaga() {
-  try {
-    const mailoutId = yield select(getMailoutId);
-    const { path, method } = ApiService.directory.user.mailouts.cancel(mailoutId);
-    const response = yield call(ApiService[method], path);
-
-    yield put(deleteMailoutDetailsSuccess(response));
-  } catch (err) {
-    yield put(deleteMailoutDetailsError(err.message));
-  }
-}
-
-export function* updatetMailoutDetailsMailoutSizeSaga() {
+export function* updatetMailoutSizeSaga({ peerId = null }) {
   try {
     const mailoutId = yield select(getMailoutId);
     const mailoutSize = yield select(getMailoutSize);
-    const { path, method } = ApiService.directory.user.mailouts.mailoutSize(mailoutId);
+    const { path, method } = peerId
+      ? ApiService.directory.peer.mailout.mailoutSize(mailoutId, peerId)
+      : ApiService.directory.user.mailout.mailoutSize(mailoutId);
 
     const data = { mailoutSize: parseInt(mailoutSize, 10) };
     const response = yield call(ApiService[method], path, data);
 
-    console.log('updatetMailoutDetailsMailoutSizeSaga', response);
+    console.log('updatetMailoutSizeSaga', response);
 
-    yield put(saveMailoutDetailsMailoutSizeSuccess(response));
+    yield put(updateMailoutSizeSuccess(response));
   } catch (err) {
-    yield put(saveMailoutDetailsMailoutSizeError(err.message));
+    yield put(updateMailoutSizeError(err.message));
+  }
+}
+
+export function* checkIfPeerSelectedGetMailoutSaga() {
+  const peerId = yield select(getSelectedPeerId);
+
+  if (peerId) {
+    yield getMailoutSaga({ peerId });
+  } else {
+    yield getMailoutSaga({});
+  }
+}
+
+export function* checkIfPeerSelectedSubmitMailoutSaga() {
+  const peerId = yield select(getSelectedPeerId);
+
+  if (peerId) {
+    yield submitMailoutSaga({ peerId });
+  } else {
+    yield submitMailoutSaga({});
+  }
+}
+
+export function* checkIfPeerSelectedStopMailoutSaga() {
+  const peerId = yield select(getSelectedPeerId);
+
+  if (peerId) {
+    yield stopMailoutSaga({ peerId });
+  } else {
+    yield stopMailoutSaga({});
+  }
+}
+
+export function* checkIfPeerSelectedUpdatetMailoutSizeSaga() {
+  const peerId = yield select(getSelectedPeerId);
+
+  if (peerId) {
+    yield updatetMailoutSizeSaga({ peerId });
+  } else {
+    yield updatetMailoutSizeSaga({});
   }
 }
 
 export default function*() {
-  yield takeEvery(GET_MAILOUT_DETAILS_PENDING, getMailoutDetailsSaga);
-  yield takeEvery(NEEDS_UPDATE_MAILOUT_DETAILS_PENDING, needsUpdateMailoutDetailsSaga);
-  yield takeEvery(APPROVE_AND_SEND_MAILOUT_DETAILS_PENDING, approveAndSendMailoutDetailsSaga);
-  yield takeEvery(DELETE_MAILOUT_DETAILS_PENDING, deleteMailoutDetailsSaga);
-  yield takeEvery(SAVE_MAILOUT_DETAILS_MAILOUT_SIZE_PENDING, updatetMailoutDetailsMailoutSizeSaga);
+  yield takeEvery(GET_MAILOUT_PENDING, checkIfPeerSelectedGetMailoutSaga);
+  yield takeEvery(SUBMIT_MAILOUT_PENDING, checkIfPeerSelectedSubmitMailoutSaga);
+  yield takeEvery(STOP_MAILOUT_PENDING, checkIfPeerSelectedStopMailoutSaga);
+  yield takeEvery(UPDATE_MAILOUT_SIZE_PENDING, checkIfPeerSelectedUpdatetMailoutSizeSaga);
 }

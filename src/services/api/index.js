@@ -128,21 +128,22 @@ const directory = {
   },
 
   user: {
-    mailouts: {
+    mailout: {
       list: () => ({ path: `/api/user/mailout`, method: 'get' }),
       get: mailoutId => ({ path: `/api/user/mailout/${mailoutId}?include_destinations=true`, method: 'get' }),
-      cancel: mailoutId => ({ path: `/api/user/mailout/${mailoutId}`, method: 'del' }),
-      approve: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/submit`, method: 'post' }),
-      needsUpdate: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/needsUpdate`, method: 'get' }),
-      regenerate: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/update`, method: 'post' }),
-      initialize: () => ({ path: `/api/user/listing/mailout/initial`, method: 'post' }),
       mailoutSize: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit/mailoutSize`, method: 'put' }),
+      stop: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/stop`, method: 'post' }),
+      submit: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/submit`, method: 'post' }),
     },
   },
 
   peer: {
-    mailouts: {
+    mailout: {
       list: peerId => ({ path: `/api/user/peer/${peerId}/mailout`, method: 'get' }),
+      get: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}?include_destinations=true`, method: 'get' }),
+      mailoutSize: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit/mailoutSize`, method: 'put' }),
+      stop: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/stop`, method: 'post' }),
+      submit: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/submit`, method: 'post' }),
     },
   },
 

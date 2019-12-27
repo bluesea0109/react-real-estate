@@ -19,7 +19,7 @@ const limit = 25;
 
 export function* getMailoutSaga({ peerId = null }) {
   try {
-    const { path, method } = peerId ? ApiService.directory.peer.mailouts.list(peerId) : ApiService.directory.user.mailouts.list();
+    const { path, method } = peerId ? ApiService.directory.peer.mailout.list(peerId) : ApiService.directory.user.mailout.list();
     yield put(resetMailouts());
     const page = yield select(getMailoutsPage);
     const response = yield call(ApiService[method], path, { page, limit });
@@ -38,7 +38,7 @@ export function* getMailoutSaga({ peerId = null }) {
 
 export function* getMoreMailoutSaga({ peerId = null }) {
   try {
-    const { path, method } = peerId ? ApiService.directory.peer.mailouts.list(peerId) : ApiService.directory.user.mailouts.list();
+    const { path, method } = peerId ? ApiService.directory.peer.mailout.list(peerId) : ApiService.directory.user.mailout.list();
     const page = yield select(getMailoutsPage);
     const response = yield call(ApiService[method], path, { page, limit });
 

@@ -5,15 +5,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useLastLocation } from 'react-router-last-location';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import {
-  approveAndSendMailoutDetailsPending,
-  deleteMailoutDetailsPending,
-  resetMailoutDetails,
-  saveMailoutDetailsMailoutSizePending,
-} from '../store/modules/mailout/actions';
+import { submitMailoutPending, stopMailoutPending, resetMailout, updateMailoutSizePending } from '../store/modules/mailout/actions';
 import { Button, Header, Grid, Menu, Message, Page, Segment, List, Popup, Input } from '../components/Base';
 import { ItemBodyDataLayout, ItemBodyLayoutV2, ItemLayout } from '../layouts';
-import { getMailoutDetailsPending } from '../store/modules/mailout/actions';
+import { getMailoutPending } from '../store/modules/mailout/actions';
 import PopupContent from '../components/MailoutListItem/PopupContent';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ImageGroup from '../components/MailoutListItem/ImageGroup';
@@ -42,10 +37,19 @@ const MailoutDetailsPage = () => {
   const [editRecipients, setEditRecipients] = useState(false);
   // const [recipientsNumber, userRecipientsNumber] = useInput({ type: "text", initalState: 0 });
   const [numberOfRecipients, setNumberOfRecipients] = useState(0);
+  const [currentPeerState, setCurrentPeerState] = useState(null);
 
   const isLoading = useSelector(store => store.mailout.pending);
   const details = useSelector(store => store.mailout.details);
   const error = useSelector(store => store.mailout.error);
+  const peerId = useSelector(store => store.peer.peerId);
+
+  useEffect(() => {
+    if (currentPeerState !== peerId) {
+      setCurrentPeerState(peerId);
+      history.push(`/dashboard`);
+    }
+  }, [peerId, currentPeerState, setCurrentPeerState, history]);
 
   useEffect(() => {
     if (details && details.recipientCount && !onlyOnce) {
@@ -58,14 +62,10 @@ const MailoutDetailsPage = () => {
     // }
   }, [details, onlyOnce, setOnlyOnce, numberOfRecipients]);
 
-  const boundApproveAndSendMailoutDetails = () => dispatch(approveAndSendMailoutDetailsPending(mailoutId));
-  const boundDeleteMailoutDetails = () => dispatch(deleteMailoutDetailsPending(mailoutId));
-  const boundResetMailoutDetails = () => dispatch(resetMailoutDetails());
-
-  useFetching(getMailoutDetailsPending, useDispatch(), mailoutId);
+  useFetching(getMailoutPending, useDispatch(), mailoutId);
 
   const handleBackClick = () => {
-    boundResetMailoutDetails();
+    dispatch(resetMailout());
     if (lastLocation.pathname === `/dashboard/edit/${mailoutId}` || lastLocation.pathname === `/dashboard/${mailoutId}`) {
       history.push(`/dashboard`);
     }
@@ -75,13 +75,13 @@ const MailoutDetailsPage = () => {
   };
 
   const handleApproveAndSendMailoutDetailsClick = () => {
-    boundApproveAndSendMailoutDetails();
+    dispatch(submitMailoutPending(mailoutId));
     // TODO: Google Map is acting up at this stage
     // history.goBack();
   };
 
   const handleDeleteMailoutDetailsClick = () => {
-    boundDeleteMailoutDetails();
+    dispatch(stopMailoutPending(mailoutId));
     handleBackClick();
   };
 
@@ -95,7 +95,7 @@ const MailoutDetailsPage = () => {
 
   const submitNewValues = () => {
     if (details && details.recipientCount !== numberOfRecipients) {
-      dispatch(saveMailoutDetailsMailoutSizePending(numberOfRecipients));
+      dispatch(updateMailoutSizePending(numberOfRecipients));
     }
   };
 
