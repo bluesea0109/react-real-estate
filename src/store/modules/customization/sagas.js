@@ -1,67 +1,36 @@
 import { put, call, select, takeLatest } from 'redux-saga/effects';
 
 import {
-  getCustomizationPending,
+  GET_CUSTOMIZATION_PENDING,
   getCustomizationSuccess,
   getCustomizationError,
   SAVE_CUSTOMIZATION_PENDING,
   saveCustomizationSuccess,
   saveCustomizationError,
 } from './actions';
-import { setCompletedCustomization, finalizeOnboarding, FINALIZE_ONBOARDING } from '../onboarded/actions';
 import { generatePostcardsPreviewPending } from '../postcards/actions';
-import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
-
 import ApiService from '../../../services/api/index';
 
-export const getOnLoginMode = state => state.onLogin.mode;
-export const getOnboardedStatus = state => state.onboarded.status;
+export const getSelectedPeerId = state => state.peer.peerId;
 export const customizationToSave = state => state.customization.toSave;
-export const getCurrentCustomization = state => state.customization.available;
-export const checkIfUserIsAdmin = state => state.onLogin && state.onLogin.permissions && state.onLogin.permissions.teamAdmin;
 
-export function* finalizeOnboardingSaga() {
+export function* getCustomizationSaga({ peerId = null }) {
   try {
-    const currentCustomization = yield select(getCurrentCustomization);
-
-    currentCustomization.onboardingComplete = Date.now();
-
-    const { path, method } = ApiService.directory.onboard.customization.save();
-    const response = yield call(ApiService[method], path, currentCustomization);
-
-    yield put(saveCustomizationSuccess(response));
-  } catch (err) {
-    yield put(saveCustomizationError(err.message));
-  }
-}
-
-export function* getCustomizationSaga() {
-  try {
-    yield put(getCustomizationPending());
-
-    const { path, method } = ApiService.directory.onboard.customization.get();
+    const { path, method } = peerId ? ApiService.directory.peer.customization.get() : ApiService.directory.user.customization.get();
     const response = yield call(ApiService[method], path);
 
     yield put(getCustomizationSuccess(response));
-
-    if (response.onboardingComplete) yield put(finalizeOnboarding());
-
-    const isOnboarded = yield select(getOnboardedStatus);
-    const mode = yield select(getOnLoginMode);
-    const userIsAdmin = yield select(checkIfUserIsAdmin);
-    if (!isOnboarded) yield put(setCompletedCustomization(true));
-    if (!isOnboarded && mode !== 'multiuser') yield put(finalizeOnboarding());
-    if (!isOnboarded && mode === 'multiuser' && !userIsAdmin) yield put(finalizeOnboarding());
+    yield put(generatePostcardsPreviewPending());
   } catch (err) {
     yield put(getCustomizationError(err.message));
   }
 }
 
-export function* saveCustomizationSaga() {
+export function* saveCustomizationSaga({ peerId = null }) {
   try {
     const customization = yield select(customizationToSave);
 
-    const { path, method } = ApiService.directory.onboard.customization.save();
+    const { path, method } = peerId ? ApiService.directory.peer.customization.save(peerId) : ApiService.directory.user.customization.save();
     const response = yield call(ApiService[method], path, customization);
 
     yield put(saveCustomizationSuccess(response));
@@ -71,8 +40,27 @@ export function* saveCustomizationSaga() {
   }
 }
 
+export function* checkIfPeerSelectedGetCustomizationSaga() {
+  const peerId = yield select(getSelectedPeerId);
+
+  if (peerId) {
+    yield getCustomizationSaga({ peerId });
+  } else {
+    yield getCustomizationSaga({});
+  }
+}
+
+export function* checkIfPeerSelectedSaveCustomizationSaga() {
+  const peerId = yield select(getSelectedPeerId);
+
+  if (peerId) {
+    yield saveCustomizationSaga({ peerId });
+  } else {
+    yield saveCustomizationSaga({});
+  }
+}
+
 export default function*() {
-  yield takeLatest(GET_ON_LOGIN_SUCCESS, getCustomizationSaga);
-  yield takeLatest(SAVE_CUSTOMIZATION_PENDING, saveCustomizationSaga);
-  yield takeLatest(FINALIZE_ONBOARDING, finalizeOnboardingSaga);
+  yield takeLatest(GET_CUSTOMIZATION_PENDING, checkIfPeerSelectedGetCustomizationSaga);
+  yield takeLatest(SAVE_CUSTOMIZATION_PENDING, checkIfPeerSelectedSaveCustomizationSaga);
 }

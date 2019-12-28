@@ -30,6 +30,7 @@ export default function customization(state = initialState, action) {
         ...state,
         pending: false,
         available: action.payload,
+        error: null,
       };
 
     case GET_CUSTOMIZATION_ERROR:
@@ -53,6 +54,7 @@ export default function customization(state = initialState, action) {
         pending: false,
         available: action.payload,
         toSave: null,
+        error: null,
       };
 
     case SAVE_CUSTOMIZATION_ERROR:
