@@ -7,7 +7,7 @@ import {
   setCompletedInviteTeammates,
   // finalizeOnboarding,
   // setCompletedCustomization,
-  FINALIZE_ONBOARDING,
+  // FINALIZE_ONBOARDING,
 } from './actions';
 // import {
 //   getCustomizationError,
