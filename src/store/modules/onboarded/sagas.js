@@ -19,6 +19,13 @@ import {
 import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
 import { SAVE_TEAM_PROFILE_SUCCESS } from '../teamProfile/actions';
 import { SAVE_PROFILE_SUCCESS } from '../profile/actions';
+// import {getOnboardedStatus, getOnLoginMode, getTeamCustomizationSaga} from "../teamCustomization/sagas";
+// import {
+//   getTeamCustomizationError,
+//   getTeamCustomizationPending,
+//   getTeamCustomizationSuccess
+// } from "../teamCustomization/actions";
+// import ApiService from "../../../services/api";
 // import ApiService from '../../../services/api';
 //
 // export const getOnLoginMode = state => state.onLogin.mode;
@@ -31,6 +38,9 @@ export const getTeamProfile = state => state.teamProfile && state.teamProfile.av
 
 export const getSetupComplete = state => state.onLogin && state.onLogin.userProfile;
 export const checkIfUserIsAdmin = state => state.onLogin && state.onLogin.permissions && state.onLogin.permissions.teamAdmin;
+
+export const getOnLoginMode = state => state.onLogin.mode;
+// export const getOnboardedStatus = state => state.onboarded.status;
 
 // export function* finalizeOnboardingSaga() {
 //   try {
@@ -69,6 +79,21 @@ export const checkIfUserIsAdmin = state => state.onLogin && state.onLogin.permis
 //   }
 // }
 
+// export function* getTeamCustomizationSaga() {
+//   try {
+//     yield put(getTeamCustomizationPending());
+//
+//     const { path, method } = ApiService.directory.onboard.teamCustomization.get();
+//     const response = yield call(ApiService[method], path);
+//
+//     yield put(getTeamCustomizationSuccess(response));
+//     const isOnboarded = yield select(getOnboardedStatus);
+//     if (!isOnboarded) yield put(setCompletedTeamCustomization(true));
+//   } catch (err) {
+//     yield put(getTeamCustomizationError(err.message));
+//   }
+// }
+
 export function* onboardedCompleteProfileSetupSaga() {
   try {
     const userProfileIsAvailable = yield select(getUserProfile);
@@ -100,7 +125,16 @@ export function* onboardedSaga() {
   }
 }
 
+// export function* checkIfMultiUser() {
+//   const mode = yield select(getOnLoginMode);
+//
+//   if (mode === 'multiuser') {
+//     yield getTeamCustomizationSaga();
+//   }
+// }
+
 export default function*() {
+  // yield takeLatest(GET_ON_LOGIN_SUCCESS, checkIfMultiUser);
   yield takeLatest(GET_ON_LOGIN_SUCCESS, onboardedSaga);
   // yield takeLatest(GET_ON_LOGIN_SUCCESS, getCustomizationSaga);
   yield takeLatest(SAVE_TEAM_PROFILE_SUCCESS, onboardedCompleteProfileSetupSaga);
