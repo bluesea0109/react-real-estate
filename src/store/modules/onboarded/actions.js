@@ -10,18 +10,18 @@ export function finalizeOnboarding() {
   return createAction(FINALIZE_ONBOARDING);
 }
 
-export function setCompletedProfile(payload) {
-  return createAction(SET_COMPLETED_PROFILE, payload);
+export function setCompletedProfile() {
+  return createAction(SET_COMPLETED_PROFILE);
 }
 
-export function setCompletedTeamCustomization(payload) {
-  return createAction(SET_COMPLETED_TEAM_CUSTOMIZATION, payload);
+export function setCompletedTeamCustomization() {
+  return createAction(SET_COMPLETED_TEAM_CUSTOMIZATION);
 }
 
-export function setCompletedCustomization(payload) {
-  return createAction(SET_COMPLETED_CUSTOMIZATION, payload);
+export function setCompletedCustomization() {
+  return createAction(SET_COMPLETED_CUSTOMIZATION);
 }
 
-export function setCompletedInviteTeammates(payload) {
-  return createAction(SET_COMPLETED_INVITE_TEAMMATES, payload);
+export function setCompletedInviteTeammates() {
+  return createAction(SET_COMPLETED_INVITE_TEAMMATES);
 }

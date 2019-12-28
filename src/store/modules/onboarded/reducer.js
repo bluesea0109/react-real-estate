@@ -8,10 +8,10 @@ import {
 
 const initialState = {
   status: false,
-  completedProfile: null,
-  completedTeamCustomization: null,
-  completedCustomization: null,
-  completedInviteTeammates: null,
+  completedProfile: false,
+  completedTeamCustomization: false,
+  completedCustomization: false,
+  completedInviteTeammates: false,
 };
 
 export default function onboarded(state = initialState, action) {
@@ -20,30 +20,34 @@ export default function onboarded(state = initialState, action) {
       return {
         ...state,
         status: true,
+        completedProfile: true,
+        completedTeamCustomization: true,
+        completedCustomization: true,
+        completedInviteTeammates: true,
       };
 
     case SET_COMPLETED_PROFILE:
       return {
         ...state,
-        completedProfile: action.payload,
+        completedProfile: true,
       };
 
     case SET_COMPLETED_TEAM_CUSTOMIZATION:
       return {
         ...state,
-        completedTeamCustomization: action.payload,
+        completedTeamCustomization: true,
       };
 
     case SET_COMPLETED_CUSTOMIZATION:
       return {
         ...state,
-        completedCustomization: action.payload,
+        completedCustomization: true,
       };
 
     case SET_COMPLETED_INVITE_TEAMMATES:
       return {
         ...state,
-        completedInviteTeammates: action.payload,
+        completedInviteTeammates: true,
       };
 
     default:

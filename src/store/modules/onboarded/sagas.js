@@ -1,143 +1,153 @@
-// import { call } from 'redux-saga/effects';
-import { put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
 
-import {
-  setCompletedProfile,
-  setCompletedTeamCustomization,
-  setCompletedInviteTeammates,
-  // finalizeOnboarding,
-  // setCompletedCustomization,
-  // FINALIZE_ONBOARDING,
-} from './actions';
-// import {
-//   getCustomizationError,
-//   getCustomizationPending,
-//   getCustomizationSuccess,
-//   saveCustomizationError,
-//   saveCustomizationSuccess
-// } from '../customization/actions';
+import { setCompletedProfile, setCompletedTeamCustomization, setCompletedCustomization, setCompletedInviteTeammates, finalizeOnboarding } from './actions';
+
 import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
-import { SAVE_TEAM_PROFILE_SUCCESS } from '../teamProfile/actions';
 import { SAVE_PROFILE_SUCCESS } from '../profile/actions';
-// import {getOnboardedStatus, getOnLoginMode, getTeamCustomizationSaga} from "../teamCustomization/sagas";
-// import {
-//   getTeamCustomizationError,
-//   getTeamCustomizationPending,
-//   getTeamCustomizationSuccess
-// } from "../teamCustomization/actions";
-// import ApiService from "../../../services/api";
-// import ApiService from '../../../services/api';
-//
-// export const getOnLoginMode = state => state.onLogin.mode;
-// export const getOnboardedStatus = state => state.onboarded.status;
-//
-// export const getCurrentCustomization = state => state.customization.available;
+import { SAVE_TEAM_PROFILE_SUCCESS } from '../teamProfile/actions';
+import { REVIEW_CUSTOMIZATION_COMPLETED } from '../customization/actions';
+import { REVIEW_TEAM_CUSTOMIZATION_COMPLETED } from '../teamCustomization/actions';
+import { INVITE_USERS_SUCCESS } from '../inviteUsers/actions';
 
-export const getUserProfile = state => state.profile && state.profile.available;
-export const getTeamProfile = state => state.teamProfile && state.teamProfile.available;
+import ApiService from '../../../services/api';
 
-export const getSetupComplete = state => state.onLogin && state.onLogin.userProfile;
-export const checkIfUserIsAdmin = state => state.onLogin && state.onLogin.permissions && state.onLogin.permissions.teamAdmin;
+export const onLoginMode = state => state.onLogin && state.onLogin.mode;
+export const onLoginPermissionsTeamAdmin = state => state.onLogin && state.onLogin.permissions && state.onLogin.permissions.teamAdmin;
 
-export const getOnLoginMode = state => state.onLogin.mode;
-// export const getOnboardedStatus = state => state.onboarded.status;
+export const onLoginUserProfile = state => state.onLogin && state.onLogin.userProfile;
+export const onLoginTeamProfile = state => state.onLogin && state.onLogin.teamProfile;
+export const onLoginUserBranding = state => state.onLogin && state.onLogin.userBranding;
+export const onLoginTeamBranding = state => state.onLogin && state.onLogin.teamBranding;
 
-// export function* finalizeOnboardingSaga() {
-//   try {
-//     const currentCustomization = yield select(getCurrentCustomization);
-//
-//     currentCustomization.onboardingComplete = Date.now();
-//
-//     const { path, method } = ApiService.directory.onboard.customization.save();
-//     const response = yield call(ApiService[method], path, currentCustomization);
-//
-//     yield put(saveCustomizationSuccess(response));
-//   } catch (err) {
-//     yield put(saveCustomizationError(err.message));
-//   }
-// }
+export const onboardingProfileSetupComplete = state => state.onLogin && state.onLogin.userProfile && state.onLogin.userProfile.setupComplete;
+export const onboardingComplete = state => state.onLogin && state.onLogin.userBranding && state.onLogin.userBranding.onboardingComplete;
 
-// export function* getCustomizationSaga() {
-//   try {
-//     yield put(getCustomizationPending());
-//
-//     const { path, method } = ApiService.directory.onboard.customization.get();
-//     const response = yield call(ApiService[method], path);
-//
-//     yield put(getCustomizationSuccess(response));
-//
-//     if (response.onboardingComplete) yield put(finalizeOnboarding());
-//
-//     const isOnboarded = yield select(getOnboardedStatus);
-//     const mode = yield select(getOnLoginMode);
-//     const userIsAdmin = yield select(checkIfUserIsAdmin);
-//     if (!isOnboarded) yield put(setCompletedCustomization(true));
-//     if (!isOnboarded && mode !== 'multiuser') yield put(finalizeOnboarding());
-//     if (!isOnboarded && mode === 'multiuser' && !userIsAdmin) yield put(finalizeOnboarding());
-//   } catch (err) {
-//     yield put(getCustomizationError(err.message));
-//   }
-// }
+let userProfileCompleted = false;
+let teamProfileCompleted = false;
 
-// export function* getTeamCustomizationSaga() {
-//   try {
-//     yield put(getTeamCustomizationPending());
-//
-//     const { path, method } = ApiService.directory.onboard.teamCustomization.get();
-//     const response = yield call(ApiService[method], path);
-//
-//     yield put(getTeamCustomizationSuccess(response));
-//     const isOnboarded = yield select(getOnboardedStatus);
-//     if (!isOnboarded) yield put(setCompletedTeamCustomization(true));
-//   } catch (err) {
-//     yield put(getTeamCustomizationError(err.message));
-//   }
-// }
-
-export function* onboardedCompleteProfileSetupSaga() {
+export function* profileSetupOnboardingSaga() {
   try {
-    const userProfileIsAvailable = yield select(getUserProfile);
-    const teamProfileIsAvailable = yield select(getTeamProfile);
+    const mode = yield select(onLoginMode);
+    const multiUser = mode === 'multiuser';
+    const userIsAdmin = yield select(onLoginPermissionsTeamAdmin);
 
-    if (userProfileIsAvailable && teamProfileIsAvailable) {
-      yield put(setCompletedProfile(true));
-    }
+    userProfileCompleted = true;
+
+    if ((!multiUser && !userIsAdmin) || (multiUser && teamProfileCompleted)) yield put(setCompletedProfile(true));
   } catch (err) {
-    console.log('completeProfileSetupSaga err', err);
+    yield console.log('profileSetupOnboardingSaga err', err);
   }
 }
 
-export function* onboardedSaga() {
+export function* teamProfileSetupOnboardingSaga() {
   try {
-    const userProfile = yield select(getSetupComplete);
-    const userIsAdmin = yield select(checkIfUserIsAdmin);
+    const mode = yield select(onLoginMode);
+    const multiUser = mode === 'multiuser';
 
-    if (!userIsAdmin) {
-      yield put(setCompletedTeamCustomization(true));
-      yield put(setCompletedInviteTeammates(true));
-    }
+    teamProfileCompleted = true;
 
-    if (userProfile && userProfile.setupComplete) {
-      yield put(setCompletedProfile(true));
-    }
+    if (multiUser && userProfileCompleted) yield put(setCompletedProfile(true));
   } catch (err) {
-    console.log('onboardedSaga err', err);
+    yield console.log('profileSetupOnboardingSaga err', err);
   }
 }
 
-// export function* checkIfMultiUser() {
-//   const mode = yield select(getOnLoginMode);
-//
-//   if (mode === 'multiuser') {
-//     yield getTeamCustomizationSaga();
-//   }
-// }
+export function* teamCustomizationOnboardingSaga() {
+  try {
+    yield put(setCompletedTeamCustomization());
+  } catch (err) {
+    yield console.log('teamCustomizationOnboardingSaga err', err);
+  }
+}
+
+export function* customizationOnboardingSaga() {
+  try {
+    const mode = yield select(onLoginMode);
+    const multiUser = mode === 'multiuser';
+    const userIsAdmin = yield select(onLoginPermissionsTeamAdmin);
+
+    yield put(setCompletedCustomization());
+    if (!multiUser && !userIsAdmin) yield put(finalizeOnboarding());
+  } catch (err) {
+    yield console.log('customizationOnboardingSaga err', err);
+  }
+}
+
+export function* finalizeOnboardingGetCustomizationSaga() {
+  try {
+    const { path, method } = ApiService.directory.user.customization.get();
+    return yield call(ApiService[method], path);
+  } catch (err) {
+    yield console.log('finalizeOnboardingGetCustomizationSaga err', err);
+  }
+}
+
+export function* finalizeOnboardingSaveCustomizationSaga(currentCustomization) {
+  try {
+    currentCustomization.onboardingComplete = Date.now();
+
+    const { path, method } = ApiService.directory.onboard.customization.save();
+    return yield call(ApiService[method], path, currentCustomization);
+  } catch (err) {
+    yield console.log('finalizeOnboardingSaveCustomizationSaga err', err);
+  }
+}
+
+export function* invitationOnboardingSaga() {
+  try {
+    const currentCustomization = yield finalizeOnboardingGetCustomizationSaga();
+    const updatedCustomization = yield finalizeOnboardingSaveCustomizationSaga(currentCustomization);
+
+    yield console.log('invitationOnboardingSaga updatedCustomization', updatedCustomization);
+
+    yield put(setCompletedInviteTeammates());
+    yield put(finalizeOnboarding());
+  } catch (err) {
+    yield console.log('invitationOnboardingSaga err', err);
+  }
+}
+
+export function* initialOnboardingSaga() {
+  try {
+    const onboarded = yield select(onboardingComplete);
+    const stageOneCompleted = yield select(onboardingProfileSetupComplete);
+
+    const userProfilePresent = yield select(onLoginUserProfile);
+    const teamProfilePresent = yield select(onLoginTeamProfile);
+    const userBrandingPresent = yield select(onLoginUserBranding);
+    const teamBrandingPresent = yield select(onLoginTeamBranding);
+
+    if (onboarded) {
+      yield put(finalizeOnboarding());
+    } else {
+      if (stageOneCompleted) {
+        yield put(setCompletedProfile());
+      } else {
+        if (userProfilePresent) {
+          yield profileSetupOnboardingSaga();
+        }
+        if (teamProfilePresent) {
+          yield teamProfileSetupOnboardingSaga();
+        }
+      }
+
+      if (teamBrandingPresent) {
+        yield teamCustomizationOnboardingSaga();
+      }
+      if (userBrandingPresent) {
+        yield customizationOnboardingSaga();
+      }
+    }
+  } catch (err) {
+    yield console.log('initialOnboardingSaga err', err);
+  }
+}
 
 export default function*() {
-  // yield takeLatest(GET_ON_LOGIN_SUCCESS, checkIfMultiUser);
-  yield takeLatest(GET_ON_LOGIN_SUCCESS, onboardedSaga);
-  // yield takeLatest(GET_ON_LOGIN_SUCCESS, getCustomizationSaga);
-  yield takeLatest(SAVE_TEAM_PROFILE_SUCCESS, onboardedCompleteProfileSetupSaga);
-  yield takeLatest(SAVE_PROFILE_SUCCESS, onboardedCompleteProfileSetupSaga);
-  // yield takeLatest(FINALIZE_ONBOARDING, finalizeOnboardingSaga);
+  yield takeLatest(GET_ON_LOGIN_SUCCESS, initialOnboardingSaga);
+  yield takeLatest(SAVE_PROFILE_SUCCESS, profileSetupOnboardingSaga);
+  yield takeLatest(SAVE_TEAM_PROFILE_SUCCESS, teamProfileSetupOnboardingSaga);
+  yield takeLatest(REVIEW_TEAM_CUSTOMIZATION_COMPLETED, teamCustomizationOnboardingSaga);
+  yield takeLatest(REVIEW_CUSTOMIZATION_COMPLETED, customizationOnboardingSaga);
+  yield takeLatest(INVITE_USERS_SUCCESS, invitationOnboardingSaga);
 }
