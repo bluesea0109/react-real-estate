@@ -106,7 +106,7 @@ export default () => {
   useEffect(() => {
     if (loggedInUser && !activeUser) {
       setActiveUser(loggedInUser._id);
-    } else if (loggedInUser && activeUser !== loggedInUser._id && !selectedPeerId) {
+    } else if (loggedInUser && activeUser !== loggedInUser._id) {
       dispatch(selectPeerId(activeUser));
     } else if (loggedInUser && activeUser === loggedInUser._id && selectedPeerId) {
       dispatch(deselectPeerId());

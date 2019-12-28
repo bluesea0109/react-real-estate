@@ -38,6 +38,7 @@ export default function customization(state = initialState, action) {
         ...state,
         pending: false,
         error: action.error,
+        available: null,
       };
 
     case SAVE_CUSTOMIZATION_PENDING:
@@ -62,6 +63,7 @@ export default function customization(state = initialState, action) {
         ...state,
         pending: false,
         error: action.error,
+        available: null,
       };
 
     case REVIEW_CUSTOMIZATION_COMPLETED:

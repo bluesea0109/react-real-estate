@@ -29,6 +29,7 @@ export default function profile(state = initialState, action) {
         ...state,
         pending: false,
         error: action.error,
+        available: null,
       };
 
     case SAVE_PROFILE_PENDING:
@@ -53,6 +54,7 @@ export default function profile(state = initialState, action) {
         pending: false,
         error: action.error,
         toSave: null,
+        available: null,
       };
 
     default:
