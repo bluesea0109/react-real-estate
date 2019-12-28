@@ -1,3 +1,9 @@
 .ui.selection.active.dropdown .menu {
   min-width: 22em !important;
 }
+
+.ui.menu .ui.dropdown .menu > .active.item {
+  background: rgba(0, 0, 0, 0.3) !important;
+  font-weight: 700 !important;
+  color: rgba(0, 0, 0, 0.95) !important;
+}
