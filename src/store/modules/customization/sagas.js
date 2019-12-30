@@ -66,5 +66,5 @@ export function* checkIfPeerSelectedSaveCustomizationSaga() {
 export default function*() {
   yield takeLatest(GET_CUSTOMIZATION_PENDING, checkIfPeerSelectedGetCustomizationSaga);
   yield takeLatest(SAVE_CUSTOMIZATION_PENDING, checkIfPeerSelectedSaveCustomizationSaga);
-  yield takeLatest(GET_ON_LOGIN_SUCCESS, saveTeamCustomizationSaga);
+  yield takeLatest(GET_ON_LOGIN_SUCCESS, checkIfPeerSelectedGetCustomizationSaga);
 }
