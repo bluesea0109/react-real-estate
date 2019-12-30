@@ -50,7 +50,7 @@ export function* teamProfileSetupOnboardingSaga() {
 
     teamProfileCompleted = true;
 
-    if ((multiUser && userProfileCompleted) || (singleuser && teamProfileCompleted)) yield put(setCompletedProfile());
+    if ((multiUser && userProfileCompleted) || (singleuser && userProfileCompleted)) yield put(setCompletedProfile());
   } catch (err) {
     yield console.log('profileSetupOnboardingSaga err', err);
   }
