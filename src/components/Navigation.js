@@ -46,7 +46,7 @@ export default () => {
   const isAuthenticated = useSelector(store => store.auth0.authenticated);
   const onLoginPending = useSelector(store => store.onLogin.pending);
   const onLoginError = useSelector(store => store.onLogin.error);
-  const onLoginUserProfileSetupComplete = useSelector(store => store.onLogin.userProfile && store.onLogin.userProfile.setupComplete);
+  const onLoginUserBrandingOnboardingComplete = useSelector(store => store.onLogin.userBranding && store.onLogin.userBranding.onboardingComplete);
 
   const templatesAvailable = useSelector(store => store.templates.available);
   const statesAvailable = useSelector(store => store.states.available);
@@ -192,7 +192,7 @@ export default () => {
 
   if (!loadingCompleted) return null;
 
-  if (loadingCompleted) {
+  if (loadingCompleted && !onLoginUserBrandingOnboardingComplete) {
     if (isMultimode && isAdmin) {
       return (
         <StepsLayout vertical={!mql.matches}>
