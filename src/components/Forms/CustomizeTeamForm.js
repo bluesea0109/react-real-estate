@@ -48,7 +48,8 @@ const CustomizeTeamForm = () => {
   const [displayReview, setDisplayReview] = useState(false);
   const [listedIsFlipped, setListedIsFlipped] = useState(false);
   const [soldIsFlipped, setSoldIsFlipped] = useState(false);
-  const [kwklyEnabled, setKwklyEnabled] = useState(false);
+  const [newListingKwklyEnabled, setNewListingKwklyEnabled] = useState(false);
+  const [soldListingKwklyEnabled, setSoldListingKwklyEnabled] = useState(false);
 
   const [selectedNewListingTemplate, setSelectedNewListingTemplate] = useState(templates[0].key);
   const [selectedSoldListingTemplate, setSelectedSoldListingTemplate] = useState(templates[0].key);
@@ -113,9 +114,6 @@ const CustomizeTeamForm = () => {
         mailoutSizeMax: values.newListing_numberOfPostcardsDefaults[2],
         templateTheme: values.newListing_template,
         brandColor: values.newListing_color,
-        cta: values.newListing_actionURL,
-        shortenCTA: true,
-        kwkly: values.newListing_kwkly,
         frontHeadline: values.newListing_headline,
       },
       sold: {
@@ -125,12 +123,21 @@ const CustomizeTeamForm = () => {
         mailoutSizeMax: values.soldListing_numberOfPostcardsDefaults[2],
         templateTheme: values.soldListing_template,
         brandColor: values.soldListing_color,
-        cta: values.soldListing_actionURL,
-        shortenCTA: true,
-        kwkly: values.soldListing_kwkly,
         frontHeadline: values.soldListing_headline,
       },
     };
+
+    if (newListingKwklyEnabled) {
+      data.listed.kwkly = values.newListing_kwkly;
+    } else {
+      data.listed.cta = values.newListing_actionURL;
+    }
+
+    if (soldListingKwklyEnabled) {
+      data.sold.kwkly = values.soldListing_kwkly;
+    } else {
+      data.sold.cta = values.soldListing_actionURL;
+    }
 
     if (tc) {
       data._id = tc._id;
@@ -180,7 +187,8 @@ const CustomizeTeamForm = () => {
       if (tc.listed.createMailoutsOfThisType !== newListingEnabled) setNewListingEnabled(tc.listed.createMailoutsOfThisType);
       if (tc.sold.createMailoutsOfThisType !== soldListingEnabled) setSoldListingEnabled(tc.sold.createMailoutsOfThisType);
 
-      if ((tc.sold && tc.sold.kwkly) || (tc.listed && tc.listed.kwkly)) setKwklyEnabled(true);
+      if (tc.listed && tc.listed.kwkly) setNewListingKwklyEnabled(true);
+      if (tc.sold && tc.sold.kwkly) setSoldListingKwklyEnabled(true);
 
       dispatch(getTeamListedShortcodePending());
       dispatch(getTeamSoldShortcodePending());
@@ -198,6 +206,9 @@ const CustomizeTeamForm = () => {
     const placeholder = listingType === NEW_LISTING ? 'Campaign will not be enabled for new listings' : 'Campaign will not be enabled for sold listings';
     const targetOn = listingType === NEW_LISTING ? 'Generate new listing campaigns' : 'Generate sold listing campaigns';
     const cta = listingType === NEW_LISTING ? initialValues[`${NEW_LISTING}_actionURL`] : initialValues[`${SOLD_LISTING}_actionURL`];
+
+    const kwklyEnabled = listingType === NEW_LISTING ? newListingKwklyEnabled : soldListingKwklyEnabled;
+    const setKwklyEnabled = listingType === NEW_LISTING ? setNewListingKwklyEnabled : setSoldListingKwklyEnabled;
 
     return (
       <Segment>

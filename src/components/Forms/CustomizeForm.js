@@ -49,7 +49,8 @@ const CustomizeTeamForm = () => {
   const [displayReview, setDisplayReview] = useState(false);
   const [listedIsFlipped, setListedIsFlipped] = useState(false);
   const [soldIsFlipped, setSoldIsFlipped] = useState(false);
-  const [kwklyEnabled, setKwklyEnabled] = useState(false);
+  const [newListingKwklyEnabled, setNewListingKwklyEnabled] = useState(false);
+  const [soldListingKwklyEnabled, setSoldListingKwklyEnabled] = useState(false);
 
   const [selectedNewListingTemplate, setSelectedNewListingTemplate] = useState(templates[0].key);
   const [selectedSoldListingTemplate, setSelectedSoldListingTemplate] = useState(templates[0].key);
@@ -120,9 +121,6 @@ const CustomizeTeamForm = () => {
           mailoutSize: returnIfNotEqual(values.newListing_numberOfPostcardsDefaults[0], tc.listed.mailoutSize),
           templateTheme: returnIfNotEqual(values.newListing_template, tc.listed.templateTheme),
           brandColor: returnIfNotEqual(values.newListing_color, tc.listed.brandColor),
-          cta: returnIfNotEqual(values.newListing_actionURL, tc.listed.cta),
-          shortenCTA: values.newListing_actionURL !== tc.listed.cta ? true : undefined,
-          kwkly: returnIfNotEqual(values.newListing_kwkly, tc.listed.kwkly),
           frontHeadline: returnIfNotEqual(values.newListing_headline, tc.listed.frontHeadline),
         },
         sold: {
@@ -130,12 +128,21 @@ const CustomizeTeamForm = () => {
           mailoutSize: returnIfNotEqual(values.soldListing_numberOfPostcardsDefaults[0], tc.sold.mailoutSize),
           templateTheme: returnIfNotEqual(values.soldListing_template, tc.sold.templateTheme),
           brandColor: returnIfNotEqual(values.soldListing_color, tc.sold.brandColor),
-          cta: returnIfNotEqual(values.soldListing_actionURL, tc.sold.cta),
-          shortenCTA: values.soldListing_actionURL !== tc.sold.cta ? true : undefined,
-          kwkly: returnIfNotEqual(values.soldListing_kwkly, tc.sold.kwkly),
           frontHeadline: returnIfNotEqual(values.soldListing_headline, tc.sold.frontHeadline),
         },
       };
+
+      if (newListingKwklyEnabled) {
+        data.listed.kwkly = returnIfNotEqual(values.newListing_kwkly, tc.listed.kwkly);
+      } else {
+        data.listed.cta = returnIfNotEqual(values.newListing_actionURL, tc.listed.cta);
+      }
+
+      if (soldListingKwklyEnabled) {
+        data.sold.kwkly = returnIfNotEqual(values.soldListing_kwkly, tc.sold.kwkly);
+      } else {
+        data.sold.cta = returnIfNotEqual(values.soldListing_actionURL, tc.sold.cta);
+      }
 
       if (existingCustomization) {
         data._id = existingCustomization._id;
@@ -148,9 +155,6 @@ const CustomizeTeamForm = () => {
           mailoutSize: values.newListing_numberOfPostcardsDefaults[0],
           templateTheme: values.newListing_template,
           brandColor: values.newListing_color,
-          cta: values.newListing_actionURL,
-          shortenCTA: true,
-          kwkly: values.newListing_kwkly,
           frontHeadline: values.newListing_headline,
         },
         sold: {
@@ -158,12 +162,21 @@ const CustomizeTeamForm = () => {
           mailoutSize: values.soldListing_numberOfPostcardsDefaults[0],
           templateTheme: values.soldListing_template,
           brandColor: values.soldListing_color,
-          cta: values.soldListing_actionURL,
-          shortenCTA: true,
-          kwkly: values.soldListing_kwkly,
           frontHeadline: values.soldListing_headline,
         },
       };
+
+      if (newListingKwklyEnabled) {
+        data.listed.kwkly = values.newListing_kwkly;
+      } else {
+        data.listed.cta = values.newListing_actionURL;
+      }
+
+      if (soldListingKwklyEnabled) {
+        data.sold.kwkly = values.soldListing_kwkly;
+      } else {
+        data.sold.cta = values.soldListing_actionURL;
+      }
     }
 
     dispatch(saveCustomizationPending(data));
@@ -265,6 +278,8 @@ const CustomizeTeamForm = () => {
 
     const placeholder = listingType === NEW_LISTING ? 'Campaign will not be enabled for new listings' : 'Campaign will not be enabled for sold listings';
     const targetOn = listingType === NEW_LISTING ? 'Generate new listing campaigns' : 'Generate sold listing campaigns';
+    const kwklyEnabled = listingType === NEW_LISTING ? newListingKwklyEnabled : soldListingKwklyEnabled;
+    const setKwklyEnabled = listingType === NEW_LISTING ? setNewListingKwklyEnabled : setSoldListingKwklyEnabled;
 
     return (
       <Segment>
