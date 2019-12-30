@@ -513,7 +513,7 @@ const CustomizeTeamForm = () => {
                 label: labelWithPopup('Kwkly URL', popup('Some message')),
                 type: 'text',
                 dispatch: dispatch,
-                validate: !kwklyEnabled ? null : composeValidators(required, url, maxLength(44)),
+                validate: !kwklyEnabled ? null : composeValidators(required, maxLength(44)),
                 target: listingType,
                 disabled: !kwklyEnabled,
               })}
