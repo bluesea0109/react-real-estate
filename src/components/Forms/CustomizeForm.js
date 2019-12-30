@@ -49,6 +49,7 @@ const CustomizeTeamForm = () => {
   const [displayReview, setDisplayReview] = useState(false);
   const [listedIsFlipped, setListedIsFlipped] = useState(false);
   const [soldIsFlipped, setSoldIsFlipped] = useState(false);
+  const [kwklyEnabled, setKwklyEnabled] = useState(false);
 
   const [selectedNewListingTemplate, setSelectedNewListingTemplate] = useState(templates[0].key);
   const [selectedSoldListingTemplate, setSelectedSoldListingTemplate] = useState(templates[0].key);
@@ -79,9 +80,9 @@ const CustomizeTeamForm = () => {
 
   const resolveTemplate = type => {
     const types = {
-      'alf-theme-ribbon': ribbonTemplate,
-      'alf-theme-bookmark': bookmarkTemplate,
-      'alf-theme-stack': stackTemplate,
+      ribbon: ribbonTemplate,
+      bookmark: bookmarkTemplate,
+      stack: stackTemplate,
       undefined: undefined,
     };
     return type ? types[type] : types['undefined'];
@@ -121,7 +122,7 @@ const CustomizeTeamForm = () => {
           brandColor: returnIfNotEqual(values.newListing_color, tc.listed.brandColor),
           cta: returnIfNotEqual(values.newListing_actionURL, tc.listed.cta),
           shortenCTA: values.newListing_actionURL !== tc.listed.cta ? true : undefined,
-          // kwkly: "string",
+          kwkly: returnIfNotEqual(values.newListing_kwkly, tc.listed.kwkly),
           frontHeadline: returnIfNotEqual(values.newListing_headline, tc.listed.frontHeadline),
         },
         sold: {
@@ -131,7 +132,7 @@ const CustomizeTeamForm = () => {
           brandColor: returnIfNotEqual(values.soldListing_color, tc.sold.brandColor),
           cta: returnIfNotEqual(values.soldListing_actionURL, tc.sold.cta),
           shortenCTA: values.soldListing_actionURL !== tc.sold.cta ? true : undefined,
-          // kwkly: "string",
+          kwkly: returnIfNotEqual(values.soldListing_kwkly, tc.sold.kwkly),
           frontHeadline: returnIfNotEqual(values.soldListing_headline, tc.sold.frontHeadline),
         },
       };
@@ -149,7 +150,7 @@ const CustomizeTeamForm = () => {
           brandColor: values.newListing_color,
           cta: values.newListing_actionURL,
           shortenCTA: true,
-          // kwkly: "string",
+          kwkly: values.newListing_kwkly,
           frontHeadline: values.newListing_headline,
         },
         sold: {
@@ -159,7 +160,7 @@ const CustomizeTeamForm = () => {
           brandColor: values.soldListing_color,
           cta: values.soldListing_actionURL,
           shortenCTA: true,
-          // kwkly: "string",
+          kwkly: values.soldListing_kwkly,
           frontHeadline: values.soldListing_headline,
         },
       };
@@ -231,6 +232,7 @@ const CustomizeTeamForm = () => {
       [`${NEW_LISTING}_headline`]: c.listed.frontHeadline,
       [`${NEW_LISTING}_numberOfPostcardsDefaults`]: [c.listed.mailoutSize],
       [`${NEW_LISTING}_actionURL`]: c.listed && c.listed.cta,
+      [`${NEW_LISTING}_kwkly`]: c.listed && c.listed.kwkly,
 
       [`${SOLD_LISTING}_createMailoutsOfThisType`]: c.sold.createMailoutsOfThisType,
       [`${SOLD_LISTING}_template`]: c.sold.templateTheme,
@@ -238,6 +240,7 @@ const CustomizeTeamForm = () => {
       [`${SOLD_LISTING}_headline`]: c.sold.frontHeadline,
       [`${SOLD_LISTING}_numberOfPostcardsDefaults`]: [c.sold.mailoutSize],
       [`${SOLD_LISTING}_actionURL`]: c.sold && c.sold.cta,
+      [`${SOLD_LISTING}_kwkly`]: c.sold && c.sold.kwkly,
     };
   }
 
@@ -293,12 +296,13 @@ const CustomizeTeamForm = () => {
                 : {
                     display: 'grid',
                     gridTemplateColumns: '2fr 1fr .75fr',
-                    gridTemplateRows: '4em 4em 2em 10em',
+                    gridTemplateRows: '4em 4em 2em 6em',
                     gridTemplateAreas: `
                       "ChooseTemplate Headline Headline"
                       "ChooseTemplate NumberOfPostcards NumberOfPostcards"
                       "ChooseTemplate NumberOfPostcards NumberOfPostcards"
                       "BrandColor CallToAction ShortenedURL"
+                      "BrandColor Kwkly KwklyToggle"
                     `,
                     gridRowGap: '1em',
                     gridColumnGap: '2em',
@@ -441,8 +445,9 @@ const CustomizeTeamForm = () => {
                 label: labelWithPopup('Call to action URL', popup('Some message')),
                 type: 'text',
                 dispatch: dispatch,
-                validate: composeValidators(required, url),
+                validate: kwklyEnabled ? null : composeValidators(required, url),
                 target: listingType,
+                disabled: kwklyEnabled,
               })}
             </div>
             <div style={{ gridArea: 'ShortenedURL' }}>
@@ -485,6 +490,28 @@ const CustomizeTeamForm = () => {
                   </Label.Detail>
                 </Label>
               )}
+            </div>
+
+            <div style={{ gridArea: 'Kwkly' }}>
+              {renderUrlField({
+                name: `${listingType}_kwkly`,
+                label: labelWithPopup('Kwkly URL', popup('Some message')),
+                type: 'text',
+                dispatch: dispatch,
+                validate: !kwklyEnabled ? null : composeValidators(required, url, maxLength(44)),
+                target: listingType,
+                disabled: !kwklyEnabled,
+              })}
+            </div>
+            <div style={{ gridArea: 'KwklyToggle' }}>
+              <Radio
+                toggle
+                label="Enable Kwkly"
+                onChange={() => setKwklyEnabled(!kwklyEnabled)}
+                checked={kwklyEnabled}
+                onClick={() => setKwklyEnabled(!kwklyEnabled)}
+                style={{ marginTop: '2.25em', opacity: kwklyEnabled ? '1' : '0.4' }}
+              />
             </div>
           </div>
         </Condition>

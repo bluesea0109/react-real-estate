@@ -48,6 +48,7 @@ const CustomizeTeamForm = () => {
   const [displayReview, setDisplayReview] = useState(false);
   const [listedIsFlipped, setListedIsFlipped] = useState(false);
   const [soldIsFlipped, setSoldIsFlipped] = useState(false);
+  const [kwklyEnabled, setKwklyEnabled] = useState(false);
 
   const [selectedNewListingTemplate, setSelectedNewListingTemplate] = useState(templates[0].key);
   const [selectedSoldListingTemplate, setSelectedSoldListingTemplate] = useState(templates[0].key);
@@ -114,7 +115,7 @@ const CustomizeTeamForm = () => {
         brandColor: values.newListing_color,
         cta: values.newListing_actionURL,
         shortenCTA: true,
-        // kwkly: "string",
+        kwkly: values.newListing_kwkly,
         frontHeadline: values.newListing_headline,
       },
       sold: {
@@ -126,7 +127,7 @@ const CustomizeTeamForm = () => {
         brandColor: values.soldListing_color,
         cta: values.soldListing_actionURL,
         shortenCTA: true,
-        // kwkly: "string",
+        kwkly: values.soldListing_kwkly,
         frontHeadline: values.soldListing_headline,
       },
     };
@@ -162,6 +163,7 @@ const CustomizeTeamForm = () => {
       [`${NEW_LISTING}_headline`]: tc.listed.frontHeadline,
       [`${NEW_LISTING}_numberOfPostcardsDefaults`]: [tc.listed.mailoutSizeMin, tc.listed.mailoutSize, tc.listed.mailoutSizeMax],
       [`${NEW_LISTING}_actionURL`]: newListingURL || (tc.listed && tc.listed.cta),
+      [`${NEW_LISTING}_kwkly`]: tc.listed && tc.listed.kwkly,
 
       [`${SOLD_LISTING}_createMailoutsOfThisType`]: tc.sold.createMailoutsOfThisType,
       [`${SOLD_LISTING}_template`]: tc.sold.templateTheme,
@@ -169,6 +171,7 @@ const CustomizeTeamForm = () => {
       [`${SOLD_LISTING}_headline`]: tc.sold.frontHeadline,
       [`${SOLD_LISTING}_numberOfPostcardsDefaults`]: [tc.sold.mailoutSizeMin, tc.sold.mailoutSize, tc.sold.mailoutSizeMax],
       [`${SOLD_LISTING}_actionURL`]: soldListingURL || (tc.sold && tc.sold.cta),
+      [`${SOLD_LISTING}_kwkly`]: tc.sold && tc.sold.kwkly,
     };
 
     if (!onlyOnce) {
@@ -176,6 +179,8 @@ const CustomizeTeamForm = () => {
 
       if (tc.listed.createMailoutsOfThisType !== newListingEnabled) setNewListingEnabled(tc.listed.createMailoutsOfThisType);
       if (tc.sold.createMailoutsOfThisType !== soldListingEnabled) setSoldListingEnabled(tc.sold.createMailoutsOfThisType);
+
+      if ((tc.sold && tc.sold.kwkly) || (tc.listed && tc.listed.kwkly)) setKwklyEnabled(true);
 
       dispatch(getTeamListedShortcodePending());
       dispatch(getTeamSoldShortcodePending());
@@ -224,12 +229,13 @@ const CustomizeTeamForm = () => {
                 : {
                     display: 'grid',
                     gridTemplateColumns: '2fr 1fr .75fr',
-                    gridTemplateRows: '4em 4em 2em 10em',
+                    gridTemplateRows: '4em 4em 2em 6em',
                     gridTemplateAreas: `
                       "ChooseTemplate Headline Headline"
                       "ChooseTemplate NumberOfPostcards NumberOfPostcards"
                       "ChooseTemplate NumberOfPostcards NumberOfPostcards"
                       "BrandColor CallToAction ShortenedURL"
+                      "BrandColor Kwkly KwklyToggle"
                         `,
                     gridRowGap: '1em',
                     gridColumnGap: '2em',
@@ -354,8 +360,9 @@ const CustomizeTeamForm = () => {
                 label: labelWithPopup('Call to action URL', popup('Some message')),
                 type: 'text',
                 dispatch: dispatch,
-                validate: composeValidators(required, url),
+                validate: kwklyEnabled ? null : composeValidators(required, url),
                 target: listingType,
+                disabled: kwklyEnabled,
                 form: 'team',
               })}
             </div>
@@ -391,6 +398,28 @@ const CustomizeTeamForm = () => {
                   </Label.Detail>
                 </Label>
               )}
+            </div>
+
+            <div style={{ gridArea: 'Kwkly' }}>
+              {renderUrlField({
+                name: `${listingType}_kwkly`,
+                label: labelWithPopup('Kwkly URL', popup('Some message')),
+                type: 'text',
+                dispatch: dispatch,
+                validate: !kwklyEnabled ? null : composeValidators(required, url, maxLength(44)),
+                target: listingType,
+                disabled: !kwklyEnabled,
+              })}
+            </div>
+            <div style={{ gridArea: 'KwklyToggle' }}>
+              <Radio
+                toggle
+                label="Enable Kwkly"
+                onChange={() => setKwklyEnabled(!kwklyEnabled)}
+                checked={kwklyEnabled}
+                onClick={() => setKwklyEnabled(!kwklyEnabled)}
+                style={{ marginTop: '2.25em', opacity: kwklyEnabled ? '1' : '0.4' }}
+              />
             </div>
           </div>
         </Condition>
