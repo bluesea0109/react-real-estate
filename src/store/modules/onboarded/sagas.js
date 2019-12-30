@@ -46,10 +46,11 @@ export function* teamProfileSetupOnboardingSaga() {
   try {
     const mode = yield select(onLoginMode);
     const multiUser = mode === 'multiuser';
+    const singleuser = mode === 'singleuser';
 
     teamProfileCompleted = true;
 
-    if (multiUser && userProfileCompleted) yield put(setCompletedProfile());
+    if ((multiUser && userProfileCompleted) || (singleuser && teamProfileCompleted)) yield put(setCompletedProfile());
   } catch (err) {
     yield console.log('profileSetupOnboardingSaga err', err);
   }
