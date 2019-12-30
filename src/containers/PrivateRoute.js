@@ -17,12 +17,20 @@ const PrivateRoute = ({ component: Component, path, auth0, onLogin, templates, s
 
       if (!auth0.authenticated) {
         await history.push('/');
-      } else if (!onLogin.pending && !onLogin.error && onLogin.userProfile && !onLogin.userProfile.setupComplete) {
-        history.push('/onboard');
-      } else if (localStorage.getItem('routerDestination')) {
-        const routerDestination = await localStorage.getItem('routerDestination');
-        await localStorage.removeItem('routerDestination');
-        await history.push(routerDestination);
+      } else {
+        if (
+          (!onLogin.pending && !onLogin.error && !onLogin.userProfile) ||
+          (!onLogin.pending && !onLogin.error && onLogin.userProfile && !onLogin.userProfile.setupComplete) ||
+          (!onLogin.pending && !onLogin.error && onLogin.userBranding && !onLogin.userBranding.onboardingComplete)
+        ) {
+          history.push('/onboard');
+        }
+
+        if (localStorage.getItem('routerDestination')) {
+          const routerDestination = await localStorage.getItem('routerDestination');
+          await localStorage.removeItem('routerDestination');
+          await history.push(routerDestination);
+        }
       }
     };
     fn();
