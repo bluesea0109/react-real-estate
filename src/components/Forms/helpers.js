@@ -238,7 +238,7 @@ export const renderPicturePickerField = ({ name, label, dispatch, required = und
   );
 };
 
-export const WhenFieldChanges = ({ field, becomes, set, to }) => (
+export const WhenFieldChanges = ({ field, becomes, set, to, when }) => (
   <Field name={set} subscription={{}}>
     {(
       // No subscription. We only use Field to get to the change function
@@ -248,8 +248,10 @@ export const WhenFieldChanges = ({ field, becomes, set, to }) => (
         {({ form, values }) => (
           <OnChange name={field}>
             {value => {
-              if (!values[set] && (value === becomes || becomes === undefined)) {
-                onChange(to);
+              if (when) {
+                if (value === becomes || becomes === undefined) {
+                  onChange(to);
+                }
               }
             }}
           </OnChange>

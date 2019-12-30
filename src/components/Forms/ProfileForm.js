@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
 import { Form as FinalForm } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { Header, Divider, Form, Image } from 'semantic-ui-react';
+import { Header, Form, Radio } from 'semantic-ui-react';
 
 import {
   email,
@@ -19,7 +19,7 @@ import {
   renderPicturePickerField,
   requiredOnlyInCalifornia,
 } from './helpers';
-import { Button, Icon, Segment } from '../Base';
+import { Button, Icon, Segment, Image, Divider } from '../Base';
 import { saveProfilePending } from '../../store/modules/profile/actions';
 import { saveTeamProfilePending } from '../../store/modules/teamProfile/actions';
 
@@ -35,6 +35,8 @@ const renderLabelWithSubHeader = (label, subHeader) =>
 const changeMsg = 'This comes from Brivity. If you want to modify this information, you will need to modify it there';
 
 const ProfileForm = () => {
+  const [personalNotificationEmailEnabled, setPersonalNotificationEmailEnabled] = useState(false);
+
   const dispatch = useDispatch();
   const auth0 = useSelector(store => store.auth0 && store.auth0.details);
   const boards = useSelector(store => store.boards && store.boards.available);
@@ -183,7 +185,7 @@ const ProfileForm = () => {
                         display: 'grid',
                         gridTemplateColumns: '1fr 1fr 1fr 1fr',
                         gridTemplateRows: '1fr 1fr 1fr 1fr',
-                        gridTemplateAreas: `"First Last Headshot Picture" "Phone Email Headshot Picture" "Dre OfficePhone Headshot Picture" "NotificationEmail NotificationEmail Website Website"`,
+                        gridTemplateAreas: `"First Last Headshot Picture" "Phone Email Headshot Picture" "Dre OfficePhone Headshot Picture" "NotificationEmail NotificationEmailToggle Website Website"`,
                         gridColumnGap: '2em',
                       }
                 }
@@ -240,9 +242,21 @@ const ProfileForm = () => {
                 <div style={{ gridArea: 'NotificationEmail' }}>
                   {renderField({
                     name: 'notificationEmail',
-                    label: renderLabelWithSubHeader('Notification Email', '( Optional, defaults to Business Notification Email if not set )'),
+                    label: renderLabelWithSubHeader('Notification Email'),
                     type: 'text',
+                    required: !personalNotificationEmailEnabled,
+                    disabled: personalNotificationEmailEnabled,
                   })}
+                </div>
+                <div style={{ gridArea: 'NotificationEmailToggle' }}>
+                  <Radio
+                    toggle
+                    label="Same as business notification email"
+                    onChange={() => setPersonalNotificationEmailEnabled(!personalNotificationEmailEnabled)}
+                    checked={personalNotificationEmailEnabled}
+                    onClick={() => setPersonalNotificationEmailEnabled(!personalNotificationEmailEnabled)}
+                    style={{ marginTop: '2.25em', opacity: personalNotificationEmailEnabled ? '1' : '0.4' }}
+                  />
                 </div>
                 <div style={{ gridArea: 'Dre' }}>
                   {renderField({
@@ -278,7 +292,10 @@ const ProfileForm = () => {
                   becomes={values.businessNotificationEmail}
                   set="notificationEmail"
                   to={values.businessNotificationEmail}
+                  when={personalNotificationEmailEnabled}
                 />
+
+                <ExternalChanges whenTrue={personalNotificationEmailEnabled} set="notificationEmail" to={values.businessNotificationEmail} />
 
                 <ExternalChanges whenTrue={picturesTeamLogo} set="teamLogo" to={picturesTeamLogo} />
 
