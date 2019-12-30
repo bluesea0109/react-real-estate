@@ -192,7 +192,7 @@ export default () => {
 
   if (!loadingCompleted) return null;
 
-  if (loadingCompleted && !onLoginUserProfileSetupComplete) {
+  if (loadingCompleted) {
     if (isMultimode && isAdmin) {
       return (
         <StepsLayout vertical={!mql.matches}>

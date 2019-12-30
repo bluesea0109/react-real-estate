@@ -29,11 +29,14 @@ export function* profileSetupOnboardingSaga() {
   try {
     const mode = yield select(onLoginMode);
     const multiUser = mode === 'multiuser';
+    const singleuser = mode === 'singleuser';
     const userIsAdmin = yield select(onLoginPermissionsTeamAdmin);
 
     userProfileCompleted = true;
 
-    if ((!multiUser && !userIsAdmin) || (multiUser && teamProfileCompleted)) yield put(setCompletedProfile());
+    if ((!multiUser && !userIsAdmin) || (multiUser && teamProfileCompleted) || (singleuser && teamProfileCompleted)) {
+      yield put(setCompletedProfile());
+    }
   } catch (err) {
     yield console.log('profileSetupOnboardingSaga err', err);
   }
