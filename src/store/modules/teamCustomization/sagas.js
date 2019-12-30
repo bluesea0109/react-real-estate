@@ -8,6 +8,7 @@ import {
   saveTeamCustomizationSuccess,
   saveTeamCustomizationError,
 } from './actions';
+import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
 import { generateTeamPostcardsPreviewPending } from '../teamPostcards/actions';
 
 import ApiService from '../../../services/api/index';
@@ -42,4 +43,5 @@ export function* saveTeamCustomizationSaga() {
 export default function*() {
   yield takeLatest(GET_TEAM_CUSTOMIZATION_PENDING, getTeamCustomizationSaga);
   yield takeLatest(SAVE_TEAM_CUSTOMIZATION_PENDING, saveTeamCustomizationSaga);
+  yield takeLatest(GET_ON_LOGIN_SUCCESS, saveTeamCustomizationSaga);
 }
