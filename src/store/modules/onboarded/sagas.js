@@ -7,7 +7,7 @@ import { SAVE_PROFILE_SUCCESS } from '../profile/actions';
 import { SAVE_TEAM_PROFILE_SUCCESS } from '../teamProfile/actions';
 import { REVIEW_CUSTOMIZATION_COMPLETED } from '../customization/actions';
 import { REVIEW_TEAM_CUSTOMIZATION_COMPLETED } from '../teamCustomization/actions';
-import { INVITE_USERS_SUCCESS } from '../inviteUsers/actions';
+import { INVITE_USERS_SUCCESS, SKIP_INVITE_USERS } from '../inviteUsers/actions';
 
 import ApiService from '../../../services/api';
 
@@ -33,7 +33,7 @@ export function* profileSetupOnboardingSaga() {
 
     userProfileCompleted = true;
 
-    if ((!multiUser && !userIsAdmin) || (multiUser && teamProfileCompleted)) yield put(setCompletedProfile(true));
+    if ((!multiUser && !userIsAdmin) || (multiUser && teamProfileCompleted)) yield put(setCompletedProfile());
   } catch (err) {
     yield console.log('profileSetupOnboardingSaga err', err);
   }
@@ -46,7 +46,7 @@ export function* teamProfileSetupOnboardingSaga() {
 
     teamProfileCompleted = true;
 
-    if (multiUser && userProfileCompleted) yield put(setCompletedProfile(true));
+    if (multiUser && userProfileCompleted) yield put(setCompletedProfile());
   } catch (err) {
     yield console.log('profileSetupOnboardingSaga err', err);
   }
@@ -150,4 +150,5 @@ export default function*() {
   yield takeLatest(REVIEW_TEAM_CUSTOMIZATION_COMPLETED, teamCustomizationOnboardingSaga);
   yield takeLatest(REVIEW_CUSTOMIZATION_COMPLETED, customizationOnboardingSaga);
   yield takeLatest(INVITE_USERS_SUCCESS, invitationOnboardingSaga);
+  yield takeLatest(SKIP_INVITE_USERS, invitationOnboardingSaga);
 }

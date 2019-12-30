@@ -23,7 +23,6 @@ import FlipCard from '../FlipCard';
 import LoadingWithMessage from '../LoadingWithMessage';
 import CustomizationWizard from './CustomizationWizard';
 import { Menu, Segment, Image, Modal, Button } from '../Base';
-import { setCompletedTeamCustomization } from '../../store/modules/onboarded/actions';
 import { getTeamListedShortcodePending, getTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
 import { saveTeamCustomizationPending, reviewTeamCustomizationCompleted } from '../../store/modules/teamCustomization/actions';
 
@@ -101,8 +100,7 @@ const CustomizeTeamForm = () => {
 
   const handleReviewComplete = () => {
     setDisplayReview(false);
-    dispatch(reviewTeamCustomizationCompleted(true));
-    dispatch(setCompletedTeamCustomization(true));
+    dispatch(reviewTeamCustomizationCompleted());
   };
 
   const onSubmit = values => {

@@ -23,7 +23,6 @@ import FlipCard from '../FlipCard';
 import LoadingWithMessage from '../LoadingWithMessage';
 import CustomizationWizard from './CustomizationWizard';
 import { Button, Icon, Image, Menu, Modal, Segment } from '../Base';
-import { setCompletedCustomization, finalizeOnboarding } from '../../store/modules/onboarded/actions';
 import { getListedShortcodePending, getSoldShortcodePending } from '../../store/modules/shortcode/actions';
 import { saveCustomizationPending, reviewCustomizationCompleted } from '../../store/modules/customization/actions';
 import { getTeamListedShortcodePending, getTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
@@ -109,9 +108,7 @@ const CustomizeTeamForm = () => {
 
   const handleReviewComplete = () => {
     setDisplayReview(false);
-    dispatch(reviewCustomizationCompleted(true));
-    dispatch(setCompletedCustomization(true));
-    if (!isMultimode || (isMultimode && !isAdmin)) dispatch(finalizeOnboarding());
+    dispatch(reviewCustomizationCompleted());
   };
 
   const onSubmit = values => {

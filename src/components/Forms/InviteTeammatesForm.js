@@ -2,8 +2,7 @@ import { Form, Header } from 'semantic-ui-react';
 import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setCompletedInviteTeammates, finalizeOnboarding } from '../../store/modules/onboarded/actions';
-import { inviteUsersPending } from '../../store/modules/inviteUsers/actions';
+import { inviteUsersPending, skipInviteUsers } from '../../store/modules/inviteUsers/actions';
 import { Divider, List, Segment, Item, Icon, Button, Message, Image } from '../Base';
 import { objectIsEmpty } from './helpers';
 import './checkbox.css';
@@ -119,8 +118,7 @@ const InviteTeammatesForm = () => {
   };
 
   const handleContinue = () => {
-    dispatch(setCompletedInviteTeammates(true));
-    dispatch(finalizeOnboarding());
+    dispatch(skipInviteUsers());
   };
 
   const createInviteField = profile => {

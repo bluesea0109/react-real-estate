@@ -69,7 +69,7 @@ export default function customization(state = initialState, action) {
     case REVIEW_CUSTOMIZATION_COMPLETED:
       return {
         ...state,
-        reviewed: action.payload,
+        reviewed: true,
       };
 
     default:

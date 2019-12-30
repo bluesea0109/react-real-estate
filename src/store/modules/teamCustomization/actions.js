@@ -34,6 +34,6 @@ export function saveTeamCustomizationError(error) {
   return createErrorAction(SAVE_TEAM_CUSTOMIZATION_ERROR, error);
 }
 
-export function reviewTeamCustomizationCompleted(payload) {
-  return createAction(REVIEW_TEAM_CUSTOMIZATION_COMPLETED, payload);
+export function reviewTeamCustomizationCompleted() {
+  return createAction(REVIEW_TEAM_CUSTOMIZATION_COMPLETED);
 }

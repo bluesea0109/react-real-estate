@@ -67,7 +67,7 @@ export default function teamCustomization(state = initialState, action) {
     case REVIEW_TEAM_CUSTOMIZATION_COMPLETED:
       return {
         ...state,
-        reviewed: action.payload,
+        reviewed: true,
       };
 
     default:
