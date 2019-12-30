@@ -73,7 +73,6 @@ const CustomizeTeamForm = () => {
   const customizationError = useSelector(store => store.customization && store.customization.error);
 
   const isMultimode = useSelector(store => store.onLogin.mode === 'multiuser');
-  const isAdmin = useSelector(store => store.onLogin && store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
   const postcardsPreviewIsPending = useSelector(store => store.postcards && store.postcards.pending);
   const postcardsPreviewError = useSelector(store => store.postcards && store.postcards.error);
   const postcardsPreview = useSelector(store => store.postcards && store.postcards.available);
