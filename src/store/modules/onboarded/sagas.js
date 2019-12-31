@@ -14,8 +14,6 @@ import ApiService from '../../../services/api';
 export const onLoginMode = state => state.onLogin && state.onLogin.mode;
 export const onLoginPermissionsTeamAdmin = state => state.onLogin && state.onLogin.permissions && state.onLogin.permissions.teamAdmin;
 
-export const onLoginUserProfile = state => state.onLogin && state.onLogin.userProfile;
-export const onLoginTeamProfile = state => state.onLogin && state.onLogin.teamProfile;
 export const onLoginUserBranding = state => state.onLogin && state.onLogin.userBranding;
 export const onLoginTeamBranding = state => state.onLogin && state.onLogin.teamBranding;
 
@@ -68,10 +66,12 @@ export function* customizationOnboardingSaga() {
   try {
     const mode = yield select(onLoginMode);
     const multiUser = mode === 'multiuser';
+    const singleuser = mode === 'singleuser';
     const userIsAdmin = yield select(onLoginPermissionsTeamAdmin);
 
     yield put(setCompletedCustomization());
-    if (!multiUser && !userIsAdmin) yield put(finalizeOnboarding());
+    if (multiUser && !userIsAdmin) yield put(finalizeOnboarding());
+    if (singleuser) yield put(finalizeOnboarding());
   } catch (err) {
     yield console.log('customizationOnboardingSaga err', err);
   }
@@ -116,8 +116,6 @@ export function* initialOnboardingSaga() {
     const onboarded = yield select(onboardingComplete);
     const stageOneCompleted = yield select(onboardingProfileSetupComplete);
 
-    const userProfilePresent = yield select(onLoginUserProfile);
-    const teamProfilePresent = yield select(onLoginTeamProfile);
     const userBrandingPresent = yield select(onLoginUserBranding);
     const teamBrandingPresent = yield select(onLoginTeamBranding);
 
@@ -126,13 +124,6 @@ export function* initialOnboardingSaga() {
     } else {
       if (stageOneCompleted) {
         yield put(setCompletedProfile());
-      } else {
-        if (userProfilePresent) {
-          yield profileSetupOnboardingSaga();
-        }
-        if (teamProfilePresent) {
-          yield teamProfileSetupOnboardingSaga();
-        }
       }
 
       if (teamBrandingPresent) {
