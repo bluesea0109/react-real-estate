@@ -510,7 +510,7 @@ const CustomizeTeamForm = () => {
             <div style={{ gridArea: 'Kwkly' }}>
               {renderUrlField({
                 name: `${listingType}_kwkly`,
-                label: labelWithPopup('Kwkly URL', popup('Some message')),
+                label: labelWithPopup('KWKLY Call to Action', popup('Some message')),
                 type: 'text',
                 dispatch: dispatch,
                 validate: !kwklyEnabled ? null : composeValidators(required, maxLength(44)),
