@@ -58,7 +58,6 @@ const MailoutDetailsPage = () => {
       setNumberOfRecipients(details.recipientCount);
       setOnlyOnce(true);
     }
-
     // if (details && details.recipientCount === numberOfRecipients) {
     //   setOnlyOnce(false);
     // }
