@@ -10,6 +10,7 @@
     "lint": "./node_modules/.bin/eslint --ext .js,.jsx --ignore-pattern public tmp artifacts .",
     "format": "prettier --write 'src/**/*.{js,jsx,json}'",
     "generate-artifacts": "node utils/generate-testing-artifacts",
+    "create": "node utils/create-campaigns",
     "reset": "node utils/reset"
   },
   "dependencies": {
