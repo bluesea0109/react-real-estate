@@ -11,8 +11,6 @@ import {
 import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
 import { generatePostcardsPreviewPending } from '../postcards/actions';
 import ApiService from '../../../services/api/index';
-import { SAVE_TEAM_CUSTOMIZATION_PENDING } from '../teamCustomization/actions';
-import { saveTeamCustomizationSaga } from '../teamCustomization/sagas';
 
 export const getSelectedPeerId = state => state.peer.peerId;
 export const customizationToSave = state => state.customization.toSave;
