@@ -18,10 +18,14 @@ import {
   UPDATE_MAILOUT_PENDING,
   UPDATE_MAILOUT_SUCCESS,
   UPDATE_MAILOUT_ERROR,
+  MODIFY_MAILOUT_PENDING,
+  MODIFY_MAILOUT_SUCCESS,
+  MODIFY_MAILOUT_ERROR,
 } from './actions';
 
 const initialState = {
   pending: false,
+  modifyPending: false,
   submitPending: false,
   stopPending: false,
   updateMailoutSizePending: false,
@@ -29,11 +33,13 @@ const initialState = {
   updatePending: false,
 
   mailoutId: null,
+  mailoutEdit: null,
   mailoutSize: null,
   needsUpdate: null,
   details: null,
 
   error: null,
+  modifyError: null,
   submitError: null,
   stopError: null,
   updateMailoutSizeError: null,
@@ -64,6 +70,28 @@ export default function mailout(state = initialState, action) {
         ...state,
         pending: false,
         error: action.error,
+      };
+
+    case MODIFY_MAILOUT_PENDING:
+      return {
+        ...state,
+        modifyPending: true,
+        mailoutEdit: action.payload,
+        modifyError: null,
+      };
+
+    case MODIFY_MAILOUT_SUCCESS:
+      return {
+        ...state,
+        modifyPending: false,
+        mailoutEdit: null,
+      };
+
+    case MODIFY_MAILOUT_ERROR:
+      return {
+        ...state,
+        modifyPending: false,
+        modifyError: action.error,
       };
 
     case SUBMIT_MAILOUT_PENDING:

@@ -4,6 +4,9 @@ import {
   GET_MAILOUT_PENDING,
   getMailoutSuccess,
   getMailoutError,
+  MODIFY_MAILOUT_PENDING,
+  modifyMailoutSuccess,
+  modifyMailoutError,
   SUBMIT_MAILOUT_PENDING,
   submitMailoutSuccess,
   submitMailoutError,
@@ -25,6 +28,7 @@ import ApiService from '../../../services/api/index';
 export const getSelectedPeerId = state => state.peer.peerId;
 export const getMailoutId = state => state.mailout.mailoutId;
 export const getMailoutSize = state => state.mailout.mailoutSize;
+export const getMailoutEdit = state => state.mailout.mailoutEdit;
 
 export function* getMailoutSaga({ peerId = null }) {
   try {
@@ -35,6 +39,22 @@ export function* getMailoutSaga({ peerId = null }) {
     yield put(getMailoutSuccess(response));
   } catch (err) {
     yield put(getMailoutError(err.message));
+  }
+}
+
+export function* modifyMailoutSaga({ peerId = null }) {
+  try {
+    const mailoutId = yield select(getMailoutId);
+    const mailoutEdit = yield select(getMailoutEdit);
+    const { path, method } = peerId ? ApiService.directory.peer.mailout.edit(mailoutId, peerId) : ApiService.directory.user.mailout.edit(mailoutId);
+
+    const response = yield call(ApiService[method], path, mailoutEdit);
+
+    console.log('modifyMailoutSaga response', response);
+
+    yield put(modifyMailoutSuccess(response));
+  } catch (err) {
+    yield put(modifyMailoutError(err.message));
   }
 }
 
@@ -130,6 +150,16 @@ export function* checkIfPeerSelectedGetMailoutSaga() {
   }
 }
 
+export function* checkIfPeerSelectedModifyMailoutSaga() {
+  const peerId = yield select(getSelectedPeerId);
+
+  if (peerId) {
+    yield modifyMailoutSaga({ peerId });
+  } else {
+    yield modifyMailoutSaga({});
+  }
+}
+
 export function* checkIfPeerSelectedSubmitMailoutSaga() {
   const peerId = yield select(getSelectedPeerId);
 
@@ -173,6 +203,7 @@ export function* checkIfPeerSelectedNeedsUpdateSaga() {
 export default function*() {
   yield takeEvery(GET_MAILOUT_PENDING, checkIfPeerSelectedGetMailoutSaga);
   yield takeEvery(GET_MAILOUT_PENDING, checkIfPeerSelectedNeedsUpdateSaga);
+  yield takeEvery(MODIFY_MAILOUT_PENDING, checkIfPeerSelectedModifyMailoutSaga);
   yield takeEvery(SUBMIT_MAILOUT_PENDING, checkIfPeerSelectedSubmitMailoutSaga);
   yield takeEvery(STOP_MAILOUT_PENDING, checkIfPeerSelectedStopMailoutSaga);
   yield takeEvery(UPDATE_MAILOUT_SIZE_PENDING, checkIfPeerSelectedUpdatetMailoutSizeSaga);
