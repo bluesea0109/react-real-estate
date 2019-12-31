@@ -2,6 +2,9 @@ import { Menu } from 'semantic-ui-react';
 import styled from 'styled-components';
 
 export default styled(Menu)`
+  position: sticky;
+  top: 80px;
+
   display: grid !important;
   grid-template-rows: repeat(5, 1fr);
   grid-template-columns: 1fr;
