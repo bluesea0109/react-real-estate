@@ -142,6 +142,7 @@ const directory = {
       mailoutSize: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit/mailoutSize`, method: 'put' }),
       stop: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/stop`, method: 'post' }),
       submit: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/submit`, method: 'post' }),
+      needsUpdate: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/needsUpdate`, method: 'get' }),
     },
     customization: {
       get: () => ({ path: `/api/user/settings/branding`, method: 'get' }),
@@ -160,6 +161,7 @@ const directory = {
       mailoutSize: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit/mailoutSize`, method: 'put' }),
       stop: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/stop`, method: 'post' }),
       submit: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/submit`, method: 'post' }),
+      needsUpdate: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/needsUpdate`, method: 'get' }),
     },
     customization: {
       get: peerId => ({ path: `/api/user/peer/${peerId}/settings/branding`, method: 'get' }),

@@ -13,6 +13,9 @@ import {
   UPDATE_MAILOUT_SIZE_PENDING,
   updateMailoutSizeSuccess,
   updateMailoutSizeError,
+  checkIfMailoutNeedsUpdatePending,
+  checkIfMailoutNeedsUpdateSuccess,
+  checkIfMailoutNeedsUpdateError,
 } from './actions';
 import ApiService from '../../../services/api/index';
 
@@ -75,6 +78,22 @@ export function* updatetMailoutSizeSaga({ peerId = null }) {
   }
 }
 
+export function* checkIfMailoutNeedsUpdateSaga({ peerId = null }) {
+  try {
+    yield put(checkIfMailoutNeedsUpdatePending());
+
+    const mailoutId = yield select(getMailoutId);
+    const { path, method } = peerId
+      ? ApiService.directory.peer.mailout.needsUpdate(mailoutId, peerId)
+      : ApiService.directory.user.mailout.needsUpdate(mailoutId);
+    const response = yield call(ApiService[method], path);
+
+    yield put(checkIfMailoutNeedsUpdateSuccess(response));
+  } catch (err) {
+    yield put(checkIfMailoutNeedsUpdateError(err.message));
+  }
+}
+
 export function* checkIfPeerSelectedGetMailoutSaga() {
   const peerId = yield select(getSelectedPeerId);
 
@@ -115,8 +134,19 @@ export function* checkIfPeerSelectedUpdatetMailoutSizeSaga() {
   }
 }
 
+export function* checkIfPeerSelectedNeedsUpdateSaga() {
+  const peerId = yield select(getSelectedPeerId);
+
+  if (peerId) {
+    yield checkIfMailoutNeedsUpdateSaga({ peerId });
+  } else {
+    yield checkIfMailoutNeedsUpdateSaga({});
+  }
+}
+
 export default function*() {
   yield takeEvery(GET_MAILOUT_PENDING, checkIfPeerSelectedGetMailoutSaga);
+  yield takeEvery(GET_MAILOUT_PENDING, checkIfPeerSelectedNeedsUpdateSaga);
   yield takeEvery(SUBMIT_MAILOUT_PENDING, checkIfPeerSelectedSubmitMailoutSaga);
   yield takeEvery(STOP_MAILOUT_PENDING, checkIfPeerSelectedStopMailoutSaga);
   yield takeEvery(UPDATE_MAILOUT_SIZE_PENDING, checkIfPeerSelectedUpdatetMailoutSizeSaga);

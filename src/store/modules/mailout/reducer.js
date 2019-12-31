@@ -12,14 +12,28 @@ import {
   UPDATE_MAILOUT_SIZE_PENDING,
   UPDATE_MAILOUT_SIZE_SUCCESS,
   UPDATE_MAILOUT_SIZE_ERROR,
+  CHECK_IF_MAILOUT_NEEDS_UPDATE_PENDING,
+  CHECK_IF_MAILOUT_NEEDS_UPDATE_SUCCESS,
+  CHECK_IF_MAILOUT_NEEDS_UPDATE_ERROR,
 } from './actions';
 
 const initialState = {
   pending: false,
+  submitPending: false,
+  stopPending: false,
+  updateMailoutSizePending: false,
+  needsUpdatePending: false,
+
   mailoutId: null,
   mailoutSize: null,
+  needsUpdate: null,
   details: null,
+
   error: null,
+  submitError: null,
+  stopError: null,
+  updateMailoutSizeError: null,
+  needsUpdateError: null,
 };
 
 export default function mailout(state = initialState, action) {
@@ -50,47 +64,47 @@ export default function mailout(state = initialState, action) {
     case SUBMIT_MAILOUT_PENDING:
       return {
         ...state,
-        pending: true,
+        submitPending: true,
         mailoutId: action.payload,
-        error: null,
+        submitError: null,
       };
 
     case SUBMIT_MAILOUT_SUCCESS:
       return {
         ...state,
-        pending: false,
+        submitPending: false,
         details: action.payload,
-        error: null,
+        submitError: null,
       };
 
     case SUBMIT_MAILOUT_ERROR:
       return {
         ...state,
-        pending: false,
-        error: action.error,
+        submitPending: false,
+        submitError: action.error,
       };
 
     case STOP_MAILOUT_PENDING:
       return {
         ...state,
-        pending: true,
+        stopPending: true,
         mailoutId: action.payload,
-        error: null,
+        stopError: null,
       };
 
     case STOP_MAILOUT_SUCCESS:
       return {
         ...state,
-        pending: false,
+        stopPending: false,
         details: action.payload,
-        error: null,
+        stopError: null,
       };
 
     case STOP_MAILOUT_ERROR:
       return {
         ...state,
-        pending: false,
-        error: action.error,
+        stopPending: false,
+        stopError: action.error,
       };
 
     case RESET_MAILOUT:
@@ -104,24 +118,47 @@ export default function mailout(state = initialState, action) {
     case UPDATE_MAILOUT_SIZE_PENDING:
       return {
         ...state,
-        pending: false,
+        updateMailoutSizePending: false,
         mailoutSize: action.payload,
-        error: null,
+        updateMailoutSizeError: null,
       };
 
     case UPDATE_MAILOUT_SIZE_SUCCESS:
       return {
         ...state,
-        pending: true,
+        updateMailoutSizePending: true,
         mailoutSize: null,
-        error: null,
+        updateMailoutSizeError: null,
       };
 
     case UPDATE_MAILOUT_SIZE_ERROR:
       return {
         ...state,
-        pending: false,
-        error: action.error,
+        updateMailoutSizePending: false,
+        updateMailoutSizeError: action.error,
+      };
+
+    case CHECK_IF_MAILOUT_NEEDS_UPDATE_PENDING:
+      return {
+        ...state,
+        needsUpdatePending: false,
+        needsUpdate: null,
+        needsUpdateError: null,
+      };
+
+    case CHECK_IF_MAILOUT_NEEDS_UPDATE_SUCCESS:
+      return {
+        ...state,
+        needsUpdatePending: true,
+        needsUpdate: action.payload,
+        needsUpdateError: null,
+      };
+
+    case CHECK_IF_MAILOUT_NEEDS_UPDATE_ERROR:
+      return {
+        ...state,
+        needsUpdatePending: false,
+        needsUpdateError: action.error,
       };
 
     default:
