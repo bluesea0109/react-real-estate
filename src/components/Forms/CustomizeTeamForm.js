@@ -240,7 +240,7 @@ const CustomizeTeamForm = () => {
                 : {
                     display: 'grid',
                     gridTemplateColumns: '2fr 1fr .75fr',
-                    gridTemplateRows: '4em 4em 2em 6em',
+                    gridTemplateRows: '4em 4em 3em 6em',
                     gridTemplateAreas: `
                       "ChooseTemplate Headline Headline"
                       "ChooseTemplate NumberOfPostcards NumberOfPostcards"
@@ -397,7 +397,7 @@ const CustomizeTeamForm = () => {
               </FormSpy>
 
               {shortenedURL && (
-                <Label style={!isMobile() && { marginTop: '2em' }}>
+                <Label style={{ marginTop: !isMobile() && '2em' }}>
                   <Icon name="linkify" />
                   Shortened URL:
                   <Label.Detail>

@@ -284,19 +284,20 @@ const renderColorRadio = field => {
       <Slide
         tag="a"
         index={field.radioValue}
-        style={
-          {
-            /*minHeight: '13em'*/
-          }
-        }
+        style={{
+          minWidth: isMobile() && '60px',
+          maxWidth: '150px',
+          marginTop: isMobile() && '-2em',
+        }}
       >
-        <Form.Radio
-          checked={field.input.value === field.radioValue}
-          name={field.input.name}
-          onChange={(e, { checked }) => field.input.onChange(field.radioValue)}
-          style={{ visibility: 'hidden' }}
-        />
         <div style={{ margin: '1em' }}>
+          <input
+            type="radio"
+            checked={field.input.value === field.radioValue}
+            name={field.input.name}
+            onChange={(e, { checked }) => field.input.onChange(field.radioValue)}
+            style={{ visibility: 'hidden', display: 'none' }}
+          />
           <div
             style={
               field.input.value === field.radioValue
@@ -304,7 +305,7 @@ const renderColorRadio = field => {
                 : { border: '1px solid lightgray', margin: 0, padding: '0.5em', borderRadius: '5px' }
             }
           >
-            <svg viewBox="0 0 220 170" xmlns="http://www.w3.org/2000/svg" onClick={e => field.input.onChange(field.radioValue)}>
+            <svg style={{ marginTop: '2px' }} viewBox="0 0 220 170" xmlns="http://www.w3.org/2000/svg" onClick={e => field.input.onChange(field.radioValue)}>
               <g color={`${field.hex}`}>
                 <rect x="5" y="5" width="210" height="165" rx="5" fill="currentColor" />
               </g>
@@ -321,19 +322,19 @@ const renderImageRadio = field => {
     <Slide
       tag="a"
       index={field.radioValue}
-      style={
-        {
-          /*minHeight: '15em'*/
-        }
-      }
+      style={{
+        minWidth: '138px',
+        maxWidth: '248px',
+      }}
     >
-      <Form.Radio
-        checked={field.input.value === field.radioValue}
-        name={field.input.name}
-        onChange={(e, { checked }) => field.input.onChange(field.radioValue)}
-        style={{ visibility: 'hidden' }}
-      />
       <div style={{ margin: '1em' }}>
+        <input
+          type="radio"
+          checked={field.input.value === field.radioValue}
+          name={field.input.name}
+          onChange={(e, { checked }) => field.input.onChange(field.radioValue)}
+          style={{ visibility: 'hidden', display: 'none' }}
+        />
         <div
           style={
             field.input.value === field.radioValue
@@ -403,10 +404,10 @@ export const renderCarouselField = ({ name, label, type, required = undefined, v
       {({ input, meta }) => {
         return (
           <Form.Field required={required}>
-            <label style={{ marginBottom: '-2em' }}>{label}</label>
+            <label>{label}</label>
 
             <CarouselProvider
-              visibleSlides={visibleSlides}
+              visibleSlides={isMobile() ? 1 : visibleSlides}
               totalSlides={totalSlides}
               step={step}
               naturalSlideWidth={360}
@@ -423,6 +424,8 @@ export const renderCarouselField = ({ name, label, type, required = undefined, v
                 style={{
                   overflowX: 'hidden',
                   gridArea: 'Slider',
+                  minWidth: '148px',
+                  // maxWidth: '248px'
                 }}
               >
                 {resolveSlider(type)}
