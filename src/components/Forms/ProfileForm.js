@@ -96,6 +96,9 @@ const ProfileForm = () => {
       if (onLoginTeamProfile) {
         business._id = onLoginTeamProfile._id;
         business._rev = onLoginTeamProfile._rev;
+        business.brivitySync = onLoginTeamProfile.brivitySync;
+        business.phone = values.officePhone || onLoginTeamProfile.phone;
+        business.website = values.businessWebsite || onLoginTeamProfile.website;
       }
 
       saveTeamProfile(business);
