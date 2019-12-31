@@ -16,6 +16,9 @@ import {
   checkIfMailoutNeedsUpdatePending,
   checkIfMailoutNeedsUpdateSuccess,
   checkIfMailoutNeedsUpdateError,
+  updateMailoutPending,
+  updateMailoutSuccess,
+  updateMailoutError,
 } from './actions';
 import ApiService from '../../../services/api/index';
 
@@ -78,6 +81,20 @@ export function* updatetMailoutSizeSaga({ peerId = null }) {
   }
 }
 
+export function* UpdateMailoutSaga({ peerId = null }) {
+  try {
+    yield put(updateMailoutPending());
+
+    const mailoutId = yield select(getMailoutId);
+    const { path, method } = peerId ? ApiService.directory.peer.mailout.update(mailoutId, peerId) : ApiService.directory.user.mailout.update(mailoutId);
+    const response = yield call(ApiService[method], path);
+
+    yield put(updateMailoutSuccess(response));
+  } catch (err) {
+    yield put(updateMailoutError(err.message));
+  }
+}
+
 export function* checkIfMailoutNeedsUpdateSaga({ peerId = null }) {
   try {
     yield put(checkIfMailoutNeedsUpdatePending());
@@ -87,8 +104,17 @@ export function* checkIfMailoutNeedsUpdateSaga({ peerId = null }) {
       ? ApiService.directory.peer.mailout.needsUpdate(mailoutId, peerId)
       : ApiService.directory.user.mailout.needsUpdate(mailoutId);
     const response = yield call(ApiService[method], path);
+    const { changed } = response;
 
     yield put(checkIfMailoutNeedsUpdateSuccess(response));
+
+    if (changed) {
+      if (peerId) {
+        yield UpdateMailoutSaga({ peerId });
+      } else {
+        yield UpdateMailoutSaga({});
+      }
+    }
   } catch (err) {
     yield put(checkIfMailoutNeedsUpdateError(err.message));
   }

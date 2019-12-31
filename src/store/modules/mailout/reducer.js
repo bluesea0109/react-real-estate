@@ -15,6 +15,9 @@ import {
   CHECK_IF_MAILOUT_NEEDS_UPDATE_PENDING,
   CHECK_IF_MAILOUT_NEEDS_UPDATE_SUCCESS,
   CHECK_IF_MAILOUT_NEEDS_UPDATE_ERROR,
+  UPDATE_MAILOUT_PENDING,
+  UPDATE_MAILOUT_SUCCESS,
+  UPDATE_MAILOUT_ERROR,
 } from './actions';
 
 const initialState = {
@@ -23,6 +26,7 @@ const initialState = {
   stopPending: false,
   updateMailoutSizePending: false,
   needsUpdatePending: false,
+  updatePending: false,
 
   mailoutId: null,
   mailoutSize: null,
@@ -34,6 +38,7 @@ const initialState = {
   stopError: null,
   updateMailoutSizeError: null,
   needsUpdateError: null,
+  updateError: null,
 };
 
 export default function mailout(state = initialState, action) {
@@ -159,6 +164,27 @@ export default function mailout(state = initialState, action) {
         ...state,
         needsUpdatePending: false,
         needsUpdateError: action.error,
+      };
+
+    case UPDATE_MAILOUT_PENDING:
+      return {
+        ...state,
+        updatePending: true,
+        updateError: null,
+      };
+
+    case UPDATE_MAILOUT_SUCCESS:
+      return {
+        ...state,
+        updatePending: false,
+        details: action.payload,
+      };
+
+    case UPDATE_MAILOUT_ERROR:
+      return {
+        ...state,
+        updatePending: false,
+        updateError: action.error,
       };
 
     default:

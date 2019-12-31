@@ -40,8 +40,10 @@ const MailoutDetailsPage = () => {
   const [currentPeerState, setCurrentPeerState] = useState(null);
 
   const isLoading = useSelector(store => store.mailout.pending);
+  const isUpdating = useSelector(store => store.mailout.updatePending);
   const details = useSelector(store => store.mailout.details);
   const error = useSelector(store => store.mailout.error);
+  const updateError = useSelector(store => store.mailout.updateError);
   const peerId = useSelector(store => store.peer.peerId);
 
   useEffect(() => {
@@ -149,7 +151,7 @@ const MailoutDetailsPage = () => {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column width={16}>
-              {!isLoading && !error && details && (
+              {!isLoading && !error && !isUpdating && !updateError && details && (
                 <ItemLayout fluid key={details._id}>
                   {ListHeader({
                     data: details,
@@ -201,13 +203,14 @@ const MailoutDetailsPage = () => {
                   </ItemBodyLayoutV2>
                 </ItemLayout>
               )}
-              {!isLoading && !error && details && <GoogleMapItem data={details} />}
+              {!isLoading && !error && !isUpdating && !updateError && details && <GoogleMapItem data={details} />}
             </Grid.Column>
           </Grid.Row>
         </Grid>
       </Segment>
-      {isLoading && !error && Loading()}
+      {isLoading && isUpdating && !error && !updateError && Loading()}
       {error && <Message error>Oh snap! {error}.</Message>}
+      {updateError && <Message error>Oh snap! {updateError}.</Message>}
     </Page>
   );
 };
