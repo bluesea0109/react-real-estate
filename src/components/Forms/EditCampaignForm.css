@@ -1,0 +1,43 @@
+.ui.menu .ui.dropdown .menu > .active.item {
+  background: rgba(0, 0, 0, 0.3) !important;
+  font-weight: 700 !important;
+  color: rgba(0, 0, 0, 0.95) !important;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-areas: '. . . .' '. . . .' '. . . .';
+}
+
+.block-picker {
+  /*background-color: red;*/
+  box-shadow: unset !important;
+  border: 1px solid lightgray;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1em;
+}
+
+.block-picker > div:nth-child(3) {
+  /*background-color: red;*/
+  padding: 5px !important;
+}
+
+.block-picker > div:nth-child(3) > div:nth-child(1) {
+  /*background-color: blue;*/
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.block-picker > div:nth-child(3) > div:nth-child(1) > span {
+  /*background-color: yellow;*/
+  flex-basis: 0;
+  flex-grow: 1;
+}
+
+.block-picker > div:nth-child(3) > div:nth-child(2) {
+  display: none;
+}

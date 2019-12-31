@@ -6,6 +6,7 @@ import { useLastLocation } from 'react-router-last-location';
 import { Button, Header, Grid, Menu, Message, Page, Segment } from '../components/Base';
 import { getMailoutPending } from '../store/modules/mailout/actions';
 import Loading from '../components/Loading';
+import EditCampaignForm from '../components/Forms/EditCampaignForm';
 
 const MailoutDetailsPage = () => {
   const history = useHistory();
@@ -58,7 +59,7 @@ const MailoutDetailsPage = () => {
               </Menu.Menu>
             </Menu>
           </Grid.Row>
-          <Grid.Row></Grid.Row>
+          <Grid.Row>{details && <EditCampaignForm data={details} />}</Grid.Row>
         </Grid>
       </Segment>
       {isLoading && !error && Loading()}
