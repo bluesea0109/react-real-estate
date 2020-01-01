@@ -15,6 +15,15 @@ import ApiService from '../../../services/api/index';
 export const getSelectedPeerId = state => state.peer.peerId;
 export const customizationToSave = state => state.customization.toSave;
 
+export function* peerListingInitialSaga(peerId) {
+  try {
+    const { path, method } = ApiService.directory.peer.listing.initial(peerId);
+    return yield call(ApiService[method], path);
+  } catch (err) {
+    yield console.log('peerListingInitialSaga err', err);
+  }
+}
+
 export function* getCustomizationSaga({ peerId = null }) {
   try {
     const { path, method } = peerId ? ApiService.directory.peer.customization.get() : ApiService.directory.user.customization.get();
@@ -36,6 +45,11 @@ export function* saveCustomizationSaga({ peerId = null }) {
 
     yield put(saveCustomizationSuccess(response));
     yield put(generatePostcardsPreviewPending());
+
+    if (peerId) {
+      const peerListingsInitial = yield peerListingInitialSaga(peerId);
+      yield console.log('saveCustomizationSaga peerListingsInitial', peerListingsInitial);
+    }
   } catch (err) {
     yield put(saveCustomizationError(err.message));
   }

@@ -25,15 +25,19 @@ let teamProfileCompleted = false;
 
 export function* profileSetupOnboardingSaga() {
   try {
-    const mode = yield select(onLoginMode);
-    const multiUser = mode === 'multiuser';
-    const singleuser = mode === 'singleuser';
-    const userIsAdmin = yield select(onLoginPermissionsTeamAdmin);
+    const onboarded = yield select(onboardingComplete);
 
-    userProfileCompleted = true;
+    if (!onboarded) {
+      const mode = yield select(onLoginMode);
+      const multiUser = mode === 'multiuser';
+      const singleuser = mode === 'singleuser';
+      const userIsAdmin = yield select(onLoginPermissionsTeamAdmin);
 
-    if ((!multiUser && !userIsAdmin) || (multiUser && teamProfileCompleted) || (singleuser && teamProfileCompleted)) {
-      yield put(setCompletedProfile());
+      userProfileCompleted = true;
+
+      if ((!multiUser && !userIsAdmin) || (multiUser && teamProfileCompleted) || (singleuser && teamProfileCompleted)) {
+        yield put(setCompletedProfile());
+      }
     }
   } catch (err) {
     yield console.log('profileSetupOnboardingSaga err', err);
@@ -42,38 +46,19 @@ export function* profileSetupOnboardingSaga() {
 
 export function* teamProfileSetupOnboardingSaga() {
   try {
-    const mode = yield select(onLoginMode);
-    const multiUser = mode === 'multiuser';
-    const singleuser = mode === 'singleuser';
+    const onboarded = yield select(onboardingComplete);
 
-    teamProfileCompleted = true;
+    if (!onboarded) {
+      const mode = yield select(onLoginMode);
+      const multiUser = mode === 'multiuser';
+      const singleuser = mode === 'singleuser';
 
-    if ((multiUser && userProfileCompleted) || (singleuser && userProfileCompleted)) yield put(setCompletedProfile());
+      teamProfileCompleted = true;
+
+      if ((multiUser && userProfileCompleted) || (singleuser && userProfileCompleted)) yield put(setCompletedProfile());
+    }
   } catch (err) {
     yield console.log('profileSetupOnboardingSaga err', err);
-  }
-}
-
-export function* teamCustomizationOnboardingSaga() {
-  try {
-    yield put(setCompletedTeamCustomization());
-  } catch (err) {
-    yield console.log('teamCustomizationOnboardingSaga err', err);
-  }
-}
-
-export function* customizationOnboardingSaga() {
-  try {
-    const mode = yield select(onLoginMode);
-    const multiUser = mode === 'multiuser';
-    const singleuser = mode === 'singleuser';
-    const userIsAdmin = yield select(onLoginPermissionsTeamAdmin);
-
-    yield put(setCompletedCustomization());
-    if (multiUser && !userIsAdmin) yield put(finalizeOnboarding());
-    if (singleuser) yield put(finalizeOnboarding());
-  } catch (err) {
-    yield console.log('customizationOnboardingSaga err', err);
   }
 }
 
@@ -97,15 +82,69 @@ export function* finalizeOnboardingSaveCustomizationSaga(currentCustomization) {
   }
 }
 
+export function* finalizeOnboardingUserListingInitialSaga() {
+  try {
+    const { path, method } = ApiService.directory.user.listing.initial();
+    return yield call(ApiService[method], path);
+  } catch (err) {
+    yield console.log('finalizeOnboardingUserListingInitialSaga err', err);
+  }
+}
+
+export function* teamCustomizationOnboardingSaga() {
+  try {
+    const onboarded = yield select(onboardingComplete);
+
+    if (!onboarded) {
+      yield put(setCompletedTeamCustomization());
+    }
+  } catch (err) {
+    yield console.log('teamCustomizationOnboardingSaga err', err);
+  }
+}
+
+export function* customizationOnboardingSaga() {
+  try {
+    const onboarded = yield select(onboardingComplete);
+
+    if (!onboarded) {
+      const mode = yield select(onLoginMode);
+      const multiUser = mode === 'multiuser';
+      const singleuser = mode === 'singleuser';
+      const userIsAdmin = yield select(onLoginPermissionsTeamAdmin);
+
+      yield put(setCompletedCustomization());
+      if ((multiUser && !userIsAdmin) || singleuser) {
+        const currentCustomization = yield finalizeOnboardingGetCustomizationSaga();
+        const updatedCustomization = yield finalizeOnboardingSaveCustomizationSaga(currentCustomization);
+        yield console.log('customizationOnboardingSaga updatedCustomization', updatedCustomization);
+
+        const listingsInitial = yield finalizeOnboardingUserListingInitialSaga();
+        yield console.log('customizationOnboardingSaga listingsInitial', listingsInitial);
+
+        yield put(finalizeOnboarding());
+      }
+    }
+  } catch (err) {
+    yield console.log('customizationOnboardingSaga err', err);
+  }
+}
+
 export function* invitationOnboardingSaga() {
   try {
-    const currentCustomization = yield finalizeOnboardingGetCustomizationSaga();
-    const updatedCustomization = yield finalizeOnboardingSaveCustomizationSaga(currentCustomization);
+    const onboarded = yield select(onboardingComplete);
 
-    yield console.log('invitationOnboardingSaga updatedCustomization', updatedCustomization);
+    if (!onboarded) {
+      const currentCustomization = yield finalizeOnboardingGetCustomizationSaga();
+      const updatedCustomization = yield finalizeOnboardingSaveCustomizationSaga(currentCustomization);
+      yield console.log('invitationOnboardingSaga updatedCustomization', updatedCustomization);
 
-    yield put(setCompletedInviteTeammates());
-    yield put(finalizeOnboarding());
+      const listingsInitial = yield finalizeOnboardingUserListingInitialSaga();
+      yield console.log('invitationOnboardingSaga listingsInitial', listingsInitial);
+
+      yield put(setCompletedInviteTeammates());
+      yield put(finalizeOnboarding());
+    }
   } catch (err) {
     yield console.log('invitationOnboardingSaga err', err);
   }

@@ -136,6 +136,9 @@ const directory = {
   },
 
   user: {
+    listing: {
+      initial: () => ({ path: `/api/user/listing/mailout/initial?skipEmailNotification=true`, method: 'post' }),
+    },
     mailout: {
       list: () => ({ path: `/api/user/mailout`, method: 'get' }),
       get: mailoutId => ({ path: `/api/user/mailout/${mailoutId}?include_destinations=true`, method: 'get' }),
@@ -157,6 +160,9 @@ const directory = {
   },
 
   peer: {
+    listing: {
+      initial: peerId => ({ path: `/api/user/peer/${peerId}/listing/mailout/initial?skipEmailNotification=true`, method: 'post' }),
+    },
     mailout: {
       list: peerId => ({ path: `/api/user/peer/${peerId}/mailout`, method: 'get' }),
       get: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}?include_destinations=true`, method: 'get' }),
