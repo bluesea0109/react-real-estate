@@ -6,8 +6,9 @@ import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
 import { SAVE_PROFILE_SUCCESS } from '../profile/actions';
 import { SAVE_TEAM_PROFILE_SUCCESS } from '../teamProfile/actions';
 import { REVIEW_CUSTOMIZATION_COMPLETED } from '../customization/actions';
-import { REVIEW_TEAM_CUSTOMIZATION_COMPLETED } from '../teamCustomization/actions';
 import { INVITE_USERS_SUCCESS, SKIP_INVITE_USERS } from '../inviteUsers/actions';
+import { REVIEW_TEAM_CUSTOMIZATION_COMPLETED } from '../teamCustomization/actions';
+import { generateMailoutsPending, generateMailoutsSuccess, generateMailoutsError } from '../mailouts/actions';
 
 import ApiService from '../../../services/api';
 
@@ -84,10 +85,15 @@ export function* finalizeOnboardingSaveCustomizationSaga(currentCustomization) {
 
 export function* finalizeOnboardingUserListingInitialSaga() {
   try {
+    yield put(generateMailoutsPending());
+
     const { path, method } = ApiService.directory.user.listing.initial();
-    return yield call(ApiService[method], path);
+    const response = yield call(ApiService[method], path);
+
+    yield put(generateMailoutsSuccess(response));
   } catch (err) {
-    yield console.log('finalizeOnboardingUserListingInitialSaga err', err);
+    yield put(generateMailoutsError(err.message));
+    console.log('finalizeOnboardingUserListingInitialSaga err', err);
   }
 }
 

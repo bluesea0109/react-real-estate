@@ -10,6 +10,10 @@ export const GET_MORE_MAILOUTS_ERROR = 'GET_MORE_MAILOUTS_ERROR';
 
 export const RESET_MAILOUTS = 'RESET_MAILOUTS';
 
+export const GENERATE_MAILOUTS_PENDING = 'GENERATE_MAILOUTS_PENDING';
+export const GENERATE_MAILOUTS_SUCCESS = 'GENERATE_MAILOUTS_SUCCESS';
+export const GENERATE_MAILOUTS_ERROR = 'GENERATE_MAILOUTS_ERROR';
+
 export function getMailoutsPending() {
   return createAction(GET_MAILOUTS_PENDING);
 }
@@ -40,4 +44,16 @@ export function getMoreMailoutsError(error) {
 
 export function resetMailouts() {
   return createAction(RESET_MAILOUTS);
+}
+
+export function generateMailoutsPending() {
+  return createAction(GENERATE_MAILOUTS_PENDING);
+}
+
+export function generateMailoutsSuccess(payload) {
+  return createAction(GENERATE_MAILOUTS_SUCCESS, payload);
+}
+
+export function generateMailoutsError(error) {
+  return createErrorAction(GENERATE_MAILOUTS_ERROR, error);
 }

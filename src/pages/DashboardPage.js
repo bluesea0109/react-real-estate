@@ -6,6 +6,7 @@ import { Button, Header, Grid, Menu, Message, Page, Segment } from '../component
 import MailoutListItem from '../components/MailoutListItem';
 import EmptyItem from '../components/EmptyItem';
 import Loading from '../components/Loading';
+import LoadingWithMessage from '../components/LoadingWithMessage';
 
 const useFetching = (getActionCreator, onboarded, dispatch) => {
   useEffect(() => {
@@ -22,10 +23,12 @@ const Dashboard = () => {
 
   const onboarded = useSelector(store => store.onboarded.status);
   const isLoading = useSelector(store => store.mailouts.pending);
+  const isGenerating = useSelector(store => store.mailouts.generatePending);
   const canLoadMore = useSelector(store => store.mailouts.canLoadMore);
   const page = useSelector(store => store.mailouts.page);
   const list = useSelector(store => store.mailouts.list);
   const error = useSelector(store => store.mailouts.error);
+  const errorGenerating = useSelector(store => store.mailouts.generateError);
 
   useFetching(getMailoutsPending, onboarded, useDispatch());
 
@@ -53,13 +56,13 @@ const Dashboard = () => {
             </Menu>
           </Grid.Row>
 
-          {!isLoading && !error && list.length > 0 && (
+          {((!isLoading && !error) || (!isGenerating && !errorGenerating)) && list.length > 0 && (
             <Grid.Row>
               <Grid.Column width={16}>{list.map(item => MailoutListItem(item))}</Grid.Column>
             </Grid.Row>
           )}
 
-          {!isLoading && !error && list.length > 0 && canLoadMore && (
+          {((!isLoading && !error) || (!isGenerating && !errorGenerating)) && list.length > 0 && canLoadMore && (
             <Grid.Row>
               <Grid.Column width={16}>
                 <Grid centered columns={2}>
@@ -71,7 +74,7 @@ const Dashboard = () => {
             </Grid.Row>
           )}
 
-          {!isLoading && !error && list.length === 0 && (
+          {((!isLoading && !error) || (!isGenerating && !errorGenerating)) && list.length === 0 && (
             <Grid.Row>
               <Grid.Column width={16}>
                 <EmptyItem />
@@ -81,7 +84,9 @@ const Dashboard = () => {
         </Grid>
       </Segment>
       {isLoading && !error && Loading()}
+      {(isLoading && !error && Loading()) || (isGenerating && !errorGenerating && LoadingWithMessage({ message: 'Updating listing, please wait...' }))}
       {error && <Message error>Oh snap! {error}.</Message>}
+      {errorGenerating && <Message error>Oh snap! {errorGenerating}.</Message>}
     </Page>
   );
 };

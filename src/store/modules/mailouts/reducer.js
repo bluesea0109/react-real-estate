@@ -7,14 +7,19 @@ import {
   GET_MORE_MAILOUTS_SUCCESS,
   GET_MORE_MAILOUTS_ERROR,
   RESET_MAILOUTS,
+  GENERATE_MAILOUTS_PENDING,
+  GENERATE_MAILOUTS_SUCCESS,
+  GENERATE_MAILOUTS_ERROR,
 } from './actions';
 
 const initialState = {
   pending: false,
+  generatePending: false,
   canLoadMore: false,
   page: 1,
   list: [],
   error: null,
+  generateError: false,
 };
 
 export default function mailouts(state = initialState, action) {
@@ -74,6 +79,26 @@ export default function mailouts(state = initialState, action) {
         page: 1,
         list: [],
         error: null,
+      };
+
+    case GENERATE_MAILOUTS_PENDING:
+      return {
+        ...state,
+        generatePending: true,
+      };
+
+    case GENERATE_MAILOUTS_SUCCESS:
+      return {
+        ...state,
+        generatePending: false,
+        list: action.payload,
+      };
+
+    case GENERATE_MAILOUTS_ERROR:
+      return {
+        ...state,
+        generatePending: false,
+        generateError: action.error,
       };
 
     default:
