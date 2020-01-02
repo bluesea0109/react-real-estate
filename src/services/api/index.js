@@ -2,9 +2,12 @@ import auth from '../auth';
 
 async function handleResponse(response) {
   if (response.ok) {
-    const data = await response.json();
-
-    return data;
+    try {
+      const data = await response.json();
+      return data;
+    } catch (e) {
+      throw new Error('404 Not Found');
+    }
   } else {
     let err;
     try {
