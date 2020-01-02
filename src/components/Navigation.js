@@ -223,7 +223,7 @@ export default () => {
             <Icon name="cog" />
             {mql.matches ? null : (
               <Step.Content>
-                <Step.Title>Customize</Step.Title>
+                <Step.Title style={sidebarTextStyle}>Customize</Step.Title>
               </Step.Content>
             )}
           </StepLayout>
@@ -254,7 +254,7 @@ export default () => {
             <Icon name="cog" />
             {mql.matches ? null : (
               <Step.Content>
-                <Step.Title>Customize</Step.Title>
+                <Step.Title style={sidebarTextStyle}>Customize</Step.Title>
               </Step.Content>
             )}
           </StepLayout>
