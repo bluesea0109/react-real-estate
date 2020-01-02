@@ -15,6 +15,7 @@ import ImageGroup from '../components/MailoutListItem/ImageGroup';
 import GoogleMapItem from '../components/GoogleMapItem';
 import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from '../components/MailoutListItem/helpers';
 import Loading from '../components/Loading';
+import LoadingWithMessage from '../components/LoadingWithMessage';
 
 const useFetching = (getActionCreator, dispatch, mailoutId) => {
   useEffect(() => {
@@ -207,7 +208,7 @@ const MailoutDetailsPage = () => {
           </Grid.Row>
         </Grid>
       </Segment>
-      {isLoading && isUpdating && !error && !updateError && Loading()}
+      {(isLoading && !error && Loading()) || (isUpdating && !updateError && LoadingWithMessage({ message: 'Updating listing, please wait...' }))}
       {error && <Message error>Oh snap! {error}.</Message>}
       {updateError && <Message error>Oh snap! {updateError}.</Message>}
     </Page>
