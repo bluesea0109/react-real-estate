@@ -113,7 +113,6 @@ export default () => {
   useEffect(() => {
     if (loggedInUser && !activeUser) {
       setActiveUser(loggedInUser._id);
-      history.push(`/dashboard`);
     } else if (loggedInUser && activeUser !== loggedInUser._id) {
       dispatch(selectPeerId(activeUser));
       history.push(`/dashboard`);
