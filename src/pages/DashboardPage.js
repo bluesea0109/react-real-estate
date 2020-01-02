@@ -84,7 +84,7 @@ const Dashboard = () => {
         </Grid>
       </Segment>
       {isLoading && !error && Loading()}
-      {(isLoading && !error && Loading()) || (isGenerating && !errorGenerating && LoadingWithMessage({ message: 'Updating listing, please wait...' }))}
+      {(isLoading && !error && Loading()) || (isGenerating && !errorGenerating && LoadingWithMessage({ message: 'Generating listings, please wait...' }))}
       {error && <Message error>Oh snap! {error}.</Message>}
       {errorGenerating && <Message error>Oh snap! {errorGenerating}.</Message>}
     </Page>
