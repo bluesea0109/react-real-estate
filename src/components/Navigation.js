@@ -19,6 +19,11 @@ const iconWithTextStyle = {
   margin: '0 .5em 0 2.5em',
 };
 
+const sidebarTextStyle = {
+  fontSize: '1em',
+  marginLeft: '-.5em',
+};
+
 const StyledUserSelectorDropdown = styled(Dropdown)`
   min-width: 8.3em !important;
   max-width: 8.3em !important;
@@ -200,7 +205,7 @@ export default () => {
             <Icon name="edit" />
             {mql.matches ? null : (
               <Step.Content>
-                <Step.Title>Fill in your profile</Step.Title>
+                <Step.Title style={sidebarTextStyle}>Fill in your profile</Step.Title>
               </Step.Content>
             )}
           </StepLayout>
@@ -209,7 +214,7 @@ export default () => {
             <Icon name="cogs" />
             {mql.matches ? null : (
               <Step.Content>
-                <Step.Title>Customize Team</Step.Title>
+                <Step.Title style={sidebarTextStyle}>Customize Team</Step.Title>
               </Step.Content>
             )}
           </StepLayout>
@@ -227,7 +232,7 @@ export default () => {
             <Icon name="paper plane" />
             {mql.matches ? null : (
               <Step.Content>
-                <Step.Title>Invite Teammates</Step.Title>
+                <Step.Title style={sidebarTextStyle}>Invite Teammates</Step.Title>
               </Step.Content>
             )}
           </StepLayout>
@@ -240,7 +245,7 @@ export default () => {
             <Icon name="edit" />
             {mql.matches ? null : (
               <Step.Content>
-                <Step.Title>Fill in your profile</Step.Title>
+                <Step.Title style={sidebarTextStyle}>Fill in your profile</Step.Title>
               </Step.Content>
             )}
           </StepLayout>
