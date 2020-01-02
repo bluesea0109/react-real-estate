@@ -1,4 +1,4 @@
-import { Icon, Label } from 'semantic-ui-react';
+import { Header, Icon, Label } from 'semantic-ui-react';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
@@ -6,7 +6,7 @@ import { useLastLocation } from 'react-router-last-location';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { submitMailoutPending, stopMailoutPending, resetMailout, updateMailoutSizePending } from '../store/modules/mailout/actions';
-import { Button, Header, Grid, Menu, Message, Page, Segment, List, Popup, Input } from '../components/Base';
+import { Button, Grid, Menu, Message, Page, Segment, List, Popup, Input } from '../components/Base';
 import { ItemBodyDataLayout, ItemBodyLayoutV2, ItemLayout } from '../layouts';
 import { getMailoutPending } from '../store/modules/mailout/actions';
 import PopupContent from '../components/MailoutListItem/PopupContent';
