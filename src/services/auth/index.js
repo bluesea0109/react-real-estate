@@ -4,7 +4,9 @@ import config from '../../config';
 
 const localStorageKey = 'loggedIn';
 const loginEvent = 'loginEvent';
-const siteRoot = process.env.NODE_ENV === 'production' ? 'https://beta.brivitymarketer.com' : 'http://localhost:8082';
+const homepage = process.env.PUBLIC_URL;
+console.log('homepage', homepage);
+const siteRoot = process.env.NODE_ENV === 'production' ? `https://beta.brivitymarketer.com/${homepage}` : 'http://localhost:8082';
 
 const webAuth = new auth0.WebAuth({
   domain: config.auth0.domain,
