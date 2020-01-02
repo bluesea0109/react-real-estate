@@ -38,21 +38,18 @@ const MailoutDetailsPage = () => {
   const [editRecipients, setEditRecipients] = useState(false);
   // const [recipientsNumber, userRecipientsNumber] = useInput({ type: "text", initalState: 0 });
   const [numberOfRecipients, setNumberOfRecipients] = useState(0);
-  const [currentPeerState, setCurrentPeerState] = useState(null);
 
   const isLoading = useSelector(store => store.mailout.pending);
   const isUpdating = useSelector(store => store.mailout.updatePending);
   const details = useSelector(store => store.mailout.details);
   const error = useSelector(store => store.mailout.error);
   const updateError = useSelector(store => store.mailout.updateError);
-  const peerId = useSelector(store => store.peer.peerId);
 
   useEffect(() => {
-    if (currentPeerState !== peerId) {
-      setCurrentPeerState(peerId);
+    if (!isLoading && !!error) {
       history.push(`/dashboard`);
     }
-  }, [peerId, currentPeerState, setCurrentPeerState, history]);
+  }, [isLoading, error, history]);
 
   useEffect(() => {
     if (details && details.recipientCount && !onlyOnce) {

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useHistory } from 'react-router';
 import React, { createRef, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Dropdown, Header, Popup } from 'semantic-ui-react';
@@ -43,6 +44,7 @@ const mql = window.matchMedia('(max-width: 599px)');
 const menuSpacing = () => (mql.matches ? {} : { marginLeft: '2.5em' });
 
 export default () => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const location = useLocation();
   const [activeItem, setActiveItem] = useState('');
@@ -111,12 +113,15 @@ export default () => {
   useEffect(() => {
     if (loggedInUser && !activeUser) {
       setActiveUser(loggedInUser._id);
+      history.push(`/dashboard`);
     } else if (loggedInUser && activeUser !== loggedInUser._id) {
       dispatch(selectPeerId(activeUser));
+      history.push(`/dashboard`);
     } else if (loggedInUser && activeUser === loggedInUser._id && selectedPeerId) {
+      history.push(`/dashboard`);
       dispatch(deselectPeerId());
     }
-  }, [loggedInUser, activeUser, selectedPeerId, dispatch]);
+  }, [loggedInUser, activeUser, selectedPeerId, dispatch, history]);
 
   const renderLabel = label => ({
     color: 'blue',
