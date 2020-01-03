@@ -26,7 +26,7 @@ export function* peerListingInitialSaga(peerId) {
 
 export function* getCustomizationSaga({ peerId = null }) {
   try {
-    const { path, method } = peerId ? ApiService.directory.peer.customization.get() : ApiService.directory.user.customization.get();
+    const { path, method } = peerId ? ApiService.directory.peer.customization.get(peerId) : ApiService.directory.user.customization.get();
     const response = yield call(ApiService[method], path);
 
     yield put(getCustomizationSuccess(response));
