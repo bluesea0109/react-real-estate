@@ -92,6 +92,12 @@ export function* updatetMailoutSizeSaga({ peerId = null }) {
     const response = yield call(ApiService[method], path, data);
 
     yield put(updateMailoutSizeSuccess(response));
+
+    if (peerId) {
+      yield getMailoutSaga({ peerId });
+    } else {
+      yield getMailoutSaga({});
+    }
   } catch (err) {
     yield put(updateMailoutSizeError(err.message));
   }
