@@ -78,7 +78,6 @@ export default () => {
   const mailoutSubmitPendingState = useSelector(store => store.mailout.submitPending);
   const mailoutStopPendingState = useSelector(store => store.mailout.stopPending);
   const mailoutUpdateMailoutSizePendingState = useSelector(store => store.mailout.updateMailoutSizePending);
-  const mailoutNeedsUpdatePendingState = useSelector(store => store.mailout.needsUpdatePending);
   const mailoutUpdatePendingState = useSelector(store => store.mailout.updatePending);
   const mailoutsPendingState = useSelector(store => store.mailouts.pending);
   const mailoutsGeneratePendingState = useSelector(store => store.mailouts.generatePending);
