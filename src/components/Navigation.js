@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StepLayout, StepsLayout, NavigationLayout, MobileDisabledLayout, MobileEnabledLayout } from '../layouts';
 import { selectPeerId, deselectPeerId } from '../store/modules/peer/actions';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, Image, Icon, Step } from './Base';
+import { Dimmer, Menu, Image, Icon, Step } from './Base';
 
 import './navigation.css';
 
@@ -49,6 +49,7 @@ export default () => {
   const location = useLocation();
   const [activeItem, setActiveItem] = useState('');
   const [activeUser, setActiveUser] = useState('');
+  const [appIsBusy, setAppIsBusy] = useState(false);
 
   const isAuthenticated = useSelector(store => store.auth0.authenticated);
   const onLoginPending = useSelector(store => store.onLogin.pending);
@@ -71,6 +72,17 @@ export default () => {
   const loggedInUser = useSelector(store => store.onLogin.user);
   const selectedPeerId = useSelector(store => store.peer.peerId);
   const teammates = useSelector(store => store.team.profiles);
+
+  const mailoutpendingState = useSelector(store => store.mailout.pending);
+  const mailoutmodifyPendingState = useSelector(store => store.mailout.modifyPending);
+  const mailoutSubmitPendingState = useSelector(store => store.mailout.submitPending);
+  const mailoutStopPendingState = useSelector(store => store.mailout.stopPending);
+  const mailoutUpdateMailoutSizePendingState = useSelector(store => store.mailout.updateMailoutSizePending);
+  const mailoutNeedsUpdatePendingState = useSelector(store => store.mailout.needsUpdatePending);
+  const mailoutUpdatePendingState = useSelector(store => store.mailout.updatePending);
+  const mailoutsPendingState = useSelector(store => store.mailouts.pending);
+  const mailoutsGeneratePendingState = useSelector(store => store.mailouts.generatePending);
+
   const profiles = [];
 
   useEffect(() => {
@@ -125,6 +137,28 @@ export default () => {
       }
     }
   }, [loggedInUser, activeUser, selectedPeerId, dispatch, history, location]);
+
+  useEffect(() => {
+    const busyState =
+      mailoutpendingState ||
+      mailoutmodifyPendingState ||
+      mailoutSubmitPendingState ||
+      mailoutStopPendingState ||
+      mailoutUpdateMailoutSizePendingState ||
+      mailoutUpdatePendingState ||
+      mailoutsPendingState ||
+      mailoutsGeneratePendingState;
+    setAppIsBusy(busyState);
+  }, [
+    mailoutpendingState,
+    mailoutmodifyPendingState,
+    mailoutSubmitPendingState,
+    mailoutStopPendingState,
+    mailoutUpdateMailoutSizePendingState,
+    mailoutUpdatePendingState,
+    mailoutsPendingState,
+    mailoutsGeneratePendingState,
+  ]);
 
   const renderLabel = label => ({
     color: 'blue',
@@ -272,60 +306,63 @@ export default () => {
   }
 
   return (
-    <NavigationLayout text>
-      {isMultimode && (
-        <Menu.Item style={menuSpacing()}>
-          <StyledUserSelectorDropdown
-            search
-            floating
-            scrolling
-            selection
-            options={profiles}
-            onChange={handleProfileSelect}
-            value={activeUser}
-            renderLabel={renderLabel}
-          />
-        </Menu.Item>
-      )}
+    <Dimmer.Dimmable blurring dimmed={appIsBusy}>
+      <Dimmer active={appIsBusy} inverted />
+      <NavigationLayout text>
+        {isMultimode && (
+          <Menu.Item style={menuSpacing()}>
+            <StyledUserSelectorDropdown
+              search
+              floating
+              scrolling
+              selection
+              options={profiles}
+              onChange={handleProfileSelect}
+              value={activeUser}
+              renderLabel={renderLabel}
+            />
+          </Menu.Item>
+        )}
 
-      <Menu.Item as={Link} color="teal" name="dashboard" active={activeItem === '/dashboard'} to="/dashboard">
-        <MobileEnabledLayout style={iconOnlyStyle}>
-          <FontAwesomeIcon icon="tachometer-alt" />
-        </MobileEnabledLayout>
-        <MobileDisabledLayout>
-          <FontAwesomeIcon icon="tachometer-alt" style={iconWithTextStyle} /> Dashboard
-        </MobileDisabledLayout>
-      </Menu.Item>
-      {isMultimode && isAdmin && !selectedPeerId ? (
-        <Menu.Item color="teal" name="customization" active={activeItem === '/customization'}>
-          {renderCustomizationDropdown()}
-        </Menu.Item>
-      ) : (
-        <Menu.Item as={Link} color="teal" name="customization" active={activeItem === '/customization'} to="/customization">
+        <Menu.Item as={Link} color="teal" name="dashboard" active={activeItem === '/dashboard'} to="/dashboard">
           <MobileEnabledLayout style={iconOnlyStyle}>
-            <FontAwesomeIcon icon="paint-brush" />
+            <FontAwesomeIcon icon="tachometer-alt" />
           </MobileEnabledLayout>
           <MobileDisabledLayout>
-            <FontAwesomeIcon icon="paint-brush" style={iconWithTextStyle} /> Customization
+            <FontAwesomeIcon icon="tachometer-alt" style={iconWithTextStyle} /> Dashboard
           </MobileDisabledLayout>
         </Menu.Item>
-      )}
-      <Menu.Item as={Link} color="teal" name="profile" active={activeItem === '/profile'} to="/profile">
-        <MobileEnabledLayout style={iconOnlyStyle}>
-          <FontAwesomeIcon icon="user" />
-        </MobileEnabledLayout>
-        <MobileDisabledLayout>
-          <FontAwesomeIcon icon="user" style={iconWithTextStyle} /> Profile
-        </MobileDisabledLayout>
-      </Menu.Item>
-      <Menu.Item as={Link} color="teal" name="settings" active={activeItem === '/settings'} to="/settings">
-        <MobileEnabledLayout style={iconOnlyStyle}>
-          <FontAwesomeIcon icon="cog" />
-        </MobileEnabledLayout>
-        <MobileDisabledLayout>
-          <FontAwesomeIcon icon="cog" style={iconWithTextStyle} /> Settings
-        </MobileDisabledLayout>
-      </Menu.Item>
-    </NavigationLayout>
+        {isMultimode && isAdmin && !selectedPeerId ? (
+          <Menu.Item color="teal" name="customization" active={activeItem === '/customization'}>
+            {renderCustomizationDropdown()}
+          </Menu.Item>
+        ) : (
+          <Menu.Item as={Link} color="teal" name="customization" active={activeItem === '/customization'} to="/customization">
+            <MobileEnabledLayout style={iconOnlyStyle}>
+              <FontAwesomeIcon icon="paint-brush" />
+            </MobileEnabledLayout>
+            <MobileDisabledLayout>
+              <FontAwesomeIcon icon="paint-brush" style={iconWithTextStyle} /> Customization
+            </MobileDisabledLayout>
+          </Menu.Item>
+        )}
+        <Menu.Item as={Link} color="teal" name="profile" active={activeItem === '/profile'} to="/profile">
+          <MobileEnabledLayout style={iconOnlyStyle}>
+            <FontAwesomeIcon icon="user" />
+          </MobileEnabledLayout>
+          <MobileDisabledLayout>
+            <FontAwesomeIcon icon="user" style={iconWithTextStyle} /> Profile
+          </MobileDisabledLayout>
+        </Menu.Item>
+        <Menu.Item as={Link} color="teal" name="settings" active={activeItem === '/settings'} to="/settings">
+          <MobileEnabledLayout style={iconOnlyStyle}>
+            <FontAwesomeIcon icon="cog" />
+          </MobileEnabledLayout>
+          <MobileDisabledLayout>
+            <FontAwesomeIcon icon="cog" style={iconWithTextStyle} /> Settings
+          </MobileDisabledLayout>
+        </Menu.Item>
+      </NavigationLayout>
+    </Dimmer.Dimmable>
   );
 };
