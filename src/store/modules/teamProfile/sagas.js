@@ -11,7 +11,6 @@ import {
 import ApiService from '../../../services/api/index';
 
 export const teamProfileToSave = state => state.teamProfile.toSave;
-export const teamProfileRev = state => state.onLogin.teamProfile && state.onLogin.teamProfile._rev;
 
 export function* getTeamProfileSaga() {
   try {
@@ -27,11 +26,9 @@ export function* getTeamProfileSaga() {
 export function* saveTeamProfileSaga() {
   try {
     const teamProfile = yield select(teamProfileToSave);
-    const _rev = yield select(teamProfileRev);
-    const revisedTeamProfile = Object.assign({}, teamProfile, { _rev });
 
     const { path, method } = ApiService.directory.team.profile.save();
-    const response = yield call(ApiService[method], path, revisedTeamProfile);
+    const response = yield call(ApiService[method], path, teamProfile);
 
     yield put(saveTeamProfileSuccess(response));
   } catch (err) {
