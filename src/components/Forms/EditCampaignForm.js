@@ -6,10 +6,9 @@ import React, { Fragment, createRef, useState } from 'react';
 import { Dropdown, Form, Header, Popup } from 'semantic-ui-react';
 
 import { modifyMailoutPending } from '../../store/modules/mailout/actions';
-import { Button, Divider, Icon, Image, Menu, Modal, Segment } from '../Base';
+import { Button, Divider, Icon, Image, Menu, Message, Segment } from '../Base';
 import LoadingWithMessage from '../LoadingWithMessage';
 import { isMobile, maxLength } from './helpers';
-import FlipCard from '../FlipCard';
 import './EditCampaignForm.css';
 
 const StyledHeader = styled(Header)`
@@ -35,26 +34,18 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
   const currentTemplateTheme = data.templateTheme;
   const currentMailoutDisplayAgent = data.mailoutDisplayAgent;
   const currentMergeVariables = data.mergeVariables;
-  const convertedMergeVariables = Object.assign({}, ...currentMergeVariables.map(object => ({ [object.name]: object.value })));
-
   const currentBrandColor = currentMergeVariables[0];
+
+  const blacklistNames = ['brandColor', 'frontImgUrl', 'agentPicture', 'brokerageLogo', 'teamLogo'];
+  const convertedMergeVariables = Object.assign(
+    {},
+    ...currentMergeVariables.filter(object => !blacklistNames.includes(object.name)).map(object => ({ [object.name]: object.value }))
+  );
 
   const [templateTheme, setTemplateTheme] = useState(currentTemplateTheme);
   const [selectedBrandColor, setSelectedBrandColor] = useState(currentBrandColor.value);
   const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(currentMailoutDisplayAgent);
   const [formValues, setFormValues] = useState(convertedMergeVariables);
-
-  const [displayReview, setDisplayReview] = useState(false);
-  const [isFlipped, setIsFlipped] = useState(false);
-
-  const postcardsPreviewIsPending = useSelector(store => store.postcards && store.postcards.pending);
-  const postcardsPreviewError = useSelector(store => store.postcards && store.postcards.error);
-  const postcardsPreview = useSelector(store => store.postcards && store.postcards.available);
-
-  const handleReviewComplete = () => {
-    setDisplayReview(false);
-    handleBackClick();
-  };
 
   const handleEditSubmitClick = () => {
     /*
@@ -78,17 +69,32 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
       }
     }
      */
-    const newMergeVariables = [];
 
+    /*
+    const raw = {
+  item1: { key: 'sdfd', value:'sdfd' },
+  item2: { key: 'sdfd', value:'sdfd' },
+  item3: { key: 'sdfd', value:'sdfd' }
+};
+
+const allowed = ['item1', 'item3'];
+
+Object.keys(raw)
+  .filter(key => !allowed.includes(key))
+  .forEach(key => delete raw[key]);
+
+console.log(raw);
+     */
+
+    const newMergeVariables = [];
     newMergeVariables.push({ name: 'brandColor', value: selectedBrandColor.hex || selectedBrandColor });
-    Object.keys(formValues).forEach(key => {
-      if (key === 'brandColor') return null;
-      newMergeVariables.push({ name: key, value: formValues[key] });
-    });
+
+    Object.keys(formValues)
+      .filter(key => !blacklistNames.includes(key))
+      .forEach(key => newMergeVariables.push({ name: key, value: formValues[key] }));
+
     const newData = Object.assign({}, { templateTheme }, { mergeVariables: newMergeVariables }, { mailoutDisplayAgent });
     dispatch(modifyMailoutPending(newData));
-
-    setDisplayReview(true);
   };
 
   const profiles = [];
@@ -171,26 +177,26 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
   const renderThemeSpecificData = () => {
     switch (templateTheme) {
       case 'ribbon':
-        const ribbonFields = ribbonTemplate[currentListingStatus].fields.map((field, index) => {
-          if (field.name === 'brandColor') return null;
+        const ribbonFields = ribbonTemplate[currentListingStatus].fields
+          .filter(field => !blacklistNames.includes(field.name))
+          .map((field, index) => {
+            const fieldName = startCase(field.name);
+            const error = maxLength(field.max)(formValues[field.name]);
 
-          const fieldName = startCase(field.name);
-          const error = maxLength(field.max)(formValues[field.name]);
-
-          return (
-            <Form.Field key={index}>
-              <Form.Input
-                fluid
-                error={error && { content: error }}
-                label={fieldName}
-                placeholder={field.default}
-                type={field.type}
-                onChange={(e, input) => handleInputChange(input.value, field.name)}
-                defaultValue={formValues[field.name]}
-              />
-            </Form.Field>
-          );
-        });
+            return (
+              <Form.Field key={index}>
+                <Form.Input
+                  fluid
+                  error={error && { content: error }}
+                  label={fieldName}
+                  placeholder={field.default}
+                  type={field.type}
+                  onChange={(e, input) => handleInputChange(input.value, field.name)}
+                  defaultValue={formValues[field.name]}
+                />
+              </Form.Field>
+            );
+          });
 
         return (
           <Form color="green">
@@ -201,26 +207,26 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
         );
 
       case 'bookmark':
-        const bookmarkFields = bookmarkTemplate[currentListingStatus].fields.map((field, index) => {
-          if (field.name === 'brandColor') return null;
+        const bookmarkFields = bookmarkTemplate[currentListingStatus].fields
+          .filter(field => !blacklistNames.includes(field.name))
+          .map((field, index) => {
+            const fieldName = startCase(field.name);
+            const error = maxLength(field.max)(formValues[field.name]);
 
-          const fieldName = startCase(field.name);
-          const error = maxLength(field.max)(formValues[field.name]);
-
-          return (
-            <Form.Field key={index}>
-              <Form.Input
-                fluid
-                error={error && { content: error }}
-                label={fieldName}
-                placeholder={field.default}
-                type={field.type}
-                onChange={(e, input) => handleInputChange(input.value, field.name)}
-                defaultValue={formValues[field.name]}
-              />
-            </Form.Field>
-          );
-        });
+            return (
+              <Form.Field key={index}>
+                <Form.Input
+                  fluid
+                  error={error && { content: error }}
+                  label={fieldName}
+                  placeholder={field.default}
+                  type={field.type}
+                  onChange={(e, input) => handleInputChange(input.value, field.name)}
+                  defaultValue={formValues[field.name]}
+                />
+              </Form.Field>
+            );
+          });
 
         return (
           <Form color="green">
@@ -231,26 +237,26 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
         );
 
       case 'stack':
-        const stackFields = stackTemplate[currentListingStatus].fields.map((field, index) => {
-          if (field.name === 'brandColor') return null;
+        const stackFields = stackTemplate[currentListingStatus].fields
+          .filter(field => !blacklistNames.includes(field.name))
+          .map((field, index) => {
+            const fieldName = startCase(field.name);
+            const error = maxLength(field.max)(formValues[field.name]);
 
-          const fieldName = startCase(field.name);
-          const error = maxLength(field.max)(formValues[field.name]);
-
-          return (
-            <Form.Field key={index}>
-              <Form.Input
-                fluid
-                error={error && { content: error }}
-                label={fieldName}
-                placeholder={field.default}
-                type={field.type}
-                onChange={(e, input) => handleInputChange(input.value, field.name)}
-                defaultValue={formValues[field.name]}
-              />
-            </Form.Field>
-          );
-        });
+            return (
+              <Form.Field key={index}>
+                <Form.Input
+                  fluid
+                  error={error && { content: error }}
+                  label={fieldName}
+                  placeholder={field.default}
+                  type={field.type}
+                  onChange={(e, input) => handleInputChange(input.value, field.name)}
+                  defaultValue={formValues[field.name]}
+                />
+              </Form.Field>
+            );
+          });
 
         return (
           <Form color="green">
@@ -274,10 +280,10 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
           </Menu.Item>
           <Menu.Menu position="right">
             <span>
-              <Button type="submit" onClick={handleEditSubmitClick} color="teal">
+              <Button type="submit" onClick={handleEditSubmitClick} color="teal" loading={modifyPending} disabled={modifyPending}>
                 Save & Preview
               </Button>
-              <Button basic color="teal" onClick={() => handleBackClick()}>
+              <Button basic color="teal" onClick={() => handleBackClick()} loading={modifyPending} disabled={modifyPending}>
                 Back
               </Button>
             </span>
@@ -285,6 +291,15 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
         </Menu>
 
         <Divider style={{ margin: '1em -1em' }} />
+
+        {modifyPending && <LoadingWithMessage message="Saving campaign..." />}
+
+        {modifyError && (
+          <Message negative>
+            <Message.Header>We're sorry, something went wrong.</Message.Header>
+            <p>{modifyError}</p>
+          </Message>
+        )}
 
         <Segment basic padded className={isMobile() ? null : 'primary-grid-container'}>
           <div>
@@ -321,50 +336,6 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
         </Segment>
 
         {renderThemeSpecificData()}
-
-        <Modal open={displayReview} basic size="tiny">
-          {!postcardsPreviewIsPending && <Modal.Header>Preview</Modal.Header>}
-
-          {!modifyPending && (postcardsPreviewError || modifyError) && <Modal.Header>Error</Modal.Header>}
-
-          {postcardsPreviewIsPending && <LoadingWithMessage message="Please wait, loading the preview..." />}
-
-          {!modifyPending && (postcardsPreviewError || modifyError) && (
-            <Modal.Content style={{ padding: '0 45px 10px' }}>{postcardsPreviewError || modifyError}</Modal.Content>
-          )}
-
-          {postcardsPreview &&
-            postcardsPreview[currentListingStatus] &&
-            postcardsPreview[currentListingStatus].sampleBackLargeUrl &&
-            postcardsPreview[currentListingStatus].sampleFrontLargeUrl && (
-              <Modal.Content image style={{ padding: '0 45px 10px' }}>
-                <FlipCard isFlipped={isFlipped}>
-                  <Image wrapped size="large" src={postcardsPreview[currentListingStatus].sampleFrontLargeUrl} onMouseOver={() => setIsFlipped(!isFlipped)} />
-
-                  <Image wrapped size="large" src={postcardsPreview[currentListingStatus].sampleBackLargeUrl} onMouseOver={() => setIsFlipped(!isFlipped)} />
-                </FlipCard>
-              </Modal.Content>
-            )}
-
-          {!postcardsPreviewIsPending && (
-            <Modal.Actions>
-              <Button basic color="red" inverted onClick={() => setDisplayReview(false)}>
-                <Icon name="remove" /> Edit
-              </Button>
-              <Button color="green" inverted onClick={handleReviewComplete}>
-                <Icon name="checkmark" /> Accept
-              </Button>
-            </Modal.Actions>
-          )}
-
-          {!modifyPending && (postcardsPreviewError || modifyError) && (
-            <Modal.Actions>
-              <Button basic color="red" inverted onClick={() => setDisplayReview(false)}>
-                <Icon name="remove" /> OK
-              </Button>
-            </Modal.Actions>
-          )}
-        </Modal>
       </Segment>
     </Fragment>
   );
