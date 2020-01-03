@@ -75,7 +75,7 @@ export default function mailouts(state = initialState, action) {
     case RESET_MAILOUTS:
       return {
         ...state,
-        canLoadMore: true,
+        canLoadMore: false,
         page: 1,
         list: [],
         error: null,

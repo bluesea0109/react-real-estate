@@ -30,7 +30,6 @@ export function* getCustomizationSaga({ peerId = null }) {
     const response = yield call(ApiService[method], path);
 
     yield put(getCustomizationSuccess(response));
-    yield put(generatePostcardsPreviewPending());
   } catch (err) {
     yield put(getCustomizationError(err.message));
   }

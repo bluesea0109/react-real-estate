@@ -8,7 +8,7 @@ import { Dropdown, Form, Header, Popup } from 'semantic-ui-react';
 import { modifyMailoutPending } from '../../store/modules/mailout/actions';
 import { Button, Divider, Icon, Image, Menu, Message, Segment } from '../Base';
 import LoadingWithMessage from '../LoadingWithMessage';
-import { isMobile, maxLength } from './helpers';
+import { isMobile, maxLength, sleep } from './helpers';
 import './EditCampaignForm.css';
 
 const StyledHeader = styled(Header)`
@@ -37,64 +37,32 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
   const currentBrandColor = currentMergeVariables[0];
 
   const blacklistNames = ['brandColor', 'frontImgUrl', 'agentPicture', 'brokerageLogo', 'teamLogo'];
-  const convertedMergeVariables = Object.assign(
-    {},
-    ...currentMergeVariables.filter(object => !blacklistNames.includes(object.name)).map(object => ({ [object.name]: object.value }))
-  );
+  const convertedMergeVariables = Object.assign({}, ...currentMergeVariables.map(object => ({ [object.name]: object.value })));
 
   const [templateTheme, setTemplateTheme] = useState(currentTemplateTheme);
   const [selectedBrandColor, setSelectedBrandColor] = useState(currentBrandColor.value);
   const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(currentMailoutDisplayAgent);
   const [formValues, setFormValues] = useState(convertedMergeVariables);
 
-  const handleEditSubmitClick = () => {
-    /*
-    {
-      "templateTheme": "bookmark",
-      "mergeVariables": [
-        {
-          "name": "string",
-          "value": "string"
-        }
-      ],
-      "ctas": {
-        "cta": "string",
-        "shortenCTA": true,
-        "kwkly": "string"
-      },
-      "mailoutDisplayAgent": {
-        "userId": "string",
-        "first": "string",
-        "last": "string"
-      }
-    }
-     */
-
-    /*
-    const raw = {
-  item1: { key: 'sdfd', value:'sdfd' },
-  item2: { key: 'sdfd', value:'sdfd' },
-  item3: { key: 'sdfd', value:'sdfd' }
-};
-
-const allowed = ['item1', 'item3'];
-
-Object.keys(raw)
-  .filter(key => !allowed.includes(key))
-  .forEach(key => delete raw[key]);
-
-console.log(raw);
-     */
-
+  const handleEditSubmitClick = async () => {
     const newMergeVariables = [];
     newMergeVariables.push({ name: 'brandColor', value: selectedBrandColor.hex || selectedBrandColor });
 
     Object.keys(formValues)
-      .filter(key => !blacklistNames.includes(key))
+      .filter(key => key !== 'brandColor')
       .forEach(key => newMergeVariables.push({ name: key, value: formValues[key] }));
 
-    const newData = Object.assign({}, { templateTheme }, { mergeVariables: newMergeVariables }, { mailoutDisplayAgent });
+    const newData = Object.assign(
+      {},
+      { templateTheme },
+      { mergeVariables: currentMergeVariables },
+      { mergeVariables: newMergeVariables },
+      { mailoutDisplayAgent }
+    );
+
     dispatch(modifyMailoutPending(newData));
+    await sleep(500);
+    handleBackClick();
   };
 
   const profiles = [];
@@ -281,7 +249,7 @@ console.log(raw);
           <Menu.Menu position="right">
             <span>
               <Button type="submit" onClick={handleEditSubmitClick} color="teal" loading={modifyPending} disabled={modifyPending}>
-                Save & Preview
+                Save
               </Button>
               <Button basic color="teal" onClick={() => handleBackClick()} loading={modifyPending} disabled={modifyPending}>
                 Back

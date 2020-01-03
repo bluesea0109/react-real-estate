@@ -38,38 +38,39 @@ export class GoogleMapItem extends Component {
     const { data, google } = this.props;
 
     const displayMarkers = () => {
-      if (!data.destinations) return;
-
-      return data.destinations.map((dest, index) => {
-        return (
-          <Marker
-            key={index}
-            id={index}
-            icon={{ url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png' }}
-            position={{
-              lat: dest.lat,
-              lng: dest.lon,
-            }}
-            title={dest.value && dest.value.deliveryLine}
-            onClick={this.onMarkerClick}
-          />
-        );
-      });
+      return (
+        data.destinations &&
+        data.destinations.map((dest, index) => {
+          return (
+            <Marker
+              key={index}
+              id={index}
+              icon={{ url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png' }}
+              position={{
+                lat: dest.lat,
+                lng: dest.lon,
+              }}
+              title={dest.value && dest.value.deliveryLine}
+              onClick={this.onMarkerClick}
+            />
+          );
+        })
+      );
     };
 
     const mainMarker = () => {
-      if (!data.details) return;
-
       return (
         <Marker
           icon={{ url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' }}
           position={{
-            lat: data.details.latitude,
-            lng: data.details.longitude,
+            lat: data.details && data.details.latitude,
+            lng: data.details && data.details.longitude,
           }}
-          title={data.details.displayAddress}
+          title={data.details && data.details.displayAddress}
           onClick={this.onMarkerClick}
-        ></Marker>
+        >
+          &nsbs;
+        </Marker>
       );
     };
 
@@ -80,7 +81,7 @@ export class GoogleMapItem extends Component {
             google={google}
             zoom={12}
             containerStyle={containerStyle}
-            initialCenter={{ lat: data.details.latitude, lng: data.details.longitude }}
+            initialCenter={{ lat: data.details && data.details.latitude, lng: data.details && data.details.longitude }}
             onClick={this.onMapClicked}
           >
             {displayMarkers()}

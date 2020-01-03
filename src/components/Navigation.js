@@ -115,12 +115,16 @@ export default () => {
       setActiveUser(loggedInUser._id);
     } else if (loggedInUser && activeUser !== loggedInUser._id) {
       dispatch(selectPeerId(activeUser));
-      history.push(`/dashboard`);
+      if (location.pathname !== '/profile' && location.pathname !== '/dashboard') {
+        history.push(`/dashboard`);
+      }
     } else if (loggedInUser && activeUser === loggedInUser._id && selectedPeerId) {
-      history.push(`/dashboard`);
       dispatch(deselectPeerId());
+      if (location.pathname !== '/profile' && location.pathname !== '/dashboard') {
+        history.push(`/dashboard`);
+      }
     }
-  }, [loggedInUser, activeUser, selectedPeerId, dispatch, history]);
+  }, [loggedInUser, activeUser, selectedPeerId, dispatch, history, location]);
 
   const renderLabel = label => ({
     color: 'blue',

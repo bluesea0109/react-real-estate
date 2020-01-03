@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 
+import RevProfileForm from '../components/Forms/RevProfileForm';
 import { getProfilePending } from '../store/modules/profile/actions';
 import { getTeamProfilePending } from '../store/modules/teamProfile/actions';
 import { Page, Segment } from '../components/Base';
@@ -29,16 +30,8 @@ const ProfilePage = () => {
 
   return (
     <Page basic>
-      <Segment>
-        <h1>Profile Page</h1>
-        <h2>{peerId ? 'Peer profile go here' : 'Logged in user profile go here'}</h2>
-        <pre>{JSON.stringify(profileAvailable, 0, 2)}</pre>
-        {isAdmin && (
-          <div>
-            <h2>As an Admin, you always have access to team profile</h2>
-            <pre>{JSON.stringify(teamProfileAvailable, 0, 2)}</pre>
-          </div>
-        )}
+      <Segment basic>
+        <RevProfileForm profileAvailable={profileAvailable} teamProfileAvailable={teamProfileAvailable} />
       </Segment>
     </Page>
   );

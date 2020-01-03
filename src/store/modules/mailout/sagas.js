@@ -23,7 +23,6 @@ import {
   updateMailoutSuccess,
   updateMailoutError,
 } from './actions';
-import { generatePostcardsPreviewPending } from '../postcards/actions';
 import ApiService from '../../../services/api/index';
 
 export const getSelectedPeerId = state => state.peer.peerId;
@@ -52,7 +51,6 @@ export function* modifyMailoutSaga({ peerId = null }) {
     const response = yield call(ApiService[method], path, mailoutEdit);
 
     yield put(modifyMailoutSuccess(response));
-    yield put(generatePostcardsPreviewPending());
   } catch (err) {
     yield put(modifyMailoutError(err.message));
   }
@@ -93,8 +91,6 @@ export function* updatetMailoutSizeSaga({ peerId = null }) {
     const data = { mailoutSize: parseInt(mailoutSize, 10) };
     const response = yield call(ApiService[method], path, data);
 
-    console.log('updatetMailoutSizeSaga', response);
-
     yield put(updateMailoutSizeSuccess(response));
   } catch (err) {
     yield put(updateMailoutSizeError(err.message));
@@ -110,6 +106,12 @@ export function* UpdateMailoutSaga({ peerId = null }) {
     const response = yield call(ApiService[method], path);
 
     yield put(updateMailoutSuccess(response));
+
+    if (peerId) {
+      yield getMailoutSaga({ peerId });
+    } else {
+      yield getMailoutSaga({});
+    }
   } catch (err) {
     yield put(updateMailoutError(err.message));
   }

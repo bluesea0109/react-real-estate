@@ -207,6 +207,7 @@ export default function mailout(state = initialState, action) {
         ...state,
         updatePending: false,
         details: action.payload,
+        updateError: null,
       };
 
     case UPDATE_MAILOUT_ERROR:

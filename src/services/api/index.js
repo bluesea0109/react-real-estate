@@ -25,6 +25,9 @@ async function handleResponse(response) {
       error = new Error(`${err.status} ${err.statusText}`);
     }
 
+    console.log('error', error);
+    console.log('error.message', error.message);
+
     error.response = err;
     throw error;
   }
@@ -160,6 +163,12 @@ const directory = {
       get: () => ({ path: `/api/user/settings/profile`, method: 'get' }),
       save: () => ({ path: `/api/user/settings/profile`, method: 'put' }),
     },
+    photos: {
+      realtorPhoto: {
+        get: () => ({ path: `/api/user/settings/photos/realtorPhoto`, method: 'get' }),
+        set: () => ({ path: `/api/user/settings/photos/realtorPhoto`, method: 'postBlob' }),
+      },
+    },
   },
 
   peer: {
@@ -184,6 +193,12 @@ const directory = {
       get: peerId => ({ path: `/api/user/peer/${peerId}/settings/profile`, method: 'get' }),
       save: peerId => ({ path: `/api/user/peer/${peerId}/settings/profile`, method: 'put' }),
     },
+    photos: {
+      realtorPhoto: {
+        get: peerId => ({ path: `/api/user/peer/${peerId}/settings/photos/realtorPhoto`, method: 'get' }),
+        set: peerId => ({ path: `/api/user/peer/${peerId}/settings/photos/realtorPhoto`, method: 'postBlob' }),
+      },
+    },
   },
 
   /* TODO: Clean onboarding section at some point */
@@ -196,10 +211,6 @@ const directory = {
         save: () => ({ path: `/api/user/team/settings/profile`, method: 'put' }),
       },
       photos: {
-        realtorPhoto: {
-          get: () => ({ path: `/api/user/settings/photos/realtorPhoto`, method: 'get' }),
-          set: () => ({ path: `/api/user/settings/photos/realtorPhoto`, method: 'postBlob' }),
-        },
         brokerageLogo: {
           set: () => ({ path: `/api/user/team/settings/photos/brokerageLogo`, method: 'postBlob' }),
         },
