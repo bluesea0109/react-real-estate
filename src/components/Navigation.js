@@ -127,12 +127,22 @@ export default () => {
       setActiveUser(loggedInUser._id);
     } else if (loggedInUser && activeUser !== loggedInUser._id) {
       dispatch(selectPeerId(activeUser));
-      if (location.pathname !== '/profile' && location.pathname !== '/dashboard') {
+      if (
+        location.pathname !== '/profile' &&
+        location.pathname !== '/dashboard' &&
+        location.pathname !== '/customization' &&
+        location.pathname !== '/settings'
+      ) {
         history.push(`/dashboard`);
       }
     } else if (loggedInUser && activeUser === loggedInUser._id && selectedPeerId) {
       dispatch(deselectPeerId());
-      if (location.pathname !== '/profile' && location.pathname !== '/dashboard') {
+      if (
+        location.pathname !== '/profile' &&
+        location.pathname !== '/dashboard' &&
+        location.pathname !== '/customization' &&
+        location.pathname !== '/settings'
+      ) {
         history.push(`/dashboard`);
       }
     }
