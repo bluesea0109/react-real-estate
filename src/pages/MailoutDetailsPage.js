@@ -148,6 +148,10 @@ const MailoutDetailsPage = () => {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column width={16}>
+              {(isLoading && !error && Loading()) || (isUpdating && !updateError && LoadingWithMessage({ message: 'Updating listing, please wait...' }))}
+              {error && <Message error>Oh snap! {error}.</Message>}
+              {updateError && <Message error>Oh snap! {updateError}.</Message>}
+
               {!isLoading && !error && !isUpdating && !updateError && details && (
                 <ItemLayout fluid key={details._id}>
                   {ListHeader({
@@ -205,9 +209,6 @@ const MailoutDetailsPage = () => {
           </Grid.Row>
         </Grid>
       </Segment>
-      {(isLoading && !error && Loading()) || (isUpdating && !updateError && LoadingWithMessage({ message: 'Updating listing, please wait...' }))}
-      {error && <Message error>Oh snap! {error}.</Message>}
-      {updateError && <Message error>Oh snap! {updateError}.</Message>}
     </Page>
   );
 };
