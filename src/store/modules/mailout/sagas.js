@@ -23,6 +23,7 @@ import {
   updateMailoutSuccess,
   updateMailoutError,
 } from './actions';
+import { generatePostcardsPreviewPending } from '../postcards/actions';
 import ApiService from '../../../services/api/index';
 
 export const getSelectedPeerId = state => state.peer.peerId;
@@ -50,9 +51,8 @@ export function* modifyMailoutSaga({ peerId = null }) {
 
     const response = yield call(ApiService[method], path, mailoutEdit);
 
-    console.log('modifyMailoutSaga response', response);
-
     yield put(modifyMailoutSuccess(response));
+    yield put(generatePostcardsPreviewPending());
   } catch (err) {
     yield put(modifyMailoutError(err.message));
   }

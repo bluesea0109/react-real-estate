@@ -83,6 +83,7 @@ export default function mailout(state = initialState, action) {
     case MODIFY_MAILOUT_SUCCESS:
       return {
         ...state,
+        details: action.payload,
         modifyPending: false,
         mailoutEdit: null,
       };

@@ -200,7 +200,7 @@ const MailoutDetailsPage = () => {
                   </ItemBodyLayoutV2>
                 </ItemLayout>
               )}
-              {!isLoading && !error && !isUpdating && !updateError && details && <GoogleMapItem data={details} />}
+              {((!isLoading && !error) || (!isUpdating && !updateError)) && details && <GoogleMapItem data={details} />}
             </Grid.Column>
           </Grid.Row>
         </Grid>
