@@ -45,6 +45,7 @@ const resolveInvitationStatus = type => {
 const InviteTeammatesForm = () => {
   const dispatch = useDispatch();
   const teammates = useSelector(store => store.team.profiles);
+  const isInviteUsersPending = useSelector(store => store.inviteUsers.pending);
 
   const [sendDisabled, setSendDisabled] = useState(true);
   const [onlyOnce, setOnlyOnce] = useState(false);
@@ -230,10 +231,10 @@ const InviteTeammatesForm = () => {
 
             <div style={{ display: 'grid', justifyContent: 'end' }}>
               <div>
-                <Button color="teal" type="submit" disabled={sendDisabled}>
+                <Button color="teal" type="submit" loading={isInviteUsersPending} disabled={sendDisabled || isInviteUsersPending}>
                   Send
                 </Button>
-                <Button color="teal" type="button" onClick={handleContinue}>
+                <Button color="teal" type="button" loading={isInviteUsersPending} onClick={handleContinue} disabled={isInviteUsersPending}>
                   Skip
                 </Button>
               </div>
