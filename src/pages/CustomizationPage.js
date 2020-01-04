@@ -3,14 +3,26 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { getCustomizationPending } from '../store/modules/customization/actions';
 import NewCustomizeForm from '../components/Forms/NewCustomizeForm';
-import { Page, Segment } from '../components/Base';
+import { Message, Page } from '../components/Base';
+import Loading from '../components/Loading';
 
 const CustomizationPage = () => {
   const dispatch = useDispatch();
-  const [currentPeerState, setCurrentPeerState] = useState(null);
+  const onLoginMode = useSelector(store => store.onLogin.mode);
+  const multiUser = onLoginMode === 'multiuser';
+  const singleuser = onLoginMode === 'singleuser';
+
+  const customizationPending = useSelector(store => store.customization.pending);
   const customizationError = useSelector(store => store.customization.error);
   const customizationAvailable = useSelector(store => store.customization.available);
+
+  const teamCustomizationPending = useSelector(store => store.teamCustomization.pending);
+  const teamCustomizationError = useSelector(store => store.teamCustomization.error);
+  const teamCustomizationAvailable = useSelector(store => store.teamCustomization.available);
+
   const peerId = useSelector(store => store.peer.peerId);
+
+  const [currentPeerState, setCurrentPeerState] = useState(null);
 
   useEffect(() => {
     if (currentPeerState !== peerId) {
@@ -23,16 +35,28 @@ const CustomizationPage = () => {
     dispatch(getCustomizationPending());
   }, [dispatch]);
 
-  return (
-    <Page basic>
-      <Segment basic>
-        <h2>{peerId ? 'Peer profile go here' : 'Logged in user profile go here'}</h2>
-        {customizationAvailable && <pre>{JSON.stringify(customizationAvailable, 0, 2)}</pre>}
-        {customizationError && <pre>{JSON.stringify(customizationError, 0, 2)}</pre>}
-        <NewCustomizeForm />
-      </Segment>
-    </Page>
-  );
+  if (singleuser) {
+    return (
+      <Page basic>
+        {!customizationError && <NewCustomizeForm customizationData={customizationAvailable} />}
+        {customizationPending && !customizationError && Loading()}
+        {customizationError && <Message error>Oh snap! {customizationError}.</Message>}
+      </Page>
+    );
+  }
+
+  if (multiUser) {
+    return (
+      <Page basic>
+        {!customizationError && !teamCustomizationError && (
+          <NewCustomizeForm customizationData={customizationAvailable} teamCustomizationData={teamCustomizationAvailable} />
+        )}
+        {customizationPending && !customizationError && teamCustomizationPending && !teamCustomizationError && Loading()}
+        {customizationError && <Message error>Oh snap! {customizationError}.</Message>}
+        {teamCustomizationError && <Message error>Oh snap! {teamCustomizationError}.</Message>}
+      </Page>
+    );
+  }
 };
 
 export default CustomizationPage;

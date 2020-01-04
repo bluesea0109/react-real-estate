@@ -19,6 +19,14 @@
   grid-column-gap: 1em;
 }
 
+.tertiary-grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(auto-fill, 1fr);
+  grid-column-gap: 1em;
+  grid-row-gap: 1em;
+}
+
 .block-picker {
   /*background-color: red;*/
   box-shadow: unset !important;
