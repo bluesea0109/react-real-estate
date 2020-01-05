@@ -300,7 +300,17 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
 
     const error = composeValidators(required)(currentValue) && true;
 
-    return <Dropdown error={error} placeholder="Select Default Agent" fluid selection options={profiles} value={currentValue} onChange={handleAgentChange} />;
+    return (
+      <Dropdown
+        error={error}
+        placeholder="Select Default Displayed Agent"
+        fluid
+        selection
+        options={profiles}
+        value={currentValue}
+        onChange={handleAgentChange}
+      />
+    );
   };
 
   const renderField = ({ fieldName, listingType }) => {

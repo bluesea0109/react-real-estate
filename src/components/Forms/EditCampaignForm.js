@@ -291,17 +291,14 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
           </div>
 
           <div>
-            <Header as="h4">Choose Agent</Header>
+            <Header as="h4">Display Agent</Header>
             <Dropdown placeholder="Select Friend" fluid selection options={profiles} value={currentMailoutDisplayAgentUserID} onChange={handleAgentChange} />
           </div>
-
-          <div>
-            <p>&nbsp;</p>
-            <Header as="h2" style={{ margin: 'auto' }}>
-              Enter {templateTheme} details
-            </Header>
-          </div>
         </Segment>
+
+        <Header as="h4" style={{ marginLeft: '1.5em', marginBottom: '-0.5em' }}>
+          Change Postcard details
+        </Header>
 
         {renderThemeSpecificData()}
       </Segment>
