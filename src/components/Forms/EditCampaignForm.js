@@ -147,12 +147,12 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
       case 'ribbon':
         const ribbonFields = ribbonTemplate[currentListingStatus].fields
           .filter(field => !blacklistNames.includes(field.name))
-          .map((field, index) => {
+          .map(field => {
             const fieldName = startCase(field.name);
             const error = maxLength(field.max)(formValues[field.name]);
 
             return (
-              <Form.Field key={index}>
+              <Form.Field key={fieldName}>
                 <Form.Input
                   fluid
                   error={error && { content: error }}
@@ -177,12 +177,12 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
       case 'bookmark':
         const bookmarkFields = bookmarkTemplate[currentListingStatus].fields
           .filter(field => !blacklistNames.includes(field.name))
-          .map((field, index) => {
+          .map(field => {
             const fieldName = startCase(field.name);
             const error = maxLength(field.max)(formValues[field.name]);
 
             return (
-              <Form.Field key={index}>
+              <Form.Field key={fieldName}>
                 <Form.Input
                   fluid
                   error={error && { content: error }}
@@ -207,12 +207,12 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
       case 'stack':
         const stackFields = stackTemplate[currentListingStatus].fields
           .filter(field => !blacklistNames.includes(field.name))
-          .map((field, index) => {
+          .map(field => {
             const fieldName = startCase(field.name);
             const error = maxLength(field.max)(formValues[field.name]);
 
             return (
-              <Form.Field key={index}>
+              <Form.Field key={fieldName}>
                 <Form.Input
                   fluid
                   error={error && { content: error }}
