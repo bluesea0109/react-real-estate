@@ -145,7 +145,8 @@ export default () => {
         history.push(`/dashboard`);
       }
     }
-  }, [loggedInUser, activeUser, selectedPeerId, dispatch, history, location]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loggedInUser, activeUser, selectedPeerId, dispatch, history]);
 
   useEffect(() => {
     const busyState =
