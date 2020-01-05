@@ -1,18 +1,26 @@
-import React from 'react';
 import { Redirect } from 'react-router';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { Page, Segment } from '../components/Base';
+import { getTeamCustomizationPending } from '../store/modules/teamCustomization/actions';
+import NewTeamCustomizeForm from '../components/Forms/NewTeamCustomizeForm';
+import { Message, Page } from '../components/Base';
 import Loading from '../components/Loading';
 
 const CustomizationTeamPage = () => {
+  const dispatch = useDispatch();
   const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
-  const peerSelected = useSelector(store => store.peer.peerId);
-  const isLoading = useSelector(store => store.onLogin.pending);
+  const peerId = useSelector(store => store.peer.peerId);
 
-  if (isLoading) return <Loading />;
+  const teamCustomizationPending = useSelector(store => store.teamCustomization.pending);
+  const teamCustomizationError = useSelector(store => store.teamCustomization.error);
+  const teamCustomizationAvailable = useSelector(store => store.teamCustomization.available);
 
-  if (isAdmin && peerSelected) {
+  useEffect(() => {
+    dispatch(getTeamCustomizationPending());
+  }, [dispatch]);
+
+  if (isAdmin && peerId) {
     return <Redirect to="/customization" />;
   }
 
@@ -22,9 +30,9 @@ const CustomizationTeamPage = () => {
 
   return (
     <Page basic>
-      <Segment>
-        <h1>Customization Team Page</h1>
-      </Segment>
+      {!teamCustomizationError && <NewTeamCustomizeForm teamCustomizationData={teamCustomizationAvailable} />}
+      {teamCustomizationPending && !teamCustomizationError && Loading()}
+      {teamCustomizationError && <Message error>Oh snap! {teamCustomizationError}.</Message>}
     </Page>
   );
 };

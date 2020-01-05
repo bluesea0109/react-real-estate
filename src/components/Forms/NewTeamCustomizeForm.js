@@ -6,9 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import React, { createRef, Fragment, useEffect, useState, useReducer } from 'react';
 import { Confirm, Dropdown, Form, Header, Label, Popup, Radio } from 'semantic-ui-react';
 
-import { isMobile, isValidURL, maxLength, popup, required, composeValidators, url, differenceObjectDeep } from './helpers';
-import { saveListedShortcodePending, saveSoldShortcodePending } from '../../store/modules/shortcode/actions';
-import { saveCustomizationPending } from '../../store/modules/customization/actions';
+import { saveTeamSoldShortcodePending, saveTeamListedShortcodePending } from '../../store/modules/teamShortcode/actions';
+import { isMobile, isValidURL, maxLength, popup, required, composeValidators, url } from './helpers';
+import { saveTeamCustomizationPending } from '../../store/modules/teamCustomization/actions';
 import { Button, Icon, Image, Menu, Modal, Segment } from '../Base';
 import LoadingWithMessage from '../LoadingWithMessage';
 import FlipCard from '../FlipCard';
@@ -29,9 +29,8 @@ const NEW_LISTING = 'listed';
 const SOLD_LISTING = 'sold';
 
 let multiUserStartState;
-let singleUserStartState;
 
-const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
+const NewCustomizeForm = ({ teamCustomizationData }) => {
   const dispatch = useDispatch();
   const bookmarkTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.bookmark);
   const ribbonTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.ribbon);
@@ -87,18 +86,14 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
   const soldListingShortenedURL = useSelector(store => store.shortcode && store.shortcode.sold);
 
   const onLoginUserId = useSelector(store => store.onLogin.user._id);
-  const onLoginMode = useSelector(store => store.onLogin.mode);
   const teammates = useSelector(store => store.team.profiles);
-  const peerId = useSelector(store => store.peer.peerId);
 
-  const customizationPending = useSelector(store => store.customization && store.customization.pending);
-  const customizationError = useSelector(store => store.customization && store.customization.error);
-  const postcardsPreviewIsPending = useSelector(store => store.postcards && store.postcards.pending);
-  const postcardsPreviewError = useSelector(store => store.postcards && store.postcards.error);
-  const postcardsPreview = useSelector(store => store.postcards && store.postcards.available);
+  const teamCustomizationPending = useSelector(store => store.teamCustomization && store.teamCustomization.pending);
+  const customizationError = useSelector(store => store.teamCustomization && store.teamCustomization.error);
+  const postcardsPreviewIsPending = useSelector(store => store.teamPostcards && store.teamPostcards.pending);
+  const postcardsPreviewError = useSelector(store => store.teamPostcards && store.teamPostcards.error);
+  const postcardsPreview = useSelector(store => store.teamPostcards && store.teamPostcards.available);
 
-  const multiUser = onLoginMode === 'multiuser';
-  const singleUser = onLoginMode === 'singleuser';
   const profiles = [];
 
   const [step, setStep] = useState(1);
@@ -110,13 +105,11 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
   const [listedIsFlipped, setListedIsFlipped] = useState(false);
   const [soldIsFlipped, setSoldIsFlipped] = useState(false);
 
-  let pristineState;
-  if (multiUser) pristineState = _.isEqual(formValues, multiUserStartState);
-  if (singleUser) pristineState = _.isEqual(formValues, singleUserStartState);
+  const pristineState = _.isEqual(formValues, multiUserStartState);
 
   useEffect(() => {
-    if (multiUser && customizationData && teamCustomizationData) {
-      const updatedFormValues = _.merge({}, formValues, teamCustomizationData, customizationData);
+    if (teamCustomizationData) {
+      const updatedFormValues = _.merge({}, formValues, teamCustomizationData);
       delete updatedFormValues._rev;
       delete updatedFormValues._id;
       delete updatedFormValues.onboardingComplete;
@@ -124,30 +117,14 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
       multiUserStartState = updatedFormValues;
 
       if (updatedFormValues.listed.cta) {
-        dispatch(saveListedShortcodePending(updatedFormValues.listed.cta));
+        dispatch(saveTeamSoldShortcodePending(updatedFormValues.listed.cta));
       }
       if (updatedFormValues.sold.cta) {
-        dispatch(saveSoldShortcodePending(updatedFormValues.sold.cta));
-      }
-    }
-
-    if (singleUser && customizationData) {
-      const updatedFormValues = _.merge({}, formValues, customizationData);
-      delete updatedFormValues._rev;
-      delete updatedFormValues._id;
-      delete updatedFormValues.onboardingComplete;
-      setFormValues(updatedFormValues);
-      singleUserStartState = updatedFormValues;
-
-      if (updatedFormValues.listed.cta) {
-        dispatch(saveListedShortcodePending(updatedFormValues.listed.cta));
-      }
-      if (updatedFormValues.sold.cta) {
-        dispatch(saveSoldShortcodePending(updatedFormValues.sold.cta));
+        dispatch(saveTeamSoldShortcodePending(updatedFormValues.sold.cta));
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [customizationData, teamCustomizationData, setFormValues, dispatch]);
+  }, [teamCustomizationData, setFormValues, dispatch]);
 
   useEffect(() => {
     if (!formValues.listed.createMailoutsOfThisType && !formValues.sold.createMailoutsOfThisType) {
@@ -158,8 +135,7 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
   }, [formValues, setShowSelectionAlert]);
 
   const handleSubmit = () => {
-    const diff = differenceObjectDeep(teamCustomizationData, formValues);
-    const data = _.merge({}, customizationData, diff);
+    const data = _.merge({}, teamCustomizationData, formValues);
 
     if (!data.listed.kwkly) delete data.listed.kwkly;
     if (!data.sold.kwkly) delete data.sold.kwkly;
@@ -167,7 +143,7 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
     if (!data.listed.defaultDisplayAgent.userId) delete data.listed.defaultDisplayAgent;
     if (!data.sold.defaultDisplayAgent.userId) delete data.sold.defaultDisplayAgent;
 
-    dispatch(saveCustomizationPending(data));
+    dispatch(saveTeamCustomizationPending(data));
     setDisplayReview(true);
   };
 
@@ -334,6 +310,8 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
   };
 
   const renderMailoutSizeSlider = ({ listingType }) => {
+    const MIN = 100;
+    const MAX = 2000;
     const INCREMENT = 10;
     const STEPS = INCREMENT;
     const MARGIN = INCREMENT;
@@ -343,9 +321,9 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
     const currentMailoutSizeMin = formValues[listingType].mailoutSizeMin;
     const currentMailoutSizeMax = formValues[listingType].mailoutSizeMax;
 
-    // SLIDER_INITIAL_VALUES.push(currentMailoutSizeMin);
+    SLIDER_INITIAL_VALUES.push(currentMailoutSizeMin);
     SLIDER_INITIAL_VALUES.push(currentMailoutSize);
-    // SLIDER_INITIAL_VALUES.push(currentMailoutSizeMax);
+    SLIDER_INITIAL_VALUES.push(currentMailoutSizeMax);
 
     const handleMailoutSizeChange = value => {
       const newValue = formValues;
@@ -364,8 +342,8 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
         <Nouislider
           style={{ height: '3px' }}
           range={{
-            min: currentMailoutSizeMin,
-            max: currentMailoutSizeMax,
+            min: MIN,
+            max: MAX,
           }}
           step={STEPS}
           start={SLIDER_INITIAL_VALUES}
@@ -381,19 +359,17 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
           }}
           format={{
             to: (value, index) => {
-              // if (index === 0) return 'Min: ' + intValue;
-              // if (index === 1) return 'Default: ' + intValue;
-              // if (index === 2) return 'Max: ' + intValue;
+              const intValue = Math.round(parseInt(value, 10) / 10) * 10;
 
-              return Math.round(parseInt(value, 10) / 10) * 10;
+              if (index === 0) return 'Min: ' + intValue;
+              if (index === 1) return 'Default: ' + intValue;
+              if (index === 2) return 'Max: ' + intValue;
             },
             from: value => {
-              // const newValue = value.split(':');
-              //
-              // if (newValue.length === 1) return newValue[0];
-              // else return newValue[1];
+              const newValue = value.split(':');
 
-              return value;
+              if (newValue.length === 1) return newValue[0];
+              else return newValue[1];
             },
           }}
           onChange={handleMailoutSizeChange}
@@ -420,8 +396,8 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
       newValue[listingType].cta = eURL;
       setFormValues(newValue);
 
-      if (listingType === NEW_LISTING && isValidURL(eURL)) dispatch(saveListedShortcodePending(eURL));
-      if (listingType === SOLD_LISTING && isValidURL(eURL)) dispatch(saveSoldShortcodePending(eURL));
+      if (listingType === NEW_LISTING && isValidURL(eURL)) dispatch(saveTeamListedShortcodePending(eURL));
+      if (listingType === SOLD_LISTING && isValidURL(eURL)) dispatch(saveTeamSoldShortcodePending(eURL));
     };
 
     const error = ctaEnabled && composeValidators(required, url)(currentValue);
@@ -591,17 +567,12 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
       <Segment>
         <Menu borderless fluid secondary>
           <Menu.Item>
-            {peerId ? (
-              <Header as="h1">
-                Peer Customization
-                <Header.Subheader>Set the default template customization options for peer campaigns.</Header.Subheader>
-              </Header>
-            ) : (
-              <Header as="h1">
-                My Customization
-                <Header.Subheader>Set the default template customization options for your campaigns.</Header.Subheader>
-              </Header>
-            )}
+            <Header as="h1">
+              Team Customization
+              <Header.Subheader>
+                Set the default template customization options for your team. Changes made here will not overwrite existing user-specific customization.
+              </Header.Subheader>
+            </Header>
           </Menu.Item>
           <Menu.Menu position="right">
             <span>
@@ -634,11 +605,11 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
       <Modal open={displayReview} basic size="tiny">
         {!postcardsPreviewIsPending && <Modal.Header>Preview</Modal.Header>}
 
-        {!customizationPending && (postcardsPreviewError || customizationError) && <Modal.Header>Error</Modal.Header>}
+        {!teamCustomizationPending && (postcardsPreviewError || customizationError) && <Modal.Header>Error</Modal.Header>}
 
         {postcardsPreviewIsPending && <LoadingWithMessage message="Please wait, loading an example preview..." />}
 
-        {!customizationPending && (postcardsPreviewError || customizationError) && (
+        {!teamCustomizationPending && (postcardsPreviewError || customizationError) && (
           <Modal.Content style={{ padding: '0 45px 10px' }}>{postcardsPreviewError || customizationError}</Modal.Content>
         )}
 
@@ -678,7 +649,7 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
           </Modal.Actions>
         )}
 
-        {!customizationPending && (postcardsPreviewError || customizationError) && (
+        {!teamCustomizationPending && (postcardsPreviewError || customizationError) && (
           <Modal.Actions>
             <Button basic color="red" inverted onClick={() => setDisplayReview(false)}>
               <Icon name="remove" /> OK
