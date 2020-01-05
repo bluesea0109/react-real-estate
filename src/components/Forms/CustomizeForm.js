@@ -579,7 +579,8 @@ const CustomizeTeamForm = () => {
           <Modal.Content style={{ padding: '0 45px 10px' }}>{postcardsPreviewError || customizationError}</Modal.Content>
         )}
 
-        {newListingEnabled &&
+        {(!postcardsPreviewError || !customizationError) &&
+          newListingEnabled &&
           postcardsPreview &&
           postcardsPreview.listed &&
           postcardsPreview.listed.sampleBackLargeUrl &&
@@ -593,7 +594,8 @@ const CustomizeTeamForm = () => {
             </Modal.Content>
           )}
 
-        {soldListingEnabled &&
+        {(!postcardsPreviewError || !customizationError) &&
+          soldListingEnabled &&
           postcardsPreview &&
           postcardsPreview.sold &&
           postcardsPreview.sold.sampleBackLargeUrl &&
@@ -607,7 +609,7 @@ const CustomizeTeamForm = () => {
             </Modal.Content>
           )}
 
-        {!postcardsPreviewIsPending && (
+        {(!postcardsPreviewError || !customizationError) && !postcardsPreviewIsPending && (
           <Modal.Actions>
             <Button basic color="red" inverted onClick={() => setDisplayReview(false)}>
               <Icon name="remove" /> Edit
