@@ -1,27 +1,72 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Header } from 'semantic-ui-react';
 
-import { Page, Segment } from '../components/Base';
-import { getUserSettingsPending, getPeerSettingsPending } from '../store/modules/settings/actions';
+import AuthService from '../services/auth';
+import { Page, Segment, Button, Modal, Icon, Image } from '../components/Base';
+import InviteTeammatesForm from '../components/Forms/InviteTeammatesForm';
 
 const SettingsPage = () => {
-  const dispatch = useDispatch();
-  const peerId = useSelector(store => store.peer.peerId);
-  const currentSettings = useSelector(store => store.settings);
+  const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  useEffect(() => {
-    peerId ? dispatch(getPeerSettingsPending()) : dispatch(getUserSettingsPending());
-  }, [peerId, dispatch]);
+  const renderPasswordChange = () => {
+    return (
+      <Segment>
+        <Header as="h1">
+          Password Change
+          <Header.Subheader>Perform password change</Header.Subheader>
+        </Header>
 
-  const str = JSON.stringify(currentSettings, undefined, 4);
+        <Button onClick={() => setModalOpen(true)}>Password Change</Button>
+
+        <Modal open={modalOpen} onClose={() => setModalOpen(false)} basic size="small">
+          <Header icon="exclamation" content="Password Change" />
+          <Modal.Content image>
+            <Image wrapped size="medium" src={require('../assets/password-change.jpg')} />
+            <Modal.Description style={{ margin: 'auto' }}>
+              <p>To change password please follow these instructions.</p>
+              <p>First, press "Continue".</p>
+              <p>You will be logged out and redirected to a login page.</p>
+              <p>Then click the "Don't remember your password?" link.</p>
+              <p>Enter your email and press "Send Email" button.</p>
+              <p>You will receive an email with reset information.</p>
+              <p>Follow them to finalize your password change.</p>
+            </Modal.Description>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button basic color="red" type="button" inverted onClick={() => setModalOpen(false)}>
+              <Icon name="remove" /> Cancel
+            </Button>
+            <Button color="green" type="button" inverted onClick={() => AuthService.signOut()}>
+              <Icon name="checkmark" /> Continue
+            </Button>
+          </Modal.Actions>
+        </Modal>
+      </Segment>
+    );
+  };
+
+  const renderSyncCRM = () => {
+    return (
+      <Segment>
+        <Header as="h1">
+          Sync CRM - WIP
+          <Header.Subheader>Perform CRM sync</Header.Subheader>
+        </Header>
+
+        <Button>Sync CRM</Button>
+      </Segment>
+    );
+  };
 
   return (
     <Page basic>
-      <Segment>
-        <h1>Settings Page</h1>
-        <h2>{peerId ? 'Peer settings go here' : 'Logged in user settings go here'}</h2>
-        <pre>{str}</pre>
-      </Segment>
+      {isAdmin && <InviteTeammatesForm settingsPage={true} />}
+
+      {renderPasswordChange()}
+
+      {isAdmin && renderSyncCRM()}
     </Page>
   );
 };
