@@ -117,7 +117,7 @@ const MailoutDetailsPage = () => {
     } else {
       return (
         <Button as="div" labelPosition="left">
-          <Label basic style={{ minWidth: '6em' }}>
+          <Label basic style={{ minWidth: '6em', marginRight: '10px' }}>
             {details && details.recipientCount}
           </Label>
           <Button
@@ -128,8 +128,7 @@ const MailoutDetailsPage = () => {
             disabled={isUpdateMailoutSizePending}
             loading={isUpdateMailoutSizePending}
           >
-            <Icon name="edit" />
-            Edit
+            Change
           </Button>
         </Button>
       );
