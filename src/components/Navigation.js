@@ -104,7 +104,7 @@ export default () => {
 
       return profiles.push({
         key: index,
-        text: profile.last,
+        text: profile.first,
         value: profile.userId,
         content: (
           <StyledHeader as="h4" ref={contextRef}>
