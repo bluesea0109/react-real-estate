@@ -24,6 +24,9 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
   const ribbonTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.ribbon);
   const stackTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.stack);
 
+  const onLoginMode = useSelector(store => store.onLogin.mode);
+  const multiUser = onLoginMode === 'multiuser';
+
   const modifyPending = useSelector(store => store.mailout.modifyPending);
   const modifyError = useSelector(store => store.mailout.modifyError);
 
@@ -290,10 +293,12 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
             <BlockPicker triangle="hide" width="200px" color={selectedBrandColor} colors={colors} onChangeComplete={setSelectedBrandColor} />
           </div>
 
-          <div>
-            <Header as="h4">Display Agent</Header>
-            <Dropdown placeholder="Select Friend" fluid selection options={profiles} value={currentMailoutDisplayAgentUserID} onChange={handleAgentChange} />
-          </div>
+          {multiUser && (
+            <div>
+              <Header as="h4">Display Agent</Header>
+              <Dropdown placeholder="Select Friend" fluid selection options={profiles} value={currentMailoutDisplayAgentUserID} onChange={handleAgentChange} />
+            </div>
+          )}
         </Segment>
 
         <Header as="h4" style={{ marginLeft: '1.5em', marginBottom: '-0.5em' }}>
