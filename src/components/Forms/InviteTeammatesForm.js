@@ -42,7 +42,7 @@ const resolveInvitationStatus = type => {
   return type ? types[type] : types['undefined'];
 };
 
-const InviteTeammatesForm = () => {
+const InviteTeammatesForm = ({ settingsPage = null }) => {
   const dispatch = useDispatch();
   const teammates = useSelector(store => store.team.profiles);
   const isInviteUsersPending = useSelector(store => store.inviteUsers.pending);
@@ -234,9 +234,11 @@ const InviteTeammatesForm = () => {
                 <Button color="teal" type="submit" loading={isInviteUsersPending} disabled={sendDisabled || isInviteUsersPending}>
                   Send
                 </Button>
-                <Button color="teal" type="button" loading={isInviteUsersPending} onClick={handleContinue} disabled={isInviteUsersPending}>
-                  Skip
-                </Button>
+                {!settingsPage && (
+                  <Button color="teal" type="button" loading={isInviteUsersPending} onClick={handleContinue} disabled={isInviteUsersPending}>
+                    Skip
+                  </Button>
+                )}
               </div>
             </div>
           </Form>
