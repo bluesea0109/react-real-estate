@@ -1,14 +1,17 @@
-import Merge from 'lodash/merge';
+import _ from 'lodash';
 import styled from 'styled-components';
 import { BlockPicker } from 'react-color';
 import Nouislider from 'nouislider-react';
-import { useSelector } from 'react-redux';
-import { Confirm, Dropdown, Form, Header, Popup, Radio } from 'semantic-ui-react';
+import { useDispatch, useSelector } from 'react-redux';
 import React, { createRef, Fragment, useEffect, useState, useReducer } from 'react';
+import { Confirm, Dropdown, Form, Header, Label, Popup, Radio, Message } from 'semantic-ui-react';
 
-import { Button, Icon, Image, Menu, Segment } from '../Base';
-import { isMobile } from './helpers';
-
+import { isMobile, isValidURL, maxLength, popup, required, composeValidators, url, differenceObjectDeep } from './helpers';
+import { saveListedShortcodePending, saveSoldShortcodePending } from '../../store/modules/shortcode/actions';
+import { saveCustomizationPending } from '../../store/modules/customization/actions';
+import { Button, Icon, Image, Menu, Modal, Segment } from '../Base';
+import LoadingWithMessage from '../LoadingWithMessage';
+import FlipCard from '../FlipCard';
 import './EditCampaignForm.css';
 
 export const colors = ['#b40101', '#f2714d', '#f4b450', '#79c34d', '#2d9a2c', '#59c4c4', '#009ee7', '#0e2b5b', '#ee83ee', '#8b288f', '#808080', '#000000'];
@@ -19,17 +22,29 @@ const StyledHeader = styled(Header)`
 `;
 
 const formReducer = (state, action) => {
-  return Merge({}, state, action);
+  return _.merge({}, state, action);
 };
 
-const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
-  const bookmarkTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.bookmark);
-  // const ribbonTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.ribbon);
-  // const stackTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.stack);
+const NEW_LISTING = 'listed';
+const SOLD_LISTING = 'sold';
 
-  // const resolveTemplateValues = () => {
-  //
-  // };
+let multiUserStartState;
+let singleUserStartState;
+
+const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
+  const dispatch = useDispatch();
+  const bookmarkTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.bookmark);
+  const ribbonTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.ribbon);
+  const stackTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.stack);
+
+  const resolveTemplateFieldValues = type => {
+    const types = {
+      bookmark: bookmarkTemplate,
+      ribbon: ribbonTemplate,
+      stack: stackTemplate,
+    };
+    return type ? types[type] : undefined;
+  };
 
   const initialValues = {
     listed: {
@@ -47,6 +62,7 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
       frontHeadline: bookmarkTemplate.listed.fields.filter(field => field.name === 'frontHeadline')[0],
       cta: null,
       shortenCTA: null,
+      kwkly: null,
     },
     sold: {
       createMailoutsOfThisType: false,
@@ -63,41 +79,76 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
       frontHeadline: bookmarkTemplate.sold.fields.filter(field => field.name === 'frontHeadline')[0],
       cta: null,
       shortenCTA: null,
+      kwkly: null,
     },
   };
+
+  const newListingShortenedURL = useSelector(store => store.shortcode && store.shortcode.listed);
+  const soldListingShortenedURL = useSelector(store => store.shortcode && store.shortcode.sold);
 
   const onLoginUserId = useSelector(store => store.onLogin.user._id);
   const onLoginMode = useSelector(store => store.onLogin.mode);
   const teammates = useSelector(store => store.team.profiles);
   const peerId = useSelector(store => store.peer.peerId);
 
+  const customizationPending = useSelector(store => store.customization && store.customization.pending);
+  const customizationError = useSelector(store => store.customization && store.customization.error);
+  const postcardsPreviewIsPending = useSelector(store => store.postcards && store.postcards.pending);
+  const postcardsPreviewError = useSelector(store => store.postcards && store.postcards.error);
+  const postcardsPreview = useSelector(store => store.postcards && store.postcards.available);
+
   const multiUser = onLoginMode === 'multiuser';
-  const singleuser = onLoginMode === 'singleuser';
+  const singleUser = onLoginMode === 'singleuser';
   const profiles = [];
 
   const [step, setStep] = useState(1);
-
   const [formValues, setFormValues] = useReducer(formReducer, initialValues);
+  const [formError, setFormError] = useState(false);
+
   const [showSelectionAlert, setShowSelectionAlert] = useState(false);
+
+  const [displayReview, setDisplayReview] = useState(false);
+  const [listedIsFlipped, setListedIsFlipped] = useState(false);
+  const [soldIsFlipped, setSoldIsFlipped] = useState(false);
+
+  let pristineState;
+  if (multiUser) pristineState = _.isEqual(formValues, multiUserStartState);
+  if (singleUser) pristineState = _.isEqual(formValues, singleUserStartState);
 
   useEffect(() => {
     if (multiUser && customizationData && teamCustomizationData) {
-      const updatedFormValues = Merge({}, formValues, teamCustomizationData, customizationData);
+      const updatedFormValues = _.merge({}, formValues, teamCustomizationData, customizationData);
       delete updatedFormValues._rev;
       delete updatedFormValues._id;
       delete updatedFormValues.onboardingComplete;
       setFormValues(updatedFormValues);
+      multiUserStartState = updatedFormValues;
+
+      if (updatedFormValues.listed.cta) {
+        dispatch(saveListedShortcodePending(updatedFormValues.listed.cta));
+      }
+      if (updatedFormValues.sold.cta) {
+        dispatch(saveSoldShortcodePending(updatedFormValues.sold.cta));
+      }
     }
 
-    if (singleuser && customizationData) {
-      const updatedFormValues = Merge({}, formValues, customizationData);
+    if (singleUser && customizationData) {
+      const updatedFormValues = _.merge({}, formValues, customizationData);
       delete updatedFormValues._rev;
       delete updatedFormValues._id;
       delete updatedFormValues.onboardingComplete;
       setFormValues(updatedFormValues);
+      singleUserStartState = updatedFormValues;
+
+      if (updatedFormValues.listed.cta) {
+        dispatch(saveListedShortcodePending(updatedFormValues.listed.cta));
+      }
+      if (updatedFormValues.sold.cta) {
+        dispatch(saveSoldShortcodePending(updatedFormValues.sold.cta));
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [customizationData, teamCustomizationData, setFormValues]);
+  }, [customizationData, teamCustomizationData, setFormValues, dispatch]);
 
   useEffect(() => {
     if (!formValues.listed.createMailoutsOfThisType && !formValues.sold.createMailoutsOfThisType) {
@@ -107,12 +158,33 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
     }
   }, [formValues, setShowSelectionAlert]);
 
-  // const handleChange = input => event => {
-  //   console.log('changes....');
-  //   console.log('input: ', input);
-  //   console.log('event: ', event);
-  //   // this.setState({ [input] : event.target.value })
-  // };
+  const handleSubmit = () => {
+    const noError = window.document.getElementsByClassName('error').length === 0;
+
+    if (noError) {
+      setFormError(false);
+
+      const diff = differenceObjectDeep(teamCustomizationData, formValues);
+      const data = _.merge({}, customizationData, diff);
+
+      if (!data.listed.kwkly) delete data.listed.kwkly;
+      if (!data.sold.kwkly) delete data.sold.kwkly;
+
+      if (!data.listed.defaultDisplayAgent.userId) delete data.listed.defaultDisplayAgent;
+      if (!data.sold.defaultDisplayAgent.userId) delete data.sold.defaultDisplayAgent;
+
+      dispatch(saveCustomizationPending(data));
+      setDisplayReview(true);
+    } else {
+      setFormError(true);
+    }
+  };
+
+  const handleConfirm = listingType => {
+    const newValue = formValues;
+    newValue[listingType].createMailoutsOfThisType = true;
+    setFormValues(newValue);
+  };
 
   const nextStep = () => {
     setStep(step + 1);
@@ -153,7 +225,7 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
   }
 
   const renderSwitch = ({ listingType }) => {
-    const targetOn = listingType === 'listed' ? 'Generate new listing campaigns' : 'Generate sold listing campaigns';
+    const targetOn = listingType === NEW_LISTING ? 'Generate new listing campaigns' : 'Generate sold listing campaigns';
 
     const currentValue = formValues[listingType].createMailoutsOfThisType;
 
@@ -235,17 +307,23 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
       setFormValues(newValue);
     };
 
-    return <Dropdown placeholder="Select Default Agent" fluid selection options={profiles} value={currentValue} onChange={handleAgentChange} />;
+    const error = composeValidators(required)(currentValue) && true;
+
+    return <Dropdown error={error} placeholder="Select Default Agent" fluid selection options={profiles} value={currentValue} onChange={handleAgentChange} />;
   };
 
   const renderField = ({ fieldName, listingType }) => {
     const adjustedName = fieldName === 'frontHeadline' ? 'Headline' : fieldName;
 
     const currentValue = formValues[listingType][fieldName];
+    const currentTemplate = formValues[listingType].templateTheme;
+    const currentTemplateFields = resolveTemplateFieldValues(currentTemplate)[listingType].fields;
+    const templateDefaults = currentTemplateFields.filter(field => fieldName === field.name)[0];
+    const error = composeValidators(required, maxLength(templateDefaults.max))(currentValue);
 
-    const handleChange = value => {
+    const handleChange = input => {
       const newValue = formValues;
-      newValue[listingType][fieldName] = value;
+      newValue[listingType][fieldName] = input.target.value;
       setFormValues(newValue);
     };
 
@@ -254,10 +332,10 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
         <Form.Input
           fluid
           label={<Header as="h4">{adjustedName}</Header>}
-          // error={error && { content: error }}
-          // placeholder={field.default}
-          // type={field.type}
-          onChange={(e, input) => handleChange(input.value)}
+          error={error && { content: error }}
+          placeholder={templateDefaults.default}
+          type={templateDefaults.type}
+          onBlur={handleChange}
           defaultValue={currentValue}
         />
       </Form.Field>
@@ -339,8 +417,108 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
     );
   };
 
+  const renderCTA = ({ listingType }) => {
+    const currentValue = formValues[listingType].cta;
+    const ctaEnabled = formValues[listingType].shortenCTA;
+    const shortenedURL = listingType === NEW_LISTING ? newListingShortenedURL : soldListingShortenedURL;
+
+    const handleCTAChange = input => {
+      const eURL = input.target.value;
+
+      const newValue = formValues;
+      newValue[listingType].cta = eURL;
+      setFormValues(newValue);
+
+      if (listingType === NEW_LISTING && isValidURL(eURL)) dispatch(saveListedShortcodePending(eURL));
+      if (listingType === SOLD_LISTING && isValidURL(eURL)) dispatch(saveSoldShortcodePending(eURL));
+    };
+
+    const error = ctaEnabled && composeValidators(required, url)(currentValue);
+
+    const isVisible = ctaEnabled && !error && shortenedURL;
+
+    return (
+      <Form.Field className={isMobile() ? null : isVisible ? 'tertiary-grid-container' : null}>
+        <Form.Input
+          fluid
+          label={
+            <Header as="h4" style={{ opacity: ctaEnabled ? '1' : '0.4' }}>
+              Call to action URL
+            </Header>
+          }
+          error={error && { content: error }}
+          // placeholder={field.default}
+          // type={field.type}
+          onBlur={handleCTAChange}
+          defaultValue={currentValue}
+          disabled={!ctaEnabled}
+          style={{ opacity: ctaEnabled ? '1' : '0.4' }}
+        />
+        {isVisible && (
+          <Label style={{ marginTop: !isMobile() && '2.75em', padding: '1em' }}>
+            <Icon name="linkify" />
+            Shortened URL:
+            <Label.Detail>
+              <Menu.Item href={'https://' + shortenedURL} position="left" target="_blank">
+                <span>
+                  {shortenedURL} {popup('Some message')}
+                </span>
+              </Menu.Item>
+            </Label.Detail>
+          </Label>
+        )}
+      </Form.Field>
+    );
+  };
+
+  const renderKWKLY = ({ listingType }) => {
+    const currentValue = formValues[listingType].kwkly;
+    const ctaEnabled = formValues[listingType].shortenCTA;
+
+    const handleKwklyEnabledChange = value => {
+      const newValue = formValues;
+      newValue[listingType].shortenCTA = value;
+      setFormValues(newValue);
+    };
+
+    const handleKwklyChange = input => {
+      const newValue = formValues;
+      newValue[listingType].kwkly = input.target.value;
+      setFormValues(newValue);
+    };
+
+    const error = !ctaEnabled && composeValidators(required)(currentValue);
+
+    return (
+      <Form.Field className={isMobile() ? null : 'tertiary-grid-container'}>
+        <Form.Input
+          fluid
+          label={
+            <Header as="h4" style={{ opacity: !ctaEnabled ? '1' : '0.4' }}>
+              KWKLY Call to Action
+            </Header>
+          }
+          error={error && { content: error }}
+          // placeholder={field.default}
+          // type={field.type}
+          onBlur={handleKwklyChange}
+          defaultValue={currentValue}
+          disabled={ctaEnabled}
+          style={{ opacity: !ctaEnabled ? '1' : '0.4' }}
+        />
+        <Radio
+          toggle
+          label={!ctaEnabled ? 'Disable Kwkly' : 'Enable Kwkly'}
+          checked={!ctaEnabled}
+          onChange={() => handleKwklyEnabledChange(!ctaEnabled)}
+          style={{ marginTop: !isMobile() && '2.75em' }}
+        />
+      </Form.Field>
+    );
+  };
+
   const Listings = ({ listingType }) => {
-    const placeholder = listingType === 'listed' ? 'Campaign will not be enabled for new listings' : 'Campaign will not be enabled for sold listings';
+    const placeholder = listingType === NEW_LISTING ? 'Campaign will not be enabled for new listings' : 'Campaign will not be enabled for sold listings';
 
     return (
       <Fragment>
@@ -382,7 +560,7 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
         {formValues[listingType].createMailoutsOfThisType && (
           <Segment padded className={isMobile() ? null : 'tertiary-grid-container'}>
             <div>
-              <Header as="h4">Choose Agent</Header>
+              <Header as="h4">Choose Default Agent</Header>
               {renderAgentDropdown({ listingType })}
             </div>
 
@@ -392,6 +570,12 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
               <Header as="h4">Number of postcards to send per listing</Header>
               {renderMailoutSizeSlider({ listingType })}
             </div>
+
+            <div>{renderCTA({ listingType })}</div>
+
+            <div> </div>
+
+            <div>{renderKWKLY({ listingType })}</div>
           </Segment>
         )}
       </Fragment>
@@ -418,19 +602,20 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
           <Menu.Item>
             {peerId ? (
               <Header as="h1">
-                Peer Customization (WORK IN PROGRESS)
+                Peer Customization
                 <Header.Subheader>Set the default template customization options for peer campaigns.</Header.Subheader>
               </Header>
             ) : (
               <Header as="h1">
-                My Customization (WORK IN PROGRESS)
+                My Customization
                 <Header.Subheader>Set the default template customization options for your campaigns.</Header.Subheader>
               </Header>
             )}
           </Menu.Item>
           <Menu.Menu position="right">
+            {formError && <Message error header="Unable to save" content="You have to fix all errors first." />}
             <span>
-              <Button type="submit" color="teal">
+              <Button type="submit" color="teal" onClick={handleSubmit} disabled={pristineState}>
                 Save
               </Button>
             </span>
@@ -450,11 +635,67 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
         content="In order to use Bravity Marketing platform, you must select at least one"
         cancelButton="Enable new listings"
         confirmButton="Enable sold listings"
-        // onCancel={() => [setNewListingEnabled(true), setTogglePages('first')]}
-        // onConfirm={() => [setSoldListingEnabled(true), setTogglePages('last')]}
+        onCancel={() => [handleConfirm(NEW_LISTING), setStep(1)]}
+        onConfirm={() => [handleConfirm(SOLD_LISTING), setStep(2)]}
       />
 
       {renderSteps()}
+
+      <Modal open={displayReview} basic size="tiny">
+        {!postcardsPreviewIsPending && <Modal.Header>Preview</Modal.Header>}
+
+        {!customizationPending && (postcardsPreviewError || customizationError) && <Modal.Header>Error</Modal.Header>}
+
+        {postcardsPreviewIsPending && <LoadingWithMessage message="Please wait, loading an example preview..." />}
+
+        {!customizationPending && (postcardsPreviewError || customizationError) && (
+          <Modal.Content style={{ padding: '0 45px 10px' }}>{postcardsPreviewError || customizationError}</Modal.Content>
+        )}
+
+        {formValues.listed.createMailoutsOfThisType &&
+          postcardsPreview &&
+          postcardsPreview.listed &&
+          postcardsPreview.listed.sampleBackLargeUrl &&
+          postcardsPreview.listed.sampleFrontLargeUrl && (
+            <Modal.Content image style={{ padding: '0 45px 10px' }}>
+              <FlipCard isFlipped={listedIsFlipped}>
+                <Image wrapped size="large" src={postcardsPreview.listed.sampleFrontLargeUrl} onMouseOver={() => setListedIsFlipped(!listedIsFlipped)} />
+
+                <Image wrapped size="large" src={postcardsPreview.listed.sampleBackLargeUrl} onMouseOver={() => setListedIsFlipped(!listedIsFlipped)} />
+              </FlipCard>
+            </Modal.Content>
+          )}
+
+        {formValues.sold.createMailoutsOfThisType &&
+          postcardsPreview &&
+          postcardsPreview.sold &&
+          postcardsPreview.sold.sampleBackLargeUrl &&
+          postcardsPreview.sold.sampleFrontLargeUrl && (
+            <Modal.Content image style={{ padding: '10px 45px 0' }}>
+              <FlipCard isFlipped={soldIsFlipped}>
+                <Image wrapped size="large" src={postcardsPreview.sold.sampleFrontLargeUrl} onMouseOver={() => setSoldIsFlipped(!soldIsFlipped)} />
+
+                <Image wrapped size="large" src={postcardsPreview.sold.sampleBackLargeUrl} onMouseOver={() => setSoldIsFlipped(!soldIsFlipped)} />
+              </FlipCard>
+            </Modal.Content>
+          )}
+
+        {!postcardsPreviewIsPending && (
+          <Modal.Actions>
+            <Button color="green" inverted onClick={() => setDisplayReview(false)}>
+              <Icon name="checkmark" /> OK
+            </Button>
+          </Modal.Actions>
+        )}
+
+        {!customizationPending && (postcardsPreviewError || customizationError) && (
+          <Modal.Actions>
+            <Button basic color="red" inverted onClick={() => setDisplayReview(false)}>
+              <Icon name="remove" /> OK
+            </Button>
+          </Modal.Actions>
+        )}
+      </Modal>
     </Fragment>
   );
 };

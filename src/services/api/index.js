@@ -169,6 +169,16 @@ const directory = {
         set: () => ({ path: `/api/user/settings/photos/realtorPhoto`, method: 'postBlob' }),
       },
     },
+    shortcode: {
+      listed: {
+        get: () => ({ path: `/api/user/settings/shortcode/listed/example`, method: 'get' }),
+        save: () => ({ path: `/api/user/settings/shortcode/listed/example`, method: 'put' }),
+      },
+      sold: {
+        get: () => ({ path: `/api/user/settings/shortcode/sold/example`, method: 'get' }),
+        save: () => ({ path: `/api/user/settings/shortcode/sold/example`, method: 'put' }),
+      },
+    },
   },
 
   peer: {
@@ -197,6 +207,16 @@ const directory = {
       realtorPhoto: {
         get: peerId => ({ path: `/api/user/peer/${peerId}/settings/photos/realtorPhoto`, method: 'get' }),
         set: peerId => ({ path: `/api/user/peer/${peerId}/settings/photos/realtorPhoto`, method: 'postBlob' }),
+      },
+    },
+    shortcode: {
+      listed: {
+        get: peerId => ({ path: `/api/user/peer/${peerId}/settings/shortcode/listed/example`, method: 'get' }),
+        save: peerId => ({ path: `/api/user/peer/${peerId}/settings/shortcode/listed/example`, method: 'put' }),
+      },
+      sold: {
+        get: peerId => ({ path: `/api/user/peer/${peerId}/settings/shortcode/sold/example`, method: 'get' }),
+        save: peerId => ({ path: `/api/user/peer/${peerId}/settings/shortcode/sold/example`, method: 'put' }),
       },
     },
   },

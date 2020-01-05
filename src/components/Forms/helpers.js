@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { Fragment } from 'react';
 import { Label } from 'semantic-ui-react';
 import { Dropdown } from 'semantic-ui-react';
@@ -14,7 +15,7 @@ import { uploadPhotoPending, deletePhotoPending } from '../../store/modules/pict
 import { saveListedShortcodePending, saveSoldShortcodePending } from '../../store/modules/shortcode/actions';
 import { saveTeamListedShortcodePending, saveTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
 
-const isValidURL = value => isURL(value, { require_protocol: true }) && isURL(value, { require_tld: true });
+export const isValidURL = value => isURL(value, { require_protocol: true }) && isURL(value, { require_tld: true });
 export const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 const isEmpty = value => value === undefined || value === null || value === '';
@@ -42,6 +43,21 @@ export const isMobile = () => mql.matches;
 
 export function objectIsEmpty(obj) {
   return !obj || Object.keys(obj).length === 0;
+}
+
+export function differenceObjectDeep(source, other) {
+  return _.reduce(
+    source,
+    function(result, value, key) {
+      if (_.isObject(value) && _.isObject(other[key])) {
+        result[key] = differenceObjectDeep(value, other[key]);
+      } else if (!_.isEqual(value, other[key])) {
+        result[key] = other[key];
+      }
+      return result;
+    },
+    _.omit(other, _.keys(source))
+  );
 }
 
 const disabledCss = {
