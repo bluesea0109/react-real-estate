@@ -4,7 +4,7 @@ import React, { Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { MobileDisabledLayout, MobileEnabledLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
-import { canDelete, canSend, resolveLabelStatus } from './helpers';
+import { canDelete, canSend, resolveLabelStatus, resolveMailoutStatus } from './helpers';
 import { Button, Header } from '../Base';
 import { Label } from 'semantic-ui-react';
 import './hover.css';
@@ -77,6 +77,7 @@ const DeleteButton = ({ data, mailoutDetailPage, onClickDelete }) => {
 
 const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickApproveAndSend, onClickDelete }) => {
   if (!data) return;
+  const enableEdit = resolveMailoutStatus(data.mailoutStatus) !== 'Sent';
 
   return (
     <ItemHeaderLayout attached="top" block>
@@ -97,7 +98,7 @@ const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickAppro
       </span>
       <ItemHeaderMenuLayout>
         <span>
-          {mailoutDetailPage && data.listingStatus !== 'sold' && (
+          {mailoutDetailPage && enableEdit && (
             <Button basic color="teal" onClick={onClickEdit}>
               Edit
             </Button>
