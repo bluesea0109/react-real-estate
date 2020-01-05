@@ -152,7 +152,7 @@ export default function mailout(state = initialState, action) {
     case UPDATE_MAILOUT_SIZE_PENDING:
       return {
         ...state,
-        updateMailoutSizePending: false,
+        updateMailoutSizePending: true,
         mailoutSize: action.payload,
         updateMailoutSizeError: null,
       };
@@ -160,7 +160,7 @@ export default function mailout(state = initialState, action) {
     case UPDATE_MAILOUT_SIZE_SUCCESS:
       return {
         ...state,
-        updateMailoutSizePending: true,
+        updateMailoutSizePending: false,
         mailoutSize: null,
         updateMailoutSizeError: null,
       };

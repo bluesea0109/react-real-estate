@@ -41,6 +41,7 @@ const MailoutDetailsPage = () => {
 
   const isLoading = useSelector(store => store.mailout.pending);
   const isUpdating = useSelector(store => store.mailout.updatePending);
+  const isUpdateMailoutSizePending = useSelector(store => store.mailout.updateMailoutSizePending);
   const details = useSelector(store => store.mailout.details);
   const error = useSelector(store => store.mailout.error);
   const updateError = useSelector(store => store.mailout.updateError);
@@ -119,7 +120,14 @@ const MailoutDetailsPage = () => {
           <Label basic style={{ minWidth: '6em' }}>
             {details && details.recipientCount}
           </Label>
-          <Button icon color="teal" onClick={toggleRecipientsEditState} style={{ minWidth: '6em' }}>
+          <Button
+            icon
+            color="teal"
+            onClick={toggleRecipientsEditState}
+            style={{ minWidth: '6em' }}
+            disabled={isUpdateMailoutSizePending}
+            loading={isUpdateMailoutSizePending}
+          >
             <Icon name="edit" />
             Edit
           </Button>
