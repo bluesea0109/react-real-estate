@@ -97,7 +97,7 @@ const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickAppro
       </span>
       <ItemHeaderMenuLayout>
         <span>
-          {mailoutDetailPage && (
+          {mailoutDetailPage && data.listingStatus !== 'sold' && (
             <Button basic color="teal" onClick={onClickEdit}>
               Edit
             </Button>
