@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { useState } from 'react';
 import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
@@ -440,6 +441,12 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
               </Header>
 
               <Divider style={{ margin: '1em -1em' }} />
+
+              <ExternalChanges
+                whenTrue={initialValues.boards.length !== 0 && _.isEqual(values.boards, initialValues.boards)}
+                set="boards"
+                to={initialValues.boards}
+              />
 
               <FieldArray name="boards">
                 {({ fields }) =>
