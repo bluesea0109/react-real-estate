@@ -560,10 +560,12 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
 
         {formValues[listingType].createMailoutsOfThisType && (
           <Segment padded className={isMobile() ? null : 'tertiary-grid-container'}>
-            <div>
-              <Header as="h4">Choose Default Agent</Header>
-              {renderAgentDropdown({ listingType })}
-            </div>
+            {multiUser && (
+              <div>
+                <Header as="h4">Choose Default Agent</Header>
+                {renderAgentDropdown({ listingType })}
+              </div>
+            )}
 
             <div>{renderField({ fieldName: 'frontHeadline', listingType })}</div>
 
