@@ -74,6 +74,10 @@ const CustomizeTeamForm = () => {
   const teamPostcardsPreviewError = useSelector(store => store.teamPostcards && store.teamPostcards.error);
   const teamPostcardsPreview = useSelector(store => store.teamPostcards && store.teamPostcards.available);
 
+  const firstTeamAdmin = useSelector(
+    store => store.team && store.team.profiles && store.team.profiles.filter(profile => profile.userId === store.onLogin.user._id)[0]
+  );
+
   const resolveTemplate = type => {
     const types = {
       ribbon: ribbonTemplate,
@@ -142,6 +146,20 @@ const CustomizeTeamForm = () => {
     if (tc) {
       data._id = tc._id;
       data._rev = tc._rev;
+
+      data.listed.defaultDisplayAgent = tc.listed.defaultDisplayAgent;
+      data.sold.defaultDisplayAgent = tc.sold.defaultDisplayAgent;
+    } else {
+      data.listed.defaultDisplayAgent = {
+        userId: firstTeamAdmin && firstTeamAdmin.userId,
+        first: firstTeamAdmin && firstTeamAdmin.first,
+        last: firstTeamAdmin && firstTeamAdmin.last,
+      };
+      data.sold.defaultDisplayAgent = {
+        userId: firstTeamAdmin && firstTeamAdmin.userId,
+        first: firstTeamAdmin && firstTeamAdmin.first,
+        last: firstTeamAdmin && firstTeamAdmin.last,
+      };
     }
 
     dispatch(saveTeamCustomizationPending(data));
