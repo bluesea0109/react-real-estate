@@ -48,11 +48,8 @@ const CustomizationPage = () => {
   if (multiUser) {
     return (
       <Page basic>
-        {!customizationError && !teamCustomizationError && (
-          <NewCustomizeForm customizationData={customizationAvailable} teamCustomizationData={teamCustomizationAvailable} />
-        )}
+        {!teamCustomizationError && <NewCustomizeForm customizationData={customizationAvailable || {}} teamCustomizationData={teamCustomizationAvailable} />}
         {customizationPending && !customizationError && teamCustomizationPending && !teamCustomizationError && Loading()}
-        {customizationError && <Message error>Oh snap! {customizationError}.</Message>}
         {teamCustomizationError && <Message error>Oh snap! {teamCustomizationError}.</Message>}
       </Page>
     );
