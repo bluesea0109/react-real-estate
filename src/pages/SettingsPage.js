@@ -8,6 +8,9 @@ import InviteTeammatesForm from '../components/Forms/InviteTeammatesForm';
 
 const SettingsPage = () => {
   const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
+  const onLoginMode = useSelector(store => store.onLogin.mode);
+  const multiUser = onLoginMode === 'multiuser';
+
   const [modalOpen, setModalOpen] = useState(false);
 
   const renderPasswordChange = () => {
@@ -62,11 +65,11 @@ const SettingsPage = () => {
 
   return (
     <Page basic>
-      {isAdmin && <InviteTeammatesForm settingsPage={true} />}
+      {multiUser && isAdmin && <InviteTeammatesForm settingsPage={true} />}
 
       {renderPasswordChange()}
 
-      {isAdmin && renderSyncCRM()}
+      {multiUser && isAdmin && renderSyncCRM()}
     </Page>
   );
 };
