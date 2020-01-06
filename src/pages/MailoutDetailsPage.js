@@ -1,21 +1,22 @@
-import { Header, Icon, Label } from 'semantic-ui-react';
+import { Header, Label } from 'semantic-ui-react';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLastLocation } from 'react-router-last-location';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from '../components/MailoutListItem/helpers';
 import { submitMailoutPending, stopMailoutPending, resetMailout, updateMailoutSizePending } from '../store/modules/mailout/actions';
 import { Button, Grid, Menu, Message, Page, Segment, List, Popup, Input } from '../components/Base';
 import { ItemBodyDataLayout, ItemBodyLayoutV2, ItemLayout } from '../layouts';
-import { getMailoutPending } from '../store/modules/mailout/actions';
 import PopupContent from '../components/MailoutListItem/PopupContent';
+import { getMailoutPending } from '../store/modules/mailout/actions';
+import PopupMinMax from '../components/MailoutListItem/PopupMinMax';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ImageGroup from '../components/MailoutListItem/ImageGroup';
-import GoogleMapItem from '../components/GoogleMapItem';
-import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from '../components/MailoutListItem/helpers';
-import Loading from '../components/Loading';
 import LoadingWithMessage from '../components/LoadingWithMessage';
+import GoogleMapItem from '../components/GoogleMapItem';
+import Loading from '../components/Loading';
 
 const useFetching = (getActionCreator, dispatch, mailoutId) => {
   useEffect(() => {
@@ -46,6 +47,14 @@ const MailoutDetailsPage = () => {
   const error = useSelector(store => store.mailout.error);
   const updateError = useSelector(store => store.mailout.updateError);
 
+  const teamCustomization = useSelector(store => store.teamCustomization.available);
+  const onLoginMode = useSelector(store => store.onLogin.mode);
+  const multiUser = onLoginMode === 'multiuser';
+  const listingType = details && details.listingStatus;
+  const listingDefaults = teamCustomization && teamCustomization[listingType];
+  const mailoutSizeMin = listingDefaults && listingDefaults.mailoutSizeMin;
+  const mailoutSizeMax = listingDefaults && listingDefaults.mailoutSizeMax;
+
   useEffect(() => {
     if (!isLoading && !!error) {
       history.push(`/dashboard`);
@@ -57,9 +66,6 @@ const MailoutDetailsPage = () => {
       setNumberOfRecipients(details.recipientCount);
       setOnlyOnce(true);
     }
-    // if (details && details.recipientCount === numberOfRecipients) {
-    //   setOnlyOnce(false);
-    // }
   }, [details, onlyOnce, setOnlyOnce, numberOfRecipients]);
 
   useFetching(getMailoutPending, useDispatch(), mailoutId);
@@ -94,22 +100,29 @@ const MailoutDetailsPage = () => {
   };
 
   const submitNewValues = () => {
-    if (details && details.recipientCount !== numberOfRecipients) {
-      dispatch(updateMailoutSizePending(numberOfRecipients));
-    }
-  };
+    if (multiUser) {
+      let chosenNumber = numberOfRecipients;
+      if (chosenNumber < mailoutSizeMin) chosenNumber = mailoutSizeMin;
+      if (chosenNumber > mailoutSizeMax) chosenNumber = mailoutSizeMax;
 
-  const registerNewValues = value => {
-    setNumberOfRecipients(value);
+      setNumberOfRecipients(chosenNumber);
+
+      if (details && details.recipientCount !== chosenNumber) {
+        dispatch(updateMailoutSizePending(chosenNumber));
+      }
+    } else {
+      if (details && details.recipientCount !== numberOfRecipients) {
+        dispatch(updateMailoutSizePending(numberOfRecipients));
+      }
+    }
   };
 
   const renderRecipients = () => {
     if (editRecipients) {
       return (
         <Button as="div" labelPosition="left">
-          <Input style={{ minWidth: '4em' }} value={numberOfRecipients} onChange={props => registerNewValues(props.target.value)} />
-          <Button icon color="orange" onClick={() => [toggleRecipientsEditState(), submitNewValues()]} style={{ minWidth: '6em' }}>
-            <Icon name="save" />
+          <Input style={{ maxWidth: '4.5em', maxHeight: '2em' }} value={numberOfRecipients} onChange={props => setNumberOfRecipients(props.target.value)} />
+          <Button icon color="orange" onClick={() => [toggleRecipientsEditState(), submitNewValues()]} style={{ marginLeft: '10px', minWidth: '5em' }}>
             Save
           </Button>
         </Button>
@@ -117,14 +130,14 @@ const MailoutDetailsPage = () => {
     } else {
       return (
         <Button as="div" labelPosition="left">
-          <Label basic style={{ minWidth: '6em', marginRight: '10px' }}>
+          <Label basic style={{ minWidth: '5em', minHeight: '2em', textAlign: 'center' }}>
             {details && details.recipientCount}
           </Label>
           <Button
             icon
             color="teal"
             onClick={toggleRecipientsEditState}
-            style={{ minWidth: '6em' }}
+            style={{ marginLeft: '10px', minWidth: '5em' }}
             disabled={isUpdateMailoutSizePending}
             loading={isUpdateMailoutSizePending}
           >
@@ -170,7 +183,17 @@ const MailoutDetailsPage = () => {
                     <ItemBodyDataLayout relaxed>
                       <List.Item>
                         <List.Content>
-                          <List.Header>Recipients</List.Header>
+                          <List.Header>
+                            Recipients
+                            {multiUser && (
+                              <Popup
+                                flowing
+                                trigger={<FontAwesomeIcon icon="info-circle" style={{ marginLeft: '.5em', color: '#2DB5AD' }} />}
+                                content={PopupMinMax({ mailoutSizeMin, mailoutSizeMax })}
+                                position="top right"
+                              />
+                            )}
+                          </List.Header>
                           <List.Description>{renderRecipients()}</List.Description>
                         </List.Content>
                       </List.Item>
