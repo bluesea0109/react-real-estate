@@ -537,7 +537,7 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
         {formValues[listingType].createMailoutsOfThisType && (
           <Segment padded className={isMobile() ? null : 'primary-grid-container'}>
             <div>
-              <Header as="h4">{listingType} Template Theme</Header>
+              <Header as="h4">Template Theme</Header>
               {renderTemplatePicture({ templateName: 'bookmark', listingType })}
             </div>
 
