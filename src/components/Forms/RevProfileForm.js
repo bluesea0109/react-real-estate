@@ -73,6 +73,7 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
     if (profileAvailable) {
       profile._id = profileAvailable._id;
       profile._rev = profileAvailable._rev;
+      profile.teamId = values.teamId || profileAvailable.teamId;
       profile.brivitySync = profileAvailable.brivitySync;
     }
 
