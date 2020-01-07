@@ -14,7 +14,7 @@
     "create": "node utils/create-campaigns",
     "reset": "node utils/reset",
     "preversion": "npm run build",
-    "version": "",
+    "version": "git commit",
     "postversion": "git push && git push --tags && push-to-production",
     "push-to-production": "git checkout production && git merge master && git push origin production && git checkout master"
   },
