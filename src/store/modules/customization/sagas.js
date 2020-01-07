@@ -7,6 +7,7 @@ import {
   SAVE_CUSTOMIZATION_PENDING,
   saveCustomizationSuccess,
   saveCustomizationError,
+  reviewCustomizationCompleted,
 } from './actions';
 import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
 import { generatePostcardsPreviewPending } from '../postcards/actions';
@@ -14,6 +15,9 @@ import ApiService from '../../../services/api/index';
 
 export const getSelectedPeerId = state => state.peer.peerId;
 export const customizationToSave = state => state.customization.toSave;
+function objectIsEmpty(obj) {
+  return !obj || Object.keys(obj).length === 0;
+}
 
 export function* peerListingInitialSaga(peerId) {
   try {
@@ -37,13 +41,17 @@ export function* getCustomizationSaga({ peerId = null }) {
 
 export function* saveCustomizationSaga({ peerId = null }) {
   try {
-    const customization = yield select(customizationToSave);
+    let customization = yield select(customizationToSave);
+    const emptyCustomization = objectIsEmpty(customization);
+
+    if (emptyCustomization) customization = { _id: undefined, _rev: undefined };
 
     const { path, method } = peerId ? ApiService.directory.peer.customization.save(peerId) : ApiService.directory.user.customization.save();
     const response = yield call(ApiService[method], path, customization);
 
     yield put(saveCustomizationSuccess(response));
-    yield put(generatePostcardsPreviewPending());
+    if (!emptyCustomization) yield put(generatePostcardsPreviewPending());
+    if (emptyCustomization) yield put(reviewCustomizationCompleted());
 
     if (peerId) {
       const peerListingsInitial = yield peerListingInitialSaga(peerId);

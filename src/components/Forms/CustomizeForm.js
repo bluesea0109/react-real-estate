@@ -28,6 +28,7 @@ import { saveCustomizationPending, reviewCustomizationCompleted } from '../../st
 import { getTeamListedShortcodePending, getTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
 
 import './thin.css';
+import './CustomizeForm.css';
 
 const NEW_LISTING = 'newListing';
 const SOLD_LISTING = 'soldListing';
@@ -40,6 +41,10 @@ const MARGIN = INCREMENT;
 const SLIDER_INITIAL_VALUES = [300];
 
 const CustomizeTeamForm = () => {
+  const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
+  const [adminSkip, setAdminSkip] = useState(isAdmin);
+  const [enableSkip, setEnableSkip] = useState(false);
+
   const dispatch = useDispatch();
   const [newListingEnabled, setNewListingEnabled] = useState(true);
   const [soldListingEnabled, setSoldListingEnabled] = useState(false);
@@ -115,6 +120,11 @@ const CustomizeTeamForm = () => {
     dispatch(reviewCustomizationCompleted());
   };
 
+  const onSkip = () => {
+    setEnableSkip(true);
+    dispatch(saveCustomizationPending({}));
+  };
+
   const onSubmit = values => {
     let data;
     if (multiUser) {
@@ -185,6 +195,27 @@ const CustomizeTeamForm = () => {
     dispatch(saveCustomizationPending(data));
     setDisplayReview(true);
   };
+
+  const RenderHeader = () => (
+    <Segment>
+      <Header as="h1">
+        My Customization
+        <Header.Subheader>
+          Set the default template customization options for your campaigns. Changes made here will overwrite existing team customization.
+        </Header.Subheader>
+      </Header>
+    </Segment>
+  );
+
+  if (enableSkip)
+    return (
+      <Fragment>
+        <Segment>
+          <RenderHeader />
+          <LoadingWithMessage message="Skipping, please wait..." />
+        </Segment>
+      </Fragment>
+    );
 
   let initialValues = {
     [`${NEW_LISTING}_createMailoutsOfThisType`]: newListingEnabled,
@@ -547,14 +578,50 @@ const CustomizeTeamForm = () => {
 
   return (
     <Fragment>
-      <Segment>
-        <Header as="h1">
-          My Customization
-          <Header.Subheader>
-            Set the default template customization options for your campaigns. Changes made here will overwrite existing team customization.
-          </Header.Subheader>
-        </Header>
-      </Segment>
+      {<RenderHeader />}
+
+      {false && isAdmin && (
+        <Confirm
+          inverted
+          open={adminSkip}
+          content={
+            <Segment basic padded>
+              <br />
+              <p>
+                You can customize your Personal default Campaigns here or you can skip this step if you want your Campaigns to look like the rest of your team.
+              </p>
+              <p>Remember that you can always personalize this later.</p>
+            </Segment>
+          }
+          cancelButton="Edit"
+          confirmButton="Skip"
+          onCancel={() => [setAdminSkip(false)]}
+          onConfirm={() => [setAdminSkip(false), onSkip()]}
+        />
+      )}
+
+      {isAdmin && (
+        <Modal open={adminSkip} dimmer={'blurring'} onClose={() => [setAdminSkip(false)]}>
+          <Modal.Content>
+            <Segment basic padded>
+              <br />
+              <p>
+                You can customize your Personal default Campaigns here or you can skip this step if you want your Campaigns to look like the rest of your team.
+              </p>
+              <p>Remember that you can always personalize this later.</p>
+            </Segment>
+          </Modal.Content>
+
+          <Modal.Actions>
+            <Button color="blue" inverted onClick={() => [setAdminSkip(false)]}>
+              <Icon name="edit" /> Edit
+            </Button>
+            <Button color="green" inverted onClick={() => [setAdminSkip(false), onSkip()]}>
+              <Icon name="forward" /> Continue
+            </Button>
+          </Modal.Actions>
+        </Modal>
+      )}
 
       <Confirm
         open={showSelectionAlert}
