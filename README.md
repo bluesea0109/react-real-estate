@@ -1,3 +1,14 @@
+# ALF-React
+
+### Commit
+npm version patch --force -m "Some message to commit"
+or
+npm version minor --force -m "Some message to commit"
+or
+npm version major --force -m "Some message to commit"
+
+# CRA README
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
