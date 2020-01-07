@@ -4,7 +4,7 @@ import React, { Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { MobileDisabledLayout, MobileEnabledLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
-import { canDelete, canSend, resolveLabelStatus, resolveMailoutStatus } from './helpers';
+import { canSend, resolveLabelStatus, resolveMailoutStatus } from './helpers';
 import { Button, Header } from '../Base';
 import { Label } from 'semantic-ui-react';
 import './hover.css';
@@ -47,31 +47,20 @@ const ApproveAndSendButton = ({ data, mailoutDetailPage, onClickApproveAndSend }
   );
 };
 
-const DeleteButton = ({ data, mailoutDetailPage, onClickDelete }) => {
+const StopSendingButton = ({ data, onClickDelete }) => {
   if (!data) return;
 
-  if (!mailoutDetailPage) {
-    return (
-      <Fragment>
-        {canDelete(data.mailoutStatus) && (
-          <Link to={`dashboard/${data._id}`}>
-            <Button basic color="teal">
-              <FontAwesomeIcon icon="trash-alt" />
-            </Button>
-          </Link>
-        )}
-      </Fragment>
-    );
-  }
+  const enableDelete = resolveMailoutStatus(data.mailoutStatus) === 'Sent';
+  const activeWhen = new Date(Date.now()).toISOString().split('T')[0] < data.send_date;
 
   return (
-    <Fragment>
-      {canDelete(data.mailoutStatus) && (
+    <span>
+      {enableDelete && activeWhen && (
         <Button basic color="teal" onClick={onClickDelete}>
-          <FontAwesomeIcon icon="trash-alt" />
+          Stop Sending
         </Button>
       )}
-    </Fragment>
+    </span>
   );
 };
 
@@ -104,8 +93,10 @@ const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickAppro
             </Button>
           )}
         </span>
-        <span>{ApproveAndSendButton({ data, mailoutDetailPage, onClickApproveAndSend })}</span>
-        <span>{DeleteButton({ data, mailoutDetailPage, onClickDelete })}</span>
+        <span>
+          <ApproveAndSendButton data={data} mailoutDetailPage={mailoutDetailPage} onClickApproveAndSend={onClickApproveAndSend} />
+        </span>
+        {mailoutDetailPage && <StopSendingButton data={data} onClickDelete={onClickDelete} />}
       </ItemHeaderMenuLayout>
     </ItemHeaderLayout>
   );

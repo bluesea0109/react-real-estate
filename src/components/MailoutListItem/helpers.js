@@ -13,10 +13,6 @@ export const canSend = mailoutStatus => {
   return mailoutStatus === 'calculated';
 };
 
-export const canDelete = mailoutStatus => {
-  return mailoutStatus === 'calculated';
-};
-
 export const formatDate = created => {
   if (!created || typeof created !== 'number') return '-';
   return format(new Date(created), 'MM/dd/yyyy');
