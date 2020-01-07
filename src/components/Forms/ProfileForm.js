@@ -43,7 +43,7 @@ const ProfileForm = () => {
   const states = useSelector(store => store.states && store.states.available);
   const onLoginMode = useSelector(store => store.onLogin.mode);
   const multiUser = onLoginMode === 'multiuser';
-  const singleUser = onLoginMode === 'singleuser';
+  // const singleUser = onLoginMode === 'singleuser';
 
   const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
 
@@ -82,7 +82,7 @@ const ProfileForm = () => {
 
     saveProfile(profile);
 
-    if (isAdmin || singleUser) {
+    if (isAdmin || !multiUser) {
       const business = {
         teamProfile: true,
         notificationEmail: values.businessNotificationEmail,
@@ -284,7 +284,7 @@ const ProfileForm = () => {
               </div>
             </Segment>
 
-            {(isAdmin || singleUser) && (
+            {(isAdmin || !multiUser) && (
               <Segment>
                 <Header as="h1">
                   Business

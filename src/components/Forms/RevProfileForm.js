@@ -44,7 +44,7 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
   const states = useSelector(store => store.states && store.states.available);
   const onLoginMode = useSelector(store => store.onLogin.mode);
   const multiUser = onLoginMode === 'multiuser';
-  const singleUser = onLoginMode === 'singleuser';
+  // const singleUser = onLoginMode === 'singleuser';
 
   const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
   const selectedPeerId = useSelector(store => store.peer.peerId);
@@ -82,7 +82,7 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
 
     saveProfile(profile);
 
-    if ((isAdmin || singleUser) && !selectedPeerId) {
+    if ((isAdmin || !multiUser) && !selectedPeerId) {
       const business = {
         teamProfile: true,
         notificationEmail: values.businessNotificationEmail,
@@ -302,7 +302,7 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
               </div>
             </Segment>
 
-            {(isAdmin || singleUser) && !selectedPeerId && (
+            {(isAdmin || !multiUser) && !selectedPeerId && (
               <Segment>
                 <Header as="h1">
                   Business
