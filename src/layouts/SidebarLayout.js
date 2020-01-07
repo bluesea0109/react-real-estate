@@ -7,4 +7,8 @@ export default styled.div`
   z-index: 10;
 
   background-color: white;
+
+  @media (max-width: 769px) {
+    min-width: 100%;
+  }
 `;
