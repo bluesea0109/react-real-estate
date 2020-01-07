@@ -14,6 +14,7 @@
     "create": "node utils/create-campaigns",
     "reset": "node utils/reset",
     "preversion": "npm run build",
+    "version": "",
     "postversion": "git push && git push --tags && push-to-production",
     "push-to-production": "git checkout production && git merge master && git push origin production && git checkout master"
   },
@@ -78,7 +79,7 @@
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
       "npm run format",
       "git add",
-      "npm version"
+      "npm run version"
     ]
   },
   "browserslist": {
