@@ -41,7 +41,10 @@ const ProfileForm = () => {
   const auth0 = useSelector(store => store.auth0 && store.auth0.details);
   const boards = useSelector(store => store.boards && store.boards.available);
   const states = useSelector(store => store.states && store.states.available);
-  const isMultimode = useSelector(store => store.onLogin.mode === 'multiuser');
+  const onLoginMode = useSelector(store => store.onLogin.mode);
+  const multiUser = onLoginMode === 'multiuser';
+  const singleUser = onLoginMode === 'singleuser';
+
   const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
 
   const onLoginUserProfile = useSelector(store => store.onLogin && store.onLogin.userProfile);
@@ -79,7 +82,7 @@ const ProfileForm = () => {
 
     saveProfile(profile);
 
-    if (isAdmin) {
+    if (isAdmin || singleUser) {
       const business = {
         teamProfile: true,
         notificationEmail: values.businessNotificationEmail,
@@ -205,41 +208,41 @@ const ProfileForm = () => {
                 <div style={{ gridArea: 'First' }}>
                   {renderField({
                     name: 'first',
-                    label: isMultimode ? labelWithPopup('First Name', popup(changeMsg)) : 'First Name',
+                    label: multiUser ? labelWithPopup('First Name', popup(changeMsg)) : 'First Name',
                     type: 'text',
                     required: true,
                     validate: required,
-                    disabled: isMultimode,
+                    disabled: multiUser,
                   })}
                 </div>
                 <div style={{ gridArea: 'Last' }}>
                   {renderField({
                     name: 'last',
-                    label: isMultimode ? labelWithPopup('Last Name', popup(changeMsg)) : 'Last Name',
+                    label: multiUser ? labelWithPopup('Last Name', popup(changeMsg)) : 'Last Name',
                     type: 'text',
                     required: true,
                     validate: required,
-                    disabled: isMultimode,
+                    disabled: multiUser,
                   })}
                 </div>
                 <div style={{ gridArea: 'Phone' }}>
                   {renderField({
                     name: 'phone',
-                    label: isMultimode ? labelWithPopup('Phone Number', popup(changeMsg)) : 'Phone Number',
+                    label: multiUser ? labelWithPopup('Phone Number', popup(changeMsg)) : 'Phone Number',
                     type: 'text',
                     required: true,
                     validate: required,
-                    disabled: isMultimode,
+                    disabled: multiUser,
                   })}
                 </div>
                 <div style={{ gridArea: 'Email' }}>
                   {renderField({
                     name: 'email',
-                    label: isMultimode ? labelWithPopup('Email', popup(changeMsg)) : 'Email',
+                    label: multiUser ? labelWithPopup('Email', popup(changeMsg)) : 'Email',
                     type: 'text',
                     required: true,
                     validate: composeValidators(required, email),
-                    disabled: isMultimode,
+                    disabled: multiUser,
                   })}
                 </div>
                 <div style={{ gridArea: 'NotificationEmail' }}>
@@ -281,7 +284,7 @@ const ProfileForm = () => {
               </div>
             </Segment>
 
-            {isAdmin && (
+            {(isAdmin || singleUser) && (
               <Segment>
                 <Header as="h1">
                   Business
@@ -325,24 +328,24 @@ const ProfileForm = () => {
                   <div style={{ gridArea: 'TeamName' }}>
                     {renderField({
                       name: 'teamName',
-                      label: isMultimode ? labelWithPopup('Team Name', popup(changeMsg)) : 'Team Name',
+                      label: multiUser ? labelWithPopup('Team Name', popup(changeMsg)) : 'Team Name',
                       type: 'text',
                       required: true,
                       validate: required,
-                      disabled: isMultimode,
+                      disabled: multiUser,
                     })}
                   </div>
                   <div style={{ gridArea: 'TeamLogo' }}>
-                    {renderPicturePickerField({ name: 'teamLogo', label: 'Team Logo', dispatch: dispatch, disabled: isMultimode })}
+                    {renderPicturePickerField({ name: 'teamLogo', label: 'Team Logo', dispatch: dispatch, disabled: multiUser })}
                   </div>
                   <div style={{ gridArea: 'BrokerageName' }}>
                     {renderField({
                       name: 'brokerageName',
-                      label: isMultimode ? labelWithPopup('Brokerage Name', popup(changeMsg)) : 'Brokerage Name',
+                      label: multiUser ? labelWithPopup('Brokerage Name', popup(changeMsg)) : 'Brokerage Name',
                       type: 'text',
                       required: true,
                       validate: required,
-                      disabled: isMultimode,
+                      disabled: multiUser,
                     })}
                   </div>
                   <div style={{ gridArea: 'BrokerageLogo' }}>
@@ -358,43 +361,43 @@ const ProfileForm = () => {
                   <div style={{ gridArea: 'Address' }}>
                     {renderField({
                       name: 'address',
-                      label: isMultimode ? labelWithPopup('Address', popup(changeMsg)) : 'Address',
+                      label: multiUser ? labelWithPopup('Address', popup(changeMsg)) : 'Address',
                       type: 'text',
                       required: true,
                       validate: required,
-                      disabled: isMultimode,
+                      disabled: multiUser,
                     })}
                   </div>
                   <div style={{ gridArea: 'City' }}>
                     {renderField({
                       name: 'city',
-                      label: isMultimode ? labelWithPopup('City', popup(changeMsg)) : 'City',
+                      label: multiUser ? labelWithPopup('City', popup(changeMsg)) : 'City',
                       type: 'text',
                       required: true,
                       validate: required,
-                      disabled: isMultimode,
+                      disabled: multiUser,
                     })}
                   </div>
                   <div style={{ gridArea: 'State' }}>
                     {renderSelectField({
                       name: 'state',
-                      label: isMultimode ? labelWithPopup('State', popup(changeMsg)) : 'State',
+                      label: multiUser ? labelWithPopup('State', popup(changeMsg)) : 'State',
                       type: 'text',
                       required: true,
-                      validate: isMultimode ? null : required,
+                      validate: multiUser ? null : required,
                       options: states ? states : [],
                       search: true,
-                      disabled: isMultimode,
+                      disabled: multiUser,
                     })}
                   </div>
                   <div style={{ gridArea: 'ZipCode' }}>
                     {renderField({
                       name: 'zip',
-                      label: isMultimode ? labelWithPopup('Zip Code', popup(changeMsg)) : 'Zip Code',
+                      label: multiUser ? labelWithPopup('Zip Code', popup(changeMsg)) : 'Zip Code',
                       type: 'text',
                       required: true,
                       validate: required,
-                      disabled: isMultimode,
+                      disabled: multiUser,
                     })}
                   </div>
                   <div style={{ gridArea: 'BusinessNotificationEmail' }}>

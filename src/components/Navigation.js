@@ -66,7 +66,9 @@ export default () => {
   const completedCustomization = useSelector(store => store.onboarded.completedCustomization);
   const completedInviteTeammates = useSelector(store => store.onboarded.completedInviteTeammates);
 
-  const isMultimode = useSelector(store => store.onLogin.mode === 'multiuser');
+  const onLoginMode = useSelector(store => store.onLogin.mode);
+  const multiUser = onLoginMode === 'multiuser';
+  // const singleUser = onLoginMode === 'singleuser';
 
   const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
   const loggedInUser = useSelector(store => store.onLogin.user);
@@ -250,7 +252,7 @@ export default () => {
   if (!loadingCompleted) return null;
 
   if (loadingCompleted && !onboarded) {
-    if (isMultimode && isAdmin) {
+    if (multiUser && isAdmin) {
       return (
         <StepsLayout vertical={!mql.matches}>
           <StepLayout active={onProfile} completed={completedProfile}>
@@ -319,7 +321,7 @@ export default () => {
     <Dimmer.Dimmable blurring dimmed={appIsBusy}>
       <Dimmer active={appIsBusy} inverted />
       <NavigationLayout text>
-        {isMultimode && (
+        {multiUser && (
           <Menu.Item style={menuSpacing()}>
             <StyledUserSelectorDropdown
               search
@@ -342,7 +344,7 @@ export default () => {
             <FontAwesomeIcon icon="tachometer-alt" style={iconWithTextStyle} /> Dashboard
           </MobileDisabledLayout>
         </Menu.Item>
-        {isMultimode && isAdmin && !selectedPeerId ? (
+        {multiUser && isAdmin && !selectedPeerId ? (
           <Menu.Item color="teal" name="customization" active={activeItem === '/customization'}>
             {renderCustomizationDropdown()}
           </Menu.Item>

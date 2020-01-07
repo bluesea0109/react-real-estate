@@ -74,7 +74,10 @@ const CustomizeTeamForm = () => {
   const customizationPending = useSelector(store => store.customization && store.customization.pending);
   const customizationError = useSelector(store => store.customization && store.customization.error);
 
-  const isMultimode = useSelector(store => store.onLogin.mode === 'multiuser');
+  const onLoginMode = useSelector(store => store.onLogin.mode);
+  const multiUser = onLoginMode === 'multiuser';
+  // const singleUser = onLoginMode === 'singleuser';
+
   const postcardsPreviewIsPending = useSelector(store => store.postcards && store.postcards.pending);
   const postcardsPreviewError = useSelector(store => store.postcards && store.postcards.error);
   const postcardsPreview = useSelector(store => store.postcards && store.postcards.available);
@@ -114,7 +117,7 @@ const CustomizeTeamForm = () => {
 
   const onSubmit = values => {
     let data;
-    if (isMultimode) {
+    if (multiUser) {
       data = {
         listed: {
           createMailoutsOfThisType: returnIfNotEqual(values.newListing_createMailoutsOfThisType, tc.listed.createMailoutsOfThisType),
@@ -267,7 +270,7 @@ const CustomizeTeamForm = () => {
 
     let cta;
     let shortenedURL;
-    if (isMultimode) {
+    if (multiUser) {
       shortenedURL = listingType === NEW_LISTING ? shortenedNewListingTeamURL : shortenedSoldListingTeamURL;
       if (tc) {
         cta = listingType === NEW_LISTING ? initialValues[`${NEW_LISTING}_actionURL`] : initialValues[`${SOLD_LISTING}_actionURL`];
@@ -388,7 +391,7 @@ const CustomizeTeamForm = () => {
                           newMax = listingType === NEW_LISTING ? tc.listed.mailoutSizeMax : tc.sold.mailoutSizeMax;
                         }
 
-                        if (!isMultimode) {
+                        if (!multiUser) {
                           newMin = MIN;
                           newMax = MAX;
                         }
@@ -470,7 +473,7 @@ const CustomizeTeamForm = () => {
                 {props => {
                   let urlCallError;
 
-                  if (isMultimode) {
+                  if (multiUser) {
                     shortenedURL = listingType === NEW_LISTING ? shortenedNewListingTeamURL : shortenedSoldListingTeamURL;
                     if (tc) {
                       cta = listingType === NEW_LISTING ? initialValues[`${NEW_LISTING}_actionURL`] : initialValues[`${SOLD_LISTING}_actionURL`];
@@ -492,7 +495,7 @@ const CustomizeTeamForm = () => {
                   return <span> </span>;
                 }}
               </FormSpy>
-              {shortenedURL && (cta || !isMultimode) && (
+              {shortenedURL && (cta || !multiUser) && (
                 <Label style={{ marginTop: !isMobile() && '2em' }}>
                   <Icon name="linkify" />
                   Shortened URL:
