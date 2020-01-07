@@ -28,6 +28,13 @@ class AuthService extends EventEmitter {
     });
   };
 
+  signUp = customState => {
+    webAuth.authorize({
+      appState: customState,
+      mode: 'signUp',
+    });
+  };
+
   cookieLogin = idToken => {
     this.idToken = idToken;
     this.accessToken = idToken;
