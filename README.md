@@ -1,11 +1,15 @@
 # ALF-React
 
 ### Commit
-npm version patch --force -m "Some message to commit"
+>npm version patch --force -m "Some message to commit"
+
 or
-npm version minor --force -m "Some message to commit"
+
+>npm version minor --force -m "Some message to commit"
+
 or
-npm version major --force -m "Some message to commit"
+
+>npm version major --force -m "Some message to commit"
 
 # CRA README
 
