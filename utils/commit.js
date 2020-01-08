@@ -12,7 +12,7 @@ const run = async () => {
     let { stdout, stderr } = await exec(`npm version ${versionType} --no-git-tag-version --force`);
     if (stderr) throw stderr;
 
-    const response = await exec(`git commit -m "${gitMessage}" && git tag ${stdout} && git status`);
+    const response = await exec(`git commit -m "${gitMessage}"`);
 
     console.log('response', response);
 
