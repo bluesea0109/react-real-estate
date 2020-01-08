@@ -12,7 +12,8 @@
     "format": "prettier --write 'src/**/*.{js,jsx,json}'",
     "generate-artifacts": "node utils/generate-testing-artifacts",
     "create": "node utils/create-campaigns",
-    "reset": "node utils/reset"
+    "reset": "node utils/reset",
+    "commit": "node utils/commit"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "1.2.25",
@@ -21,6 +22,7 @@
     "auth0-js": "9.11.3",
     "date-fns": "2.7.0",
     "dinero.js": "1.6.0",
+    "dotenv": "8.2.0",
     "final-form": "4.18.6",
     "final-form-arrays": "3.0.2",
     "google-maps-react": "2.0.2",
