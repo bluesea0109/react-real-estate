@@ -36,8 +36,19 @@ const PrivateRoute = ({ component: Component, path, auth0, onLogin, templates, s
     fn();
   }, [auth0, history, onLogin]);
 
-  const render = props =>
-    auth0.authenticated && !onLogin.pending && !onLogin.error && templates.available && states.available && boards.available ? (
+  const render = props => {
+    const isReady =
+      auth0.authenticated &&
+      !onLogin.pending &&
+      !onLogin.error &&
+      !templates.pending &&
+      !states.pending &&
+      !boards.pending &&
+      !!templates.available &&
+      !!states.available &&
+      !!boards.available;
+
+    return isReady ? (
       <Component {...props} />
     ) : onLogin.error ? (
       <Segment basic>
@@ -49,7 +60,7 @@ const PrivateRoute = ({ component: Component, path, auth0, onLogin, templates, s
     ) : (
       <Loading />
     );
-
+  };
   return <Route path={path} render={render} {...rest} />;
 };
 
