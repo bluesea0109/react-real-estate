@@ -19,8 +19,8 @@ const run = async () => {
     const npmVersion = await version(versionType);
     await spawn('git', ['add', 'package.json'], { stdio: 'inherit' });
     await spawn('git', ['commit', '-m', `"${gitMessage}"`], { stdio: 'inherit' });
-    await spawn('git', ['tag', npmVersion], { stdio: 'inherit' });
-    await spawn('git', ['status'], { stdio: 'inherit' });
+    await spawn('git', ['tag', npmVersion.trim()], { stdio: 'inherit' });
+    // await spawn('git', ['status'], { stdio: 'inherit' });
 
   } catch (err) {
     console.log('Something went wrong:');
