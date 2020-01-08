@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Header } from 'semantic-ui-react';
 
 import AuthService from '../services/auth';
-import { Page, Segment, Button, Modal, Icon, Image } from '../components/Base';
+import { Page, Segment, Button, Modal, Icon, Image, Message } from '../components/Base';
 import InviteTeammatesForm from '../components/Forms/InviteTeammatesForm';
+import { syncPending } from '../store/modules/team/actions';
 
 const SettingsPage = () => {
+  const dispatch = useDispatch();
+  const isSyncing = useSelector(store => store.team.syncPending);
+  const syncResponse = useSelector(store => store.team.syncResponse);
+  const syncError = useSelector(store => store.team.syncError);
   const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
   const onLoginMode = useSelector(store => store.onLogin.mode);
   const multiUser = onLoginMode === 'multiuser';
@@ -54,11 +59,29 @@ const SettingsPage = () => {
     return (
       <Segment>
         <Header as="h1">
-          Sync CRM - WIP
+          Sync CRM
           <Header.Subheader>Perform CRM sync</Header.Subheader>
         </Header>
 
-        <Button>Sync CRM</Button>
+        <Button color="green" type="button" inverted onClick={() => dispatch(syncPending())} loading={isSyncing} disabled={isSyncing}>
+          <Icon name="sync" /> Sync Now
+        </Button>
+
+        {syncResponse && syncResponse.ok && (
+          <Message info>
+            <Message.Header>Last Successful Sync</Message.Header>
+            <p>
+              On {syncResponse.lastSuccessfulSync.split(' ')[0]} at {syncResponse.lastSuccessfulSync.split(' ')[1]}
+            </p>
+          </Message>
+        )}
+
+        {syncError && (
+          <Message negative>
+            <Message.Header>We're sorry, but there was an error during syncing</Message.Header>
+            <p>{syncError}</p>
+          </Message>
+        )}
       </Segment>
     );
   };
