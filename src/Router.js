@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router';
 import PrivateRoute from './containers/PrivateRoute';
 import IndexPage from './containers/IndexPage';
 import SignUpPage from './containers/SignUpPage';
+import EmailVerifiedPage from './containers/EmailVerifiedPage';
 import LoginPage from './containers/LoginPage';
 import CallbackPage from './containers/CallbackPage';
 import OnboardPage from './pages/OnboardPage';
@@ -26,6 +27,7 @@ export default () => {
     <Switch>
       <Route exact path="/" component={IndexPage} />
       <Route path="/signup" component={SignUpPage} />
+      <Route path="/emailverified" component={EmailVerifiedPage} />
       <Route path="/callback" component={CallbackPage} />
       <Route path="/login" component={LoginPage} />
       <PrivateRoute path="/onboard" component={OnboardPage} />
