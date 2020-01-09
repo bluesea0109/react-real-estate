@@ -81,7 +81,7 @@ const CustomizeTeamForm = () => {
 
   const onLoginMode = useSelector(store => store.onLogin.mode);
   const multiUser = onLoginMode === 'multiuser';
-  // const singleUser = onLoginMode === 'singleuser';
+  const singleUser = onLoginMode === 'singleuser';
 
   const postcardsPreviewIsPending = useSelector(store => store.postcards && store.postcards.pending);
   const postcardsPreviewError = useSelector(store => store.postcards && store.postcards.error);
@@ -580,27 +580,7 @@ const CustomizeTeamForm = () => {
     <Fragment>
       {<RenderHeader />}
 
-      {false && isAdmin && (
-        <Confirm
-          inverted
-          open={adminSkip}
-          content={
-            <Segment basic padded>
-              <br />
-              <p>
-                You can customize your Personal default Campaigns here or you can skip this step if you want your Campaigns to look like the rest of your team.
-              </p>
-              <p>Remember that you can always personalize this later.</p>
-            </Segment>
-          }
-          cancelButton="Edit"
-          confirmButton="Skip"
-          onCancel={() => [setAdminSkip(false)]}
-          onConfirm={() => [setAdminSkip(false), onSkip()]}
-        />
-      )}
-
-      {isAdmin && (
+      {isAdmin && !singleUser && (
         <Modal open={adminSkip} dimmer={'blurring'} onClose={() => [setAdminSkip(false)]}>
           <Modal.Content>
             <Segment basic padded>
