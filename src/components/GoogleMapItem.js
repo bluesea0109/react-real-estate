@@ -3,7 +3,6 @@ import React, { Fragment, Component } from 'react';
 import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'google-maps-react';
 
 import { Header, Segment } from './Base';
-import config from '../config';
 
 const containerStyle = {
   position: 'relative',
@@ -101,5 +100,5 @@ GoogleMapItem.propTypes = {
 };
 
 export default GoogleApiWrapper({
-  apiKey: config.googleMap.apiKey,
+  apiKey: process.env.REACT_APP_GOOGLE_MAP_APP_KEY,
 })(GoogleMapItem);

@@ -9,6 +9,11 @@ build:
   image: node:12.9.1
   script:
       - export API_URL="examplex.com"
+      - export REACT_APP_VERSION=$REACT_APP_VERSION
+      - export REACT_APP_GOOGLE_MAP_APP_KEY=$REACT_APP_GOOGLE_MAP_APP_KEY
+      - export REACT_APP_AUTH0_DOMAIN=$PRODUCTION_REACT_APP_AUTH0_DOMAIN
+      - export REACT_APP_AUTH0_CLIENT_ID=$PRODUCTION_REACT_APP_AUTH0_CLIENT_ID
+      - export REACT_APP_AUTH0_AUDIENCE=$PRODUCTION_REACT_APP_AUTH0_AUDIENCE
       - npm install --silent
       - npm run build
       - echo "BUILD SUCCESSFULLY"
@@ -29,7 +34,7 @@ deploy:
   script:
     - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
     - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-    - export S3_BUCKET_NAME=$S3_BUCKET_NAME
+    - export S3_BUCKET_NAME=$PRODUCTION_S3_BUCKET_NAME
     - export DISTRIBUTION_ID=$DISTRIBUTION_ID
     - pip install awscli --upgrade --user
     - export PATH=~/.local/bin:$PATH

@@ -1,16 +1,19 @@
 import auth0 from 'auth0-js';
 import EventEmitter from 'events';
-import config from '../../config';
 
 const localStorageKey = 'loggedIn';
 const loginEvent = 'loginEvent';
 const homepage = process.env.PUBLIC_URL;
 const siteRoot = process.env.NODE_ENV === 'production' ? `https://beta.brivitymarketer.com${homepage}` : 'http://localhost:8082';
 
+console.log('process.env.REACT_APP_AUTH0_DOMAIN', process.env.REACT_APP_AUTH0_DOMAIN);
+console.log('process.env.REACT_APP_AUTH0_AUDIENCE', process.env.REACT_APP_AUTH0_AUDIENCE);
+console.log('process.env.REACT_APP_AUTH0_CLIENT_ID', process.env.REACT_APP_AUTH0_CLIENT_ID);
+
 const webAuth = new auth0.WebAuth({
-  domain: config.auth0.domain,
-  audience: `${config.auth0.audience}`,
-  clientID: config.auth0.clientId,
+  domain: process.env.REACT_APP_AUTH0_DOMAIN,
+  audience: `${process.env.REACT_APP_AUTH0_AUDIENCE}`,
+  clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
   redirectUri: `${siteRoot}/callback`,
   responseType: 'token id_token',
   scope: 'openid profile email',
@@ -102,7 +105,7 @@ class AuthService extends EventEmitter {
 
     webAuth.logout({
       returnTo: `${siteRoot}`,
-      clientID: config.auth0.clientId,
+      clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
     });
 
     this.emit(loginEvent, { loggedIn: false });
