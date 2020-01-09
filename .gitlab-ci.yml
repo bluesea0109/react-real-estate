@@ -8,8 +8,6 @@ build_dev:
   stage: build
   image: node:12.9.1
   script:
-      - npm install -g json
-      - json -I -f package.json -e 'this.homepage="/dev/v2/"'
       - export REACT_APP_VERSION=$(node -p "require('./package.json').version")
       - export REACT_APP_GOOGLE_MAP_APP_KEY=$REACT_APP_GOOGLE_MAP_APP_KEY
       - export REACT_APP_AUTH0_DOMAIN=$DEVELOPMENT_REACT_APP_AUTH0_DOMAIN
@@ -31,8 +29,6 @@ build_prod:
   stage: build
   image: node:12.9.1
   script:
-    - npm install -g json
-    - json -I -f package.json -e 'this.homepage="/prod/v2/"'
     - export REACT_APP_VERSION=$(node -p "require('./package.json').version")
     - export REACT_APP_GOOGLE_MAP_APP_KEY=$REACT_APP_GOOGLE_MAP_APP_KEY
     - export REACT_APP_AUTH0_DOMAIN=$PRODUCTION_REACT_APP_AUTH0_DOMAIN
