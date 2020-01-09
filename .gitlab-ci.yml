@@ -4,19 +4,39 @@ stages:
   - build
   - deploy
 
-build:
+build_dev:
   stage: build
   image: node:12.9.1
   script:
-      - export API_URL="examplex.com"
       - export REACT_APP_VERSION=$(node -p "require('./package.json').version")
       - export REACT_APP_GOOGLE_MAP_APP_KEY=$REACT_APP_GOOGLE_MAP_APP_KEY
-      - export REACT_APP_AUTH0_DOMAIN=$PRODUCTION_REACT_APP_AUTH0_DOMAIN
-      - export REACT_APP_AUTH0_CLIENT_ID=$PRODUCTION_REACT_APP_AUTH0_CLIENT_ID
-      - export REACT_APP_AUTH0_AUDIENCE=$PRODUCTION_REACT_APP_AUTH0_AUDIENCE
+      - export REACT_APP_AUTH0_DOMAIN=$DEVELOPMENT_REACT_APP_AUTH0_DOMAIN
+      - export REACT_APP_AUTH0_CLIENT_ID=$REACT_APP_AUTH0_CLIENT_ID
+      - export REACT_APP_AUTH0_AUDIENCE=$REACT_APP_AUTH0_AUDIENCE
       - npm install --silent
       - npm run build
       - echo "BUILD SUCCESSFULLY"
+  artifacts:
+    paths:
+      - build/
+    expire_in: 30 mins
+  environment:
+    name: master
+  only:
+    - master
+
+build_prod:
+  stage: build
+  image: node:12.9.1
+  script:
+    - export REACT_APP_VERSION=$(node -p "require('./package.json').version")
+    - export REACT_APP_GOOGLE_MAP_APP_KEY=$REACT_APP_GOOGLE_MAP_APP_KEY
+    - export REACT_APP_AUTH0_DOMAIN=$PRODUCTION_REACT_APP_AUTH0_DOMAIN
+    - export REACT_APP_AUTH0_CLIENT_ID=$REACT_APP_AUTH0_CLIENT_ID
+    - export REACT_APP_AUTH0_AUDIENCE=$REACT_APP_AUTH0_AUDIENCE
+    - npm install --silent
+    - npm run build
+    - echo "BUILD SUCCESSFULLY"
   artifacts:
     paths:
       - build/
@@ -26,7 +46,27 @@ build:
   only:
     - production
 
-deploy:
+deploy_dev:
+  stage: deploy
+  image: python:3.5
+  dependencies:
+    - build
+  script:
+    - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+    - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+    - export S3_BUCKET_NAME=$DEVELOPMENT_S3_BUCKET_NAME
+    - export DISTRIBUTION_ID=$DISTRIBUTION_ID
+    - pip install awscli --upgrade --user
+    - export PATH=~/.local/bin:$PATH
+    - aws s3 sync --acl public-read --delete build $S3_BUCKET_NAME
+    - aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths '/*'
+    - echo "DEPLOYED SUCCESSFULLY"
+  environment:
+    name: master
+  only:
+    - master
+
+deploy_prod:
   stage: deploy
   image: python:3.5
   dependencies:
