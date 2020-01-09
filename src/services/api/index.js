@@ -132,6 +132,10 @@ const directory = {
   team: {
     list: () => ({ path: `/api/user/team/list`, method: 'get' }),
     sync: () => ({ path: `/api/user/team/settings/brivity/sync`, method: 'post' }),
+    listing: {
+      initial: () => ({ path: `/api/user/team/listing/mailout/initial`, method: 'post' }),
+      poll: () => ({ path: `/api/user/team/listing/mailout/initial/poll`, method: 'get' }),
+    },
     customization: {
       get: () => ({ path: `/api/user/team/settings/branding`, method: 'get' }),
       save: () => ({ path: `/api/user/team/settings/branding`, method: 'put' }),

@@ -8,6 +8,7 @@ import { SAVE_TEAM_PROFILE_SUCCESS } from '../teamProfile/actions';
 import { REVIEW_CUSTOMIZATION_COMPLETED } from '../customization/actions';
 import { INVITE_USERS_SUCCESS, SKIP_INVITE_USERS } from '../inviteUsers/actions';
 import { REVIEW_TEAM_CUSTOMIZATION_COMPLETED } from '../teamCustomization/actions';
+import { initializeTeamPollingStart } from '../initialize/actions';
 import { generateMailoutsPending, generateMailoutsSuccess, generateMailoutsError } from '../mailouts/actions';
 
 import ApiService from '../../../services/api';
@@ -97,6 +98,21 @@ export function* finalizeOnboardingUserListingInitialSaga() {
   }
 }
 
+export function* finalizeOnboardingTeamListingInitialSaga() {
+  try {
+    yield put(generateMailoutsPending());
+
+    const { path, method } = ApiService.directory.team.listing.initial();
+    const response = yield call(ApiService[method], path);
+
+    yield put(generateMailoutsSuccess(response));
+    yield put(initializeTeamPollingStart());
+  } catch (err) {
+    yield put(generateMailoutsError(err.message));
+    console.log('finalizeOnboardingTeamListingInitialSaga err', err);
+  }
+}
+
 export function* teamCustomizationOnboardingSaga() {
   try {
     const onboarded = yield select(onboardingComplete);
@@ -145,7 +161,7 @@ export function* invitationOnboardingSaga() {
       const updatedCustomization = yield finalizeOnboardingSaveCustomizationSaga(currentCustomization);
       yield console.log('invitationOnboardingSaga updatedCustomization', updatedCustomization);
 
-      const listingsInitial = yield finalizeOnboardingUserListingInitialSaga();
+      const listingsInitial = yield finalizeOnboardingTeamListingInitialSaga();
       yield console.log('invitationOnboardingSaga listingsInitial', listingsInitial);
 
       yield put(setCompletedInviteTeammates());
