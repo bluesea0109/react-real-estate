@@ -1,15 +1,15 @@
 # ALF-React
 
 ### Commit
->npm version patch --force -m "Some message to commit"
+This repo is fully automated, hence with each commit, an npm version will take place.
 
-or
-
->npm version minor --force -m "Some message to commit"
-
-or
-
->npm version major --force -m "Some message to commit"
+As such, to commit, please use the following npm command:
+- For patch type:
+> npm run commit patch "Git commit message goes here"
+- For patch minor:
+> npm run commit minor "Git commit message goes here"
+- For patch major:
+> npm run commit major "Git commit message goes here"
 
 # CRA README
 
