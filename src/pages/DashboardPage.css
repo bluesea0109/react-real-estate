@@ -1,0 +1,4 @@
+.bar > .progress {
+  display: none;
+  visibility: hidden;
+}

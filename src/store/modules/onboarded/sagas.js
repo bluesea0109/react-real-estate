@@ -138,12 +138,8 @@ export function* customizationOnboardingSaga() {
       yield put(setCompletedCustomization());
       if ((multiUser && !userIsAdmin) || singleuser) {
         const currentCustomization = yield finalizeOnboardingGetCustomizationSaga();
-        const updatedCustomization = yield finalizeOnboardingSaveCustomizationSaga(currentCustomization);
-        yield console.log('customizationOnboardingSaga updatedCustomization', updatedCustomization);
-
-        const listingsInitial = yield finalizeOnboardingUserListingInitialSaga();
-        yield console.log('customizationOnboardingSaga listingsInitial', listingsInitial);
-
+        yield finalizeOnboardingSaveCustomizationSaga(currentCustomization);
+        yield finalizeOnboardingUserListingInitialSaga();
         yield put(finalizeOnboarding());
       }
     }
@@ -158,12 +154,8 @@ export function* invitationOnboardingSaga() {
 
     if (!onboarded) {
       const currentCustomization = yield finalizeOnboardingGetCustomizationSaga();
-      const updatedCustomization = yield finalizeOnboardingSaveCustomizationSaga(currentCustomization);
-      yield console.log('invitationOnboardingSaga updatedCustomization', updatedCustomization);
-
-      const listingsInitial = yield finalizeOnboardingTeamListingInitialSaga();
-      yield console.log('invitationOnboardingSaga listingsInitial', listingsInitial);
-
+      yield finalizeOnboardingSaveCustomizationSaga(currentCustomization);
+      yield finalizeOnboardingTeamListingInitialSaga();
       yield put(setCompletedInviteTeammates());
       yield put(finalizeOnboarding());
     }

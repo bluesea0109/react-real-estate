@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Progress } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { getMailoutsPending, getMoreMailoutsPending } from '../store/modules/mailouts/actions';
@@ -7,6 +8,8 @@ import MailoutListItem from '../components/MailoutListItem';
 import EmptyItem from '../components/EmptyItem';
 import Loading from '../components/Loading';
 import LoadingWithMessage from '../components/LoadingWithMessage';
+
+import './DashboardPage.css';
 
 const useFetching = (getActionCreator, onboarded, dispatch) => {
   useEffect(() => {
@@ -20,6 +23,10 @@ const useFetching = (getActionCreator, onboarded, dispatch) => {
 
 const Dashboard = () => {
   const dispatch = useDispatch();
+  const isInitiating = useSelector(store => store.initialize.polling);
+  const initiatingState = useSelector(store => store.initialize.available);
+  const initiatingTotalForAllUsers = initiatingState && initiatingState.campaignsTotalForAllUsers;
+  const initiatingCompletedForAllUsers = initiatingState && initiatingState.campaignsCompletedForAllUsers;
 
   const onboarded = useSelector(store => store.onboarded.status);
   const isLoading = useSelector(store => store.mailouts.pending);
@@ -56,6 +63,14 @@ const Dashboard = () => {
             </Menu>
           </Grid.Row>
 
+          {isInitiating && (
+            <Grid.Row>
+              <Grid.Column width={16}>
+                <Progress value={initiatingTotalForAllUsers} total={initiatingCompletedForAllUsers} progress="ratio" inverted success size="tiny" />
+              </Grid.Column>
+            </Grid.Row>
+          )}
+
           {((!isLoading && !error) || (!isGenerating && !errorGenerating)) && list.length > 0 && (
             <Grid.Row>
               <Grid.Column width={16}>{list.map(item => MailoutListItem(item))}</Grid.Column>
@@ -74,7 +89,7 @@ const Dashboard = () => {
             </Grid.Row>
           )}
 
-          {((!isLoading && !error) || (!isGenerating && !errorGenerating)) && list.length === 0 && (
+          {((!isLoading && !error) || (!isGenerating && !errorGenerating)) && !isInitiating && list.length === 0 && (
             <Grid.Row>
               <Grid.Column width={16}>
                 <EmptyItem />
@@ -84,7 +99,7 @@ const Dashboard = () => {
         </Grid>
       </Segment>
       {isLoading && !error && Loading()}
-      {(isLoading && !error && Loading()) || (isGenerating && !errorGenerating && LoadingWithMessage({ message: 'Generating listings, please wait...' }))}
+      {((isLoading && !error && Loading()) || (isGenerating && !errorGenerating)) && LoadingWithMessage({ message: 'Generating listings, please wait...' })}
       {error && <Message error>Oh snap! {error}.</Message>}
       {errorGenerating && <Message error>Oh snap! {errorGenerating}.</Message>}
     </Page>
