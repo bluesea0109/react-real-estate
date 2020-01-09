@@ -1,35 +1,22 @@
 import React from 'react';
-import { Redirect, useParams } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
-
-import { authenticate } from '../store/modules/auth0/actions';
-import Loading from '../components/Loading';
+import { useLocation } from 'react-router-dom';
+import { Redirect } from 'react-router';
 
 const EmailVerifiedPage = () => {
-  const dispatch = useDispatch();
-  const { supportSignUp, supportForgotPassword, email, message, success, code } = useParams();
+  const location = useLocation();
 
-  console.log('EmailVerifiedPage');
-  console.log('supportSignUp        : ', supportSignUp);
-  console.log('supportForgotPassword: ', supportForgotPassword);
-  console.log('email                : ', email);
-  console.log('message              : ', message);
-  console.log('success              : ', success);
-  console.log('code                 : ', code);
+  const paramsString = decodeURI(location.search.substr(1));
+  const paramsArr = paramsString.split('&');
+  const params = {};
+  paramsArr.map(str => {
+    const splitStrArr = str.split('=');
+    return (params[splitStrArr[0]] = splitStrArr[1]);
+  });
 
-  const auth0 = useSelector(store => store.auth0);
+  console.log('EmailVerifiedPage: ');
+  console.log(JSON.stringify(params, 0, 2));
 
-  if (auth0.authenticated) {
-    console.log('EmailVerifiedPage auth0.authenticated redirect');
-    return <Redirect to="/dashboard" />;
-  }
-
-  if (!auth0.pending) {
-    console.log('EmailVerifiedPage !auth0.pending dispatch');
-    dispatch(authenticate());
-  }
-
-  return <Loading />;
+  return <Redirect to="/" />;
 };
 
 export default EmailVerifiedPage;
