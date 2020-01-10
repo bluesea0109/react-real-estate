@@ -4,7 +4,10 @@ import EventEmitter from 'events';
 const localStorageKey = 'loggedIn';
 const loginEvent = 'loginEvent';
 const homepage = process.env.PUBLIC_URL;
-const siteRoot = process.env.NODE_ENV === 'production' ? `https://beta.brivitymarketer.com${homepage}` : 'http://localhost:8082';
+let siteRoot = process.env.NODE_ENV === 'production' ? `https://beta.brivitymarketer.com${homepage}` : 'http://localhost:8082';
+if (typeof window != 'undefined') {
+  siteRoot = window.location.protocol + '//' + window.location.host + homepage
+}
 
 const webAuth = new auth0.WebAuth({
   domain: process.env.REACT_APP_AUTH0_DOMAIN,
