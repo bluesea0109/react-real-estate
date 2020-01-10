@@ -4,16 +4,16 @@ import EventEmitter from 'events';
 const localStorageKey = 'loggedIn';
 const loginEvent = 'loginEvent';
 const homepage = process.env.PUBLIC_URL;
-let siteRoot = process.env.NODE_ENV === 'production' ? `https://beta.brivitymarketer.com${homepage}` : 'http://localhost:8082';
+
 if (typeof window != 'undefined') {
-  siteRoot = window.location.protocol + '//' + window.location.host + homepage
+  console.log('Oh noes!');
 }
 
 const webAuth = new auth0.WebAuth({
   domain: process.env.REACT_APP_AUTH0_DOMAIN,
   audience: `${process.env.REACT_APP_AUTH0_AUDIENCE}`,
   clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
-  redirectUri: `${siteRoot}/callback`,
+  redirectUri: `${window.location.protocol}//${window.location.host}${homepage}/callback`,
   responseType: 'token id_token',
   scope: 'openid profile email',
 });
@@ -103,7 +103,7 @@ class AuthService extends EventEmitter {
     this.accessTokenExpiry = null;
 
     webAuth.logout({
-      returnTo: `${siteRoot}`,
+      returnTo: `${window.location.protocol}//${window.location.host}${homepage}`,
       clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
     });
 
