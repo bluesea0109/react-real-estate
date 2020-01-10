@@ -5,10 +5,6 @@ const localStorageKey = 'loggedIn';
 const loginEvent = 'loginEvent';
 const homepage = process.env.PUBLIC_URL;
 
-if (typeof window != 'undefined') {
-  console.log('Oh noes!');
-}
-
 const webAuth = new auth0.WebAuth({
   domain: process.env.REACT_APP_AUTH0_DOMAIN,
   audience: `${process.env.REACT_APP_AUTH0_AUDIENCE}`,
@@ -65,7 +61,10 @@ class AuthService extends EventEmitter {
   };
 
   handleAuthentication = () => {
+    console.log('before webAuth', webAuth);
     return new Promise((resolve, reject) => {
+      console.log('after webAuth', webAuth);
+
       webAuth.parseHash((err, authResult) => {
         if (err) {
           return reject(err);
