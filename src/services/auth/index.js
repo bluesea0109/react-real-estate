@@ -61,10 +61,7 @@ class AuthService extends EventEmitter {
   };
 
   handleAuthentication = () => {
-    console.log('before webAuth', webAuth);
     return new Promise((resolve, reject) => {
-      console.log('after webAuth', webAuth);
-
       webAuth.parseHash((err, authResult) => {
         if (err) {
           return reject(err);
