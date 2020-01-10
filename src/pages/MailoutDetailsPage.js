@@ -35,14 +35,15 @@ const MailoutDetailsPage = () => {
   const dispatch = useDispatch();
   const { mailoutId } = useParams();
   const lastLocation = useLastLocation();
-  const [onlyOnce, setOnlyOnce] = useState(false);
   const [editRecipients, setEditRecipients] = useState(false);
   // const [recipientsNumber, userRecipientsNumber] = useInput({ type: "text", initalState: 0 });
-  const [numberOfRecipients, setNumberOfRecipients] = useState(0);
+  const [currentNumberOfRecipients, setCurrentNumberOfRecipients] = useState(0);
+  const [newNumberOfRecipients, setNewNumberOfRecipients] = useState(0);
 
   const isLoading = useSelector(store => store.mailout.pending);
   const isUpdating = useSelector(store => store.mailout.updatePending);
   const isUpdateMailoutSizePending = useSelector(store => store.mailout.updateMailoutSizePending);
+  const isUpdateMailoutSizeError = useSelector(store => store.mailout.updateMailoutSizeError);
   const details = useSelector(store => store.mailout.details);
   const error = useSelector(store => store.mailout.error);
   const updateError = useSelector(store => store.mailout.updateError);
@@ -62,11 +63,10 @@ const MailoutDetailsPage = () => {
   }, [isLoading, error, history]);
 
   useEffect(() => {
-    if (details && details.recipientCount && !onlyOnce) {
-      setNumberOfRecipients(details.recipientCount);
-      setOnlyOnce(true);
+    if (details && details.recipientCount) {
+      setCurrentNumberOfRecipients(details.recipientCount);
     }
-  }, [details, onlyOnce, setOnlyOnce, numberOfRecipients]);
+  }, [details, currentNumberOfRecipients]);
 
   useFetching(getMailoutPending, useDispatch(), mailoutId);
 
@@ -96,23 +96,25 @@ const MailoutDetailsPage = () => {
   };
 
   const toggleRecipientsEditState = () => {
+    if (newNumberOfRecipients === 0) setNewNumberOfRecipients(currentNumberOfRecipients);
+
     setEditRecipients(!editRecipients);
   };
 
   const submitNewValues = () => {
     if (multiUser) {
-      let chosenNumber = numberOfRecipients;
+      let chosenNumber = newNumberOfRecipients;
       if (chosenNumber < mailoutSizeMin) chosenNumber = mailoutSizeMin;
       if (chosenNumber > mailoutSizeMax) chosenNumber = mailoutSizeMax;
 
-      setNumberOfRecipients(chosenNumber);
+      setCurrentNumberOfRecipients(chosenNumber);
 
-      if (details && details.recipientCount !== chosenNumber) {
+      if (currentNumberOfRecipients !== chosenNumber) {
         dispatch(updateMailoutSizePending(chosenNumber));
       }
     } else {
-      if (details && details.recipientCount !== numberOfRecipients) {
-        dispatch(updateMailoutSizePending(numberOfRecipients));
+      if (currentNumberOfRecipients !== newNumberOfRecipients) {
+        dispatch(updateMailoutSizePending(newNumberOfRecipients));
       }
     }
   };
@@ -121,7 +123,11 @@ const MailoutDetailsPage = () => {
     if (editRecipients) {
       return (
         <Button as="div" labelPosition="left">
-          <Input style={{ maxWidth: '4.5em', maxHeight: '2em' }} value={numberOfRecipients} onChange={props => setNumberOfRecipients(props.target.value)} />
+          <Input
+            style={{ maxWidth: '4.5em', maxHeight: '2em' }}
+            value={newNumberOfRecipients}
+            onChange={props => setNewNumberOfRecipients(props.target.value)}
+          />
           <Button icon color="orange" onClick={() => [toggleRecipientsEditState(), submitNewValues()]} style={{ marginLeft: '10px', minWidth: '5em' }}>
             Save
           </Button>
@@ -130,9 +136,9 @@ const MailoutDetailsPage = () => {
     } else {
       return (
         <Button as="div" labelPosition="left">
-          <Label basic style={{ minWidth: '5em', minHeight: '2em', textAlign: 'center' }}>
-            {details && details.recipientCount}
-          </Label>
+          <label style={{ minWidth: '5em', minHeight: '2em', textAlign: 'center' }}>
+            {(!isUpdateMailoutSizeError && newNumberOfRecipients) || currentNumberOfRecipients}
+          </label>
           <Button
             icon
             color="teal"
