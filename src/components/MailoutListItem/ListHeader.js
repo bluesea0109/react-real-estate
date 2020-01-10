@@ -19,7 +19,7 @@ const ApproveAndSendButton = ({ data, mailoutDetailPage, onClickApproveAndSend }
           <Link to={`dashboard/${data._id}`}>
             <Button color="teal">
               <MobileDisabledLayout>
-                <Fragment>Approve & Send</Fragment>
+                <Fragment>Review & Send</Fragment>
               </MobileDisabledLayout>
               <MobileEnabledLayout>
                 <FontAwesomeIcon icon="thumbs-up" />

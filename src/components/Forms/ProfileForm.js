@@ -248,7 +248,7 @@ const ProfileForm = () => {
                 <div style={{ gridArea: 'NotificationEmail' }}>
                   {renderField({
                     name: 'notificationEmail',
-                    label: renderLabelWithSubHeader('Notification Email'),
+                    label: renderLabelWithSubHeader('Personal Notification Email'),
                     type: 'text',
                     required: !personalNotificationEmailEnabled,
                     disabled: personalNotificationEmailEnabled,
