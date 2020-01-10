@@ -123,8 +123,8 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
         <div
           style={
             templateTheme === templateName
-              ? { border: '2px solid teal', margin: 0, padding: '0.5em', borderRadius: '5px' }
-              : { border: '1px solid lightgray', margin: 0, padding: '0.5em', borderRadius: '5px' }
+              ? { border: '2px solid teal', margin: 0, padding: '0.5em', borderRadius: '5px', maxWidth: '260px' }
+              : { border: '1px solid lightgray', margin: 0, padding: '0.5em', borderRadius: '5px', maxWidth: '260px' }
           }
         >
           <img onClick={e => setTemplateTheme(templateName)} src={resolveSource(templateName)} alt={templateName} />
