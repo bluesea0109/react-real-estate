@@ -2,6 +2,8 @@ import { GET_PROFILE_PENDING, GET_PROFILE_SUCCESS, GET_PROFILE_ERROR, SAVE_PROFI
 
 const initialState = {
   pending: false,
+  savePending: false,
+  saveError: null,
   error: null,
   available: null,
   toSave: null,
@@ -29,21 +31,20 @@ export default function profile(state = initialState, action) {
         ...state,
         pending: false,
         error: action.error,
-        available: null,
       };
 
     case SAVE_PROFILE_PENDING:
       return {
         ...state,
-        error: null,
-        pending: true,
+        saveError: null,
+        savePending: true,
         toSave: action.payload,
       };
 
     case SAVE_PROFILE_SUCCESS:
       return {
         ...state,
-        pending: false,
+        savePending: false,
         available: action.payload,
         toSave: null,
       };
@@ -51,10 +52,9 @@ export default function profile(state = initialState, action) {
     case SAVE_PROFILE_ERROR:
       return {
         ...state,
-        pending: false,
-        error: action.error,
+        savePending: false,
+        saveError: action.error,
         toSave: null,
-        available: null,
       };
 
     default:

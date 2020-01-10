@@ -23,6 +23,7 @@ import {
 import { Button, Icon, Segment, Image, Divider, Menu } from '../Base';
 import { saveProfilePending } from '../../store/modules/profile/actions';
 import { saveTeamProfilePending } from '../../store/modules/teamProfile/actions';
+import LoadingWithMessage from '../LoadingWithMessage';
 
 const renderLabelWithSubHeader = (label, subHeader) =>
   isMobile() ? (
@@ -56,6 +57,10 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
   const picturesRealtorPhoto = useSelector(store => store.pictures && store.pictures.realtorPhoto && store.pictures.realtorPhoto.resized);
   const picturesTeamLogo = useSelector(store => store.pictures && store.pictures.teamLogo && store.pictures.teamLogo.resized);
   const picturesBrokerageLogo = useSelector(store => store.pictures && store.pictures.brokerageLogo && store.pictures.brokerageLogo.resized);
+
+  const profileSavePending = useSelector(store => store.profile.savePending);
+  const teamProfileSavePending = useSelector(store => store.teamProfile.savePending);
+  const mailoutsGeneratePending = useSelector(store => store.mailouts.generatePending);
 
   const saveProfile = profile => dispatch(saveProfilePending(profile));
   const saveTeamProfile = teamProfile => dispatch(saveTeamProfilePending(teamProfile));
@@ -171,6 +176,14 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
         pristine,
         values,
       }) => {
+        if (profileSavePending || teamProfileSavePending || mailoutsGeneratePending) {
+          return (
+            <Segment style={{ minHeight: '80vh' }}>
+              <LoadingWithMessage message="Saving, please wait..." />
+            </Segment>
+          );
+        }
+
         return (
           <Form onSubmit={handleSubmit}>
             <Segment>

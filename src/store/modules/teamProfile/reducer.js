@@ -9,6 +9,8 @@ import {
 
 const initialState = {
   pending: false,
+  savePending: false,
+  saveError: null,
   error: null,
   available: null,
   toSave: null,
@@ -40,15 +42,15 @@ export default function teamProfile(state = initialState, action) {
     case SAVE_TEAM_PROFILE_PENDING:
       return {
         ...state,
-        error: null,
-        pending: true,
+        saveError: null,
+        savePending: true,
         toSave: action.payload,
       };
 
     case SAVE_TEAM_PROFILE_SUCCESS:
       return {
         ...state,
-        pending: false,
+        savePending: false,
         available: action.payload,
         toSave: null,
       };
@@ -56,8 +58,8 @@ export default function teamProfile(state = initialState, action) {
     case SAVE_TEAM_PROFILE_ERROR:
       return {
         ...state,
-        pending: false,
-        error: action.error,
+        savePending: false,
+        saveError: action.error,
       };
 
     default:

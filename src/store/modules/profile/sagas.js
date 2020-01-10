@@ -1,9 +1,12 @@
+import _ from 'lodash';
 import { put, call, select, takeLatest } from 'redux-saga/effects';
 
 import { GET_PROFILE_PENDING, getProfileSuccess, getProfileError, SAVE_PROFILE_PENDING, saveProfileSuccess, saveProfileError } from './actions';
 import ApiService from '../../../services/api/index';
+import { generateMailoutsError, generateMailoutsPending, generateMailoutsSuccess } from '../mailouts/actions';
 
 export const getSelectedPeerId = state => state.peer.peerId;
+export const getExistingProfile = state => state.profile.available;
 export const profileToSave = state => state.profile.toSave;
 
 export function* getProfileSaga({ peerId = null }) {
@@ -17,14 +20,37 @@ export function* getProfileSaga({ peerId = null }) {
   }
 }
 
+export function* reInitializeListingSaga({ peerId = null }) {
+  try {
+    yield put(generateMailoutsPending());
+
+    const { path, method } = peerId ? ApiService.directory.peer.listing.initial(peerId) : ApiService.directory.user.listing.initial();
+    const response = yield call(ApiService[method], path);
+
+    yield put(generateMailoutsSuccess(response));
+  } catch (err) {
+    yield put(generateMailoutsError(err.message));
+  }
+}
+
 export function* saveProfileSaga({ peerId = null }) {
   try {
-    const profile = yield select(profileToSave);
+    const existingProfile = yield select(getExistingProfile);
+    const newProfile = yield select(profileToSave);
+    const boardsDiffer = !_.isEqual(existingProfile.boards, newProfile.boards);
 
     const { path, method } = peerId ? ApiService.directory.peer.profile.save(peerId) : ApiService.directory.user.profile.save();
-    const response = yield call(ApiService[method], path, profile);
+    const response = yield call(ApiService[method], path, newProfile);
 
     yield put(saveProfileSuccess(response));
+
+    if (boardsDiffer) {
+      if (peerId) {
+        yield reInitializeListingSaga({ peerId });
+      } else {
+        yield reInitializeListingSaga({});
+      }
+    }
   } catch (err) {
     yield put(saveProfileError(err.message));
   }
