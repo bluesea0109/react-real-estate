@@ -1,4 +1,4 @@
-import { Header, Label } from 'semantic-ui-react';
+import { Header } from 'semantic-ui-react';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
