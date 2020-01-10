@@ -37,7 +37,7 @@ export function* saveProfileSaga({ peerId = null }) {
   try {
     const existingProfile = yield select(getExistingProfile);
     const newProfile = yield select(profileToSave);
-    const boardsDiffer = !_.isEqual(existingProfile.boards, newProfile.boards);
+    const boardsDiffer = existingProfile && !_.isEqual(existingProfile.boards, newProfile.boards);
 
     const { path, method } = peerId ? ApiService.directory.peer.profile.save(peerId) : ApiService.directory.user.profile.save();
     const response = yield call(ApiService[method], path, newProfile);
