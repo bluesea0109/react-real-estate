@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLastLocation } from 'react-router-last-location';
@@ -32,11 +32,11 @@ const MailoutDetailsPage = () => {
   };
 
   return (
-    <Page basic>
+    <Fragment>
       {details && <EditCampaignForm data={details} handleBackClick={handleBackClick} />}
       {isLoading && !error && Loading()}
       {error && <Message error>Oh snap! {error}.</Message>}
-    </Page>
+    </Fragment>
   );
 };
 

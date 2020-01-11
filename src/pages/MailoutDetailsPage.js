@@ -4,6 +4,7 @@ import { useHistory, useParams } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLastLocation } from 'react-router-last-location';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ContentTopHeaderLayout, ContentBottomHeaderLayout } from '../layouts';
 
 import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from '../components/MailoutListItem/helpers';
 import { submitMailoutPending, stopMailoutPending, resetMailout, updateMailoutSizePending } from '../store/modules/mailout/actions';
@@ -156,34 +157,40 @@ const MailoutDetailsPage = () => {
 
   return (
     <Page basic>
+      <ContentTopHeaderLayout>
+        <Segment>
+          <Menu borderless fluid secondary>
+            <Menu.Item>
+              <Header as="h3">Campaign Details</Header>
+            </Menu.Item>
+            <Menu.Menu position="right">
+              <Menu.Item>
+                <Button basic color="teal" onClick={() => handleBackClick()}>
+                  Back
+                </Button>
+              </Menu.Item>
+            </Menu.Menu>
+          </Menu>
+        </Segment>
+      </ContentTopHeaderLayout>
+
       <Segment>
         <Grid>
-          <Grid.Row>
-            <Menu borderless fluid secondary>
-              <Menu.Item>
-                <Header as="h3">Campaign Details</Header>
-              </Menu.Item>
-              <Menu.Menu position="right">
-                <Menu.Item>
-                  <Button basic color="teal" onClick={() => handleBackClick()}>
-                    Back
-                  </Button>
-                </Menu.Item>
-              </Menu.Menu>
-            </Menu>
-          </Grid.Row>
           <Grid.Row>
             <Grid.Column width={16}>
               {!isLoading && !error && !isUpdating && !updateError && details && (
                 <ItemLayout fluid key={details._id}>
-                  {ListHeader({
-                    data: details,
-                    mailoutDetailPage: true,
-                    onClickEdit: handleEditMailoutDetailsClick,
-                    onClickApproveAndSend: handleApproveAndSendMailoutDetailsClick,
-                    onClickDelete: handleDeleteMailoutDetailsClick,
-                  })}
-                  <ItemBodyLayoutV2 attached style={{ padding: 10 }}>
+                  <ContentBottomHeaderLayout>
+                    {ListHeader({
+                      data: details,
+                      mailoutDetailPage: true,
+                      onClickEdit: handleEditMailoutDetailsClick,
+                      onClickApproveAndSend: handleApproveAndSendMailoutDetailsClick,
+                      onClickDelete: handleDeleteMailoutDetailsClick,
+                    })}
+                  </ContentBottomHeaderLayout>
+
+                  <ItemBodyLayoutV2 attached style={{ padding: 10, marginTop: '89px' }}>
                     {ImageGroup({ img1src: details.sampleBackLargeUrl, img2src: details.sampleFrontLargeUrl })}
 
                     <ItemBodyDataLayout relaxed>
