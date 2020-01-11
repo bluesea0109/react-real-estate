@@ -5,7 +5,7 @@ import { useLastLocation } from 'react-router-last-location';
 
 import { getMailoutPending } from '../store/modules/mailout/actions';
 import EditCampaignForm from '../components/Forms/EditCampaignForm';
-import { Message, Page } from '../components/Base';
+import { Message } from '../components/Base';
 import Loading from '../components/Loading';
 
 const MailoutDetailsPage = () => {

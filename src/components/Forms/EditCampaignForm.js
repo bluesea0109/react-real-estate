@@ -1,19 +1,17 @@
 import styled from 'styled-components';
 import startCase from 'lodash/startCase';
 import { BlockPicker } from 'react-color';
+import React, { createRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import React, { Fragment, createRef, useState } from 'react';
 import { Dropdown, Form, Header, Label, Popup } from 'semantic-ui-react';
 
+import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
+import { Button, Icon, Image, Menu, Message, Page, Segment } from '../Base';
 import { modifyMailoutPending } from '../../store/modules/mailout/actions';
-import { Button, Divider, Icon, Image, Menu, Message, Page, Segment } from '../Base';
+import { resolveLabelStatus } from '../MailoutListItem/helpers';
 import LoadingWithMessage from '../LoadingWithMessage';
 import { isMobile, maxLength, sleep } from './helpers';
 import './EditCampaignForm.css';
-import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
-import ListHeader from '../MailoutListItem/ListHeader';
-import { resolveLabelStatus } from '../MailoutListItem/helpers';
-import { Link } from 'react-router-dom';
 
 const StyledHeader = styled(Header)`
   min-width: 18em;
