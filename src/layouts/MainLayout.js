@@ -8,6 +8,8 @@ export default styled.div`
   grid-template-columns: [sidebar] 175px [content] 1fr;
   grid-template-areas:
     'header header'
+    'sidebar content-top-header'
+    'sidebar content-bottom-header'
     'sidebar content';
 
   @media (max-width: 768px) {
@@ -16,6 +18,8 @@ export default styled.div`
     grid-template-areas:
       'header'
       'sidebar'
+      'content-top-header'
+      'content-bottom-header'
       'content';
   }
 `;

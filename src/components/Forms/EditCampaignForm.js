@@ -3,13 +3,17 @@ import startCase from 'lodash/startCase';
 import { BlockPicker } from 'react-color';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { Fragment, createRef, useState } from 'react';
-import { Dropdown, Form, Header, Popup } from 'semantic-ui-react';
+import { Dropdown, Form, Header, Label, Popup } from 'semantic-ui-react';
 
 import { modifyMailoutPending } from '../../store/modules/mailout/actions';
-import { Button, Divider, Icon, Image, Menu, Message, Segment } from '../Base';
+import { Button, Divider, Icon, Image, Menu, Message, Page, Segment } from '../Base';
 import LoadingWithMessage from '../LoadingWithMessage';
 import { isMobile, maxLength, sleep } from './helpers';
 import './EditCampaignForm.css';
+import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
+import ListHeader from '../MailoutListItem/ListHeader';
+import { resolveLabelStatus } from '../MailoutListItem/helpers';
+import { Link } from 'react-router-dom';
 
 const StyledHeader = styled(Header)`
   min-width: 18em;
@@ -243,25 +247,47 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
   };
 
   return (
-    <Fragment>
-      <Segment>
-        <Menu borderless fluid secondary>
-          <Menu.Item>
-            <Header as="h3">Edit Campaign Details</Header>
-          </Menu.Item>
-          <Menu.Menu position="right">
-            <span>
-              <Button type="submit" onClick={handleEditSubmitClick} color="teal" loading={modifyPending} disabled={modifyPending}>
-                Save
-              </Button>
-              <Button basic color="teal" onClick={() => handleBackClick()} loading={modifyPending} disabled={modifyPending}>
-                Back
-              </Button>
-            </span>
-          </Menu.Menu>
-        </Menu>
+    <Page basic>
+      <ContentTopHeaderLayout>
+        <Segment>
+          <Menu borderless fluid secondary>
+            <Menu.Item>
+              <Header as="h3">Campaign Edit</Header>
+            </Menu.Item>
+            <Menu.Menu position="right">
+              <span>
+                <Button basic color="teal" onClick={() => handleBackClick()} loading={modifyPending} disabled={modifyPending}>
+                  Back
+                </Button>
+              </span>
+            </Menu.Menu>
+          </Menu>
+        </Segment>
+      </ContentTopHeaderLayout>
 
-        <Divider style={{ margin: '1em -1em' }} />
+      <Segment>
+        <ContentBottomHeaderLayout>
+          <ItemHeaderLayout attached="top" block>
+            <span style={{ gridArea: 'label' }}>
+              <Label size="large" color={resolveLabelStatus(data.listingStatus)} ribbon style={{ textTransform: 'capitalize', top: '-0.9em', left: '-2.7em' }}>
+                {data.listingStatus}
+              </Label>
+            </span>
+            <span style={{ gridArea: 'address', alignSelf: 'center' }}>
+              <Header as="h3">{data.details.displayAddress}</Header>
+            </span>
+
+            <ItemHeaderMenuLayout>
+              <span>
+                <Button type="submit" onClick={handleEditSubmitClick} color="teal" loading={modifyPending} disabled={modifyPending}>
+                  Save
+                </Button>
+              </span>
+            </ItemHeaderMenuLayout>
+          </ItemHeaderLayout>
+        </ContentBottomHeaderLayout>
+
+        {/*<Divider style={{ margin: '1em -1em' }} />*/}
 
         {modifyPending && <LoadingWithMessage message="Saving campaign..." />}
 
@@ -272,7 +298,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
           </Message>
         )}
 
-        <Segment basic padded className={isMobile() ? null : 'primary-grid-container'}>
+        <Segment basic padded className={isMobile() ? null : 'primary-grid-container'} style={{ padding: 10, marginTop: '89px' }}>
           <div>
             <Header as="h4">Template Theme</Header>
             {renderTemplatePicture('bookmark')}
@@ -307,7 +333,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
 
         {renderThemeSpecificData()}
       </Segment>
-    </Fragment>
+    </Page>
   );
 };
 
