@@ -3,11 +3,11 @@ import { Progress } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { getMailoutsPending, getMoreMailoutsPending } from '../store/modules/mailouts/actions';
-import { Button, Header, Grid, Menu, Message, Page, Segment, Icon } from '../components/Base';
+import { Button, Header, Grid, Menu, /*Message,*/ Page, Segment, Icon } from '../components/Base';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
 import MailoutListItem from '../components/MailoutListItem';
 import { isMobile } from '../components/Forms/helpers';
-import Loading from '../components/Loading';
+// import Loading from '../components/Loading';
 import './DashboardPage.css';
 
 const useFetching = (getActionCreator, onboarded, dispatch) => {
@@ -28,11 +28,11 @@ const Dashboard = () => {
   const initiatingCompletedForAllUsers = initiatingState && initiatingState.campaignsCompletedForAllUsers;
 
   const onboarded = useSelector(store => store.onboarded.status);
-  const isLoading = useSelector(store => store.mailouts.pending);
+  // const isLoading = useSelector(store => store.mailouts.pending);
   const canLoadMore = useSelector(store => store.mailouts.canLoadMore);
   const page = useSelector(store => store.mailouts.page);
   const list = useSelector(store => store.mailouts.list);
-  const error = useSelector(store => store.mailouts.error);
+  // const error = useSelector(store => store.mailouts.error);
 
   useFetching(getMailoutsPending, onboarded, useDispatch());
 
@@ -48,8 +48,8 @@ const Dashboard = () => {
     boundFetchMoreMailouts(page + 1);
   };
 
-  if (isLoading && !error) return <Loading />;
-  if (error) return <Message error>Oh snap! {error}.</Message>;
+  // if (isLoading && !error) return <Loading />;
+  // if (error) return <Message error>Oh snap! {error}.</Message>;
 
   return (
     <Page basic>
