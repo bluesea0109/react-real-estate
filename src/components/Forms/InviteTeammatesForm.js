@@ -191,60 +191,58 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
       .map(createInviteField);
 
   return (
-    <Fragment>
-      <Segment>
-        <Header as="h1">
-          Invite Users
-          <Header.Subheader>Send invitations to team members to start using Brivity Marketer (for Brivity Platform users only).</Header.Subheader>
-        </Header>
+    <Segment>
+      <Header as="h1">
+        Invite Users
+        <Header.Subheader>Send invitations to team members to start using Brivity Marketer (for Brivity Platform users only).</Header.Subheader>
+      </Header>
 
-        {teammates && teammates.length === 1 ? (
-          <div>
-            <Message size="large" style={{ textAlign: 'center' }}>
-              <Message.Header>You currently have no team members.</Message.Header>
-              <br />
-              <Image src={require('../../assets/under-construction.jpg')} style={{ margin: 'auto' }} />
-              <p>When you get others on your team, check the Settings section in the app to invite them.</p>
-            </Message>
-            <div style={{ display: 'grid', justifyContent: 'end' }}>
-              <div>
-                <Button color="teal" type="button" onClick={handleContinue}>
-                  Continue
-                </Button>
-              </div>
+      {teammates && teammates.length === 1 ? (
+        <div>
+          <Message size="large" style={{ textAlign: 'center' }}>
+            <Message.Header>You currently have no team members.</Message.Header>
+            <br />
+            <Image src={require('../../assets/under-construction.jpg')} style={{ margin: 'auto' }} />
+            <p>When you get others on your team, check the Settings section in the app to invite them.</p>
+          </Message>
+          <div style={{ display: 'grid', justifyContent: 'end' }}>
+            <div>
+              <Button color="teal" type="button" onClick={handleContinue}>
+                Continue
+              </Button>
             </div>
           </div>
-        ) : (
-          <Form onSubmit={handleSubmit}>
-            <div style={{ display: 'grid', justifyContent: 'start' }}>
-              <div>
-                <Button type="button" onClick={selectAll}>
-                  Select All
-                </Button>
-                <Button type="button" onClick={deselectAll}>
-                  Deselect All
-                </Button>
-              </div>
+        </div>
+      ) : (
+        <Form onSubmit={handleSubmit}>
+          <div style={{ display: 'grid', justifyContent: 'start' }}>
+            <div>
+              <Button type="button" onClick={selectAll}>
+                Select All
+              </Button>
+              <Button type="button" onClick={deselectAll}>
+                Deselect All
+              </Button>
             </div>
+          </div>
 
-            <List>{createInviteList()}</List>
+          <List>{createInviteList()}</List>
 
-            <div style={{ display: 'grid', justifyContent: 'end' }}>
-              <div>
-                <Button color="teal" type="submit" loading={isInviteUsersPending} disabled={sendDisabled || isInviteUsersPending}>
-                  Send
+          <div style={{ display: 'grid', justifyContent: 'end' }}>
+            <div>
+              <Button color="teal" type="submit" loading={isInviteUsersPending} disabled={sendDisabled || isInviteUsersPending}>
+                Send
+              </Button>
+              {!settingsPage && (
+                <Button color="teal" type="button" loading={isInviteUsersPending} onClick={handleContinue} disabled={isInviteUsersPending}>
+                  Skip
                 </Button>
-                {!settingsPage && (
-                  <Button color="teal" type="button" loading={isInviteUsersPending} onClick={handleContinue} disabled={isInviteUsersPending}>
-                    Skip
-                  </Button>
-                )}
-              </div>
+              )}
             </div>
-          </Form>
-        )}
-      </Segment>
-    </Fragment>
+          </div>
+        </Form>
+      )}
+    </Segment>
   );
 };
 

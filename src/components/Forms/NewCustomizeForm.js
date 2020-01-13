@@ -13,6 +13,7 @@ import { Button, Icon, Image, Menu, Modal, Segment } from '../Base';
 import LoadingWithMessage from '../LoadingWithMessage';
 import FlipCard from '../FlipCard';
 import './EditCampaignForm.css';
+import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../../layouts';
 
 export const colors = ['#b40101', '#f2714d', '#f4b450', '#79c34d', '#2d9a2c', '#59c4c4', '#009ee7', '#0e2b5b', '#ee83ee', '#8b288f', '#808080', '#000000'];
 
@@ -39,8 +40,8 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
 
   const resolveTemplateFieldValues = type => {
     const types = {
-      bookmark: bookmarkTemplate,
       ribbon: ribbonTemplate,
+      bookmark: bookmarkTemplate,
       stack: stackTemplate,
     };
     return type ? types[type] : undefined;
@@ -523,7 +524,7 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
 
     return (
       <Fragment>
-        <Segment>{renderSwitch({ listingType })}</Segment>
+        <Segment style={isMobile() ? { marginTop: '200px' } : { marginTop: '170px' }}>{renderSwitch({ listingType })}</Segment>
 
         {!formValues[listingType].createMailoutsOfThisType && (
           <Segment placeholder>
@@ -538,12 +539,12 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
           <Segment padded className={isMobile() ? null : 'primary-grid-container'}>
             <div>
               <Header as="h4">Template Theme</Header>
-              {renderTemplatePicture({ templateName: 'bookmark', listingType })}
+              {renderTemplatePicture({ templateName: 'ribbon', listingType })}
             </div>
 
             <div>
               <p>&nbsp;</p>
-              {renderTemplatePicture({ templateName: 'ribbon', listingType })}
+              {renderTemplatePicture({ templateName: 'bookmark', listingType })}
             </div>
 
             <div>
@@ -600,9 +601,9 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
 
   return (
     <Fragment>
-      <Segment>
-        <Menu borderless fluid secondary>
-          <Menu.Item>
+      <ContentTopHeaderLayout>
+        <Segment style={isMobile() ? { marginTop: '58px' } : {}}>
+          <Menu borderless fluid secondary>
             {peerId ? (
               <Header as="h1">
                 Peer Customization
@@ -614,23 +615,25 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
                 <Header.Subheader>Set the default template customization options for your campaigns.</Header.Subheader>
               </Header>
             )}
-          </Menu.Item>
-          <Menu.Menu position="right">
-            <span>
-              <Button type="submit" color="teal" onClick={handleSubmit} disabled={pristineState}>
-                Save
-              </Button>
-            </span>
-          </Menu.Menu>
-        </Menu>
-      </Segment>
+            <Menu.Menu position="right">
+              <span>
+                <Button type="submit" color="teal" onClick={handleSubmit} disabled={pristineState}>
+                  Save
+                </Button>
+              </span>
+            </Menu.Menu>
+          </Menu>
+        </Segment>
+      </ContentTopHeaderLayout>
 
-      <Segment>
-        <Menu pointing secondary>
-          <Menu.Item name="newListing" active={step === 1} disabled={step === 1} onClick={prevStep} />
-          <Menu.Item name="soldListing" active={step === 2} disabled={step === 2} onClick={nextStep} />
-        </Menu>
-      </Segment>
+      <ContentBottomHeaderLayout style={isMobile() ? {} : { minWidth: `calc(100% - 203px)` }}>
+        <Segment style={isMobile() ? { marginTop: '118px' } : { marginTop: '29px' }}>
+          <Menu pointing secondary>
+            <Menu.Item name="newListing" active={step === 1} disabled={step === 1} onClick={prevStep} />
+            <Menu.Item name="soldListing" active={step === 2} disabled={step === 2} onClick={nextStep} />
+          </Menu>
+        </Segment>
+      </ContentBottomHeaderLayout>
 
       <Confirm
         open={showSelectionAlert}

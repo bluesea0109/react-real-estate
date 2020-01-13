@@ -3,9 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Header } from 'semantic-ui-react';
 
 import AuthService from '../services/auth';
-import { Page, Segment, Button, Modal, Icon, Image, Message } from '../components/Base';
+import { Page, Segment, Button, Modal, Icon, Image, Message, Menu } from '../components/Base';
 import InviteTeammatesForm from '../components/Forms/InviteTeammatesForm';
 import { syncPending } from '../store/modules/team/actions';
+import { ContentTopHeaderLayout } from '../layouts';
+import { isMobile } from '../components/Forms/helpers';
 
 const SettingsPage = () => {
   const dispatch = useDispatch();
@@ -21,7 +23,7 @@ const SettingsPage = () => {
   const renderPasswordChange = () => {
     return (
       <Segment>
-        <Header as="h1">
+        <Header as="h2">
           Password Change
           <Header.Subheader>Perform password change</Header.Subheader>
         </Header>
@@ -58,7 +60,7 @@ const SettingsPage = () => {
   const renderSyncCRM = () => {
     return (
       <Segment>
-        <Header as="h1">
+        <Header as="h2">
           Sync CRM
           <Header.Subheader>Perform CRM sync</Header.Subheader>
         </Header>
@@ -88,11 +90,23 @@ const SettingsPage = () => {
 
   return (
     <Page basic>
-      {multiUser && isAdmin && <InviteTeammatesForm settingsPage={true} />}
+      <ContentTopHeaderLayout>
+        <Segment style={isMobile() ? { marginTop: '58px' } : {}}>
+          <Menu borderless fluid secondary>
+            <Menu.Item>
+              <Header as="h1">Settings</Header>
+            </Menu.Item>
+          </Menu>
+        </Segment>
+      </ContentTopHeaderLayout>
 
-      {renderPasswordChange()}
+      <div style={isMobile() ? { marginTop: '80px' } : { marginTop: '85px' }}>
+        {renderPasswordChange()}
 
-      {multiUser && isAdmin && renderSyncCRM()}
+        {multiUser && isAdmin && <InviteTeammatesForm settingsPage={true} />}
+
+        {multiUser && isAdmin && renderSyncCRM()}
+      </div>
     </Page>
   );
 };
