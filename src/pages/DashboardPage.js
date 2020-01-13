@@ -4,13 +4,11 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { getMailoutsPending, getMoreMailoutsPending } from '../store/modules/mailouts/actions';
 import { Button, Header, Grid, Menu, Message, Page, Segment, Icon } from '../components/Base';
-import MailoutListItem from '../components/MailoutListItem';
-import Loading from '../components/Loading';
-import LoadingWithMessage from '../components/LoadingWithMessage';
-
-import './DashboardPage.css';
-import { isMobile } from '../components/Forms/helpers';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
+import MailoutListItem from '../components/MailoutListItem';
+import { isMobile } from '../components/Forms/helpers';
+import Loading from '../components/Loading';
+import './DashboardPage.css';
 
 const useFetching = (getActionCreator, onboarded, dispatch) => {
   useEffect(() => {
@@ -31,12 +29,10 @@ const Dashboard = () => {
 
   const onboarded = useSelector(store => store.onboarded.status);
   const isLoading = useSelector(store => store.mailouts.pending);
-  const isGenerating = useSelector(store => store.mailouts.generatePending);
   const canLoadMore = useSelector(store => store.mailouts.canLoadMore);
   const page = useSelector(store => store.mailouts.page);
   const list = useSelector(store => store.mailouts.list);
   const error = useSelector(store => store.mailouts.error);
-  const errorGenerating = useSelector(store => store.mailouts.generateError);
 
   useFetching(getMailoutsPending, onboarded, useDispatch());
 
@@ -53,9 +49,7 @@ const Dashboard = () => {
   };
 
   if (isLoading && !error) return <Loading />;
-  if (isGenerating && !errorGenerating) return <LoadingWithMessage message="Generating listings, please wait..." />;
   if (error) return <Message error>Oh snap! {error}.</Message>;
-  if (errorGenerating) return <Message error>Oh snap! {errorGenerating}.</Message>;
 
   return (
     <Page basic>
@@ -86,7 +80,7 @@ const Dashboard = () => {
         </ContentBottomHeaderLayout>
       )}
 
-      {!isInitiating && list.length > 0 && (
+      {list.length > 0 && (
         <Segment style={isMobile() ? { marginTop: '129px' } : { marginTop: '75px' }}>
           <Grid>
             <Grid.Row>
