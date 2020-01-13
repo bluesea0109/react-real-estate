@@ -3,13 +3,14 @@ import { Progress } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { getMailoutsPending, getMoreMailoutsPending } from '../store/modules/mailouts/actions';
-import { Button, Header, Grid, Menu, Message, Page, Segment } from '../components/Base';
+import { Button, Header, Grid, Menu, Message, Page, Segment, Icon } from '../components/Base';
 import MailoutListItem from '../components/MailoutListItem';
-import EmptyItem from '../components/EmptyItem';
 import Loading from '../components/Loading';
 import LoadingWithMessage from '../components/LoadingWithMessage';
 
 import './DashboardPage.css';
+import { isMobile } from '../components/Forms/helpers';
+import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
 
 const useFetching = (getActionCreator, onboarded, dispatch) => {
   useEffect(() => {
@@ -51,57 +52,65 @@ const Dashboard = () => {
     boundFetchMoreMailouts(page + 1);
   };
 
+  if (isLoading && !error) return <Loading />;
+  if (isGenerating && !errorGenerating) return <LoadingWithMessage message="Generating listings, please wait..." />;
+  if (error) return <Message error>Oh snap! {error}.</Message>;
+  if (errorGenerating) return <Message error>Oh snap! {errorGenerating}.</Message>;
+
   return (
     <Page basic>
-      <Segment>
-        <Grid>
-          <Grid.Row>
-            <Menu borderless fluid secondary>
-              <Menu.Item>
-                <Header as="h3">Dashboard</Header>
-              </Menu.Item>
-            </Menu>
-          </Grid.Row>
+      <ContentTopHeaderLayout>
+        <Segment style={isMobile() ? { marginTop: '58px' } : {}}>
+          <Menu borderless fluid secondary>
+            <Menu.Item>
+              <Header as="h3">Dashboard</Header>
+            </Menu.Item>
+          </Menu>
+        </Segment>
+      </ContentTopHeaderLayout>
 
-          {isInitiating && (
+      {isInitiating && (
+        <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
+          <Progress value={initiatingTotalForAllUsers} total={initiatingCompletedForAllUsers} progress="ratio" inverted success size="tiny" />
+        </ContentBottomHeaderLayout>
+      )}
+
+      {!isInitiating && list.length === 0 && (
+        <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
+          <Segment placeholder>
+            <Header icon>
+              <Icon name="file outline" />
+              No Mailouts found.
+            </Header>
+          </Segment>
+        </ContentBottomHeaderLayout>
+      )}
+
+      {!isInitiating && list.length > 0 && (
+        <Segment style={isMobile() ? { marginTop: '129px' } : { marginTop: '75px' }}>
+          <Grid>
             <Grid.Row>
               <Grid.Column width={16}>
-                <Progress value={initiatingTotalForAllUsers} total={initiatingCompletedForAllUsers} progress="ratio" inverted success size="tiny" />
+                <Grid.Row>
+                  <Grid.Column width={16}>{list.map(item => MailoutListItem(item))}</Grid.Column>
+                </Grid.Row>
+
+                {canLoadMore && (
+                  <Grid.Row>
+                    <Grid.Column width={16}>
+                      <Grid centered columns={2}>
+                        <Grid.Column>
+                          <Button id="loadMoreButton" attached="bottom" content="Load More" onClick={handleClick} onKeyPress={handleKeyPress} />
+                        </Grid.Column>
+                      </Grid>
+                    </Grid.Column>
+                  </Grid.Row>
+                )}
               </Grid.Column>
             </Grid.Row>
-          )}
-
-          {((!isLoading && !error) || (!isGenerating && !errorGenerating)) && list.length > 0 && (
-            <Grid.Row>
-              <Grid.Column width={16}>{list.map(item => MailoutListItem(item))}</Grid.Column>
-            </Grid.Row>
-          )}
-
-          {((!isLoading && !error) || (!isGenerating && !errorGenerating)) && list.length > 0 && canLoadMore && (
-            <Grid.Row>
-              <Grid.Column width={16}>
-                <Grid centered columns={2}>
-                  <Grid.Column>
-                    <Button id="loadMoreButton" attached="bottom" content="Load More" onClick={handleClick} onKeyPress={handleKeyPress} />
-                  </Grid.Column>
-                </Grid>
-              </Grid.Column>
-            </Grid.Row>
-          )}
-
-          {((!isLoading && !error) || (!isGenerating && !errorGenerating)) && !isInitiating && list.length === 0 && (
-            <Grid.Row>
-              <Grid.Column width={16}>
-                <EmptyItem />
-              </Grid.Column>
-            </Grid.Row>
-          )}
-        </Grid>
-      </Segment>
-      {isLoading && !error && Loading()}
-      {((isLoading && !error && Loading()) || (isGenerating && !errorGenerating)) && LoadingWithMessage({ message: 'Generating listings, please wait...' })}
-      {error && <Message error>Oh snap! {error}.</Message>}
-      {errorGenerating && <Message error>Oh snap! {errorGenerating}.</Message>}
+          </Grid>
+        </Segment>
+      )}
     </Page>
   );
 };

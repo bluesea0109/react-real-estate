@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react';
 import RevProfileForm from '../components/Forms/RevProfileForm';
 import { getProfilePending } from '../store/modules/profile/actions';
 import { getTeamProfilePending } from '../store/modules/teamProfile/actions';
-import { Page, Segment } from '../components/Base';
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
