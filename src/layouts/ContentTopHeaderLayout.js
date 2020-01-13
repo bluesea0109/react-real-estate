@@ -6,5 +6,9 @@ export default styled.div`
   min-width: calc(100% - 203px);
   position: fixed;
   top: 62px;
-  z-index: 10;
+  z-index: 15;
+
+  @media (max-width: 768px) {
+    min-width: 92.5%;
+  }
 `;

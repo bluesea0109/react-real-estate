@@ -247,17 +247,17 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
   return (
     <Page basic>
       <ContentTopHeaderLayout>
-        <Segment>
+        <Segment style={isMobile() ? { marginTop: '58px' } : {}}>
           <Menu borderless fluid secondary>
             <Menu.Item>
               <Header as="h3">Campaign Edit</Header>
             </Menu.Item>
             <Menu.Menu position="right">
-              <span>
+              <Menu.Item>
                 <Button basic color="teal" onClick={() => handleBackClick()} loading={modifyPending} disabled={modifyPending}>
                   Back
                 </Button>
-              </span>
+              </Menu.Item>
             </Menu.Menu>
           </Menu>
         </Segment>
@@ -265,7 +265,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
 
       <Segment>
         <ContentBottomHeaderLayout>
-          <ItemHeaderLayout attached="top" block>
+          <ItemHeaderLayout attached="top" block style={isMobile() ? { marginTop: '56px' } : {}}>
             <span style={{ gridArea: 'label' }}>
               <Label size="large" color={resolveLabelStatus(data.listingStatus)} ribbon style={{ textTransform: 'capitalize', top: '-0.9em', left: '-2.7em' }}>
                 {data.listingStatus}
@@ -296,7 +296,12 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
           </Message>
         )}
 
-        <Segment basic padded className={isMobile() ? null : 'primary-grid-container'} style={{ padding: 10, marginTop: '89px' }}>
+        <Segment
+          basic
+          padded
+          className={isMobile() ? null : 'primary-grid-container'}
+          style={isMobile() ? { marginTop: '120px' } : { padding: 10, marginTop: '89px' }}
+        >
           <div>
             <Header as="h4">Template Theme</Header>
             {renderTemplatePicture('bookmark')}

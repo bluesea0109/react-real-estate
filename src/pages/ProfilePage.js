@@ -29,21 +29,9 @@ const ProfilePage = () => {
     if (isAdmin) dispatch(getTeamProfilePending());
   }, [isAdmin, dispatch]);
 
-  return (
-    <Page basic>
-      <Segment basic>
-        <RevProfileForm profileAvailable={profileAvailable} teamProfileAvailable={teamProfileAvailable} />
-      </Segment>
-    </Page>
-  );
+  return <RevProfileForm profileAvailable={profileAvailable} teamProfileAvailable={teamProfileAvailable} />;
 
-  // return (
-  //   <Page basic>
-  //     <Segment basic>
-  //       <NewProfileForm profileAvailable={profileAvailable} teamProfileAvailable={teamProfileAvailable} />
-  //     </Segment>
-  //   </Page>
-  // );
+  // return <NewProfileForm profileAvailable={profileAvailable} teamProfileAvailable={teamProfileAvailable} />;
 };
 
 export default ProfilePage;

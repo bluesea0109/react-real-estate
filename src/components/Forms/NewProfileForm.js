@@ -8,6 +8,7 @@ import { Button, Card, Divider, Icon, Image, Item, Menu, Segment } from '../Base
 import { composeValidators, email, isMobile, labelWithPopup, popup, required, requiredOnlyInCalifornia } from './helpers';
 
 import { deletePhotoPending, uploadPhotoPending } from '../../store/modules/pictures/actions';
+import { ContentTopHeaderLayout } from '../../layouts';
 
 const renderLabelWithSubHeader = (label, subHeader) =>
   isMobile() ? (
@@ -239,27 +240,31 @@ const NewProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
 
   return (
     <Fragment>
-      <Segment>
-        <Menu borderless fluid secondary>
-          <Menu.Item>
-            <Header as="h1">
-              Profile
-              {selectedPeerId ? (
-                <Header.Subheader>Peers information will be shown on their postcards and will enable recipients to reach them.</Header.Subheader>
-              ) : (
-                <Header.Subheader>Your information will be shown on your postcards and will enable recipients to reach you.</Header.Subheader>
-              )}
-            </Header>
-          </Menu.Item>
-          <Menu.Menu position="right">
-            <span>
-              <Button type="submit" color="teal">
-                Save
-              </Button>
-            </span>
-          </Menu.Menu>
-        </Menu>
+      <ContentTopHeaderLayout>
+        <Segment>
+          <Menu borderless fluid secondary>
+            <Menu.Item>
+              <Header as="h1">
+                Profile
+                {selectedPeerId ? (
+                  <Header.Subheader>Peers information will be shown on their postcards and will enable recipients to reach them.</Header.Subheader>
+                ) : (
+                  <Header.Subheader>Your information will be shown on your postcards and will enable recipients to reach you.</Header.Subheader>
+                )}
+              </Header>
+            </Menu.Item>
+            <Menu.Menu position="right">
+              <span>
+                <Button type="submit" color="teal">
+                  Save
+                </Button>
+              </span>
+            </Menu.Menu>
+          </Menu>
+        </Segment>
+      </ContentTopHeaderLayout>
 
+      <Segment>
         <Divider style={{ margin: '1em -1em' }} />
 
         <div

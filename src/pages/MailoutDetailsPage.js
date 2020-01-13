@@ -18,6 +18,7 @@ import ImageGroup from '../components/MailoutListItem/ImageGroup';
 import LoadingWithMessage from '../components/LoadingWithMessage';
 import GoogleMapItem from '../components/GoogleMapItem';
 import Loading from '../components/Loading';
+import { isMobile } from '../components/Forms/helpers';
 
 const useFetching = (getActionCreator, dispatch, mailoutId) => {
   useEffect(() => {
@@ -158,7 +159,7 @@ const MailoutDetailsPage = () => {
   return (
     <Page basic>
       <ContentTopHeaderLayout>
-        <Segment>
+        <Segment style={isMobile() ? { marginTop: '58px' } : {}}>
           <Menu borderless fluid secondary>
             <Menu.Item>
               <Header as="h3">Campaign Details</Header>
@@ -180,17 +181,19 @@ const MailoutDetailsPage = () => {
             <Grid.Column width={16}>
               {!isLoading && !error && !isUpdating && !updateError && details && (
                 <ItemLayout fluid key={details._id}>
-                  <ContentBottomHeaderLayout>
-                    {ListHeader({
-                      data: details,
-                      mailoutDetailPage: true,
-                      onClickEdit: handleEditMailoutDetailsClick,
-                      onClickApproveAndSend: handleApproveAndSendMailoutDetailsClick,
-                      onClickDelete: handleDeleteMailoutDetailsClick,
-                    })}
+                  <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
+                    {
+                      <ListHeader
+                        data={details}
+                        mailoutDetailPage={true}
+                        onClickEdit={handleEditMailoutDetailsClick}
+                        onClickApproveAndSend={handleApproveAndSendMailoutDetailsClick}
+                        onClickDelete={handleDeleteMailoutDetailsClick}
+                      />
+                    }
                   </ContentBottomHeaderLayout>
 
-                  <ItemBodyLayoutV2 attached style={{ padding: 10, marginTop: '89px' }}>
+                  <ItemBodyLayoutV2 attached style={isMobile() ? { padding: 10, marginTop: '129px' } : { padding: 10, marginTop: '89px' }}>
                     {ImageGroup({ img1src: details.sampleBackLargeUrl, img2src: details.sampleFrontLargeUrl })}
 
                     <ItemBodyDataLayout relaxed>
