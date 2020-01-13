@@ -47,26 +47,11 @@ const ApproveAndSendButton = ({ data, mailoutDetailPage, onClickApproveAndSend }
   );
 };
 
-const StopSendingButton = ({ data, onClickDelete }) => {
-  if (!data) return;
-
-  const enableDelete = resolveMailoutStatus(data.mailoutStatus) === 'Sent';
-  const activeWhen = new Date(Date.now()).toISOString().split('T')[0] < data.send_date;
-
-  return (
-    <span>
-      {enableDelete && activeWhen && (
-        <Button basic color="teal" onClick={onClickDelete}>
-          Stop Sending
-        </Button>
-      )}
-    </span>
-  );
-};
-
 const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickApproveAndSend, onClickDelete }) => {
   if (!data) return;
-  const enableEdit = resolveMailoutStatus(data.mailoutStatus) !== 'Sent';
+  const enableEdit = resolveMailoutStatus(data.mailoutStatus) !== 'Sent' && resolveMailoutStatus(data.mailoutStatus) !== 'Processing';
+  const enableDelete = resolveMailoutStatus(data.mailoutStatus) === 'Sent';
+  const activeWhen = new Date(Date.now()).toISOString().split('T')[0] < data.send_date;
 
   return (
     <ItemHeaderLayout attached="top" block>
@@ -96,7 +81,13 @@ const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickAppro
         <span>
           <ApproveAndSendButton data={data} mailoutDetailPage={mailoutDetailPage} onClickApproveAndSend={onClickApproveAndSend} />
         </span>
-        {mailoutDetailPage && <StopSendingButton data={data} onClickDelete={onClickDelete} />}
+        <span>
+          {mailoutDetailPage && enableDelete && activeWhen && (
+            <Button basic color="teal" onClick={onClickDelete}>
+              Stop Sending
+            </Button>
+          )}
+        </span>
       </ItemHeaderMenuLayout>
     </ItemHeaderLayout>
   );
