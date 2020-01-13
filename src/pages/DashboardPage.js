@@ -65,7 +65,7 @@ const Dashboard = () => {
 
       {isInitiating && (
         <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
-          <Progress value={initiatingTotalForAllUsers} total={initiatingCompletedForAllUsers} progress="ratio" inverted success size="tiny" />
+          <Progress value={initiatingCompletedForAllUsers} total={initiatingTotalForAllUsers} progress="ratio" inverted success size="tiny" />
         </ContentBottomHeaderLayout>
       )}
 
