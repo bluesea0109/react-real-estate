@@ -4,7 +4,7 @@ import { BlockPicker } from 'react-color';
 import Nouislider from 'nouislider-react';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { createRef, Fragment, useEffect, useState, useReducer } from 'react';
-import { Confirm, Dropdown, Form, Header, Label, Popup, Radio } from 'semantic-ui-react';
+import { Confirm, /*Dropdown,*/ Form, Header, Label, Popup, Radio } from 'semantic-ui-react';
 
 import { saveTeamSoldShortcodePending, saveTeamListedShortcodePending } from '../../store/modules/teamShortcode/actions';
 import { isMobile, isValidURL, maxLength, popup, required, composeValidators, url } from './helpers';
@@ -264,31 +264,31 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
     return <BlockPicker triangle="hide" width="200px" color={currentValue} colors={colors} onChangeComplete={handleColorChange} />;
   };
 
-  const renderAgentDropdown = ({ listingType }) => {
-    const currentValue = formValues[listingType].defaultDisplayAgent.userId;
-
-    const handleAgentChange = (e, input) => {
-      const selectedAgent = input.options.filter(o => o.value === input.value)[0];
-      const { first, last, value } = selectedAgent;
-      const newValue = formValues;
-      newValue[listingType].defaultDisplayAgent = { userId: value, first, last };
-      setFormValues(newValue);
-    };
-
-    const error = composeValidators(required)(currentValue) && true;
-
-    return (
-      <Dropdown
-        error={error}
-        placeholder="Select Default Displayed Agent"
-        fluid
-        selection
-        options={profiles}
-        value={currentValue}
-        onChange={handleAgentChange}
-      />
-    );
-  };
+  // const renderAgentDropdown = ({ listingType }) => {
+  //   const currentValue = formValues[listingType].defaultDisplayAgent.userId;
+  //
+  //   const handleAgentChange = (e, input) => {
+  //     const selectedAgent = input.options.filter(o => o.value === input.value)[0];
+  //     const { first, last, value } = selectedAgent;
+  //     const newValue = formValues;
+  //     newValue[listingType].defaultDisplayAgent = { userId: value, first, last };
+  //     setFormValues(newValue);
+  //   };
+  //
+  //   const error = composeValidators(required)(currentValue) && true;
+  //
+  //   return (
+  //     <Dropdown
+  //       error={error}
+  //       placeholder="Select Default Displayed Agent"
+  //       fluid
+  //       selection
+  //       options={profiles}
+  //       value={currentValue}
+  //       onChange={handleAgentChange}
+  //     />
+  //   );
+  // };
 
   const renderField = ({ fieldName, listingType }) => {
     const adjustedName = fieldName === 'frontHeadline' ? 'Headline' : fieldName;
@@ -535,10 +535,10 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
 
         {formValues[listingType].createMailoutsOfThisType && (
           <Segment padded className={isMobile() ? null : 'tertiary-grid-container'}>
-            <div>
-              <Header as="h4">Choose Default Agent</Header>
-              {renderAgentDropdown({ listingType })}
-            </div>
+            {/*<div>*/}
+            {/*  <Header as="h4">Choose Default Agent</Header>*/}
+            {/*  {renderAgentDropdown({ listingType })}*/}
+            {/*</div>*/}
 
             <div>{renderField({ fieldName: 'frontHeadline', listingType })}</div>
 
