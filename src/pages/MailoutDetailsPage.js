@@ -105,14 +105,19 @@ const MailoutDetailsPage = () => {
   };
 
   const toggleRecipientsEditState = () => {
-    if (newNumberOfRecipients === 0) setNewNumberOfRecipients(currentNumberOfRecipients);
+    if (!newNumberOfRecipients || newNumberOfRecipients === 0) setNewNumberOfRecipients(currentNumberOfRecipients);
 
     setEditRecipients(!editRecipients);
   };
 
   const submitNewValues = () => {
+    let parsedNewNumberOfRecipients = parseInt(newNumberOfRecipients, 10);
+    if (isNaN(parsedNewNumberOfRecipients)) {
+      parsedNewNumberOfRecipients = currentNumberOfRecipients;
+    }
+
     if (multiUser) {
-      let chosenNumber = newNumberOfRecipients;
+      let chosenNumber = parsedNewNumberOfRecipients;
       if (chosenNumber < mailoutSizeMin) chosenNumber = mailoutSizeMin;
       if (chosenNumber > mailoutSizeMax) chosenNumber = mailoutSizeMax;
 
@@ -122,8 +127,8 @@ const MailoutDetailsPage = () => {
         dispatch(updateMailoutSizePending(chosenNumber));
       }
     } else {
-      if (currentNumberOfRecipients !== newNumberOfRecipients) {
-        dispatch(updateMailoutSizePending(newNumberOfRecipients));
+      if (currentNumberOfRecipients !== parsedNewNumberOfRecipients) {
+        dispatch(updateMailoutSizePending(parsedNewNumberOfRecipients));
       }
     }
   };
