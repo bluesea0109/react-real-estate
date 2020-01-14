@@ -505,7 +505,7 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
         {!formValues[listingType].createMailoutsOfThisType && (
           <Segment placeholder>
             <Header textAlign="center">{placeholder}</Header>
-            <Image src={require('../../assets/undraw_choice_9385.png')} style={{ margin: 'auto' }} />
+            <Image src={require('../../assets/undraw_choice_9385.png')} style={{ margin: 'auto', maxWidth: '500px' }} />
           </Segment>
         )}
 
