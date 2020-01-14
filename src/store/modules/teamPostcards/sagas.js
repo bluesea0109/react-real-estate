@@ -24,10 +24,38 @@ export function* getTeamPostcardsPreviewSaga() {
       const { path, method } = ApiService.directory.onboard.teamCustomization.generatePostcardPreview();
       const response = yield call(ApiService[method], path);
 
-      const listedFrontLarge = yield getDimensions({ url: response.listed.sampleFrontLargeUrl });
-      const listedBackLarge = yield getDimensions({ url: response.listed.sampleBackLargeUrl });
-      const soldFrontLarge = yield getDimensions({ url: response.sold.sampleFrontLargeUrl });
-      const soldBackLarge = yield getDimensions({ url: response.sold.sampleBackLargeUrl });
+      let listedFrontLarge = { height: 0, width: 0 };
+      let listedBackLarge = { height: 0, width: 0 };
+      let soldFrontLarge = { height: 0, width: 0 };
+      let soldBackLarge = { height: 0, width: 0 };
+
+      try {
+        listedFrontLarge = yield getDimensions({ url: response.listed.sampleFrontLargeUrl });
+      } catch (err) {
+        console.log('Error @ getTeamPostcardsPreviewSaga on listedFrontLarge');
+        console.error(err.message);
+      }
+
+      try {
+        listedBackLarge = yield getDimensions({ url: response.listed.sampleBackLargeUrl });
+      } catch (err) {
+        console.log('Error @ getTeamPostcardsPreviewSaga on listedBackLarge');
+        console.error(err.message);
+      }
+
+      try {
+        soldFrontLarge = yield getDimensions({ url: response.sold.sampleFrontLargeUrl });
+      } catch (err) {
+        console.log('Error @ getTeamPostcardsPreviewSaga on soldFrontLarge');
+        console.error(err.message);
+      }
+
+      try {
+        soldBackLarge = yield getDimensions({ url: response.sold.sampleBackLargeUrl });
+      } catch (err) {
+        console.log('Error @ getTeamPostcardsPreviewSaga on soldBackLarge');
+        console.error(err.message);
+      }
 
       if (
         listedFrontLarge.height > 0 &&
@@ -49,8 +77,8 @@ export function* getTeamPostcardsPreviewSaga() {
         yield delay(1000);
       }
     } catch (err) {
-      console.log('getTeamPostcardsPreviewSaga');
-      console.error(err);
+      console.log('Error @ getTeamPostcardsPreviewSaga on Main loop');
+      console.error(err.message);
       yield put(generateTeamPostcardsPreviewError(err.message));
     }
   }
