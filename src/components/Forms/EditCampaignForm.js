@@ -325,7 +325,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
           {multiUser && (
             <div>
               <Header as="h4">Display Agent</Header>
-              <Dropdown placeholder="Select Friend" fluid selection options={profiles} value={currentMailoutDisplayAgentUserID} onChange={handleAgentChange} />
+              <Dropdown placeholder="Select Friend" fluid selection options={profiles} value={mailoutDisplayAgent.userId} onChange={handleAgentChange} />
             </div>
           )}
         </Segment>
