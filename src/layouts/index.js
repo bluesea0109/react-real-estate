@@ -4,6 +4,7 @@ import SidebarLayout from './SidebarLayout';
 import ContentLayout from './ContentLayout';
 import ContentTopHeaderLayout from './ContentTopHeaderLayout';
 import ContentBottomHeaderLayout from './ContentBottomHeaderLayout';
+import ContentBodyLayout from './ContentBodyLayout';
 
 import StepLayout from './StepLayout';
 import StepsLayout from './StepsLayout';
@@ -27,6 +28,7 @@ export {
   ContentLayout,
   ContentTopHeaderLayout,
   ContentBottomHeaderLayout,
+  ContentBodyLayout,
   StepLayout,
   StepsLayout,
   NavigationLayout,

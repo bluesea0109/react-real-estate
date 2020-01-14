@@ -19,9 +19,10 @@ import {
   renderPicturePickerField,
   requiredOnlyInCalifornia,
 } from './helpers';
-import { Button, Icon, Segment, Image, Divider } from '../Base';
+import { Button, Icon, Segment, Image, Divider, Menu } from '../Base';
 import { saveProfilePending } from '../../store/modules/profile/actions';
 import { saveTeamProfilePending } from '../../store/modules/teamProfile/actions';
+import { ContentTopHeaderLayout, ContentBodyLayout } from '../../layouts';
 
 const renderLabelWithSubHeader = (label, subHeader) =>
   isMobile() ? (
@@ -173,143 +174,38 @@ const ProfileForm = () => {
       }) => {
         return (
           <Form onSubmit={handleSubmit}>
-            <Segment>
-              <Header as="h1">
-                Profile
-                <Header.Subheader>Your information will be shown on your postcards and will enable recipients to reach you.</Header.Subheader>
-              </Header>
-
-              <Divider style={{ margin: '1em -1em' }} />
-
-              <ExternalChanges whenTrue={picturesRealtorPhoto} set="realtorPhoto" to={picturesRealtorPhoto} />
-
-              <div
-                style={
-                  isMobile()
-                    ? {}
-                    : {
-                        display: 'grid',
-                        gridTemplateColumns: '1fr 1fr 1fr 1fr',
-                        gridTemplateRows: '1fr 1fr 1fr 1fr',
-                        gridTemplateAreas: `"First Last Headshot Picture" "Phone Email Headshot Picture" "Dre OfficePhone Headshot Picture" "NotificationEmail NotificationEmailToggle Website Website"`,
-                        gridColumnGap: '2em',
-                      }
-                }
-              >
-                <div style={{ gridArea: 'Headshot' }}>
-                  {renderPicturePickerField({
-                    name: 'realtorPhoto',
-                    label: 'Headshot',
-                    dispatch: dispatch,
-                    required: true,
-                    validate: required,
-                  })}
-                </div>
-                <div style={{ gridArea: 'First' }}>
-                  {renderField({
-                    name: 'first',
-                    label: multiUser ? labelWithPopup('First Name', popup(changeMsg)) : 'First Name',
-                    type: 'text',
-                    required: true,
-                    validate: required,
-                    disabled: multiUser,
-                  })}
-                </div>
-                <div style={{ gridArea: 'Last' }}>
-                  {renderField({
-                    name: 'last',
-                    label: multiUser ? labelWithPopup('Last Name', popup(changeMsg)) : 'Last Name',
-                    type: 'text',
-                    required: true,
-                    validate: required,
-                    disabled: multiUser,
-                  })}
-                </div>
-                <div style={{ gridArea: 'Phone' }}>
-                  {renderField({
-                    name: 'phone',
-                    label: multiUser ? labelWithPopup('Phone Number', popup(changeMsg)) : 'Phone Number',
-                    type: 'text',
-                    required: true,
-                    validate: required,
-                    disabled: multiUser,
-                  })}
-                </div>
-                <div style={{ gridArea: 'Email' }}>
-                  {renderField({
-                    name: 'email',
-                    label: multiUser ? labelWithPopup('Email', popup(changeMsg)) : 'Email',
-                    type: 'text',
-                    required: true,
-                    validate: composeValidators(required, email),
-                    disabled: multiUser,
-                  })}
-                </div>
-                <div style={{ gridArea: 'NotificationEmail' }}>
-                  {renderField({
-                    name: 'notificationEmail',
-                    label: renderLabelWithSubHeader('Personal Notification Email'),
-                    type: 'text',
-                    required: !personalNotificationEmailEnabled,
-                    disabled: personalNotificationEmailEnabled,
-                  })}
-                </div>
-                <div style={{ gridArea: 'NotificationEmailToggle' }}>
-                  <Radio
-                    toggle
-                    label="Same as business notification email"
-                    onChange={() => setPersonalNotificationEmailEnabled(!personalNotificationEmailEnabled)}
-                    checked={personalNotificationEmailEnabled}
-                    onClick={() => setPersonalNotificationEmailEnabled(!personalNotificationEmailEnabled)}
-                    style={{ marginTop: '2.25em', opacity: personalNotificationEmailEnabled ? '1' : '0.4' }}
-                  />
-                </div>
-                <div style={{ gridArea: 'Dre' }}>
-                  {renderField({
-                    name: 'dre',
-                    label: renderLabelWithSubHeader('DRE Number', '( Required in California )'),
-                    type: 'text',
-                    validate: requiredOnlyInCalifornia,
-                  })}
-                </div>
-                <div style={{ gridArea: 'OfficePhone' }}>
-                  {renderField({ name: 'officePhone', label: renderLabelWithSubHeader('Office Phone Number', '( Optional )'), type: 'text' })}
-                </div>
-                <div style={{ gridArea: 'Website' }}>
-                  {renderField({ name: 'personalWebsite', label: renderLabelWithSubHeader('Personal Website', '( Optional )'), type: 'text' })}
-                </div>
-                <div style={{ gridArea: 'Picture' }}>
-                  <Image size="large" src={require('../../assets/onboard-profile.png')} alt="Brivity Marketer Mailout" />
-                </div>
-              </div>
-            </Segment>
-
-            {(isAdmin || !multiUser) && (
+            <ContentTopHeaderLayout>
               <Segment>
-                <Header as="h1">
-                  Business
-                  <Header.Subheader>Enter your company details for branding purposes and for the return addresss of your mailers.</Header.Subheader>
+                <Menu borderless fluid secondary>
+                  <Menu.Item>
+                    <Header as="h1">Profile</Header>
+                  </Menu.Item>
+                  <Menu.Menu position="right">
+                    <Menu.Item>
+                      <span>
+                        <Button basic type="button" onClick={form.reset} disabled={submitting || pristine} color="teal">
+                          Discard
+                        </Button>
+                        <Button type="submit" disabled={submitting} color="teal">
+                          Save
+                        </Button>
+                      </span>
+                    </Menu.Item>
+                  </Menu.Menu>
+                </Menu>
+              </Segment>
+            </ContentTopHeaderLayout>
+
+            <ContentBodyLayout style={{ marginTop: '88px' }}>
+              <Segment>
+                <Header as="h2">
+                  Personal
+                  <Header.Subheader>Your information will be shown on your postcards and will enable recipients to reach you.</Header.Subheader>
                 </Header>
 
                 <Divider style={{ margin: '1em -1em' }} />
 
-                <WhenFieldChanges
-                  field="businessNotificationEmail"
-                  becomes={values.businessNotificationEmail}
-                  set="notificationEmail"
-                  to={values.businessNotificationEmail}
-                  when={personalNotificationEmailEnabled}
-                />
-
-                <ExternalChanges whenTrue={personalNotificationEmailEnabled} set="notificationEmail" to={values.businessNotificationEmail} />
-
-                {teamLogo && !picturesTeamLogo && <ExternalChanges whenTrue={teamLogo} set="teamLogo" to={teamLogo} />}
-
-                {picturesTeamLogo && <ExternalChanges whenTrue={picturesTeamLogo} set="teamLogo" to={picturesTeamLogo} />}
-
-                {brokerageLogo && !picturesBrokerageLogo && <ExternalChanges whenTrue={brokerageLogo} set="brokerageLogo" to={brokerageLogo} />}
-
-                {picturesBrokerageLogo && <ExternalChanges whenTrue={picturesBrokerageLogo} set="brokerageLogo" to={picturesBrokerageLogo} />}
+                <ExternalChanges whenTrue={picturesRealtorPhoto} set="realtorPhoto" to={picturesRealtorPhoto} />
 
                 <div
                   style={
@@ -318,161 +214,279 @@ const ProfileForm = () => {
                       : {
                           display: 'grid',
                           gridTemplateColumns: '1fr 1fr 1fr 1fr',
-                          gridTemplateRows: '1fr 1fr 1fr 1fr 1fr 1fr',
-                          gridTemplateAreas: `"TeamName TeamName TeamLogo BrokerageLogo" "BrokerageName BrokerageName TeamLogo BrokerageLogo" "OfficePhone OfficePhone TeamLogo BrokerageLogo" "Address Address City City" "State State ZipCode ZipCode" "BusinessNotificationEmail BusinessNotificationEmail BusinessWebsite BusinessWebsite"`,
-                          gridRowGap: '1em',
+                          gridTemplateRows: '1fr 1fr 1fr 1fr',
+                          gridTemplateAreas: `"First Last Headshot Picture" "Phone Email Headshot Picture" "Dre OfficePhone Headshot Picture" "NotificationEmail NotificationEmailToggle Website Website"`,
                           gridColumnGap: '2em',
                         }
                   }
                 >
-                  <div style={{ gridArea: 'TeamName' }}>
-                    {renderField({
-                      name: 'teamName',
-                      label: multiUser ? labelWithPopup('Team Name', popup(changeMsg)) : 'Team Name',
-                      type: 'text',
-                      required: true,
-                      validate: required,
-                      disabled: multiUser,
-                    })}
-                  </div>
-                  <div style={{ gridArea: 'TeamLogo' }}>
-                    {renderPicturePickerField({ name: 'teamLogo', label: 'Team Logo', dispatch: dispatch, disabled: multiUser })}
-                  </div>
-                  <div style={{ gridArea: 'BrokerageName' }}>
-                    {renderField({
-                      name: 'brokerageName',
-                      label: multiUser ? labelWithPopup('Brokerage Name', popup(changeMsg)) : 'Brokerage Name',
-                      type: 'text',
-                      required: true,
-                      validate: required,
-                      disabled: multiUser,
-                    })}
-                  </div>
-                  <div style={{ gridArea: 'BrokerageLogo' }}>
+                  <div style={{ gridArea: 'Headshot' }}>
                     {renderPicturePickerField({
-                      name: 'brokerageLogo',
-                      label: 'Brokerage Logo',
+                      name: 'realtorPhoto',
+                      label: 'Headshot',
                       dispatch: dispatch,
                       required: true,
                       validate: required,
                     })}
                   </div>
-                  <div style={{ gridArea: 'OfficePhone' }}>{renderField({ name: 'officePhone', label: 'Office Phone Number (Optional)', type: 'text' })}</div>
-                  <div style={{ gridArea: 'Address' }}>
+                  <div style={{ gridArea: 'First' }}>
                     {renderField({
-                      name: 'address',
-                      label: multiUser ? labelWithPopup('Address', popup(changeMsg)) : 'Address',
+                      name: 'first',
+                      label: multiUser ? labelWithPopup('First Name', popup(changeMsg)) : 'First Name',
                       type: 'text',
                       required: true,
                       validate: required,
                       disabled: multiUser,
                     })}
                   </div>
-                  <div style={{ gridArea: 'City' }}>
+                  <div style={{ gridArea: 'Last' }}>
                     {renderField({
-                      name: 'city',
-                      label: multiUser ? labelWithPopup('City', popup(changeMsg)) : 'City',
+                      name: 'last',
+                      label: multiUser ? labelWithPopup('Last Name', popup(changeMsg)) : 'Last Name',
                       type: 'text',
                       required: true,
                       validate: required,
                       disabled: multiUser,
                     })}
                   </div>
-                  <div style={{ gridArea: 'State' }}>
-                    {renderSelectField({
-                      name: 'state',
-                      label: multiUser ? labelWithPopup('State', popup(changeMsg)) : 'State',
-                      type: 'text',
-                      required: true,
-                      validate: multiUser ? null : required,
-                      options: states ? states : [],
-                      search: true,
-                      disabled: multiUser,
-                    })}
-                  </div>
-                  <div style={{ gridArea: 'ZipCode' }}>
+                  <div style={{ gridArea: 'Phone' }}>
                     {renderField({
-                      name: 'zip',
-                      label: multiUser ? labelWithPopup('Zip Code', popup(changeMsg)) : 'Zip Code',
+                      name: 'phone',
+                      label: multiUser ? labelWithPopup('Phone Number', popup(changeMsg)) : 'Phone Number',
                       type: 'text',
                       required: true,
                       validate: required,
                       disabled: multiUser,
                     })}
                   </div>
-                  <div style={{ gridArea: 'BusinessNotificationEmail' }}>
+                  <div style={{ gridArea: 'Email' }}>
                     {renderField({
-                      name: 'businessNotificationEmail',
-                      label: renderLabelWithSubHeader('Business Notification Email', '( Required )'),
+                      name: 'email',
+                      label: multiUser ? labelWithPopup('Email', popup(changeMsg)) : 'Email',
                       type: 'text',
                       required: true,
                       validate: composeValidators(required, email),
+                      disabled: multiUser,
                     })}
                   </div>
-                  <div style={{ gridArea: 'BusinessWebsite' }}>
-                    {renderField({ name: 'businessWebsite', label: 'Business Website (Optional)', type: 'text' })}
+                  <div style={{ gridArea: 'NotificationEmail' }}>
+                    {renderField({
+                      name: 'notificationEmail',
+                      label: renderLabelWithSubHeader('Personal Notification Email'),
+                      type: 'text',
+                      required: !personalNotificationEmailEnabled,
+                      disabled: personalNotificationEmailEnabled,
+                    })}
+                  </div>
+                  <div style={{ gridArea: 'NotificationEmailToggle' }}>
+                    <Radio
+                      toggle
+                      label="Same as business notification email"
+                      onChange={() => setPersonalNotificationEmailEnabled(!personalNotificationEmailEnabled)}
+                      checked={personalNotificationEmailEnabled}
+                      onClick={() => setPersonalNotificationEmailEnabled(!personalNotificationEmailEnabled)}
+                      style={{ marginTop: '2.25em', opacity: personalNotificationEmailEnabled ? '1' : '0.4' }}
+                    />
+                  </div>
+                  <div style={{ gridArea: 'Dre' }}>
+                    {renderField({
+                      name: 'dre',
+                      label: renderLabelWithSubHeader('DRE Number', '( Required in California )'),
+                      type: 'text',
+                      validate: requiredOnlyInCalifornia,
+                    })}
+                  </div>
+                  <div style={{ gridArea: 'OfficePhone' }}>
+                    {renderField({ name: 'officePhone', label: renderLabelWithSubHeader('Office Phone Number', '( Optional )'), type: 'text' })}
+                  </div>
+                  <div style={{ gridArea: 'Website' }}>
+                    {renderField({ name: 'personalWebsite', label: renderLabelWithSubHeader('Personal Website', '( Optional )'), type: 'text' })}
+                  </div>
+                  <div style={{ gridArea: 'Picture' }}>
+                    <Image size="large" src={require('../../assets/onboard-profile.png')} alt="Brivity Marketer Mailout" />
                   </div>
                 </div>
               </Segment>
-            )}
 
-            <Segment>
-              <Header as="h1">
-                MLS
-                <Header.Subheader>Enter your MLS information so we can generate postcards for your listings.</Header.Subheader>
-              </Header>
+              {(isAdmin || !multiUser) && (
+                <Segment>
+                  <Header as="h2">
+                    Business
+                    <Header.Subheader>Enter your company details for branding purposes and for the return addresss of your mailers.</Header.Subheader>
+                  </Header>
 
-              <Divider style={{ margin: '1em -1em' }} />
+                  <Divider style={{ margin: '1em -1em' }} />
 
-              <FieldArray name="boards">
-                {({ fields }) =>
-                  fields.map((name, index) => (
-                    <Segment secondary key={index}>
-                      <div style={isMobile() ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 1fr 45px', gridColumnGap: '2em' }}>
-                        {renderSelectField({
-                          name: `${name}.name`,
-                          label: 'MLS',
-                          type: 'text',
-                          required: true,
-                          validate: required,
-                          options: boards ? boards : [],
-                          search: true,
-                        })}
-                        {renderField({ name: `${name}.mlsId`, label: 'MLS Agent ID', type: 'text', required: true, validate: required })}
-                        <Button
-                          basic
-                          icon
-                          color="teal"
-                          disabled={fields.length === 1}
-                          onClick={() => fields.remove(index)}
-                          style={isMobile() ? { cursor: 'pointer' } : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }}
-                          aria-label="remove mls"
-                        >
-                          <Icon name="trash" />
-                        </Button>
-                      </div>
-                    </Segment>
-                  ))
-                }
-              </FieldArray>
+                  <WhenFieldChanges
+                    field="businessNotificationEmail"
+                    becomes={values.businessNotificationEmail}
+                    set="notificationEmail"
+                    to={values.businessNotificationEmail}
+                    when={personalNotificationEmailEnabled}
+                  />
 
-              <div className="buttons">
-                <Button basic onClick={() => push('boards', undefined)} color="teal">
-                  Add MLS
-                </Button>
-              </div>
-            </Segment>
+                  <ExternalChanges whenTrue={personalNotificationEmailEnabled} set="notificationEmail" to={values.businessNotificationEmail} />
 
-            <div style={{ display: 'grid', justifyContent: 'end' }}>
-              <span>
-                <Button basic type="button" onClick={form.reset} disabled={submitting || pristine} color="teal">
-                  Discard
-                </Button>
-                <Button type="submit" disabled={submitting} color="teal">
-                  Save
-                </Button>
-              </span>
-            </div>
+                  {teamLogo && !picturesTeamLogo && <ExternalChanges whenTrue={teamLogo} set="teamLogo" to={teamLogo} />}
+
+                  {picturesTeamLogo && <ExternalChanges whenTrue={picturesTeamLogo} set="teamLogo" to={picturesTeamLogo} />}
+
+                  {brokerageLogo && !picturesBrokerageLogo && <ExternalChanges whenTrue={brokerageLogo} set="brokerageLogo" to={brokerageLogo} />}
+
+                  {picturesBrokerageLogo && <ExternalChanges whenTrue={picturesBrokerageLogo} set="brokerageLogo" to={picturesBrokerageLogo} />}
+
+                  <div
+                    style={
+                      isMobile()
+                        ? {}
+                        : {
+                            display: 'grid',
+                            gridTemplateColumns: '1fr 1fr 1fr 1fr',
+                            gridTemplateRows: '1fr 1fr 1fr 1fr 1fr 1fr',
+                            gridTemplateAreas: `"TeamName TeamName TeamLogo BrokerageLogo" "BrokerageName BrokerageName TeamLogo BrokerageLogo" "OfficePhone OfficePhone TeamLogo BrokerageLogo" "Address Address City City" "State State ZipCode ZipCode" "BusinessNotificationEmail BusinessNotificationEmail BusinessWebsite BusinessWebsite"`,
+                            gridRowGap: '1em',
+                            gridColumnGap: '2em',
+                          }
+                    }
+                  >
+                    <div style={{ gridArea: 'TeamName' }}>
+                      {renderField({
+                        name: 'teamName',
+                        label: multiUser ? labelWithPopup('Team Name', popup(changeMsg)) : 'Team Name',
+                        type: 'text',
+                        required: true,
+                        validate: required,
+                        disabled: multiUser,
+                      })}
+                    </div>
+                    <div style={{ gridArea: 'TeamLogo' }}>
+                      {renderPicturePickerField({ name: 'teamLogo', label: 'Team Logo', dispatch: dispatch, disabled: multiUser })}
+                    </div>
+                    <div style={{ gridArea: 'BrokerageName' }}>
+                      {renderField({
+                        name: 'brokerageName',
+                        label: multiUser ? labelWithPopup('Brokerage Name', popup(changeMsg)) : 'Brokerage Name',
+                        type: 'text',
+                        required: true,
+                        validate: required,
+                        disabled: multiUser,
+                      })}
+                    </div>
+                    <div style={{ gridArea: 'BrokerageLogo' }}>
+                      {renderPicturePickerField({
+                        name: 'brokerageLogo',
+                        label: 'Brokerage Logo',
+                        dispatch: dispatch,
+                        required: true,
+                        validate: required,
+                      })}
+                    </div>
+                    <div style={{ gridArea: 'OfficePhone' }}>{renderField({ name: 'officePhone', label: 'Office Phone Number (Optional)', type: 'text' })}</div>
+                    <div style={{ gridArea: 'Address' }}>
+                      {renderField({
+                        name: 'address',
+                        label: multiUser ? labelWithPopup('Address', popup(changeMsg)) : 'Address',
+                        type: 'text',
+                        required: true,
+                        validate: required,
+                        disabled: multiUser,
+                      })}
+                    </div>
+                    <div style={{ gridArea: 'City' }}>
+                      {renderField({
+                        name: 'city',
+                        label: multiUser ? labelWithPopup('City', popup(changeMsg)) : 'City',
+                        type: 'text',
+                        required: true,
+                        validate: required,
+                        disabled: multiUser,
+                      })}
+                    </div>
+                    <div style={{ gridArea: 'State' }}>
+                      {renderSelectField({
+                        name: 'state',
+                        label: multiUser ? labelWithPopup('State', popup(changeMsg)) : 'State',
+                        type: 'text',
+                        required: true,
+                        validate: multiUser ? null : required,
+                        options: states ? states : [],
+                        search: true,
+                        disabled: multiUser,
+                      })}
+                    </div>
+                    <div style={{ gridArea: 'ZipCode' }}>
+                      {renderField({
+                        name: 'zip',
+                        label: multiUser ? labelWithPopup('Zip Code', popup(changeMsg)) : 'Zip Code',
+                        type: 'text',
+                        required: true,
+                        validate: required,
+                        disabled: multiUser,
+                      })}
+                    </div>
+                    <div style={{ gridArea: 'BusinessNotificationEmail' }}>
+                      {renderField({
+                        name: 'businessNotificationEmail',
+                        label: renderLabelWithSubHeader('Business Notification Email', '( Required )'),
+                        type: 'text',
+                        required: true,
+                        validate: composeValidators(required, email),
+                      })}
+                    </div>
+                    <div style={{ gridArea: 'BusinessWebsite' }}>
+                      {renderField({ name: 'businessWebsite', label: 'Business Website (Optional)', type: 'text' })}
+                    </div>
+                  </div>
+                </Segment>
+              )}
+
+              <Segment>
+                <Header as="h2">
+                  MLS
+                  <Header.Subheader>Enter your MLS information so we can generate postcards for your listings.</Header.Subheader>
+                </Header>
+
+                <Divider style={{ margin: '1em -1em' }} />
+
+                <FieldArray name="boards">
+                  {({ fields }) =>
+                    fields.map((name, index) => (
+                      <Segment secondary key={index}>
+                        <div style={isMobile() ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 1fr 45px', gridColumnGap: '2em' }}>
+                          {renderSelectField({
+                            name: `${name}.name`,
+                            label: 'MLS',
+                            type: 'text',
+                            required: true,
+                            validate: required,
+                            options: boards ? boards : [],
+                            search: true,
+                          })}
+                          {renderField({ name: `${name}.mlsId`, label: 'MLS Agent ID', type: 'text', required: true, validate: required })}
+                          <Button
+                            basic
+                            icon
+                            color="teal"
+                            disabled={fields.length === 1}
+                            onClick={() => fields.remove(index)}
+                            style={isMobile() ? { cursor: 'pointer' } : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }}
+                            aria-label="remove mls"
+                          >
+                            <Icon name="trash" />
+                          </Button>
+                        </div>
+                      </Segment>
+                    ))
+                  }
+                </FieldArray>
+
+                <div className="buttons">
+                  <Button basic onClick={() => push('boards', undefined)} color="teal">
+                    Add MLS
+                  </Button>
+                </div>
+              </Segment>
+            </ContentBodyLayout>
           </Form>
         );
       }}

@@ -1,14 +1,12 @@
 import React from 'react';
 
+import { Page } from '../../components/Base';
 import CustomizeForm from '../../components/Forms/CustomizeForm';
-import { Page, Segment } from '../../components/Base';
 
 const CustomizePage = () => {
   return (
     <Page basic>
-      <Segment basic>
-        <CustomizeForm />
-      </Segment>
+      <CustomizeForm />
     </Page>
   );
 };

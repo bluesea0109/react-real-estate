@@ -1,14 +1,12 @@
 import React from 'react';
 
+import { Page } from '../../components/Base';
 import InviteTeammatesForm from '../../components/Forms/InviteTeammatesForm';
-import { Page, Segment } from '../../components/Base';
 
 const InviteTeammatesPage = () => {
   return (
     <Page basic>
-      <Segment basic>
-        <InviteTeammatesForm />
-      </Segment>
+      <InviteTeammatesForm />
     </Page>
   );
 };
