@@ -31,10 +31,12 @@ export default function mailouts(state = initialState, action) {
       };
 
     case GET_MAILOUTS_SUCCESS:
+      const getMailoutsSuccessNewList = state.list.concat(action.payload);
+
       return {
         ...state,
         pending: false,
-        list: action.payload,
+        list: getMailoutsSuccessNewList,
       };
 
     case GET_MAILOUTS_ERROR:
@@ -58,11 +60,12 @@ export default function mailouts(state = initialState, action) {
       };
 
     case GET_MORE_MAILOUTS_SUCCESS:
-      const newList = state.list.concat(action.payload);
+      const getMoreMailoutsNewList = state.list.concat(action.payload);
+
       return {
         ...state,
         pending: false,
-        list: newList,
+        list: getMoreMailoutsNewList,
       };
 
     case GET_MORE_MAILOUTS_ERROR:
@@ -88,10 +91,12 @@ export default function mailouts(state = initialState, action) {
       };
 
     case GENERATE_MAILOUTS_SUCCESS:
+      const generateMailoutsSuccessNewList = state.list.concat(action.payload);
+
       return {
         ...state,
         generatePending: false,
-        list: action.payload,
+        list: generateMailoutsSuccessNewList,
       };
 
     case GENERATE_MAILOUTS_ERROR:

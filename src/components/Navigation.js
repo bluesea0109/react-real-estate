@@ -81,7 +81,6 @@ export default () => {
   const mailoutStopPendingState = useSelector(store => store.mailout.stopPending);
   const mailoutUpdateMailoutSizePendingState = useSelector(store => store.mailout.updateMailoutSizePending);
   const mailoutUpdatePendingState = useSelector(store => store.mailout.updatePending);
-  const mailoutsPendingState = useSelector(store => store.mailouts.pending);
 
   const profiles = [];
 
@@ -156,8 +155,7 @@ export default () => {
       mailoutSubmitPendingState ||
       mailoutStopPendingState ||
       mailoutUpdateMailoutSizePendingState ||
-      mailoutUpdatePendingState ||
-      mailoutsPendingState;
+      mailoutUpdatePendingState;
     setAppIsBusy(busyState);
   }, [
     mailoutpendingState,
@@ -166,7 +164,6 @@ export default () => {
     mailoutStopPendingState,
     mailoutUpdateMailoutSizePendingState,
     mailoutUpdatePendingState,
-    mailoutsPendingState,
   ]);
 
   const renderLabel = label => ({
