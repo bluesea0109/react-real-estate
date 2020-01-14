@@ -202,7 +202,7 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
           <Message size="large" style={{ textAlign: 'center' }}>
             <Message.Header>You currently have no team members.</Message.Header>
             <br />
-            <Image src={require('../../assets/under-construction.jpg')} style={{ margin: 'auto' }} />
+            <Image src={require('../../assets/undraw_selecting_team_8uux.png')} style={{ margin: 'auto' }} />
             <p>When you get others on your team, check the Settings section in the app to invite them.</p>
           </Message>
           <div style={{ display: 'grid', justifyContent: 'end' }}>
