@@ -504,10 +504,8 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
 
         {!formValues[listingType].createMailoutsOfThisType && (
           <Segment placeholder>
-            <Header icon>
-              <Icon name="exclamation triangle" />
-              {placeholder}
-            </Header>
+            <Header textAlign="center">{placeholder}</Header>
+            <Image src={require('../../assets/undraw_choice_9385.png')} style={{ margin: 'auto' }} />
           </Segment>
         )}
 
