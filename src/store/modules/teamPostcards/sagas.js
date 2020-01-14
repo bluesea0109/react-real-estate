@@ -3,6 +3,7 @@ import { call, delay, put, race, take } from 'redux-saga/effects';
 import {
   GENERATE_TEAM_POSTCARDS_PREVIEW_PENDING,
   GENERATE_TEAM_POSTCARDS_PREVIEW_SUCCESS,
+  GENERATE_TEAM_POSTCARDS_PREVIEW_ERROR,
   generateTeamPostcardsPreviewError,
   generateTeamPostcardsPreviewSuccess,
 } from './actions';
@@ -58,6 +59,6 @@ export function* getTeamPostcardsPreviewSaga() {
 export default function*() {
   while (true) {
     yield take(GENERATE_TEAM_POSTCARDS_PREVIEW_PENDING);
-    yield race([call(getTeamPostcardsPreviewSaga), take(GENERATE_TEAM_POSTCARDS_PREVIEW_SUCCESS)]);
+    yield race([call(getTeamPostcardsPreviewSaga), take(GENERATE_TEAM_POSTCARDS_PREVIEW_ERROR), take(GENERATE_TEAM_POSTCARDS_PREVIEW_SUCCESS)]);
   }
 }
