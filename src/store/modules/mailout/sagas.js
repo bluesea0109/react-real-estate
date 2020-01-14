@@ -63,6 +63,12 @@ export function* submitMailoutSaga({ peerId = null }) {
     const response = yield call(ApiService[method], path);
 
     yield put(submitMailoutSuccess(response));
+
+    if (peerId) {
+      yield getMailoutSaga({ peerId });
+    } else {
+      yield getMailoutSaga({});
+    }
   } catch (err) {
     yield put(submitMailoutError(err.message));
   }
@@ -75,6 +81,12 @@ export function* stopMailoutSaga({ peerId = null }) {
     const response = yield call(ApiService[method], path);
 
     yield put(stopMailoutSuccess(response));
+
+    if (peerId) {
+      yield getMailoutSaga({ peerId });
+    } else {
+      yield getMailoutSaga({});
+    }
   } catch (err) {
     yield put(stopMailoutError(err.message));
   }

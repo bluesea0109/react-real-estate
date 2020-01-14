@@ -41,10 +41,15 @@ const MailoutDetailsPage = () => {
   // const [recipientsNumber, userRecipientsNumber] = useInput({ type: "text", initalState: 0 });
   const [currentNumberOfRecipients, setCurrentNumberOfRecipients] = useState(0);
   const [newNumberOfRecipients, setNewNumberOfRecipients] = useState(0);
+  const [working, setWorking] = useState(false);
 
-  const isLoading = useSelector(store => store.mailout.pending);
-  const isUpdating = useSelector(store => store.mailout.updatePending);
-  const isUpdateMailoutSizePending = useSelector(store => store.mailout.updateMailoutSizePending);
+  const pendingState = useSelector(store => store.mailout.pending);
+  const modifyPendingState = useSelector(store => store.mailout.modifyPending);
+  const submitPendingState = useSelector(store => store.mailout.submitPending);
+  const stopPendingState = useSelector(store => store.mailout.stopPending);
+  const updateMailoutSizePendingState = useSelector(store => store.mailout.updateMailoutSizePending);
+  const updatePendingState = useSelector(store => store.mailout.updatePending);
+
   const isUpdateMailoutSizeError = useSelector(store => store.mailout.updateMailoutSizeError);
   const details = useSelector(store => store.mailout.details);
   const error = useSelector(store => store.mailout.error);
@@ -59,10 +64,10 @@ const MailoutDetailsPage = () => {
   const mailoutSizeMax = listingDefaults && listingDefaults.mailoutSizeMax;
 
   useEffect(() => {
-    if (!isLoading && !!error) {
+    if (!pendingState && !!error) {
       history.push(`/dashboard`);
     }
-  }, [isLoading, error, history]);
+  }, [pendingState, error, history]);
 
   useEffect(() => {
     if (details && details.recipientCount) {
@@ -71,6 +76,11 @@ const MailoutDetailsPage = () => {
   }, [details, currentNumberOfRecipients]);
 
   useFetching(getMailoutPending, useDispatch(), mailoutId);
+
+  useEffect(() => {
+    const busyState = pendingState || modifyPendingState || submitPendingState || stopPendingState || updateMailoutSizePendingState || updatePendingState;
+    setWorking(busyState);
+  }, [pendingState, modifyPendingState, submitPendingState, stopPendingState, updateMailoutSizePendingState, updatePendingState]);
 
   const handleBackClick = () => {
     dispatch(resetMailout());
@@ -84,13 +94,10 @@ const MailoutDetailsPage = () => {
 
   const handleApproveAndSendMailoutDetailsClick = () => {
     dispatch(submitMailoutPending(mailoutId));
-    // TODO: Google Map is acting up at this stage
-    // history.goBack();
   };
 
   const handleDeleteMailoutDetailsClick = () => {
     dispatch(stopMailoutPending(mailoutId));
-    handleBackClick();
   };
 
   const handleEditMailoutDetailsClick = () => {
@@ -146,8 +153,8 @@ const MailoutDetailsPage = () => {
             color="teal"
             onClick={toggleRecipientsEditState}
             style={{ marginLeft: '10px', minWidth: '5em' }}
-            disabled={isUpdateMailoutSizePending}
-            loading={isUpdateMailoutSizePending}
+            disabled={updateMailoutSizePendingState}
+            loading={updateMailoutSizePendingState}
           >
             Change
           </Button>
@@ -166,7 +173,7 @@ const MailoutDetailsPage = () => {
             </Menu.Item>
             <Menu.Menu position="right">
               <Menu.Item>
-                <Button basic color="teal" onClick={() => handleBackClick()}>
+                <Button basic color="teal" onClick={() => handleBackClick()} disabled={working} loading={working}>
                   Back
                 </Button>
               </Menu.Item>
@@ -179,7 +186,7 @@ const MailoutDetailsPage = () => {
         <Grid>
           <Grid.Row>
             <Grid.Column width={16}>
-              {!isLoading && !error && !isUpdating && !updateError && details && (
+              {!pendingState && !error && !updatePendingState && !updateError && details && (
                 <ItemLayout fluid key={details._id}>
                   <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
                     {
@@ -189,6 +196,7 @@ const MailoutDetailsPage = () => {
                         onClickEdit={handleEditMailoutDetailsClick}
                         onClickApproveAndSend={handleApproveAndSendMailoutDetailsClick}
                         onClickDelete={handleDeleteMailoutDetailsClick}
+                        lockControls={working}
                       />
                     }
                   </ContentBottomHeaderLayout>
@@ -247,12 +255,12 @@ const MailoutDetailsPage = () => {
                 </ItemLayout>
               )}
 
-              {!isLoading && !error && !isUpdating && !updateError && details && <GoogleMapItem data={details} />}
+              {!pendingState && !error && !updatePendingState && !updateError && details && <GoogleMapItem data={details} />}
             </Grid.Column>
           </Grid.Row>
         </Grid>
       </Segment>
-      {(isLoading && !error && Loading()) || (isUpdating && !updateError && LoadingWithMessage({ message: 'Updating listing, please wait...' }))}
+      {(pendingState && !error && Loading()) || (updatePendingState && !updateError && LoadingWithMessage({ message: 'Updating listing, please wait...' }))}
       {error && <Message error>Oh snap! {error}.</Message>}
       {updateError && <Message error>Oh snap! {updateError}.</Message>}
     </Page>

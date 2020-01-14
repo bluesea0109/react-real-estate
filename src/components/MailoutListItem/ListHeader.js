@@ -9,7 +9,7 @@ import { Button, Header } from '../Base';
 import { Label } from 'semantic-ui-react';
 import './hover.css';
 
-const ApproveAndSendButton = ({ data, mailoutDetailPage, onClickApproveAndSend }) => {
+const ApproveAndSendButton = ({ data, mailoutDetailPage, onClickApproveAndSend, lockControls = false }) => {
   if (!data) return;
 
   if (!mailoutDetailPage) {
@@ -34,7 +34,7 @@ const ApproveAndSendButton = ({ data, mailoutDetailPage, onClickApproveAndSend }
   return (
     <Fragment>
       {canSend(data.mailoutStatus) && (
-        <Button color="teal" onClick={onClickApproveAndSend}>
+        <Button color="teal" onClick={onClickApproveAndSend} disabled={lockControls} loading={lockControls}>
           <MobileDisabledLayout>
             <Fragment>Approve & Send</Fragment>
           </MobileDisabledLayout>
@@ -47,7 +47,7 @@ const ApproveAndSendButton = ({ data, mailoutDetailPage, onClickApproveAndSend }
   );
 };
 
-const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickApproveAndSend, onClickDelete }) => {
+const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickApproveAndSend, onClickDelete, lockControls = false }) => {
   if (!data) return;
   const enableEdit = resolveMailoutStatus(data.mailoutStatus) !== 'Sent' && resolveMailoutStatus(data.mailoutStatus) !== 'Processing';
   const enableDelete = resolveMailoutStatus(data.mailoutStatus) === 'Sent';
@@ -64,26 +64,26 @@ const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickAppro
         {!mailoutDetailPage && (
           <Link to={`dashboard/${data._id}`} className="ui header">
             <Header as="h3" className="bm-color-effect">
-              {data.details.displayAddress}
+              {data.details && data.details.displayAddress}
             </Header>
           </Link>
         )}
-        {mailoutDetailPage && <Header as="h3">{data.details.displayAddress}</Header>}
+        {mailoutDetailPage && <Header as="h3">{data.details && data.details.displayAddress}</Header>}
       </span>
       <ItemHeaderMenuLayout>
         <span>
           {mailoutDetailPage && enableEdit && (
-            <Button basic color="teal" onClick={onClickEdit}>
+            <Button basic color="teal" onClick={onClickEdit} disabled={lockControls} loading={lockControls}>
               Edit
             </Button>
           )}
         </span>
         <span>
-          <ApproveAndSendButton data={data} mailoutDetailPage={mailoutDetailPage} onClickApproveAndSend={onClickApproveAndSend} />
+          <ApproveAndSendButton data={data} mailoutDetailPage={mailoutDetailPage} onClickApproveAndSend={onClickApproveAndSend} lockControls={lockControls} />
         </span>
         <span>
           {mailoutDetailPage && enableDelete && activeWhen && (
-            <Button basic color="teal" onClick={onClickDelete}>
+            <Button basic color="teal" onClick={onClickDelete} disabled={lockControls} loading={lockControls}>
               Stop Sending
             </Button>
           )}
