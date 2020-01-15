@@ -6,7 +6,7 @@ export default styled.div`
   position: fixed;
   min-width: calc(100% - 219px);
   top: 135px;
-  z-index: 10;
+  z-index: 15;
 
   @media (max-width: 768px) {
     min-width: 92.5%;
