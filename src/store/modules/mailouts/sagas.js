@@ -8,7 +8,6 @@ import {
   setCanFetchMore,
   getMoreMailoutsSuccess,
   getMoreMailoutsError,
-  resetMailouts,
 } from './actions';
 import { SELECT_PEER_ID, DESELECT_PEER_ID } from '../peer/actions';
 import ApiService from '../../../services/api/index';
@@ -20,7 +19,6 @@ const limit = 25;
 export function* getMailoutSaga({ peerId = null }) {
   try {
     const { path, method } = peerId ? ApiService.directory.peer.mailout.list(peerId) : ApiService.directory.user.mailout.list();
-    yield put(resetMailouts());
     const page = yield select(getMailoutsPage);
     const response = yield call(ApiService[method], path, { page, limit });
 
