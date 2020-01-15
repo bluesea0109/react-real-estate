@@ -8,6 +8,7 @@ import {
   setCanFetchMore,
   getMoreMailoutsSuccess,
   getMoreMailoutsError,
+  resetMailouts,
 } from './actions';
 import { SELECT_PEER_ID, DESELECT_PEER_ID } from '../peer/actions';
 import ApiService from '../../../services/api/index';
@@ -54,6 +55,8 @@ export function* getMoreMailoutSaga({ peerId = null }) {
 
 export function* checkIfPeerSelectedGetMailout() {
   const peerId = yield select(getSelectedPeerId);
+
+  yield put(resetMailouts());
 
   if (peerId) {
     yield getMailoutSaga({ peerId });
