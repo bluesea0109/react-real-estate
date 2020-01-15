@@ -2,10 +2,12 @@ import React, { useEffect } from 'react';
 import { Progress } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { getMailoutsPending, getMoreMailoutsPending } from '../store/modules/mailouts/actions';
+import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemBodyLayout, ItemLayout } from '../layouts';
 import { Button, Header, Grid, Menu, /*Message,*/ Page, Segment, Icon } from '../components/Base';
-import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
-import MailoutListItem from '../components/MailoutListItem';
+import { getMailoutsPending, getMoreMailoutsPending } from '../store/modules/mailouts/actions';
+import ListHeader from '../components/MailoutListItem/ListHeader';
+import ImageGroup from '../components/MailoutListItem/ImageGroup';
+import ItemList from '../components/MailoutListItem/ItemList';
 import { isMobile } from '../components/Forms/helpers';
 import Loading from '../components/Loading';
 import './DashboardPage.css';
@@ -31,7 +33,7 @@ const Dashboard = () => {
   const mailoutsPendingState = useSelector(store => store.mailouts.pending);
   const canLoadMore = useSelector(store => store.mailouts.canLoadMore);
   const page = useSelector(store => store.mailouts.page);
-  const list = useSelector(store => store.mailouts.list);
+  const mailoutList = useSelector(store => store.mailouts.list);
   // const error = useSelector(store => store.mailouts.error);
 
   useFetching(getMailoutsPending, onboarded, useDispatch());
@@ -48,11 +50,19 @@ const Dashboard = () => {
     boundFetchMoreMailouts(page + 1);
   };
 
-  // if (isLoading && !error) return <Loading />;
-  // if (error) return <Message error>Oh snap! {error}.</Message>;
+  const MailoutsList = ({ list }) => {
+    if (list[0].started) return null;
 
-  const MailoutsList = ({ data }) => {
-    return data.map(item => MailoutListItem(item));
+    return list.map(item => (
+      <ItemLayout fluid key={`${item.userId}-${item._id}-${item.mlsNum}`}>
+        {ListHeader({ data: item })}
+        <ItemBodyLayout attached style={{ padding: 10 }}>
+          {ImageGroup({ img1src: item.sampleBackLargeUrl, img2src: item.sampleFrontLargeUrl, linkTo: `dashboard/${item._id}` })}
+
+          {ItemList({ data: item })}
+        </ItemBodyLayout>
+      </ItemLayout>
+    ));
   };
 
   return (
@@ -73,7 +83,7 @@ const Dashboard = () => {
         </ContentBottomHeaderLayout>
       )}
 
-      {!isInitiating && !mailoutsPendingState && list.length === 0 && (
+      {!isInitiating && !mailoutsPendingState && mailoutList.length === 0 && (
         <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
           <Segment placeholder>
             <Header icon>
@@ -84,7 +94,7 @@ const Dashboard = () => {
         </ContentBottomHeaderLayout>
       )}
 
-      {list.length === 0 && mailoutsPendingState && (
+      {mailoutList.length === 0 && mailoutsPendingState && (
         <Segment style={isMobile() ? { marginTop: '129px' } : { marginTop: '75px' }}>
           <Grid>
             <Grid.Row>
@@ -100,14 +110,14 @@ const Dashboard = () => {
         </Segment>
       )}
 
-      {list.length > 0 && (
+      {mailoutList.length > 0 && (
         <Segment style={isMobile() ? { marginTop: '129px' } : { marginTop: '75px' }}>
           <Grid>
             <Grid.Row>
               <Grid.Column width={16}>
                 <Grid.Row>
                   <Grid.Column width={16}>
-                    <MailoutsList data={list} />
+                    <MailoutsList list={mailoutList} />
                   </Grid.Column>
                 </Grid.Row>
 

@@ -1,7 +1,7 @@
 {
   "name": "beta-brivitymarketer-com",
   "homepage": "/v2/",
-  "version": "2.0.46",
+  "version": "2.0.47",
   "private": true,
   "scripts": {
     "start": "PORT=8082 react-scripts start",
@@ -12,7 +12,7 @@
     "format": "prettier --write 'src/**/*.{js,jsx,json}'",
     "generate-artifacts": "node utils/generate-testing-artifacts",
     "create": "node utils/create-campaigns",
-    "reset": "node utils/reset",
+    "reset": "node utils/resetDevDb",
     "commit": "node utils/commit",
     "postcommit": "git push origin master",
     "push-to-production": "git checkout production && git merge master && git push origin production && git checkout master"
