@@ -132,7 +132,9 @@ const MailoutDetailsPage = () => {
     }
   };
 
-  const renderRecipients = () => {
+  const RenderRecipients = () => {
+    const enableEditRecipients = resolveMailoutStatus(details.mailoutStatus) !== 'Sent' && resolveMailoutStatus(details.mailoutStatus) !== 'Processing';
+
     if (editRecipients) {
       return (
         <Button as="div" labelPosition="left">
@@ -152,16 +154,18 @@ const MailoutDetailsPage = () => {
           <label style={{ minWidth: '5em', minHeight: '2em', textAlign: 'center' }}>
             {(!isUpdateMailoutSizeError && newNumberOfRecipients) || currentNumberOfRecipients}
           </label>
-          <Button
-            icon
-            color="teal"
-            onClick={toggleRecipientsEditState}
-            style={{ marginLeft: '10px', minWidth: '5em' }}
-            disabled={updateMailoutSizePendingState}
-            loading={updateMailoutSizePendingState}
-          >
-            Change
-          </Button>
+          {enableEditRecipients && (
+            <Button
+              icon
+              color="teal"
+              onClick={toggleRecipientsEditState}
+              style={{ marginLeft: '10px', minWidth: '5em' }}
+              disabled={updateMailoutSizePendingState}
+              loading={updateMailoutSizePendingState}
+            >
+              Change
+            </Button>
+          )}
         </Button>
       );
     }
@@ -222,7 +226,9 @@ const MailoutDetailsPage = () => {
                               />
                             )}
                           </List.Header>
-                          <List.Description>{renderRecipients()}</List.Description>
+                          <List.Description>
+                            <RenderRecipients />
+                          </List.Description>
                         </List.Content>
                       </List.Item>
                       <List.Item>
