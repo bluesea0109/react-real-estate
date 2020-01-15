@@ -10,7 +10,7 @@ import { isMobile, isValidURL, maxLength, popup, required, composeValidators, ur
 import { saveListedShortcodePending, saveSoldShortcodePending } from '../../store/modules/shortcode/actions';
 import { saveCustomizationPending } from '../../store/modules/customization/actions';
 import { Button, Icon, Image, Menu, Modal, Segment } from '../Base';
-import LoadingWithMessage from '../LoadingWithMessage';
+import Loading from '../Loading';
 import FlipCard from '../FlipCard';
 import './EditCampaignForm.css';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../../layouts';
@@ -649,7 +649,7 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
 
         {!customizationPending && (postcardsPreviewError || customizationError) && <Modal.Header>Error</Modal.Header>}
 
-        {postcardsPreviewIsPending && <LoadingWithMessage message="Please wait, loading an example preview..." />}
+        {postcardsPreviewIsPending && <Loading message="Please wait, loading an example preview..." />}
 
         {!customizationPending && (postcardsPreviewError || customizationError) && (
           <Modal.Content style={{ padding: '0 45px 10px' }}>{postcardsPreviewError || customizationError}</Modal.Content>

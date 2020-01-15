@@ -34,7 +34,7 @@ const MailoutDetailsPage = () => {
   return (
     <Fragment>
       {details && <EditCampaignForm data={details} handleBackClick={handleBackClick} />}
-      {isLoading && !error && Loading()}
+      {isLoading && !error && <Loading />}
       {error && <Message error>Oh snap! {error}.</Message>}
     </Fragment>
   );

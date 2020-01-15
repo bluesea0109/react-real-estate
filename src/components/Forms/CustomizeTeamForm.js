@@ -20,7 +20,7 @@ import {
   renderCarouselField,
 } from './helpers';
 import FlipCard from '../FlipCard';
-import LoadingWithMessage from '../LoadingWithMessage';
+import Loading from '../Loading';
 import CustomizationWizard from './CustomizationWizard';
 import { Menu, Segment, Image, Modal, Button } from '../Base';
 import { getTeamListedShortcodePending, getTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
@@ -493,7 +493,7 @@ const CustomizeTeamForm = () => {
 
         {!teamCustomizationPending && (teamPostcardsPreviewError || teamCustomizationError) && <Modal.Header>Error</Modal.Header>}
 
-        {teamPostcardsPreviewIsPending && <LoadingWithMessage message="Please wait, loading an example preview..." />}
+        {teamPostcardsPreviewIsPending && <Loading message="Please wait, loading an example preview..." />}
 
         {!teamCustomizationPending && (teamPostcardsPreviewError || teamCustomizationError) && (
           <Modal.Content style={{ padding: '0 45px 10px' }}>{teamPostcardsPreviewError || teamCustomizationError}</Modal.Content>

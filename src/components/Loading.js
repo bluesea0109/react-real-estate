@@ -1,19 +1,19 @@
 import React from 'react';
 import { Header } from 'semantic-ui-react';
 
-import { Dimmer, Icon, Segment } from './Base';
+import { Card, Image, Segment } from './Base';
 
-import './Loading.css';
-
-const Loading = () => (
-  <Dimmer active inverted>
-    <Segment loading padded="very" textAlign="center">
-      <Header as="h2" icon textAlign="center">
-        <Icon name="hourglass half" circular />
-        <Header.Content>Loading, please wait...</Header.Content>
-      </Header>
-    </Segment>
-  </Dimmer>
+const Loading = ({ message = 'Loading, please wait...' }) => (
+  <Segment basic style={{ margin: '6em auto' }}>
+    <Card centered style={{ backgroundColor: '#f9f8f7', minWidth: '380px' }}>
+      <Image centered size="tiny" src={require('../assets/loading.gif')} style={{ background: 'unset' }} />
+      <Card.Content style={{ borderTop: 'none' }}>
+        <Header as="h2" textAlign="center">
+          <Header.Content>{message}</Header.Content>
+        </Header>
+      </Card.Content>
+    </Card>
+  </Segment>
 );
 
 export default Loading;

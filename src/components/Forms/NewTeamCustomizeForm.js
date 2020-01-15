@@ -10,7 +10,7 @@ import { saveTeamSoldShortcodePending, saveTeamListedShortcodePending } from '..
 import { isMobile, isValidURL, maxLength, popup, required, composeValidators, url } from './helpers';
 import { saveTeamCustomizationPending } from '../../store/modules/teamCustomization/actions';
 import { Button, Icon, Image, Menu, Modal, Segment } from '../Base';
-import LoadingWithMessage from '../LoadingWithMessage';
+import Loading from '../Loading';
 import FlipCard from '../FlipCard';
 import './EditCampaignForm.css';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../../layouts';
@@ -618,7 +618,7 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
 
         {!teamCustomizationPending && (postcardsPreviewError || customizationError) && <Modal.Header>Error</Modal.Header>}
 
-        {postcardsPreviewIsPending && <LoadingWithMessage message="Please wait, loading an example preview..." />}
+        {postcardsPreviewIsPending && <Loading message="Please wait, loading an example preview..." />}
 
         {!teamCustomizationPending && (postcardsPreviewError || customizationError) && (
           <Modal.Content style={{ padding: '0 45px 10px' }}>{postcardsPreviewError || customizationError}</Modal.Content>

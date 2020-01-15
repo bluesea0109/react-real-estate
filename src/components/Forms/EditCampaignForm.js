@@ -9,7 +9,7 @@ import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemHeaderLayout, It
 import { Button, Icon, Image, Menu, Message, Page, Segment } from '../Base';
 import { modifyMailoutPending } from '../../store/modules/mailout/actions';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
-import LoadingWithMessage from '../LoadingWithMessage';
+import Loading from '../Loading';
 import { isMobile, maxLength, sleep } from './helpers';
 import './EditCampaignForm.css';
 
@@ -287,7 +287,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
 
         {/*<Divider style={{ margin: '1em -1em' }} />*/}
 
-        {modifyPending && <LoadingWithMessage message="Saving campaign..." />}
+        {modifyPending && <Loading message="Saving campaign..." />}
 
         {modifyError && (
           <Message negative>

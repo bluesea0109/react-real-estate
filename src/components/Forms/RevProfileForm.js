@@ -23,7 +23,7 @@ import {
 import { Button, Icon, Segment, Image, Divider, Menu, Page } from '../Base';
 import { saveProfilePending } from '../../store/modules/profile/actions';
 import { saveTeamProfilePending } from '../../store/modules/teamProfile/actions';
-import LoadingWithMessage from '../LoadingWithMessage';
+import Loading from '../Loading';
 import { ContentTopHeaderLayout } from '../../layouts';
 
 const renderLabelWithSubHeader = (label, subHeader) =>
@@ -180,7 +180,7 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
         if (profileSavePending || teamProfileSavePending || mailoutsGeneratePending) {
           return (
             <Segment style={{ minHeight: '80vh' }}>
-              <LoadingWithMessage message="Saving, please wait..." />
+              <Loading message="Saving, please wait..." />
             </Segment>
           );
         }

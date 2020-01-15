@@ -39,7 +39,7 @@ const CustomizationPage = () => {
     return (
       <Page basic>
         {!customizationError && <NewCustomizeForm customizationData={customizationAvailable} />}
-        {customizationPending && !customizationError && Loading()}
+        {customizationPending && !customizationError && <Loading />}
         {customizationError && <Message error>Oh snap! {customizationError}.</Message>}
       </Page>
     );
@@ -49,7 +49,7 @@ const CustomizationPage = () => {
     return (
       <Page basic>
         {!teamCustomizationError && <NewCustomizeForm customizationData={customizationAvailable || {}} teamCustomizationData={teamCustomizationAvailable} />}
-        {customizationPending && !customizationError && teamCustomizationPending && !teamCustomizationError && Loading()}
+        {customizationPending && !customizationError && teamCustomizationPending && !teamCustomizationError && <Loading />}
         {teamCustomizationError && <Message error>Oh snap! {teamCustomizationError}.</Message>}
       </Page>
     );

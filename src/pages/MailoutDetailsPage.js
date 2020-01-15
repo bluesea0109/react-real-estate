@@ -15,7 +15,6 @@ import { getMailoutPending } from '../store/modules/mailout/actions';
 import PopupMinMax from '../components/MailoutListItem/PopupMinMax';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ImageGroup from '../components/MailoutListItem/ImageGroup';
-import LoadingWithMessage from '../components/LoadingWithMessage';
 import GoogleMapItem from '../components/GoogleMapItem';
 import Loading from '../components/Loading';
 import { isMobile } from '../components/Forms/helpers';
@@ -265,7 +264,7 @@ const MailoutDetailsPage = () => {
           </Grid.Row>
         </Grid>
       </Segment>
-      {(pendingState && !error && Loading()) || (updatePendingState && !updateError && LoadingWithMessage({ message: 'Updating listing, please wait...' }))}
+      {(pendingState && !error && <Loading />) || (updatePendingState && !updateError && <Loading message="Updating listing, please wait..." />)}
       {error && <Message error>Oh snap! {error}.</Message>}
       {updateError && <Message error>Oh snap! {updateError}.</Message>}
     </Page>

@@ -31,7 +31,7 @@ const CustomizationTeamPage = () => {
   return (
     <Page basic>
       {!teamCustomizationError && <NewTeamCustomizeForm teamCustomizationData={teamCustomizationAvailable} />}
-      {teamCustomizationPending && !teamCustomizationError && Loading()}
+      {teamCustomizationPending && !teamCustomizationError && <Loading />}
       {teamCustomizationError && <Message error>Oh snap! {teamCustomizationError}.</Message>}
     </Page>
   );

@@ -20,7 +20,7 @@ import {
   renderCarouselField,
 } from './helpers';
 import FlipCard from '../FlipCard';
-import LoadingWithMessage from '../LoadingWithMessage';
+import Loading from '../Loading';
 import CustomizationWizard from './CustomizationWizard';
 import { Button, Icon, Image, Menu, Modal, Segment } from '../Base';
 import { getListedShortcodePending, getSoldShortcodePending } from '../../store/modules/shortcode/actions';
@@ -212,7 +212,7 @@ const CustomizeTeamForm = () => {
       <Fragment>
         <Segment>
           <RenderHeader />
-          <LoadingWithMessage message="Skipping, please wait..." />
+          <Loading message="Skipping, please wait..." />
         </Segment>
       </Fragment>
     );
@@ -427,7 +427,7 @@ const CustomizeTeamForm = () => {
                           newMax = MAX;
                         }
 
-                        if (!newMin || !newMax) return <span>Loading... </span>;
+                        if (!newMin || !newMax) return <span>Resolving min/max... </span>;
 
                         return (
                           <div className="slider" style={{ gridArea: 'PostcardsSlider', padding: '0 0.5em' }}>
@@ -621,7 +621,7 @@ const CustomizeTeamForm = () => {
 
         {!customizationPending && (postcardsPreviewError || customizationError) && <Modal.Header>Error</Modal.Header>}
 
-        {postcardsPreviewIsPending && <LoadingWithMessage message="Please wait, loading an example preview..." />}
+        {postcardsPreviewIsPending && <Loading message="Please wait, loading an example preview..." />}
 
         {!customizationPending && (postcardsPreviewError || customizationError) && (
           <Modal.Content style={{ padding: '0 45px 10px' }}>{postcardsPreviewError || customizationError}</Modal.Content>
