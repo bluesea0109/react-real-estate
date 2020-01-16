@@ -6,6 +6,7 @@ import ApiService from '../../../services/api/index';
 import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
 import { DESELECT_PEER_ID, SELECT_PEER_ID } from '../peer/actions';
 import { generateMailoutsError, generateMailoutsPending, generateMailoutsSuccess } from '../mailouts/actions';
+import { initializeUserPollingStart } from '../initialize/actions';
 
 export const getSelectedPeerId = state => state.peer.peerId;
 export const getExistingProfile = state => state.profile.available;
@@ -30,6 +31,7 @@ export function* reInitializeListingSaga({ peerId = null }) {
     const response = yield call(ApiService[method], path);
 
     yield put(generateMailoutsSuccess(response));
+    yield put(initializeUserPollingStart());
   } catch (err) {
     yield put(generateMailoutsError(err.message));
   }

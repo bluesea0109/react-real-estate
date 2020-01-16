@@ -24,10 +24,15 @@ const useFetching = (getActionCreator, onboarded, dispatch) => {
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const isInitiating = useSelector(store => store.initialize.polling);
-  const initiatingState = useSelector(store => store.initialize.available);
-  const currentUserTotal = initiatingState && initiatingState.currentUserTotal;
-  const currentUserCompleted = initiatingState && initiatingState.currentUserCompleted;
+  const isInitiatingTeam = useSelector(store => store.teamInitialize.polling);
+  const initiatingTeamState = useSelector(store => store.teamInitialize.available);
+  const currentTeamUserTotal = initiatingTeamState && initiatingTeamState.currentUserTotal;
+  const currentTeamUserCompleted = initiatingTeamState && initiatingTeamState.currentUserCompleted;
+
+  const isInitiatingUser = useSelector(store => store.initialize.polling);
+  const initiatingUserState = useSelector(store => store.initialize.available);
+  const currentUserTotal = initiatingUserState && initiatingUserState.campaignsTotal;
+  const currentUserCompleted = initiatingUserState && initiatingUserState.campaignsCompleted;
 
   const onboarded = useSelector(store => store.onboarded.status);
   const mailoutsPendingState = useSelector(store => store.mailouts.pending);
@@ -77,13 +82,19 @@ const Dashboard = () => {
         </Segment>
       </ContentTopHeaderLayout>
 
-      {isInitiating && (
+      {isInitiatingTeam && (
+        <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
+          <Progress value={currentTeamUserCompleted} total={currentTeamUserTotal} progress="ratio" inverted success size="tiny" />
+        </ContentBottomHeaderLayout>
+      )}
+
+      {isInitiatingUser && (
         <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
           <Progress value={currentUserCompleted} total={currentUserTotal} progress="ratio" inverted success size="tiny" />
         </ContentBottomHeaderLayout>
       )}
 
-      {!isInitiating && !mailoutsPendingState && mailoutList.length === 0 && (
+      {!isInitiatingTeam && !isInitiatingUser && !mailoutsPendingState && mailoutList.length === 0 && (
         <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
           <Segment placeholder>
             <Header icon>

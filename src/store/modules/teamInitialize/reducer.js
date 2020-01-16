@@ -1,9 +1,9 @@
 import {
-  INITIALIZE_USER_PENDING,
-  INITIALIZE_USER_SUCCESS,
-  INITIALIZE_USER_ERROR,
-  INITIALIZE_USER_POLLING_START,
-  INITIALIZE_USER_POLLING_STOP,
+  INITIALIZE_TEAM_PENDING,
+  INITIALIZE_TEAM_SUCCESS,
+  INITIALIZE_TEAM_ERROR,
+  INITIALIZE_TEAM_POLLING_START,
+  INITIALIZE_TEAM_POLLING_STOP,
 } from './actions';
 
 const initialState = {
@@ -13,36 +13,36 @@ const initialState = {
   available: null,
 };
 
-export default function initialize(state = initialState, action) {
+export default function teamInitialize(state = initialState, action) {
   switch (action.type) {
-    case INITIALIZE_USER_PENDING:
+    case INITIALIZE_TEAM_PENDING:
       return {
         ...state,
         pending: true,
         error: null,
       };
 
-    case INITIALIZE_USER_SUCCESS:
+    case INITIALIZE_TEAM_SUCCESS:
       return {
         ...state,
         pending: false,
         available: action.payload,
       };
 
-    case INITIALIZE_USER_ERROR:
+    case INITIALIZE_TEAM_ERROR:
       return {
         ...state,
         pending: false,
         error: action.error,
       };
 
-    case INITIALIZE_USER_POLLING_START:
+    case INITIALIZE_TEAM_POLLING_START:
       return {
         ...state,
         polling: true,
       };
 
-    case INITIALIZE_USER_POLLING_STOP:
+    case INITIALIZE_TEAM_POLLING_STOP:
       return {
         ...state,
         polling: false,

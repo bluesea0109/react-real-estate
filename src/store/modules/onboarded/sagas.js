@@ -8,7 +8,7 @@ import { SAVE_TEAM_PROFILE_SUCCESS } from '../teamProfile/actions';
 import { REVIEW_CUSTOMIZATION_COMPLETED } from '../customization/actions';
 import { INVITE_USERS_SUCCESS, SKIP_INVITE_USERS } from '../inviteUsers/actions';
 import { REVIEW_TEAM_CUSTOMIZATION_COMPLETED } from '../teamCustomization/actions';
-import { initializeTeamPollingStart } from '../initialize/actions';
+import { initializeTeamPollingStart } from '../teamInitialize/actions';
 import { generateMailoutsPending, generateMailoutsSuccess, generateMailoutsError } from '../mailouts/actions';
 
 import ApiService from '../../../services/api';

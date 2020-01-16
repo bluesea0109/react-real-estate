@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
 import { Form as FinalForm } from 'react-final-form';
@@ -62,6 +62,9 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
   const profileSavePending = useSelector(store => store.profile.savePending);
   const teamProfileSavePending = useSelector(store => store.teamProfile.savePending);
   const mailoutsGeneratePending = useSelector(store => store.mailouts.generatePending);
+
+  const isInitiatingTeam = useSelector(store => store.teamInitialize.polling);
+  const isInitiatingUser = useSelector(store => store.initialize.polling);
 
   const saveProfile = profile => dispatch(saveProfilePending(profile));
   const saveTeamProfile = teamProfile => dispatch(saveTeamProfilePending(teamProfile));
@@ -475,43 +478,49 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                   to={initialValues.boards}
                 />
 
-                <FieldArray name="boards">
-                  {({ fields }) =>
-                    fields.map((name, index) => (
-                      <Segment secondary key={index}>
-                        <div style={isMobile() ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 1fr 45px', gridColumnGap: '2em' }}>
-                          {renderSelectField({
-                            name: `${name}.name`,
-                            label: 'MLS',
-                            type: 'text',
-                            required: true,
-                            validate: required,
-                            options: boards ? boards : [],
-                            search: true,
-                          })}
-                          {renderField({ name: `${name}.mlsId`, label: 'MLS Agent ID', type: 'text', required: true, validate: required })}
-                          <Button
-                            basic
-                            icon
-                            color="teal"
-                            disabled={fields.length === 1}
-                            onClick={() => fields.remove(index)}
-                            style={isMobile() ? { cursor: 'pointer' } : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }}
-                            aria-label="remove mls"
-                          >
-                            <Icon name="trash" />
-                          </Button>
-                        </div>
-                      </Segment>
-                    ))
-                  }
-                </FieldArray>
+                {isInitiatingTeam || isInitiatingUser ? (
+                  <Loading message="Updating MLS settings, please wait..." />
+                ) : (
+                  <Fragment>
+                    <FieldArray name="boards">
+                      {({ fields }) =>
+                        fields.map((name, index) => (
+                          <Segment secondary key={index}>
+                            <div style={isMobile() ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 1fr 45px', gridColumnGap: '2em' }}>
+                              {renderSelectField({
+                                name: `${name}.name`,
+                                label: 'MLS',
+                                type: 'text',
+                                required: true,
+                                validate: required,
+                                options: boards ? boards : [],
+                                search: true,
+                              })}
+                              {renderField({ name: `${name}.mlsId`, label: 'MLS Agent ID', type: 'text', required: true, validate: required })}
+                              <Button
+                                basic
+                                icon
+                                color="teal"
+                                disabled={fields.length === 1}
+                                onClick={() => fields.remove(index)}
+                                style={isMobile() ? { cursor: 'pointer' } : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }}
+                                aria-label="remove mls"
+                              >
+                                <Icon name="trash" />
+                              </Button>
+                            </div>
+                          </Segment>
+                        ))
+                      }
+                    </FieldArray>
 
-                <div className="buttons">
-                  <Button basic onClick={() => push('boards', undefined)} color="teal">
-                    Add MLS
-                  </Button>
-                </div>
+                    <div className="buttons">
+                      <Button basic onClick={() => push('boards', undefined)} color="teal">
+                        Add MLS
+                      </Button>
+                    </div>
+                  </Fragment>
+                )}
               </Segment>
             </Form>
           </Page>
