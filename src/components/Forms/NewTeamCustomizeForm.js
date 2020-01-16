@@ -138,6 +138,9 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
   const handleSubmit = () => {
     const data = _.merge({}, teamCustomizationData, formValues);
 
+    if (!data.listed.cta) delete data.listed.cta;
+    if (!data.sold.cta) delete data.sold.cta;
+
     if (!data.listed.kwkly) delete data.listed.kwkly;
     if (!data.sold.kwkly) delete data.sold.kwkly;
 

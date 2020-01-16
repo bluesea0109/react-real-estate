@@ -162,6 +162,9 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
     const allData = _.merge({}, customizationData, formValues);
 
     const diffData = differenceObjectDeep(teamCustomizationData, allData);
+    if (!diffData.listed.cta) delete diffData.listed.cta;
+    if (!diffData.sold.cta) delete diffData.sold.cta;
+
     if (!diffData.listed.kwkly) delete diffData.listed.kwkly;
     if (!diffData.sold.kwkly) delete diffData.sold.kwkly;
 
@@ -227,6 +230,26 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
     const handleChange = (param, data) => {
       const newValue = formValues;
       newValue[listingType].createMailoutsOfThisType = data.checked;
+
+      // To ensure that we have cta or kwkly when switching
+      if (newValue.listed.createMailoutsOfThisType) {
+        if (newValue.sold.cta && !newValue.listed.cta) {
+          newValue.listed.cta = newValue.sold.cta;
+        }
+        if (newValue.sold.kwkly && !newValue.listed.kwkly) {
+          newValue.listed.kwkly = newValue.sold.kwkly;
+        }
+      }
+
+      if (newValue.sold.createMailoutsOfThisType) {
+        if (newValue.listed.cta && !newValue.sold.cta) {
+          newValue.sold.cta = newValue.listed.cta;
+        }
+        if (newValue.listed.kwkly && !newValue.sold.kwkly) {
+          newValue.sold.kwkly = newValue.listed.kwkly;
+        }
+      }
+
       setFormValues(newValue);
     };
 
