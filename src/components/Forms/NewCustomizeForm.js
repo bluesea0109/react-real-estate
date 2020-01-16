@@ -159,16 +159,19 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
   }, [formValues, setShowSelectionAlert]);
 
   const handleSubmit = () => {
-    const diff = differenceObjectDeep(teamCustomizationData, formValues);
-    const data = _.merge({}, customizationData, diff);
+    const allData = _.merge({}, customizationData, formValues);
 
-    if (!data.listed.kwkly) delete data.listed.kwkly;
-    if (!data.sold.kwkly) delete data.sold.kwkly;
+    const diffData = differenceObjectDeep(teamCustomizationData, allData);
+    if (!diffData.listed.kwkly) delete diffData.listed.kwkly;
+    if (!diffData.sold.kwkly) delete diffData.sold.kwkly;
 
-    if (!data.listed.defaultDisplayAgent.userId) delete data.listed.defaultDisplayAgent;
-    if (!data.sold.defaultDisplayAgent.userId) delete data.sold.defaultDisplayAgent;
+    if (!diffData.listed.defaultDisplayAgent.userId) delete diffData.listed.defaultDisplayAgent;
+    if (!diffData.sold.defaultDisplayAgent.userId) delete diffData.sold.defaultDisplayAgent;
 
-    dispatch(saveCustomizationPending(data));
+    diffData.listed.createMailoutsOfThisType = formValues.listed.createMailoutsOfThisType;
+    diffData.sold.createMailoutsOfThisType = formValues.sold.createMailoutsOfThisType;
+
+    dispatch(saveCustomizationPending(diffData));
     setDisplayReview(true);
   };
 
