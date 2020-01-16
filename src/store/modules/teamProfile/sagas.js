@@ -9,6 +9,7 @@ import {
   saveTeamProfileError,
 } from './actions';
 import ApiService from '../../../services/api/index';
+import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
 
 export const teamProfileToSave = state => state.teamProfile.toSave;
 
@@ -39,4 +40,5 @@ export function* saveTeamProfileSaga() {
 export default function*() {
   yield takeLatest(GET_TEAM_PROFILE_PENDING, getTeamProfileSaga);
   yield takeLatest(SAVE_TEAM_PROFILE_PENDING, saveTeamProfileSaga);
+  yield takeLatest(GET_ON_LOGIN_SUCCESS, getTeamProfileSaga);
 }

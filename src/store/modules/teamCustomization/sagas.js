@@ -8,10 +8,9 @@ import {
   saveTeamCustomizationSuccess,
   saveTeamCustomizationError,
 } from './actions';
+import ApiService from '../../../services/api/index';
 import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
 import { generateTeamPostcardsPreviewPending } from '../teamPostcards/actions';
-
-import ApiService from '../../../services/api/index';
 
 export const teamCustomizationToSave = state => state.teamCustomization.toSave;
 

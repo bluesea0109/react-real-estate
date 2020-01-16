@@ -9,9 +9,10 @@ import {
   saveCustomizationError,
   reviewCustomizationCompleted,
 } from './actions';
-import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
-import { generatePostcardsPreviewPending } from '../postcards/actions';
 import ApiService from '../../../services/api/index';
+import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
+import { DESELECT_PEER_ID, SELECT_PEER_ID } from '../peer/actions';
+import { generatePostcardsPreviewPending } from '../postcards/actions';
 
 export const getSelectedPeerId = state => state.peer.peerId;
 export const customizationToSave = state => state.customization.toSave;
@@ -86,4 +87,6 @@ export default function*() {
   yield takeLatest(GET_CUSTOMIZATION_PENDING, checkIfPeerSelectedGetCustomizationSaga);
   yield takeLatest(SAVE_CUSTOMIZATION_PENDING, checkIfPeerSelectedSaveCustomizationSaga);
   yield takeLatest(GET_ON_LOGIN_SUCCESS, checkIfPeerSelectedGetCustomizationSaga);
+  yield takeLatest(SELECT_PEER_ID, checkIfPeerSelectedGetCustomizationSaga);
+  yield takeLatest(DESELECT_PEER_ID, checkIfPeerSelectedGetCustomizationSaga);
 }

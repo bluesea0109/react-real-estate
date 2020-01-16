@@ -1,4 +1,4 @@
-import { call, put, select, takeEvery } from '@redux-saga/core/effects';
+import { call, put, select, takeLatest } from '@redux-saga/core/effects';
 
 import {
   GET_MAILOUT_PENDING,
@@ -221,10 +221,10 @@ export function* checkIfPeerSelectedNeedsUpdateSaga() {
 }
 
 export default function*() {
-  yield takeEvery(GET_MAILOUT_PENDING, checkIfPeerSelectedGetMailoutSaga);
-  yield takeEvery(GET_MAILOUT_PENDING, checkIfPeerSelectedNeedsUpdateSaga);
-  yield takeEvery(MODIFY_MAILOUT_PENDING, checkIfPeerSelectedModifyMailoutSaga);
-  yield takeEvery(SUBMIT_MAILOUT_PENDING, checkIfPeerSelectedSubmitMailoutSaga);
-  yield takeEvery(STOP_MAILOUT_PENDING, checkIfPeerSelectedStopMailoutSaga);
-  yield takeEvery(UPDATE_MAILOUT_SIZE_PENDING, checkIfPeerSelectedUpdatetMailoutSizeSaga);
+  yield takeLatest(GET_MAILOUT_PENDING, checkIfPeerSelectedGetMailoutSaga);
+  yield takeLatest(GET_MAILOUT_PENDING, checkIfPeerSelectedNeedsUpdateSaga);
+  yield takeLatest(MODIFY_MAILOUT_PENDING, checkIfPeerSelectedModifyMailoutSaga);
+  yield takeLatest(SUBMIT_MAILOUT_PENDING, checkIfPeerSelectedSubmitMailoutSaga);
+  yield takeLatest(STOP_MAILOUT_PENDING, checkIfPeerSelectedStopMailoutSaga);
+  yield takeLatest(UPDATE_MAILOUT_SIZE_PENDING, checkIfPeerSelectedUpdatetMailoutSizeSaga);
 }

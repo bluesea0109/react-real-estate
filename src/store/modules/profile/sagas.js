@@ -3,6 +3,8 @@ import { put, call, select, takeLatest } from 'redux-saga/effects';
 
 import { GET_PROFILE_PENDING, getProfileSuccess, getProfileError, SAVE_PROFILE_PENDING, saveProfileSuccess, saveProfileError } from './actions';
 import ApiService from '../../../services/api/index';
+import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
+import { DESELECT_PEER_ID, SELECT_PEER_ID } from '../peer/actions';
 import { generateMailoutsError, generateMailoutsPending, generateMailoutsSuccess } from '../mailouts/actions';
 
 export const getSelectedPeerId = state => state.peer.peerId;
@@ -79,4 +81,7 @@ export function* checkIfPeerSelectedSaveProfileSaga() {
 export default function*() {
   yield takeLatest(GET_PROFILE_PENDING, checkIfPeerSelectedGetProfileSaga);
   yield takeLatest(SAVE_PROFILE_PENDING, checkIfPeerSelectedSaveProfileSaga);
+  yield takeLatest(GET_ON_LOGIN_SUCCESS, checkIfPeerSelectedGetProfileSaga);
+  yield takeLatest(SELECT_PEER_ID, checkIfPeerSelectedGetProfileSaga);
+  yield takeLatest(DESELECT_PEER_ID, checkIfPeerSelectedGetProfileSaga);
 }

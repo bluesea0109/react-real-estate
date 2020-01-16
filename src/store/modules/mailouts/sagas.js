@@ -10,7 +10,7 @@ import {
 } from './actions';
 import ApiService from '../../../services/api/index';
 import { SELECT_PEER_ID, DESELECT_PEER_ID } from '../peer/actions';
-import { call, put, select, takeEvery } from '@redux-saga/core/effects';
+import { call, put, select, takeLatest } from '@redux-saga/core/effects';
 
 export const getSelectedPeerId = state => state.peer.peerId;
 export const getMailoutsPage = state => state.mailouts.page;
@@ -85,8 +85,8 @@ export function* checkIfPeerSelectedGetMoreMailout() {
 }
 
 export default function*() {
-  yield takeEvery(GET_MAILOUTS_PENDING, checkIfPeerSelectedGetMailout);
-  yield takeEvery(GET_MORE_MAILOUTS_PENDING, checkIfPeerSelectedGetMoreMailout);
-  yield takeEvery(SELECT_PEER_ID, checkIfPeerSelectedResetAndGetMailout);
-  yield takeEvery(DESELECT_PEER_ID, checkIfPeerSelectedResetAndGetMailout);
+  yield takeLatest(GET_MAILOUTS_PENDING, checkIfPeerSelectedGetMailout);
+  yield takeLatest(GET_MORE_MAILOUTS_PENDING, checkIfPeerSelectedGetMoreMailout);
+  yield takeLatest(SELECT_PEER_ID, checkIfPeerSelectedResetAndGetMailout);
+  yield takeLatest(DESELECT_PEER_ID, checkIfPeerSelectedResetAndGetMailout);
 }
