@@ -31,12 +31,10 @@ export default function mailouts(state = initialState, action) {
       };
 
     case GET_MAILOUTS_SUCCESS:
-      const getMailoutsSuccessNewList = state.list.concat(action.payload);
-
       return {
         ...state,
         pending: false,
-        list: getMailoutsSuccessNewList,
+        list: action.payload,
       };
 
     case GET_MAILOUTS_ERROR:
@@ -91,12 +89,10 @@ export default function mailouts(state = initialState, action) {
       };
 
     case GENERATE_MAILOUTS_SUCCESS:
-      const generateMailoutsSuccessNewList = state.list.concat(action.payload);
-
       return {
         ...state,
         generatePending: false,
-        list: generateMailoutsSuccessNewList,
+        list: action.payload,
       };
 
     case GENERATE_MAILOUTS_ERROR:

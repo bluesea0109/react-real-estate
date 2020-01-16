@@ -13,11 +13,14 @@ import { getMailoutsPending } from '../mailouts/actions';
 import ApiService from '../../../services/api/index';
 
 export const getCurrentUserId = state => state.onLogin.user && state.onLogin.user._id;
+export const getPeerUserId = state => state.onLogin.user && state.peer.peerId;
 
 export function* initializePollSagaWorker() {
   while (true) {
     try {
-      const currentUserId = yield select(getCurrentUserId);
+      const loggedInUserId = yield select(getCurrentUserId);
+      const peerUserId = yield select(getPeerUserId);
+
       yield put(initializeTeamPending());
 
       const { path, method } = ApiService.directory.team.listing.poll();
@@ -29,17 +32,24 @@ export function* initializePollSagaWorker() {
       let campaignsCompletedForAllUsers = 0;
 
       for (const user of response.completed) {
-        if (user.userId === currentUserId) {
-          currentUserTotal = currentUserTotal += user.campaignsTotal;
-          currentUserCompleted = currentUserCompleted += user.campaignsCompleted;
+        if (peerUserId) {
+          if (user.userId === peerUserId) {
+            currentUserTotal = currentUserTotal += user.campaignsTotal;
+            currentUserCompleted = currentUserCompleted += user.campaignsCompleted;
+          }
+        } else {
+          if (user.userId === loggedInUserId) {
+            currentUserTotal = currentUserTotal += user.campaignsTotal;
+            currentUserCompleted = currentUserCompleted += user.campaignsCompleted;
+          }
         }
 
         campaignsTotalForAllUsers = campaignsTotalForAllUsers += user.campaignsTotal;
         campaignsCompletedForAllUsers = campaignsCompletedForAllUsers += user.campaignsCompleted;
       }
 
-      response.campaignsTotalForAllUsers = campaignsTotalForAllUsers;
-      response.campaignsCompletedForAllUsers = campaignsCompletedForAllUsers;
+      response.currentUserTotal = currentUserTotal;
+      response.currentUserCompleted = currentUserCompleted;
 
       yield put(initializeTeamSuccess(response));
       if (currentUserTotal !== currentUserCompleted) yield put(getMailoutsPending());

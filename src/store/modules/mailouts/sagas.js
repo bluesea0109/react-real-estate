@@ -1,5 +1,3 @@
-import { call, put, select, takeEvery } from '@redux-saga/core/effects';
-
 import {
   GET_MAILOUTS_PENDING,
   getMailoutsSuccess,
@@ -10,8 +8,9 @@ import {
   getMoreMailoutsError,
   resetMailouts,
 } from './actions';
-import { SELECT_PEER_ID, DESELECT_PEER_ID } from '../peer/actions';
 import ApiService from '../../../services/api/index';
+import { SELECT_PEER_ID, DESELECT_PEER_ID } from '../peer/actions';
+import { call, put, select, takeEvery } from '@redux-saga/core/effects';
 
 export const getSelectedPeerId = state => state.peer.peerId;
 export const getMailoutsPage = state => state.mailouts.page;
@@ -56,6 +55,16 @@ export function* getMoreMailoutSaga({ peerId = null }) {
 export function* checkIfPeerSelectedGetMailout() {
   const peerId = yield select(getSelectedPeerId);
 
+  if (peerId) {
+    yield getMailoutSaga({ peerId });
+  } else {
+    yield getMailoutSaga({});
+  }
+}
+
+export function* checkIfPeerSelectedResetAndGetMailout() {
+  const peerId = yield select(getSelectedPeerId);
+
   yield put(resetMailouts());
 
   if (peerId) {
@@ -78,6 +87,6 @@ export function* checkIfPeerSelectedGetMoreMailout() {
 export default function*() {
   yield takeEvery(GET_MAILOUTS_PENDING, checkIfPeerSelectedGetMailout);
   yield takeEvery(GET_MORE_MAILOUTS_PENDING, checkIfPeerSelectedGetMoreMailout);
-  yield takeEvery(SELECT_PEER_ID, checkIfPeerSelectedGetMailout);
-  yield takeEvery(DESELECT_PEER_ID, checkIfPeerSelectedGetMailout);
+  yield takeEvery(SELECT_PEER_ID, checkIfPeerSelectedResetAndGetMailout);
+  yield takeEvery(DESELECT_PEER_ID, checkIfPeerSelectedResetAndGetMailout);
 }

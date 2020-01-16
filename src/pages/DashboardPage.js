@@ -26,8 +26,8 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const isInitiating = useSelector(store => store.initialize.polling);
   const initiatingState = useSelector(store => store.initialize.available);
-  const initiatingTotalForAllUsers = initiatingState && initiatingState.campaignsTotalForAllUsers;
-  const initiatingCompletedForAllUsers = initiatingState && initiatingState.campaignsCompletedForAllUsers;
+  const currentUserTotal = initiatingState && initiatingState.currentUserTotal;
+  const currentUserCompleted = initiatingState && initiatingState.currentUserCompleted;
 
   const onboarded = useSelector(store => store.onboarded.status);
   const mailoutsPendingState = useSelector(store => store.mailouts.pending);
@@ -79,7 +79,7 @@ const Dashboard = () => {
 
       {isInitiating && (
         <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
-          <Progress value={initiatingCompletedForAllUsers} total={initiatingTotalForAllUsers} progress="ratio" inverted success size="tiny" />
+          <Progress value={currentUserCompleted} total={currentUserTotal} progress="ratio" inverted success size="tiny" />
         </ContentBottomHeaderLayout>
       )}
 
