@@ -148,7 +148,7 @@ const directory = {
 
   user: {
     listing: {
-      initial: () => ({ path: `/api/user/listing/mailout/initial?skipEmailNotification=true&removeUnsent=true`, method: 'post' }),
+      initial: () => ({ path: `/api/user/listing/mailout/initial?removeUnsent=true&skipEmailNotification=true`, method: 'post' }),
       poll: () => ({ path: `/api/user/listing/mailout/initial/poll`, method: 'get' }),
     },
     mailout: {
@@ -189,7 +189,7 @@ const directory = {
 
   peer: {
     listing: {
-      initial: peerId => ({ path: `/api/user/peer/${peerId}/listing/mailout/initial?skipEmailNotification=true&removeUnsent=true`, method: 'post' }),
+      initial: peerId => ({ path: `/api/user/peer/${peerId}/listing/mailout/initial?removeUnsent=true&skipEmailNotification=true`, method: 'post' }),
       poll: peerId => ({ path: `/api/user/peer/${peerId}/listing/mailout/initial/poll`, method: 'get' }),
     },
     mailout: {
