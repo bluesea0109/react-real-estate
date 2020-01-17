@@ -275,6 +275,7 @@ const ProfileForm = () => {
                       label: renderLabelWithSubHeader('Personal Notification Email'),
                       type: 'text',
                       required: !personalNotificationEmailEnabled,
+                      validate: !personalNotificationEmailEnabled ? composeValidators(required, email) : null,
                       disabled: personalNotificationEmailEnabled,
                     })}
                   </div>
