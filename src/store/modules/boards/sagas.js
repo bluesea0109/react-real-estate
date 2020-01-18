@@ -20,7 +20,7 @@ export function* onLoginSaga() {
 
     yield put(getBoardsSuccess(normalize));
   } catch (err) {
-    yield put(getBoardsError(err.message));
+    yield put(getBoardsError(err));
   }
 }
 

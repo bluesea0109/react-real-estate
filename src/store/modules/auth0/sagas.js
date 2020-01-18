@@ -9,7 +9,7 @@ export function* parseHash() {
 
     yield put(authenticationSuccess(auth0));
   } catch (err) {
-    yield put(authenticationError(err.message));
+    yield put(authenticationError(err));
   }
 }
 

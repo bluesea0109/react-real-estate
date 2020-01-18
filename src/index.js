@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import * as Sentry from '@sentry/browser';
 import { BrowserRouter } from 'react-router-dom';
 import { LastLocationProvider } from 'react-router-last-location';
 
@@ -15,6 +16,16 @@ import * as serviceWorker from './serviceWorker';
 import configureStore from './store/configure';
 import registerIcons from './registerIcons';
 import AuthService from './services/auth';
+
+if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_SENTRY_RELEASE) {
+  Sentry.init({
+    dsn: 'https://39702e95d9d84b03a307d16ec61d9ae0@sentry.io/1886172',
+    release: process.env.REACT_APP_SENTRY_RELEASE,
+    integrations(integrations) {
+      return integrations.filter(integration => integration.name !== 'Breadcrumbs');
+    },
+  });
+}
 
 const store = configureStore({ initialState: {}, AuthService });
 registerIcons();

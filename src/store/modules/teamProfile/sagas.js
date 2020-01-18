@@ -20,7 +20,7 @@ export function* getTeamProfileSaga() {
 
     yield put(getTeamProfileSuccess(response));
   } catch (err) {
-    yield put(getTeamProfileError(err.message));
+    yield put(getTeamProfileError(err));
   }
 }
 
@@ -33,7 +33,7 @@ export function* saveTeamProfileSaga() {
 
     yield put(saveTeamProfileSuccess(response));
   } catch (err) {
-    yield put(saveTeamProfileError(err.message));
+    yield put(saveTeamProfileError(err));
   }
 }
 

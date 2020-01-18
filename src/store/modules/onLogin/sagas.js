@@ -13,7 +13,7 @@ export function* onLoginSaga() {
 
     yield put(getOnLoginSuccess(response));
   } catch (err) {
-    yield put(getOnLoginError(err.message));
+    yield put(getOnLoginError(err));
   }
 }
 

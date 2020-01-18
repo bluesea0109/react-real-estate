@@ -33,28 +33,28 @@ export function* getPostcardsPreviewSaga() {
         listedFrontLarge = yield getDimensions({ url: response.listed.sampleFrontLargeUrl });
       } catch (err) {
         console.log('Error @ getPostcardsPreviewSaga on listedFrontLarge');
-        console.error(err.message);
+        console.error(err);
       }
 
       try {
         listedBackLarge = yield getDimensions({ url: response.listed.sampleBackLargeUrl });
       } catch (err) {
         console.log('Error @ getPostcardsPreviewSaga on listedBackLarge');
-        console.error(err.message);
+        console.error(err);
       }
 
       try {
         soldFrontLarge = yield getDimensions({ url: response.sold.sampleFrontLargeUrl });
       } catch (err) {
         console.log('Error @ getPostcardsPreviewSaga on soldFrontLarge');
-        console.error(err.message);
+        console.error(err);
       }
 
       try {
         soldBackLarge = yield getDimensions({ url: response.sold.sampleBackLargeUrl });
       } catch (err) {
         console.log('Error @ getPostcardsPreviewSaga on soldBackLarge');
-        console.error(err.message);
+        console.error(err);
       }
 
       if (
@@ -78,8 +78,8 @@ export function* getPostcardsPreviewSaga() {
       }
     } catch (err) {
       console.log('Error @ getPostcardsPreviewSaga on Main loop');
-      console.error(err.message);
-      yield put(generatePostcardsPreviewError(err.message));
+      console.error(err);
+      yield put(generatePostcardsPreviewError(err));
     }
   }
 }

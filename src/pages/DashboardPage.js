@@ -3,7 +3,7 @@ import { Progress } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemBodyLayout, ItemLayout } from '../layouts';
-import { Button, Header, Grid, Menu, /*Message,*/ Page, Segment, Icon } from '../components/Base';
+import { Button, Header, Grid, Menu, /*Message,*/ Page, Segment, Icon, Snackbar } from '../components/Base';
 import { getMailoutsPending, getMoreMailoutsPending } from '../store/modules/mailouts/actions';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ImageGroup from '../components/MailoutListItem/ImageGroup';
@@ -39,7 +39,7 @@ const Dashboard = () => {
   const canLoadMore = useSelector(store => store.mailouts.canLoadMore);
   const page = useSelector(store => store.mailouts.page);
   const mailoutList = useSelector(store => store.mailouts.list);
-  // const error = useSelector(store => store.mailouts.error);
+  const error = useSelector(store => store.mailouts.error);
 
   useFetching(getMailoutsPending, onboarded, useDispatch());
 
@@ -104,6 +104,10 @@ const Dashboard = () => {
           </Segment>
         </ContentBottomHeaderLayout>
       )}
+
+      {!isInitiatingTeam && !isInitiatingUser && !mailoutsPendingState && mailoutList.length === 0 && <Snackbar info>No Mailouts found.</Snackbar>}
+
+      {error && <Snackbar error>{error}</Snackbar>}
 
       {mailoutList.length === 0 && mailoutsPendingState && (
         <Segment style={isMobile() ? { marginTop: '129px' } : { marginTop: '75px' }}>

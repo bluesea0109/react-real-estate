@@ -16,7 +16,7 @@ export function* onLoginSaga() {
 
     yield put(getStatesSuccess(normalize));
   } catch (err) {
-    yield put(getStatesError(err.message));
+    yield put(getStatesError(err));
   }
 }
 

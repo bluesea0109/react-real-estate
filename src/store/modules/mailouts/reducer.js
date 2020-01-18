@@ -27,6 +27,7 @@ export default function mailouts(state = initialState, action) {
     case GET_MAILOUTS_PENDING:
       return {
         ...state,
+        page: 1,
         pending: true,
       };
 

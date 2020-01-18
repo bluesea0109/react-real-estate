@@ -19,8 +19,7 @@ const limit = 25;
 export function* getMailoutSaga({ peerId = null }) {
   try {
     const { path, method } = peerId ? ApiService.directory.peer.mailout.list(peerId) : ApiService.directory.user.mailout.list();
-    const page = yield select(getMailoutsPage);
-    const response = yield call(ApiService[method], path, { page, limit });
+    const response = yield call(ApiService[method], path, { page: 1, limit });
 
     if (response.length === 0 || response.length < limit) {
       yield put(setCanFetchMore(false));
@@ -30,7 +29,7 @@ export function* getMailoutSaga({ peerId = null }) {
 
     yield put(getMailoutsSuccess(response));
   } catch (err) {
-    yield put(getMailoutsError(err.message));
+    yield put(getMailoutsError(err));
   }
 }
 
@@ -48,7 +47,7 @@ export function* getMoreMailoutSaga({ peerId = null }) {
 
     yield put(getMoreMailoutsSuccess(response));
   } catch (err) {
-    yield put(getMoreMailoutsError(err.message));
+    yield put(getMoreMailoutsError(err));
   }
 }
 

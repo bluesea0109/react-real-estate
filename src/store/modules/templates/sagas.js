@@ -13,7 +13,7 @@ export function* getTemplatesSaga() {
 
     yield put(getTemplatesSuccess(response));
   } catch (err) {
-    yield put(getTemplatesError(err.message));
+    yield put(getTemplatesError(err));
   }
 }
 

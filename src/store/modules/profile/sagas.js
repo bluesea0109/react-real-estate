@@ -19,7 +19,7 @@ export function* getProfileSaga({ peerId = null }) {
 
     yield put(getProfileSuccess(response));
   } catch (err) {
-    yield put(getProfileError(err.message));
+    yield put(getProfileError(err));
   }
 }
 
@@ -33,7 +33,7 @@ export function* reInitializeListingSaga({ peerId = null }) {
     yield put(generateMailoutsSuccess(response));
     yield put(initializeUserPollingStart());
   } catch (err) {
-    yield put(generateMailoutsError(err.message));
+    yield put(generateMailoutsError(err));
   }
 }
 
@@ -56,7 +56,7 @@ export function* saveProfileSaga({ peerId = null }) {
       }
     }
   } catch (err) {
-    yield put(saveProfileError(err.message));
+    yield put(saveProfileError(err));
   }
 }
 
