@@ -27,8 +27,6 @@ const crashReporter = store => next => action => {
     sentryHandler(store, action);
   }
 
-  return next(action);
-
   try {
     return next(action);
   } catch (err) {
