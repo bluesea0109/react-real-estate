@@ -16,7 +16,7 @@ export function* getTeamSaga() {
 
     yield put(getTeamSuccess(response));
   } catch (err) {
-    yield put(getTeamError(err.message));
+    yield put(getTeamError(err));
   }
 }
 
@@ -37,7 +37,7 @@ export function* syncTeamSaga() {
 
     yield put(syncSuccess(response));
   } catch (err) {
-    yield put(syncError(err.message));
+    yield put(syncError(err));
   }
 }
 

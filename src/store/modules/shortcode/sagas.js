@@ -31,7 +31,7 @@ export function* getSoldShortcodeSaga({ peerId = null }) {
 
     yield put(getSoldShortcodeSuccess(response.shortUrl));
   } catch (err) {
-    yield put(getSoldShortcodeError(err.message));
+    yield put(getSoldShortcodeError(err));
   }
 }
 
@@ -44,7 +44,7 @@ export function* saveSoldShortcodeSaga({ peerId = null }) {
 
     yield put(saveSoldShortcodeSuccess(response.shortUrl));
   } catch (err) {
-    yield put(saveSoldShortcodeError(err.message));
+    yield put(saveSoldShortcodeError(err));
   }
 }
 
@@ -55,7 +55,7 @@ export function* getListedShortcodeSaga({ peerId = null }) {
 
     yield put(getListedShortcodeSuccess(response.shortUrl));
   } catch (err) {
-    yield put(getListedShortcodeError(err.message));
+    yield put(getListedShortcodeError(err));
   }
 }
 
@@ -68,7 +68,7 @@ export function* saveListedShortcodeSaga({ peerId = null }) {
 
     yield put(saveListedShortcodeSuccess(response.shortUrl));
   } catch (err) {
-    yield put(saveListedShortcodeError(err.message));
+    yield put(saveListedShortcodeError(err));
   }
 }
 

@@ -38,7 +38,7 @@ export function* getMailoutSaga({ peerId = null }) {
 
     yield put(getMailoutSuccess(response));
   } catch (err) {
-    yield put(getMailoutError(err.message));
+    yield put(getMailoutError(err));
   }
 }
 
@@ -52,7 +52,7 @@ export function* modifyMailoutSaga({ peerId = null }) {
 
     yield put(modifyMailoutSuccess(response));
   } catch (err) {
-    yield put(modifyMailoutError(err.message));
+    yield put(modifyMailoutError(err));
   }
 }
 
@@ -70,7 +70,7 @@ export function* submitMailoutSaga({ peerId = null }) {
       yield getMailoutSaga({});
     }
   } catch (err) {
-    yield put(submitMailoutError(err.message));
+    yield put(submitMailoutError(err));
   }
 }
 
@@ -88,7 +88,7 @@ export function* stopMailoutSaga({ peerId = null }) {
       yield getMailoutSaga({});
     }
   } catch (err) {
-    yield put(stopMailoutError(err.message));
+    yield put(stopMailoutError(err));
   }
 }
 
@@ -111,7 +111,7 @@ export function* updatetMailoutSizeSaga({ peerId = null }) {
       yield getMailoutSaga({});
     }
   } catch (err) {
-    yield put(updateMailoutSizeError(err.message));
+    yield put(updateMailoutSizeError(err));
   }
 }
 
@@ -131,7 +131,7 @@ export function* UpdateMailoutSaga({ peerId = null }) {
       yield getMailoutSaga({});
     }
   } catch (err) {
-    yield put(updateMailoutError(err.message));
+    yield put(updateMailoutError(err));
   }
 }
 
@@ -156,7 +156,7 @@ export function* checkIfMailoutNeedsUpdateSaga({ peerId = null }) {
       }
     }
   } catch (err) {
-    yield put(checkIfMailoutNeedsUpdateError(err.message));
+    yield put(checkIfMailoutNeedsUpdateError(err));
   }
 }
 

@@ -32,7 +32,7 @@ export function* initializeUserPollSagaWorker() {
       if (campaignsTotal === campaignsCompleted) yield put(initializeUserPollingStop());
       yield delay(2000);
     } catch (err) {
-      yield put(initializeUserError(err.message));
+      yield put(initializeUserError(err));
       yield put(initializeUserPollingStop());
     }
   }

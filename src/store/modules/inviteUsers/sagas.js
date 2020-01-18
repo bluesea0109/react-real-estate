@@ -15,7 +15,7 @@ export function* inviteUsersSaga() {
 
     yield put(inviteUsersSuccess(response));
   } catch (err) {
-    yield put(inviteUsersError(err.message));
+    yield put(inviteUsersError(err));
   }
 }
 

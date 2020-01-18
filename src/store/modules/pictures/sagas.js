@@ -29,7 +29,7 @@ export function* getPhotoSaga({ peerId = null }) {
 
     yield put(getPhotoSuccess(response));
   } catch (err) {
-    yield put(getPhotoError(err.message));
+    yield put(getPhotoError(err));
   }
 }
 
@@ -58,7 +58,7 @@ export function* uploadPhotoSaga({ peerId = null }) {
 
     yield put(uploadPhotoSuccess({ target: targetKey, data: normalizedResponse }));
   } catch (err) {
-    yield put(uploadPhotoError({ target: targetKey, data: err.message }));
+    yield put(uploadPhotoError({ target: targetKey, data: err }));
   }
 }
 
@@ -72,7 +72,7 @@ export function* deletePhotoSaga() {
 
     yield put(deletePhotoSuccess({ target: target }));
   } catch (err) {
-    yield put(deletePhotoError(err.message));
+    yield put(deletePhotoError(err));
   }
 }
 

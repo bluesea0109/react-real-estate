@@ -19,6 +19,7 @@ import Page from './Page';
 import Pagination from './Pagination';
 import Popup from './Popup';
 import Responsive from './Responsive';
+import Snackbar from './Snackbar';
 import Segment from './Segment';
 import Select from './Select';
 import Step from './Step';
@@ -45,6 +46,7 @@ export {
   Pagination,
   Popup,
   Responsive,
+  Snackbar,
   Segment,
   Select,
   Step,

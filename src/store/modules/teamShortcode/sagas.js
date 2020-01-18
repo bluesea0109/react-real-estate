@@ -29,7 +29,7 @@ export function* getTeamSoldShortcodeSaga() {
 
     yield put(getTeamSoldShortcodeSuccess(response.shortUrl));
   } catch (err) {
-    yield put(getTeamSoldShortcodeError(err.message));
+    yield put(getTeamSoldShortcodeError(err));
   }
 }
 
@@ -42,7 +42,7 @@ export function* saveTeamSoldShortcodeSaga() {
 
     yield put(saveTeamSoldShortcodeSuccess(response.shortUrl));
   } catch (err) {
-    yield put(saveTeamSoldShortcodeError(err.message));
+    yield put(saveTeamSoldShortcodeError(err));
   }
 }
 
@@ -53,7 +53,7 @@ export function* getTeamListedShortcodeSaga() {
 
     yield put(getTeamListedShortcodeSuccess(response.shortUrl));
   } catch (err) {
-    yield put(getTeamListedShortcodeError(err.message));
+    yield put(getTeamListedShortcodeError(err));
   }
 }
 
@@ -66,7 +66,7 @@ export function* saveTeamListedShortcodeSaga() {
 
     yield put(saveTeamListedShortcodeSuccess(response.shortUrl));
   } catch (err) {
-    yield put(saveTeamListedShortcodeError(err.message));
+    yield put(saveTeamListedShortcodeError(err));
   }
 }
 

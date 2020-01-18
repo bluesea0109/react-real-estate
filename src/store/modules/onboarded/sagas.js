@@ -93,7 +93,7 @@ export function* finalizeOnboardingUserListingInitialSaga() {
 
     yield put(generateMailoutsSuccess(response));
   } catch (err) {
-    yield put(generateMailoutsError(err.message));
+    yield put(generateMailoutsError(err));
     console.log('finalizeOnboardingUserListingInitialSaga err', err);
   }
 }
@@ -108,7 +108,7 @@ export function* finalizeOnboardingTeamListingInitialSaga() {
     yield put(generateMailoutsSuccess(response));
     yield put(initializeTeamPollingStart());
   } catch (err) {
-    yield put(generateMailoutsError(err.message));
+    yield put(generateMailoutsError(err));
     console.log('finalizeOnboardingTeamListingInitialSaga err', err);
   }
 }

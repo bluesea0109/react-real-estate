@@ -1,7 +1,9 @@
 import auth from '../auth';
 
 async function handleResponse(response) {
-  if (response.ok) {
+  const { url, ok } = response;
+
+  if (ok) {
     try {
       const data = await response.json();
       return data;
@@ -9,26 +11,16 @@ async function handleResponse(response) {
       throw new Error('404 Not Found');
     }
   } else {
-    let err;
-    try {
-      err = await response.json();
-    } catch (e) {
-      err = response;
-    }
-
     let error;
-    if (err.error && err.message && err.error === err.message) {
-      error = new Error(`${err.statusCode} ${err.error}`);
-    } else if (err.message) {
-      error = new Error(`${err.message}`);
-    } else {
-      error = new Error(`${err.status} ${err.statusText}`);
+
+    try {
+      error = await response.json();
+    } catch (e) {
+      error = response;
     }
 
-    console.log('error', error);
-    console.log('error.message', error.message);
+    error.url = url;
 
-    error.response = err;
     throw error;
   }
 }

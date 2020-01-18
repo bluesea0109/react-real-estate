@@ -36,7 +36,7 @@ export function* getCustomizationSaga({ peerId = null }) {
 
     yield put(getCustomizationSuccess(response));
   } catch (err) {
-    yield put(getCustomizationError(err.message));
+    yield put(getCustomizationError(err));
   }
 }
 
@@ -59,7 +59,7 @@ export function* saveCustomizationSaga({ peerId = null }) {
       yield console.log('saveCustomizationSaga peerListingsInitial', peerListingsInitial);
     }
   } catch (err) {
-    yield put(saveCustomizationError(err.message));
+    yield put(saveCustomizationError(err));
   }
 }
 

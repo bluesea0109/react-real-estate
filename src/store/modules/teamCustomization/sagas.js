@@ -21,7 +21,7 @@ export function* getTeamCustomizationSaga() {
 
     yield put(getTeamCustomizationSuccess(response));
   } catch (err) {
-    yield put(getTeamCustomizationError(err.message));
+    yield put(getTeamCustomizationError(err));
   }
 }
 
@@ -35,7 +35,7 @@ export function* saveTeamCustomizationSaga() {
     yield put(saveTeamCustomizationSuccess(response));
     yield put(generateTeamPostcardsPreviewPending());
   } catch (err) {
-    yield put(saveTeamCustomizationError(err.message));
+    yield put(saveTeamCustomizationError(err));
   }
 }
 
