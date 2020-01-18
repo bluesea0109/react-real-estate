@@ -3,13 +3,6 @@ import * as Sentry from '@sentry/browser';
 const sentryHandler = (store, action, err) => {
   const state = store.getState();
 
-  if (err) {
-    Sentry.captureException(new Error('Exception Error'));
-    Sentry.setExtra('details', err);
-  } else {
-    Sentry.captureException(new Error('API Return Error'));
-  }
-
   if (action.type) Sentry.setExtra('type', action.type);
   if (action.error) Sentry.setExtra('error', action.error);
   if (state.onLogin.mode) Sentry.setExtra('mode', state.onLogin.mode);
@@ -19,6 +12,13 @@ const sentryHandler = (store, action, err) => {
   if (state.onLogin.userProfile) Sentry.setExtra('userProfile', state.onLogin.userProfile);
   if (state.onLogin.teamBranding) Sentry.setExtra('teamBranding', state.onLogin.teamBranding);
   if (state.onLogin.teamProfile) Sentry.setExtra('teamProfile', state.onLogin.teamProfile);
+
+  if (err) {
+    Sentry.setExtra('details', err);
+    Sentry.captureException(new Error('Exception Error'));
+  } else {
+    Sentry.captureException(new Error('API Return Error'));
+  }
 };
 
 const crashReporter = store => next => action => {
