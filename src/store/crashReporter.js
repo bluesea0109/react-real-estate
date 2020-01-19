@@ -23,7 +23,8 @@ const sentryHandler = (store, action, err) => {
 
 const crashReporter = store => next => action => {
   // TODO: Fix shortcode erros and remove `&& !action.type.includes('_SHORTCODE_')`
-  if (action.type.includes('_ERROR') && !action.type.includes('_SHORTCODE_')) {
+  // if (action.type.includes('_ERROR') && !action.type.includes('_SHORTCODE_')) {
+  if (action.type.includes('_ERROR')) {
     sentryHandler(store, action);
   }
 

@@ -19,7 +19,7 @@ import AuthService from './services/auth';
 
 if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_SENTRY_RELEASE) {
   Sentry.init({
-    dsn: 'https://39702e95d9d84b03a307d16ec61d9ae0@sentry.io/1886172',
+    dsn: 'https://3ce400284f5644d6b8612ab0213520f6@sentry.io/1887516',
     release: process.env.REACT_APP_SENTRY_RELEASE,
     integrations(integrations) {
       return integrations.filter(integration => integration.name !== 'Breadcrumbs');
