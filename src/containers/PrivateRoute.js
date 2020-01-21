@@ -53,7 +53,7 @@ const PrivateRoute = ({ component: Component, path, auth0, onLogin, templates, s
     ) : onLogin.error ? (
       <Segment basic>
         <Message>
-          <Message.Header>{onLogin.error}</Message.Header>
+          <Message.Header>{onLogin.error.message}</Message.Header>
           <p>The login process has failed, please contact the Brivity Marketer Technical Support to resolve this issue!</p>
         </Message>
       </Segment>

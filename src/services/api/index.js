@@ -16,10 +16,16 @@ async function handleResponse(response) {
     try {
       error = await response.json();
     } catch (e) {
-      error = response;
+      error = {};
+      error.ok = response.ok;
+      error.url = response.url;
+      error.status = response.status;
+      error.statusText = response.statusText;
+      error.message = `${error.status} ${error.statusText}`;
     }
 
-    error.url = url;
+    if (!error.url) error.url = url;
+    if (!error.message) error.message = `${response.status} ${response.statusText}`;
 
     throw error;
   }
