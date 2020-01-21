@@ -28,7 +28,8 @@ export function* initializeUserPollSagaWorker() {
       const { campaignsTotal, campaignsCompleted } = response;
 
       yield put(initializeUserSuccess(response));
-      if (campaignsTotal !== campaignsCompleted) yield put(getMailoutsPending());
+      // if (campaignsTotal !== campaignsCompleted) yield put(getMailoutsPending());
+      yield put(getMailoutsPending());
       if (campaignsTotal === campaignsCompleted) yield put(initializeUserPollingStop());
       yield delay(2000);
     } catch (err) {

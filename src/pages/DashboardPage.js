@@ -109,9 +109,21 @@ const Dashboard = () => {
 
       {error && <Snackbar error>{error}</Snackbar>}
 
-      {mailoutList.length === 0 && mailoutsPendingState && (
-        <Segment style={isMobile() ? { marginTop: '129px' } : { marginTop: '75px' }}>
-          <Grid>
+      <Segment style={isMobile() ? { marginTop: '129px' } : { marginTop: '75px' }}>
+        <Grid>
+          {mailoutList.length > 0 && (
+            <Grid.Row>
+              <Grid.Column width={16}>
+                <Grid.Row>
+                  <Grid.Column width={16}>
+                    <MailoutsList list={mailoutList} />
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid.Column>
+            </Grid.Row>
+          )}
+
+          {(isInitiatingTeam || isInitiatingUser || mailoutsPendingState) && (
             <Grid.Row>
               <Grid.Column width={16}>
                 <Grid.Row>
@@ -121,45 +133,21 @@ const Dashboard = () => {
                 </Grid.Row>
               </Grid.Column>
             </Grid.Row>
-          </Grid>
-        </Segment>
-      )}
+          )}
 
-      {mailoutList.length > 0 && (
-        <Segment style={isMobile() ? { marginTop: '129px' } : { marginTop: '75px' }}>
-          <Grid>
+          {mailoutList.length > 0 && canLoadMore && (
             <Grid.Row>
               <Grid.Column width={16}>
-                <Grid.Row>
-                  <Grid.Column width={16}>
-                    <MailoutsList list={mailoutList} />
+                <Grid centered columns={2}>
+                  <Grid.Column>
+                    <Button id="loadMoreButton" attached="bottom" content="Load More" onClick={handleClick} onKeyPress={handleKeyPress} />
                   </Grid.Column>
-                </Grid.Row>
-
-                {mailoutsPendingState && (
-                  <Grid.Row>
-                    <Grid.Column width={16}>
-                      <Loading />
-                    </Grid.Column>
-                  </Grid.Row>
-                )}
-
-                {canLoadMore && (
-                  <Grid.Row>
-                    <Grid.Column width={16}>
-                      <Grid centered columns={2}>
-                        <Grid.Column>
-                          <Button id="loadMoreButton" attached="bottom" content="Load More" onClick={handleClick} onKeyPress={handleKeyPress} />
-                        </Grid.Column>
-                      </Grid>
-                    </Grid.Column>
-                  </Grid.Row>
-                )}
+                </Grid>
               </Grid.Column>
             </Grid.Row>
-          </Grid>
-        </Segment>
-      )}
+          )}
+        </Grid>
+      </Segment>
     </Page>
   );
 };
