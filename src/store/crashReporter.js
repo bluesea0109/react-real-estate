@@ -14,10 +14,9 @@ const sentryHandler = (store, action, err) => {
   if (state.onLogin.teamProfile) Sentry.setExtra('teamProfile', state.onLogin.teamProfile);
 
   if (err) {
-    Sentry.setExtra('details', err);
-    Sentry.captureException(new Error('Exception Error'));
+    Sentry.captureException(new Error(err.message));
   } else {
-    Sentry.captureException(new Error('API Return Error'));
+    Sentry.captureException(new Error(action.error.message));
   }
 };
 
@@ -31,7 +30,6 @@ const crashReporter = store => next => action => {
   try {
     return next(action);
   } catch (err) {
-    console.error('Caught an exception!', err);
     sentryHandler(store, action, err);
     throw err;
   }
