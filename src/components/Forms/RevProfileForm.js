@@ -20,11 +20,11 @@ import {
   renderPicturePickerField,
   requiredOnlyInCalifornia,
 } from './helpers';
-import { Button, Icon, Segment, Image, Divider, Menu, Page } from '../Base';
-import { saveProfilePending } from '../../store/modules/profile/actions';
-import { saveTeamProfilePending } from '../../store/modules/teamProfile/actions';
 import Loading from '../Loading';
 import { ContentTopHeaderLayout } from '../../layouts';
+import { saveProfilePending } from '../../store/modules/profile/actions';
+import { saveTeamProfilePending } from '../../store/modules/teamProfile/actions';
+import { Button, Icon, Segment, Image, Divider, Menu, Page, Snackbar } from '../Base';
 
 const renderLabelWithSubHeader = (label, subHeader) =>
   isMobile() ? (
@@ -50,6 +50,11 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
 
   const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
   const selectedPeerId = useSelector(store => store.peer.peerId);
+
+  const profileError = useSelector(store => store.profile.error);
+  const profileSaveError = useSelector(store => store.profile.saveError);
+  const teamProfileError = useSelector(store => store.teamProfile.error);
+  const teamProfileSaveError = useSelector(store => store.profile.saveError);
 
   const realtorPhoto = useSelector(store => store.onLogin && store.onLogin.realtorPhoto && store.onLogin.realtorPhoto.resized);
   const teamLogo = useSelector(store => store.onLogin && store.onLogin.teamLogo && store.onLogin.teamLogo.resized);
@@ -212,6 +217,11 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                   </Menu>
                 </Segment>
               </ContentTopHeaderLayout>
+
+              {profileError && <Snackbar error>{profileError}</Snackbar>}
+              {profileSaveError && <Snackbar error>{profileSaveError}</Snackbar>}
+              {teamProfileError && <Snackbar error>{teamProfileError}</Snackbar>}
+              {teamProfileSaveError && <Snackbar error>{teamProfileSaveError}</Snackbar>}
 
               <Segment style={isMobile() ? { marginTop: '6em' } : { marginTop: '6em' }}>
                 <Header as="h2">

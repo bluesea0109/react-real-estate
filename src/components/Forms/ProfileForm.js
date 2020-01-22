@@ -19,10 +19,10 @@ import {
   renderPicturePickerField,
   requiredOnlyInCalifornia,
 } from './helpers';
-import { Button, Icon, Segment, Image, Divider, Menu } from '../Base';
 import { saveProfilePending } from '../../store/modules/profile/actions';
-import { saveTeamProfilePending } from '../../store/modules/teamProfile/actions';
 import { ContentTopHeaderLayout, ContentBodyLayout } from '../../layouts';
+import { Button, Icon, Segment, Image, Divider, Menu, Snackbar } from '../Base';
+import { saveTeamProfilePending } from '../../store/modules/teamProfile/actions';
 
 const renderLabelWithSubHeader = (label, subHeader) =>
   isMobile() ? (
@@ -47,6 +47,11 @@ const ProfileForm = () => {
   // const singleUser = onLoginMode === 'singleuser';
 
   const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
+
+  const profileError = useSelector(store => store.profile.error);
+  const profileSaveError = useSelector(store => store.profile.saveError);
+  const teamProfileError = useSelector(store => store.teamProfile.error);
+  const teamProfileSaveError = useSelector(store => store.profile.saveError);
 
   const onLoginUserProfile = useSelector(store => store.onLogin && store.onLogin.userProfile);
   const onLoginTeamProfile = useSelector(store => store.onLogin && store.onLogin.teamProfile);
@@ -195,6 +200,11 @@ const ProfileForm = () => {
                 </Menu>
               </Segment>
             </ContentTopHeaderLayout>
+
+            {profileError && <Snackbar error>{profileError}</Snackbar>}
+            {profileSaveError && <Snackbar error>{profileSaveError}</Snackbar>}
+            {teamProfileError && <Snackbar error>{teamProfileError}</Snackbar>}
+            {teamProfileSaveError && <Snackbar error>{teamProfileSaveError}</Snackbar>}
 
             <ContentBodyLayout style={{ marginTop: '88px' }}>
               <Segment>
