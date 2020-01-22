@@ -28,7 +28,7 @@ const UserVerified = (
 const PendingInvitation = (
   <Item.Header style={{ color: 'gray' }}>
     <Icon name="hourglass start" />
-    Pending invitation
+    Pending Invitation
   </Item.Header>
 );
 
@@ -217,10 +217,10 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
         <Form onSubmit={handleSubmit}>
           <div style={{ display: 'grid', justifyContent: 'start' }}>
             <div>
-              <Button type="button" onClick={selectAll}>
+              <Button primary inverted type="button" onClick={selectAll}>
                 Select All
               </Button>
-              <Button type="button" onClick={deselectAll}>
+              <Button primary inverted type="button" onClick={deselectAll}>
                 Deselect All
               </Button>
             </div>

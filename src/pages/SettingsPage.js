@@ -28,7 +28,9 @@ const SettingsPage = () => {
           <Header.Subheader>Perform password change</Header.Subheader>
         </Header>
 
-        <Button onClick={() => setModalOpen(true)}>Password Change</Button>
+        <Button primary inverted onClick={() => setModalOpen(true)}>
+          Password Change
+        </Button>
 
         <Modal open={modalOpen} onClose={() => setModalOpen(false)} basic size="small">
           <Header icon="exclamation" content="Password Change" />

@@ -28,7 +28,7 @@ const formReducer = (state, action) => {
   return _.merge({}, state, action);
 };
 
-const changeMsg = 'This comes from Brivity. If you want to modify this information, you will need to modify it there';
+const changeMsg = 'This comes from Brivity CRM. If you want to modify this information, you will need to modify it there';
 
 const NewProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
   const dispatch = useDispatch();
