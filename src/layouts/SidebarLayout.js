@@ -6,7 +6,8 @@ export default styled.div`
   top: 60px;
   z-index: 20;
 
-  background-color: white;
+  border-right: 1px solid lightgrey;
+  min-height: 100vh !important;
 
   @media (max-width: 769px) {
     min-width: 100%;

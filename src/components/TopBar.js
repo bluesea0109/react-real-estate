@@ -13,7 +13,7 @@ export default ({ auth0 }) => (
     <Menu.Menu position="right">
       {auth0.authenticated && (
         <Fragment>
-          <Button basic onClick={AuthService.signOut}>
+          <Button basic onClick={AuthService.signOut} style={{ boxShadow: 'none' }}>
             Log Out <FontAwesomeIcon icon="sign-out-alt" style={{ marginLeft: '0.5em' }} />
           </Button>
         </Fragment>

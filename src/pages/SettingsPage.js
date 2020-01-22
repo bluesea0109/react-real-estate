@@ -65,7 +65,7 @@ const SettingsPage = () => {
           <Header.Subheader>Perform CRM sync</Header.Subheader>
         </Header>
 
-        <Button color="green" type="button" inverted onClick={() => dispatch(syncPending())} loading={isSyncing} disabled={isSyncing}>
+        <Button primary type="button" inverted onClick={() => dispatch(syncPending())} loading={isSyncing} disabled={isSyncing}>
           <Icon name="sync" /> Sync Now
         </Button>
 
