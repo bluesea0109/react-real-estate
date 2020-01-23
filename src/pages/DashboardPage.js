@@ -105,8 +105,6 @@ const Dashboard = () => {
         </ContentBottomHeaderLayout>
       )}
 
-      {!isInitiatingTeam && !isInitiatingUser && !mailoutsPendingState && mailoutList.length === 0 && <Snackbar info>No Mailouts found.</Snackbar>}
-
       {error && <Snackbar error>{error}</Snackbar>}
 
       <Segment style={isMobile() ? { marginTop: '129px' } : { marginTop: '79px' }}>
