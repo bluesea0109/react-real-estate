@@ -49,10 +49,10 @@ const MailoutDetailsPage = () => {
   const updateMailoutSizePendingState = useSelector(store => store.mailout.updateMailoutSizePending);
   const updatePendingState = useSelector(store => store.mailout.updatePending);
 
-  const isUpdateMailoutSizeError = useSelector(store => store.mailout.updateMailoutSizeError);
+  const isUpdateMailoutSizeError = useSelector(store => store.mailout.updateMailoutSizeError && store.mailout.updateMailoutSizeError.message);
   const details = useSelector(store => store.mailout.details);
-  const error = useSelector(store => store.mailout.error);
-  const updateError = useSelector(store => store.mailout.updateError);
+  const error = useSelector(store => store.mailout.error && store.mailout.error.message);
+  const updateError = useSelector(store => store.mailout.updateError && store.mailout.updateError.message);
 
   const teamCustomization = useSelector(store => store.teamCustomization.available);
   const onLoginMode = useSelector(store => store.onLogin.mode);

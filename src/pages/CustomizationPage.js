@@ -13,11 +13,11 @@ const CustomizationPage = () => {
   const singleuser = onLoginMode === 'singleuser';
 
   const customizationPending = useSelector(store => store.customization.pending);
-  const customizationError = useSelector(store => store.customization.error);
+  const customizationError = useSelector(store => store.customization.error && store.customization.error.message);
   const customizationAvailable = useSelector(store => store.customization.available);
 
   const teamCustomizationPending = useSelector(store => store.teamCustomization.pending);
-  const teamCustomizationError = useSelector(store => store.teamCustomization.error);
+  const teamCustomizationError = useSelector(store => store.teamCustomization.error && store.teamCustomization.error.message);
   const teamCustomizationAvailable = useSelector(store => store.teamCustomization.available);
 
   const peerId = useSelector(store => store.peer.peerId);

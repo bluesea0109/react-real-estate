@@ -90,9 +90,9 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
   const teammates = useSelector(store => store.team.profiles);
 
   const teamCustomizationPending = useSelector(store => store.teamCustomization && store.teamCustomization.pending);
-  const customizationError = useSelector(store => store.teamCustomization && store.teamCustomization.error);
+  const customizationError = useSelector(store => store.teamCustomization && store.teamCustomization.error && store.teamCustomization.error.message);
   const postcardsPreviewIsPending = useSelector(store => store.teamPostcards && store.teamPostcards.pending);
-  const postcardsPreviewError = useSelector(store => store.teamPostcards && store.teamPostcards.error);
+  const postcardsPreviewError = useSelector(store => store.teamPostcards && store.teamPostcards.error && store.teamPostcards.error.message);
   const postcardsPreview = useSelector(store => store.teamPostcards && store.teamPostcards.available);
 
   const profiles = [];

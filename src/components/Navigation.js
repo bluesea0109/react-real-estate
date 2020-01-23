@@ -53,7 +53,7 @@ export default () => {
 
   const isAuthenticated = useSelector(store => store.auth0.authenticated);
   const onLoginPending = useSelector(store => store.onLogin.pending);
-  const onLoginError = useSelector(store => store.onLogin.error);
+  const onLoginError = useSelector(store => store.onLogin.error && store.onLogin.error.message);
   const onboarded = useSelector(store => store.onboarded.status);
 
   const templatesAvailable = useSelector(store => store.templates.available);

@@ -16,7 +16,7 @@ const MailoutDetailsPage = () => {
 
   const isLoading = useSelector(store => store.mailout.pending);
   const details = useSelector(store => store.mailout.details);
-  const error = useSelector(store => store.mailout.error);
+  const error = useSelector(store => store.mailout.error && store.mailout.error.message);
 
   useEffect(() => {
     if (!details) dispatch(getMailoutPending(mailoutId));

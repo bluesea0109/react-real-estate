@@ -13,7 +13,7 @@ const CustomizationTeamPage = () => {
   const peerId = useSelector(store => store.peer.peerId);
 
   const teamCustomizationPending = useSelector(store => store.teamCustomization.pending);
-  const teamCustomizationError = useSelector(store => store.teamCustomization.error);
+  const teamCustomizationError = useSelector(store => store.teamCustomization.error && store.teamCustomization.error.message);
   const teamCustomizationAvailable = useSelector(store => store.teamCustomization.available);
 
   useEffect(() => {

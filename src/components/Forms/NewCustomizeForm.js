@@ -93,9 +93,9 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
   const peerId = useSelector(store => store.peer.peerId);
 
   const customizationPending = useSelector(store => store.customization && store.customization.pending);
-  const customizationError = useSelector(store => store.customization && store.customization.error);
+  const customizationError = useSelector(store => store.customization && store.customization.error && store.customization.error.message);
   const postcardsPreviewIsPending = useSelector(store => store.postcards && store.postcards.pending);
-  const postcardsPreviewError = useSelector(store => store.postcards && store.postcards.error);
+  const postcardsPreviewError = useSelector(store => store.postcards && store.postcards.error && store.postcards.error.message);
   const postcardsPreview = useSelector(store => store.postcards && store.postcards.available);
 
   const multiUser = onLoginMode === 'multiuser';

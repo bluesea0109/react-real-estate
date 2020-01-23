@@ -51,10 +51,10 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
   const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
   const selectedPeerId = useSelector(store => store.peer.peerId);
 
-  const profileError = useSelector(store => store.profile.error);
-  const profileSaveError = useSelector(store => store.profile.saveError);
-  const teamProfileError = useSelector(store => store.teamProfile.error);
-  const teamProfileSaveError = useSelector(store => store.profile.saveError);
+  const profileError = useSelector(store => store.profile.error && store.profile.error.message);
+  const profileSaveError = useSelector(store => store.profile.saveError && store.profile.saveError.message);
+  const teamProfileError = useSelector(store => store.teamProfile.error && store.teamProfile.error.message);
+  const teamProfileSaveError = useSelector(store => store.profile.saveError && store.profile.saveError.message);
 
   const realtorPhoto = useSelector(store => store.onLogin && store.onLogin.realtorPhoto && store.onLogin.realtorPhoto.resized);
   const teamLogo = useSelector(store => store.onLogin && store.onLogin.teamLogo && store.onLogin.teamLogo.resized);
