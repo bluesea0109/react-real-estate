@@ -4,12 +4,12 @@ import { useHistory, useParams } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLastLocation } from 'react-router-last-location';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ContentTopHeaderLayout, ContentBottomHeaderLayout } from '../layouts';
+
+import { ContentTopHeaderLayout, ContentSpacerLayout, ContentBottomHeaderLayout, ItemBodyDataLayout, ItemBodyLayoutV2, ItemLayout } from '../layouts';
 
 import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from '../components/MailoutListItem/helpers';
 import { submitMailoutPending, stopMailoutPending, resetMailout, updateMailoutSizePending } from '../store/modules/mailout/actions';
 import { Button, Grid, Menu, Message, Page, Segment, List, Popup, Input } from '../components/Base';
-import { ItemBodyDataLayout, ItemBodyLayoutV2, ItemLayout } from '../layouts';
 import PopupContent from '../components/MailoutListItem/PopupContent';
 import { getMailoutPending } from '../store/modules/mailout/actions';
 import PopupMinMax from '../components/MailoutListItem/PopupMinMax';
@@ -190,7 +190,9 @@ const MailoutDetailsPage = () => {
         </Segment>
       </ContentTopHeaderLayout>
 
-      <Segment>
+      <ContentSpacerLayout />
+
+      <Segment style={isMobile() ? { marginTop: '129px' } : { marginTop: '34px' }}>
         <Grid>
           <Grid.Row>
             <Grid.Column width={16}>

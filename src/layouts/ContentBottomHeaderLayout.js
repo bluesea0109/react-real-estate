@@ -5,8 +5,8 @@ export default styled.div`
   min-height: 61px;
   position: fixed;
   min-width: calc(100% - 219px);
-  top: 135px;
-  z-index: 15;
+  top: 155px;
+  z-index: 10;
 
   @media (max-width: 768px) {
     min-width: 92.5%;

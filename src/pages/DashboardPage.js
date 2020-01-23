@@ -73,7 +73,7 @@ const Dashboard = () => {
   return (
     <Page basic>
       <ContentTopHeaderLayout>
-        <Segment style={isMobile() ? { marginTop: '58px' } : {}}>
+        <Segment style={isMobile() ? { marginTop: '58px' } : { maxHeight: '74px' }}>
           <Menu borderless fluid secondary>
             <Menu.Item>
               <Header as="h3">Dashboard</Header>
@@ -109,7 +109,7 @@ const Dashboard = () => {
 
       {error && <Snackbar error>{error}</Snackbar>}
 
-      <Segment style={isMobile() ? { marginTop: '129px' } : { marginTop: '75px' }}>
+      <Segment style={isMobile() ? { marginTop: '129px' } : { marginTop: '79px' }}>
         <Grid>
           {mailoutList.length > 0 && (
             <Grid.Row>

@@ -34,6 +34,13 @@
   margin-bottom: 1em;
 }
 
+@media (max-width: 769px) {
+  .block-picker {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 .block-picker > div:nth-child(2) > div {
   display: none;
 }

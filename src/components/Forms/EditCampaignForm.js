@@ -5,7 +5,7 @@ import React, { createRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { /*Dropdown,*/ Form, Header, Label, Popup } from 'semantic-ui-react';
 
-import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
+import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import { Button, Icon, Image, Menu, Message, Page, Segment } from '../Base';
 import { modifyMailoutPending } from '../../store/modules/mailout/actions';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
@@ -263,6 +263,8 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
         </Segment>
       </ContentTopHeaderLayout>
 
+      <ContentSpacerLayout />
+
       <Segment>
         <ContentBottomHeaderLayout>
           <ItemHeaderLayout attached="top" block style={isMobile() ? { marginTop: '56px' } : {}}>
@@ -300,7 +302,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
           basic
           padded
           className={isMobile() ? null : 'primary-grid-container'}
-          style={isMobile() ? { marginTop: '120px' } : { padding: 10, marginTop: '89px' }}
+          style={isMobile() ? { marginTop: '140px' } : { padding: 10, marginTop: '120px' }}
         >
           <div>
             <Header as="h4">Template Theme</Header>

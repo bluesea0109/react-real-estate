@@ -35,7 +35,7 @@ const renderLabelWithSubHeader = (label, subHeader) =>
     </label>
   );
 
-const changeMsg = 'This comes from Brivity CRM. If you want to modify this information, you will need to modify it there';
+const changeMsg = 'This information comes from Brivity CRM. If you want to modify this information, you need to do it there.';
 
 const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
   const [personalNotificationEmailEnabled, setPersonalNotificationEmailEnabled] = useState(false);
