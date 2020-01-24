@@ -15,10 +15,10 @@ const ImageGroup = ({ img1src, img2src, linkTo }) => {
     return (
       <ItemBodyPicturesLayout>
         <Link to={linkTo}>
-          <Image src={img1src} style={resizePictures()} className="bm-transform-effect" />
+          <Image src={img1src} style={resizePictures()} className="bm-transform-effect image-frame-border" />
         </Link>
         <Link to={linkTo}>
-          <Image src={img2src} style={resizePictures()} className="bm-transform-effect" />
+          <Image src={img2src} style={resizePictures()} className="bm-transform-effect image-frame-border" />
         </Link>
       </ItemBodyPicturesLayout>
     );
@@ -26,8 +26,8 @@ const ImageGroup = ({ img1src, img2src, linkTo }) => {
 
   return (
     <ItemBodyPicturesLayout>
-      <Image src={img1src} style={resizePictures()} />
-      <Image src={img2src} style={resizePictures()} />
+      <Image src={img1src} style={resizePictures()} className="image-frame-border" />
+      <Image src={img2src} style={resizePictures()} className="image-frame-border" />
     </ItemBodyPicturesLayout>
   );
 };
