@@ -18,13 +18,17 @@ import registerIcons from './registerIcons';
 import AuthService from './services/auth';
 
 if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_SENTRY_RELEASE) {
-  Sentry.init({
-    dsn: 'https://3ce400284f5644d6b8612ab0213520f6@sentry.io/1887516',
-    release: process.env.REACT_APP_SENTRY_RELEASE,
-    integrations(integrations) {
-      return integrations.filter(integration => integration.name !== 'Breadcrumbs');
-    },
-  });
+  try {
+    Sentry.init({
+      dsn: 'https://3ce400284f5644d6b8612ab0213520f6@sentry.io/1887516',
+      release: process.env.REACT_APP_SENTRY_RELEASE,
+      integrations(integrations) {
+        return integrations.filter(integration => integration.name !== 'Breadcrumbs');
+      },
+    });
+  } catch (e) {
+    console.log('Sentry initialization has failed.');
+  }
 }
 
 const store = configureStore({ initialState: {}, AuthService });
