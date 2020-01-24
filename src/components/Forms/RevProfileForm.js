@@ -224,9 +224,6 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                     <Menu.Menu position="right">
                       <Menu.Item>
                         <span>
-                          <Button basic type="button" onClick={form.reset} disabled={submitting || pristine} color="teal">
-                            Discard
-                          </Button>
                           <Button type="submit" disabled={submitting} color="teal">
                             Save
                           </Button>
@@ -242,7 +239,7 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
               {teamProfileError && <Snackbar error>{teamProfileError}</Snackbar>}
               {teamProfileSaveError && <Snackbar error>{teamProfileSaveError}</Snackbar>}
 
-              <Segment style={isMobile() ? { marginTop: '6em' } : { marginTop: '6em' }}>
+              <Segment style={isMobile() ? { marginTop: '6em' } : { marginTop: '6.5em' }}>
                 <Header as="h2">
                   Personal
                   {selectedPeerId ? (
@@ -514,7 +511,7 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                     <FieldArray name="boards">
                       {({ fields }) =>
                         fields.map((name, index) => (
-                          <Segment secondary key={index}>
+                          <Segment key={index}>
                             <div style={isMobile() ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 1fr 45px', gridColumnGap: '2em' }}>
                               {renderSelectField({
                                 name: `${name}.name`,
