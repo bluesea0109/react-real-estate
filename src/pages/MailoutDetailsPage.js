@@ -154,9 +154,11 @@ const MailoutDetailsPage = () => {
     } else {
       return (
         <Button as="div" labelPosition="left">
-          <label style={{ minWidth: '5em', minHeight: '2em', textAlign: 'center' }}>
-            {(!isUpdateMailoutSizeError && newNumberOfRecipients) || currentNumberOfRecipients}
-          </label>
+          <Input
+            className="display-only"
+            style={{ maxWidth: '4.5em', maxHeight: '2em' }}
+            value={(!isUpdateMailoutSizeError && newNumberOfRecipients) || currentNumberOfRecipients}
+          />
           {enableEditRecipients && (
             <Button
               icon

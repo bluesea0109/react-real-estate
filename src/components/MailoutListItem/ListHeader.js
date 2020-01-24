@@ -7,7 +7,6 @@ import { MobileDisabledLayout, MobileEnabledLayout, ItemHeaderLayout, ItemHeader
 import { canSend, resolveLabelStatus, resolveMailoutStatus } from './helpers';
 import { Button, Header } from '../Base';
 import { Label } from 'semantic-ui-react';
-import './hover.css';
 
 const ApproveAndSendButton = ({ data, mailoutDetailPage, onClickApproveAndSend, lockControls = false }) => {
   if (!data) return;

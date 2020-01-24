@@ -11,7 +11,6 @@ import { modifyMailoutPending } from '../../store/modules/mailout/actions';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
 import Loading from '../Loading';
 import { isMobile, maxLength, sleep } from './helpers';
-import './EditCampaignForm.css';
 
 const StyledHeader = styled(Header)`
   min-width: 18em;

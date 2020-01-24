@@ -27,9 +27,6 @@ import { getListedShortcodePending, getSoldShortcodePending } from '../../store/
 import { saveCustomizationPending, reviewCustomizationCompleted } from '../../store/modules/customization/actions';
 import { getTeamListedShortcodePending, getTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
 
-import './thin.css';
-import './CustomizeForm.css';
-
 const NEW_LISTING = 'newListing';
 const SOLD_LISTING = 'soldListing';
 

@@ -10,7 +10,6 @@ import ImageGroup from '../components/MailoutListItem/ImageGroup';
 import ItemList from '../components/MailoutListItem/ItemList';
 import { isMobile } from '../components/Forms/helpers';
 import Loading from '../components/Loading';
-import './DashboardPage.css';
 
 const useFetching = (getActionCreator, onboarded, dispatch) => {
   useEffect(() => {

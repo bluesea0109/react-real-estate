@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 import { ItemBodyPicturesLayout } from '../../layouts';
 import { Image } from '../Base';
-import './hover.css';
 
 const mql = window.matchMedia('(max-width: 599px)');
 const resizePictures = () => (mql.matches ? { width: '100%' } : { width: '48%' });

@@ -10,8 +10,6 @@ import { selectPeerId, deselectPeerId } from '../store/modules/peer/actions';
 import { Link, useLocation } from 'react-router-dom';
 import { Dimmer, Menu, Image, Icon, Step } from './Base';
 
-import './navigation.css';
-
 const iconOnlyStyle = {
   margin: '0 auto 0 auto',
 };

@@ -12,7 +12,6 @@ import { saveCustomizationPending } from '../../store/modules/customization/acti
 import { Button, Icon, Image, Menu, Modal, Segment } from '../Base';
 import Loading from '../Loading';
 import FlipCard from '../FlipCard';
-import './EditCampaignForm.css';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../../layouts';
 
 export const colors = ['#b40101', '#f2714d', '#f4b450', '#79c34d', '#2d9a2c', '#59c4c4', '#009ee7', '#0e2b5b', '#ee83ee', '#8b288f', '#808080', '#000000'];
