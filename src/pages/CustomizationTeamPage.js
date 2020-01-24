@@ -1,10 +1,10 @@
 import { Redirect } from 'react-router';
-import React, { useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getTeamCustomizationPending } from '../store/modules/teamCustomization/actions';
 import NewTeamCustomizeForm from '../components/Forms/NewTeamCustomizeForm';
-import { Message, Page } from '../components/Base';
+import { Message } from '../components/Base';
 import Loading from '../components/Loading';
 
 const CustomizationTeamPage = () => {
@@ -29,11 +29,11 @@ const CustomizationTeamPage = () => {
   }
 
   return (
-    <Page basic>
+    <Fragment>
       {!teamCustomizationError && <NewTeamCustomizeForm teamCustomizationData={teamCustomizationAvailable} />}
       {teamCustomizationPending && !teamCustomizationError && <Loading />}
       {teamCustomizationError && <Message error>Oh snap! {teamCustomizationError}.</Message>}
-    </Page>
+    </Fragment>
   );
 };
 

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getCustomizationPending } from '../store/modules/customization/actions';
 import NewCustomizeForm from '../components/Forms/NewCustomizeForm';
-import { Message, Page } from '../components/Base';
+import { Message } from '../components/Base';
 import Loading from '../components/Loading';
 
 const CustomizationPage = () => {
@@ -37,21 +37,21 @@ const CustomizationPage = () => {
 
   if (singleuser) {
     return (
-      <Page basic>
+      <Fragment>
         {!customizationError && <NewCustomizeForm customizationData={customizationAvailable} />}
         {customizationPending && !customizationError && <Loading />}
         {customizationError && <Message error>Oh snap! {customizationError}.</Message>}
-      </Page>
+      </Fragment>
     );
   }
 
   if (multiUser) {
     return (
-      <Page basic>
+      <Fragment>
         {!teamCustomizationError && <NewCustomizeForm customizationData={customizationAvailable || {}} teamCustomizationData={teamCustomizationAvailable} />}
         {customizationPending && !customizationError && teamCustomizationPending && !teamCustomizationError && <Loading />}
         {teamCustomizationError && <Message error>Oh snap! {teamCustomizationError}.</Message>}
-      </Page>
+      </Fragment>
     );
   }
 };
