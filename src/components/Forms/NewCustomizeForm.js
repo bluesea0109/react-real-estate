@@ -379,9 +379,7 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
     const currentMailoutSizeMin = formValues[listingType].mailoutSizeMin;
     const currentMailoutSizeMax = formValues[listingType].mailoutSizeMax;
 
-    // SLIDER_INITIAL_VALUES.push(currentMailoutSizeMin);
     SLIDER_INITIAL_VALUES.push(currentMailoutSize);
-    // SLIDER_INITIAL_VALUES.push(currentMailoutSizeMax);
 
     const handleMailoutSizeChange = value => {
       const newValue = formValues;
@@ -417,18 +415,9 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
           }}
           format={{
             to: (value, index) => {
-              // if (index === 0) return 'Min: ' + intValue;
-              // if (index === 1) return 'Default: ' + intValue;
-              // if (index === 2) return 'Max: ' + intValue;
-
               return Math.round(parseInt(value, 10) / 10) * 10;
             },
             from: value => {
-              // const newValue = value.split(':');
-              //
-              // if (newValue.length === 1) return newValue[0];
-              // else return newValue[1];
-
               return value;
             },
           }}

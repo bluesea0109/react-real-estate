@@ -30,6 +30,8 @@ const SOLD_LISTING = 'sold';
 
 let multiUserStartState;
 
+const TrimStrAndConvertToInt = value => Math.round(parseInt(value.trim(), 10) / 10) * 10;
+
 const NewCustomizeForm = ({ teamCustomizationData }) => {
   const dispatch = useDispatch();
   const bookmarkTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.bookmark);
@@ -327,7 +329,7 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
     const MAX = 2000;
     const INCREMENT = 10;
     const STEPS = INCREMENT;
-    const MARGIN = INCREMENT;
+    const MARGIN = 0;
     const SLIDER_INITIAL_VALUES = [];
 
     const currentMailoutSize = formValues[listingType].mailoutSize;
@@ -340,7 +342,15 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
 
     const handleMailoutSizeChange = value => {
       const newValue = formValues;
-      newValue[listingType].mailoutSize = value[0];
+
+      value.map(item => {
+        const itemArr = item.split(':');
+        if (itemArr[0] === 'Min') return (newValue[listingType].mailoutSizeMin = TrimStrAndConvertToInt(itemArr[1]));
+        if (itemArr[0] === 'Default') return (newValue[listingType].mailoutSize = TrimStrAndConvertToInt(itemArr[1]));
+        if (itemArr[0] === 'Max') return (newValue[listingType].mailoutSizeMax = TrimStrAndConvertToInt(itemArr[1]));
+        return null;
+      });
+
       setFormValues(newValue);
     };
 
@@ -382,7 +392,7 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
               const newValue = value.split(':');
 
               if (newValue.length === 1) return newValue[0];
-              else return newValue[1];
+              else return TrimStrAndConvertToInt(newValue[1]);
             },
           }}
           onChange={handleMailoutSizeChange}
