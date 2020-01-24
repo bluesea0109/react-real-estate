@@ -1,14 +1,17 @@
 import _ from 'lodash';
-import React, { Fragment, useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Header, Form, Radio, Label, Dropdown } from 'semantic-ui-react';
 // import { saveProfilePending } from "../../store/modules/profile/actions";
 // import { saveTeamProfilePending } from "../../store/modules/teamProfile/actions";
-import { Button, Card, Divider, Icon, Image, Item, Menu, Segment } from '../Base';
+import { Button, Card, Divider, Icon, Image, Item, Menu, Page, Segment, Snackbar } from '../Base';
 import { composeValidators, email, isMobile, labelWithPopup, popup, required, requiredOnlyInCalifornia } from './helpers';
 
 import { deletePhotoPending, uploadPhotoPending } from '../../store/modules/pictures/actions';
 import { ContentTopHeaderLayout } from '../../layouts';
+import Loading from '../Loading';
+import { saveProfilePending } from '../../store/modules/profile/actions';
+import { saveTeamProfilePending } from '../../store/modules/teamProfile/actions';
 
 const renderLabelWithSubHeader = (label, subHeader) =>
   isMobile() ? (
@@ -28,7 +31,7 @@ const formReducer = (state, action) => {
   return _.merge({}, state, action);
 };
 
-const changeMsg = 'This comes from Brivity CRM. If you want to modify this information, you will need to modify it there';
+const changeMsg = 'This information comes from Brivity CRM. If you want to modify this information, you need to do it there.';
 
 const NewProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
   const dispatch = useDispatch();
@@ -52,6 +55,109 @@ const NewProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
   const picturesRealtorPhoto = useSelector(store => store.pictures && store.pictures.realtorPhoto && store.pictures.realtorPhoto.resized);
   const picturesTeamLogo = useSelector(store => store.pictures && store.pictures.teamLogo && store.pictures.teamLogo.resized);
   const picturesBrokerageLogo = useSelector(store => store.pictures && store.pictures.brokerageLogo && store.pictures.brokerageLogo.resized);
+
+  const profileSavePending = useSelector(store => store.profile.savePending);
+  const teamProfileSavePending = useSelector(store => store.teamProfile.savePending);
+  const mailoutsGeneratePending = useSelector(store => store.mailouts.generatePending);
+
+  const profileError = useSelector(store => store.profile.error && store.profile.error.message);
+  const profileSaveError = useSelector(store => store.profile.saveError && store.profile.saveError.message);
+  const teamProfileError = useSelector(store => store.teamProfile.error && store.teamProfile.error.message);
+  const teamProfileSaveError = useSelector(store => store.profile.saveError && store.profile.saveError.message);
+
+  // const isInitiatingTeam = useSelector(store => store.teamInitialize.polling);
+  // const isInitiatingUser = useSelector(store => store.initialize.polling);
+  //
+  // const saveProfile = profile => dispatch(saveProfilePending(profile));
+  // const saveTeamProfile = teamProfile => dispatch(saveTeamProfilePending(teamProfile));
+
+  const submit = () => {
+    console.log('saveProfile', formValues);
+    /*
+    const profile = {
+      notificationEmail: values.notificationEmail,
+      first: values.first,
+      last: values.last,
+      email: values.email,
+      phone: values.phone,
+      dre: values.dre,
+      teamId: values.teamId,
+      setupComplete: Date.now(),
+      boards: values.boards,
+      website: values.personalWebsite,
+    };
+
+    if (profileAvailable) {
+      profile._id = profileAvailable._id;
+      profile._rev = profileAvailable._rev;
+      profile.teamId = values.teamId || profileAvailable.teamId;
+      profile.brivitySync = profileAvailable.brivitySync;
+    }
+    */
+    // const userProfile = {
+    //   _id: '',
+    //   _rev: '',
+    //   notificationEmail: '',
+    //   first: '',
+    //   last: '',
+    //   email: '',
+    //   phone: '',
+    //   dre: '',
+    //   teamId: '',
+    //   setupComplete: '',
+    //   brivitySync: '',
+    //   boards: '',
+    // };
+    //
+    // const businessProfile = {
+    //     _id: '',
+    //     _rev: '',
+    //     teamProfile: '',
+    //     notificationEmail: '',
+    //     brivitySync: '',
+    //     teamName: '',
+    //     brokerageName: '',
+    //     address: '',
+    //     city: '',
+    //     state: '',
+    //     zip: '',
+    //     phone: '',
+    //     website: '',
+    //   };
+
+    // console.log('saveProfile', profile);
+
+    // saveProfile(profile);
+
+    /*
+    if ((isAdmin || !multiUser) && !selectedPeerId) {
+      const business = {
+        teamProfile: true,
+        notificationEmail: values.businessNotificationEmail,
+        teamName: values.teamName,
+        brokerageName: values.brokerageName,
+        address: values.address,
+        city: values.city,
+        state: values.state,
+        zip: values.zip,
+        phone: values.officePhone,
+        website: values.businessWebsite,
+      };
+
+      if (teamProfileAvailable) {
+        business._id = teamProfileAvailable._id;
+        business._rev = teamProfileAvailable._rev;
+        business.brivitySync = teamProfileAvailable.brivitySync;
+        business.phone = values.officePhone || teamProfileAvailable.phone;
+        business.website = values.businessWebsite || teamProfileAvailable.website;
+      }
+
+      console.log('saveTeamProfile', business);
+
+      // saveTeamProfile(business);
+    }
+    */
+  };
 
   const initialValues = {
     userProfile: {
@@ -88,14 +194,20 @@ const NewProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
   const [formValues, setFormValues] = useReducer(formReducer, initialValues);
 
   useEffect(() => {
-    if (profileAvailable) {
-      const updatedFormValues = _.merge({}, initialValues.userProfile, { userProfile: profileAvailable });
+    if (profileAvailable && teamProfileAvailable) {
+      const updatedFormValues = _.merge({}, formValues, { userProfile: profileAvailable }, { businessProfile: teamProfileAvailable });
+      console.log('profileAvailable', profileAvailable);
+      console.log('updatedFormValues', updatedFormValues);
       setFormValues(updatedFormValues);
     }
-    if (teamProfileAvailable) {
-      const updatedFormValues = _.merge({}, initialValues.businessProfile, { businessProfile: teamProfileAvailable });
-      setFormValues(updatedFormValues);
-    }
+
+    // if (teamProfileAvailable) {
+    //   const updatedFormValues = _.merge({}, formValues, { businessProfile: teamProfileAvailable });
+    //   console.log('teamProfileAvailable', teamProfileAvailable);
+    //   console.log('updatedFormValues', updatedFormValues);
+    //   setFormValues(updatedFormValues);
+    // }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profileAvailable, teamProfileAvailable, setFormValues]);
 
@@ -238,33 +350,50 @@ const NewProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
     );
   };
 
+  if (profileSavePending || teamProfileSavePending || mailoutsGeneratePending) {
+    return (
+      <Segment style={{ minHeight: '80vh' }}>
+        <Loading message="Saving, please wait..." />
+      </Segment>
+    );
+  }
+
   return (
-    <Fragment>
+    <Page basic>
       <ContentTopHeaderLayout>
-        <Segment>
+        <Segment style={isMobile() ? { marginTop: '58px' } : {}}>
           <Menu borderless fluid secondary>
             <Menu.Item>
-              <Header as="h1">
-                Profile
-                {selectedPeerId ? (
-                  <Header.Subheader>Peers information will be shown on their postcards and will enable recipients to reach them.</Header.Subheader>
-                ) : (
-                  <Header.Subheader>Your information will be shown on your postcards and will enable recipients to reach you.</Header.Subheader>
-                )}
-              </Header>
+              <Header as="h1">Profile</Header>
             </Menu.Item>
             <Menu.Menu position="right">
-              <span>
-                <Button type="submit" color="teal">
-                  Save
-                </Button>
-              </span>
+              <Menu.Item>
+                <span>
+                  <Button type="submit" onClick={submit} disabled={profileSavePending || teamProfileSavePending} color="teal">
+                    Save
+                  </Button>
+                </span>
+              </Menu.Item>
             </Menu.Menu>
           </Menu>
         </Segment>
       </ContentTopHeaderLayout>
 
-      <Segment>
+      {profileError && <Snackbar error>{profileError}</Snackbar>}
+      {profileSaveError && <Snackbar error>{profileSaveError}</Snackbar>}
+      {teamProfileError && <Snackbar error>{teamProfileError}</Snackbar>}
+      {teamProfileSaveError && <Snackbar error>{teamProfileSaveError}</Snackbar>}
+
+      <Segment style={isMobile() ? { marginTop: '6em' } : { marginTop: '6em' }}>
+        <Header as="h2">
+          Personal
+          {selectedPeerId ? (
+            <Header.Subheader>Peers information will be shown on their postcards and will enable recipients to reach them.</Header.Subheader>
+          ) : (
+            <Header.Subheader>Your information will be shown on your postcards and will enable recipients to reach you.</Header.Subheader>
+          )}
+        </Header>
+
         <Divider style={{ margin: '1em -1em' }} />
 
         <div
@@ -378,7 +507,7 @@ const NewProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
 
       {(isAdmin || !multiUser) && !selectedPeerId && (
         <Segment>
-          <Header as="h1">
+          <Header as="h2">
             Business
             <Header.Subheader>Enter your company details for branding purposes and for the return addresss of your mailers.</Header.Subheader>
           </Header>
@@ -591,7 +720,7 @@ const NewProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
           </Button>
         </div>
       </Segment>
-    </Fragment>
+    </Page>
   );
 };
 

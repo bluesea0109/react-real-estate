@@ -130,9 +130,12 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
     brokerageLogo: brokerageLogo,
   };
 
-  if (profileAvailable) {
-    const profileAvailableBoards = profileAvailable && profileAvailable.boards;
-    const mlsArr = [];
+  let profileAvailableBoards;
+  let mlsArr;
+
+  if (profileAvailable && !teamProfileAvailable) {
+    profileAvailableBoards = profileAvailable && profileAvailable.boards;
+    mlsArr = [];
 
     if (profileAvailableBoards) {
       profileAvailableBoards.forEach(board => {
@@ -153,16 +156,32 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
     };
   }
 
-  if (teamProfileAvailable) {
+  if (profileAvailable && teamProfileAvailable) {
+    profileAvailableBoards = profileAvailable && profileAvailable.boards;
+    mlsArr = [];
+
+    if (profileAvailableBoards) {
+      profileAvailableBoards.forEach(board => {
+        const userBoard = boards.filter(boardObj => boardObj.mlsid === board.name);
+        mlsArr.push({ name: userBoard[0] && userBoard[0].value, mlsId: board.mlsId });
+      });
+    } else {
+      mlsArr.push(null);
+    }
+
+    let notificationEmail = profileAvailable && profileAvailable.notificationEmail;
     const businessNotificationEmail = teamProfileAvailable && teamProfileAvailable.notificationEmail ? teamProfileAvailable.notificationEmail : null;
 
-    if (!initialValues.notificationEmail) initialValues.notificationEmail = businessNotificationEmail;
+    if (!notificationEmail) notificationEmail = businessNotificationEmail;
 
     initialValues = {
       ...initialValues,
+      ...profileAvailable,
       ...teamProfileAvailable,
+      boards: mlsArr,
       teamLogo: picturesTeamLogo,
       brokerageLogo: picturesBrokerageLogo,
+      notificationEmail: notificationEmail,
       businessNotificationEmail: businessNotificationEmail,
     };
   }
