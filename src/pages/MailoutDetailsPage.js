@@ -109,8 +109,9 @@ const MailoutDetailsPage = () => {
     setEditRecipients(!editRecipients);
   };
 
-  const submitNewValues = () => {
-    let parsedNewNumberOfRecipients = parseInt(newNumberOfRecipients, 10);
+  const submitNewValues = newNumber => {
+    setNewNumberOfRecipients(newNumber);
+    let parsedNewNumberOfRecipients = parseInt(newNumber, 10);
     if (isNaN(parsedNewNumberOfRecipients)) {
       parsedNewNumberOfRecipients = currentNumberOfRecipients;
     }
@@ -134,16 +135,18 @@ const MailoutDetailsPage = () => {
 
   const RenderRecipients = () => {
     const enableEditRecipients = resolveMailoutStatus(details.mailoutStatus) !== 'Sent' && resolveMailoutStatus(details.mailoutStatus) !== 'Processing';
+    const [newNumber, setNewNumber] = useState(newNumberOfRecipients);
 
     if (editRecipients) {
       return (
         <Button as="div" labelPosition="left">
           <Input
+            key="newNumberOfRecipients"
             style={{ maxWidth: '4.5em', maxHeight: '2em' }}
-            value={newNumberOfRecipients}
-            onChange={props => setNewNumberOfRecipients(props.target.value)}
+            value={newNumber}
+            onChange={props => setNewNumber(props.target.value)}
           />
-          <Button icon color="orange" onClick={() => [toggleRecipientsEditState(), submitNewValues()]} style={{ marginLeft: '10px', minWidth: '5em' }}>
+          <Button icon color="orange" onClick={() => [toggleRecipientsEditState(), submitNewValues(newNumber)]} style={{ marginLeft: '10px', minWidth: '5em' }}>
             Save
           </Button>
         </Button>
