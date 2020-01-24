@@ -146,7 +146,7 @@ const MailoutDetailsPage = () => {
             value={newNumber}
             onChange={props => setNewNumber(props.target.value)}
           />
-          <Button icon color="orange" onClick={() => [toggleRecipientsEditState(), submitNewValues(newNumber)]} style={{ marginLeft: '10px', minWidth: '5em' }}>
+          <Button icon secondary onClick={() => [toggleRecipientsEditState(), submitNewValues(newNumber)]} style={{ marginLeft: '10px', minWidth: '5em' }}>
             Save
           </Button>
         </Button>
@@ -162,7 +162,7 @@ const MailoutDetailsPage = () => {
           {enableEditRecipients && (
             <Button
               icon
-              color="teal"
+              primary
               onClick={toggleRecipientsEditState}
               style={{ marginLeft: '10px', minWidth: '5em' }}
               disabled={updateMailoutSizePendingState}
@@ -186,7 +186,7 @@ const MailoutDetailsPage = () => {
             </Menu.Item>
             <Menu.Menu position="right">
               <Menu.Item>
-                <Button basic color="teal" onClick={() => handleBackClick()} disabled={working} loading={working}>
+                <Button primary inverted onClick={() => handleBackClick()} disabled={working} loading={working}>
                   Back
                 </Button>
               </Menu.Item>

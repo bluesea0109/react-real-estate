@@ -224,7 +224,7 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                     <Menu.Menu position="right">
                       <Menu.Item>
                         <span>
-                          <Button type="submit" disabled={submitting} color="teal">
+                          <Button primary type="submit" disabled={submitting}>
                             Save
                           </Button>
                         </span>
@@ -524,9 +524,9 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                               })}
                               {renderField({ name: `${name}.mlsId`, label: 'MLS Agent ID', type: 'text', required: true, validate: required })}
                               <Button
-                                basic
+                                primary
+                                inverted
                                 icon
-                                color="teal"
                                 disabled={fields.length === 1}
                                 onClick={() => fields.remove(index)}
                                 style={isMobile() ? { cursor: 'pointer' } : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }}
@@ -541,7 +541,7 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                     </FieldArray>
 
                     <div className="buttons">
-                      <Button basic onClick={() => push('boards', undefined)} color="teal">
+                      <Button primary inverted onClick={() => push('boards', undefined)} color="teal">
                         Add MLS
                       </Button>
                     </div>

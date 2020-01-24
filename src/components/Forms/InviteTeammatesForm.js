@@ -206,7 +206,7 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
           </Message>
           <div style={{ display: 'grid', justifyContent: 'end' }}>
             <div>
-              <Button color="teal" type="button" onClick={handleContinue}>
+              <Button primary type="button" onClick={handleContinue}>
                 Continue
               </Button>
             </div>
@@ -229,11 +229,11 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
 
           <div style={{ display: 'grid', justifyContent: 'end' }}>
             <div>
-              <Button color="teal" type="submit" loading={isInviteUsersPending} disabled={sendDisabled || isInviteUsersPending}>
+              <Button primary type="submit" loading={isInviteUsersPending} disabled={sendDisabled || isInviteUsersPending}>
                 Send
               </Button>
               {!settingsPage && (
-                <Button color="teal" type="button" loading={isInviteUsersPending} onClick={handleContinue} disabled={isInviteUsersPending}>
+                <Button primary type="button" loading={isInviteUsersPending} onClick={handleContinue} disabled={isInviteUsersPending}>
                   Skip
                 </Button>
               )}

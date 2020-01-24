@@ -253,7 +253,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
             </Menu.Item>
             <Menu.Menu position="right">
               <Menu.Item>
-                <Button basic color="teal" onClick={() => handleBackClick()} loading={modifyPending} disabled={modifyPending}>
+                <Button primary inverted onClick={() => handleBackClick()} loading={modifyPending} disabled={modifyPending}>
                   Back
                 </Button>
               </Menu.Item>
@@ -278,7 +278,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
 
             <ItemHeaderMenuLayout>
               <span>
-                <Button type="submit" onClick={handleEditSubmitClick} color="teal" loading={modifyPending} disabled={modifyPending}>
+                <Button primary type="submit" onClick={handleEditSubmitClick} loading={modifyPending} disabled={modifyPending}>
                   Save
                 </Button>
               </span>

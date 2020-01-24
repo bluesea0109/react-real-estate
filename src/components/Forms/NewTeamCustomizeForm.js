@@ -586,7 +586,7 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
             </Header>
             <Menu.Menu position="right">
               <span>
-                <Button type="submit" color="teal" onClick={handleSubmit} disabled={pristineState}>
+                <Button primary type="submit" onClick={handleSubmit} disabled={pristineState}>
                   Save
                 </Button>
               </span>
