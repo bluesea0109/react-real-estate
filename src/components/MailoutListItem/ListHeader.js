@@ -7,7 +7,6 @@ import { MobileDisabledLayout, MobileEnabledLayout, ItemHeaderLayout, ItemHeader
 import { canSend, resolveLabelStatus, resolveMailoutStatus } from './helpers';
 import { Button, Header } from '../Base';
 import { Label } from 'semantic-ui-react';
-import './hover.css';
 
 const ApproveAndSendButton = ({ data, mailoutDetailPage, onClickApproveAndSend, lockControls = false }) => {
   if (!data) return;
@@ -17,7 +16,7 @@ const ApproveAndSendButton = ({ data, mailoutDetailPage, onClickApproveAndSend, 
       <Fragment>
         {canSend(data.mailoutStatus) && (
           <Link to={`dashboard/${data._id}`}>
-            <Button color="teal">
+            <Button primary>
               <MobileDisabledLayout>
                 <Fragment>Review & Send</Fragment>
               </MobileDisabledLayout>
@@ -34,7 +33,7 @@ const ApproveAndSendButton = ({ data, mailoutDetailPage, onClickApproveAndSend, 
   return (
     <Fragment>
       {canSend(data.mailoutStatus) && (
-        <Button color="teal" onClick={onClickApproveAndSend} disabled={lockControls} loading={lockControls}>
+        <Button primary onClick={onClickApproveAndSend} disabled={lockControls} loading={lockControls}>
           <MobileDisabledLayout>
             <Fragment>Approve & Send</Fragment>
           </MobileDisabledLayout>
@@ -73,7 +72,7 @@ const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickAppro
       <ItemHeaderMenuLayout>
         <span>
           {mailoutDetailPage && enableEdit && (
-            <Button basic color="teal" onClick={onClickEdit} disabled={lockControls} loading={lockControls}>
+            <Button primary inverted onClick={onClickEdit} disabled={lockControls} loading={lockControls}>
               Edit
             </Button>
           )}
@@ -83,7 +82,7 @@ const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickAppro
         </span>
         <span>
           {mailoutDetailPage && enableDelete && activeWhen && (
-            <Button basic color="teal" onClick={onClickDelete} disabled={lockControls} loading={lockControls}>
+            <Button primary inverted onClick={onClickDelete} disabled={lockControls} loading={lockControls}>
               Stop Sending
             </Button>
           )}

@@ -26,8 +26,6 @@ import { Menu, Segment, Image, Modal, Button } from '../Base';
 import { getTeamListedShortcodePending, getTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
 import { saveTeamCustomizationPending, reviewTeamCustomizationCompleted } from '../../store/modules/teamCustomization/actions';
 
-import './thin.css';
-
 const NEW_LISTING = 'newListing';
 const SOLD_LISTING = 'soldListing';
 

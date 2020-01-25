@@ -28,7 +28,9 @@ const SettingsPage = () => {
           <Header.Subheader>Perform password change</Header.Subheader>
         </Header>
 
-        <Button onClick={() => setModalOpen(true)}>Password Change</Button>
+        <Button primary inverted onClick={() => setModalOpen(true)}>
+          Password Change
+        </Button>
 
         <Modal open={modalOpen} onClose={() => setModalOpen(false)} basic size="small">
           <Header icon="exclamation" content="Password Change" />
@@ -65,7 +67,7 @@ const SettingsPage = () => {
           <Header.Subheader>Perform CRM sync</Header.Subheader>
         </Header>
 
-        <Button color="green" type="button" inverted onClick={() => dispatch(syncPending())} loading={isSyncing} disabled={isSyncing}>
+        <Button primary type="button" inverted onClick={() => dispatch(syncPending())} loading={isSyncing} disabled={isSyncing}>
           <Icon name="sync" /> Sync Now
         </Button>
 

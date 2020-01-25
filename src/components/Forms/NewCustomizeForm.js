@@ -8,12 +8,11 @@ import { Confirm, /*Dropdown,*/ Form, Header, Label, Popup, Radio } from 'semant
 
 import { isMobile, isValidURL, maxLength, popup, required, composeValidators, url, differenceObjectDeep } from './helpers';
 import { saveListedShortcodePending, saveSoldShortcodePending } from '../../store/modules/shortcode/actions';
+import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ContentSpacerLayout } from '../../layouts';
 import { saveCustomizationPending } from '../../store/modules/customization/actions';
-import { Button, Icon, Image, Menu, Modal, Segment } from '../Base';
-import Loading from '../Loading';
+import { Button, Icon, Image, Menu, Modal, Page, Segment } from '../Base';
 import FlipCard from '../FlipCard';
-import './EditCampaignForm.css';
-import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../../layouts';
+import Loading from '../Loading';
 
 export const colors = ['#b40101', '#f2714d', '#f4b450', '#79c34d', '#2d9a2c', '#59c4c4', '#009ee7', '#0e2b5b', '#ee83ee', '#8b288f', '#808080', '#000000'];
 
@@ -93,9 +92,9 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
   const peerId = useSelector(store => store.peer.peerId);
 
   const customizationPending = useSelector(store => store.customization && store.customization.pending);
-  const customizationError = useSelector(store => store.customization && store.customization.error);
+  const customizationError = useSelector(store => store.customization && store.customization.error && store.customization.error.message);
   const postcardsPreviewIsPending = useSelector(store => store.postcards && store.postcards.pending);
-  const postcardsPreviewError = useSelector(store => store.postcards && store.postcards.error);
+  const postcardsPreviewError = useSelector(store => store.postcards && store.postcards.error && store.postcards.error.message);
   const postcardsPreview = useSelector(store => store.postcards && store.postcards.available);
 
   const multiUser = onLoginMode === 'multiuser';
@@ -292,7 +291,7 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
         <div
           style={
             currentValue === templateName
-              ? { border: '2px solid teal', margin: 0, padding: '0.5em', borderRadius: '5px' }
+              ? { border: '2px solid #59C4C4', margin: 0, padding: '0.5em', borderRadius: '5px' }
               : { border: '1px solid lightgray', margin: 0, padding: '0.5em', borderRadius: '5px' }
           }
         >
@@ -380,9 +379,7 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
     const currentMailoutSizeMin = formValues[listingType].mailoutSizeMin;
     const currentMailoutSizeMax = formValues[listingType].mailoutSizeMax;
 
-    // SLIDER_INITIAL_VALUES.push(currentMailoutSizeMin);
     SLIDER_INITIAL_VALUES.push(currentMailoutSize);
-    // SLIDER_INITIAL_VALUES.push(currentMailoutSizeMax);
 
     const handleMailoutSizeChange = value => {
       const newValue = formValues;
@@ -418,18 +415,9 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
           }}
           format={{
             to: (value, index) => {
-              // if (index === 0) return 'Min: ' + intValue;
-              // if (index === 1) return 'Default: ' + intValue;
-              // if (index === 2) return 'Max: ' + intValue;
-
               return Math.round(parseInt(value, 10) / 10) * 10;
             },
             from: value => {
-              // const newValue = value.split(':');
-              //
-              // if (newValue.length === 1) return newValue[0];
-              // else return newValue[1];
-
               return value;
             },
           }}
@@ -550,7 +538,7 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
 
     return (
       <Fragment>
-        <Segment style={isMobile() ? { marginTop: '200px' } : { marginTop: '170px' }}>{renderSwitch({ listingType })}</Segment>
+        <Segment>{renderSwitch({ listingType })}</Segment>
 
         {!formValues[listingType].createMailoutsOfThisType && (
           <Segment placeholder>
@@ -560,7 +548,11 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
         )}
 
         {formValues[listingType].createMailoutsOfThisType && (
-          <Segment padded className={isMobile() ? null : 'primary-grid-container'}>
+          <Segment
+            padded
+            className={isMobile() ? null : 'primary-grid-container'}
+            style={isMobile() ? {} : { gridTemplateRows: 'unset', gridTemplateAreas: 'unset' }}
+          >
             <div>
               <Header as="h4">Template Theme</Header>
               {renderTemplatePicture({ templateName: 'ribbon', listingType })}
@@ -624,7 +616,7 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
   };
 
   return (
-    <Fragment>
+    <Page basic>
       <ContentTopHeaderLayout>
         <Segment style={isMobile() ? { marginTop: '58px' } : {}}>
           <Menu borderless fluid secondary>
@@ -641,7 +633,7 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
             )}
             <Menu.Menu position="right">
               <span>
-                <Button type="submit" color="teal" onClick={handleSubmit} disabled={pristineState}>
+                <Button primary type="submit" onClick={handleSubmit} disabled={pristineState}>
                   Save
                 </Button>
               </span>
@@ -650,8 +642,10 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
         </Segment>
       </ContentTopHeaderLayout>
 
-      <ContentBottomHeaderLayout style={isMobile() ? {} : { minWidth: `calc(100% - 203px)` }}>
-        <Segment style={isMobile() ? { marginTop: '118px' } : { marginTop: '29px' }}>
+      <ContentSpacerLayout style={isMobile() ? { minHeight: '190px' } : { top: '155px', minHeight: '22px' }} />
+
+      <ContentBottomHeaderLayout style={isMobile() ? {} : { top: '152px', minWidth: `calc(100% - 203px)` }}>
+        <Segment style={isMobile() ? { marginTop: '97px' } : { marginTop: '20px' }}>
           <Menu pointing secondary>
             <Menu.Item name="newListing" active={step === 1} disabled={step === 1} onClick={prevStep} />
             <Menu.Item name="soldListing" active={step === 2} disabled={step === 2} onClick={nextStep} />
@@ -659,73 +653,75 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
         </Segment>
       </ContentBottomHeaderLayout>
 
-      <Confirm
-        open={showSelectionAlert}
-        content="In order to use Brivity Marketing platform, you must select at least one"
-        cancelButton="Enable new listings"
-        confirmButton="Enable sold listings"
-        onCancel={() => [handleConfirm(NEW_LISTING), setStep(1)]}
-        onConfirm={() => [handleConfirm(SOLD_LISTING), setStep(2)]}
-      />
+      <Segment style={isMobile() ? { marginTop: '207px' } : { marginTop: '183px' }}>
+        <Confirm
+          open={showSelectionAlert}
+          content="In order to use Brivity Marketing platform, you must select at least one"
+          cancelButton="Enable new listings"
+          confirmButton="Enable sold listings"
+          onCancel={() => [handleConfirm(NEW_LISTING), setStep(1)]}
+          onConfirm={() => [handleConfirm(SOLD_LISTING), setStep(2)]}
+        />
 
-      {renderSteps()}
+        {renderSteps()}
 
-      <Modal open={displayReview} basic size="tiny">
-        {!postcardsPreviewIsPending && <Modal.Header>Preview</Modal.Header>}
+        <Modal open={displayReview} basic size="tiny">
+          {!postcardsPreviewIsPending && <Modal.Header>Preview</Modal.Header>}
 
-        {!customizationPending && (postcardsPreviewError || customizationError) && <Modal.Header>Error</Modal.Header>}
+          {!customizationPending && (postcardsPreviewError || customizationError) && <Modal.Header>Error</Modal.Header>}
 
-        {postcardsPreviewIsPending && <Loading message="Please wait, loading an example preview..." />}
+          {postcardsPreviewIsPending && <Loading message="Please wait, loading an example preview..." />}
 
-        {!customizationPending && (postcardsPreviewError || customizationError) && (
-          <Modal.Content style={{ padding: '0 45px 10px' }}>{postcardsPreviewError || customizationError}</Modal.Content>
-        )}
-
-        {formValues.listed.createMailoutsOfThisType &&
-          postcardsPreview &&
-          postcardsPreview.listed &&
-          postcardsPreview.listed.sampleBackLargeUrl &&
-          postcardsPreview.listed.sampleFrontLargeUrl && (
-            <Modal.Content image style={{ padding: '0 45px 10px' }}>
-              <FlipCard isFlipped={listedIsFlipped}>
-                <Image wrapped size="large" src={postcardsPreview.listed.sampleFrontLargeUrl} onMouseOver={() => setListedIsFlipped(!listedIsFlipped)} />
-
-                <Image wrapped size="large" src={postcardsPreview.listed.sampleBackLargeUrl} onMouseOver={() => setListedIsFlipped(!listedIsFlipped)} />
-              </FlipCard>
-            </Modal.Content>
+          {!customizationPending && (postcardsPreviewError || customizationError) && (
+            <Modal.Content style={{ padding: '0 45px 10px' }}>{postcardsPreviewError || customizationError}</Modal.Content>
           )}
 
-        {formValues.sold.createMailoutsOfThisType &&
-          postcardsPreview &&
-          postcardsPreview.sold &&
-          postcardsPreview.sold.sampleBackLargeUrl &&
-          postcardsPreview.sold.sampleFrontLargeUrl && (
-            <Modal.Content image style={{ padding: '10px 45px 0' }}>
-              <FlipCard isFlipped={soldIsFlipped}>
-                <Image wrapped size="large" src={postcardsPreview.sold.sampleFrontLargeUrl} onMouseOver={() => setSoldIsFlipped(!soldIsFlipped)} />
+          {formValues.listed.createMailoutsOfThisType &&
+            postcardsPreview &&
+            postcardsPreview.listed &&
+            postcardsPreview.listed.sampleBackLargeUrl &&
+            postcardsPreview.listed.sampleFrontLargeUrl && (
+              <Modal.Content image style={{ padding: '0 45px 10px' }}>
+                <FlipCard isFlipped={listedIsFlipped}>
+                  <Image wrapped size="large" src={postcardsPreview.listed.sampleFrontLargeUrl} onMouseOver={() => setListedIsFlipped(!listedIsFlipped)} />
 
-                <Image wrapped size="large" src={postcardsPreview.sold.sampleBackLargeUrl} onMouseOver={() => setSoldIsFlipped(!soldIsFlipped)} />
-              </FlipCard>
-            </Modal.Content>
+                  <Image wrapped size="large" src={postcardsPreview.listed.sampleBackLargeUrl} onMouseOver={() => setListedIsFlipped(!listedIsFlipped)} />
+                </FlipCard>
+              </Modal.Content>
+            )}
+
+          {formValues.sold.createMailoutsOfThisType &&
+            postcardsPreview &&
+            postcardsPreview.sold &&
+            postcardsPreview.sold.sampleBackLargeUrl &&
+            postcardsPreview.sold.sampleFrontLargeUrl && (
+              <Modal.Content image style={{ padding: '10px 45px 0' }}>
+                <FlipCard isFlipped={soldIsFlipped}>
+                  <Image wrapped size="large" src={postcardsPreview.sold.sampleFrontLargeUrl} onMouseOver={() => setSoldIsFlipped(!soldIsFlipped)} />
+
+                  <Image wrapped size="large" src={postcardsPreview.sold.sampleBackLargeUrl} onMouseOver={() => setSoldIsFlipped(!soldIsFlipped)} />
+                </FlipCard>
+              </Modal.Content>
+            )}
+
+          {!postcardsPreviewIsPending && (
+            <Modal.Actions>
+              <Button color="green" inverted onClick={() => setDisplayReview(false)}>
+                <Icon name="checkmark" /> OK
+              </Button>
+            </Modal.Actions>
           )}
 
-        {!postcardsPreviewIsPending && (
-          <Modal.Actions>
-            <Button color="green" inverted onClick={() => setDisplayReview(false)}>
-              <Icon name="checkmark" /> OK
-            </Button>
-          </Modal.Actions>
-        )}
-
-        {!customizationPending && (postcardsPreviewError || customizationError) && (
-          <Modal.Actions>
-            <Button basic color="red" inverted onClick={() => setDisplayReview(false)}>
-              <Icon name="remove" /> OK
-            </Button>
-          </Modal.Actions>
-        )}
-      </Modal>
-    </Fragment>
+          {!customizationPending && (postcardsPreviewError || customizationError) && (
+            <Modal.Actions>
+              <Button basic color="red" inverted onClick={() => setDisplayReview(false)}>
+                <Icon name="remove" /> OK
+              </Button>
+            </Modal.Actions>
+          )}
+        </Modal>
+      </Segment>
+    </Page>
   );
 };
 

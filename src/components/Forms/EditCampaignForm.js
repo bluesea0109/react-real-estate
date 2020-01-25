@@ -5,13 +5,12 @@ import React, { createRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { /*Dropdown,*/ Form, Header, Label, Popup } from 'semantic-ui-react';
 
-import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
+import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import { Button, Icon, Image, Menu, Message, Page, Segment } from '../Base';
 import { modifyMailoutPending } from '../../store/modules/mailout/actions';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
 import Loading from '../Loading';
 import { isMobile, maxLength, sleep } from './helpers';
-import './EditCampaignForm.css';
 
 const StyledHeader = styled(Header)`
   min-width: 18em;
@@ -254,7 +253,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
             </Menu.Item>
             <Menu.Menu position="right">
               <Menu.Item>
-                <Button basic color="teal" onClick={() => handleBackClick()} loading={modifyPending} disabled={modifyPending}>
+                <Button primary inverted onClick={() => handleBackClick()} loading={modifyPending} disabled={modifyPending}>
                   Back
                 </Button>
               </Menu.Item>
@@ -262,6 +261,8 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
           </Menu>
         </Segment>
       </ContentTopHeaderLayout>
+
+      <ContentSpacerLayout />
 
       <Segment>
         <ContentBottomHeaderLayout>
@@ -277,7 +278,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
 
             <ItemHeaderMenuLayout>
               <span>
-                <Button type="submit" onClick={handleEditSubmitClick} color="teal" loading={modifyPending} disabled={modifyPending}>
+                <Button primary type="submit" onClick={handleEditSubmitClick} loading={modifyPending} disabled={modifyPending}>
                   Save
                 </Button>
               </span>
@@ -300,7 +301,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
           basic
           padded
           className={isMobile() ? null : 'primary-grid-container'}
-          style={isMobile() ? { marginTop: '120px' } : { padding: 10, marginTop: '89px' }}
+          style={isMobile() ? { marginTop: '140px' } : { padding: 10, marginTop: '120px' }}
         >
           <div>
             <Header as="h4">Template Theme</Header>

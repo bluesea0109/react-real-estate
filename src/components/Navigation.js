@@ -10,8 +10,6 @@ import { selectPeerId, deselectPeerId } from '../store/modules/peer/actions';
 import { Link, useLocation } from 'react-router-dom';
 import { Dimmer, Menu, Image, Icon, Step } from './Base';
 
-import './navigation.css';
-
 const iconOnlyStyle = {
   margin: '0 auto 0 auto',
 };
@@ -53,7 +51,7 @@ export default () => {
 
   const isAuthenticated = useSelector(store => store.auth0.authenticated);
   const onLoginPending = useSelector(store => store.onLogin.pending);
-  const onLoginError = useSelector(store => store.onLogin.error);
+  const onLoginError = useSelector(store => store.onLogin.error && store.onLogin.error.message);
   const onboarded = useSelector(store => store.onboarded.status);
 
   const templatesAvailable = useSelector(store => store.templates.available);
@@ -330,7 +328,7 @@ export default () => {
           </Menu.Item>
         )}
 
-        <Menu.Item as={Link} color="teal" name="dashboard" active={activeItem === '/dashboard'} to="/dashboard">
+        <Menu.Item as={Link} color="teal" name="dashboard" active={activeItem === '/dashboard'} to="/dashboard" style={{ lineHeight: 2.6 }}>
           <MobileEnabledLayout style={iconOnlyStyle}>
             <FontAwesomeIcon icon="tachometer-alt" />
           </MobileEnabledLayout>
@@ -339,11 +337,11 @@ export default () => {
           </MobileDisabledLayout>
         </Menu.Item>
         {multiUser && isAdmin && !selectedPeerId ? (
-          <Menu.Item color="teal" name="customization" active={activeItem === '/customization'}>
+          <Menu.Item color="teal" name="customization" active={activeItem === '/customization'} style={{ lineHeight: 2.6 }}>
             {renderCustomizationDropdown()}
           </Menu.Item>
         ) : (
-          <Menu.Item as={Link} color="teal" name="customization" active={activeItem === '/customization'} to="/customization">
+          <Menu.Item as={Link} color="teal" name="customization" active={activeItem === '/customization'} to="/customization" style={{ lineHeight: 2.6 }}>
             <MobileEnabledLayout style={iconOnlyStyle}>
               <FontAwesomeIcon icon="paint-brush" />
             </MobileEnabledLayout>
@@ -352,7 +350,7 @@ export default () => {
             </MobileDisabledLayout>
           </Menu.Item>
         )}
-        <Menu.Item as={Link} color="teal" name="profile" active={activeItem === '/profile'} to="/profile">
+        <Menu.Item as={Link} color="teal" name="profile" active={activeItem === '/profile'} to="/profile" style={{ lineHeight: 2.6 }}>
           <MobileEnabledLayout style={iconOnlyStyle}>
             <FontAwesomeIcon icon="user" />
           </MobileEnabledLayout>
@@ -360,7 +358,7 @@ export default () => {
             <FontAwesomeIcon icon="user" style={iconWithTextStyle} /> Profile
           </MobileDisabledLayout>
         </Menu.Item>
-        <Menu.Item as={Link} color="teal" name="settings" active={activeItem === '/settings'} to="/settings">
+        <Menu.Item as={Link} color="teal" name="settings" active={activeItem === '/settings'} to="/settings" style={{ lineHeight: 2.6 }}>
           <MobileEnabledLayout style={iconOnlyStyle}>
             <FontAwesomeIcon icon="cog" />
           </MobileEnabledLayout>

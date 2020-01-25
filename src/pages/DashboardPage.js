@@ -10,7 +10,6 @@ import ImageGroup from '../components/MailoutListItem/ImageGroup';
 import ItemList from '../components/MailoutListItem/ItemList';
 import { isMobile } from '../components/Forms/helpers';
 import Loading from '../components/Loading';
-import './DashboardPage.css';
 
 const useFetching = (getActionCreator, onboarded, dispatch) => {
   useEffect(() => {
@@ -39,7 +38,7 @@ const Dashboard = () => {
   const canLoadMore = useSelector(store => store.mailouts.canLoadMore);
   const page = useSelector(store => store.mailouts.page);
   const mailoutList = useSelector(store => store.mailouts.list);
-  const error = useSelector(store => store.mailouts.error);
+  const error = useSelector(store => store.mailouts.error && store.mailouts.error.message);
 
   useFetching(getMailoutsPending, onboarded, useDispatch());
 
@@ -73,7 +72,7 @@ const Dashboard = () => {
   return (
     <Page basic>
       <ContentTopHeaderLayout>
-        <Segment style={isMobile() ? { marginTop: '58px' } : {}}>
+        <Segment style={isMobile() ? { marginTop: '58px' } : { maxHeight: '74px' }}>
           <Menu borderless fluid secondary>
             <Menu.Item>
               <Header as="h3">Dashboard</Header>
@@ -105,11 +104,9 @@ const Dashboard = () => {
         </ContentBottomHeaderLayout>
       )}
 
-      {!isInitiatingTeam && !isInitiatingUser && !mailoutsPendingState && mailoutList.length === 0 && <Snackbar info>No Mailouts found.</Snackbar>}
-
       {error && <Snackbar error>{error}</Snackbar>}
 
-      <Segment style={isMobile() ? { marginTop: '129px' } : { marginTop: '75px' }}>
+      <Segment style={isMobile() ? { marginTop: '129px' } : { marginTop: '79px' }}>
         <Grid>
           {mailoutList.length > 0 && (
             <Grid.Row>

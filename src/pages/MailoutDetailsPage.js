@@ -4,12 +4,12 @@ import { useHistory, useParams } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLastLocation } from 'react-router-last-location';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ContentTopHeaderLayout, ContentBottomHeaderLayout } from '../layouts';
+
+import { ContentTopHeaderLayout, ContentSpacerLayout, ContentBottomHeaderLayout, ItemBodyDataLayout, ItemBodyLayoutV2, ItemLayout } from '../layouts';
 
 import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from '../components/MailoutListItem/helpers';
 import { submitMailoutPending, stopMailoutPending, resetMailout, updateMailoutSizePending } from '../store/modules/mailout/actions';
 import { Button, Grid, Menu, Message, Page, Segment, List, Popup, Input } from '../components/Base';
-import { ItemBodyDataLayout, ItemBodyLayoutV2, ItemLayout } from '../layouts';
 import PopupContent from '../components/MailoutListItem/PopupContent';
 import { getMailoutPending } from '../store/modules/mailout/actions';
 import PopupMinMax from '../components/MailoutListItem/PopupMinMax';
@@ -49,10 +49,10 @@ const MailoutDetailsPage = () => {
   const updateMailoutSizePendingState = useSelector(store => store.mailout.updateMailoutSizePending);
   const updatePendingState = useSelector(store => store.mailout.updatePending);
 
-  const isUpdateMailoutSizeError = useSelector(store => store.mailout.updateMailoutSizeError);
+  const isUpdateMailoutSizeError = useSelector(store => store.mailout.updateMailoutSizeError && store.mailout.updateMailoutSizeError.message);
   const details = useSelector(store => store.mailout.details);
-  const error = useSelector(store => store.mailout.error);
-  const updateError = useSelector(store => store.mailout.updateError);
+  const error = useSelector(store => store.mailout.error && store.mailout.error.message);
+  const updateError = useSelector(store => store.mailout.updateError && store.mailout.updateError.message);
 
   const teamCustomization = useSelector(store => store.teamCustomization.available);
   const onLoginMode = useSelector(store => store.onLogin.mode);
@@ -109,8 +109,9 @@ const MailoutDetailsPage = () => {
     setEditRecipients(!editRecipients);
   };
 
-  const submitNewValues = () => {
-    let parsedNewNumberOfRecipients = parseInt(newNumberOfRecipients, 10);
+  const submitNewValues = newNumber => {
+    setNewNumberOfRecipients(newNumber);
+    let parsedNewNumberOfRecipients = parseInt(newNumber, 10);
     if (isNaN(parsedNewNumberOfRecipients)) {
       parsedNewNumberOfRecipients = currentNumberOfRecipients;
     }
@@ -134,16 +135,18 @@ const MailoutDetailsPage = () => {
 
   const RenderRecipients = () => {
     const enableEditRecipients = resolveMailoutStatus(details.mailoutStatus) !== 'Sent' && resolveMailoutStatus(details.mailoutStatus) !== 'Processing';
+    const [newNumber, setNewNumber] = useState(newNumberOfRecipients);
 
     if (editRecipients) {
       return (
         <Button as="div" labelPosition="left">
           <Input
+            key="newNumberOfRecipients"
             style={{ maxWidth: '4.5em', maxHeight: '2em' }}
-            value={newNumberOfRecipients}
-            onChange={props => setNewNumberOfRecipients(props.target.value)}
+            value={newNumber}
+            onChange={props => setNewNumber(props.target.value)}
           />
-          <Button icon color="orange" onClick={() => [toggleRecipientsEditState(), submitNewValues()]} style={{ marginLeft: '10px', minWidth: '5em' }}>
+          <Button icon secondary onClick={() => [toggleRecipientsEditState(), submitNewValues(newNumber)]} style={{ marginLeft: '10px', minWidth: '5em' }}>
             Save
           </Button>
         </Button>
@@ -151,13 +154,15 @@ const MailoutDetailsPage = () => {
     } else {
       return (
         <Button as="div" labelPosition="left">
-          <label style={{ minWidth: '5em', minHeight: '2em', textAlign: 'center' }}>
-            {(!isUpdateMailoutSizeError && newNumberOfRecipients) || currentNumberOfRecipients}
-          </label>
+          <Input
+            className="display-only"
+            style={{ maxWidth: '4.5em', maxHeight: '2em' }}
+            value={(!isUpdateMailoutSizeError && newNumberOfRecipients) || currentNumberOfRecipients}
+          />
           {enableEditRecipients && (
             <Button
               icon
-              color="teal"
+              primary
               onClick={toggleRecipientsEditState}
               style={{ marginLeft: '10px', minWidth: '5em' }}
               disabled={updateMailoutSizePendingState}
@@ -181,7 +186,7 @@ const MailoutDetailsPage = () => {
             </Menu.Item>
             <Menu.Menu position="right">
               <Menu.Item>
-                <Button basic color="teal" onClick={() => handleBackClick()} disabled={working} loading={working}>
+                <Button primary inverted onClick={() => handleBackClick()} disabled={working} loading={working}>
                   Back
                 </Button>
               </Menu.Item>
@@ -190,7 +195,9 @@ const MailoutDetailsPage = () => {
         </Segment>
       </ContentTopHeaderLayout>
 
-      <Segment>
+      <ContentSpacerLayout />
+
+      <Segment style={isMobile() ? { marginTop: '129px' } : { marginTop: '34px' }}>
         <Grid>
           <Grid.Row>
             <Grid.Column width={16}>

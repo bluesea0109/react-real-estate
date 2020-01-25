@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { inviteUsersPending, skipInviteUsers } from '../../store/modules/inviteUsers/actions';
 import { Divider, List, Segment, Item, Icon, Button, Message, Image } from '../Base';
 import { objectIsEmpty } from './helpers';
-import './checkbox.css';
 
 const Checkbox = ({ disabled, label, isSelected, onCheckboxChange }) => (
   <input disabled={disabled} type="checkbox" name={label} checked={isSelected} onChange={onCheckboxChange} />
@@ -28,7 +27,7 @@ const UserVerified = (
 const PendingInvitation = (
   <Item.Header style={{ color: 'gray' }}>
     <Icon name="hourglass start" />
-    Pending invitation
+    Pending Invitation
   </Item.Header>
 );
 
@@ -207,7 +206,7 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
           </Message>
           <div style={{ display: 'grid', justifyContent: 'end' }}>
             <div>
-              <Button color="teal" type="button" onClick={handleContinue}>
+              <Button primary type="button" onClick={handleContinue}>
                 Continue
               </Button>
             </div>
@@ -217,10 +216,10 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
         <Form onSubmit={handleSubmit}>
           <div style={{ display: 'grid', justifyContent: 'start' }}>
             <div>
-              <Button type="button" onClick={selectAll}>
+              <Button primary inverted type="button" onClick={selectAll}>
                 Select All
               </Button>
-              <Button type="button" onClick={deselectAll}>
+              <Button primary inverted type="button" onClick={deselectAll}>
                 Deselect All
               </Button>
             </div>
@@ -230,11 +229,11 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
 
           <div style={{ display: 'grid', justifyContent: 'end' }}>
             <div>
-              <Button color="teal" type="submit" loading={isInviteUsersPending} disabled={sendDisabled || isInviteUsersPending}>
+              <Button primary type="submit" loading={isInviteUsersPending} disabled={sendDisabled || isInviteUsersPending}>
                 Send
               </Button>
               {!settingsPage && (
-                <Button color="teal" type="button" loading={isInviteUsersPending} onClick={handleContinue} disabled={isInviteUsersPending}>
+                <Button primary type="button" loading={isInviteUsersPending} onClick={handleContinue} disabled={isInviteUsersPending}>
                   Skip
                 </Button>
               )}
