@@ -36,6 +36,29 @@ code {
   background: none !important;
 }
 
+/* CUSTOMIZATION TABS */
+.ui.secondary.pointing.menu {
+  border-bottom: 1px solid rgba(34, 36, 38, 0.15);
+  margin-left: -1em;
+  margin-right: -1em;
+}
+
+.ui.secondary.pointing.menu .item {
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.ui.secondary.pointing.menu a.item:hover {
+  background-color: transparent;
+  color: #59c4c4 !important;
+}
+
+.ui.secondary.pointing.menu .active.item,
+.ui.secondary.pointing.menu .active.item :hover {
+  border-bottom: 3px solid #59c4c4 !important;
+  color: #59c4c4 !important;
+}
+
 /* NAVIGATION LINKS */
 .ui.text.menu .item:hover,
 .ui.dropdown .menu:hover,

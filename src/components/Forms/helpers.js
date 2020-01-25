@@ -65,10 +65,6 @@ const disabledCss = {
   opacity: 0.5,
 };
 
-const disabledFieldCss = {
-  backgroundColor: '#F0F0F0',
-};
-
 export const renderSelectField = ({ name, label, type, options, required = undefined, validate, search = undefined, disabled = undefined }) => (
   <Field name={name} validate={validate}>
     {({ input, meta }) => (
