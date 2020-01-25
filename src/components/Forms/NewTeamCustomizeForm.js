@@ -207,6 +207,19 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
       setFormValues(newValue);
     };
 
+    // return (
+    //   <Header size="medium">
+    //     {targetOn}: &nbsp;
+    //     <Button
+    //       compact
+    //       icon={currentValue ? ''}
+    //       onChange={handleChange}
+    //       checked={currentValue}
+    //     />
+    //
+    //   </Header>
+    // );
+
     return (
       <Header size="medium">
         {targetOn}: &nbsp;
@@ -246,7 +259,7 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
         <div
           style={
             currentValue === templateName
-              ? { border: '2px solid teal', margin: 0, padding: '0.5em', borderRadius: '5px' }
+              ? { border: '2px solid #59C4C4', margin: 0, padding: '0.5em', borderRadius: '5px' }
               : { border: '1px solid lightgray', margin: 0, padding: '0.5em', borderRadius: '5px' }
           }
         >

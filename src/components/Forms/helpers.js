@@ -65,10 +65,14 @@ const disabledCss = {
   opacity: 0.5,
 };
 
+const disabledFieldCss = {
+  backgroundColor: '#F0F0F0',
+};
+
 export const renderSelectField = ({ name, label, type, options, required = undefined, validate, search = undefined, disabled = undefined }) => (
   <Field name={name} validate={validate}>
     {({ input, meta }) => (
-      <Form.Field>
+      <Form.Field className={disabled ? 'disabled-form-field' : null}>
         <Header as="h4" style={{ margin: '0 0 .28571429rem 0' }}>
           {label}
           {required && !disabled ? <span style={{ margin: '-.2em 0 0 .2em', color: '#db2828' }}>*</span> : null}
@@ -101,7 +105,7 @@ export const renderField = ({ name, label, type, required = undefined, validate,
     return (
       <Field name={name} validate={validate}>
         {({ input, meta }) => (
-          <Form.Field required={required}>
+          <Form.Field required={required} className={disabled ? 'disabled-form-field' : null}>
             {label}
             <Form.Input {...input} type={type} error={meta.error && meta.touched && { content: `${meta.error}` }} style={disabled ? disabledCss : {}} />
           </Form.Field>
@@ -354,7 +358,7 @@ const renderImageRadio = field => {
         <div
           style={
             field.input.value === field.radioValue
-              ? { border: '2px solid teal', margin: 0, padding: '0.5em', borderRadius: '5px' }
+              ? { border: '2px solid #59C4C4', margin: 0, padding: '0.5em', borderRadius: '5px' }
               : { border: '1px solid lightgray', margin: 0, padding: '0.5em', borderRadius: '5px' }
           }
         >

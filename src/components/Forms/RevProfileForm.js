@@ -511,7 +511,7 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                     <FieldArray name="boards">
                       {({ fields }) =>
                         fields.map((name, index) => (
-                          <Segment key={index}>
+                          <Segment basic key={index}>
                             <div style={isMobile() ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 1fr 45px', gridColumnGap: '2em' }}>
                               {renderSelectField({
                                 name: `${name}.name`,
@@ -541,7 +541,7 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                     </FieldArray>
 
                     <div className="buttons">
-                      <Button primary inverted onClick={() => push('boards', undefined)} color="teal">
+                      <Button primary inverted onClick={() => push('boards', undefined)}>
                         Add MLS
                       </Button>
                     </div>
