@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { BlockPicker } from 'react-color';
 import Nouislider from 'nouislider-react';
 import { useDispatch, useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { createRef, Fragment, useEffect, useState, useReducer } from 'react';
 import { Confirm, /*Dropdown,*/ Form, Header, Label, Popup, Radio } from 'semantic-ui-react';
 
@@ -201,29 +202,18 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
 
     const currentValue = formValues[listingType].createMailoutsOfThisType;
 
-    const handleChange = (param, data) => {
+    const handleChange = () => {
       const newValue = formValues;
-      newValue[listingType].createMailoutsOfThisType = data.checked;
+      newValue[listingType].createMailoutsOfThisType = !currentValue;
       setFormValues(newValue);
     };
-
-    // return (
-    //   <Header size="medium">
-    //     {targetOn}: &nbsp;
-    //     <Button
-    //       compact
-    //       icon={currentValue ? ''}
-    //       onChange={handleChange}
-    //       checked={currentValue}
-    //     />
-    //
-    //   </Header>
-    // );
 
     return (
       <Header size="medium">
         {targetOn}: &nbsp;
-        <Radio toggle onChange={handleChange} checked={currentValue} style={{ verticalAlign: 'bottom' }} />
+        <span style={{ verticalAlign: '-0.35em', color: '#59C4C4' }} onClick={handleChange}>
+          {currentValue ? <FontAwesomeIcon icon="toggle-on" size="2x" /> : <FontAwesomeIcon icon="toggle-off" size="2x" />}
+        </span>
       </Header>
     );
   };

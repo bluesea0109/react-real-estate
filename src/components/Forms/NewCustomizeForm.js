@@ -13,6 +13,7 @@ import { saveCustomizationPending } from '../../store/modules/customization/acti
 import { Button, Icon, Image, Menu, Modal, Page, Segment } from '../Base';
 import FlipCard from '../FlipCard';
 import Loading from '../Loading';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const colors = ['#b40101', '#f2714d', '#f4b450', '#79c34d', '#2d9a2c', '#59c4c4', '#009ee7', '#0e2b5b', '#ee83ee', '#8b288f', '#808080', '#000000'];
 
@@ -226,9 +227,9 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
 
     const currentValue = formValues[listingType].createMailoutsOfThisType;
 
-    const handleChange = (param, data) => {
+    const handleChange = () => {
       const newValue = formValues;
-      newValue[listingType].createMailoutsOfThisType = data.checked;
+      newValue[listingType].createMailoutsOfThisType = !currentValue;
 
       // To ensure that we have cta or kwkly when switching
       if (newValue.listed.createMailoutsOfThisType) {
@@ -255,7 +256,9 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
     return (
       <Header size="medium">
         {targetOn}: &nbsp;
-        <Radio toggle onChange={handleChange} checked={currentValue} style={{ verticalAlign: 'bottom' }} />
+        <span style={{ verticalAlign: '-0.35em', color: '#59C4C4' }} onClick={handleChange}>
+          {currentValue ? <FontAwesomeIcon icon="toggle-on" size="2x" /> : <FontAwesomeIcon icon="toggle-off" size="2x" />}
+        </span>
       </Header>
     );
   };
