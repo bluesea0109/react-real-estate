@@ -608,7 +608,8 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
             <Header as="h1">
               Team Customization
               <Header.Subheader>
-                Set the default template customization options for your team. Changes made here will not overwrite existing user-specific customization.
+                Set the default template customization options for your team. <br />
+                Changes made here will not overwrite existing user-specific customization.
               </Header.Subheader>
             </Header>
             <Menu.Menu position="right">

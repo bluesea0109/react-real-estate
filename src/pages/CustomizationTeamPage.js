@@ -1,5 +1,5 @@
 import { Redirect } from 'react-router';
-import React, { Fragment, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getTeamCustomizationPending } from '../store/modules/teamCustomization/actions';
@@ -28,13 +28,12 @@ const CustomizationTeamPage = () => {
     return <Redirect to="/customization" />;
   }
 
-  return (
-    <Fragment>
-      {!teamCustomizationError && <NewTeamCustomizeForm teamCustomizationData={teamCustomizationAvailable} />}
-      {teamCustomizationPending && !teamCustomizationError && <Loading />}
-      {teamCustomizationError && <Message error>Oh snap! {teamCustomizationError}.</Message>}
-    </Fragment>
-  );
+  if (teamCustomizationPending && !teamCustomizationError) {
+    return <Loading />;
+  } else {
+    if (!teamCustomizationError) return <NewTeamCustomizeForm teamCustomizationData={teamCustomizationAvailable} />;
+    if (teamCustomizationError) return <Message error>Oh snap! {teamCustomizationError}.</Message>;
+  }
 };
 
 export default CustomizationTeamPage;

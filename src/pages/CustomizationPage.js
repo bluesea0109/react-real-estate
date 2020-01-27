@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getCustomizationPending } from '../store/modules/customization/actions';
@@ -36,23 +36,22 @@ const CustomizationPage = () => {
   }, [dispatch]);
 
   if (singleuser) {
-    return (
-      <Fragment>
-        {!customizationError && <NewCustomizeForm customizationData={customizationAvailable} />}
-        {customizationPending && !customizationError && <Loading />}
-        {customizationError && <Message error>Oh snap! {customizationError}.</Message>}
-      </Fragment>
-    );
+    if (customizationPending && !customizationError) {
+      return <Loading />;
+    } else {
+      if (!customizationError) return <NewCustomizeForm customizationData={customizationAvailable} />;
+      if (customizationError) return <Message error>Oh snap! {customizationError}.</Message>;
+    }
   }
 
   if (multiUser) {
-    return (
-      <Fragment>
-        {!teamCustomizationError && <NewCustomizeForm customizationData={customizationAvailable || {}} teamCustomizationData={teamCustomizationAvailable} />}
-        {customizationPending && !customizationError && teamCustomizationPending && !teamCustomizationError && <Loading />}
-        {teamCustomizationError && <Message error>Oh snap! {teamCustomizationError}.</Message>}
-      </Fragment>
-    );
+    if (customizationPending && !customizationError && teamCustomizationPending && !teamCustomizationError) {
+      return <Loading />;
+    } else {
+      if (!teamCustomizationError)
+        return <NewCustomizeForm customizationData={customizationAvailable || {}} teamCustomizationData={teamCustomizationAvailable} />;
+      if (teamCustomizationError) return <Message error>Oh snap! {teamCustomizationError}.</Message>;
+    }
   }
 };
 
