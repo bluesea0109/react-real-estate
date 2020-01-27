@@ -597,7 +597,7 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
           <Menu borderless fluid secondary>
             <Header as="h1">
               Team Customization
-              <Header.Subheader>
+              <Header.Subheader style={{ lineHeight: '1.5em', marginBottom: '-11px' }}>
                 Set the default template customization options for your team. <br />
                 Changes made here will not overwrite existing user-specific customization.
               </Header.Subheader>
