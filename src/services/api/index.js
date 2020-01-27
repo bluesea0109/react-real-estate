@@ -27,6 +27,10 @@ async function handleResponse(response) {
     if (!error.url) error.url = url;
     if (!error.message) error.message = `${response.status} ${response.statusText}`;
 
+    if (error.message === 'jwt expired' || error.statusText === 'jwt expired') {
+      return auth.signOut();
+    }
+
     throw error;
   }
 }
