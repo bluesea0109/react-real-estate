@@ -28,6 +28,13 @@ code {
 */
 
 /* Overrides Start */
+
+@media (min-width: 769px) {
+  .ui.text.menu {
+    margin: 1em -1.25em;
+  }
+}
+
 .ui.header {
   font-family: 'Open Sans', sans-serif !important;
 }

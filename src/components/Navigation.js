@@ -40,6 +40,7 @@ const StyledCustomizationDropdown = styled(Dropdown)`
 
 const mql = window.matchMedia('(max-width: 599px)');
 const menuSpacing = () => (mql.matches ? {} : { marginLeft: '2.5em' });
+const isMobile = () => mql.matches;
 
 export default () => {
   const history = useHistory();
@@ -181,7 +182,7 @@ export default () => {
     if (mql.matches) {
       return (
         <span style={{ display: 'inline-flex' }}>
-          <FontAwesomeIcon icon="paint-brush" style={{ marginLeft: '0.5em', marginRight: '-0.5em' }} />
+          <FontAwesomeIcon icon="paint-brush" style={{ marginLeft: '0.5em', marginRight: '-0.5em', marginTop: 'auto', marginBottom: 'auto' }} />
           <Dropdown floating>
             <Dropdown.Menu>
               <Dropdown.Item
@@ -312,7 +313,7 @@ export default () => {
   return (
     <Dimmer.Dimmable blurring dimmed={appIsBusy}>
       <Dimmer active={appIsBusy} inverted />
-      <NavigationLayout text>
+      <NavigationLayout text style={isMobile() ? { backgroundColor: 'white' } : {}}>
         {multiUser && (
           <Menu.Item style={menuSpacing()}>
             <StyledUserSelectorDropdown
