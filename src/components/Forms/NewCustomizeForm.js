@@ -210,6 +210,14 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
     });
   }
 
+  const selectedPeer = () => {
+    if (teammates.length > 0 && peerId) {
+      return teammates.find(profile => profile.userId === peerId);
+    } else {
+      return null;
+    }
+  };
+
   const renderSwitch = ({ listingType }) => {
     const targetOn = listingType === NEW_LISTING ? 'Generate new listing campaigns' : 'Generate sold listing campaigns';
 
@@ -623,6 +631,9 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
     }
   };
 
+  const getPeer = selectedPeer();
+  const peersName = getPeer && getPeer.first;
+
   return (
     <Page basic>
       <ContentTopHeaderLayout>
@@ -630,7 +641,7 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
           <Menu borderless fluid secondary>
             {peerId ? (
               <Header as="h1">
-                Peer Customization
+                {peersName}'s Customization
                 <Header.Subheader>Set the default template customization options for peer campaigns.</Header.Subheader>
               </Header>
             ) : (
@@ -674,7 +685,17 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
         {renderSteps()}
 
         <Modal open={displayReview} basic size="tiny">
-          {!postcardsPreviewIsPending && <Modal.Header>Preview</Modal.Header>}
+          {!postcardsPreviewIsPending && (
+            <Modal.Header>
+              Preview
+              <Button primary inverted floated="right" onClick={() => [setListedIsFlipped(true), setSoldIsFlipped(true)]}>
+                Flip Back
+              </Button>
+              <Button primary inverted floated="right" onClick={() => [setListedIsFlipped(false), setSoldIsFlipped(false)]}>
+                Flip Forward
+              </Button>
+            </Modal.Header>
+          )}
 
           {!customizationPending && (postcardsPreviewError || customizationError) && <Modal.Header>Error</Modal.Header>}
 
@@ -691,9 +712,19 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
             postcardsPreview.listed.sampleFrontLargeUrl && (
               <Modal.Content image style={{ padding: '0 45px 10px' }}>
                 <FlipCard isFlipped={listedIsFlipped}>
-                  <Image wrapped size="large" src={postcardsPreview.listed.sampleFrontLargeUrl} onMouseOver={() => setListedIsFlipped(!listedIsFlipped)} />
+                  <Image
+                    wrapped
+                    size="large"
+                    src={postcardsPreview.listed.sampleFrontLargeUrl}
+                    label={{ as: 'a', corner: 'right', icon: 'undo', onClick: () => setListedIsFlipped(!listedIsFlipped) }}
+                  />
 
-                  <Image wrapped size="large" src={postcardsPreview.listed.sampleBackLargeUrl} onMouseOver={() => setListedIsFlipped(!listedIsFlipped)} />
+                  <Image
+                    wrapped
+                    size="large"
+                    src={postcardsPreview.listed.sampleBackLargeUrl}
+                    label={{ as: 'a', corner: 'right', icon: 'redo', onClick: () => setListedIsFlipped(!listedIsFlipped) }}
+                  />
                 </FlipCard>
               </Modal.Content>
             )}
@@ -705,16 +736,26 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
             postcardsPreview.sold.sampleFrontLargeUrl && (
               <Modal.Content image style={{ padding: '10px 45px 0' }}>
                 <FlipCard isFlipped={soldIsFlipped}>
-                  <Image wrapped size="large" src={postcardsPreview.sold.sampleFrontLargeUrl} onMouseOver={() => setSoldIsFlipped(!soldIsFlipped)} />
+                  <Image
+                    wrapped
+                    size="large"
+                    src={postcardsPreview.sold.sampleFrontLargeUrl}
+                    label={{ as: 'a', corner: 'right', icon: 'undo', onClick: () => setSoldIsFlipped(!soldIsFlipped) }}
+                  />
 
-                  <Image wrapped size="large" src={postcardsPreview.sold.sampleBackLargeUrl} onMouseOver={() => setSoldIsFlipped(!soldIsFlipped)} />
+                  <Image
+                    wrapped
+                    size="large"
+                    src={postcardsPreview.sold.sampleBackLargeUrl}
+                    label={{ as: 'a', corner: 'right', icon: 'redo', onClick: () => setSoldIsFlipped(!soldIsFlipped) }}
+                  />
                 </FlipCard>
               </Modal.Content>
             )}
 
           {!postcardsPreviewIsPending && (
             <Modal.Actions>
-              <Button color="green" inverted onClick={() => setDisplayReview(false)}>
+              <Button primary inverted onClick={() => setDisplayReview(false)}>
                 <Icon name="checkmark" /> OK
               </Button>
             </Modal.Actions>
@@ -722,7 +763,7 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
 
           {!customizationPending && (postcardsPreviewError || customizationError) && (
             <Modal.Actions>
-              <Button basic color="red" inverted onClick={() => setDisplayReview(false)}>
+              <Button secondary inverted onClick={() => setDisplayReview(false)}>
                 <Icon name="remove" /> OK
               </Button>
             </Modal.Actions>
