@@ -106,7 +106,7 @@ const Dashboard = () => {
 
       {error && <Snackbar error>{error}</Snackbar>}
 
-      <Segment style={isMobile() ? { marginTop: '129px' } : { marginTop: '79px' }}>
+      <Segment style={{ marginTop: '79px' }}>
         <Grid>
           {mailoutList.length > 0 && (
             <Grid.Row>

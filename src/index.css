@@ -28,6 +28,13 @@ code {
 */
 
 /* Overrides Start */
+
+@media (min-width: 769px) {
+  .ui.text.menu {
+    margin: 1em -1.25em;
+  }
+}
+
 .ui.header {
   font-family: 'Open Sans', sans-serif !important;
 }
@@ -178,7 +185,7 @@ code {
 /* Images Start */
 .image-frame-border {
   border: 1px solid #ccc;
-  box-shadow: 3px 3px 1px #ccc;
+  box-shadow: 9px 9px 10px -3px rgba(0, 0, 0, 0.33);
 }
 
 .bm-transform-effect {
@@ -188,17 +195,12 @@ code {
 
 .bm-transform-effect:hover {
   transform: scale(1.1, 1.1);
+  z-index: 25;
 }
 
 /* Images End */
 
 /* Customize & Edit Campaigns Start */
-.ui.menu .ui.dropdown .menu > .active.item {
-  background: rgba(0, 0, 0, 0.3) !important;
-  font-weight: 700 !important;
-  color: rgba(0, 0, 0, 0.95) !important;
-}
-
 .primary-grid-container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -267,9 +269,13 @@ code {
 }
 
 .ui.menu .ui.dropdown .menu > .active.item {
-  background: rgba(0, 0, 0, 0.3) !important;
-  font-weight: 700 !important;
-  color: rgba(0, 0, 0, 0.95) !important;
+  background: #59c4c4 !important;
+  color: white !important;
+}
+
+.ui.menu .ui.dropdown .menu > .item:hover {
+  background: white !important;
+  color: #59c4c4 !important;
 }
 /* Navigation End */
 
@@ -298,7 +304,8 @@ code {
 /* Campaign Details End */
 
 /* Form Field Start */
-.disabled-form-field > div {
+.disabled-form-field > div,
+.disabled-form-field > div > input {
   color: #969696 !important;
   background-color: #f0f0f0 !important;
 }
@@ -326,6 +333,10 @@ code {
   height: 14px;
   right: -17px;
   top: -6px;
+}
+
+.noUi-pips-horizontal {
+  height: unset;
 }
 
 .carousel :focus {

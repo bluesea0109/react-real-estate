@@ -3,7 +3,7 @@ import startCase from 'lodash/startCase';
 import { BlockPicker } from 'react-color';
 import React, { createRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { /*Dropdown,*/ Form, Header, Label, Popup } from 'semantic-ui-react';
+import { Dropdown, Form, Header, Label, Popup } from 'semantic-ui-react';
 
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import { Button, Icon, Image, Menu, Message, Page, Segment } from '../Base';
@@ -25,8 +25,8 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
   const ribbonTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.ribbon);
   const stackTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.stack);
 
-  // const onLoginMode = useSelector(store => store.onLogin.mode);
-  // const multiUser = onLoginMode === 'multiuser';
+  const onLoginMode = useSelector(store => store.onLogin.mode);
+  const multiUser = onLoginMode === 'multiuser';
 
   const modifyPending = useSelector(store => store.mailout.modifyPending);
   const modifyError = useSelector(store => store.mailout.modifyError);
@@ -34,9 +34,9 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
   const teammates = useSelector(store => store.team.profiles);
 
   const currentListingStatus = data.listingStatus;
-  const currentMailoutDisplayAgentUserID = data.mailoutDisplayAgent.userId;
+  const currentMailoutDisplayAgentUserID = data.mailoutDisplayAgent ? data.mailoutDisplayAgent.userId : data.userId;
   const currentTemplateTheme = data.templateTheme;
-  // const currentMailoutDisplayAgent = data.mailoutDisplayAgent;
+  const currentMailoutDisplayAgent = data.mailoutDisplayAgent;
   const currentMergeVariables = data.mergeVariables;
   const currentBrandColor = currentMergeVariables[0];
 
@@ -45,7 +45,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
 
   const [templateTheme, setTemplateTheme] = useState(currentTemplateTheme);
   const [selectedBrandColor, setSelectedBrandColor] = useState(currentBrandColor.value);
-  // const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(currentMailoutDisplayAgent);
+  const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(currentMailoutDisplayAgent);
   const [formValues, setFormValues] = useState(convertedMergeVariables);
 
   const handleEditSubmitClick = async () => {
@@ -60,8 +60,8 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
       {},
       { templateTheme },
       { mergeVariables: currentMergeVariables },
-      { mergeVariables: newMergeVariables }
-      // { mailoutDisplayAgent }
+      { mergeVariables: newMergeVariables },
+      { mailoutDisplayAgent }
     );
 
     dispatch(modifyMailoutPending(newData));
@@ -134,12 +134,12 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
     );
   };
 
-  // const handleAgentChange = (e, input) => {
-  //   const selectedAgent = input.options.filter(o => o.value === input.value)[0];
-  //   const { first, last, value } = selectedAgent;
-  //
-  //   setMailoutDisplayAgent({ userId: value, first, last });
-  // };
+  const handleAgentChange = (e, input) => {
+    const selectedAgent = input.options.filter(o => o.value === input.value)[0];
+    const { first, last, value } = selectedAgent;
+
+    setMailoutDisplayAgent({ userId: value, first, last });
+  };
 
   const handleInputChange = (value, name) => {
     const newValues = Object.assign({}, formValues, { [name]: value });
@@ -152,8 +152,11 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
         const ribbonFields = ribbonTemplate[currentListingStatus].fields
           .filter(field => !blacklistNames.includes(field.name))
           .map(field => {
-            const fieldName = startCase(field.name);
+            let fieldName = startCase(field.name);
             const error = maxLength(field.max)(formValues[field.name]);
+
+            if (fieldName.includes('Url')) fieldName = fieldName.replace(/Url/g, 'URL');
+            if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
 
             return (
               <Form.Field key={fieldName}>
@@ -182,8 +185,11 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
         const bookmarkFields = bookmarkTemplate[currentListingStatus].fields
           .filter(field => !blacklistNames.includes(field.name))
           .map(field => {
-            const fieldName = startCase(field.name);
+            let fieldName = startCase(field.name);
             const error = maxLength(field.max)(formValues[field.name]);
+
+            if (fieldName.includes('Url')) fieldName = fieldName.replace(/Url/g, 'URL');
+            if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
 
             return (
               <Form.Field key={fieldName}>
@@ -212,8 +218,11 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
         const stackFields = stackTemplate[currentListingStatus].fields
           .filter(field => !blacklistNames.includes(field.name))
           .map(field => {
-            const fieldName = startCase(field.name);
+            let fieldName = startCase(field.name);
             const error = maxLength(field.max)(formValues[field.name]);
+
+            if (fieldName.includes('Url')) fieldName = fieldName.replace(/Url/g, 'URL');
+            if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
 
             return (
               <Form.Field key={fieldName}>
@@ -323,12 +332,12 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
             <BlockPicker triangle="hide" width="200px" color={selectedBrandColor} colors={colors} onChangeComplete={setSelectedBrandColor} />
           </div>
 
-          {/*{multiUser && (*/}
-          {/*  <div>*/}
-          {/*    <Header as="h4">Display Agent</Header>*/}
-          {/*    <Dropdown placeholder="Select Friend" fluid selection options={profiles} value={mailoutDisplayAgent.userId} onChange={handleAgentChange} />*/}
-          {/*  </div>*/}
-          {/*)}*/}
+          {multiUser && (
+            <div>
+              <Header as="h4">Display Agent</Header>
+              <Dropdown placeholder="Select Friend" fluid selection options={profiles} value={mailoutDisplayAgent.userId} onChange={handleAgentChange} />
+            </div>
+          )}
         </Segment>
 
         <Header as="h4" style={{ marginLeft: '1.5em', marginBottom: '-0.5em' }}>

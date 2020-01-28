@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import { BlockPicker } from 'react-color';
 import Nouislider from 'nouislider-react';
 import { useDispatch, useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Confirm, Dropdown, Form, Header, Label, Popup } from 'semantic-ui-react';
 import React, { createRef, Fragment, useEffect, useState, useReducer } from 'react';
-import { Confirm, /*Dropdown,*/ Form, Header, Label, Popup, Radio } from 'semantic-ui-react';
 
 import { isMobile, isValidURL, maxLength, popup, required, composeValidators, url, differenceObjectDeep } from './helpers';
 import { saveListedShortcodePending, saveSoldShortcodePending } from '../../store/modules/shortcode/actions';
@@ -84,7 +85,9 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
   };
 
   const newListingShortenedURL = useSelector(store => store.shortcode && store.shortcode.listed);
+  const newListingShortenedURLPending = useSelector(store => store.shortcode && store.shortcode.listedURLToShortenPending);
   const soldListingShortenedURL = useSelector(store => store.shortcode && store.shortcode.sold);
+  const soldListingShortenedURLPending = useSelector(store => store.shortcode && store.shortcode.soldURLToShortenPending);
 
   const onLoginUserId = useSelector(store => store.onLogin.user._id);
   const onLoginMode = useSelector(store => store.onLogin.mode);
@@ -122,13 +125,6 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
       delete updatedFormValues.onboardingComplete;
       setFormValues(updatedFormValues);
       multiUserStartState = updatedFormValues;
-
-      if (updatedFormValues.listed.cta) {
-        dispatch(saveListedShortcodePending(updatedFormValues.listed.cta));
-      }
-      if (updatedFormValues.sold.cta) {
-        dispatch(saveSoldShortcodePending(updatedFormValues.sold.cta));
-      }
     }
 
     if (singleUser && customizationData) {
@@ -138,13 +134,6 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
       delete updatedFormValues.onboardingComplete;
       setFormValues(updatedFormValues);
       singleUserStartState = updatedFormValues;
-
-      if (updatedFormValues.listed.cta) {
-        dispatch(saveListedShortcodePending(updatedFormValues.listed.cta));
-      }
-      if (updatedFormValues.sold.cta) {
-        dispatch(saveSoldShortcodePending(updatedFormValues.sold.cta));
-      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [customizationData, teamCustomizationData, setFormValues, dispatch]);
@@ -221,14 +210,22 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
     });
   }
 
+  const selectedPeer = () => {
+    if (teammates.length > 0 && peerId) {
+      return teammates.find(profile => profile.userId === peerId);
+    } else {
+      return null;
+    }
+  };
+
   const renderSwitch = ({ listingType }) => {
     const targetOn = listingType === NEW_LISTING ? 'Generate new listing campaigns' : 'Generate sold listing campaigns';
 
     const currentValue = formValues[listingType].createMailoutsOfThisType;
 
-    const handleChange = (param, data) => {
+    const handleChange = () => {
       const newValue = formValues;
-      newValue[listingType].createMailoutsOfThisType = data.checked;
+      newValue[listingType].createMailoutsOfThisType = !currentValue;
 
       // To ensure that we have cta or kwkly when switching
       if (newValue.listed.createMailoutsOfThisType) {
@@ -255,7 +252,9 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
     return (
       <Header size="medium">
         {targetOn}: &nbsp;
-        <Radio toggle onChange={handleChange} checked={currentValue} style={{ verticalAlign: 'bottom' }} />
+        <span style={{ verticalAlign: '-0.35em', color: '#59C4C4' }} onClick={handleChange}>
+          {currentValue ? <FontAwesomeIcon icon="toggle-on" size="2x" /> : <FontAwesomeIcon icon="toggle-off" size="2x" />}
+        </span>
       </Header>
     );
   };
@@ -313,31 +312,31 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
     return <BlockPicker triangle="hide" width="200px" color={currentValue} colors={colors} onChangeComplete={handleColorChange} />;
   };
 
-  // const renderAgentDropdown = ({ listingType }) => {
-  //   const currentValue = formValues[listingType].defaultDisplayAgent.userId;
-  //
-  //   const handleAgentChange = (e, input) => {
-  //     const selectedAgent = input.options.filter(o => o.value === input.value)[0];
-  //     const { first, last, value } = selectedAgent;
-  //     const newValue = formValues;
-  //     newValue[listingType].defaultDisplayAgent = { userId: value, first, last };
-  //     setFormValues(newValue);
-  //   };
-  //
-  //   const error = composeValidators(required)(currentValue) && true;
-  //
-  //   return (
-  //     <Dropdown
-  //       error={error}
-  //       placeholder="Select Default Displayed Agent"
-  //       fluid
-  //       selection
-  //       options={profiles}
-  //       value={currentValue}
-  //       onChange={handleAgentChange}
-  //     />
-  //   );
-  // };
+  const renderAgentDropdown = ({ listingType }) => {
+    const currentValue = formValues[listingType].defaultDisplayAgent.userId;
+
+    const handleAgentChange = (e, input) => {
+      const selectedAgent = input.options.filter(o => o.value === input.value)[0];
+      const { first, last, value } = selectedAgent;
+      const newValue = formValues;
+      newValue[listingType].defaultDisplayAgent = { userId: value, first, last };
+      setFormValues(newValue);
+    };
+
+    const error = composeValidators(required)(currentValue) && true;
+
+    return (
+      <Dropdown
+        error={error}
+        placeholder="Select Default Displayed Agent"
+        fluid
+        selection
+        options={profiles}
+        value={currentValue}
+        onChange={handleAgentChange}
+      />
+    );
+  };
 
   const renderField = ({ fieldName, listingType }) => {
     const adjustedName = fieldName === 'frontHeadline' ? 'Headline' : fieldName;
@@ -433,10 +432,35 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
     );
   };
 
+  const renderKWKLYCTAToggle = ({ listingType }) => {
+    const ctaEnabled = formValues[listingType].shortenCTA;
+
+    const handleKwklyEnabledChange = () => {
+      const newValue = formValues;
+      newValue[listingType].shortenCTA = !ctaEnabled;
+      setFormValues(newValue);
+    };
+
+    return (
+      <Form.Field>
+        <span style={{ verticalAlign: '-0.35em', color: '#59C4C4' }} onClick={handleKwklyEnabledChange}>
+          {!ctaEnabled ? <FontAwesomeIcon icon="toggle-on" size="2x" /> : <FontAwesomeIcon icon="toggle-off" size="2x" />}
+        </span>
+        &nbsp;
+        {!ctaEnabled ? 'Disable Kwkly' : 'Enable Kwkly'}
+      </Form.Field>
+    );
+  };
+
   const renderCTA = ({ listingType }) => {
     const currentValue = formValues[listingType].cta;
     const ctaEnabled = formValues[listingType].shortenCTA;
     const shortenedURL = listingType === NEW_LISTING ? newListingShortenedURL : soldListingShortenedURL;
+
+    if (currentValue && isValidURL(currentValue)) {
+      if (listingType === NEW_LISTING && !newListingShortenedURLPending && !newListingShortenedURL) dispatch(saveListedShortcodePending(currentValue));
+      if (listingType === SOLD_LISTING && !soldListingShortenedURLPending && !soldListingShortenedURL) dispatch(saveSoldShortcodePending(currentValue));
+    }
 
     const handleCTAChange = input => {
       const eURL = input.target.value;
@@ -456,6 +480,7 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
     return (
       <Form.Field className={isMobile() ? null : isVisible ? 'tertiary-grid-container' : null}>
         <Form.Input
+          className={!ctaEnabled ? 'disabled-form-field' : null}
           fluid
           label={
             <Header as="h4" style={{ opacity: ctaEnabled ? '1' : '0.4' }}>
@@ -471,13 +496,14 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
           style={{ opacity: ctaEnabled ? '1' : '0.4' }}
         />
         {isVisible && (
-          <Label style={{ marginTop: !isMobile() && '2.75em', padding: '1em' }}>
+          <Label style={{ marginTop: !isMobile() && '2.75em', padding: '1em', backgroundColor: 'transparent' }}>
             <Icon name="linkify" />
             Shortened URL:
             <Label.Detail>
               <Menu.Item href={'https://' + shortenedURL} position="left" target="_blank">
                 <span>
-                  {shortenedURL} {popup('Some message')}
+                  {shortenedURL}{' '}
+                  {popup('We automatically shorten your call to action links and generate URLs for each card to provide tracking and increase conversion.')}
                 </span>
               </Menu.Item>
             </Label.Detail>
@@ -491,12 +517,6 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
     const currentValue = formValues[listingType].kwkly;
     const ctaEnabled = formValues[listingType].shortenCTA;
 
-    const handleKwklyEnabledChange = value => {
-      const newValue = formValues;
-      newValue[listingType].shortenCTA = value;
-      setFormValues(newValue);
-    };
-
     const handleKwklyChange = input => {
       const newValue = formValues;
       newValue[listingType].kwkly = input.target.value;
@@ -506,8 +526,9 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
     const error = !ctaEnabled && composeValidators(required)(currentValue);
 
     return (
-      <Form.Field className={isMobile() ? null : 'tertiary-grid-container'}>
+      <Form.Field>
         <Form.Input
+          className={ctaEnabled ? 'disabled-form-field' : null}
           fluid
           label={
             <Header as="h4" style={{ opacity: !ctaEnabled ? '1' : '0.4' }}>
@@ -515,19 +536,10 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
             </Header>
           }
           error={error && { content: error }}
-          // placeholder={field.default}
-          // type={field.type}
           onBlur={handleKwklyChange}
           defaultValue={currentValue}
           disabled={ctaEnabled}
           style={{ opacity: !ctaEnabled ? '1' : '0.4' }}
-        />
-        <Radio
-          toggle
-          label={!ctaEnabled ? 'Disable Kwkly' : 'Enable Kwkly'}
-          checked={!ctaEnabled}
-          onChange={() => handleKwklyEnabledChange(!ctaEnabled)}
-          style={{ marginTop: !isMobile() && '2.75em' }}
         />
       </Form.Field>
     );
@@ -577,12 +589,12 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
 
         {formValues[listingType].createMailoutsOfThisType && (
           <Segment padded className={isMobile() ? null : 'tertiary-grid-container'}>
-            {/*{multiUser && (*/}
-            {/*  <div>*/}
-            {/*    <Header as="h4">Choose Default Agent</Header>*/}
-            {/*    {renderAgentDropdown({ listingType })}*/}
-            {/*  </div>*/}
-            {/*)}*/}
+            {multiUser && (
+              <div>
+                <Header as="h4">Choose Default Agent</Header>
+                {renderAgentDropdown({ listingType })}
+              </div>
+            )}
 
             <div>{renderField({ fieldName: 'frontHeadline', listingType })}</div>
 
@@ -591,9 +603,13 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
               {renderMailoutSizeSlider({ listingType })}
             </div>
 
-            <div>{renderCTA({ listingType })}</div>
+            <div> </div>
+
+            <div>{renderKWKLYCTAToggle({ listingType })}</div>
 
             <div> </div>
+
+            <div>{renderCTA({ listingType })}</div>
 
             <div>{renderKWKLY({ listingType })}</div>
           </Segment>
@@ -615,6 +631,9 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
     }
   };
 
+  const getPeer = selectedPeer();
+  const peersName = getPeer && getPeer.first;
+
   return (
     <Page basic>
       <ContentTopHeaderLayout>
@@ -622,12 +641,12 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
           <Menu borderless fluid secondary>
             {peerId ? (
               <Header as="h1">
-                Peer Customization
+                {peersName}'s Customization
                 <Header.Subheader>Set the default template customization options for peer campaigns.</Header.Subheader>
               </Header>
             ) : (
               <Header as="h1">
-                My Customization
+                Personal Customization
                 <Header.Subheader>Set the default template customization options for your campaigns.</Header.Subheader>
               </Header>
             )}
@@ -666,7 +685,17 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
         {renderSteps()}
 
         <Modal open={displayReview} basic size="tiny">
-          {!postcardsPreviewIsPending && <Modal.Header>Preview</Modal.Header>}
+          {!postcardsPreviewIsPending && (
+            <Modal.Header>
+              Preview
+              <Button primary inverted floated="right" onClick={() => [setListedIsFlipped(true), setSoldIsFlipped(true)]}>
+                Flip Back
+              </Button>
+              <Button primary inverted floated="right" onClick={() => [setListedIsFlipped(false), setSoldIsFlipped(false)]}>
+                Flip Forward
+              </Button>
+            </Modal.Header>
+          )}
 
           {!customizationPending && (postcardsPreviewError || customizationError) && <Modal.Header>Error</Modal.Header>}
 
@@ -683,9 +712,19 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
             postcardsPreview.listed.sampleFrontLargeUrl && (
               <Modal.Content image style={{ padding: '0 45px 10px' }}>
                 <FlipCard isFlipped={listedIsFlipped}>
-                  <Image wrapped size="large" src={postcardsPreview.listed.sampleFrontLargeUrl} onMouseOver={() => setListedIsFlipped(!listedIsFlipped)} />
+                  <Image
+                    wrapped
+                    size="large"
+                    src={postcardsPreview.listed.sampleFrontLargeUrl}
+                    label={{ as: 'a', corner: 'right', icon: 'undo', onClick: () => setListedIsFlipped(!listedIsFlipped) }}
+                  />
 
-                  <Image wrapped size="large" src={postcardsPreview.listed.sampleBackLargeUrl} onMouseOver={() => setListedIsFlipped(!listedIsFlipped)} />
+                  <Image
+                    wrapped
+                    size="large"
+                    src={postcardsPreview.listed.sampleBackLargeUrl}
+                    label={{ as: 'a', corner: 'right', icon: 'redo', onClick: () => setListedIsFlipped(!listedIsFlipped) }}
+                  />
                 </FlipCard>
               </Modal.Content>
             )}
@@ -697,16 +736,26 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
             postcardsPreview.sold.sampleFrontLargeUrl && (
               <Modal.Content image style={{ padding: '10px 45px 0' }}>
                 <FlipCard isFlipped={soldIsFlipped}>
-                  <Image wrapped size="large" src={postcardsPreview.sold.sampleFrontLargeUrl} onMouseOver={() => setSoldIsFlipped(!soldIsFlipped)} />
+                  <Image
+                    wrapped
+                    size="large"
+                    src={postcardsPreview.sold.sampleFrontLargeUrl}
+                    label={{ as: 'a', corner: 'right', icon: 'undo', onClick: () => setSoldIsFlipped(!soldIsFlipped) }}
+                  />
 
-                  <Image wrapped size="large" src={postcardsPreview.sold.sampleBackLargeUrl} onMouseOver={() => setSoldIsFlipped(!soldIsFlipped)} />
+                  <Image
+                    wrapped
+                    size="large"
+                    src={postcardsPreview.sold.sampleBackLargeUrl}
+                    label={{ as: 'a', corner: 'right', icon: 'redo', onClick: () => setSoldIsFlipped(!soldIsFlipped) }}
+                  />
                 </FlipCard>
               </Modal.Content>
             )}
 
           {!postcardsPreviewIsPending && (
             <Modal.Actions>
-              <Button color="green" inverted onClick={() => setDisplayReview(false)}>
+              <Button primary inverted onClick={() => setDisplayReview(false)}>
                 <Icon name="checkmark" /> OK
               </Button>
             </Modal.Actions>
@@ -714,7 +763,7 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
 
           {!customizationPending && (postcardsPreviewError || customizationError) && (
             <Modal.Actions>
-              <Button basic color="red" inverted onClick={() => setDisplayReview(false)}>
+              <Button secondary inverted onClick={() => setDisplayReview(false)}>
                 <Icon name="remove" /> OK
               </Button>
             </Modal.Actions>

@@ -1,14 +1,14 @@
 import styled from 'styled-components';
 import { useHistory } from 'react-router';
-import React, { createRef, useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Dropdown, Header, Popup } from 'semantic-ui-react';
+import React, { createRef, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { StepLayout, StepsLayout, NavigationLayout, MobileDisabledLayout, MobileEnabledLayout } from '../layouts';
 import { selectPeerId, deselectPeerId } from '../store/modules/peer/actions';
-import { Link, useLocation } from 'react-router-dom';
-import { Dimmer, Menu, Image, Icon, Step } from './Base';
+import { Dimmer, Menu, Initials, Icon, Step } from './Base';
 
 const iconOnlyStyle = {
   margin: '0 auto 0 auto',
@@ -29,7 +29,7 @@ const StyledUserSelectorDropdown = styled(Dropdown)`
 `;
 
 const StyledHeader = styled(Header)`
-  min-width: 18em;
+  min-width: max-content !important;
   display: inline-block;
 `;
 
@@ -40,6 +40,7 @@ const StyledCustomizationDropdown = styled(Dropdown)`
 
 const mql = window.matchMedia('(max-width: 599px)');
 const menuSpacing = () => (mql.matches ? {} : { marginLeft: '2.5em' });
+const isMobile = () => mql.matches;
 
 export default () => {
   const history = useHistory();
@@ -95,8 +96,6 @@ export default () => {
       // const userEmail = profile.doc.email;
 
       const contextRef = createRef();
-      const adminIconWithPopup = <Popup context={contextRef} content="Admin" trigger={<Icon name="legal" />} />;
-      const agentIconWithPopup = <Popup context={contextRef} content="Agent" trigger={<Icon name="detective" />} />;
       const currentUserIconWithPopup = <Popup context={contextRef} content="Currently logged in user" trigger={<Icon name="user" />} />;
       const setupCompletedIconWithPopup = <Popup context={contextRef} content="Setup Completed" trigger={<Icon name="check circle" color="teal" />} />;
 
@@ -106,12 +105,12 @@ export default () => {
         value: profile.userId,
         content: (
           <StyledHeader as="h4" ref={contextRef}>
-            <Image size="mini" inline circular src="https://react.semantic-ui.com/images/avatar/large/patrick.png" />
+            <Initials firstName={profile.first} lastName={profile.last} />
             &nbsp;
             {profile.first}&nbsp;
             {profile.last}&nbsp;
+            {profile.permissions && profile.permissions.teamAdmin ? '(Admin)' : '(Agent)'}&nbsp;
             {currentUser ? currentUserIconWithPopup : null}
-            {profile.permissions && profile.permissions.teamAdmin ? adminIconWithPopup : agentIconWithPopup}
             {setupComplete ? setupCompletedIconWithPopup : null}
           </StyledHeader>
         ),
@@ -181,12 +180,12 @@ export default () => {
     if (mql.matches) {
       return (
         <span style={{ display: 'inline-flex' }}>
-          <FontAwesomeIcon icon="paint-brush" style={{ marginLeft: '0.5em', marginRight: '-0.5em' }} />
+          <FontAwesomeIcon icon="paint-brush" style={{ marginLeft: '0.5em', marginRight: '-0.5em', marginTop: 'auto', marginBottom: 'auto' }} />
           <Dropdown floating>
             <Dropdown.Menu>
               <Dropdown.Item
                 as={Link}
-                text="Team Default"
+                text="Team"
                 value="team"
                 onClick={handleCustomizationDropdown}
                 to="/customization/team"
@@ -194,8 +193,8 @@ export default () => {
               />
               <Dropdown.Item
                 as={Link}
-                text="My Defaults"
-                value="mine"
+                text="Personal"
+                value="personal"
                 onClick={handleCustomizationDropdown}
                 to="/customization"
                 active={activeItem === '/customization'}
@@ -212,15 +211,15 @@ export default () => {
             <Dropdown.Menu>
               <Dropdown.Item
                 as={Link}
-                text="Team Default"
-                value="team"
+                text="Team"
+                value="personal"
                 onClick={handleCustomizationDropdown}
                 to="/customization/team"
                 active={activeItem === '/customization/team'}
               />
               <Dropdown.Item
                 as={Link}
-                text="My Defaults"
+                text="Personal"
                 value="mine"
                 onClick={handleCustomizationDropdown}
                 to="/customization"
@@ -312,7 +311,7 @@ export default () => {
   return (
     <Dimmer.Dimmable blurring dimmed={appIsBusy}>
       <Dimmer active={appIsBusy} inverted />
-      <NavigationLayout text>
+      <NavigationLayout text style={isMobile() ? { backgroundColor: 'white' } : {}}>
         {multiUser && (
           <Menu.Item style={menuSpacing()}>
             <StyledUserSelectorDropdown

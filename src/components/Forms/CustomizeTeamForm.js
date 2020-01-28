@@ -23,7 +23,6 @@ import FlipCard from '../FlipCard';
 import Loading from '../Loading';
 import CustomizationWizard from './CustomizationWizard';
 import { Menu, Segment, Image, Modal, Button } from '../Base';
-import { getTeamListedShortcodePending, getTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
 import { saveTeamCustomizationPending, reviewTeamCustomizationCompleted } from '../../store/modules/teamCustomization/actions';
 
 const NEW_LISTING = 'newListing';
@@ -205,9 +204,6 @@ const CustomizeTeamForm = () => {
 
       if (tc.listed && tc.listed.kwkly) setNewListingKwklyEnabled(true);
       if (tc.sold && tc.sold.kwkly) setSoldListingKwklyEnabled(true);
-
-      dispatch(getTeamListedShortcodePending());
-      dispatch(getTeamSoldShortcodePending());
     }
   }
 

@@ -11,14 +11,14 @@ const Checkbox = ({ disabled, label, isSelected, onCheckboxChange }) => (
 );
 
 const ProfileCompleted = (
-  <Item.Header style={{ color: 'teal' }}>
+  <Item.Header style={{ color: '#59C4C4' }}>
     <Icon name="check" />
     Profile Completed
   </Item.Header>
 );
 
 const UserVerified = (
-  <Item.Header style={{ color: 'orange' }}>
+  <Item.Header style={{ color: '#F2714D' }}>
     <Icon name="hourglass" />
     Email Verified
   </Item.Header>
