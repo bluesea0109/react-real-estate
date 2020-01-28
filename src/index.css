@@ -335,6 +335,10 @@ code {
   top: -6px;
 }
 
+.noUi-pips-horizontal {
+  height: unset;
+}
+
 .carousel :focus {
   display: none !important;
 }
