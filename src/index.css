@@ -348,3 +348,51 @@ code {
   padding-top: 0;
   padding-bottom: 0;
 }
+
+/* Image Overlay */
+.image-container {
+  position: relative;
+  width: 50%;
+}
+
+.image {
+  opacity: 0.5;
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: 0.5s ease;
+  backface-visibility: hidden;
+  margin: auto;
+}
+
+.image a {
+  opacity: 0;
+  transition: 0.5s ease;
+}
+
+.image-middle {
+  transition: 0.5s ease;
+  opacity: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.image-container:hover .image {
+  opacity: 1;
+}
+
+.image-container:hover .image a {
+  opacity: 1;
+}
+
+.image-container:hover .image-middle {
+  opacity: 0;
+}
+
+.image-overlay {
+  color: #59c4c4;
+}

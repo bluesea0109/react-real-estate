@@ -1,4 +1,5 @@
 import { GET_ON_LOGIN_PENDING, GET_ON_LOGIN_SUCCESS, GET_ON_LOGIN_ERROR } from './actions';
+import { DELETE_PHOTO_SUCCESS } from '../pictures/actions';
 
 const initialState = {
   pending: false,
@@ -29,6 +30,12 @@ export default function onLogin(state = initialState, action) {
         ...state,
         pending: false,
         error: action.error,
+      };
+
+    case DELETE_PHOTO_SUCCESS:
+      return {
+        ...state,
+        teamLogo: null,
       };
 
     default:
