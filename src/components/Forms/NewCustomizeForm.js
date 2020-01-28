@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import { BlockPicker } from 'react-color';
 import Nouislider from 'nouislider-react';
 import { useDispatch, useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Confirm, Dropdown, Form, Header, Label, Popup } from 'semantic-ui-react';
 import React, { createRef, Fragment, useEffect, useState, useReducer } from 'react';
-import { Confirm, /*Dropdown,*/ Form, Header, Label, Popup, Radio } from 'semantic-ui-react';
 
 import { isMobile, isValidURL, maxLength, popup, required, composeValidators, url, differenceObjectDeep } from './helpers';
 import { saveListedShortcodePending, saveSoldShortcodePending } from '../../store/modules/shortcode/actions';
@@ -13,7 +14,6 @@ import { saveCustomizationPending } from '../../store/modules/customization/acti
 import { Button, Icon, Image, Menu, Modal, Page, Segment } from '../Base';
 import FlipCard from '../FlipCard';
 import Loading from '../Loading';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const colors = ['#b40101', '#f2714d', '#f4b450', '#79c34d', '#2d9a2c', '#59c4c4', '#009ee7', '#0e2b5b', '#ee83ee', '#8b288f', '#808080', '#000000'];
 
@@ -304,31 +304,31 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
     return <BlockPicker triangle="hide" width="200px" color={currentValue} colors={colors} onChangeComplete={handleColorChange} />;
   };
 
-  // const renderAgentDropdown = ({ listingType }) => {
-  //   const currentValue = formValues[listingType].defaultDisplayAgent.userId;
-  //
-  //   const handleAgentChange = (e, input) => {
-  //     const selectedAgent = input.options.filter(o => o.value === input.value)[0];
-  //     const { first, last, value } = selectedAgent;
-  //     const newValue = formValues;
-  //     newValue[listingType].defaultDisplayAgent = { userId: value, first, last };
-  //     setFormValues(newValue);
-  //   };
-  //
-  //   const error = composeValidators(required)(currentValue) && true;
-  //
-  //   return (
-  //     <Dropdown
-  //       error={error}
-  //       placeholder="Select Default Displayed Agent"
-  //       fluid
-  //       selection
-  //       options={profiles}
-  //       value={currentValue}
-  //       onChange={handleAgentChange}
-  //     />
-  //   );
-  // };
+  const renderAgentDropdown = ({ listingType }) => {
+    const currentValue = formValues[listingType].defaultDisplayAgent.userId;
+
+    const handleAgentChange = (e, input) => {
+      const selectedAgent = input.options.filter(o => o.value === input.value)[0];
+      const { first, last, value } = selectedAgent;
+      const newValue = formValues;
+      newValue[listingType].defaultDisplayAgent = { userId: value, first, last };
+      setFormValues(newValue);
+    };
+
+    const error = composeValidators(required)(currentValue) && true;
+
+    return (
+      <Dropdown
+        error={error}
+        placeholder="Select Default Displayed Agent"
+        fluid
+        selection
+        options={profiles}
+        value={currentValue}
+        onChange={handleAgentChange}
+      />
+    );
+  };
 
   const renderField = ({ fieldName, listingType }) => {
     const adjustedName = fieldName === 'frontHeadline' ? 'Headline' : fieldName;
@@ -581,12 +581,12 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
 
         {formValues[listingType].createMailoutsOfThisType && (
           <Segment padded className={isMobile() ? null : 'tertiary-grid-container'}>
-            {/*{multiUser && (*/}
-            {/*  <div>*/}
-            {/*    <Header as="h4">Choose Default Agent</Header>*/}
-            {/*    {renderAgentDropdown({ listingType })}*/}
-            {/*  </div>*/}
-            {/*)}*/}
+            {multiUser && (
+              <div>
+                <Header as="h4">Choose Default Agent</Header>
+                {renderAgentDropdown({ listingType })}
+              </div>
+            )}
 
             <div>{renderField({ fieldName: 'frontHeadline', listingType })}</div>
 
@@ -594,6 +594,8 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
               <Header as="h4">Number of postcards to send per listing</Header>
               {renderMailoutSizeSlider({ listingType })}
             </div>
+
+            <div> </div>
 
             <div>{renderKWKLYCTAToggle({ listingType })}</div>
 
