@@ -152,8 +152,11 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
         const ribbonFields = ribbonTemplate[currentListingStatus].fields
           .filter(field => !blacklistNames.includes(field.name))
           .map(field => {
-            const fieldName = startCase(field.name);
+            let fieldName = startCase(field.name);
             const error = maxLength(field.max)(formValues[field.name]);
+
+            if (fieldName.includes('Url')) fieldName = fieldName.replace(/Url/g, 'URL');
+            if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
 
             return (
               <Form.Field key={fieldName}>
@@ -182,8 +185,11 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
         const bookmarkFields = bookmarkTemplate[currentListingStatus].fields
           .filter(field => !blacklistNames.includes(field.name))
           .map(field => {
-            const fieldName = startCase(field.name);
+            let fieldName = startCase(field.name);
             const error = maxLength(field.max)(formValues[field.name]);
+
+            if (fieldName.includes('Url')) fieldName = fieldName.replace(/Url/g, 'URL');
+            if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
 
             return (
               <Form.Field key={fieldName}>
@@ -212,8 +218,11 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
         const stackFields = stackTemplate[currentListingStatus].fields
           .filter(field => !blacklistNames.includes(field.name))
           .map(field => {
-            const fieldName = startCase(field.name);
+            let fieldName = startCase(field.name);
             const error = maxLength(field.max)(formValues[field.name]);
+
+            if (fieldName.includes('Url')) fieldName = fieldName.replace(/Url/g, 'URL');
+            if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
 
             return (
               <Form.Field key={fieldName}>
