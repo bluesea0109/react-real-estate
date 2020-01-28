@@ -34,7 +34,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
   const teammates = useSelector(store => store.team.profiles);
 
   const currentListingStatus = data.listingStatus;
-  const currentMailoutDisplayAgentUserID = data.mailoutDisplayAgent.userId;
+  const currentMailoutDisplayAgentUserID = data.mailoutDisplayAgent ? data.mailoutDisplayAgent.userId : data.userId;
   const currentTemplateTheme = data.templateTheme;
   // const currentMailoutDisplayAgent = data.mailoutDisplayAgent;
   const currentMergeVariables = data.mergeVariables;

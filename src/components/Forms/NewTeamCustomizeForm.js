@@ -85,8 +85,10 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
     },
   };
 
-  const newListingShortenedURL = useSelector(store => store.shortcode && store.shortcode.listed);
-  const soldListingShortenedURL = useSelector(store => store.shortcode && store.shortcode.sold);
+  const newListingShortenedURL = useSelector(store => store.teamShortcode && store.teamShortcode.listed);
+  const newListingShortenedURLPending = useSelector(store => store.teamShortcode && store.teamShortcode.listedURLToShortenPending);
+  const soldListingShortenedURL = useSelector(store => store.teamShortcode && store.teamShortcode.sold);
+  const soldListingShortenedURLPending = useSelector(store => store.teamShortcode && store.teamShortcode.soldURLToShortenPending);
 
   const onLoginUserId = useSelector(store => store.onLogin.user._id);
   const teammates = useSelector(store => store.team.profiles);
@@ -205,6 +207,26 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
     const handleChange = () => {
       const newValue = formValues;
       newValue[listingType].createMailoutsOfThisType = !currentValue;
+
+      // To ensure that we have cta or kwkly when switching
+      if (newValue.listed.createMailoutsOfThisType) {
+        if (newValue.sold.cta && !newValue.listed.cta) {
+          newValue.listed.cta = newValue.sold.cta;
+        }
+        if (newValue.sold.kwkly && !newValue.listed.kwkly) {
+          newValue.listed.kwkly = newValue.sold.kwkly;
+        }
+      }
+
+      if (newValue.sold.createMailoutsOfThisType) {
+        if (newValue.listed.cta && !newValue.sold.cta) {
+          newValue.sold.cta = newValue.listed.cta;
+        }
+        if (newValue.listed.kwkly && !newValue.sold.kwkly) {
+          newValue.sold.kwkly = newValue.listed.kwkly;
+        }
+      }
+
       setFormValues(newValue);
     };
 
@@ -410,10 +432,35 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
     );
   };
 
+  const renderKWKLYCTAToggle = ({ listingType }) => {
+    const ctaEnabled = formValues[listingType].shortenCTA;
+
+    const handleKwklyEnabledChange = () => {
+      const newValue = formValues;
+      newValue[listingType].shortenCTA = !ctaEnabled;
+      setFormValues(newValue);
+    };
+
+    return (
+      <Form.Field>
+        <span style={{ verticalAlign: '-0.35em', color: '#59C4C4' }} onClick={handleKwklyEnabledChange}>
+          {!ctaEnabled ? <FontAwesomeIcon icon="toggle-on" size="2x" /> : <FontAwesomeIcon icon="toggle-off" size="2x" />}
+        </span>
+        &nbsp;
+        {!ctaEnabled ? 'Disable Kwkly' : 'Enable Kwkly'}
+      </Form.Field>
+    );
+  };
+
   const renderCTA = ({ listingType }) => {
     const currentValue = formValues[listingType].cta;
     const ctaEnabled = formValues[listingType].shortenCTA;
     const shortenedURL = listingType === NEW_LISTING ? newListingShortenedURL : soldListingShortenedURL;
+
+    if (currentValue && isValidURL(currentValue)) {
+      if (listingType === NEW_LISTING && !newListingShortenedURLPending && !newListingShortenedURL) dispatch(saveTeamListedShortcodePending(currentValue));
+      if (listingType === SOLD_LISTING && !soldListingShortenedURLPending && !soldListingShortenedURL) dispatch(saveTeamSoldShortcodePending(currentValue));
+    }
 
     const handleCTAChange = input => {
       const eURL = input.target.value;
@@ -433,6 +480,7 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
     return (
       <Form.Field className={isMobile() ? null : isVisible ? 'tertiary-grid-container' : null}>
         <Form.Input
+          className={!ctaEnabled ? 'disabled-form-field' : null}
           fluid
           label={
             <Header as="h4" style={{ opacity: ctaEnabled ? '1' : '0.4' }}>
@@ -440,21 +488,19 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
             </Header>
           }
           error={error && { content: error }}
-          // placeholder={field.default}
-          // type={field.type}
           onBlur={handleCTAChange}
           defaultValue={currentValue}
           disabled={!ctaEnabled}
-          style={{ opacity: ctaEnabled ? '1' : '0.4' }}
         />
         {isVisible && (
-          <Label style={{ marginTop: !isMobile() && '2.75em', padding: '1em' }}>
+          <Label style={{ marginTop: !isMobile() && '2.75em', padding: '1em', backgroundColor: 'transparent' }}>
             <Icon name="linkify" />
             Shortened URL:
             <Label.Detail>
               <Menu.Item href={'https://' + shortenedURL} position="left" target="_blank">
                 <span>
-                  {shortenedURL} {popup('Some message')}
+                  {shortenedURL}{' '}
+                  {popup('We automatically shorten your call to action links and generate URLs for each card to provide tracking and increase conversion.')}
                 </span>
               </Menu.Item>
             </Label.Detail>
@@ -468,12 +514,6 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
     const currentValue = formValues[listingType].kwkly;
     const ctaEnabled = formValues[listingType].shortenCTA;
 
-    const handleKwklyEnabledChange = value => {
-      const newValue = formValues;
-      newValue[listingType].shortenCTA = value;
-      setFormValues(newValue);
-    };
-
     const handleKwklyChange = input => {
       const newValue = formValues;
       newValue[listingType].kwkly = input.target.value;
@@ -483,8 +523,9 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
     const error = !ctaEnabled && composeValidators(required)(currentValue);
 
     return (
-      <Form.Field className={isMobile() ? null : 'tertiary-grid-container'}>
+      <Form.Field>
         <Form.Input
+          className={ctaEnabled ? 'disabled-form-field' : null}
           fluid
           label={
             <Header as="h4" style={{ opacity: !ctaEnabled ? '1' : '0.4' }}>
@@ -492,19 +533,9 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
             </Header>
           }
           error={error && { content: error }}
-          // placeholder={field.default}
-          // type={field.type}
           onBlur={handleKwklyChange}
           defaultValue={currentValue}
           disabled={ctaEnabled}
-          style={{ opacity: !ctaEnabled ? '1' : '0.4' }}
-        />
-        <Radio
-          toggle
-          label={!ctaEnabled ? 'Disable Kwkly' : 'Enable Kwkly'}
-          checked={!ctaEnabled}
-          onChange={() => handleKwklyEnabledChange(!ctaEnabled)}
-          style={{ marginTop: !isMobile() && '2.75em' }}
         />
       </Form.Field>
     );
@@ -566,9 +597,11 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
               {renderMailoutSizeSlider({ listingType })}
             </div>
 
-            <div>{renderCTA({ listingType })}</div>
+            <div>{renderKWKLYCTAToggle({ listingType })}</div>
 
             <div> </div>
+
+            <div>{renderCTA({ listingType })}</div>
 
             <div>{renderKWKLY({ listingType })}</div>
           </Segment>

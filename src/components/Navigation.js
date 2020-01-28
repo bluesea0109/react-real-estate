@@ -187,7 +187,7 @@ export default () => {
             <Dropdown.Menu>
               <Dropdown.Item
                 as={Link}
-                text="Team Default"
+                text="Team"
                 value="team"
                 onClick={handleCustomizationDropdown}
                 to="/customization/team"
@@ -195,8 +195,8 @@ export default () => {
               />
               <Dropdown.Item
                 as={Link}
-                text="My Defaults"
-                value="mine"
+                text="Personal"
+                value="personal"
                 onClick={handleCustomizationDropdown}
                 to="/customization"
                 active={activeItem === '/customization'}
@@ -213,15 +213,15 @@ export default () => {
             <Dropdown.Menu>
               <Dropdown.Item
                 as={Link}
-                text="Team Default"
-                value="team"
+                text="Team"
+                value="personal"
                 onClick={handleCustomizationDropdown}
                 to="/customization/team"
                 active={activeItem === '/customization/team'}
               />
               <Dropdown.Item
                 as={Link}
-                text="My Defaults"
+                text="Personal"
                 value="mine"
                 onClick={handleCustomizationDropdown}
                 to="/customization"

@@ -23,9 +23,7 @@ import FlipCard from '../FlipCard';
 import Loading from '../Loading';
 import CustomizationWizard from './CustomizationWizard';
 import { Button, Icon, Image, Menu, Modal, Segment } from '../Base';
-import { getListedShortcodePending, getSoldShortcodePending } from '../../store/modules/shortcode/actions';
 import { saveCustomizationPending, reviewCustomizationCompleted } from '../../store/modules/customization/actions';
-import { getTeamListedShortcodePending, getTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
 
 const NEW_LISTING = 'newListing';
 const SOLD_LISTING = 'soldListing';
@@ -250,9 +248,6 @@ const CustomizeTeamForm = () => {
 
       if (tc.listed.createMailoutsOfThisType !== newListingEnabled) setNewListingEnabled(tc.listed.createMailoutsOfThisType);
       if (tc.sold.createMailoutsOfThisType !== soldListingEnabled) setSoldListingEnabled(tc.sold.createMailoutsOfThisType);
-
-      dispatch(getTeamListedShortcodePending());
-      dispatch(getTeamSoldShortcodePending());
     }
   }
 
@@ -264,9 +259,6 @@ const CustomizeTeamForm = () => {
 
       if (c.listed.createMailoutsOfThisType !== newListingEnabled) setNewListingEnabled(c.listed.createMailoutsOfThisType);
       if (c.sold.createMailoutsOfThisType !== soldListingEnabled) setSoldListingEnabled(c.sold.createMailoutsOfThisType);
-
-      dispatch(getListedShortcodePending());
-      dispatch(getSoldShortcodePending());
     }
 
     initialValues = {

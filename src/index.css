@@ -201,12 +201,6 @@ code {
 /* Images End */
 
 /* Customize & Edit Campaigns Start */
-.ui.menu .ui.dropdown .menu > .active.item {
-  background: rgba(0, 0, 0, 0.3) !important;
-  font-weight: 700 !important;
-  color: rgba(0, 0, 0, 0.95) !important;
-}
-
 .primary-grid-container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -275,9 +269,13 @@ code {
 }
 
 .ui.menu .ui.dropdown .menu > .active.item {
-  background: rgba(0, 0, 0, 0.3) !important;
-  font-weight: 700 !important;
-  color: rgba(0, 0, 0, 0.95) !important;
+  background: #59c4c4 !important;
+  color: white !important;
+}
+
+.ui.menu .ui.dropdown .menu > .item:hover {
+  background: white !important;
+  color: #59c4c4 !important;
 }
 /* Navigation End */
 
@@ -306,7 +304,8 @@ code {
 /* Campaign Details End */
 
 /* Form Field Start */
-.disabled-form-field > div {
+.disabled-form-field > div,
+.disabled-form-field > div > input {
   color: #969696 !important;
   background-color: #f0f0f0 !important;
 }
