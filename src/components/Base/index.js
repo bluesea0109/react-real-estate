@@ -8,6 +8,7 @@ import Grid from './Grid';
 import Header from './Header';
 import Icon from './Icon';
 import Image from './Image';
+import Initials from './Initials';
 import Input from './Input';
 import Item from './Item';
 import List from './List';
@@ -35,6 +36,7 @@ export {
   Header,
   Icon,
   Image,
+  Initials,
   Input,
   Item,
   List,
