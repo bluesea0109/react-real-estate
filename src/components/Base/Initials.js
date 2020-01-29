@@ -116,8 +116,8 @@ export default class Initials extends Component {
         xmlns="http://www.w3.org/2000/svg"
         pointerEvents="none"
         {...{
-          width,
-          height,
+          width: 150,
+          height: 150,
           style: {
             width,
             height,

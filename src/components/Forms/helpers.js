@@ -224,14 +224,14 @@ export const renderPicturePickerField = ({ name, label, dispatch, required = und
                   }
                 >
                   {input.value ? (
-                    <Image size="tiny" src={input.value} wrapped ui={false} label={{ as: 'a', corner: 'right', icon: 'upload' }} />
+                    <Image size="tiny" src={input.value} wrapped ui={false} label={{ as: 'span', corner: 'right', icon: 'upload' }} />
                   ) : name === 'realtorPhoto' ? (
                     <Image
                       size="tiny"
                       src={require('../../assets/photo-placeholder.svg')}
                       wrapped
                       ui={false}
-                      label={{ as: 'a', corner: 'right', icon: 'upload' }}
+                      label={{ as: 'span', corner: 'right', icon: 'upload' }}
                     />
                   ) : (
                     <Image
@@ -239,7 +239,7 @@ export const renderPicturePickerField = ({ name, label, dispatch, required = und
                       src={require('../../assets/image-placeholder.svg')}
                       wrapped
                       ui={false}
-                      label={{ as: 'a', corner: 'right', icon: 'upload' }}
+                      label={{ as: 'span', corner: 'right', icon: 'upload' }}
                     />
                   )}
                   {pending ? null : <input hidden id={name} type="file" onChange={onChangeHandler} />}
