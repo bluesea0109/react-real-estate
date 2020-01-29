@@ -9,6 +9,6 @@ export default styled(Step)`
     padding-left: 10px !important;
 
     grid-template-rows: 1fr;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 30px 1fr;
   }
 `;

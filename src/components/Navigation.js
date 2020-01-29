@@ -247,7 +247,7 @@ export default () => {
       return (
         <StepsLayout vertical={!mql.matches}>
           <StepLayout active={onProfile} completed={completedProfile}>
-            <Icon name="edit" />
+            <Icon name="user" />
             {mql.matches ? null : (
               <Step.Content>
                 <Step.Title style={sidebarTextStyle}>Fill in your profile</Step.Title>
@@ -256,7 +256,7 @@ export default () => {
           </StepLayout>
 
           <StepLayout active={onTeamCustomization} completed={completedTeamCustomization}>
-            <Icon name="cogs" />
+            <Icon name="paint brush" />
             {mql.matches ? null : (
               <Step.Content>
                 <Step.Title style={sidebarTextStyle}>Customize Team</Step.Title>
@@ -265,7 +265,7 @@ export default () => {
           </StepLayout>
 
           <StepLayout active={onCustomization} completed={completedCustomization}>
-            <Icon name="cog" />
+            <Icon name="paint brush" />
             {mql.matches ? null : (
               <Step.Content>
                 <Step.Title style={sidebarTextStyle}>Customize</Step.Title>
@@ -274,7 +274,7 @@ export default () => {
           </StepLayout>
 
           <StepLayout active={onInviteTeammates} completed={completedInviteTeammates}>
-            <Icon name="paper plane" />
+            <Icon name="cog" />
             {mql.matches ? null : (
               <Step.Content>
                 <Step.Title style={sidebarTextStyle}>Invite Teammates</Step.Title>
@@ -287,7 +287,7 @@ export default () => {
       return (
         <StepsLayout vertical={!mql.matches}>
           <StepLayout active={onProfileSingleUser} completed={completedProfile}>
-            <Icon name="edit" />
+            <Icon name="user" />
             {mql.matches ? null : (
               <Step.Content>
                 <Step.Title style={sidebarTextStyle}>Fill in your profile</Step.Title>
@@ -296,7 +296,7 @@ export default () => {
           </StepLayout>
 
           <StepLayout active={onCustomizationSingleUser} completed={completedCustomization}>
-            <Icon name="cog" />
+            <Icon name="paint brush" />
             {mql.matches ? null : (
               <Step.Content>
                 <Step.Title style={sidebarTextStyle}>Customize</Step.Title>

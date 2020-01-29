@@ -9,7 +9,7 @@ import { Field, FormSpy } from 'react-final-form';
 import { OnChange } from 'react-final-form-listeners';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Card, Form, Header, Image, Item, Popup } from '../Base';
+import { Card, Form, Header, Image, Item, Popup, Icon } from '../Base';
 import { ButtonBack, ButtonNext, CarouselProvider, Slide, Slider } from 'pure-react-carousel';
 import { uploadPhotoPending, deletePhotoPending } from '../../store/modules/pictures/actions';
 import { saveListedShortcodePending, saveSoldShortcodePending } from '../../store/modules/shortcode/actions';
@@ -171,14 +171,18 @@ export const renderUrlField = ({ name, label, type, dispatch, required = undefin
   );
 };
 
-export const renderPicturePickerField = ({ name, label, dispatch, required = undefined, validate }) => {
+export const renderPicturePickerField = ({ name, label, dispatch, required = undefined, validate, pending = undefined, error = undefined }) => {
   const onChangeHandler = event => {
-    const data = [name, event.target.files[0]];
-    dispatch(uploadPhotoPending(data));
+    if (!pending) {
+      const data = [name, event.target.files[0]];
+      dispatch(uploadPhotoPending(data));
+    }
   };
 
-  const onClickHandler = target => {
-    dispatch(deletePhotoPending(target));
+  const onClickDelete = target => {
+    if (!pending) {
+      dispatch(deletePhotoPending(target));
+    }
   };
 
   return (
@@ -186,61 +190,68 @@ export const renderPicturePickerField = ({ name, label, dispatch, required = und
       {({ input, meta }) => (
         <Form.Field required={required}>
           <div
-            style={
-              name === 'teamLogo'
-                ? {
-                    display: 'grid',
-                    gridTemplateColumns: '2fr 1fr 1fr',
-                    gridTemplateAreas: `"Label Func Func2" "Image Image Image"`,
-                    width: '14em',
-                  }
-                : {
-                    display: 'grid',
-                    gridTemplateColumns: '2fr 1fr',
-                    gridTemplateAreas: `"Label Func" "Image Image"`,
-                    width: '14em',
-                  }
-            }
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '2fr 1fr',
+              gridTemplateAreas: `"Label Func" "Image Image"`,
+              width: '14em',
+            }}
           >
             <div style={{ gridArea: 'Label' }}>
-              <Header as="h4">
+              <Header as="h4" style={meta.error && meta.touched ? { color: 'red' } : {}}>
                 {label}
                 {required ? <span style={{ margin: '-.2em 0 0 .2em', color: '#db2828' }}>*</span> : null}
               </Header>
             </div>
-            <div style={{ gridArea: 'Func', justifySelf: 'end' }}>
-              <Item as="label" htmlFor={name} style={{ cursor: 'pointer' }}>
-                <Header as="h4" style={meta.error && meta.touched ? { color: 'red' } : { color: 'teal' }}>
-                  Upload
-                </Header>
-                <input hidden id={name} type="file" onChange={onChangeHandler} />
-              </Item>
-            </div>
 
-            {name === 'teamLogo' && (
-              <div style={{ gridArea: 'Func2', justifySelf: 'end' }}>
+            {name === 'teamLogo' && input.value && (
+              <div style={{ gridArea: 'Func', justifySelf: 'end' }}>
                 <Item as="label" style={{ cursor: 'pointer' }}>
-                  <Header as="h4" style={meta.error && meta.touched ? { color: 'red' } : { color: 'teal' }} onClick={() => onClickHandler(name)}>
+                  <Header as="h4" style={meta.error && meta.touched ? { color: 'red' } : { color: 'teal' }} onClick={() => onClickDelete(name)}>
                     Delete
                   </Header>
                 </Item>
               </div>
             )}
 
-            <div style={{ gridArea: 'Image' /*margin: '-.8em 0'*/ }}>
-              <Card
-                style={
-                  meta.error && meta.touched ? { maxHeight: '15em', overflow: 'hidden', border: '3px solid red' } : { maxHeight: '15em', overflow: 'hidden' }
-                }
-              >
-                {input.value ? (
-                  <Image size="tiny" src={input.value} wrapped ui={false} />
-                ) : name === 'realtorPhoto' ? (
-                  <Image size="tiny" src={require('../../assets/photo-placeholder.svg')} wrapped ui={false} />
-                ) : (
-                  <Image size="tiny" src={require('../../assets/image-placeholder.svg')} wrapped ui={false} />
-                )}
-              </Card>
+            <div style={{ gridArea: 'Image', paddingTop: '0.5em' }}>
+              <Item className="image-container" htmlFor={name} as="label" style={{ cursor: 'pointer' }}>
+                <Card
+                  style={
+                    meta.error && meta.touched
+                      ? { minHeight: '15em', maxHeight: '15em', minWidth: '15em', maxWidth: '15em', overflow: 'hidden', border: '3px solid red' }
+                      : { minHeight: '15em', maxHeight: '15em', minWidth: '15em', maxWidth: '15em', overflow: 'hidden' }
+                  }
+                >
+                  {input.value ? (
+                    <Image size="tiny" src={input.value} wrapped ui={false} label={{ as: 'span', corner: 'right', icon: 'upload' }} />
+                  ) : name === 'realtorPhoto' ? (
+                    <Image
+                      size="tiny"
+                      src={require('../../assets/photo-placeholder.svg')}
+                      wrapped
+                      ui={false}
+                      label={{ as: 'span', corner: 'right', icon: 'upload' }}
+                    />
+                  ) : (
+                    <Image
+                      size="tiny"
+                      src={require('../../assets/image-placeholder.svg')}
+                      wrapped
+                      ui={false}
+                      label={{ as: 'span', corner: 'right', icon: 'upload' }}
+                    />
+                  )}
+                  {pending ? null : <input hidden id={name} type="file" onChange={onChangeHandler} />}
+                  <div className="image-middle">
+                    {pending ? (
+                      <Image centered size="tiny" src={require('../../assets/loading.gif')} style={{ background: 'unset', marginTop: '1em', opacity: 1 }} />
+                    ) : (
+                      <Icon name="camera" size="huge" className="image-overlay" />
+                    )}
+                  </div>
+                </Card>
+              </Item>
               {meta.error && meta.touched && (
                 <Label basic color="red" pointing>
                   {meta.error}

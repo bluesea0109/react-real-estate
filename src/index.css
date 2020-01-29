@@ -277,6 +277,16 @@ code {
   background: white !important;
   color: #59c4c4 !important;
 }
+
+/* STEPS */
+.ui.steps {
+  line-height: 2.5;
+}
+
+.ui.steps .step > .icon {
+  font-size: 1em;
+}
+
 /* Navigation End */
 
 /* Dashboard Start */
@@ -328,23 +338,92 @@ code {
   color: #59c4c4;
 }
 
+.carousel :focus {
+  display: none !important;
+}
+
+/* noUI Slider */
 .noUi-horizontal .noUi-handle {
-  width: 34px;
-  height: 14px;
-  right: -17px;
-  top: -6px;
+  width: 16px;
+  height: 16px;
+  right: -8px;
+  top: -8px;
+  border-radius: 12px;
 }
 
 .noUi-pips-horizontal {
   height: unset;
 }
 
-.carousel :focus {
+.noUi-handle:after {
   display: none !important;
+  visibility: hidden;
+}
+
+.noUi-handle:before,
+.noUi-handle:after {
+  display: none !important;
+  visibility: hidden;
 }
 
 .noUi-tooltip {
   font-size: 10px;
   padding-top: 0;
   padding-bottom: 0;
+}
+
+.noUi-target {
+  border: none;
+  height: 5px;
+}
+
+.noUi-connect {
+  background: #59c4c4;
+}
+
+/* Image Overlay */
+.image-container {
+  position: relative;
+  width: 50%;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: 0.5s ease;
+  backface-visibility: hidden;
+  margin: auto;
+}
+
+.image span {
+  opacity: 0;
+  transition: 0.5s ease;
+}
+
+.image-middle {
+  transition: 0.5s ease;
+  opacity: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.image-container:hover .image {
+  opacity: 1;
+}
+
+.image-container:hover .image span {
+  opacity: 1;
+}
+
+.image-container:hover .image-middle {
+  opacity: 0;
+}
+
+.image-overlay {
+  color: #59c4c4;
 }

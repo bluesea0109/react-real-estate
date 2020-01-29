@@ -64,6 +64,9 @@ const ProfileForm = () => {
   const picturesTeamLogo = useSelector(store => store.pictures && store.pictures.teamLogo && store.pictures.teamLogo.resized);
   const picturesBrokerageLogo = useSelector(store => store.pictures && store.pictures.brokerageLogo && store.pictures.brokerageLogo.resized);
 
+  const picturesPending = useSelector(store => store.pictures && store.pictures.pending);
+  const picturesError = useSelector(store => store.pictures && store.pictures.error);
+
   const saveProfile = profile => dispatch(saveProfilePending(profile));
   const saveTeamProfile = teamProfile => dispatch(saveTeamProfilePending(teamProfile));
   const onSubmit = values => {
@@ -237,6 +240,8 @@ const ProfileForm = () => {
                       dispatch: dispatch,
                       required: true,
                       validate: required,
+                      pending: picturesPending,
+                      error: picturesError,
                     })}
                   </div>
                   <div style={{ gridArea: 'First' }}>
@@ -338,6 +343,8 @@ const ProfileForm = () => {
 
                   <ExternalChanges whenTrue={personalNotificationEmailEnabled} set="notificationEmail" to={values.businessNotificationEmail} />
 
+                  {!teamLogo && !picturesTeamLogo && <ExternalChanges whenTrue={true} set="teamLogo" to={require('../../assets/image-placeholder.svg')} />}
+
                   {teamLogo && !picturesTeamLogo && <ExternalChanges whenTrue={teamLogo} set="teamLogo" to={teamLogo} />}
 
                   {picturesTeamLogo && <ExternalChanges whenTrue={picturesTeamLogo} set="teamLogo" to={picturesTeamLogo} />}
@@ -371,7 +378,14 @@ const ProfileForm = () => {
                       })}
                     </div>
                     <div style={{ gridArea: 'TeamLogo' }}>
-                      {renderPicturePickerField({ name: 'teamLogo', label: 'Team Logo', dispatch: dispatch, disabled: multiUser })}
+                      {renderPicturePickerField({
+                        name: 'teamLogo',
+                        label: 'Team Logo',
+                        dispatch: dispatch,
+                        disabled: multiUser,
+                        pending: picturesPending,
+                        error: picturesError,
+                      })}
                     </div>
                     <div style={{ gridArea: 'BrokerageName' }}>
                       {renderField({
@@ -390,6 +404,8 @@ const ProfileForm = () => {
                         dispatch: dispatch,
                         required: true,
                         validate: required,
+                        pending: picturesPending,
+                        error: picturesError,
                       })}
                     </div>
                     <div style={{ gridArea: 'OfficePhone' }}>{renderField({ name: 'officePhone', label: 'Office Phone Number (Optional)', type: 'text' })}</div>
