@@ -15,7 +15,7 @@ const PrivateRoute = ({ component: Component, path, auth0, onLogin, templates, s
         await localStorage.setItem('routerDestination', history.location.pathname);
       }
 
-      if (!auth0.authenticated) {
+      if (!auth0.authenticated && !auth0.error) {
         await history.push('/');
       } else {
         if (

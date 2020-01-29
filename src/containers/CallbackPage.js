@@ -11,7 +11,7 @@ const CallbackPage = () => {
 
   if (auth0.authenticated) return <Redirect to="/dashboard" />;
 
-  if (!auth0.pending) dispatch(authenticate());
+  if (!auth0.pending && !auth0.error) dispatch(authenticate());
 
   return <Loading />;
 };
