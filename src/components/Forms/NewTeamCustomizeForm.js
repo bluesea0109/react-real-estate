@@ -112,6 +112,13 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
 
   const pristineState = _.isEqual(formValues, multiUserStartState);
 
+  /* Instead of relying on handleSubmit changing the state of displayReview, we're doing it here */
+  useEffect(() => {
+    if (!displayReview && postcardsPreviewIsPending) {
+      setDisplayReview(true);
+    }
+  }, [displayReview, setDisplayReview, postcardsPreviewIsPending]);
+
   useEffect(() => {
     if (teamCustomizationData) {
       const updatedFormValues = _.merge({}, formValues, teamCustomizationData);
@@ -152,7 +159,6 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
     if (!data.sold.defaultDisplayAgent.userId) delete data.sold.defaultDisplayAgent;
 
     dispatch(saveTeamCustomizationPending(data));
-    setDisplayReview(true);
   };
 
   const handleConfirm = listingType => {
