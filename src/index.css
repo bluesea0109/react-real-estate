@@ -277,6 +277,16 @@ code {
   background: white !important;
   color: #59c4c4 !important;
 }
+
+/* STEPS */
+.ui.steps {
+  line-height: 2.5;
+}
+
+.ui.steps .step > .icon {
+  font-size: 1em;
+}
+
 /* Navigation End */
 
 /* Dashboard Start */
