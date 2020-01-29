@@ -328,25 +328,47 @@ code {
   color: #59c4c4;
 }
 
+.carousel :focus {
+  display: none !important;
+}
+
+/* noUI Slider */
 .noUi-horizontal .noUi-handle {
-  width: 34px;
-  height: 14px;
-  right: -17px;
-  top: -6px;
+  width: 16px;
+  height: 16px;
+  right: -8px;
+  top: -8px;
+  border-radius: 12px;
 }
 
 .noUi-pips-horizontal {
   height: unset;
 }
 
-.carousel :focus {
+.noUi-handle:after {
   display: none !important;
+  visibility: hidden;
+}
+
+.noUi-handle:before,
+.noUi-handle:after {
+  display: none !important;
+  visibility: hidden;
 }
 
 .noUi-tooltip {
   font-size: 10px;
   padding-top: 0;
   padding-bottom: 0;
+}
+
+.noUi-target {
+  border: none;
+  height: 5px;
+}
+
+.noUi-connect {
+  background: #59c4c4;
 }
 
 /* Image Overlay */
@@ -356,7 +378,6 @@ code {
 }
 
 .image {
-  opacity: 0.5;
   display: block;
   width: 100%;
   height: auto;

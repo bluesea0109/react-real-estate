@@ -395,7 +395,6 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
           </Fragment>
         )}
         <Nouislider
-          style={{ height: '3px' }}
           range={{
             min: currentMailoutSizeMin,
             max: currentMailoutSizeMax,
