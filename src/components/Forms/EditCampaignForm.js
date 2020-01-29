@@ -7,7 +7,7 @@ import { Dropdown, Form, Header, Label, Popup } from 'semantic-ui-react';
 
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import { Button, Icon, Image, Menu, Message, Page, Segment } from '../Base';
-import { modifyMailoutPending } from '../../store/modules/mailout/actions';
+import { modifyMailoutPending, changeMailoutDisplayAgentPending } from '../../store/modules/mailout/actions';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
 import Loading from '../Loading';
 import { isMobile, maxLength, sleep } from './helpers';
@@ -139,6 +139,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
     const { first, last, value } = selectedAgent;
 
     setMailoutDisplayAgent({ userId: value, first, last });
+    dispatch(changeMailoutDisplayAgentPending(value));
   };
 
   const handleInputChange = (value, name) => {
