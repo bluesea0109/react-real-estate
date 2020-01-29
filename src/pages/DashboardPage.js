@@ -95,10 +95,10 @@ const Dashboard = () => {
 
       {!isInitiatingTeam && !isInitiatingUser && !mailoutsPendingState && mailoutList.length === 0 && (
         <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
-          <Segment placeholder>
+          <Segment placeholder style={{ marginRight: '-1em' }}>
             <Header icon>
               <Icon name="file outline" />
-              No Mailouts found.
+              No Campaigns found.
             </Header>
           </Segment>
         </ContentBottomHeaderLayout>
@@ -106,9 +106,9 @@ const Dashboard = () => {
 
       {error && <Snackbar error>{error}</Snackbar>}
 
-      <Segment style={{ marginTop: '79px' }}>
-        <Grid>
-          {mailoutList.length > 0 && (
+      {mailoutList.length > 0 && (
+        <Segment style={{ marginTop: '79px' }}>
+          <Grid>
             <Grid.Row>
               <Grid.Column width={16}>
                 <Grid.Row>
@@ -118,33 +118,33 @@ const Dashboard = () => {
                 </Grid.Row>
               </Grid.Column>
             </Grid.Row>
-          )}
 
-          {(isInitiatingTeam || isInitiatingUser || mailoutsPendingState) && (
-            <Grid.Row>
-              <Grid.Column width={16}>
-                <Grid.Row>
-                  <Grid.Column width={16}>
-                    <Loading />
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid.Column>
-            </Grid.Row>
-          )}
+            {(isInitiatingTeam || isInitiatingUser || mailoutsPendingState) && (
+              <Grid.Row>
+                <Grid.Column width={16}>
+                  <Grid.Row>
+                    <Grid.Column width={16}>
+                      <Loading />
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid.Column>
+              </Grid.Row>
+            )}
 
-          {mailoutList.length > 0 && canLoadMore && (
-            <Grid.Row>
-              <Grid.Column width={16}>
-                <Grid centered columns={2}>
-                  <Grid.Column>
-                    <Button id="loadMoreButton" attached="bottom" content="Load More" onClick={handleClick} onKeyPress={handleKeyPress} />
-                  </Grid.Column>
-                </Grid>
-              </Grid.Column>
-            </Grid.Row>
-          )}
-        </Grid>
-      </Segment>
+            {canLoadMore && (
+              <Grid.Row>
+                <Grid.Column width={16}>
+                  <Grid centered columns={2}>
+                    <Grid.Column>
+                      <Button id="loadMoreButton" attached="bottom" content="Load More" onClick={handleClick} onKeyPress={handleKeyPress} />
+                    </Grid.Column>
+                  </Grid>
+                </Grid.Column>
+              </Grid.Row>
+            )}
+          </Grid>
+        </Segment>
+      )}
     </Page>
   );
 };
