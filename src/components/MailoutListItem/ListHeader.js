@@ -74,7 +74,7 @@ const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickAppro
         {mailoutDetailPage && enableRevertEdit && (
           <span>
             <Button secondary inverted onClick={onClickRevertEdit} disabled={lockControls} loading={lockControls}>
-              Revert Edit
+              Revert & Unlock
             </Button>
           </span>
         )}
