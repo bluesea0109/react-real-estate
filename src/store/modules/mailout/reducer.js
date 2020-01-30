@@ -241,10 +241,7 @@ export default function mailout(state = initialState, action) {
         ...state,
         changeDisplayAgentPending: false,
         mailoutDisplayAgent: null,
-        details: {
-          ...state.details,
-          mergeVariables: [...state.details.mergeVariables, ...action.payload],
-        },
+        details: action.payload,
         changeDisplayAgentError: null,
       };
 

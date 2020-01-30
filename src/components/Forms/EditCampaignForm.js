@@ -168,7 +168,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
             if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
 
             return (
-              <Form.Field key={fieldName}>
+              <Form.Field key={formValues[field.name] || fieldName}>
                 <Form.Input
                   fluid
                   error={error && { content: error }}
@@ -176,7 +176,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
                   placeholder={field.default}
                   type={field.type}
                   onChange={(e, input) => handleInputChange(input.value, field.name)}
-                  value={formValues[field.name]}
+                  defaultValue={formValues[field.name]}
                 />
               </Form.Field>
             );
@@ -201,7 +201,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
             if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
 
             return (
-              <Form.Field key={fieldName}>
+              <Form.Field key={formValues[field.name] || fieldName}>
                 <Form.Input
                   fluid
                   error={error && { content: error }}
@@ -209,7 +209,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
                   placeholder={field.default}
                   type={field.type}
                   onChange={(e, input) => handleInputChange(input.value, field.name)}
-                  value={formValues[field.name]}
+                  defaultValue={formValues[field.name]}
                 />
               </Form.Field>
             );
@@ -234,7 +234,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
             if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
 
             return (
-              <Form.Field key={fieldName}>
+              <Form.Field key={formValues[field.name] || fieldName}>
                 <Form.Input
                   fluid
                   error={error && { content: error }}
@@ -242,7 +242,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
                   placeholder={field.default}
                   type={field.type}
                   onChange={(e, input) => handleInputChange(input.value, field.name)}
-                  value={formValues[field.name]}
+                  defaultValue={formValues[field.name]}
                 />
               </Form.Field>
             );
