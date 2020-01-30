@@ -170,6 +170,7 @@ const directory = {
     customization: {
       get: () => ({ path: `/api/user/settings/branding`, method: 'get' }),
       save: () => ({ path: `/api/user/settings/branding`, method: 'put' }),
+      generatePostcardPreview: () => ({ path: `/api/user/postcard/preview`, method: 'post' }),
     },
     profile: {
       get: () => ({ path: `/api/user/settings/profile`, method: 'get' }),
@@ -215,6 +216,7 @@ const directory = {
     customization: {
       get: peerId => ({ path: `/api/user/peer/${peerId}/settings/branding`, method: 'get' }),
       save: peerId => ({ path: `/api/user/peer/${peerId}/settings/branding`, method: 'put' }),
+      generatePostcardPreview: peerId => ({ path: `/api/user/peer/${peerId}/postcard/preview`, method: 'post' }),
     },
     profile: {
       get: peerId => ({ path: `/api/user/peer/${peerId}/settings/profile`, method: 'get' }),
@@ -285,7 +287,6 @@ const directory = {
           save: () => ({ path: `/api/user/settings/shortcode/sold/example`, method: 'put' }),
         },
       },
-      generatePostcardPreview: () => ({ path: `/api/user/postcard/preview`, method: 'post' }),
     },
     inviteUsers: {
       send: () => ({ path: `/api/user/peer/invite`, method: 'post' }),
