@@ -172,8 +172,8 @@ export function* changeMailoutDisplayAgentSaga({ peerId = null }) {
     const mailoutId = yield select(getMailoutId);
     const mailoutDisplayAgent = yield select(getMailoutDisplayAgent);
     const { path, method } = peerId
-      ? ApiService.directory.peer.mailout.get(mailoutId, peerId, mailoutDisplayAgent)
-      : ApiService.directory.user.mailout.get(mailoutId, mailoutDisplayAgent);
+      ? ApiService.directory.peer.mailout.changeAgent(mailoutId, peerId, mailoutDisplayAgent)
+      : ApiService.directory.user.mailout.changeAgent(mailoutId, mailoutDisplayAgent);
     const response = yield call(ApiService[method], path);
 
     yield put(changeMailoutDisplayAgentSuccess(response));
