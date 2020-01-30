@@ -2,7 +2,8 @@ import Nouislider from 'nouislider-react';
 import { Field, FormSpy } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { Fragment, useEffect, useState } from 'react';
-import { Confirm, Header, Icon, Label, Radio } from 'semantic-ui-react';
+import { Confirm, Header, Icon, Label } from 'semantic-ui-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import {
   url,
@@ -19,8 +20,8 @@ import {
   composeValidators,
   renderCarouselField,
 } from './helpers';
-import FlipCard from '../FlipCard';
 import Loading from '../Loading';
+import FlipCard from '../FlipCard';
 import CustomizationWizard from './CustomizationWizard';
 import { Menu, Segment, Image, Modal, Button } from '../Base';
 import { saveTeamCustomizationPending, reviewTeamCustomizationCompleted } from '../../store/modules/teamCustomization/actions';
@@ -232,15 +233,19 @@ const CustomizeTeamForm = () => {
                 props.input.onChange(radioValue);
               }
 
-              return (
-                <Radio
-                  toggle
-                  name={props.input.name}
-                  onChange={(param, data) => [props.input.onChange(data.checked), radioToggleFx(data.checked)]}
-                  checked={radioValue}
-                  style={{ verticalAlign: 'bottom' }}
-                />
-              );
+              if (radioValue) {
+                return (
+                  <span style={{ verticalAlign: '-0.35em', color: '#59C4C4' }} onClick={() => [props.input.onChange(!radioValue), radioToggleFx(!radioValue)]}>
+                    <FontAwesomeIcon icon="toggle-on" size="2x" />
+                  </span>
+                );
+              } else {
+                return (
+                  <span style={{ verticalAlign: '-0.35em', color: '#969696' }} onClick={() => [props.input.onChange(!radioValue), radioToggleFx(!radioValue)]}>
+                    <FontAwesomeIcon icon="toggle-on" size="2x" className="fa-flip-horizontal" />
+                  </span>
+                );
+              }
             }}
           </Field>
         </Header>
@@ -435,14 +440,18 @@ const CustomizeTeamForm = () => {
               })}
             </div>
             <div style={{ gridArea: 'KwklyToggle' }}>
-              <Radio
-                toggle
-                label="Enable Kwkly"
-                onChange={() => setKwklyEnabled(!kwklyEnabled)}
-                checked={kwklyEnabled}
-                onClick={() => setKwklyEnabled(!kwklyEnabled)}
-                style={{ marginTop: '2.25em', opacity: kwklyEnabled ? '1' : '0.4' }}
-              />
+              <Header size="small" style={{ marginTop: '1.5em' }}>
+                Enable Kwkly: &nbsp;
+                {kwklyEnabled ? (
+                  <span style={{ verticalAlign: '-0.35em', color: '#59C4C4' }} onClick={() => setKwklyEnabled(!kwklyEnabled)}>
+                    <FontAwesomeIcon icon="toggle-on" size="2x" />
+                  </span>
+                ) : (
+                  <span style={{ verticalAlign: '-0.35em', color: '#969696' }} onClick={() => setKwklyEnabled(!kwklyEnabled)}>
+                    <FontAwesomeIcon icon="toggle-on" size="2x" className="fa-flip-horizontal" />
+                  </span>
+                )}
+              </Header>
             </div>
           </div>
         </Condition>
