@@ -1,10 +1,11 @@
 import _ from 'lodash';
-import React, { Fragment, useState } from 'react';
 import arrayMutators from 'final-form-arrays';
+import { Header, Form } from 'semantic-ui-react';
+import React, { Fragment, useState } from 'react';
 import { FieldArray } from 'react-final-form-arrays';
 import { Form as FinalForm } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { Header, Form, Radio } from 'semantic-ui-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import {
   email,
@@ -325,14 +326,28 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                     })}
                   </div>
                   <div style={{ gridArea: 'NotificationEmailToggle' }}>
-                    <Radio
-                      toggle
-                      label="Same as business notification email"
-                      onChange={() => setPersonalNotificationEmailEnabled(!personalNotificationEmailEnabled)}
-                      checked={personalNotificationEmailEnabled}
-                      onClick={() => setPersonalNotificationEmailEnabled(!personalNotificationEmailEnabled)}
-                      style={{ marginTop: '2.25em', opacity: personalNotificationEmailEnabled ? '1' : '0.4' }}
-                    />
+                    {personalNotificationEmailEnabled ? (
+                      <span style={{ color: '#F2714D' }}>
+                        <FontAwesomeIcon
+                          icon="toggle-on"
+                          size="2x"
+                          style={{ marginTop: '1em', verticalAlign: '-0.3em', color: '#59C4C4' }}
+                          onClick={() => setPersonalNotificationEmailEnabled(!personalNotificationEmailEnabled)}
+                        />{' '}
+                        Same as business notification email
+                      </span>
+                    ) : (
+                      <span style={{ color: '#969696' }}>
+                        <FontAwesomeIcon
+                          icon="toggle-on"
+                          size="2x"
+                          className="fa-flip-horizontal"
+                          style={{ marginTop: '1em', verticalAlign: '-0.3em' }}
+                          onClick={() => setPersonalNotificationEmailEnabled(!personalNotificationEmailEnabled)}
+                        />{' '}
+                        Same as business notification email
+                      </span>
+                    )}
                   </div>
                   <div style={{ gridArea: 'Dre' }}>
                     {renderField({
