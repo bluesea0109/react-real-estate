@@ -245,7 +245,7 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
           </span>
         ) : (
           <span style={{ verticalAlign: '-0.35em', color: '#969696' }} onClick={handleChange}>
-            <FontAwesomeIcon icon="toggle-off" size="2x" />
+            <FontAwesomeIcon icon="toggle-on" size="2x" className="fa-flip-horizontal" />
           </span>
         )}
       </Header>
@@ -460,7 +460,7 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
           </span>
         ) : (
           <span style={{ verticalAlign: '-0.35em', color: '#969696' }} onClick={handleKwklyEnabledChange}>
-            <FontAwesomeIcon icon="toggle-off" size="2x" />
+            <FontAwesomeIcon icon="toggle-on" size="2x" className="fa-flip-horizontal" />
           </span>
         )}
         &nbsp;
