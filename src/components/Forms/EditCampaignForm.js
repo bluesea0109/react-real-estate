@@ -30,6 +30,8 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
 
   const modifyPending = useSelector(store => store.mailout.modifyPending);
   const modifyError = useSelector(store => store.mailout.modifyError);
+  const changeDisplayAgentPending = useSelector(store => store.mailout.changeDisplayAgentPending);
+  const changeDisplayAgentError = useSelector(store => store.mailout.changeDisplayAgentError);
 
   const teammates = useSelector(store => store.team.profiles);
 
@@ -271,7 +273,13 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
             </Menu.Item>
             <Menu.Menu position="right">
               <Menu.Item>
-                <Button primary inverted onClick={() => handleBackClick()} loading={modifyPending} disabled={modifyPending}>
+                <Button
+                  primary
+                  inverted
+                  onClick={() => handleBackClick()}
+                  loading={modifyPending || changeDisplayAgentPending}
+                  disabled={modifyPending || changeDisplayAgentPending}
+                >
                   Back
                 </Button>
               </Menu.Item>
@@ -296,24 +304,37 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
 
             <ItemHeaderMenuLayout>
               <span>
-                <Button primary type="submit" onClick={handleEditSubmitClick} loading={modifyPending} disabled={modifyPending}>
+                <Button
+                  primary
+                  type="submit"
+                  onClick={handleEditSubmitClick}
+                  loading={modifyPending || changeDisplayAgentPending}
+                  disabled={modifyPending || changeDisplayAgentPending}
+                >
                   Save
                 </Button>
               </span>
             </ItemHeaderMenuLayout>
           </ItemHeaderLayout>
+
+          {modifyPending && <Loading message="Saving campaign..." />}
+
+          {modifyError && (
+            <Message negative>
+              <Message.Header>We're sorry, something went wrong.</Message.Header>
+              <p>{modifyError}</p>
+            </Message>
+          )}
+
+          {changeDisplayAgentPending && <Loading message="Updating postcard details..." />}
+
+          {changeDisplayAgentError && (
+            <Message negative>
+              <Message.Header>We're sorry, something went wrong.</Message.Header>
+              <p>{changeDisplayAgentError}</p>
+            </Message>
+          )}
         </ContentBottomHeaderLayout>
-
-        {/*<Divider style={{ margin: '1em -1em' }} />*/}
-
-        {modifyPending && <Loading message="Saving campaign..." />}
-
-        {modifyError && (
-          <Message negative>
-            <Message.Header>We're sorry, something went wrong.</Message.Header>
-            <p>{modifyError}</p>
-          </Message>
-        )}
 
         <Segment
           basic
