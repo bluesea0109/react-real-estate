@@ -12,7 +12,6 @@ import {
   isMobile,
   required,
   renderField,
-  labelWithPopup,
   ExternalChanges,
   WhenFieldChanges,
   composeValidators,
@@ -25,15 +24,6 @@ import { ContentTopHeaderLayout } from '../../layouts';
 import { saveProfilePending } from '../../store/modules/profile/actions';
 import { saveTeamProfilePending } from '../../store/modules/teamProfile/actions';
 import { Button, Icon, Segment, Image, Divider, Menu, Page, Snackbar } from '../Base';
-
-const renderLabelWithSubHeader = (label, subHeader) =>
-  isMobile() ? (
-    <Header as={'label'} content={label} subheader={subHeader} />
-  ) : (
-    <label>
-      {label} <span style={{ fontWeight: 300 }}>{subHeader}</span>
-    </label>
-  );
 
 const changeMsg = 'This information comes from Brivity CRM. If you want to modify this information, you need to do it there.';
 
@@ -283,7 +273,8 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                   <div style={{ gridArea: 'First' }}>
                     {renderField({
                       name: 'first',
-                      label: multiUser ? labelWithPopup('First Name', popup(changeMsg)) : 'First Name',
+                      label: 'First Name',
+                      popup: multiUser ? popup(changeMsg) : null,
                       type: 'text',
                       required: true,
                       validate: required,
@@ -293,7 +284,8 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                   <div style={{ gridArea: 'Last' }}>
                     {renderField({
                       name: 'last',
-                      label: multiUser ? labelWithPopup('Last Name', popup(changeMsg)) : 'Last Name',
+                      label: 'Last Name',
+                      popup: multiUser ? popup(changeMsg) : null,
                       type: 'text',
                       required: true,
                       validate: required,
@@ -303,7 +295,8 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                   <div style={{ gridArea: 'Phone' }}>
                     {renderField({
                       name: 'phone',
-                      label: multiUser ? labelWithPopup('Phone Number', popup(changeMsg)) : 'Phone Number',
+                      label: 'Phone Number',
+                      popup: multiUser ? popup(changeMsg) : null,
                       type: 'text',
                       required: true,
                       validate: required,
@@ -313,7 +306,8 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                   <div style={{ gridArea: 'Email' }}>
                     {renderField({
                       name: 'email',
-                      label: multiUser ? labelWithPopup('Email', popup(changeMsg)) : 'Email',
+                      label: 'Email',
+                      popup: multiUser ? popup(changeMsg) : null,
                       type: 'text',
                       required: true,
                       validate: composeValidators(required, email),
@@ -323,9 +317,10 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                   <div style={{ gridArea: 'NotificationEmail' }}>
                     {renderField({
                       name: 'notificationEmail',
-                      label: renderLabelWithSubHeader('Personal Notification Email'),
+                      label: 'Personal Notification Email',
                       type: 'text',
                       required: !personalNotificationEmailEnabled,
+                      validate: !personalNotificationEmailEnabled ? composeValidators(required, email) : null,
                       disabled: personalNotificationEmailEnabled,
                     })}
                   </div>
@@ -342,16 +337,27 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                   <div style={{ gridArea: 'Dre' }}>
                     {renderField({
                       name: 'dre',
-                      label: renderLabelWithSubHeader('DRE Number', '( Required in California )'),
+                      label: 'DRE Number',
+                      subHeader: '(Required in California)',
                       type: 'text',
                       validate: requiredOnlyInCalifornia,
                     })}
                   </div>
                   <div style={{ gridArea: 'OfficePhone' }}>
-                    {renderField({ name: 'officePhone', label: renderLabelWithSubHeader('Office Phone Number', '( Optional )'), type: 'text' })}
+                    {renderField({
+                      name: 'officePhone',
+                      label: 'Office Phone Number',
+                      subHeader: '(Optional)',
+                      type: 'text',
+                    })}
                   </div>
                   <div style={{ gridArea: 'Website' }}>
-                    {renderField({ name: 'personalWebsite', label: renderLabelWithSubHeader('Personal Website', '( Optional )'), type: 'text' })}
+                    {renderField({
+                      name: 'personalWebsite',
+                      label: 'Personal Website',
+                      subHeader: '(Optional)',
+                      type: 'text',
+                    })}
                   </div>
                   <div style={{ gridArea: 'Picture' }}>
                     <Image size="large" src={require('../../assets/onboard-profile.png')} alt="Brivity Marketer Mailout" />
@@ -405,7 +411,8 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                     <div style={{ gridArea: 'TeamName' }}>
                       {renderField({
                         name: 'teamName',
-                        label: multiUser ? labelWithPopup('Team Name', popup(changeMsg)) : 'Team Name',
+                        label: 'Team Name',
+                        popup: multiUser ? popup(changeMsg) : null,
                         type: 'text',
                         required: true,
                         validate: required,
@@ -425,7 +432,8 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                     <div style={{ gridArea: 'BrokerageName' }}>
                       {renderField({
                         name: 'brokerageName',
-                        label: multiUser ? labelWithPopup('Brokerage Name', popup(changeMsg)) : 'Brokerage Name',
+                        label: 'Brokerage Name',
+                        popup: multiUser ? popup(changeMsg) : null,
                         type: 'text',
                         required: true,
                         validate: required,
@@ -447,7 +455,8 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                     <div style={{ gridArea: 'Address' }}>
                       {renderField({
                         name: 'address',
-                        label: multiUser ? labelWithPopup('Address', popup(changeMsg)) : 'Address',
+                        label: 'Address',
+                        popup: multiUser ? popup(changeMsg) : null,
                         type: 'text',
                         required: true,
                         validate: required,
@@ -457,7 +466,8 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                     <div style={{ gridArea: 'City' }}>
                       {renderField({
                         name: 'city',
-                        label: multiUser ? labelWithPopup('City', popup(changeMsg)) : 'City',
+                        label: 'City',
+                        popup: multiUser ? popup(changeMsg) : null,
                         type: 'text',
                         required: true,
                         validate: required,
@@ -467,7 +477,8 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                     <div style={{ gridArea: 'State' }}>
                       {renderSelectField({
                         name: 'state',
-                        label: multiUser ? labelWithPopup('State', popup(changeMsg)) : 'State',
+                        label: 'State',
+                        popup: multiUser ? popup(changeMsg) : null,
                         type: 'text',
                         required: true,
                         validate: multiUser ? null : required,
@@ -479,7 +490,8 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                     <div style={{ gridArea: 'ZipCode' }}>
                       {renderField({
                         name: 'zip',
-                        label: multiUser ? labelWithPopup('Zip Code', popup(changeMsg)) : 'Zip Code',
+                        label: 'Zip Code',
+                        popup: multiUser ? popup(changeMsg) : null,
                         type: 'text',
                         required: true,
                         validate: required,
@@ -489,7 +501,7 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                     <div style={{ gridArea: 'BusinessNotificationEmail' }}>
                       {renderField({
                         name: 'businessNotificationEmail',
-                        label: renderLabelWithSubHeader('Business Notification Email', '( Required )'),
+                        label: 'Business Notification Email',
                         type: 'text',
                         required: true,
                         validate: composeValidators(required, email),

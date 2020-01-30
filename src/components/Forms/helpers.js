@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, { Fragment } from 'react';
 import { Label } from 'semantic-ui-react';
-import { Dropdown } from 'semantic-ui-react';
+import { Dropdown, Header } from 'semantic-ui-react';
 import * as isURL from 'validator/lib/isURL';
 // import * as isInt from 'validator/lib/isInt';
 import * as isEmail from 'validator/lib/isEmail';
@@ -9,7 +9,7 @@ import { Field, FormSpy } from 'react-final-form';
 import { OnChange } from 'react-final-form-listeners';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Card, Form, Header, Image, Item, Popup, Icon } from '../Base';
+import { Card, Form, Image, Item, Popup, Icon } from '../Base';
 import { ButtonBack, ButtonNext, CarouselProvider, Slide, Slider } from 'pure-react-carousel';
 import { uploadPhotoPending, deletePhotoPending } from '../../store/modules/pictures/actions';
 import { saveListedShortcodePending, saveSoldShortcodePending } from '../../store/modules/shortcode/actions';
@@ -65,65 +65,89 @@ const disabledCss = {
   opacity: 0.5,
 };
 
-export const renderSelectField = ({ name, label, type, options, required = undefined, validate, search = undefined, disabled = undefined }) => (
-  <Field name={name} validate={validate}>
-    {({ input, meta }) => (
-      <Form.Field className={disabled ? 'disabled-form-field' : null}>
-        <Header as="h4" style={{ margin: '0 0 .28571429rem 0' }}>
-          {label}
-          {required && !disabled ? <span style={{ margin: '-.2em 0 0 .2em', color: '#db2828' }}>*</span> : null}
-        </Header>
-        <Dropdown
-          onChange={(param, data) => input.onChange(data.value)}
-          value={input.value}
-          options={options}
-          name={name}
-          label={label}
-          type={type}
-          required={required && !disabled}
-          search={search}
-          selection
-          error={!disabled && meta.error && meta.touched}
-          style={disabled ? disabledCss : {}}
-        />
-        {!disabled && meta.error && meta.touched && (
-          <Label basic color="red" pointing>
-            {meta.error}
-          </Label>
-        )}
-      </Form.Field>
-    )}
-  </Field>
-);
+const renderLabelWithSubHeader = (label, subHeader) =>
+  isMobile() ? (
+    <Header as={'label'} content={`${label} `} subheader={subHeader} />
+  ) : (
+    <label>
+      <span style={{ fontWeight: 700 }}>
+        {label} {subHeader}
+      </span>
+    </label>
+  );
 
-export const renderField = ({ name, label, type, required = undefined, validate, disabled = undefined }) => {
-  if (typeof label !== 'string') {
-    return (
-      <Field name={name} validate={validate}>
-        {({ input, meta }) => (
-          <Form.Field required={required} className={disabled ? 'disabled-form-field' : null}>
-            {label}
-            <Form.Input {...input} type={type} error={meta.error && meta.touched && { content: `${meta.error}` }} style={disabled ? disabledCss : {}} />
-          </Form.Field>
-        )}
-      </Field>
-    );
-  } else {
-    return (
-      <Field name={name} validate={validate}>
-        {({ input, meta }) => (
-          <Form.Input
-            required={required}
-            {...input}
-            type={type}
+export const renderSelectField = ({
+  name,
+  label,
+  subHeader = undefined,
+  popup = undefined,
+  type,
+  options,
+  required = undefined,
+  validate,
+  search = undefined,
+  disabled = undefined,
+}) => {
+  const resolveSubHeader = subHeader ? (
+    subHeader
+  ) : popup ? (
+    popup
+  ) : required && !disabled ? (
+    <span>
+      (Required)<span style={{ margin: '-.2em 0 0 .2em', color: '#db2828' }}>*</span>
+    </span>
+  ) : null;
+
+  return (
+    <Field name={name} validate={validate}>
+      {({ input, meta }) => (
+        <Form.Field className={disabled ? 'disabled-form-field' : null}>
+          {renderLabelWithSubHeader(label, resolveSubHeader)}
+          <Dropdown
+            onChange={(param, data) => input.onChange(data.value)}
+            value={input.value}
+            options={options}
+            name={name}
             label={label}
-            error={meta.error && meta.touched && { content: `${meta.error}` }}
+            type={type}
+            required={required && !disabled}
+            search={search}
+            selection
+            error={!disabled && meta.error && meta.touched}
             style={disabled ? disabledCss : {}}
           />
-        )}
-      </Field>
-    );
-  }
+          {!disabled && meta.error && meta.touched && (
+            <Label basic color="red" pointing>
+              {meta.error}
+            </Label>
+          )}
+        </Form.Field>
+      )}
+    </Field>
+  );
+};
+
+export const renderField = ({ name, label, subHeader = undefined, popup = undefined, type, required = undefined, validate, disabled = undefined }) => {
+  const resolveSubHeader = subHeader ? (
+    subHeader
+  ) : popup ? (
+    popup
+  ) : required && !disabled ? (
+    <span>
+      (Required)<span style={{ margin: '-.2em 0 0 .2em', color: '#db2828' }}>*</span>
+    </span>
+  ) : null;
+
+  return (
+    <Field name={name} validate={validate}>
+      {({ input, meta }) => (
+        <Form.Field className={disabled ? 'disabled-form-field' : null}>
+          {renderLabelWithSubHeader(label, resolveSubHeader)}
+          <Form.Input {...input} type={type} error={meta.error && meta.touched && { content: `${meta.error}` }} style={disabled ? disabledCss : {}} />
+        </Form.Field>
+      )}
+    </Field>
+  );
 };
 
 export const renderUrlField = ({ name, label, type, dispatch, required = undefined, validate, target, disabled = undefined, form = undefined }) => {
@@ -185,23 +209,26 @@ export const renderPicturePickerField = ({ name, label, dispatch, required = und
     }
   };
 
+  const resolveSubHeader = required ? (
+    <span>
+      (Required)<span style={{ margin: '-.2em 0 0 .2em', color: '#db2828' }}>*</span>
+    </span>
+  ) : null;
+
   return (
     <Field name={name} validate={validate}>
       {({ input, meta }) => (
-        <Form.Field required={required}>
+        <Form.Field>
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: '2fr 1fr',
+              gridTemplateColumns: '3fr 1fr',
               gridTemplateAreas: `"Label Func" "Image Image"`,
-              width: '14em',
+              width: '18em',
             }}
           >
             <div style={{ gridArea: 'Label' }}>
-              <Header as="h4" style={meta.error && meta.touched ? { color: 'red' } : {}}>
-                {label}
-                {required ? <span style={{ margin: '-.2em 0 0 .2em', color: '#db2828' }}>*</span> : null}
-              </Header>
+              <span style={meta.error && meta.touched ? { color: 'red' } : {}}>{renderLabelWithSubHeader(label, resolveSubHeader)}</span>
             </div>
 
             {name === 'teamLogo' && input.value && !input.value.includes('image-placeholder') && (
