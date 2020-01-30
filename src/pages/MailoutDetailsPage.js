@@ -7,8 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { ContentTopHeaderLayout, ContentSpacerLayout, ContentBottomHeaderLayout, ItemBodyDataLayout, ItemBodyLayoutV2, ItemLayout } from '../layouts';
 
+import { submitMailoutPending, stopMailoutPending, resetMailout, updateMailoutSizePending, revertEditedMailoutPending } from '../store/modules/mailout/actions';
 import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from '../components/MailoutListItem/helpers';
-import { submitMailoutPending, stopMailoutPending, resetMailout, updateMailoutSizePending } from '../store/modules/mailout/actions';
 import { Button, Grid, Menu, Message, Page, Segment, List, Popup, Input } from '../components/Base';
 import PopupContent from '../components/MailoutListItem/PopupContent';
 import { getMailoutPending } from '../store/modules/mailout/actions';
@@ -97,6 +97,10 @@ const MailoutDetailsPage = () => {
 
   const handleDeleteMailoutDetailsClick = () => {
     dispatch(stopMailoutPending(mailoutId));
+  };
+
+  const handleRevertEditedMailoutClick = () => {
+    dispatch(revertEditedMailoutPending());
   };
 
   const handleEditMailoutDetailsClick = () => {
@@ -212,6 +216,7 @@ const MailoutDetailsPage = () => {
                         onClickApproveAndSend={handleApproveAndSendMailoutDetailsClick}
                         onClickDelete={handleDeleteMailoutDetailsClick}
                         lockControls={working}
+                        onClickRevertEdit={handleRevertEditedMailoutClick}
                       />
                     }
                   </ContentBottomHeaderLayout>

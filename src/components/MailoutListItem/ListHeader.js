@@ -46,11 +46,12 @@ const ApproveAndSendButton = ({ data, mailoutDetailPage, onClickApproveAndSend, 
   );
 };
 
-const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickApproveAndSend, onClickDelete, lockControls = false }) => {
+const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickApproveAndSend, onClickDelete, lockControls = false, onClickRevertEdit }) => {
   if (!data) return;
   const enableEdit = resolveMailoutStatus(data.mailoutStatus) !== 'Sent' && resolveMailoutStatus(data.mailoutStatus) !== 'Processing';
   const enableDelete = resolveMailoutStatus(data.mailoutStatus) === 'Sent';
   const activeWhen = new Date(Date.now()).toISOString().split('T')[0] < data.send_date;
+  const enableRevertEdit = data.edited;
 
   return (
     <ItemHeaderLayout attached="top" block>
@@ -70,13 +71,20 @@ const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickAppro
         {mailoutDetailPage && <Header as="h3">{data.details && data.details.displayAddress}</Header>}
       </span>
       <ItemHeaderMenuLayout>
-        <span>
-          {mailoutDetailPage && enableEdit && (
+        {mailoutDetailPage && enableRevertEdit && (
+          <span>
+            <Button secondary inverted onClick={onClickRevertEdit} disabled={lockControls} loading={lockControls}>
+              Revert Edit
+            </Button>
+          </span>
+        )}
+        {mailoutDetailPage && enableEdit && (
+          <span>
             <Button primary inverted onClick={onClickEdit} disabled={lockControls} loading={lockControls}>
               Edit
             </Button>
-          )}
-        </span>
+          </span>
+        )}
         <span>
           <ApproveAndSendButton data={data} mailoutDetailPage={mailoutDetailPage} onClickApproveAndSend={onClickApproveAndSend} lockControls={lockControls} />
         </span>

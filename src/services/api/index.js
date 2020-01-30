@@ -166,6 +166,7 @@ const directory = {
         path: `/api/user/mailout/${mailoutId}/edit/mailoutDisplayAgent?peerId=${displayAgentUserId}`,
         method: 'get',
       }),
+      revertEdited: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'del' }),
     },
     customization: {
       get: () => ({ path: `/api/user/settings/branding`, method: 'get' }),
@@ -212,6 +213,7 @@ const directory = {
         path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit/mailoutDisplayAgent?peerId=${displayAgentUserId}`,
         method: 'get',
       }),
+      revertEdited: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit`, method: 'del' }),
     },
     customization: {
       get: peerId => ({ path: `/api/user/peer/${peerId}/settings/branding`, method: 'get' }),

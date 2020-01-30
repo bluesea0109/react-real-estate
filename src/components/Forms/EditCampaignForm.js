@@ -36,7 +36,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
   const currentListingStatus = data.listingStatus;
   const currentMailoutDisplayAgentUserID = data.mailoutDisplayAgent ? data.mailoutDisplayAgent.userId : data.userId;
   const currentTemplateTheme = data.templateTheme;
-  const currentMailoutDisplayAgent = data.mailoutDisplayAgent;
+  const currentMailoutDisplayAgent = data.mailoutDisplayAgent || { userId: data.userId };
   const currentMergeVariables = data.mergeVariables;
   const currentBrandColor = currentMergeVariables[0];
 
@@ -336,7 +336,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
           {multiUser && (
             <div>
               <Header as="h4">Display Agent</Header>
-              <Dropdown placeholder="Select Friend" fluid selection options={profiles} value={mailoutDisplayAgent.userId} onChange={handleAgentChange} />
+              <Dropdown placeholder="Select Display Agent" fluid selection options={profiles} value={mailoutDisplayAgent.userId} onChange={handleAgentChange} />
             </div>
           )}
         </Segment>
