@@ -223,24 +223,15 @@ export const renderPicturePickerField = ({ name, label, dispatch, required = und
                       : { minHeight: '15em', maxHeight: '15em', minWidth: '15em', maxWidth: '15em', overflow: 'hidden' }
                   }
                 >
+                  <Label corner="right" className="image-upload-label">
+                    <Icon name="upload" style={{ cursor: 'pointer' }} />
+                  </Label>
                   {input.value ? (
-                    <Image size="tiny" src={input.value} wrapped ui={false} label={{ as: 'span', corner: 'right', icon: 'upload' }} />
+                    <Image size="tiny" src={input.value} wrapped ui={false} />
                   ) : name === 'realtorPhoto' ? (
-                    <Image
-                      size="tiny"
-                      src={require('../../assets/photo-placeholder.svg')}
-                      wrapped
-                      ui={false}
-                      label={{ as: 'span', corner: 'right', icon: 'upload' }}
-                    />
+                    <Image size="tiny" src={require('../../assets/photo-placeholder.svg')} wrapped ui={false} />
                   ) : (
-                    <Image
-                      size="tiny"
-                      src={require('../../assets/image-placeholder.svg')}
-                      wrapped
-                      ui={false}
-                      label={{ as: 'span', corner: 'right', icon: 'upload' }}
-                    />
+                    <Image size="tiny" src={require('../../assets/image-placeholder.svg')} wrapped ui={false} />
                   )}
                   {pending ? null : <input hidden id={name} type="file" onChange={onChangeHandler} />}
                   <div className="image-middle">
