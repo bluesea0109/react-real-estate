@@ -1,16 +1,16 @@
 import styled from 'styled-components';
 import startCase from 'lodash/startCase';
 import { BlockPicker } from 'react-color';
-import React, { createRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import React, { createRef, useState, useEffect } from 'react';
 import { Dropdown, Form, Header, Label, Popup } from 'semantic-ui-react';
 
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
-import { Button, Icon, Image, Menu, Message, Page, Segment } from '../Base';
 import { modifyMailoutPending, changeMailoutDisplayAgentPending } from '../../store/modules/mailout/actions';
+import { isMobile, maxLength, sleep, differenceObjectDeep, objectIsEmpty } from './helpers';
+import { Button, Icon, Image, Menu, Message, Page, Segment } from '../Base';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
 import Loading from '../Loading';
-import { isMobile, maxLength, sleep } from './helpers';
 
 const StyledHeader = styled(Header)`
   min-width: 18em;
@@ -47,6 +47,14 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
   const [selectedBrandColor, setSelectedBrandColor] = useState(currentBrandColor.value);
   const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(currentMailoutDisplayAgent);
   const [formValues, setFormValues] = useState(convertedMergeVariables);
+
+  useEffect(() => {
+    const diff = differenceObjectDeep(formValues, convertedMergeVariables);
+
+    if (!objectIsEmpty(diff)) {
+      setFormValues(convertedMergeVariables);
+    }
+  }, [convertedMergeVariables, formValues, setFormValues]);
 
   const handleEditSubmitClick = async () => {
     const newMergeVariables = [];
@@ -168,7 +176,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
                   placeholder={field.default}
                   type={field.type}
                   onChange={(e, input) => handleInputChange(input.value, field.name)}
-                  defaultValue={formValues[field.name]}
+                  value={formValues[field.name]}
                 />
               </Form.Field>
             );
@@ -201,7 +209,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
                   placeholder={field.default}
                   type={field.type}
                   onChange={(e, input) => handleInputChange(input.value, field.name)}
-                  defaultValue={formValues[field.name]}
+                  value={formValues[field.name]}
                 />
               </Form.Field>
             );
@@ -234,7 +242,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
                   placeholder={field.default}
                   type={field.type}
                   onChange={(e, input) => handleInputChange(input.value, field.name)}
-                  defaultValue={formValues[field.name]}
+                  value={formValues[field.name]}
                 />
               </Form.Field>
             );
