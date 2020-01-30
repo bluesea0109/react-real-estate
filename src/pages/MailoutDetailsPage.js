@@ -186,7 +186,7 @@ const MailoutDetailsPage = () => {
         <Segment style={isMobile() ? { marginTop: '58px' } : {}}>
           <Menu borderless fluid secondary>
             <Menu.Item>
-              <Header as="h3">Campaign Details</Header>
+              <Header as="h1">Campaign Details</Header>
             </Menu.Item>
             <Menu.Menu position="right">
               <Menu.Item>

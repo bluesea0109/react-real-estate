@@ -75,7 +75,7 @@ const Dashboard = () => {
         <Segment style={isMobile() ? { marginTop: '58px' } : { maxHeight: '74px' }}>
           <Menu borderless fluid secondary>
             <Menu.Item>
-              <Header as="h3">Dashboard</Header>
+              <Header as="h1">Dashboard</Header>
             </Menu.Item>
           </Menu>
         </Segment>

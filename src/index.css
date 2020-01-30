@@ -34,6 +34,14 @@ code {
     margin: 1em -1.25em;
   }
 }
+h1 {
+  font-size: 28px !important;
+  line-height: 1em !important;
+}
+
+.sub.header {
+  font-size: 16px !important;
+}
 
 .ui.header {
   font-family: 'Open Sans', sans-serif !important;
@@ -185,7 +193,7 @@ code {
 /* Images Start */
 .image-frame-border {
   border: 1px solid #ccc;
-  box-shadow: 9px 9px 10px -3px rgba(0, 0, 0, 0.33);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
 }
 
 .bm-transform-effect {
