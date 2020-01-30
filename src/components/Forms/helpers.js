@@ -204,7 +204,7 @@ export const renderPicturePickerField = ({ name, label, dispatch, required = und
               </Header>
             </div>
 
-            {name === 'teamLogo' && input.value && (
+            {name === 'teamLogo' && input.value && !input.value.includes('image-placeholder') && (
               <div style={{ gridArea: 'Func', justifySelf: 'end' }}>
                 <Item as="label" style={{ cursor: 'pointer' }}>
                   <Header as="h4" style={meta.error && meta.touched ? { color: 'red' } : { color: 'teal' }} onClick={() => onClickDelete(name)}>
