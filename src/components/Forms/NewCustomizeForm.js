@@ -9,9 +9,9 @@ import React, { createRef, Fragment, useEffect, useState, useReducer } from 'rea
 
 import { isMobile, isValidURL, maxLength, popup, required, composeValidators, url, differenceObjectDeep } from './helpers';
 import { saveListedShortcodePending, saveSoldShortcodePending } from '../../store/modules/shortcode/actions';
-import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ContentSpacerLayout } from '../../layouts';
 import { saveCustomizationPending } from '../../store/modules/customization/actions';
 import { Button, Icon, Image, Menu, Modal, Page, Segment } from '../Base';
+import { ContentTopHeaderLayout } from '../../layouts';
 import FlipCard from '../FlipCard';
 import Loading from '../Loading';
 
@@ -252,9 +252,15 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
     return (
       <Header size="medium">
         {targetOn}: &nbsp;
-        <span style={{ verticalAlign: '-0.35em', color: '#59C4C4' }} onClick={handleChange}>
-          {currentValue ? <FontAwesomeIcon icon="toggle-on" size="2x" /> : <FontAwesomeIcon icon="toggle-off" size="2x" />}
-        </span>
+        {currentValue ? (
+          <span style={{ verticalAlign: '-0.35em', color: '#59C4C4' }} onClick={handleChange}>
+            <FontAwesomeIcon icon="toggle-on" size="2x" />
+          </span>
+        ) : (
+          <span style={{ verticalAlign: '-0.35em', color: '#969696' }} onClick={handleChange}>
+            <FontAwesomeIcon icon="toggle-on" size="2x" className="fa-flip-horizontal" />
+          </span>
+        )}
       </Header>
     );
   };
@@ -442,9 +448,15 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
 
     return (
       <Form.Field>
-        <span style={{ verticalAlign: '-0.35em', color: '#59C4C4' }} onClick={handleKwklyEnabledChange}>
-          {!ctaEnabled ? <FontAwesomeIcon icon="toggle-on" size="2x" /> : <FontAwesomeIcon icon="toggle-off" size="2x" />}
-        </span>
+        {!ctaEnabled ? (
+          <span style={{ verticalAlign: '-0.35em', color: '#59C4C4' }} onClick={handleKwklyEnabledChange}>
+            <FontAwesomeIcon icon="toggle-on" size="2x" />
+          </span>
+        ) : (
+          <span style={{ verticalAlign: '-0.35em', color: '#969696' }} onClick={handleKwklyEnabledChange}>
+            <FontAwesomeIcon icon="toggle-on" size="2x" className="fa-flip-horizontal" />
+          </span>
+        )}
         &nbsp;
         {!ctaEnabled ? 'Disable Kwkly' : 'Enable Kwkly'}
       </Form.Field>
@@ -660,18 +672,12 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
         </Segment>
       </ContentTopHeaderLayout>
 
-      <ContentSpacerLayout style={isMobile() ? { minHeight: '190px' } : { top: '155px', minHeight: '22px' }} />
+      <Segment style={isMobile() ? { marginTop: '155px' } : { marginTop: '90px' }}>
+        <Menu pointing secondary>
+          <Menu.Item name="newListing" active={step === 1} disabled={step === 1} onClick={prevStep} />
+          <Menu.Item name="soldListing" active={step === 2} disabled={step === 2} onClick={nextStep} />
+        </Menu>
 
-      <ContentBottomHeaderLayout style={isMobile() ? {} : { top: '152px', minWidth: `calc(100% - 203px)` }}>
-        <Segment style={isMobile() ? { marginTop: '97px' } : { marginTop: '20px' }}>
-          <Menu pointing secondary>
-            <Menu.Item name="newListing" active={step === 1} disabled={step === 1} onClick={prevStep} />
-            <Menu.Item name="soldListing" active={step === 2} disabled={step === 2} onClick={nextStep} />
-          </Menu>
-        </Segment>
-      </ContentBottomHeaderLayout>
-
-      <Segment style={isMobile() ? { marginTop: '207px' } : { marginTop: '183px' }}>
         <Confirm
           open={showSelectionAlert}
           content="In order to use Brivity Marketing platform, you must select at least one"

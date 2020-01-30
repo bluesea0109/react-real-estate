@@ -7,8 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { ContentTopHeaderLayout, ContentSpacerLayout, ContentBottomHeaderLayout, ItemBodyDataLayout, ItemBodyLayoutV2, ItemLayout } from '../layouts';
 
+import { submitMailoutPending, stopMailoutPending, resetMailout, updateMailoutSizePending, revertEditedMailoutPending } from '../store/modules/mailout/actions';
 import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from '../components/MailoutListItem/helpers';
-import { submitMailoutPending, stopMailoutPending, resetMailout, updateMailoutSizePending } from '../store/modules/mailout/actions';
 import { Button, Grid, Menu, Message, Page, Segment, List, Popup, Input } from '../components/Base';
 import PopupContent from '../components/MailoutListItem/PopupContent';
 import { getMailoutPending } from '../store/modules/mailout/actions';
@@ -99,6 +99,10 @@ const MailoutDetailsPage = () => {
     dispatch(stopMailoutPending(mailoutId));
   };
 
+  const handleRevertEditedMailoutClick = () => {
+    dispatch(revertEditedMailoutPending());
+  };
+
   const handleEditMailoutDetailsClick = () => {
     history.push(`/dashboard/edit/${details._id}`);
   };
@@ -182,7 +186,7 @@ const MailoutDetailsPage = () => {
         <Segment style={isMobile() ? { marginTop: '58px' } : {}}>
           <Menu borderless fluid secondary>
             <Menu.Item>
-              <Header as="h3">Campaign Details</Header>
+              <Header as="h1">Campaign Details</Header>
             </Menu.Item>
             <Menu.Menu position="right">
               <Menu.Item>
@@ -212,6 +216,7 @@ const MailoutDetailsPage = () => {
                         onClickApproveAndSend={handleApproveAndSendMailoutDetailsClick}
                         onClickDelete={handleDeleteMailoutDetailsClick}
                         lockControls={working}
+                        onClickRevertEdit={handleRevertEditedMailoutClick}
                       />
                     }
                   </ContentBottomHeaderLayout>

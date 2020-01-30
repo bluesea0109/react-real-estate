@@ -21,6 +21,12 @@ import {
   MODIFY_MAILOUT_PENDING,
   MODIFY_MAILOUT_SUCCESS,
   MODIFY_MAILOUT_ERROR,
+  CHANGE_MAILOUT_DISPLAY_AGENT_PENDING,
+  CHANGE_MAILOUT_DISPLAY_AGENT_SUCCESS,
+  CHANGE_MAILOUT_DISPLAY_AGENT_ERROR,
+  REVERT_EDITED_MAILOUT_PENDING,
+  REVERT_EDITED_MAILOUT_SUCCESS,
+  REVERT_EDITED_MAILOUT_ERROR,
 } from './actions';
 
 const initialState = {
@@ -31,10 +37,13 @@ const initialState = {
   updateMailoutSizePending: false,
   needsUpdatePending: false,
   updatePending: false,
+  changeDisplayAgentPending: false,
+  revertEditedPending: false,
 
   mailoutId: null,
   mailoutEdit: null,
   mailoutSize: null,
+  mailoutDisplayAgent: null,
   needsUpdate: null,
   details: null,
 
@@ -45,6 +54,8 @@ const initialState = {
   updateMailoutSizeError: null,
   needsUpdateError: null,
   updateError: null,
+  changeDisplayAgentError: null,
+  revertEditedError: null,
 };
 
 export default function mailout(state = initialState, action) {
@@ -215,6 +226,56 @@ export default function mailout(state = initialState, action) {
         ...state,
         updatePending: false,
         updateError: action.error,
+      };
+
+    case CHANGE_MAILOUT_DISPLAY_AGENT_PENDING:
+      return {
+        ...state,
+        changeDisplayAgentPending: true,
+        mailoutDisplayAgent: action.payload,
+        changeDisplayAgentError: null,
+      };
+
+    case CHANGE_MAILOUT_DISPLAY_AGENT_SUCCESS:
+      return {
+        ...state,
+        changeDisplayAgentPending: false,
+        mailoutDisplayAgent: null,
+        details: {
+          ...state.details,
+          mergeVariables: [...state.details.mergeVariables, ...action.payload],
+        },
+        changeDisplayAgentError: null,
+      };
+
+    case CHANGE_MAILOUT_DISPLAY_AGENT_ERROR:
+      return {
+        ...state,
+        changeDisplayAgentPending: false,
+        mailoutDisplayAgent: null,
+        changeDisplayAgentError: action.error,
+      };
+
+    case REVERT_EDITED_MAILOUT_PENDING:
+      return {
+        ...state,
+        revertEditedPending: true,
+        revertEditedError: null,
+      };
+
+    case REVERT_EDITED_MAILOUT_SUCCESS:
+      return {
+        ...state,
+        revertEditedPending: false,
+        details: action.payload,
+        revertEditedError: null,
+      };
+
+    case REVERT_EDITED_MAILOUT_ERROR:
+      return {
+        ...state,
+        revertEditedPending: false,
+        revertEditedError: action.error,
       };
 
     default:

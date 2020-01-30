@@ -1,16 +1,16 @@
 import styled from 'styled-components';
 import startCase from 'lodash/startCase';
 import { BlockPicker } from 'react-color';
-import React, { createRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import React, { createRef, useState, useEffect } from 'react';
 import { Dropdown, Form, Header, Label, Popup } from 'semantic-ui-react';
 
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
+import { modifyMailoutPending, changeMailoutDisplayAgentPending } from '../../store/modules/mailout/actions';
+import { isMobile, maxLength, sleep, differenceObjectDeep, objectIsEmpty } from './helpers';
 import { Button, Icon, Image, Menu, Message, Page, Segment } from '../Base';
-import { modifyMailoutPending } from '../../store/modules/mailout/actions';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
 import Loading from '../Loading';
-import { isMobile, maxLength, sleep } from './helpers';
 
 const StyledHeader = styled(Header)`
   min-width: 18em;
@@ -30,13 +30,15 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
 
   const modifyPending = useSelector(store => store.mailout.modifyPending);
   const modifyError = useSelector(store => store.mailout.modifyError);
+  const changeDisplayAgentPending = useSelector(store => store.mailout.changeDisplayAgentPending);
+  const changeDisplayAgentError = useSelector(store => store.mailout.changeDisplayAgentError);
 
   const teammates = useSelector(store => store.team.profiles);
 
   const currentListingStatus = data.listingStatus;
   const currentMailoutDisplayAgentUserID = data.mailoutDisplayAgent ? data.mailoutDisplayAgent.userId : data.userId;
   const currentTemplateTheme = data.templateTheme;
-  const currentMailoutDisplayAgent = data.mailoutDisplayAgent;
+  const currentMailoutDisplayAgent = data.mailoutDisplayAgent || { userId: data.userId };
   const currentMergeVariables = data.mergeVariables;
   const currentBrandColor = currentMergeVariables[0];
 
@@ -47,6 +49,14 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
   const [selectedBrandColor, setSelectedBrandColor] = useState(currentBrandColor.value);
   const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(currentMailoutDisplayAgent);
   const [formValues, setFormValues] = useState(convertedMergeVariables);
+
+  useEffect(() => {
+    const diff = differenceObjectDeep(formValues, convertedMergeVariables);
+
+    if (!objectIsEmpty(diff)) {
+      setFormValues(convertedMergeVariables);
+    }
+  }, [convertedMergeVariables, formValues, setFormValues]);
 
   const handleEditSubmitClick = async () => {
     const newMergeVariables = [];
@@ -139,6 +149,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
     const { first, last, value } = selectedAgent;
 
     setMailoutDisplayAgent({ userId: value, first, last });
+    dispatch(changeMailoutDisplayAgentPending(value));
   };
 
   const handleInputChange = (value, name) => {
@@ -159,7 +170,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
             if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
 
             return (
-              <Form.Field key={fieldName}>
+              <Form.Field key={formValues[field.name] || fieldName}>
                 <Form.Input
                   fluid
                   error={error && { content: error }}
@@ -192,7 +203,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
             if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
 
             return (
-              <Form.Field key={fieldName}>
+              <Form.Field key={formValues[field.name] || fieldName}>
                 <Form.Input
                   fluid
                   error={error && { content: error }}
@@ -225,7 +236,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
             if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
 
             return (
-              <Form.Field key={fieldName}>
+              <Form.Field key={formValues[field.name] || fieldName}>
                 <Form.Input
                   fluid
                   error={error && { content: error }}
@@ -262,7 +273,13 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
             </Menu.Item>
             <Menu.Menu position="right">
               <Menu.Item>
-                <Button primary inverted onClick={() => handleBackClick()} loading={modifyPending} disabled={modifyPending}>
+                <Button
+                  primary
+                  inverted
+                  onClick={() => handleBackClick()}
+                  loading={modifyPending || changeDisplayAgentPending}
+                  disabled={modifyPending || changeDisplayAgentPending}
+                >
                   Back
                 </Button>
               </Menu.Item>
@@ -287,24 +304,37 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
 
             <ItemHeaderMenuLayout>
               <span>
-                <Button primary type="submit" onClick={handleEditSubmitClick} loading={modifyPending} disabled={modifyPending}>
+                <Button
+                  primary
+                  type="submit"
+                  onClick={handleEditSubmitClick}
+                  loading={modifyPending || changeDisplayAgentPending}
+                  disabled={modifyPending || changeDisplayAgentPending}
+                >
                   Save
                 </Button>
               </span>
             </ItemHeaderMenuLayout>
           </ItemHeaderLayout>
+
+          {modifyPending && <Loading message="Saving campaign..." />}
+
+          {modifyError && (
+            <Message negative>
+              <Message.Header>We're sorry, something went wrong.</Message.Header>
+              <p>{modifyError}</p>
+            </Message>
+          )}
+
+          {changeDisplayAgentPending && <Loading message="Updating postcard details..." />}
+
+          {changeDisplayAgentError && (
+            <Message negative>
+              <Message.Header>We're sorry, something went wrong.</Message.Header>
+              <p>{changeDisplayAgentError}</p>
+            </Message>
+          )}
         </ContentBottomHeaderLayout>
-
-        {/*<Divider style={{ margin: '1em -1em' }} />*/}
-
-        {modifyPending && <Loading message="Saving campaign..." />}
-
-        {modifyError && (
-          <Message negative>
-            <Message.Header>We're sorry, something went wrong.</Message.Header>
-            <p>{modifyError}</p>
-          </Message>
-        )}
 
         <Segment
           basic
@@ -335,7 +365,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
           {multiUser && (
             <div>
               <Header as="h4">Display Agent</Header>
-              <Dropdown placeholder="Select Friend" fluid selection options={profiles} value={mailoutDisplayAgent.userId} onChange={handleAgentChange} />
+              <Dropdown placeholder="Select Display Agent" fluid selection options={profiles} value={mailoutDisplayAgent.userId} onChange={handleAgentChange} />
             </div>
           )}
         </Segment>

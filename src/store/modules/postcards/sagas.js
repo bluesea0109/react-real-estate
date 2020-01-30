@@ -8,6 +8,7 @@ import {
   generatePostcardsPreviewError,
 } from './actions';
 import ApiService from '../../../services/api/index';
+import { select } from '@redux-saga/core/effects';
 
 const getDimensions = ({ url }) => {
   return new Promise((resolve, reject) => {
@@ -18,10 +19,17 @@ const getDimensions = ({ url }) => {
   });
 };
 
+export const getSelectedPeerId = state => state.peer.peerId;
+
 export function* getPostcardsPreviewSaga() {
   while (true) {
     try {
-      const { path, method } = ApiService.directory.onboard.customization.generatePostcardPreview();
+      const peerId = yield select(getSelectedPeerId);
+
+      const { path, method } = peerId
+        ? ApiService.directory.peer.customization.generatePostcardPreview(peerId)
+        : ApiService.directory.user.customization.generatePostcardPreview();
+
       const response = yield call(ApiService[method], path);
 
       let listedFrontLarge = { height: 0, width: 0 };

@@ -216,7 +216,7 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
         <Form onSubmit={handleSubmit}>
           <div style={{ display: 'grid', justifyContent: 'start' }}>
             <div>
-              <Button primary inverted type="button" onClick={selectAll}>
+              <Button primary type="button" onClick={selectAll}>
                 Select All
               </Button>
               <Button primary inverted type="button" onClick={deselectAll}>

@@ -162,10 +162,16 @@ const directory = {
       submit: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/submit`, method: 'post' }),
       needsUpdate: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/needsUpdate`, method: 'get' }),
       update: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/update`, method: 'post' }),
+      changeAgent: (mailoutId, displayAgentUserId) => ({
+        path: `/api/user/mailout/${mailoutId}/edit/mailoutDisplayAgent?peerId=${displayAgentUserId}`,
+        method: 'get',
+      }),
+      revertEdited: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'del' }),
     },
     customization: {
       get: () => ({ path: `/api/user/settings/branding`, method: 'get' }),
       save: () => ({ path: `/api/user/settings/branding`, method: 'put' }),
+      generatePostcardPreview: () => ({ path: `/api/user/postcard/preview`, method: 'post' }),
     },
     profile: {
       get: () => ({ path: `/api/user/settings/profile`, method: 'get' }),
@@ -203,10 +209,16 @@ const directory = {
       submit: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/submit`, method: 'post' }),
       needsUpdate: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/needsUpdate`, method: 'get' }),
       update: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/update`, method: 'post' }),
+      changeAgent: (mailoutId, peerId, displayAgentUserId) => ({
+        path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit/mailoutDisplayAgent?peerId=${displayAgentUserId}`,
+        method: 'get',
+      }),
+      revertEdited: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit`, method: 'del' }),
     },
     customization: {
       get: peerId => ({ path: `/api/user/peer/${peerId}/settings/branding`, method: 'get' }),
       save: peerId => ({ path: `/api/user/peer/${peerId}/settings/branding`, method: 'put' }),
+      generatePostcardPreview: peerId => ({ path: `/api/user/peer/${peerId}/postcard/preview`, method: 'post' }),
     },
     profile: {
       get: peerId => ({ path: `/api/user/peer/${peerId}/settings/profile`, method: 'get' }),
@@ -277,7 +289,6 @@ const directory = {
           save: () => ({ path: `/api/user/settings/shortcode/sold/example`, method: 'put' }),
         },
       },
-      generatePostcardPreview: () => ({ path: `/api/user/postcard/preview`, method: 'post' }),
     },
     inviteUsers: {
       send: () => ({ path: `/api/user/peer/invite`, method: 'post' }),

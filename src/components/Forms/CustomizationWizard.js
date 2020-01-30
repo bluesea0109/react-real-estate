@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useState } from 'react';
 import { Form } from 'semantic-ui-react';
 import { Form as FinalForm } from 'react-final-form';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Button, Menu, Segment } from '../../components/Base';
 
@@ -16,17 +16,6 @@ const CustomizationWizard = ({ children, initialValues = {}, onSubmit, togglePag
       setOnlyOnce(true);
     }
   }, [initialValues, values, setValues, onlyOnce, setOnlyOnce]);
-
-  // useEffect(() => {
-  //   if (!onlyOnce && values !== initialValues) {
-  //     setValues(initialValues);
-  //     setOnlyOnce(true);
-  //   }
-  //
-  //   if (values === initialValues) {
-  //     setOnlyOnce(false);
-  //   }
-  // }, [initialValues, values, setValues, onlyOnce, setOnlyOnce]);
 
   const next = useCallback(
     values => {
@@ -86,13 +75,17 @@ const CustomizationWizard = ({ children, initialValues = {}, onSubmit, togglePag
             <div style={{ display: 'grid', justifyContent: 'end' }}>
               <span>
                 {page > 0 && (
-                  <Button type="button" onClick={previous}>
+                  <Button primary inverted type="button" onClick={previous}>
                     « Previous
                   </Button>
                 )}
-                {!isLastPage && <Button type="submit">Next »</Button>}
+                {!isLastPage && (
+                  <Button primary inverted type="submit">
+                    Next »
+                  </Button>
+                )}
                 {isLastPage && (
-                  <Button type="submit" disabled={submitting}>
+                  <Button primary type="submit" disabled={submitting}>
                     Submit
                   </Button>
                 )}

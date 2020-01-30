@@ -106,7 +106,7 @@ export default () => {
         content: (
           <StyledHeader as="h4" ref={contextRef}>
             <Initials firstName={profile.first} lastName={profile.last} />
-            &nbsp;
+            &nbsp; &nbsp;
             {profile.first}&nbsp;
             {profile.last}&nbsp;
             {profile.permissions && profile.permissions.teamAdmin ? '(Admin)' : '(Agent)'}&nbsp;

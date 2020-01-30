@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import _ from 'lodash';
 import arrayMutators from 'final-form-arrays';
+import { Header, Form } from 'semantic-ui-react';
+import React, { Fragment, useState } from 'react';
 import { FieldArray } from 'react-final-form-arrays';
 import { Form as FinalForm } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { Header, Form, Radio } from 'semantic-ui-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import {
   email,
@@ -11,7 +13,6 @@ import {
   isMobile,
   required,
   renderField,
-  labelWithPopup,
   ExternalChanges,
   WhenFieldChanges,
   composeValidators,
@@ -19,23 +20,15 @@ import {
   renderPicturePickerField,
   requiredOnlyInCalifornia,
 } from './helpers';
+import Loading from '../Loading';
+import { ContentTopHeaderLayout } from '../../layouts';
 import { saveProfilePending } from '../../store/modules/profile/actions';
-import { ContentTopHeaderLayout, ContentBodyLayout } from '../../layouts';
-import { Button, Icon, Segment, Image, Divider, Menu, Snackbar } from '../Base';
 import { saveTeamProfilePending } from '../../store/modules/teamProfile/actions';
-
-const renderLabelWithSubHeader = (label, subHeader) =>
-  isMobile() ? (
-    <Header as={'label'} content={label} subheader={subHeader} />
-  ) : (
-    <label>
-      {label} <span style={{ fontWeight: 300 }}>{subHeader}</span>
-    </label>
-  );
+import { Button, Icon, Segment, Image, Divider, Menu, Page, Snackbar } from '../Base';
 
 const changeMsg = 'This information comes from Brivity CRM. If you want to modify this information, you need to do it there.';
 
-const ProfileForm = () => {
+const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
   const [personalNotificationEmailEnabled, setPersonalNotificationEmailEnabled] = useState(false);
 
   const dispatch = useDispatch();
@@ -47,14 +40,12 @@ const ProfileForm = () => {
   // const singleUser = onLoginMode === 'singleuser';
 
   const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
+  const selectedPeerId = useSelector(store => store.peer.peerId);
 
   const profileError = useSelector(store => store.profile.error && store.profile.error.message);
   const profileSaveError = useSelector(store => store.profile.saveError && store.profile.saveError.message);
   const teamProfileError = useSelector(store => store.teamProfile.error && store.teamProfile.error.message);
   const teamProfileSaveError = useSelector(store => store.profile.saveError && store.profile.saveError.message);
-
-  const onLoginUserProfile = useSelector(store => store.onLogin && store.onLogin.userProfile);
-  const onLoginTeamProfile = useSelector(store => store.onLogin && store.onLogin.teamProfile);
 
   const realtorPhoto = useSelector(store => store.onLogin && store.onLogin.realtorPhoto && store.onLogin.realtorPhoto.resized);
   const teamLogo = useSelector(store => store.onLogin && store.onLogin.teamLogo && store.onLogin.teamLogo.resized);
@@ -66,6 +57,13 @@ const ProfileForm = () => {
 
   const picturesPending = useSelector(store => store.pictures && store.pictures.pending);
   const picturesError = useSelector(store => store.pictures && store.pictures.error);
+
+  const profileSavePending = useSelector(store => store.profile.savePending);
+  const teamProfileSavePending = useSelector(store => store.teamProfile.savePending);
+  const mailoutsGeneratePending = useSelector(store => store.mailouts.generatePending);
+
+  const isInitiatingTeam = useSelector(store => store.teamInitialize.polling);
+  const isInitiatingUser = useSelector(store => store.initialize.polling);
 
   const saveProfile = profile => dispatch(saveProfilePending(profile));
   const saveTeamProfile = teamProfile => dispatch(saveTeamProfilePending(teamProfile));
@@ -83,15 +81,16 @@ const ProfileForm = () => {
       website: values.personalWebsite,
     };
 
-    if (onLoginUserProfile) {
-      profile._id = onLoginUserProfile._id;
-      profile._rev = onLoginUserProfile._rev;
-      profile.brivitySync = onLoginUserProfile.brivitySync;
+    if (profileAvailable) {
+      profile._id = profileAvailable._id;
+      profile._rev = profileAvailable._rev;
+      profile.teamId = values.teamId || profileAvailable.teamId;
+      profile.brivitySync = profileAvailable.brivitySync;
     }
 
     saveProfile(profile);
 
-    if (isAdmin || !multiUser) {
+    if ((isAdmin || !multiUser) && !selectedPeerId) {
       const business = {
         teamProfile: true,
         notificationEmail: values.businessNotificationEmail,
@@ -105,12 +104,12 @@ const ProfileForm = () => {
         website: values.businessWebsite,
       };
 
-      if (onLoginTeamProfile) {
-        business._id = onLoginTeamProfile._id;
-        business._rev = onLoginTeamProfile._rev;
-        business.brivitySync = onLoginTeamProfile.brivitySync;
-        business.phone = values.officePhone || onLoginTeamProfile.phone;
-        business.website = values.businessWebsite || onLoginTeamProfile.website;
+      if (teamProfileAvailable) {
+        business._id = teamProfileAvailable._id;
+        business._rev = teamProfileAvailable._rev;
+        business.brivitySync = teamProfileAvailable.brivitySync;
+        business.phone = values.officePhone || teamProfileAvailable.phone;
+        business.website = values.businessWebsite || teamProfileAvailable.website;
       }
 
       saveTeamProfile(business);
@@ -125,12 +124,15 @@ const ProfileForm = () => {
     brokerageLogo: brokerageLogo,
   };
 
-  if (onLoginUserProfile) {
-    const onLoginUserProfileBoards = onLoginUserProfile && onLoginUserProfile.boards;
-    const mlsArr = [];
+  let profileAvailableBoards;
+  let mlsArr;
 
-    if (onLoginUserProfileBoards) {
-      onLoginUserProfileBoards.forEach(board => {
+  if (profileAvailable && !teamProfileAvailable) {
+    profileAvailableBoards = profileAvailable && profileAvailable.boards;
+    mlsArr = [];
+
+    if (profileAvailableBoards) {
+      profileAvailableBoards.forEach(board => {
         const userBoard = boards.filter(boardObj => boardObj.mlsid === board.name);
         mlsArr.push({ name: userBoard[0] && userBoard[0].value, mlsId: board.mlsId });
       });
@@ -138,26 +140,42 @@ const ProfileForm = () => {
       mlsArr.push(null);
     }
 
-    const notificationEmail = onLoginUserProfile && onLoginUserProfile.notificationEmail;
+    const notificationEmail = profileAvailable && profileAvailable.notificationEmail;
 
     initialValues = {
       ...initialValues,
-      ...onLoginUserProfile,
+      ...profileAvailable,
       boards: mlsArr,
       notificationEmail: notificationEmail,
     };
   }
 
-  if (onLoginTeamProfile) {
-    const businessNotificationEmail = onLoginTeamProfile && onLoginTeamProfile.notificationEmail ? onLoginTeamProfile.notificationEmail : null;
+  if (profileAvailable && teamProfileAvailable) {
+    profileAvailableBoards = profileAvailable && profileAvailable.boards;
+    mlsArr = [];
 
-    if (!initialValues.notificationEmail) initialValues.notificationEmail = businessNotificationEmail;
+    if (profileAvailableBoards) {
+      profileAvailableBoards.forEach(board => {
+        const userBoard = boards.filter(boardObj => boardObj.mlsid === board.name);
+        mlsArr.push({ name: userBoard[0] && userBoard[0].value, mlsId: board.mlsId });
+      });
+    } else {
+      mlsArr.push(null);
+    }
+
+    let notificationEmail = profileAvailable && profileAvailable.notificationEmail;
+    const businessNotificationEmail = teamProfileAvailable && teamProfileAvailable.notificationEmail ? teamProfileAvailable.notificationEmail : null;
+
+    if (!notificationEmail) notificationEmail = businessNotificationEmail;
 
     initialValues = {
       ...initialValues,
-      ...onLoginTeamProfile,
+      ...profileAvailable,
+      ...teamProfileAvailable,
+      boards: mlsArr,
       teamLogo: picturesTeamLogo,
       brokerageLogo: picturesBrokerageLogo,
+      notificationEmail: notificationEmail,
       businessNotificationEmail: businessNotificationEmail,
     };
   }
@@ -180,40 +198,49 @@ const ProfileForm = () => {
         pristine,
         values,
       }) => {
+        if (profileSavePending || teamProfileSavePending || mailoutsGeneratePending) {
+          return (
+            <Segment style={{ minHeight: '80vh' }}>
+              <Loading message="Saving, please wait..." />
+            </Segment>
+          );
+        }
+
         return (
-          <Form onSubmit={handleSubmit}>
-            <ContentTopHeaderLayout>
-              <Segment>
-                <Menu borderless fluid secondary>
-                  <Menu.Item>
-                    <Header as="h1">Profile</Header>
-                  </Menu.Item>
-                  <Menu.Menu position="right">
+          <Page basic>
+            <Form onSubmit={handleSubmit}>
+              <ContentTopHeaderLayout>
+                <Segment style={isMobile() ? { marginTop: '58px' } : {}}>
+                  <Menu borderless fluid secondary>
                     <Menu.Item>
-                      <span>
-                        <Button basic type="button" onClick={form.reset} disabled={submitting || pristine} color="teal">
-                          Discard
-                        </Button>
-                        <Button type="submit" disabled={submitting} color="teal">
-                          Save
-                        </Button>
-                      </span>
+                      <Header as="h1">Profile</Header>
                     </Menu.Item>
-                  </Menu.Menu>
-                </Menu>
-              </Segment>
-            </ContentTopHeaderLayout>
+                    <Menu.Menu position="right">
+                      <Menu.Item>
+                        <span>
+                          <Button primary type="submit" disabled={submitting}>
+                            Save
+                          </Button>
+                        </span>
+                      </Menu.Item>
+                    </Menu.Menu>
+                  </Menu>
+                </Segment>
+              </ContentTopHeaderLayout>
 
-            {profileError && <Snackbar error>{profileError}</Snackbar>}
-            {profileSaveError && <Snackbar error>{profileSaveError}</Snackbar>}
-            {teamProfileError && <Snackbar error>{teamProfileError}</Snackbar>}
-            {teamProfileSaveError && <Snackbar error>{teamProfileSaveError}</Snackbar>}
+              {profileError && <Snackbar error>{profileError}</Snackbar>}
+              {profileSaveError && <Snackbar error>{profileSaveError}</Snackbar>}
+              {teamProfileError && <Snackbar error>{teamProfileError}</Snackbar>}
+              {teamProfileSaveError && <Snackbar error>{teamProfileSaveError}</Snackbar>}
 
-            <ContentBodyLayout style={{ marginTop: '88px' }}>
-              <Segment>
+              <Segment style={isMobile() ? { marginTop: '6em' } : { marginTop: '6.5em' }}>
                 <Header as="h2">
                   Personal
-                  <Header.Subheader>Your information will be shown on your postcards and will enable recipients to reach you.</Header.Subheader>
+                  {selectedPeerId ? (
+                    <Header.Subheader>Peers information will be shown on their postcards and will enable recipients to reach them.</Header.Subheader>
+                  ) : (
+                    <Header.Subheader>Your information will be shown on your postcards and will enable recipients to reach you.</Header.Subheader>
+                  )}
                 </Header>
 
                 <Divider style={{ margin: '1em -1em' }} />
@@ -247,7 +274,8 @@ const ProfileForm = () => {
                   <div style={{ gridArea: 'First' }}>
                     {renderField({
                       name: 'first',
-                      label: multiUser ? labelWithPopup('First Name', popup(changeMsg)) : 'First Name',
+                      label: 'First Name',
+                      popup: multiUser ? popup(changeMsg) : null,
                       type: 'text',
                       required: true,
                       validate: required,
@@ -257,7 +285,8 @@ const ProfileForm = () => {
                   <div style={{ gridArea: 'Last' }}>
                     {renderField({
                       name: 'last',
-                      label: multiUser ? labelWithPopup('Last Name', popup(changeMsg)) : 'Last Name',
+                      label: 'Last Name',
+                      popup: multiUser ? popup(changeMsg) : null,
                       type: 'text',
                       required: true,
                       validate: required,
@@ -267,7 +296,8 @@ const ProfileForm = () => {
                   <div style={{ gridArea: 'Phone' }}>
                     {renderField({
                       name: 'phone',
-                      label: multiUser ? labelWithPopup('Phone Number', popup(changeMsg)) : 'Phone Number',
+                      label: 'Phone Number',
+                      popup: multiUser ? popup(changeMsg) : null,
                       type: 'text',
                       required: true,
                       validate: required,
@@ -277,7 +307,8 @@ const ProfileForm = () => {
                   <div style={{ gridArea: 'Email' }}>
                     {renderField({
                       name: 'email',
-                      label: multiUser ? labelWithPopup('Email', popup(changeMsg)) : 'Email',
+                      label: 'Email',
+                      popup: multiUser ? popup(changeMsg) : null,
                       type: 'text',
                       required: true,
                       validate: composeValidators(required, email),
@@ -287,7 +318,7 @@ const ProfileForm = () => {
                   <div style={{ gridArea: 'NotificationEmail' }}>
                     {renderField({
                       name: 'notificationEmail',
-                      label: renderLabelWithSubHeader('Personal Notification Email'),
+                      label: 'Personal Notification Email',
                       type: 'text',
                       required: !personalNotificationEmailEnabled,
                       validate: !personalNotificationEmailEnabled ? composeValidators(required, email) : null,
@@ -295,28 +326,53 @@ const ProfileForm = () => {
                     })}
                   </div>
                   <div style={{ gridArea: 'NotificationEmailToggle' }}>
-                    <Radio
-                      toggle
-                      label="Same as business notification email"
-                      onChange={() => setPersonalNotificationEmailEnabled(!personalNotificationEmailEnabled)}
-                      checked={personalNotificationEmailEnabled}
-                      onClick={() => setPersonalNotificationEmailEnabled(!personalNotificationEmailEnabled)}
-                      style={{ marginTop: '2.25em', opacity: personalNotificationEmailEnabled ? '1' : '0.4' }}
-                    />
+                    {personalNotificationEmailEnabled ? (
+                      <span style={{ color: '#F2714D' }}>
+                        <FontAwesomeIcon
+                          icon="toggle-on"
+                          size="2x"
+                          style={{ marginTop: '1em', verticalAlign: '-0.3em', color: '#59C4C4' }}
+                          onClick={() => setPersonalNotificationEmailEnabled(!personalNotificationEmailEnabled)}
+                        />{' '}
+                        Same as business notification email
+                      </span>
+                    ) : (
+                      <span style={{ color: '#969696' }}>
+                        <FontAwesomeIcon
+                          icon="toggle-on"
+                          size="2x"
+                          className="fa-flip-horizontal"
+                          style={{ marginTop: '1em', verticalAlign: '-0.3em' }}
+                          onClick={() => setPersonalNotificationEmailEnabled(!personalNotificationEmailEnabled)}
+                        />{' '}
+                        Same as business notification email
+                      </span>
+                    )}
                   </div>
                   <div style={{ gridArea: 'Dre' }}>
                     {renderField({
                       name: 'dre',
-                      label: renderLabelWithSubHeader('DRE Number', '( Required in California )'),
+                      label: 'DRE Number',
+                      subHeader: '(Required in California)',
                       type: 'text',
                       validate: requiredOnlyInCalifornia,
                     })}
                   </div>
                   <div style={{ gridArea: 'OfficePhone' }}>
-                    {renderField({ name: 'officePhone', label: renderLabelWithSubHeader('Office Phone Number', '( Optional )'), type: 'text' })}
+                    {renderField({
+                      name: 'officePhone',
+                      label: 'Office Phone Number',
+                      subHeader: '(Optional)',
+                      type: 'text',
+                    })}
                   </div>
                   <div style={{ gridArea: 'Website' }}>
-                    {renderField({ name: 'personalWebsite', label: renderLabelWithSubHeader('Personal Website', '( Optional )'), type: 'text' })}
+                    {renderField({
+                      name: 'personalWebsite',
+                      label: 'Personal Website',
+                      subHeader: '(Optional)',
+                      type: 'text',
+                    })}
                   </div>
                   <div style={{ gridArea: 'Picture' }}>
                     <Image size="large" src={require('../../assets/onboard-profile.png')} alt="Brivity Marketer Mailout" />
@@ -324,7 +380,7 @@ const ProfileForm = () => {
                 </div>
               </Segment>
 
-              {(isAdmin || !multiUser) && (
+              {(isAdmin || !multiUser) && !selectedPeerId && (
                 <Segment>
                   <Header as="h2">
                     Business
@@ -370,7 +426,8 @@ const ProfileForm = () => {
                     <div style={{ gridArea: 'TeamName' }}>
                       {renderField({
                         name: 'teamName',
-                        label: multiUser ? labelWithPopup('Team Name', popup(changeMsg)) : 'Team Name',
+                        label: 'Team Name',
+                        popup: multiUser ? popup(changeMsg) : null,
                         type: 'text',
                         required: true,
                         validate: required,
@@ -390,7 +447,8 @@ const ProfileForm = () => {
                     <div style={{ gridArea: 'BrokerageName' }}>
                       {renderField({
                         name: 'brokerageName',
-                        label: multiUser ? labelWithPopup('Brokerage Name', popup(changeMsg)) : 'Brokerage Name',
+                        label: 'Brokerage Name',
+                        popup: multiUser ? popup(changeMsg) : null,
                         type: 'text',
                         required: true,
                         validate: required,
@@ -412,7 +470,8 @@ const ProfileForm = () => {
                     <div style={{ gridArea: 'Address' }}>
                       {renderField({
                         name: 'address',
-                        label: multiUser ? labelWithPopup('Address', popup(changeMsg)) : 'Address',
+                        label: 'Address',
+                        popup: multiUser ? popup(changeMsg) : null,
                         type: 'text',
                         required: true,
                         validate: required,
@@ -422,7 +481,8 @@ const ProfileForm = () => {
                     <div style={{ gridArea: 'City' }}>
                       {renderField({
                         name: 'city',
-                        label: multiUser ? labelWithPopup('City', popup(changeMsg)) : 'City',
+                        label: 'City',
+                        popup: multiUser ? popup(changeMsg) : null,
                         type: 'text',
                         required: true,
                         validate: required,
@@ -432,7 +492,8 @@ const ProfileForm = () => {
                     <div style={{ gridArea: 'State' }}>
                       {renderSelectField({
                         name: 'state',
-                        label: multiUser ? labelWithPopup('State', popup(changeMsg)) : 'State',
+                        label: 'State',
+                        popup: multiUser ? popup(changeMsg) : null,
                         type: 'text',
                         required: true,
                         validate: multiUser ? null : required,
@@ -444,7 +505,8 @@ const ProfileForm = () => {
                     <div style={{ gridArea: 'ZipCode' }}>
                       {renderField({
                         name: 'zip',
-                        label: multiUser ? labelWithPopup('Zip Code', popup(changeMsg)) : 'Zip Code',
+                        label: 'Zip Code',
+                        popup: multiUser ? popup(changeMsg) : null,
                         type: 'text',
                         required: true,
                         validate: required,
@@ -454,7 +516,7 @@ const ProfileForm = () => {
                     <div style={{ gridArea: 'BusinessNotificationEmail' }}>
                       {renderField({
                         name: 'businessNotificationEmail',
-                        label: renderLabelWithSubHeader('Business Notification Email', '( Required )'),
+                        label: 'Business Notification Email',
                         type: 'text',
                         required: true,
                         validate: composeValidators(required, email),
@@ -470,51 +532,67 @@ const ProfileForm = () => {
               <Segment>
                 <Header as="h2">
                   MLS
-                  <Header.Subheader>Enter your MLS information so we can generate postcards for your listings.</Header.Subheader>
+                  {selectedPeerId ? (
+                    <Header.Subheader>Enter peers MLS information so we can generate postcards for their listings.</Header.Subheader>
+                  ) : (
+                    <Header.Subheader>Enter your MLS information so we can generate postcards for your listings.</Header.Subheader>
+                  )}
                 </Header>
 
                 <Divider style={{ margin: '1em -1em' }} />
 
-                <FieldArray name="boards">
-                  {({ fields }) =>
-                    fields.map((name, index) => (
-                      <Segment secondary key={index}>
-                        <div style={isMobile() ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 1fr 45px', gridColumnGap: '2em' }}>
-                          {renderSelectField({
-                            name: `${name}.name`,
-                            label: 'MLS',
-                            type: 'text',
-                            required: true,
-                            validate: required,
-                            options: boards ? boards : [],
-                            search: true,
-                          })}
-                          {renderField({ name: `${name}.mlsId`, label: 'MLS Agent ID', type: 'text', required: true, validate: required })}
-                          <Button
-                            basic
-                            icon
-                            color="teal"
-                            disabled={fields.length === 1}
-                            onClick={() => fields.remove(index)}
-                            style={isMobile() ? { cursor: 'pointer' } : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }}
-                            aria-label="remove mls"
-                          >
-                            <Icon name="trash" />
-                          </Button>
-                        </div>
-                      </Segment>
-                    ))
-                  }
-                </FieldArray>
+                <ExternalChanges
+                  whenTrue={initialValues.boards.length !== 0 && _.isEqual(values.boards, initialValues.boards)}
+                  set="boards"
+                  to={initialValues.boards}
+                />
 
-                <div className="buttons">
-                  <Button basic onClick={() => push('boards', undefined)} color="teal">
-                    Add MLS
-                  </Button>
-                </div>
+                {isInitiatingTeam || isInitiatingUser ? (
+                  <Loading message="Updating MLS settings, please wait..." />
+                ) : (
+                  <Fragment>
+                    <FieldArray name="boards">
+                      {({ fields }) =>
+                        fields.map((name, index) => (
+                          <Segment basic key={index}>
+                            <div style={isMobile() ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 1fr 45px', gridColumnGap: '2em' }}>
+                              {renderSelectField({
+                                name: `${name}.name`,
+                                label: 'MLS',
+                                type: 'text',
+                                required: true,
+                                validate: required,
+                                options: boards ? boards : [],
+                                search: true,
+                              })}
+                              {renderField({ name: `${name}.mlsId`, label: 'MLS Agent ID', type: 'text', required: true, validate: required })}
+                              <Button
+                                primary
+                                inverted
+                                icon
+                                disabled={fields.length === 1}
+                                onClick={() => fields.remove(index)}
+                                style={isMobile() ? { cursor: 'pointer' } : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }}
+                                aria-label="remove mls"
+                              >
+                                <Icon name="trash" />
+                              </Button>
+                            </div>
+                          </Segment>
+                        ))
+                      }
+                    </FieldArray>
+
+                    <div className="buttons">
+                      <Button primary inverted onClick={() => push('boards', undefined)}>
+                        Add MLS
+                      </Button>
+                    </div>
+                  </Fragment>
+                )}
               </Segment>
-            </ContentBodyLayout>
-          </Form>
+            </Form>
+          </Page>
         );
       }}
     />

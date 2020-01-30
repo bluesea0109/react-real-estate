@@ -22,6 +22,12 @@ import {
   updateMailoutPending,
   updateMailoutSuccess,
   updateMailoutError,
+  CHANGE_MAILOUT_DISPLAY_AGENT_PENDING,
+  changeMailoutDisplayAgentSuccess,
+  changeMailoutDisplayAgentError,
+  REVERT_EDITED_MAILOUT_PENDING,
+  revertEditedMailoutSuccess,
+  revertEditedMailoutError,
 } from './actions';
 import ApiService from '../../../services/api/index';
 
@@ -29,6 +35,7 @@ export const getSelectedPeerId = state => state.peer.peerId;
 export const getMailoutId = state => state.mailout.mailoutId;
 export const getMailoutSize = state => state.mailout.mailoutSize;
 export const getMailoutEdit = state => state.mailout.mailoutEdit;
+export const getMailoutDisplayAgent = state => state.mailout.mailoutDisplayAgent;
 
 export function* getMailoutSaga({ peerId = null }) {
   try {
@@ -160,6 +167,42 @@ export function* checkIfMailoutNeedsUpdateSaga({ peerId = null }) {
   }
 }
 
+export function* changeMailoutDisplayAgentSaga({ peerId = null }) {
+  try {
+    const mailoutId = yield select(getMailoutId);
+    const mailoutDisplayAgent = yield select(getMailoutDisplayAgent);
+    const { path, method } = peerId
+      ? ApiService.directory.peer.mailout.changeAgent(mailoutId, peerId, mailoutDisplayAgent)
+      : ApiService.directory.user.mailout.changeAgent(mailoutId, mailoutDisplayAgent);
+    const response = yield call(ApiService[method], path);
+
+    yield put(changeMailoutDisplayAgentSuccess(response));
+  } catch (err) {
+    yield put(changeMailoutDisplayAgentError(err));
+  }
+}
+
+export function* revertEditedMailoutSaga({ peerId = null }) {
+  try {
+    const mailoutId = yield select(getMailoutId);
+    const { path, method } = peerId
+      ? ApiService.directory.peer.mailout.revertEdited(mailoutId, peerId)
+      : ApiService.directory.user.mailout.revertEdited(mailoutId);
+
+    const response = yield call(ApiService[method], path);
+
+    yield put(revertEditedMailoutSuccess(response));
+
+    if (peerId) {
+      yield UpdateMailoutSaga({ peerId });
+    } else {
+      yield UpdateMailoutSaga({});
+    }
+  } catch (err) {
+    yield put(revertEditedMailoutError(err));
+  }
+}
+
 export function* checkIfPeerSelectedGetMailoutSaga() {
   const peerId = yield select(getSelectedPeerId);
 
@@ -220,6 +263,26 @@ export function* checkIfPeerSelectedNeedsUpdateSaga() {
   }
 }
 
+export function* checkIfPeerSelectedChangeMailoutDisplayAgentSaga() {
+  const peerId = yield select(getSelectedPeerId);
+
+  if (peerId) {
+    yield changeMailoutDisplayAgentSaga({ peerId });
+  } else {
+    yield changeMailoutDisplayAgentSaga({});
+  }
+}
+
+export function* checkIfPeerSelectedRevertEditedMailoutSaga() {
+  const peerId = yield select(getSelectedPeerId);
+
+  if (peerId) {
+    yield revertEditedMailoutSaga({ peerId });
+  } else {
+    yield revertEditedMailoutSaga({});
+  }
+}
+
 export default function*() {
   yield takeLatest(GET_MAILOUT_PENDING, checkIfPeerSelectedGetMailoutSaga);
   yield takeLatest(GET_MAILOUT_PENDING, checkIfPeerSelectedNeedsUpdateSaga);
@@ -227,4 +290,6 @@ export default function*() {
   yield takeLatest(SUBMIT_MAILOUT_PENDING, checkIfPeerSelectedSubmitMailoutSaga);
   yield takeLatest(STOP_MAILOUT_PENDING, checkIfPeerSelectedStopMailoutSaga);
   yield takeLatest(UPDATE_MAILOUT_SIZE_PENDING, checkIfPeerSelectedUpdatetMailoutSizeSaga);
+  yield takeLatest(CHANGE_MAILOUT_DISPLAY_AGENT_PENDING, checkIfPeerSelectedChangeMailoutDisplayAgentSaga);
+  yield takeLatest(REVERT_EDITED_MAILOUT_PENDING, checkIfPeerSelectedRevertEditedMailoutSaga);
 }

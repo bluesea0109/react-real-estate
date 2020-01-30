@@ -63,8 +63,8 @@ const SettingsPage = () => {
     return (
       <Segment>
         <Header as="h2">
-          Sync CRM
-          <Header.Subheader>Perform CRM sync</Header.Subheader>
+          Brivity CRM Sync
+          <Header.Subheader>Perform Brivity CRM Sync</Header.Subheader>
         </Header>
 
         <Button primary type="button" inverted onClick={() => dispatch(syncPending())} loading={isSyncing} disabled={isSyncing}>
