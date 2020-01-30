@@ -27,7 +27,7 @@ import { Button, Icon, Segment, Image, Divider, Menu, Page, Snackbar } from '../
 
 const changeMsg = 'This information comes from Brivity CRM. If you want to modify this information, you need to do it there.';
 
-const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
+const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
   const [personalNotificationEmailEnabled, setPersonalNotificationEmailEnabled] = useState(false);
 
   const dispatch = useDispatch();
@@ -584,4 +584,4 @@ const RevProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
   );
 };
 
-export default RevProfileForm;
+export default ProfileForm;

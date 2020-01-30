@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 
 // import NewProfileForm from '../components/Forms/NewProfileForm';
-import RevProfileForm from '../components/Forms/RevProfileForm';
+import ProfileForm from '../components/Forms/ProfileForm';
 import { getProfilePending } from '../store/modules/profile/actions';
 import { getTeamProfilePending } from '../store/modules/teamProfile/actions';
 
@@ -28,7 +28,7 @@ const ProfilePage = () => {
     if (isAdmin) dispatch(getTeamProfilePending());
   }, [isAdmin, dispatch]);
 
-  return <RevProfileForm profileAvailable={profileAvailable} teamProfileAvailable={teamProfileAvailable} />;
+  return <ProfileForm profileAvailable={profileAvailable} teamProfileAvailable={teamProfileAvailable} />;
 
   // return <NewProfileForm profileAvailable={profileAvailable} teamProfileAvailable={teamProfileAvailable} />;
 };

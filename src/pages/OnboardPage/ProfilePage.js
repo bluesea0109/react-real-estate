@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import RevProfileForm from '../../components/Forms/RevProfileForm';
+import ProfileForm from '../../components/Forms/ProfileForm';
 import { getProfilePending } from '../../store/modules/profile/actions';
 import { getTeamProfilePending } from '../../store/modules/teamProfile/actions';
 
@@ -17,7 +17,7 @@ const OnboardPage = () => {
     if (isAdmin) dispatch(getTeamProfilePending());
   }, [isAdmin, dispatch]);
 
-  return <RevProfileForm profileAvailable={profileAvailable} teamProfileAvailable={teamProfileAvailable} />;
+  return <ProfileForm profileAvailable={profileAvailable} teamProfileAvailable={teamProfileAvailable} />;
 };
 
 export default OnboardPage;
