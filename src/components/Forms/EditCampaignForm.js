@@ -42,13 +42,42 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
   const currentMergeVariables = data.mergeVariables;
   const currentBrandColor = currentMergeVariables[0];
 
-  const blacklistNames = ['brandColor', 'frontImgUrl', 'agentPicture', 'brokerageLogo', 'teamLogo'];
+  const blacklistNames = ['brandColor', 'frontImgUrl', 'agentPicture', 'brokerageLogo', 'teamLogo', 'backUrl', 'frontAgentUrl'];
   const convertedMergeVariables = Object.assign({}, ...currentMergeVariables.map(object => ({ [object.name]: object.value })));
 
   const [templateTheme, setTemplateTheme] = useState(currentTemplateTheme);
   const [selectedBrandColor, setSelectedBrandColor] = useState(currentBrandColor.value);
   const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(currentMailoutDisplayAgent);
   const [formValues, setFormValues] = useState(convertedMergeVariables);
+
+  /* This is a hack to enable fields to updated while enabling use to edit them as well
+   * TODO: find a more permanents (correct) solution to this problem */
+  const [formValuesHaveChanged, setFormValuesHaveChanged] = useState(false);
+  useEffect(() => {
+    let isInitialized = true;
+
+    async function delaySwitchOn() {
+      await sleep(1000);
+      if (isInitialized) {
+        setFormValuesHaveChanged(true);
+      }
+    }
+
+    async function delaySwitchOff() {
+      await sleep(1000);
+      if (isInitialized) {
+        setFormValuesHaveChanged(false);
+      }
+    }
+
+    if (modifyPending || changeDisplayAgentPending) {
+      delaySwitchOn();
+    } else {
+      delaySwitchOff();
+    }
+
+    return () => (isInitialized = false);
+  }, [modifyPending, changeDisplayAgentPending, setFormValuesHaveChanged]);
 
   useEffect(() => {
     const diff = differenceObjectDeep(formValues, convertedMergeVariables);
@@ -170,7 +199,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
             if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
 
             return (
-              <Form.Field key={formValues[field.name] || fieldName}>
+              <Form.Field key={formValuesHaveChanged ? formValues[field.name] || fieldName : fieldName}>
                 <Form.Input
                   fluid
                   error={error && { content: error }}
@@ -203,7 +232,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
             if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
 
             return (
-              <Form.Field key={formValues[field.name] || fieldName}>
+              <Form.Field key={formValuesHaveChanged ? formValues[field.name] || fieldName : fieldName}>
                 <Form.Input
                   fluid
                   error={error && { content: error }}
@@ -236,7 +265,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
             if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
 
             return (
-              <Form.Field key={formValues[field.name] || fieldName}>
+              <Form.Field key={formValuesHaveChanged ? formValues[field.name] || fieldName : fieldName}>
                 <Form.Input
                   fluid
                   error={error && { content: error }}
