@@ -39,7 +39,6 @@ const PrivateRoute = ({ component: Component, path, auth0, onLogin, templates, s
   const render = props => {
     const isReady =
       auth0.authenticated &&
-      !auth0.error &&
       !onLogin.pending &&
       !onLogin.error &&
       !templates.pending &&
@@ -51,10 +50,10 @@ const PrivateRoute = ({ component: Component, path, auth0, onLogin, templates, s
 
     return isReady ? (
       <Component {...props} />
-    ) : onLogin.error || auth0.error ? (
+    ) : onLogin.error ? (
       <Segment basic>
         <Message>
-          <Message.Header>{onLogin.error.message || auth0.error.message}</Message.Header>
+          <Message.Header>{onLogin.error.message}</Message.Header>
           <p>The login process has failed, please contact the Brivity Marketer Technical Support to resolve this issue!</p>
         </Message>
       </Segment>
