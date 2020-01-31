@@ -4,7 +4,8 @@ import React, { useEffect } from 'react';
 import { Route, useHistory } from 'react-router-dom';
 
 import Loading from '../components/Loading';
-import { Message, Segment } from '../components/Base';
+import { ContentTopHeaderLayout } from '../layouts';
+import { Message, Page, Segment } from '../components/Base';
 
 const PrivateRoute = ({ component: Component, path, auth0, onLogin, templates, states, boards, ...rest }) => {
   let history = useHistory();
@@ -58,7 +59,11 @@ const PrivateRoute = ({ component: Component, path, auth0, onLogin, templates, s
         </Message>
       </Segment>
     ) : (
-      <Loading />
+      <Page basic>
+        <ContentTopHeaderLayout>
+          <Loading />
+        </ContentTopHeaderLayout>
+      </Page>
     );
   };
   return <Route path={path} render={render} {...rest} />;

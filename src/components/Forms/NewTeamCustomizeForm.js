@@ -64,7 +64,7 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
       frontHeadline: bookmarkTemplate.listed.fields.filter(field => field.name === 'frontHeadline')[0],
       cta: null,
       shortenCTA: null,
-      kwkly: null,
+      kwkly: 'Text KEYWORD to 59559 for details!',
     },
     sold: {
       createMailoutsOfThisType: false,
@@ -81,7 +81,7 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
       frontHeadline: bookmarkTemplate.sold.fields.filter(field => field.name === 'frontHeadline')[0],
       cta: null,
       shortenCTA: null,
-      kwkly: null,
+      kwkly: 'Text KEYWORD to 59559 for details!',
     },
   };
 
