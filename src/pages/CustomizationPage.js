@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { getCustomizationPending } from '../store/modules/customization/actions';
 import NewCustomizeForm from '../components/Forms/NewCustomizeForm';
-import { Message } from '../components/Base';
+import { ContentTopHeaderLayout } from '../layouts';
+import { Message, Page } from '../components/Base';
 import Loading from '../components/Loading';
 
 const CustomizationPage = () => {
@@ -37,7 +38,13 @@ const CustomizationPage = () => {
 
   if (singleuser) {
     if (customizationPending && !customizationError) {
-      return <Loading />;
+      return (
+        <Page basic>
+          <ContentTopHeaderLayout>
+            <Loading />
+          </ContentTopHeaderLayout>
+        </Page>
+      );
     } else {
       if (!customizationError) return <NewCustomizeForm customizationData={customizationAvailable} />;
       if (customizationError) return <Message error>Oh snap! {customizationError}.</Message>;
@@ -46,7 +53,13 @@ const CustomizationPage = () => {
 
   if (multiUser) {
     if (customizationPending && !customizationError && teamCustomizationPending && !teamCustomizationError) {
-      return <Loading />;
+      return (
+        <Page basic>
+          <ContentTopHeaderLayout>
+            <Loading />
+          </ContentTopHeaderLayout>
+        </Page>
+      );
     } else {
       if (!teamCustomizationError)
         return <NewCustomizeForm customizationData={customizationAvailable || {}} teamCustomizationData={teamCustomizationAvailable} />;

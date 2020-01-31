@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { getTeamCustomizationPending } from '../store/modules/teamCustomization/actions';
 import NewTeamCustomizeForm from '../components/Forms/NewTeamCustomizeForm';
-import { Message } from '../components/Base';
+import { ContentTopHeaderLayout } from '../layouts';
+import { Message, Page } from '../components/Base';
 import Loading from '../components/Loading';
 
 const CustomizationTeamPage = () => {
@@ -29,7 +30,13 @@ const CustomizationTeamPage = () => {
   }
 
   if (teamCustomizationPending && !teamCustomizationError) {
-    return <Loading />;
+    return (
+      <Page basic>
+        <ContentTopHeaderLayout>
+          <Loading />
+        </ContentTopHeaderLayout>
+      </Page>
+    );
   } else {
     if (!teamCustomizationError) return <NewTeamCustomizeForm teamCustomizationData={teamCustomizationAvailable} />;
     if (teamCustomizationError) return <Message error>Oh snap! {teamCustomizationError}.</Message>;
