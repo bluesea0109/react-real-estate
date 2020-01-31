@@ -79,7 +79,6 @@ const Dashboard = () => {
             </Menu.Item>
           </Menu>
         </Segment>
-        {mailoutsPendingState && !error && <Loading />}
       </ContentTopHeaderLayout>
 
       {isInitiatingTeam && (
@@ -146,6 +145,7 @@ const Dashboard = () => {
           </Grid>
         </Segment>
       )}
+      {mailoutsPendingState && !error && <Loading />}
     </Page>
   );
 };
