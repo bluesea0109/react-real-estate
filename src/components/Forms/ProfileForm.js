@@ -366,14 +366,14 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                       type: 'text',
                     })}
                   </div>
-                  <div style={{ gridArea: 'Website' }}>
-                    {renderField({
-                      name: 'personalWebsite',
-                      label: 'Personal Website',
-                      subHeader: '(Optional)',
-                      type: 'text',
-                    })}
-                  </div>
+                  {/*<div style={{ gridArea: 'Website' }}>*/}
+                  {/*  {renderField({*/}
+                  {/*    name: 'personalWebsite',*/}
+                  {/*    label: 'Personal Website',*/}
+                  {/*    subHeader: '(Optional)',*/}
+                  {/*    type: 'text',*/}
+                  {/*  })}*/}
+                  {/*</div>*/}
                   <div style={{ gridArea: 'Picture' }}>
                     <Image size="large" src={require('../../assets/onboard-profile.png')} alt="Brivity Marketer Mailout" />
                   </div>
@@ -522,9 +522,9 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                         validate: composeValidators(required, email),
                       })}
                     </div>
-                    <div style={{ gridArea: 'BusinessWebsite' }}>
-                      {renderField({ name: 'businessWebsite', label: 'Business Website (Optional)', type: 'text' })}
-                    </div>
+                    {/*<div style={{ gridArea: 'BusinessWebsite' }}>*/}
+                    {/*  {renderField({ name: 'businessWebsite', label: 'Business Website (Optional)', type: 'text' })}*/}
+                    {/*</div>*/}
                   </div>
                 </Segment>
               )}

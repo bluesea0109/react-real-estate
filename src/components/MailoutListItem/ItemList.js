@@ -12,21 +12,21 @@ const ItemList = ({ data }) => {
 
   return (
     <ItemBodyDataLayout relaxed>
-      <List.Item>
+      <List.Item style={{ paddingTop: '.42857143em' }}>
         <List.Content>
-          <List.Header>Recipients</List.Header>
-          <List.Description>{data.recipientCount}</List.Description>
+          <List.Header style={{ padding: '1em' }}>Recipients</List.Header>
+          <List.Description style={{ padding: '1em' }}>{data.recipientCount}</List.Description>
         </List.Content>
       </List.Item>
       <List.Item>
         <List.Content>
-          <List.Header>Cost</List.Header>
-          <List.Description>{calculateCost(data.recipientCount)}</List.Description>
+          <List.Header style={{ padding: '1em' }}>Cost</List.Header>
+          <List.Description style={{ padding: '1em' }}>{calculateCost(data.recipientCount)}</List.Description>
         </List.Content>
       </List.Item>
       <List.Item>
         <List.Content>
-          <List.Header>
+          <List.Header style={{ padding: '1em' }}>
             Status
             <Popup
               flowing
@@ -35,7 +35,7 @@ const ItemList = ({ data }) => {
               position="top right"
             />
           </List.Header>
-          <List.Description style={{ color: resolveMailoutStatusColor(data.mailoutStatus) }}>
+          <List.Description style={{ padding: '1em', color: resolveMailoutStatusColor(data.mailoutStatus) }}>
             <FontAwesomeIcon icon={resolveMailoutStatusIcon(data.mailoutStatus)} style={{ marginRight: '.5em' }} />
             {resolveMailoutStatus(data.mailoutStatus)}
           </List.Description>
@@ -43,8 +43,8 @@ const ItemList = ({ data }) => {
       </List.Item>
       <List.Item>
         <List.Content>
-          <List.Header>Created</List.Header>
-          <List.Description>{formatDate(data.created)}</List.Description>
+          <List.Header style={{ padding: '1em' }}>Created</List.Header>
+          <List.Description style={{ padding: '1em' }}>{formatDate(data.created)}</List.Description>
         </List.Content>
       </List.Item>
     </ItemBodyDataLayout>

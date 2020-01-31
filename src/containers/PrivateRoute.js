@@ -4,7 +4,8 @@ import React, { useEffect } from 'react';
 import { Route, useHistory } from 'react-router-dom';
 
 import Loading from '../components/Loading';
-import { Message, Segment } from '../components/Base';
+import { ContentTopHeaderLayout } from '../layouts';
+import { Message, Page, Segment } from '../components/Base';
 
 const PrivateRoute = ({ component: Component, path, auth0, onLogin, templates, states, boards, ...rest }) => {
   let history = useHistory();
@@ -39,7 +40,6 @@ const PrivateRoute = ({ component: Component, path, auth0, onLogin, templates, s
   const render = props => {
     const isReady =
       auth0.authenticated &&
-      !auth0.error &&
       !onLogin.pending &&
       !onLogin.error &&
       !templates.pending &&
@@ -51,15 +51,19 @@ const PrivateRoute = ({ component: Component, path, auth0, onLogin, templates, s
 
     return isReady ? (
       <Component {...props} />
-    ) : onLogin.error || auth0.error ? (
+    ) : onLogin.error ? (
       <Segment basic>
         <Message>
-          <Message.Header>{onLogin.error.message || auth0.error.message}</Message.Header>
+          <Message.Header>{onLogin.error.message}</Message.Header>
           <p>The login process has failed, please contact the Brivity Marketer Technical Support to resolve this issue!</p>
         </Message>
       </Segment>
     ) : (
-      <Loading />
+      <Page basic>
+        <ContentTopHeaderLayout>
+          <Loading />
+        </ContentTopHeaderLayout>
+      </Page>
     );
   };
   return <Route path={path} render={render} {...rest} />;

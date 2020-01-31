@@ -191,7 +191,7 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
 
   return (
     <Segment>
-      <Header as="h1">
+      <Header as="h2">
         Invite Users
         <Header.Subheader>Send invitations to team members to start using Brivity Marketer (for Brivity Platform users only).</Header.Subheader>
       </Header>

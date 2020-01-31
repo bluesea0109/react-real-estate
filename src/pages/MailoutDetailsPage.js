@@ -197,6 +197,7 @@ const MailoutDetailsPage = () => {
             </Menu.Menu>
           </Menu>
         </Segment>
+        {(pendingState && !error && <Loading />) || (updatePendingState && !updateError && <Loading message="Updating listing, please wait..." />)}
       </ContentTopHeaderLayout>
 
       <ContentSpacerLayout />
@@ -282,7 +283,6 @@ const MailoutDetailsPage = () => {
           </Grid.Row>
         </Grid>
       </Segment>
-      {(pendingState && !error && <Loading />) || (updatePendingState && !updateError && <Loading message="Updating listing, please wait..." />)}
       {error && <Message error>Oh snap! {error}.</Message>}
       {updateError && <Message error>Oh snap! {updateError}.</Message>}
     </Page>
