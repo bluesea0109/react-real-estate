@@ -40,8 +40,11 @@ h1 {
 }
 
 .sub.header {
-  color: #b3b3b3 !important;
+  color: #3b3b3b !important;
   font-size: 14px !important;
+  padding-top: 8px !important;
+  margin-bottom: -14px !important;
+  line-height: 18px;
 }
 
 .ui.header {

@@ -648,7 +648,7 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
   return (
     <Page basic>
       <ContentTopHeaderLayout>
-        <Segment style={isMobile() ? { marginTop: '58px' } : {}}>
+        <Segment padded style={isMobile() ? { marginTop: '58px' } : {}}>
           <Menu borderless fluid secondary>
             {peerId ? (
               <Header as="h1">

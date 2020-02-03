@@ -645,12 +645,13 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
   return (
     <Page basic>
       <ContentTopHeaderLayout>
-        <Segment style={isMobile() ? { marginTop: '58px' } : {}}>
+        <Segment padded style={isMobile() ? { marginTop: '58px' } : {}}>
           <Menu borderless fluid secondary>
             <Header as="h1">
               Team Customization
-              <Header.Subheader style={{ lineHeight: '1.5em', marginBottom: '-11px' }}>
-                Set the default template customization options for your team. <br />
+              <Header.Subheader>
+                Set the default template customization options for your team.&nbsp;
+                {isMobile() && <br />}
                 Changes made here will not overwrite existing user-specific customization.
               </Header.Subheader>
             </Header>
@@ -665,7 +666,7 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
         </Segment>
       </ContentTopHeaderLayout>
 
-      <Segment style={isMobile() ? { marginTop: '205px' } : { marginTop: '110px' }}>
+      <Segment style={isMobile() ? { marginTop: '170px' } : { marginTop: '110px' }}>
         <Menu pointing secondary>
           <Menu.Item name="newListing" active={step === 1} disabled={step === 1} onClick={prevStep} />
           <Menu.Item name="soldListing" active={step === 2} disabled={step === 2} onClick={nextStep} />
