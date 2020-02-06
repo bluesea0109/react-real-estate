@@ -8,9 +8,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { saveTeamProfilePending } from '../../store/modules/teamProfile/actions';
 import { Divider, Icon, Image, Menu, Page, Segment, Snackbar } from '../Base';
-import { objectIsEmpty, isMobile, phoneRegExp, popup, tag } from './utils';
 import { saveProfilePending } from '../../store/modules/profile/actions';
 import { Button, Dropdown, Form, Input, FileUpload } from './Base';
+import { isMobile, phoneRegExp, popup, tag } from './utils';
 import { ContentTopHeaderLayout } from '../../layouts';
 import Loading from '../Loading';
 
@@ -282,8 +282,6 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                 </Menu>
               </Segment>
             </ContentTopHeaderLayout>
-
-            {!objectIsEmpty(errors) && <Snackbar error>Profile form has error(s)</Snackbar>}
 
             {picturesError && <Snackbar error>{JSON.stringify(picturesError, 0, 2)}</Snackbar>}
 

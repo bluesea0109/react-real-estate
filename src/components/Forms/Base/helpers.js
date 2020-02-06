@@ -1,4 +1,5 @@
-import { getIn } from 'formik';
+import React from 'react';
+import { getIn, useFormikContext } from 'formik';
 
 export const getFieldError = (field, form) => {
   const { name } = field;
@@ -11,4 +12,16 @@ export const getFieldError = (field, form) => {
 export const setFieldValue = (form, name, value, shouldValidate) => {
   form.setFieldValue(name, value, shouldValidate);
   form.setFieldTouched(name, true, shouldValidate);
+};
+
+export const useFocusOnError = ({ fieldRef, name }) => {
+  const formik = useFormikContext();
+  const prevSubmitCountRef = React.useRef(formik.submitCount);
+  const firstErrorKey = Object.keys(formik.errors)[0];
+  React.useEffect(() => {
+    if (prevSubmitCountRef.current !== formik.submitCount && !formik.isValid) {
+      if (fieldRef.current && firstErrorKey === name) fieldRef.current.focus();
+    }
+    prevSubmitCountRef.current = formik.submitCount;
+  }, [formik.submitCount, formik.isValid, firstErrorKey, fieldRef, name]);
 };

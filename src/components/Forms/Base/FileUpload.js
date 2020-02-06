@@ -4,6 +4,7 @@ import { useDropzone } from 'react-dropzone';
 import { Form, Header, Icon, Label, Card, Image, Item } from 'semantic-ui-react';
 
 import { deletePhotoPending, uploadPhotoPending } from '../../../store/modules/pictures/actions';
+import { useFocusOnError } from './helpers';
 import ErrorMessage from './ErrorMessage';
 
 function FileUpload({ name, label, pending, dispatch, errorComponent = ErrorMessage, tag = undefined, ...props }) {
@@ -14,6 +15,8 @@ function FileUpload({ name, label, pending, dispatch, errorComponent = ErrorMess
   });
 
   const files = acceptedFiles.map(file => file);
+  const fieldRef = React.useRef();
+  useFocusOnError({ fieldRef, name });
 
   const onChangeHandler = files => {
     if (!pending) {
@@ -59,7 +62,7 @@ function FileUpload({ name, label, pending, dispatch, errorComponent = ErrorMess
               </div>
             )}
 
-            <div style={{ gridArea: 'Image' }} {...getRootProps({ className: 'dropzone' })} onDrop={() => onChangeHandler(files)}>
+            <div style={{ gridArea: 'Image' }} {...getRootProps({ className: 'dropzone' })} onDrop={() => onChangeHandler(files)} ref={fieldRef}>
               <Item className="image-container" htmlFor={name} as="label" style={{ cursor: 'pointer' }} onClick={open}>
                 <Card
                   style={
