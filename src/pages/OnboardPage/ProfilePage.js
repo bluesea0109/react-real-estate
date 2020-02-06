@@ -9,15 +9,20 @@ const OnboardPage = () => {
   const dispatch = useDispatch();
 
   const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
-  const profileAvailable = useSelector(store => store.onLogin.userProfile);
-  const teamProfileAvailable = useSelector(store => store.onLogin.teamProfile);
+  const onLoginProfileAvailable = useSelector(store => store.onLogin.userProfile);
+  const onLoginTeamProfileAvailable = useSelector(store => store.onLogin.teamProfile);
+
+  const profileAvailable = useSelector(store => store.profile.available);
+  const teamProfileAvailable = useSelector(store => store.teamProfile.available);
 
   useEffect(() => {
     dispatch(getProfilePending());
     if (isAdmin) dispatch(getTeamProfilePending());
   }, [isAdmin, dispatch]);
 
-  return <ProfileForm profileAvailable={profileAvailable} teamProfileAvailable={teamProfileAvailable} />;
+  return (
+    <ProfileForm profileAvailable={profileAvailable || onLoginProfileAvailable} teamProfileAvailable={teamProfileAvailable || onLoginTeamProfileAvailable} />
+  );
 };
 
 export default OnboardPage;
