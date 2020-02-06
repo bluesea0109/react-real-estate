@@ -49,6 +49,7 @@ class FormikInput extends Component {
                   name={name}
                   {...safeInputProps}
                   value={field.value}
+                  disabled={disabled}
                   onChange={(e, { name, value }) => {
                     setFieldValue(form, name, value, validateOnChange);
                     Promise.resolve().then(() => {

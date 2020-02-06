@@ -48,6 +48,7 @@ class FormikTextArea extends Component {
                   rows={4}
                   {...safeInputProps}
                   value={field.value}
+                  disabled={disabled}
                   onChange={(e, { name, value }) => {
                     setFieldValue(form, name, value, validateOnChange);
                     Promise.resolve().then(() => {

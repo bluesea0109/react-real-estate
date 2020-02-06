@@ -30,6 +30,7 @@ class FormikCheckbox extends Component {
                   label={label}
                   name={name}
                   checked={field.value}
+                  disabled={disabled}
                   onChange={(e, { name, checked }) => {
                     setFieldValue(form, name, checked, true);
                     Promise.resolve().then(() => {

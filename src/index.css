@@ -452,3 +452,14 @@ h1 {
 /*  !*position: sticky;*!*/
 /*  !*margin-left: 65%;*!*/
 /*}*/
+
+.ui.form .disabled.field,
+.ui.form .disabled.fields .field,
+.ui.form .field :disabled,
+.ui.disabled.input,
+.ui.input:not(.disabled) input[disabled],
+.ui.disabled.dropdown,
+.ui.dropdown .menu > .disabled.item {
+  pointer-events: none;
+  opacity: 1 !important;
+}

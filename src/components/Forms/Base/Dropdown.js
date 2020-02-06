@@ -44,6 +44,7 @@ class FormikDropdown extends Component {
                 selection
                 {...safeInputProps}
                 value={field.value}
+                disabled={disabled}
                 onAddItem={this.handleAddition.bind(this)}
                 onChange={(e, { name, value }) => {
                   setFieldValue(form, name, value, true);
