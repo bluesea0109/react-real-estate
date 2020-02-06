@@ -42,6 +42,7 @@ class FormikDropdown extends Component {
                 selectOnBlur={false}
                 selectOnNavigation={false}
                 selection
+                search
                 {...safeInputProps}
                 value={field.value}
                 disabled={disabled}
