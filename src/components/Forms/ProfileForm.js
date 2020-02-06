@@ -172,6 +172,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
       <Form
         ignoreLoading
         enableReinitialize
+        validateOnMount
         initialValues={{
           realtorPhoto: pictureCheck(picturesRealtorPhoto) || pictureCheck(realtorPhoto),
           first: formValues.userProfile.first,
