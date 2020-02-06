@@ -4,8 +4,9 @@ import { useDropzone } from 'react-dropzone';
 import { Form, Header, Icon, Label, Card, Image, Item } from 'semantic-ui-react';
 
 import { deletePhotoPending, uploadPhotoPending } from '../../../store/modules/pictures/actions';
+import ErrorMessage from './ErrorMessage';
 
-function FileUpload({ name, label, pending, dispatch, ...props }) {
+function FileUpload({ name, label, pending, dispatch, errorComponent = ErrorMessage, tag = undefined, ...props }) {
   const { getRootProps, getInputProps, open, acceptedFiles } = useDropzone({
     // Disable click and keydown behavior
     noClick: true,
@@ -44,7 +45,7 @@ function FileUpload({ name, label, pending, dispatch, ...props }) {
           >
             {!!label && (
               <label style={{ gridArea: 'Label' }} htmlFor={props.id || props.name}>
-                {label}{' '}
+                {label} {tag}
               </label>
             )}
 
@@ -63,7 +64,7 @@ function FileUpload({ name, label, pending, dispatch, ...props }) {
                 <Card
                   style={
                     error
-                      ? { minHeight: '15em', maxHeight: '15em', minWidth: '15em', maxWidth: '15em', overflow: 'hidden', border: '1px solid #e0b4b4' }
+                      ? { minHeight: '15em', maxHeight: '15em', minWidth: '15em', maxWidth: '15em', overflow: 'hidden', border: '3px solid #e0b4b4' }
                       : { minHeight: '15em', maxHeight: '15em', minWidth: '15em', maxWidth: '15em', overflow: 'hidden' }
                   }
                 >

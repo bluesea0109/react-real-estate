@@ -20,7 +20,7 @@ class FormikDropdown extends Component {
   }
 
   render() {
-    const { name, label, validate, inputProps = {}, fieldProps = {}, errorComponent = ErrorMessage, fast } = this.props;
+    const { name, label, validate, inputProps = {}, fieldProps = {}, errorComponent = ErrorMessage, fast, disabled = false, tag = undefined } = this.props;
     const { onChange, ...safeInputProps } = inputProps;
     const DesiredField = fast === true ? FastField : Field;
     return (
@@ -28,10 +28,10 @@ class FormikDropdown extends Component {
         {({ field, form }) => {
           const error = getFieldError(field, form);
           return (
-            <Form.Field error={!!error} {...fieldProps}>
+            <Form.Field error={!!error} {...fieldProps} className={disabled ? 'disabled-form-field' : null}>
               {!!label && (
                 <label htmlFor={this.id} onClick={() => this._dropdown.open()}>
-                  {label}
+                  {label} {tag}
                 </label>
               )}
               <Dropdown

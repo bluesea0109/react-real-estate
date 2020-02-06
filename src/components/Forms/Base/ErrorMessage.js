@@ -1,5 +1,9 @@
 import React from 'react';
 
-const ErrorMessage = ({ message }) => <span className="sui-error-message">{message}</span>;
+const ErrorMessage = ({ message, style }) => (
+  <span className="sui-error-message" style={style}>
+    {message}
+  </span>
+);
 
 export default ErrorMessage;

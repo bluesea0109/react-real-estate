@@ -14,7 +14,19 @@ class FormikTextArea extends Component {
   }
 
   render() {
-    const { name, label, validate, inputProps = {}, fieldProps = {}, validateOnChange, errorComponent = ErrorMessage, inputRef, fast } = this.props;
+    const {
+      name,
+      label,
+      validate,
+      inputProps = {},
+      fieldProps = {},
+      validateOnChange,
+      errorComponent = ErrorMessage,
+      inputRef,
+      fast,
+      disabled = false,
+      tag = undefined,
+    } = this.props;
     const { onChange, ...safeInputProps } = inputProps;
     const RefWrapper = inputRef ? Ref : NullRef;
     const DesiredField = fast === true ? FastField : Field;
@@ -23,8 +35,12 @@ class FormikTextArea extends Component {
         {({ field, form }) => {
           const error = getFieldError(field, form);
           return (
-            <Form.Field error={!!error} {...fieldProps}>
-              {!!label && <label htmlFor={this.id}>{label}</label>}
+            <Form.Field error={!!error} {...fieldProps} className={disabled ? 'disabled-form-field' : null}>
+              {!!label && (
+                <label htmlFor={this.id}>
+                  {label} {tag}
+                </label>
+              )}
               <RefWrapper innerRef={inputRef}>
                 <TextArea
                   id={this.id}

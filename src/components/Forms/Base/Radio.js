@@ -14,7 +14,7 @@ class FormikCheckbox extends Component {
   }
 
   render() {
-    const { name, label, value, validate, inputProps = {}, fieldProps = {}, errorComponent = ErrorMessage, inputRef, fast } = this.props;
+    const { name, label, value, validate, inputProps = {}, fieldProps = {}, errorComponent = ErrorMessage, inputRef, fast, disabled = false } = this.props;
     const { onChange, ...safeInputProps } = inputProps;
     const DesiredField = fast === true ? FastField : Field;
     return (
@@ -22,7 +22,7 @@ class FormikCheckbox extends Component {
         {({ field, form }) => {
           const error = getFieldError(field, form);
           return (
-            <Form.Field error={!!error} {...fieldProps}>
+            <Form.Field error={!!error} {...fieldProps} className={disabled ? 'disabled-form-field' : null}>
               <InputRef inputRef={inputRef}>
                 <Radio
                   {...safeInputProps}
