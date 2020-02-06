@@ -1,3 +1,5 @@
+export { default as Debug } from './Debug';
+
 export { default as Button } from './Button';
 export { default as Form } from './Form';
 

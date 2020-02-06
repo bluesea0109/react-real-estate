@@ -157,13 +157,23 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
     );
   }
 
+  const pictureCheck = src => {
+    if (src) {
+      if (src.includes('/undefined')) {
+        return undefined;
+      } else {
+        return src;
+      }
+    }
+  };
+
   return (
     <Page basic>
       <Form
         ignoreLoading
         enableReinitialize
         initialValues={{
-          realtorPhoto: picturesRealtorPhoto || realtorPhoto,
+          realtorPhoto: pictureCheck(picturesRealtorPhoto) || pictureCheck(realtorPhoto),
           first: formValues.userProfile.first,
           last: formValues.userProfile.last,
           personalPhone: formValues.userProfile.phone,
@@ -175,8 +185,8 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
           teamName: formValues.businessProfile.teamName,
           brokerageName: formValues.businessProfile.brokerageName,
           businessPhone: formValues.businessProfile.phone,
-          teamLogo: picturesTeamLogo || teamLogo,
-          brokerageLogo: picturesBrokerageLogo || brokerageLogo,
+          teamLogo: pictureCheck(picturesTeamLogo) || pictureCheck(teamLogo),
+          brokerageLogo: pictureCheck(picturesBrokerageLogo) || pictureCheck(brokerageLogo),
           address: formValues.businessProfile.address,
           city: formValues.businessProfile.city,
           state: formValues.businessProfile.state,
