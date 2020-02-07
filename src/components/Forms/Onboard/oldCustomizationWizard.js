@@ -3,7 +3,7 @@ import { Form } from 'semantic-ui-react';
 import { Form as FinalForm } from 'react-final-form';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Button, Menu, Segment } from '../../components/Base';
+import { Button, Menu, Segment } from '../../../components/Base';
 
 const CustomizationWizard = ({ children, initialValues = {}, onSubmit, togglePages, setTogglePages }) => {
   const [page, setPage] = useState(0);

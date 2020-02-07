@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Page } from '../../components/Base';
-import CustomizeTeamForm from '../../components/Forms/CustomizeTeamForm';
+import CustomizeTeamForm from '../../components/Forms/Onboard/oldCustomizeTeamForm';
 
 const CustomizeTeamPage = () => {
   return (

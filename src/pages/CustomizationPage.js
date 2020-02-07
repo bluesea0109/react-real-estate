@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getCustomizationPending } from '../store/modules/customization/actions';
-import NewCustomizeForm from '../components/Forms/NewCustomizeForm';
+import CustomizeForm from '../components/Forms/CustomizeForm';
 import { ContentTopHeaderLayout } from '../layouts';
 import { Message, Page } from '../components/Base';
 import Loading from '../components/Loading';
@@ -46,7 +46,7 @@ const CustomizationPage = () => {
         </Page>
       );
     } else {
-      if (!customizationError) return <NewCustomizeForm customizationData={customizationAvailable} />;
+      if (!customizationError) return <CustomizeForm customizationData={customizationAvailable} />;
       if (customizationError) return <Message error>Oh snap! {customizationError}.</Message>;
     }
   }
@@ -61,8 +61,7 @@ const CustomizationPage = () => {
         </Page>
       );
     } else {
-      if (!teamCustomizationError)
-        return <NewCustomizeForm customizationData={customizationAvailable || {}} teamCustomizationData={teamCustomizationAvailable} />;
+      if (!teamCustomizationError) return <CustomizeForm customizationData={customizationAvailable || {}} teamCustomizationData={teamCustomizationAvailable} />;
       if (teamCustomizationError) return <Message error>Oh snap! {teamCustomizationError}.</Message>;
     }
   }

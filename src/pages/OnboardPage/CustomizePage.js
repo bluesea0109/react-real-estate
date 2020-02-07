@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Page } from '../../components/Base';
-import CustomizeForm from '../../components/Forms/CustomizeForm';
+import CustomizeForm from '../../components/Forms/Onboard/oldCustomizeForm';
 
 const CustomizePage = () => {
   return (

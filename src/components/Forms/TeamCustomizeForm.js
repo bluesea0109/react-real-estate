@@ -33,7 +33,7 @@ let multiUserStartState;
 
 const TrimStrAndConvertToInt = value => Math.round(parseInt(value.trim(), 10) / 10) * 10;
 
-const NewCustomizeForm = ({ teamCustomizationData }) => {
+const CustomizeForm = ({ teamCustomizationData }) => {
   const dispatch = useDispatch();
   const bookmarkTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.bookmark);
   const ribbonTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.ribbon);
@@ -773,4 +773,4 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
   );
 };
 
-export default NewCustomizeForm;
+export default CustomizeForm;
