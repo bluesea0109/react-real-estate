@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Field } from 'formik';
 import { useDropzone } from 'react-dropzone';
 import { Form, Header, Icon, Label, Card, Image, Item } from 'semantic-ui-react';
@@ -8,22 +8,25 @@ import { useFocusOnError } from './helpers';
 import ErrorMessage from './ErrorMessage';
 
 function FileUpload({ name, label, pending, dispatch, errorComponent = ErrorMessage, tag = undefined, ...props }) {
-  const { getRootProps, getInputProps, open, acceptedFiles } = useDropzone({
-    // Disable click and keydown behavior
+  const fieldRef = React.useRef();
+
+  const onDrop = useCallback(
+    acceptedFiles => {
+      if (!pending) {
+        const data = [name, acceptedFiles[0]];
+        dispatch(uploadPhotoPending(data));
+      }
+    },
+    [pending, name, dispatch]
+  );
+
+  const { getRootProps, getInputProps, open } = useDropzone({
+    onDrop,
     noClick: true,
     noKeyboard: true,
   });
 
-  const files = acceptedFiles.map(file => file);
-  const fieldRef = React.useRef();
   useFocusOnError({ fieldRef, name });
-
-  const onChangeHandler = files => {
-    if (!pending) {
-      const data = [name, files[0]];
-      dispatch(uploadPhotoPending(data));
-    }
-  };
 
   const onClickDelete = target => {
     if (!pending) {
@@ -62,7 +65,7 @@ function FileUpload({ name, label, pending, dispatch, errorComponent = ErrorMess
               </div>
             )}
 
-            <div style={{ gridArea: 'Image' }} {...getRootProps({ className: 'dropzone' })} onDrop={() => onChangeHandler(files)} ref={fieldRef}>
+            <div style={{ gridArea: 'Image' }} {...getRootProps({ className: 'dropzone' })} ref={fieldRef}>
               <Item className="image-container" htmlFor={name} as="label" style={{ cursor: 'pointer' }} onClick={open}>
                 <Card
                   style={
@@ -81,7 +84,7 @@ function FileUpload({ name, label, pending, dispatch, errorComponent = ErrorMess
                   ) : (
                     <Image size="tiny" src={require('../../../assets/image-placeholder.svg')} wrapped ui={false} />
                   )}
-                  {pending ? null : <input {...getInputProps()} onChange={() => onChangeHandler(files)} />}
+                  {pending ? null : <input {...getInputProps()} />}
                   <div className="image-middle">
                     {pending ? (
                       <Image centered size="tiny" src={require('../../../assets/loading.gif')} style={{ background: 'unset', marginTop: '1em', opacity: 1 }} />
