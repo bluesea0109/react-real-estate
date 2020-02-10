@@ -9,6 +9,10 @@ export const getFieldError = (field, form) => {
   return checkTouched && getIn(form.errors, name);
 };
 
+// export const setFieldErrors = (form, name, value) => {
+//   form.setFieldError(name, value);
+// };
+
 export const setFieldValue = (form, name, value, shouldValidate) => {
   form.setFieldValue(name, value, shouldValidate);
   form.setFieldTouched(name, true, shouldValidate);

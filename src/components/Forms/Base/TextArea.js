@@ -33,7 +33,7 @@ const FormikTextArea = ({
         return (
           <Form.Field error={!!error} {...fieldProps} className={disabled ? 'disabled-form-field' : null}>
             {!!label && (
-              <label htmlFor={id}>
+              <label htmlFor={id} style={{ opacity: disabled ? '0.4' : 1 }}>
                 {label} {tag}
               </label>
             )}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Popup } from '../Base';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import _ from 'lodash';
 
 const mql = window.matchMedia('(max-width: 599px)');
 export const isMobile = () => mql.matches;
@@ -22,7 +23,39 @@ export const tag = type => {
 };
 
 export const phoneRegExp = /^(\+?\d{0,4})?\s?[-.]?\s?(\(?\d{3}\)?)\s?[-.]?\s?(\(?\d{3}\)?)\s?[-.]?\s?(\(?\d{4}\)?)?$/;
+export const urlRegExp = new RegExp(
+  '^(https?:\\/\\/)?' + // protocol
+  '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+  '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+  '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+  '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+    '(\\#[-a-z\\d_]*)?$',
+  'i'
+); // fragment locator
+
+export const required = value => (value ? undefined : 'Required');
+export const isEmpty = value => value === undefined || value === null || value === '';
+export const minLength = min => value => !isEmpty(value) && value.length < min && `Must be at least ${min} characters`;
+export const maxLength = max => value => !isEmpty(value) && value.length > max && `Must be no more than ${max} characters`;
+export const composeValidators = (...validators) => value => validators.reduce((error, validator) => error || validator(value), undefined);
+
+export const TrimStrAndConvertToInt = value => Math.round(parseInt(value.trim(), 10) / 10) * 10;
 
 export function objectIsEmpty(obj) {
   return !obj || Object.keys(obj).length === 0;
+}
+
+export function differenceObjectDeep(source, other) {
+  return _.reduce(
+    source,
+    function(result, value, key) {
+      if (_.isObject(value) && _.isObject(other[key])) {
+        result[key] = differenceObjectDeep(value, other[key]);
+      } else if (!_.isEqual(value, other[key])) {
+        result[key] = other[key];
+      }
+      return result;
+    },
+    _.omit(other, _.keys(source))
+  );
 }

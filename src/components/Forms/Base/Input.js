@@ -19,8 +19,11 @@ const FormikInput = ({
   disabled = false,
   tag = undefined,
   id = `field_input_${name}`,
+  onBlur,
+  onChange,
+  errorState,
+  ...rest
 }) => {
-  const { onChange, ...safeInputProps } = inputProps;
   const DesiredField = fast === true ? FastField : Field;
   const fieldRef = React.useRef();
   useFocusOnError({ fieldRef, name });
@@ -28,12 +31,12 @@ const FormikInput = ({
   return (
     <DesiredField name={name} validate={validate}>
       {({ field, form }) => {
-        const error = getFieldError(field, form);
+        const error = errorState || getFieldError(field, form);
 
         return (
           <Form.Field error={!!error} {...fieldProps} className={disabled ? 'disabled-form-field' : null}>
             {!!label && (
-              <label htmlFor={id}>
+              <label htmlFor={id} style={{ opacity: disabled ? '0.4' : 1 }}>
                 {label} {tag}
               </label>
             )}
@@ -43,7 +46,7 @@ const FormikInput = ({
                 id={id}
                 name={name}
                 ref={fieldRef}
-                {...safeInputProps}
+                {...rest}
                 value={field.value}
                 disabled={disabled}
                 onChange={(e, { name, value }) => {
@@ -52,11 +55,16 @@ const FormikInput = ({
                     onChange && onChange(e, { name, value });
                   });
                 }}
-                onBlur={form.handleBlur}
+                onBlur={e => {
+                  form.handleBlur(e);
+                  Promise.resolve().then(() => {
+                    onBlur && onBlur(e);
+                  });
+                }}
               />
             </InputRef>
 
-            {error && React.createElement(errorComponent, { message: getIn(form.errors, name) })}
+            {error && React.createElement(errorComponent, { message: errorState || getIn(form.errors, name) })}
           </Form.Field>
         );
       }}
