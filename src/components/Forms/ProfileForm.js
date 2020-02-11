@@ -190,7 +190,6 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
           personalPhone: formValues.userProfile.phone,
           email: formValues.userProfile.email,
           dre: formValues.userProfile.dre,
-          personalOfficePhone: '',
           personalNotificationEmail: personalNotificationEmailEnabled ? formValues.businessProfile.notificationEmail : formValues.userProfile.notificationEmail,
           boards: formValues.userProfile.boards,
           teamName: formValues.businessProfile.teamName,
@@ -226,7 +225,6 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
               is: 'CA',
               then: Yup.string().required('Required by state of California'),
             }),
-          personalOfficePhone: Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
           personalNotificationEmail: Yup.string()
             .email('Invalid email')
             .when('businessNotificationEmail', {
@@ -365,10 +363,9 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                   <Input label="Email" name="email" disabled={multiUser} tag={multiUser ? popup(changeMsg) : tag('Required')} />
                 </Form.Group>
 
-                <Form.Group widths="2" style={{ gridArea: 'DreOfficePhone' }}>
+                <div style={{ gridArea: 'DreOfficePhone' }}>
                   <Input label="DRE Number" name="dre" tag={tag('Dre')} />
-                  <Input label="Office Phone Number" name="personalOfficePhone" tag={tag('Optional')} />
-                </Form.Group>
+                </div>
 
                 <Form.Group widths="2" style={{ gridArea: 'NotificationEmailToggle' }}>
                   <Input
@@ -492,7 +489,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                   </div>
 
                   <div style={{ gridArea: 'OfficePhone' }}>
-                    <Input label="Office Phone Number" name="businessPhone" tag={tag('Optional')} />
+                    <Input label="Office Phone Number" name="businessPhone" disabled={multiUser} tag={multiUser ? popup(changeMsg) : tag('Optional')} />
                   </div>
 
                   <FileUpload style={{ gridArea: 'TeamLogo' }} label="Team Logo" name="teamLogo" dispatch={dispatch} pending={picturesPending} />
