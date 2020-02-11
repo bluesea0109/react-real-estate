@@ -1,7 +1,7 @@
 {
   "name": "beta-brivitymarketer-com",
   "homepage": "/v2/",
-  "version": "2.1.94",
+  "version": "2.1.95",
   "private": true,
   "scripts": {
     "start": "PORT=8082 react-scripts start",
