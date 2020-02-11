@@ -1,21 +1,20 @@
 import _ from 'lodash';
-
 import { BlockPicker } from 'react-color';
 import Nouislider from 'nouislider-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Form, Header, Label, Popup } from 'semantic-ui-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { createRef, Fragment, useEffect, useState, useReducer } from 'react';
 
-import { isMobile, popup, urlRegExp, required, minLength, maxLength, composeValidators, differenceObjectDeep } from '../utils';
-import { saveListedShortcodePending, saveSoldShortcodePending } from '../../../store/modules/shortcode/actions';
+import { isMobile, popup, urlRegExp, required, minLength, maxLength, composeValidators, differenceObjectDeep } from '../../utils';
 import { saveCustomizationPending, reviewCustomizationCompleted } from '../../../store/modules/customization/actions';
+import { saveListedShortcodePending, saveSoldShortcodePending } from '../../../store/modules/shortcode/actions';
 import { Button, Icon, Image, Menu, Modal, Page, Segment } from '../../Base';
 import { ContentTopHeaderLayout } from '../../../layouts';
-import { colors, StyledHeader } from './helpers';
+import { colors, StyledHeader } from '../../helpers';
+import Wizard from './CustomizationWizard';
 import FlipCard from '../../FlipCard';
 import Loading from '../../Loading';
-import Wizard from './CustomizationWizard';
 import { Input } from '../Base';
 
 const formReducer = (state, action) => {

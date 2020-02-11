@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import * as Yup from 'yup';
-import { FieldArray, useFormikContext } from 'formik';
 import { Header } from 'semantic-ui-react';
+import { FieldArray, useFormikContext } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useReducer, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,7 +10,7 @@ import { saveTeamProfilePending } from '../../store/modules/teamProfile/actions'
 import { Divider, Icon, Image, Menu, Page, Segment, Snackbar } from '../Base';
 import { saveProfilePending } from '../../store/modules/profile/actions';
 import { Button, Dropdown, Form, Input, FileUpload } from './Base';
-import { isMobile, phoneRegExp, popup, tag } from './utils';
+import { isMobile, phoneRegExp, popup, tag } from '../utils';
 import { ContentTopHeaderLayout } from '../../layouts';
 import Loading from '../Loading';
 

@@ -1,7 +1,7 @@
-import React from 'react';
-import { Popup } from '../Base';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import _ from 'lodash';
+import React from 'react';
+import { Popup } from './Base';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 

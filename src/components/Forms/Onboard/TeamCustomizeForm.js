@@ -7,11 +7,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { createRef, Fragment, useEffect, useState, useReducer } from 'react';
 
 import { reviewTeamCustomizationCompleted, saveTeamCustomizationPending } from '../../../store/modules/teamCustomization/actions';
-import { isMobile, popup, urlRegExp, required, minLength, maxLength, composeValidators, TrimStrAndConvertToInt } from '../utils';
+import { isMobile, popup, urlRegExp, required, minLength, maxLength, composeValidators, TrimStrAndConvertToInt } from '../../utils';
 import { saveTeamSoldShortcodePending, saveTeamListedShortcodePending } from '../../../store/modules/teamShortcode/actions';
 import { Button, Icon, Image, Menu, Modal, Page, Segment } from '../../Base';
 import { ContentTopHeaderLayout } from '../../../layouts';
-import { colors, StyledHeader } from './helpers';
+import { colors, StyledHeader } from '../../helpers';
 import Wizard from './CustomizationWizard';
 import { Form, Input } from '../Base';
 import FlipCard from '../../FlipCard';

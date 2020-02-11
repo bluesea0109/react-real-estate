@@ -4,10 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getCustomizationPending } from '../../store/modules/customization/actions';
 import CustomizeForm from '../../components/Forms/Onboard/CustomizeForm';
 import { ContentTopHeaderLayout } from '../../layouts';
+import { colors } from '../../components/helpers';
 import Loading from '../../components/Loading';
 import { Page } from '../../components/Base';
-
-import { colors } from '../../components/Forms/Onboard/helpers';
 
 const initialValues = {
   listed: {

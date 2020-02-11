@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { Menu, Segment } from '../../Base';
-import { isMobile } from '../utils';
+import { isMobile } from '../../utils';
 import { Form } from '../Base';
 
 const Wizard = ({ children, initialValues = {}, onSubmit, page, setPage, controls, onLastPage, onIsSubmitting }) => {

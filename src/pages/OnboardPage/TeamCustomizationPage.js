@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getTeamCustomizationPending } from '../../store/modules/teamCustomization/actions';
 import TeamCustomizeForm from '../../components/Forms/Onboard/TeamCustomizeForm';
 import { ContentTopHeaderLayout } from '../../layouts';
+import { colors } from '../../components/helpers';
 import Loading from '../../components/Loading';
 import { Page } from '../../components/Base';
-import { colors } from '../../components/Forms/Onboard/helpers';
 
 const initialValues = {
   listed: {

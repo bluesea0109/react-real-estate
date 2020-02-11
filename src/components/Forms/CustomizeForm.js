@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import styled from 'styled-components';
 import { BlockPicker } from 'react-color';
 import Nouislider from 'nouislider-react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,20 +6,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { /*Confirm,*/ Dropdown, Form, Header, Label, Popup } from 'semantic-ui-react';
 import React, { createRef, Fragment, useEffect, useState, useReducer } from 'react';
 
-import { isMobile, maxLength, popup, required, composeValidators, differenceObjectDeep, urlRegExp } from './utils';
+import { isMobile, maxLength, popup, required, composeValidators, differenceObjectDeep, urlRegExp } from '../utils';
 import { saveListedShortcodePending, saveSoldShortcodePending } from '../../store/modules/shortcode/actions';
 import { saveCustomizationPending } from '../../store/modules/customization/actions';
 import { Button, Icon, Image, Menu, Modal, Page, Segment } from '../Base';
 import { ContentTopHeaderLayout } from '../../layouts';
+import { colors, StyledHeader } from '../helpers';
 import FlipCard from '../FlipCard';
 import Loading from '../Loading';
-
-export const colors = ['#b40101', '#f2714d', '#f4b450', '#79c34d', '#2d9a2c', '#59c4c4', '#009ee7', '#0e2b5b', '#ee83ee', '#8b288f', '#808080', '#000000'];
-
-const StyledHeader = styled(Header)`
-  min-width: 18em;
-  display: inline-block;
-`;
 
 const formReducer = (state, action) => {
   return _.merge({}, state, action);
