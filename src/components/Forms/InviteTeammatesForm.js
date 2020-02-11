@@ -196,6 +196,8 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
         <Header.Subheader>Send invitations to team members to start using Brivity Marketer (for Brivity Platform users only).</Header.Subheader>
       </Header>
 
+      <br />
+
       {teammates && teammates.length === 1 ? (
         <div>
           <Message size="large" style={{ textAlign: 'center' }}>
@@ -224,6 +226,8 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
               </Button>
             </div>
           </div>
+
+          <br />
 
           <List>{createInviteList()}</List>
 

@@ -28,6 +28,8 @@ const SettingsPage = () => {
           <Header.Subheader>Perform password change</Header.Subheader>
         </Header>
 
+        <br />
+
         <Button primary inverted onClick={() => setModalOpen(true)}>
           Password Change
         </Button>
@@ -66,6 +68,8 @@ const SettingsPage = () => {
           Brivity CRM Sync
           <Header.Subheader>Perform Brivity CRM Sync</Header.Subheader>
         </Header>
+
+        <br />
 
         <Button primary type="button" inverted onClick={() => dispatch(syncPending())} loading={isSyncing} disabled={isSyncing}>
           <Icon name="sync" /> Sync Now
