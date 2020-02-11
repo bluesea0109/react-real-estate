@@ -7,7 +7,7 @@ import { Dropdown, Form, Header, Label, Popup } from 'semantic-ui-react';
 
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import { modifyMailoutPending, changeMailoutDisplayAgentPending } from '../../store/modules/mailout/actions';
-import { isMobile, maxLength, sleep, differenceObjectDeep, objectIsEmpty } from './helpers';
+import { isMobile, maxLength, sleep, differenceObjectDeep, objectIsEmpty } from './utils';
 import { Button, Icon, Image, Menu, Message, Page, Segment } from '../Base';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
 import Loading from '../Loading';

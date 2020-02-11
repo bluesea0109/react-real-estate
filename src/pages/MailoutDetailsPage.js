@@ -17,7 +17,7 @@ import ListHeader from '../components/MailoutListItem/ListHeader';
 import ImageGroup from '../components/MailoutListItem/ImageGroup';
 import GoogleMapItem from '../components/GoogleMapItem';
 import Loading from '../components/Loading';
-import { isMobile } from '../components/Forms/helpers';
+import { isMobile } from '../components/Forms/utils';
 
 const useFetching = (getActionCreator, dispatch, mailoutId) => {
   useEffect(() => {

@@ -4,7 +4,7 @@ import { Menu, Segment } from '../../Base';
 import { isMobile } from '../utils';
 import { Form } from '../Base';
 
-const Wizard = ({ children, initialValues = {}, onSubmit, page, setPage, controls, onLastPage, onIsSubmitting, pauseFormUpdate }) => {
+const Wizard = ({ children, initialValues = {}, onSubmit, page, setPage, controls, onLastPage, onIsSubmitting }) => {
   const [values, setValues] = useState(initialValues);
 
   const next = values => {

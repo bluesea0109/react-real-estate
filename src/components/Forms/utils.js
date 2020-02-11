@@ -3,6 +3,8 @@ import { Popup } from '../Base';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import _ from 'lodash';
 
+export const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 const mql = window.matchMedia('(max-width: 599px)');
 export const isMobile = () => mql.matches;
 

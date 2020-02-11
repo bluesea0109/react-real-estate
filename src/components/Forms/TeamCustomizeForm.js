@@ -8,7 +8,7 @@ import { Confirm, Dropdown, Form, Header, Label, Popup } from 'semantic-ui-react
 import React, { createRef, Fragment, useEffect, useState, useReducer } from 'react';
 
 import { saveTeamSoldShortcodePending, saveTeamListedShortcodePending } from '../../store/modules/teamShortcode/actions';
-import { isMobile, isValidURL, maxLength, popup, required, composeValidators, url } from './helpers';
+import { isMobile, maxLength, popup, required, composeValidators, urlRegExp } from './utils';
 import { saveTeamCustomizationPending } from '../../store/modules/teamCustomization/actions';
 import { Button, Icon, Image, Menu, Modal, Page, Segment } from '../Base';
 import { ContentTopHeaderLayout } from '../../layouts';
@@ -470,6 +470,9 @@ const CustomizeForm = ({ teamCustomizationData }) => {
   };
 
   const renderCTA = ({ listingType }) => {
+    const validURL = str => !urlRegExp.test(str) && 'URL is not valid';
+    const isValidURL = str => !!urlRegExp.test(str);
+
     const currentValue = formValues[listingType].cta;
     const ctaEnabled = formValues[listingType].shortenCTA;
     const shortenedURL = listingType === NEW_LISTING ? newListingShortenedURL : soldListingShortenedURL;
@@ -490,7 +493,7 @@ const CustomizeForm = ({ teamCustomizationData }) => {
       if (listingType === SOLD_LISTING && isValidURL(eURL)) dispatch(saveTeamSoldShortcodePending(eURL));
     };
 
-    const error = ctaEnabled && composeValidators(required, url)(currentValue);
+    const error = ctaEnabled && composeValidators(required, validURL)(currentValue);
 
     const isVisible = ctaEnabled && !error && shortenedURL;
 

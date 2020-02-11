@@ -7,7 +7,7 @@ import { Page, Segment, Button, Modal, Icon, Image, Message, Menu } from '../com
 import InviteTeammatesForm from '../components/Forms/InviteTeammatesForm';
 import { syncPending } from '../store/modules/team/actions';
 import { ContentTopHeaderLayout } from '../layouts';
-import { isMobile } from '../components/Forms/helpers';
+import { isMobile } from '../components/Forms/utils';
 
 const SettingsPage = () => {
   const dispatch = useDispatch();

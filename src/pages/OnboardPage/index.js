@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, useLocation } from 'react-router';
 
 import { finalizeOnboarding } from '../../store/modules/onboarded/actions';
-import OnboardPageProfile from './ProfilePage';
-import OnboardPageCustomizeTeam from './CustomizeTeamPage';
-import OnboardPageCustomize from './CustomizePage';
-import OnboardPageInviteTeammates from './InviteTeammatesPage';
+import ProfilePage from './ProfilePage';
+import TeamCustomizationPage from './TeamCustomizationPage';
+import CustomizationPage from './CustomizationPage';
+import InviteTeammatesPage from './InviteTeammatesPage';
 
 const OnboardPage = () => {
   const dispatch = useDispatch();
@@ -95,10 +95,10 @@ const OnboardPage = () => {
 
   return (
     <Switch>
-      <Route path="/onboard/profile" component={OnboardPageProfile} />
-      <Route path="/onboard/customization/team" component={OnboardPageCustomizeTeam} />
-      <Route path="/onboard/customization" component={OnboardPageCustomize} />
-      <Route path="/onboard/invite" component={OnboardPageInviteTeammates} />
+      <Route path="/onboard/profile" component={ProfilePage} />
+      <Route path="/onboard/customization/team" component={TeamCustomizationPage} />
+      <Route path="/onboard/customization" component={CustomizationPage} />
+      <Route path="/onboard/invite" component={InviteTeammatesPage} />
     </Switch>
   );
 };

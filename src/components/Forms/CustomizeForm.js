@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Confirm, Dropdown, Form, Header, Label, Popup } from 'semantic-ui-react';
 import React, { createRef, Fragment, useEffect, useState, useReducer } from 'react';
 
-import { isMobile, isValidURL, maxLength, popup, required, composeValidators, url, differenceObjectDeep } from './helpers';
+import { isMobile, maxLength, popup, required, composeValidators, differenceObjectDeep, urlRegExp } from './utils';
 import { saveListedShortcodePending, saveSoldShortcodePending } from '../../store/modules/shortcode/actions';
 import { saveCustomizationPending } from '../../store/modules/customization/actions';
 import { Button, Icon, Image, Menu, Modal, Page, Segment } from '../Base';
@@ -464,6 +464,9 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
   };
 
   const renderCTA = ({ listingType }) => {
+    const validURL = str => !urlRegExp.test(str) && 'URL is not valid';
+    const isValidURL = str => !!urlRegExp.test(str);
+
     const currentValue = formValues[listingType].cta;
     const ctaEnabled = formValues[listingType].shortenCTA;
     const shortenedURL = listingType === NEW_LISTING ? newListingShortenedURL : soldListingShortenedURL;
@@ -484,7 +487,7 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
       if (listingType === SOLD_LISTING && isValidURL(eURL)) dispatch(saveSoldShortcodePending(eURL));
     };
 
-    const error = ctaEnabled && composeValidators(required, url)(currentValue);
+    const error = ctaEnabled && composeValidators(required, validURL)(currentValue);
 
     const isVisible = ctaEnabled && !error && shortenedURL;
 
