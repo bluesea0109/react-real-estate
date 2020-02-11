@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import * as Yup from 'yup';
-import { FieldArray } from 'formik';
+import { FieldArray, useFormikContext } from 'formik';
 import { Header } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useReducer, useState } from 'react';
@@ -167,6 +167,16 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
     }
   };
 
+  const UpdateWithoutRerender = () => {
+    const { setFieldValue } = useFormikContext();
+    React.useEffect(() => {
+      setFieldValue('realtorPhoto', pictureCheck(picturesRealtorPhoto) || (!selectedPeerId && pictureCheck(realtorPhoto)), true);
+      setFieldValue('teamLogo', pictureCheck(picturesTeamLogo) || pictureCheck(teamLogo), true);
+      setFieldValue('brokerageLogo', pictureCheck(picturesBrokerageLogo) || pictureCheck(brokerageLogo), true);
+    }, [setFieldValue]);
+    return null;
+  };
+
   return (
     <Page basic>
       <Form
@@ -174,7 +184,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
         enableReinitialize
         validateOnMount
         initialValues={{
-          realtorPhoto: pictureCheck(picturesRealtorPhoto) || (!selectedPeerId && pictureCheck(realtorPhoto)),
+          realtorPhoto: '',
           first: formValues.userProfile.first,
           last: formValues.userProfile.last,
           personalPhone: formValues.userProfile.phone,
@@ -186,8 +196,8 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
           teamName: formValues.businessProfile.teamName,
           brokerageName: formValues.businessProfile.brokerageName,
           businessPhone: formValues.businessProfile.phone,
-          teamLogo: pictureCheck(picturesTeamLogo) || pictureCheck(teamLogo),
-          brokerageLogo: pictureCheck(picturesBrokerageLogo) || pictureCheck(brokerageLogo),
+          teamLogo: '',
+          brokerageLogo: '',
           address: formValues.businessProfile.address,
           city: formValues.businessProfile.city,
           state: formValues.businessProfile.state,
@@ -512,6 +522,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                 </div>
               </Segment>
             )}
+            <UpdateWithoutRerender />
           </Form.Children>
         )}
       />
