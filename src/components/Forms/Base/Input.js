@@ -46,8 +46,7 @@ const FormikInput = ({
                 id={id}
                 name={name}
                 ref={fieldRef}
-                {...rest}
-                value={field.value}
+                value={field.value || ''}
                 disabled={disabled}
                 onChange={(e, { name, value }) => {
                   setFieldValue(form, name, value, validateOnChange);
@@ -61,6 +60,7 @@ const FormikInput = ({
                     onBlur && onBlur(e);
                   });
                 }}
+                {...rest}
               />
             </InputRef>
 

@@ -174,7 +174,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
         enableReinitialize
         validateOnMount
         initialValues={{
-          realtorPhoto: pictureCheck(picturesRealtorPhoto) || pictureCheck(realtorPhoto),
+          realtorPhoto: pictureCheck(picturesRealtorPhoto) || (!selectedPeerId && pictureCheck(realtorPhoto)),
           first: formValues.userProfile.first,
           last: formValues.userProfile.last,
           personalPhone: formValues.userProfile.phone,
@@ -210,10 +210,12 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
           email: Yup.string()
             .email('Invalid email')
             .required('Required'),
-          dre: Yup.string().when('state', {
-            is: 'CA',
-            then: Yup.string().required('Required by state of California'),
-          }),
+          dre: Yup.string()
+            .nullable()
+            .when('state', {
+              is: 'CA',
+              then: Yup.string().required('Required by state of California'),
+            }),
           personalOfficePhone: Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
           personalNotificationEmail: Yup.string()
             .email('Invalid email')
