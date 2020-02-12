@@ -59,8 +59,10 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
 
   const onLoginMode = useSelector(store => store.onLogin.mode);
   const multiUser = onLoginMode === 'multiuser';
-  const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
+  const isAdminOnLogin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
   const selectedPeerId = useSelector(store => store.peer.peerId);
+  const currentProfileRole = useSelector(store => store.profile.available && store.profile.available.brivitySync.role);
+  const isAdmin = selectedPeerId ? currentProfileRole === 'Administrator' : isAdminOnLogin;
 
   const picturesPending = useSelector(store => store.pictures && store.pictures.pending);
   const picturesError = useSelector(store => store.pictures && store.pictures.error);
@@ -73,6 +75,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
   const picturesTeamLogo = useSelector(store => store.pictures && store.pictures.teamLogo && store.pictures.teamLogo.resized);
   const picturesBrokerageLogo = useSelector(store => store.pictures && store.pictures.brokerageLogo && store.pictures.brokerageLogo.resized);
 
+  const profileChangePending = useSelector(store => store.profile.pending);
   const profileSavePending = useSelector(store => store.profile.savePending);
   const profileSaveError = useSelector(store => store.profile.saveError && store.profile.saveError.message);
   const teamProfileSavePending = useSelector(store => store.teamProfile.savePending);
@@ -289,11 +292,11 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                     <Menu.Item>
                       <span>
                         {profileAvailable ? (
-                          <Button.Submit primary disabled={isSubmitting}>
+                          <Button.Submit primary disabled={isSubmitting || profileChangePending}>
                             Save
                           </Button.Submit>
                         ) : (
-                          <Button.Submit primary disabled={isSubmitting}>
+                          <Button.Submit primary disabled={isSubmitting || profileChangePending}>
                             Submit
                           </Button.Submit>
                         )}
@@ -452,7 +455,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
               )}
             </Segment>
 
-            {(isAdmin || !multiUser) && !selectedPeerId && (
+            {(isAdmin || !multiUser) && !profileChangePending && (
               <Segment>
                 <Header as="h2">
                   Business
