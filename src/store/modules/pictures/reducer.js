@@ -9,6 +9,7 @@ import {
   DELETE_PHOTO_SUCCESS,
   DELETE_PHOTO_ERROR,
 } from './actions';
+import { DESELECT_PEER_ID, SELECT_PEER_ID } from '../peer/actions';
 
 const initialState = {
   pending: false,
@@ -22,6 +23,28 @@ const initialState = {
 
 export default function pictures(state = initialState, action) {
   switch (action.type) {
+    case SELECT_PEER_ID:
+      return {
+        pending: false,
+        error: null,
+        toUpload: null,
+        realtorPhoto: null,
+        teamLogo: null,
+        brokerageLogo: null,
+        toDelete: null,
+      };
+
+    case DESELECT_PEER_ID:
+      return {
+        pending: false,
+        error: null,
+        toUpload: null,
+        realtorPhoto: null,
+        teamLogo: null,
+        brokerageLogo: null,
+        toDelete: null,
+      };
+
     case GET_PHOTO_PENDING:
       return {
         ...state,

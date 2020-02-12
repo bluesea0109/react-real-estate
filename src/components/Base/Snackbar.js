@@ -14,6 +14,7 @@ const SnackbarMessage = styled(Message)`
   top: 1.5%;
   left: 50%;
   transform: translate(-50%, -50%);
+  display: block !important;
 `;
 
 const Snackbar = ({ error = false, info = false, success = false, children }) => {
@@ -23,7 +24,7 @@ const Snackbar = ({ error = false, info = false, success = false, children }) =>
     let isInitialized = true;
 
     (async function closeIt() {
-      await new Promise(resolve => setTimeout(resolve, 300000));
+      await new Promise(resolve => setTimeout(resolve, 10000));
       if (isInitialized) {
         setVisible(false);
       }
@@ -35,7 +36,7 @@ const Snackbar = ({ error = false, info = false, success = false, children }) =>
   return visible ? (
     <SnackbarMessage info={info} error={error} success={success}>
       <Icon name={success ? 'check circle' : error ? 'times circle' : info ? 'info circle' : null} />
-      <b>{success ? 'Hurray! ' : error ? 'Oups! ' : info ? 'Heads Up! ' : null}</b>
+      <b>{success ? 'Hurray! ' : error ? 'Oops! ' : info ? 'Heads Up! ' : null}</b>
       <span>{children}</span>
       <Icon name="times" style={{ float: 'right', cursor: 'pointer' }} onClick={() => setVisible(false)} />
     </SnackbarMessage>

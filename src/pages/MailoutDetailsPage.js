@@ -5,10 +5,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useLastLocation } from 'react-router-last-location';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { ContentTopHeaderLayout, ContentSpacerLayout, ContentBottomHeaderLayout, ItemBodyDataLayout, ItemBodyLayoutV2, ItemLayout } from '../layouts';
-
 import { submitMailoutPending, stopMailoutPending, resetMailout, updateMailoutSizePending, revertEditedMailoutPending } from '../store/modules/mailout/actions';
 import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from '../components/MailoutListItem/helpers';
+import { ContentTopHeaderLayout, ContentSpacerLayout, ContentBottomHeaderLayout, ItemBodyDataLayout, ItemBodyLayoutV2, ItemLayout } from '../layouts';
 import { Button, Grid, Menu, Message, Page, Segment, List, Popup, Input } from '../components/Base';
 import PopupContent from '../components/MailoutListItem/PopupContent';
 import { getMailoutPending } from '../store/modules/mailout/actions';
@@ -16,8 +15,8 @@ import PopupMinMax from '../components/MailoutListItem/PopupMinMax';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ImageGroup from '../components/MailoutListItem/ImageGroup';
 import GoogleMapItem from '../components/GoogleMapItem';
+import { isMobile } from '../components/utils';
 import Loading from '../components/Loading';
-import { isMobile } from '../components/Forms/helpers';
 
 const useFetching = (getActionCreator, dispatch, mailoutId) => {
   useEffect(() => {

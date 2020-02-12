@@ -8,7 +8,7 @@ import { getMailoutsPending, getMoreMailoutsPending } from '../store/modules/mai
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ImageGroup from '../components/MailoutListItem/ImageGroup';
 import ItemList from '../components/MailoutListItem/ItemList';
-import { isMobile } from '../components/Forms/helpers';
+import { isMobile } from '../components/utils';
 import Loading from '../components/Loading';
 
 const useFetching = (getActionCreator, onboarded, dispatch) => {

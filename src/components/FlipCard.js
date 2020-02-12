@@ -37,6 +37,7 @@ const FlipCard = props => {
   const styles = {
     back: {
       WebkitBackfaceVisibility: 'hidden',
+      opacity: isFlipped ? 1 : 0,
       backfaceVisibility: 'hidden',
       height: '100%',
       left: '0',
@@ -59,6 +60,7 @@ const FlipCard = props => {
     },
     front: {
       WebkitBackfaceVisibility: 'hidden',
+      opacity: isFlipped ? 0 : 1,
       backfaceVisibility: 'hidden',
       height: '100%',
       left: '0',

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Header } from 'semantic-ui-react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import AuthService from '../services/auth';
 import { Page, Segment, Button, Modal, Icon, Image, Message, Menu } from '../components/Base';
 import InviteTeammatesForm from '../components/Forms/InviteTeammatesForm';
 import { syncPending } from '../store/modules/team/actions';
 import { ContentTopHeaderLayout } from '../layouts';
-import { isMobile } from '../components/Forms/helpers';
+import { isMobile } from '../components/utils';
 
 const SettingsPage = () => {
   const dispatch = useDispatch();
@@ -27,6 +27,8 @@ const SettingsPage = () => {
           Password Change
           <Header.Subheader>Perform password change</Header.Subheader>
         </Header>
+
+        <br />
 
         <Button primary inverted onClick={() => setModalOpen(true)}>
           Password Change
@@ -66,6 +68,8 @@ const SettingsPage = () => {
           Brivity CRM Sync
           <Header.Subheader>Perform Brivity CRM Sync</Header.Subheader>
         </Header>
+
+        <br />
 
         <Button primary type="button" inverted onClick={() => dispatch(syncPending())} loading={isSyncing} disabled={isSyncing}>
           <Icon name="sync" /> Sync Now

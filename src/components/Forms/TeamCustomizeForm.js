@@ -1,26 +1,19 @@
 import _ from 'lodash';
-import styled from 'styled-components';
 import { BlockPicker } from 'react-color';
 import Nouislider from 'nouislider-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Confirm, Dropdown, Form, Header, Label, Popup } from 'semantic-ui-react';
 import React, { createRef, Fragment, useEffect, useState, useReducer } from 'react';
+import { /*Confirm,*/ Dropdown, Form, Header, Label, Popup } from 'semantic-ui-react';
 
 import { saveTeamSoldShortcodePending, saveTeamListedShortcodePending } from '../../store/modules/teamShortcode/actions';
-import { isMobile, isValidURL, maxLength, popup, required, composeValidators, url } from './helpers';
+import { isMobile, maxLength, popup, required, composeValidators, urlRegExp, TrimStrAndConvertToInt } from '../utils';
 import { saveTeamCustomizationPending } from '../../store/modules/teamCustomization/actions';
 import { Button, Icon, Image, Menu, Modal, Page, Segment } from '../Base';
 import { ContentTopHeaderLayout } from '../../layouts';
+import { colors, StyledHeader } from '../helpers';
 import FlipCard from '../FlipCard';
 import Loading from '../Loading';
-
-export const colors = ['#b40101', '#f2714d', '#f4b450', '#79c34d', '#2d9a2c', '#59c4c4', '#009ee7', '#0e2b5b', '#ee83ee', '#8b288f', '#808080', '#000000'];
-
-const StyledHeader = styled(Header)`
-  min-width: 18em;
-  display: inline-block;
-`;
 
 const formReducer = (state, action) => {
   return _.merge({}, state, action);
@@ -31,9 +24,7 @@ const SOLD_LISTING = 'sold';
 
 let multiUserStartState;
 
-const TrimStrAndConvertToInt = value => Math.round(parseInt(value.trim(), 10) / 10) * 10;
-
-const NewCustomizeForm = ({ teamCustomizationData }) => {
+const CustomizeForm = ({ teamCustomizationData }) => {
   const dispatch = useDispatch();
   const bookmarkTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.bookmark);
   const ribbonTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.ribbon);
@@ -67,7 +58,7 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
       kwkly: 'Text KEYWORD to 59559 for details!',
     },
     sold: {
-      createMailoutsOfThisType: false,
+      createMailoutsOfThisType: true,
       defaultDisplayAgent: {
         userId: null,
         first: null,
@@ -104,7 +95,7 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
   const [step, setStep] = useState(1);
   const [formValues, setFormValues] = useReducer(formReducer, initialValues);
 
-  const [showSelectionAlert, setShowSelectionAlert] = useState(false);
+  // const [showSelectionAlert, setShowSelectionAlert] = useState(false);
 
   const [displayReview, setDisplayReview] = useState(false);
   const [listedIsFlipped, setListedIsFlipped] = useState(false);
@@ -112,7 +103,6 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
 
   const pristineState = _.isEqual(formValues, multiUserStartState);
 
-  /* Instead of relying on handleSubmit changing the state of displayReview, we're doing it here */
   useEffect(() => {
     if (!displayReview && postcardsPreviewIsPending) {
       setDisplayReview(true);
@@ -138,13 +128,13 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [teamCustomizationData, setFormValues, dispatch]);
 
-  useEffect(() => {
-    if (!formValues.listed.createMailoutsOfThisType && !formValues.sold.createMailoutsOfThisType) {
-      setShowSelectionAlert(true);
-    } else {
-      setShowSelectionAlert(false);
-    }
-  }, [formValues, setShowSelectionAlert]);
+  // useEffect(() => {
+  //   if (!formValues.listed.createMailoutsOfThisType && !formValues.sold.createMailoutsOfThisType) {
+  //     setShowSelectionAlert(true);
+  //   } else {
+  //     setShowSelectionAlert(false);
+  //   }
+  // }, [formValues, setShowSelectionAlert]);
 
   const handleSubmit = () => {
     const data = _.merge({}, teamCustomizationData, formValues);
@@ -161,11 +151,11 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
     dispatch(saveTeamCustomizationPending(data));
   };
 
-  const handleConfirm = listingType => {
-    const newValue = formValues;
-    newValue[listingType].createMailoutsOfThisType = true;
-    setFormValues(newValue);
-  };
+  // const handleConfirm = listingType => {
+  //   const newValue = formValues;
+  //   newValue[listingType].createMailoutsOfThisType = true;
+  //   setFormValues(newValue);
+  // };
 
   const nextStep = () => {
     setStep(step + 1);
@@ -205,52 +195,52 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
     });
   }
 
-  const renderSwitch = ({ listingType }) => {
-    const targetOn = listingType === NEW_LISTING ? 'Generate new listing campaigns' : 'Generate sold listing campaigns';
-
-    const currentValue = formValues[listingType].createMailoutsOfThisType;
-
-    const handleChange = () => {
-      const newValue = formValues;
-      newValue[listingType].createMailoutsOfThisType = !currentValue;
-
-      // To ensure that we have cta or kwkly when switching
-      if (newValue.listed.createMailoutsOfThisType) {
-        if (newValue.sold.cta && !newValue.listed.cta) {
-          newValue.listed.cta = newValue.sold.cta;
-        }
-        if (newValue.sold.kwkly && !newValue.listed.kwkly) {
-          newValue.listed.kwkly = newValue.sold.kwkly;
-        }
-      }
-
-      if (newValue.sold.createMailoutsOfThisType) {
-        if (newValue.listed.cta && !newValue.sold.cta) {
-          newValue.sold.cta = newValue.listed.cta;
-        }
-        if (newValue.listed.kwkly && !newValue.sold.kwkly) {
-          newValue.sold.kwkly = newValue.listed.kwkly;
-        }
-      }
-
-      setFormValues(newValue);
-    };
-
-    return (
-      <Header size="medium">
-        {targetOn}: &nbsp;
-        {currentValue ? (
-          <span style={{ verticalAlign: '-0.35em', color: '#59C4C4' }} onClick={handleChange}>
-            <FontAwesomeIcon icon="toggle-on" size="2x" />
-          </span>
-        ) : (
-          <span style={{ verticalAlign: '-0.35em', color: '#969696' }} onClick={handleChange}>
-            <FontAwesomeIcon icon="toggle-on" size="2x" className="fa-flip-horizontal" />
-          </span>
-        )}
-      </Header>
-    );
-  };
+  // const renderSwitch = ({ listingType }) => {
+  //   const targetOn = listingType === NEW_LISTING ? 'Generate new listing campaigns' : 'Generate sold listing campaigns';
+  //
+  //   const currentValue = formValues[listingType].createMailoutsOfThisType;
+  //
+  //   const handleChange = () => {
+  //     const newValue = formValues;
+  //     newValue[listingType].createMailoutsOfThisType = !currentValue;
+  //
+  //     // To ensure that we have cta or kwkly when switching
+  //     if (newValue.listed.createMailoutsOfThisType) {
+  //       if (newValue.sold.cta && !newValue.listed.cta) {
+  //         newValue.listed.cta = newValue.sold.cta;
+  //       }
+  //       if (newValue.sold.kwkly && !newValue.listed.kwkly) {
+  //         newValue.listed.kwkly = newValue.sold.kwkly;
+  //       }
+  //     }
+  //
+  //     if (newValue.sold.createMailoutsOfThisType) {
+  //       if (newValue.listed.cta && !newValue.sold.cta) {
+  //         newValue.sold.cta = newValue.listed.cta;
+  //       }
+  //       if (newValue.listed.kwkly && !newValue.sold.kwkly) {
+  //         newValue.sold.kwkly = newValue.listed.kwkly;
+  //       }
+  //     }
+  //
+  //     setFormValues(newValue);
+  //   };
+  //
+  //   return (
+  //     <Header size="medium">
+  //       {targetOn}: &nbsp;
+  //       {currentValue ? (
+  //         <span style={{ verticalAlign: '-0.35em', color: '#59C4C4' }} onClick={handleChange}>
+  //           <FontAwesomeIcon icon="toggle-on" size="2x" />
+  //         </span>
+  //       ) : (
+  //         <span style={{ verticalAlign: '-0.35em', color: '#969696' }} onClick={handleChange}>
+  //           <FontAwesomeIcon icon="toggle-on" size="2x" className="fa-flip-horizontal" />
+  //         </span>
+  //       )}
+  //     </Header>
+  //   );
+  // };
 
   const renderTemplatePicture = ({ templateName, listingType }) => {
     const currentValue = formValues[listingType].templateTheme;
@@ -470,6 +460,9 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
   };
 
   const renderCTA = ({ listingType }) => {
+    const validURL = str => !urlRegExp.test(str) && 'URL is not valid';
+    const isValidURL = str => !!urlRegExp.test(str);
+
     const currentValue = formValues[listingType].cta;
     const ctaEnabled = formValues[listingType].shortenCTA;
     const shortenedURL = listingType === NEW_LISTING ? newListingShortenedURL : soldListingShortenedURL;
@@ -490,7 +483,7 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
       if (listingType === SOLD_LISTING && isValidURL(eURL)) dispatch(saveTeamSoldShortcodePending(eURL));
     };
 
-    const error = ctaEnabled && composeValidators(required, url)(currentValue);
+    const error = ctaEnabled && composeValidators(required, validURL)(currentValue);
 
     const isVisible = ctaEnabled && !error && shortenedURL;
 
@@ -559,72 +552,72 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
   };
 
   const Listings = ({ listingType }) => {
-    const placeholder = listingType === NEW_LISTING ? 'Campaign will not be enabled for new listings' : 'Campaign will not be enabled for sold listings';
+    // const placeholder = listingType === NEW_LISTING ? 'Campaign will not be enabled for new listings' : 'Campaign will not be enabled for sold listings';
 
     return (
       <Fragment>
-        <Segment>{renderSwitch({ listingType })}</Segment>
+        {/*<Segment>{renderSwitch({ listingType })}</Segment>*/}
 
-        {!formValues[listingType].createMailoutsOfThisType && (
-          <Segment placeholder>
-            <Header textAlign="center">{placeholder}</Header>
-            <Image src={require('../../assets/undraw_choice_9385.png')} style={{ margin: 'auto', maxWidth: '500px' }} />
-          </Segment>
-        )}
+        {/*{!formValues[listingType].createMailoutsOfThisType && (*/}
+        {/*  <Segment placeholder>*/}
+        {/*    <Header textAlign="center">{placeholder}</Header>*/}
+        {/*    <Image src={require('../../assets/undraw_choice_9385.png')} style={{ margin: 'auto', maxWidth: '500px' }} />*/}
+        {/*  </Segment>*/}
+        {/*)}*/}
 
-        {formValues[listingType].createMailoutsOfThisType && (
-          <Segment
-            padded
-            className={isMobile() ? null : 'primary-grid-container'}
-            style={isMobile() ? {} : { gridTemplateRows: 'unset', gridTemplateAreas: 'unset' }}
-          >
-            <div>
-              <Header as="h4">Template Theme</Header>
-              {renderTemplatePicture({ templateName: 'ribbon', listingType })}
-            </div>
+        {/*{formValues[listingType].createMailoutsOfThisType && (*/}
+        <Segment
+          padded
+          className={isMobile() ? null : 'primary-grid-container'}
+          style={isMobile() ? {} : { gridTemplateRows: 'unset', gridTemplateAreas: 'unset' }}
+        >
+          <div>
+            <Header as="h4">Template Theme</Header>
+            {renderTemplatePicture({ templateName: 'ribbon', listingType })}
+          </div>
 
-            <div>
-              <p>&nbsp;</p>
-              {renderTemplatePicture({ templateName: 'bookmark', listingType })}
-            </div>
+          <div>
+            <p>&nbsp;</p>
+            {renderTemplatePicture({ templateName: 'bookmark', listingType })}
+          </div>
 
-            <div>
-              <p>&nbsp;</p>
-              {renderTemplatePicture({ templateName: 'stack', listingType })}
-            </div>
+          <div>
+            <p>&nbsp;</p>
+            {renderTemplatePicture({ templateName: 'stack', listingType })}
+          </div>
 
-            <div>
-              <Header as="h4">Brand Color</Header>
-              {renderColorPicker({ listingType })}
-            </div>
-          </Segment>
-        )}
+          <div>
+            <Header as="h4">Brand Color</Header>
+            {renderColorPicker({ listingType })}
+          </div>
+        </Segment>
+        {/*)}*/}
 
-        {formValues[listingType].createMailoutsOfThisType && (
-          <Segment padded className={isMobile() ? null : 'tertiary-grid-container'}>
-            <div>
-              <Header as="h4">Choose Default Agent</Header>
-              {renderAgentDropdown({ listingType })}
-            </div>
+        {/*{formValues[listingType].createMailoutsOfThisType && (*/}
+        <Segment padded className={isMobile() ? null : 'tertiary-grid-container'}>
+          <div>
+            <Header as="h4">Choose Default Agent</Header>
+            {renderAgentDropdown({ listingType })}
+          </div>
 
-            <div>{renderField({ fieldName: 'frontHeadline', listingType })}</div>
+          <div>{renderField({ fieldName: 'frontHeadline', listingType })}</div>
 
-            <div>
-              <Header as="h4">Number of postcards to send per listing</Header>
-              {renderMailoutSizeSlider({ listingType })}
-            </div>
+          <div>
+            <Header as="h4">Number of postcards to send per listing</Header>
+            {renderMailoutSizeSlider({ listingType })}
+          </div>
 
-            <div> </div>
+          <div> </div>
 
-            <div>{renderKWKLYCTAToggle({ listingType })}</div>
+          <div>{renderKWKLYCTAToggle({ listingType })}</div>
 
-            <div> </div>
+          <div> </div>
 
-            <div>{renderCTA({ listingType })}</div>
+          <div>{renderCTA({ listingType })}</div>
 
-            <div>{renderKWKLY({ listingType })}</div>
-          </Segment>
-        )}
+          <div>{renderKWKLY({ listingType })}</div>
+        </Segment>
+        {/*)}*/}
       </Fragment>
     );
   };
@@ -645,12 +638,13 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
   return (
     <Page basic>
       <ContentTopHeaderLayout>
-        <Segment style={isMobile() ? { marginTop: '58px' } : {}}>
+        <Segment padded style={isMobile() ? { marginTop: '58px' } : {}}>
           <Menu borderless fluid secondary>
             <Header as="h1">
               Team Customization
-              <Header.Subheader style={{ lineHeight: '1.5em', marginBottom: '-11px' }}>
-                Set the default template customization options for your team. <br />
+              <Header.Subheader>
+                Set the default template customization options for your team.&nbsp;
+                {isMobile() && <br />}
                 Changes made here will not overwrite existing user-specific customization.
               </Header.Subheader>
             </Header>
@@ -665,20 +659,20 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
         </Segment>
       </ContentTopHeaderLayout>
 
-      <Segment style={isMobile() ? { marginTop: '205px' } : { marginTop: '110px' }}>
+      <Segment style={isMobile() ? { marginTop: '170px' } : { marginTop: '110px' }}>
         <Menu pointing secondary>
           <Menu.Item name="newListing" active={step === 1} disabled={step === 1} onClick={prevStep} />
           <Menu.Item name="soldListing" active={step === 2} disabled={step === 2} onClick={nextStep} />
         </Menu>
 
-        <Confirm
-          open={showSelectionAlert}
-          content="In order to use Brivity Marketing platform, you must select at least one"
-          cancelButton="Enable new listings"
-          confirmButton="Enable sold listings"
-          onCancel={() => [handleConfirm(NEW_LISTING), setStep(1)]}
-          onConfirm={() => [handleConfirm(SOLD_LISTING), setStep(2)]}
-        />
+        {/*<Confirm*/}
+        {/*  open={showSelectionAlert}*/}
+        {/*  content="In order to use Brivity Marketing platform, you must select at least one"*/}
+        {/*  cancelButton="Enable new listings"*/}
+        {/*  confirmButton="Enable sold listings"*/}
+        {/*  onCancel={() => [handleConfirm(NEW_LISTING), setStep(1)]}*/}
+        {/*  onConfirm={() => [handleConfirm(SOLD_LISTING), setStep(2)]}*/}
+        {/*/>*/}
 
         {renderSteps()}
 
@@ -772,4 +766,4 @@ const NewCustomizeForm = ({ teamCustomizationData }) => {
   );
 };
 
-export default NewCustomizeForm;
+export default CustomizeForm;

@@ -40,8 +40,11 @@ h1 {
 }
 
 .sub.header {
-  color: #b3b3b3 !important;
+  color: #3b3b3b !important;
   font-size: 14px !important;
+  padding-top: 8px !important;
+  margin-bottom: -14px !important;
+  line-height: 18px;
 }
 
 .ui.header {
@@ -417,7 +420,6 @@ h1 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
   text-align: center;
 }
 
@@ -435,4 +437,29 @@ h1 {
 
 .image-overlay {
   color: #59c4c4;
+}
+
+.sui-error-message {
+  display: block;
+  margin: 0.28571429rem 0;
+  color: rgb(159, 58, 56);
+  font-size: 0.92857143em;
+}
+
+/*!* Errors *!*/
+/*.ui.form .field .prompt.label {*/
+/*  top: -5px!important;*/
+/*  !*position: sticky;*!*/
+/*  !*margin-left: 65%;*!*/
+/*}*/
+
+.ui.form .disabled.field,
+.ui.form .disabled.fields .field,
+.ui.form .field :disabled,
+.ui.disabled.input,
+.ui.input:not(.disabled) input[disabled],
+.ui.disabled.dropdown,
+.ui.dropdown .menu > .disabled.item {
+  pointer-events: none;
+  opacity: 1 !important;
 }

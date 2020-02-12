@@ -1,10 +1,10 @@
 import { Form, Header } from 'semantic-ui-react';
-import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import React, { Fragment, useEffect, useState } from 'react';
 
 import { inviteUsersPending, skipInviteUsers } from '../../store/modules/inviteUsers/actions';
 import { Divider, List, Segment, Item, Icon, Button, Message, Image } from '../Base';
-import { objectIsEmpty } from './helpers';
+import { objectIsEmpty } from '../utils';
 
 const Checkbox = ({ disabled, label, isSelected, onCheckboxChange }) => (
   <input disabled={disabled} type="checkbox" name={label} checked={isSelected} onChange={onCheckboxChange} />
@@ -196,6 +196,8 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
         <Header.Subheader>Send invitations to team members to start using Brivity Marketer (for Brivity Platform users only).</Header.Subheader>
       </Header>
 
+      <br />
+
       {teammates && teammates.length === 1 ? (
         <div>
           <Message size="large" style={{ textAlign: 'center' }}>
@@ -224,6 +226,8 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
               </Button>
             </div>
           </div>
+
+          <br />
 
           <List>{createInviteList()}</List>
 

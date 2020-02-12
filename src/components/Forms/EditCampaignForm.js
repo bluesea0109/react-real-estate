@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import startCase from 'lodash/startCase';
 import { BlockPicker } from 'react-color';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,17 +6,11 @@ import { Dropdown, Form, Header, Label, Popup } from 'semantic-ui-react';
 
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import { modifyMailoutPending, changeMailoutDisplayAgentPending } from '../../store/modules/mailout/actions';
-import { isMobile, maxLength, sleep, differenceObjectDeep, objectIsEmpty } from './helpers';
+import { isMobile, maxLength, sleep, differenceObjectDeep, objectIsEmpty } from '../utils';
 import { Button, Icon, Image, Menu, Message, Page, Segment } from '../Base';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
+import { colors, StyledHeader } from '../helpers';
 import Loading from '../Loading';
-
-const StyledHeader = styled(Header)`
-  min-width: 18em;
-  display: inline-block;
-`;
-
-export const colors = ['#b40101', '#f2714d', '#f4b450', '#79c34d', '#2d9a2c', '#59c4c4', '#009ee7', '#0e2b5b', '#ee83ee', '#8b288f', '#808080', '#000000'];
 
 const EditCampaignForm = ({ data, handleBackClick }) => {
   const dispatch = useDispatch();
