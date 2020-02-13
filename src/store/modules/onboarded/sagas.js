@@ -6,7 +6,7 @@ import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
 import { SAVE_PROFILE_SUCCESS } from '../profile/actions';
 import { SAVE_TEAM_PROFILE_SUCCESS } from '../teamProfile/actions';
 import { REVIEW_CUSTOMIZATION_COMPLETED } from '../customization/actions';
-import { INVITE_USERS_SUCCESS, SKIP_INVITE_USERS } from '../inviteUsers/actions';
+import { TERMS_OF_SERVICE_ACCEPTED } from '../termsOfService/actions';
 import { REVIEW_TEAM_CUSTOMIZATION_COMPLETED } from '../teamCustomization/actions';
 import { initializeTeamPollingStart } from '../teamInitialize/actions';
 import { generateMailoutsPending, generateMailoutsSuccess, generateMailoutsError } from '../mailouts/actions';
@@ -197,6 +197,5 @@ export default function*() {
   yield takeLatest(SAVE_TEAM_PROFILE_SUCCESS, teamProfileSetupOnboardingSaga);
   yield takeLatest(REVIEW_TEAM_CUSTOMIZATION_COMPLETED, teamCustomizationOnboardingSaga);
   yield takeLatest(REVIEW_CUSTOMIZATION_COMPLETED, customizationOnboardingSaga);
-  yield takeLatest(INVITE_USERS_SUCCESS, invitationOnboardingSaga);
-  yield takeLatest(SKIP_INVITE_USERS, invitationOnboardingSaga);
+  yield takeLatest(TERMS_OF_SERVICE_ACCEPTED, invitationOnboardingSaga);
 }

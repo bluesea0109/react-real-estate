@@ -1,9 +1,10 @@
-import { Form, Header } from 'semantic-ui-react';
+import { Confirm, Form, Header } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { Fragment, useEffect, useState } from 'react';
 
-import { inviteUsersPending, skipInviteUsers } from '../../store/modules/inviteUsers/actions';
+import { termsOfServicePending, termsOfServiceAccepted, termsOfServiceRejected } from '../../store/modules/termsOfService/actions';
 import { Divider, List, Segment, Item, Icon, Button, Message, Image } from '../Base';
+import { inviteUsersPending } from '../../store/modules/inviteUsers/actions';
 import { objectIsEmpty } from '../utils';
 
 const Checkbox = ({ disabled, label, isSelected, onCheckboxChange }) => (
@@ -45,10 +46,12 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
   const dispatch = useDispatch();
   const teammates = useSelector(store => store.team.profiles);
   const isInviteUsersPending = useSelector(store => store.inviteUsers.pending);
+  const isTermsOfServicePending = useSelector(store => store.termsOfService.pending);
 
   const [sendDisabled, setSendDisabled] = useState(true);
   const [onlyOnce, setOnlyOnce] = useState(false);
   const [checkboxes, setCheckboxes] = useState([]);
+  const [showTermsOfService, setShowTermsOfService] = useState(false);
 
   const profiles = {};
 
@@ -66,6 +69,12 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
     setOnlyOnce(true);
     setCheckboxes(profiles);
   }
+
+  useEffect(() => {
+    if (isTermsOfServicePending && !showTermsOfService) {
+      setShowTermsOfService(true);
+    }
+  }, [isTermsOfServicePending, showTermsOfService, setShowTermsOfService]);
 
   useEffect(() => {
     const usersToInvite = [];
@@ -115,10 +124,11 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
       });
 
     dispatch(inviteUsersPending({ peers: usersToInvite }));
+    dispatch(termsOfServicePending());
   };
 
   const handleContinue = () => {
-    dispatch(skipInviteUsers());
+    dispatch(termsOfServicePending());
   };
 
   const createInviteField = profile => {
@@ -197,6 +207,17 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
       </Header>
 
       <br />
+
+      {!settingsPage && (
+        <Confirm
+          open={showTermsOfService}
+          content="I agree to pay the rate of $0.59 per postcard sent with Brivity Marketer, and am authorized to do so."
+          cancelButton="I Don't Agree"
+          confirmButton="I Agree"
+          onCancel={() => dispatch(termsOfServiceRejected())}
+          onConfirm={() => dispatch(termsOfServiceAccepted())}
+        />
+      )}
 
       {teammates && teammates.length === 1 ? (
         <div>
