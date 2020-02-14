@@ -211,8 +211,8 @@ const MailoutDetailsPage = () => {
         </Modal.Content>
         <Modal.Content>
           <Modal.Description style={{ textAlign: 'center' }}>
-            <p>I agree to be immediately charged</p>
-            <b style={{ fontSize: '28px' }}>${0.59 * currentNumberOfRecipients}</b>
+            <p style={{ margin: 0 }}>I agree to be immediately charged</p>
+            <b style={{ fontSize: '32px' }}>{calculateCost(details && details.recipientCount)}</b>
             <br />
             <p>$0.59 x {currentNumberOfRecipients}</p>
           </Modal.Description>

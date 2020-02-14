@@ -463,3 +463,8 @@ h1 {
   pointer-events: none;
   opacity: 1 !important;
 }
+
+/* MODAL */
+.ui.page.modals.dimmer.transition.visible.active {
+  background-color: rgba(0, 0, 0, 0.95) !important;
+}
