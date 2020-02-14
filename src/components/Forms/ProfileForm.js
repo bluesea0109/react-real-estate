@@ -459,28 +459,29 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                   name="boards"
                   render={arrayHelpers => (
                     <div>
-                      {values.boards.map((board, index) => (
-                        <Segment basic key={index} style={{ paddingTop: 0, paddingBottom: 0 }}>
-                          <div style={isMobile() ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 45px', gridColumnGap: '2em' }}>
-                            <Form.Group widths="2">
-                              <Dropdown label="MLS" name={`boards[${index}].name`} options={boards} tag={tag('Required')} />
-                              <Input label="MLS Agent ID" name={`boards.${index}.mlsId`} tag={tag('Required')} />
-                            </Form.Group>
-                            <Button
-                              type="button"
-                              primary
-                              inverted
-                              icon
-                              disabled={values.boards.length === 1}
-                              onClick={() => arrayHelpers.remove(index)}
-                              style={isMobile() ? { cursor: 'pointer' } : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }}
-                              aria-label="remove mls"
-                            >
-                              <Icon name="trash" />
-                            </Button>
-                          </div>
-                        </Segment>
-                      ))}
+                      {values.boards &&
+                        values.boards.map((board, index) => (
+                          <Segment basic key={index} style={{ paddingTop: 0, paddingBottom: 0 }}>
+                            <div style={isMobile() ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 45px', gridColumnGap: '2em' }}>
+                              <Form.Group widths="2">
+                                <Dropdown label="MLS" name={`boards[${index}].name`} options={boards} tag={tag('Required')} />
+                                <Input label="MLS Agent ID" name={`boards.${index}.mlsId`} tag={tag('Required')} />
+                              </Form.Group>
+                              <Button
+                                type="button"
+                                primary
+                                inverted
+                                icon
+                                disabled={values.boards.length === 1}
+                                onClick={() => arrayHelpers.remove(index)}
+                                style={isMobile() ? { cursor: 'pointer' } : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }}
+                                aria-label="remove mls"
+                              >
+                                <Icon name="trash" />
+                              </Button>
+                            </div>
+                          </Segment>
+                        ))}
                       <div className="buttons">
                         <Button primary inverted type="button" onClick={() => arrayHelpers.push({ name: '', mlsId: '' })}>
                           Add MLS
