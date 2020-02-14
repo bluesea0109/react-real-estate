@@ -8,7 +8,6 @@ import {
   passwordResetSuccess,
   passwordResetError,
 } from './actions';
-import { TERMS_OF_SERVICE_REJECTED } from '../termsOfService/actions';
 import AuthService from '../../../services/auth';
 import ApiService from '../../../services/api';
 
@@ -21,15 +20,6 @@ export function* parseHash() {
     yield put(authenticationSuccess(auth0));
   } catch (err) {
     yield put(authenticationError(err));
-  }
-}
-
-export function* logoutSaga() {
-  try {
-    yield console.log('auth0 logout in progress');
-    yield call(AuthService.signOut);
-  } catch (err) {
-    yield console.log('auth0 logout saga error: ', err);
   }
 }
 
@@ -56,6 +46,5 @@ export function* checkIfPeerSelectedPasswordResetSaga() {
 
 export default function*() {
   yield takeLatest(AUTHENTICATION_PENDING, parseHash);
-  yield takeLatest(TERMS_OF_SERVICE_REJECTED, logoutSaga);
   yield takeLatest(PASSWORD_RESET_PENDING, checkIfPeerSelectedPasswordResetSaga);
 }

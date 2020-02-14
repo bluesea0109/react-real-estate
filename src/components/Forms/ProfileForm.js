@@ -230,7 +230,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
             }),
           personalNotificationEmail: Yup.string()
             .email('Invalid email')
-            .when('businessNotificationEmail', {
+            .when('undefined', {
               is: () => !personalNotificationEmailEnabled,
               then: Yup.string().required('Required!'),
             }),
@@ -256,7 +256,10 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
             .required('Required'),
           businessPhone: Yup.string()
             .matches(phoneRegExp, 'Phone number is not valid')
-            .required('Required'),
+            .when('undefined', {
+              is: () => !multiUser,
+              then: Yup.string().required('Required!'),
+            }),
           teamLogo: Yup.string(),
           brokerageLogo: Yup.string().required('Required'),
           address: Yup.string()
