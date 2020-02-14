@@ -90,6 +90,10 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
 
   useEffect(() => {
     if (profileAvailable && teamProfileAvailable) {
+      if (formValues.userProfile.boards !== profileAvailable.boards) {
+        delete formValues.userProfile.boards;
+      }
+
       const updatedFormValues = _.merge({}, formValues, { userProfile: profileAvailable }, { businessProfile: teamProfileAvailable });
       if (profileAvailable.notificationEmail === teamProfileAvailable.notificationEmail) {
         setPersonalNotificationEmailEnabled(true);
