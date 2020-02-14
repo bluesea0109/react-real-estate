@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { submitMailoutPending, stopMailoutPending, resetMailout, updateMailoutSizePending, revertEditedMailoutPending } from '../store/modules/mailout/actions';
 import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from '../components/MailoutListItem/helpers';
 import { ContentTopHeaderLayout, ContentSpacerLayout, ContentBottomHeaderLayout, ItemBodyDataLayout, ItemBodyLayoutV2, ItemLayout } from '../layouts';
-import { Button, Grid, Menu, Message, Page, Segment, List, Popup, Input } from '../components/Base';
+import { Button, Grid, Menu, Message, Page, Segment, List, Popup, Input, Modal, Icon, Image } from '../components/Base';
 import PopupContent from '../components/MailoutListItem/PopupContent';
 import { getMailoutPending } from '../store/modules/mailout/actions';
 import PopupMinMax from '../components/MailoutListItem/PopupMinMax';
@@ -40,6 +40,7 @@ const MailoutDetailsPage = () => {
   const [currentNumberOfRecipients, setCurrentNumberOfRecipients] = useState(0);
   const [newNumberOfRecipients, setNewNumberOfRecipients] = useState(0);
   const [working, setWorking] = useState(false);
+  const [showConsentModal, setShowConsentModal] = useState(false);
 
   const pendingState = useSelector(store => store.mailout.pending);
   const modifyPendingState = useSelector(store => store.mailout.modifyPending);
@@ -91,7 +92,7 @@ const MailoutDetailsPage = () => {
   };
 
   const handleApproveAndSendMailoutDetailsClick = () => {
-    dispatch(submitMailoutPending(mailoutId));
+    setShowConsentModal(true);
   };
 
   const handleDeleteMailoutDetailsClick = () => {
@@ -200,6 +201,31 @@ const MailoutDetailsPage = () => {
       </ContentTopHeaderLayout>
 
       <ContentSpacerLayout />
+
+      <Modal open={showConsentModal} onClose={() => setShowConsentModal(false)} basic size="small">
+        <Modal.Content image>
+          <Image wrapped size="medium" src={details && details.sampleFrontLargeUrl} />
+          <Modal.Description>
+            <Image wrapped size="medium" src={details && details.sampleBackLargeUrl} />
+          </Modal.Description>
+        </Modal.Content>
+        <Modal.Content>
+          <Modal.Description style={{ textAlign: 'center' }}>
+            <p style={{ margin: 0 }}>I agree to be immediately charged</p>
+            <b style={{ fontSize: '32px' }}>{calculateCost(details && details.recipientCount)}</b>
+            <br />
+            <p>$0.59 x {currentNumberOfRecipients}</p>
+          </Modal.Description>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button secondary inverted onClick={() => setShowConsentModal(false)}>
+            <Icon name="remove" /> Cancel
+          </Button>
+          <Button primary onClick={() => [dispatch(submitMailoutPending(mailoutId)), setShowConsentModal(false)]}>
+            <Icon name="checkmark" /> Agree
+          </Button>
+        </Modal.Actions>
+      </Modal>
 
       <Segment style={isMobile() ? { marginTop: '129px' } : { marginTop: '34px' }}>
         <Grid>

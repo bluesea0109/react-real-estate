@@ -75,10 +75,10 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
   useEffect(() => {
     const diff = differenceObjectDeep(formValues, convertedMergeVariables);
 
-    if (!objectIsEmpty(diff)) {
+    if (!objectIsEmpty(diff) && formValuesHaveChanged) {
       setFormValues(convertedMergeVariables);
     }
-  }, [convertedMergeVariables, formValues, setFormValues]);
+  }, [convertedMergeVariables, formValues, setFormValues, formValuesHaveChanged]);
 
   const handleEditSubmitClick = async () => {
     const newMergeVariables = [];
