@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import { Header } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import AuthService from '../services/auth';
-import { Page, Segment, Button, Modal, Icon, Image, Message, Menu } from '../components/Base';
+import { Page, Segment, Button, Modal, Icon, Message, Menu } from '../components/Base';
 import InviteTeammatesForm from '../components/Forms/InviteTeammatesForm';
+import { passwordReset } from '../store/modules/auth0/actions';
 import { syncPending } from '../store/modules/team/actions';
 import { ContentTopHeaderLayout } from '../layouts';
 import { isMobile } from '../components/utils';
 
 const SettingsPage = () => {
   const dispatch = useDispatch();
+  const passwordResetPending = useSelector(store => store.auth0.passwordResetPending);
+  const passwordResetStatus = useSelector(store => store.auth0.passwordResetDetails && store.auth0.passwordResetDetails.ok);
   const isSyncing = useSelector(store => store.team.syncPending);
   const syncResponse = useSelector(store => store.team.syncResponse);
   const syncError = useSelector(store => store.team.syncError);
@@ -30,29 +32,23 @@ const SettingsPage = () => {
 
         <br />
 
-        <Button primary inverted onClick={() => setModalOpen(true)}>
-          Password Change
+        <Button primary inverted onClick={() => setModalOpen(true)} loading={passwordResetPending} disabled={passwordResetStatus}>
+          {passwordResetStatus ? `Reset Initiated` : `Password Change`}
         </Button>
 
         <Modal open={modalOpen} onClose={() => setModalOpen(false)} basic size="small">
           <Header icon="exclamation" content="Password Change" />
           <Modal.Content image>
-            <Image wrapped size="medium" src={require('../assets/password-change.jpg')} />
             <Modal.Description style={{ margin: 'auto' }}>
-              <p>To change password please follow these instructions.</p>
-              <p>First, press "Continue".</p>
-              <p>You will be logged out and redirected to a login page.</p>
-              <p>Then click the "Don't remember your password?" link.</p>
-              <p>Enter your email and press "Send Email" button.</p>
-              <p>You will receive an email with reset information.</p>
-              <p>Follow them to finalize your password change.</p>
+              <p>By pressing continue, an email with password reset instructions will be sent.</p>
+              <p>Please follow the instructions within in to finalize the process.</p>
             </Modal.Description>
           </Modal.Content>
           <Modal.Actions>
             <Button basic color="red" type="button" inverted onClick={() => setModalOpen(false)}>
               <Icon name="remove" /> Cancel
             </Button>
-            <Button color="green" type="button" inverted onClick={() => AuthService.signOut()}>
+            <Button color="green" type="button" inverted onClick={() => [dispatch(passwordReset()), setModalOpen(false)]}>
               <Icon name="checkmark" /> Continue
             </Button>
           </Modal.Actions>

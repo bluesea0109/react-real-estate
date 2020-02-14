@@ -193,6 +193,9 @@ const directory = {
         save: () => ({ path: `/api/user/settings/shortcode/sold/example`, method: 'put' }),
       },
     },
+    password: {
+      reset: () => ({ path: `/api/user/settings/password/reset`, method: 'post' }),
+    },
   },
 
   peer: {
@@ -239,6 +242,9 @@ const directory = {
         get: peerId => ({ path: `/api/user/peer/${peerId}/settings/shortcode/sold/example`, method: 'get' }),
         save: peerId => ({ path: `/api/user/peer/${peerId}/settings/shortcode/sold/example`, method: 'put' }),
       },
+    },
+    password: {
+      reset: peerId => ({ path: `/api/user/peer/${peerId}/settings/password/reset`, method: 'post' }),
     },
   },
 
