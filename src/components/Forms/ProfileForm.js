@@ -211,17 +211,29 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
           first: Yup.string()
             .min(2, 'Too Short!')
             .max(50, 'Too Long!')
-            .required('Required'),
+            .when('undefined', {
+              is: () => !multiUser,
+              then: Yup.string().required('Required!'),
+            }),
           last: Yup.string()
             .min(2, 'Too Short!')
             .max(50, 'Too Long!')
-            .required('Required'),
+            .when('undefined', {
+              is: () => !multiUser,
+              then: Yup.string().required('Required!'),
+            }),
           personalPhone: Yup.string()
             .matches(phoneRegExp, 'Phone number is not valid')
-            .required('Required'),
+            .when('undefined', {
+              is: () => !multiUser,
+              then: Yup.string().required('Required!'),
+            }),
           email: Yup.string()
             .email('Invalid email')
-            .required('Required'),
+            .when('undefined', {
+              is: () => !multiUser,
+              then: Yup.string().required('Required!'),
+            }),
           dre: Yup.string()
             .nullable()
             .when('state', {
@@ -249,11 +261,17 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
           teamName: Yup.string()
             .min(2, 'Too Short!')
             .max(50, 'Too Long!')
-            .required('Required'),
+            .when('undefined', {
+              is: () => !multiUser,
+              then: Yup.string().required('Required!'),
+            }),
           brokerageName: Yup.string()
             .min(2, 'Too Short!')
             .max(50, 'Too Long!')
-            .required('Required'),
+            .when('undefined', {
+              is: () => !multiUser,
+              then: Yup.string().required('Required!'),
+            }),
           businessPhone: Yup.string()
             .matches(phoneRegExp, 'Phone number is not valid')
             .when('undefined', {
@@ -265,19 +283,31 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
           address: Yup.string()
             .min(2, 'Too Short!')
             .max(50, 'Too Long!')
-            .required('Required'),
+            .when('undefined', {
+              is: () => !multiUser,
+              then: Yup.string().required('Required!'),
+            }),
           city: Yup.string()
             .min(2, 'Too Short!')
             .max(50, 'Too Long!')
-            .required('Required'),
+            .when('undefined', {
+              is: () => !multiUser,
+              then: Yup.string().required('Required!'),
+            }),
           state: Yup.string()
             .min(2, 'Too Short!')
             .max(50, 'Too Long!')
-            .required('Required'),
+            .when('undefined', {
+              is: () => !multiUser,
+              then: Yup.string().required('Required!'),
+            }),
           zip: Yup.string()
             .min(2, 'Too Short!')
             .max(50, 'Too Long!')
-            .required('Required'),
+            .when('undefined', {
+              is: () => !multiUser,
+              then: Yup.string().required('Required!'),
+            }),
           businessNotificationEmail: Yup.string()
             .email('Invalid email')
             .required('Required'),
