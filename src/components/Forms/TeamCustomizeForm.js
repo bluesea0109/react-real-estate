@@ -356,7 +356,7 @@ const CustomizeForm = ({ teamCustomizationData }) => {
     const MAX = 2000;
     const INCREMENT = 10;
     const STEPS = INCREMENT;
-    const MARGIN = 0;
+    const MARGIN = 10;
     const SLIDER_INITIAL_VALUES = [];
 
     const currentMailoutSize = formValues[listingType].mailoutSize;
