@@ -382,6 +382,8 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
     const currentMailoutSizeMin = formValues[listingType].mailoutSizeMin;
     const currentMailoutSizeMax = formValues[listingType].mailoutSizeMax;
 
+    const adjustedMailoutSizeMax = currentMailoutSizeMin === currentMailoutSizeMax ? currentMailoutSizeMax + 20 : undefined;
+
     SLIDER_INITIAL_VALUES.push(currentMailoutSize);
 
     const handleMailoutSizeChange = value => {
@@ -401,7 +403,7 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
         <Nouislider
           range={{
             min: currentMailoutSizeMin,
-            max: currentMailoutSizeMax,
+            max: adjustedMailoutSizeMax || currentMailoutSizeMax,
           }}
           step={STEPS}
           start={SLIDER_INITIAL_VALUES}
@@ -411,7 +413,7 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
           tooltips={true}
           pips={{
             mode: 'values',
-            values: [currentMailoutSizeMin, currentMailoutSizeMax],
+            values: adjustedMailoutSizeMax ? [currentMailoutSizeMin, adjustedMailoutSizeMax] : [currentMailoutSizeMin, currentMailoutSizeMax],
             stepped: true,
             density: 3,
           }}
