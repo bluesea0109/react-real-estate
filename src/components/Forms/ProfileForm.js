@@ -86,7 +86,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
   const isInitiatingUser = useSelector(store => store.initialize.polling);
 
   const [formValues, setFormValues] = useReducer(formReducer, initialValues);
-  const [personalNotificationEmailEnabled, setPersonalNotificationEmailEnabled] = useState(false);
+  const [personalNotificationEmailDisabled, setPersonalNotificationEmailDisabled] = useState(false);
 
   useEffect(() => {
     if (profileAvailable && teamProfileAvailable) {
@@ -96,7 +96,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
 
       const updatedFormValues = _.merge({}, formValues, { userProfile: profileAvailable }, { businessProfile: teamProfileAvailable });
       if (profileAvailable.notificationEmail === teamProfileAvailable.notificationEmail) {
-        setPersonalNotificationEmailEnabled(true);
+        setPersonalNotificationEmailDisabled(true);
       }
       setFormValues(updatedFormValues);
     } else {
@@ -106,14 +106,14 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profileAvailable, teamProfileAvailable, setFormValues, setPersonalNotificationEmailEnabled]);
+  }, [profileAvailable, teamProfileAvailable, setFormValues, setPersonalNotificationEmailDisabled]);
 
   const saveProfile = profile => dispatch(saveProfilePending(profile));
   const saveTeamProfile = teamProfile => dispatch(saveTeamProfilePending(teamProfile));
 
   const _handleSubmit = values => {
     const profile = {
-      notificationEmail: values.personalNotificationEmail,
+      notificationEmail: personalNotificationEmailDisabled ? values.businessNotificationEmail : values.personalNotificationEmail,
       first: values.first,
       last: values.last,
       email: values.email,
@@ -180,6 +180,12 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
       setFieldValue('realtorPhoto', pictureCheck(picturesRealtorPhoto) || (!selectedPeerId && pictureCheck(realtorPhoto)), true);
       setFieldValue('teamLogo', pictureCheck(picturesTeamLogo) || pictureCheck(teamLogo), true);
       setFieldValue('brokerageLogo', pictureCheck(picturesBrokerageLogo) || pictureCheck(brokerageLogo), true);
+
+      setFieldValue(
+        'personalNotificationEmail',
+        personalNotificationEmailDisabled ? formValues.businessProfile.notificationEmail : formValues.userProfile.notificationEmail,
+        true
+      );
     }, [setFieldValue]);
     return null;
   };
@@ -197,7 +203,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
           personalPhone: formValues.userProfile.phone,
           email: formValues.userProfile.email,
           dre: formValues.userProfile.dre,
-          personalNotificationEmail: personalNotificationEmailEnabled ? formValues.businessProfile.notificationEmail : formValues.userProfile.notificationEmail,
+          personalNotificationEmail: '',
           boards: formValues.userProfile.boards,
           teamName: formValues.businessProfile.teamName,
           brokerageName: formValues.businessProfile.brokerageName,
@@ -247,7 +253,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
           personalNotificationEmail: Yup.string()
             .email('Invalid email')
             .when('undefined', {
-              is: () => !personalNotificationEmailEnabled,
+              is: () => !personalNotificationEmailDisabled,
               then: Yup.string().required('Required!'),
             }),
           boards: Yup.array()
@@ -411,16 +417,16 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                   <Input
                     label="Personal Notification Email"
                     name="personalNotificationEmail"
-                    disabled={personalNotificationEmailEnabled}
-                    tag={personalNotificationEmailEnabled ? null : tag('Required')}
+                    disabled={personalNotificationEmailDisabled}
+                    tag={personalNotificationEmailDisabled ? null : tag('Required')}
                   />
-                  {personalNotificationEmailEnabled ? (
+                  {personalNotificationEmailDisabled ? (
                     <span style={{ color: '#F2714D' }}>
                       <FontAwesomeIcon
                         icon="toggle-on"
                         size="2x"
                         style={{ marginTop: '1em', verticalAlign: '-0.3em', color: '#59C4C4' }}
-                        onClick={() => setPersonalNotificationEmailEnabled(!personalNotificationEmailEnabled)}
+                        onClick={() => setPersonalNotificationEmailDisabled(!personalNotificationEmailDisabled)}
                       />{' '}
                       Same as business notification email
                     </span>
@@ -431,7 +437,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                         size="2x"
                         className="fa-flip-horizontal"
                         style={{ marginTop: '1em', verticalAlign: '-0.3em' }}
-                        onClick={() => setPersonalNotificationEmailEnabled(!personalNotificationEmailEnabled)}
+                        onClick={() => setPersonalNotificationEmailDisabled(!personalNotificationEmailDisabled)}
                       />{' '}
                       Same as business notification email
                     </span>
