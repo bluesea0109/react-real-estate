@@ -439,6 +439,10 @@ h1 {
   color: #59c4c4;
 }
 
+.wrong-image-overlay {
+  color: rgb(159, 58, 56);
+}
+
 .sui-error-message {
   display: block;
   margin: 0.28571429rem 0;
