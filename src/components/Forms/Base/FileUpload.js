@@ -12,7 +12,7 @@ function FileUpload({ name, label, pending, dispatch, errorComponent = ErrorMess
 
   const onDrop = useCallback(
     acceptedFiles => {
-      if (!pending) {
+      if (!pending && acceptedFiles.length > 0) {
         const data = [name, acceptedFiles[0]];
         dispatch(uploadPhotoPending(data));
       }
@@ -20,10 +20,11 @@ function FileUpload({ name, label, pending, dispatch, errorComponent = ErrorMess
     [pending, name, dispatch]
   );
 
-  const { getRootProps, getInputProps, open } = useDropzone({
+  const { getRootProps, getInputProps, open, isDragReject } = useDropzone({
     onDrop,
     noClick: true,
     noKeyboard: true,
+    accept: 'image/jpeg, image/png',
   });
 
   useFocusOnError({ fieldRef, name });
@@ -65,35 +66,45 @@ function FileUpload({ name, label, pending, dispatch, errorComponent = ErrorMess
               </div>
             )}
 
-            <div style={{ gridArea: 'Image' }} {...getRootProps({ className: 'dropzone' })} ref={fieldRef}>
-              <Item className="image-container" htmlFor={name} as="label" style={{ cursor: 'pointer' }} onClick={open}>
-                <Card
-                  style={
-                    error
-                      ? { minHeight: '15em', maxHeight: '15em', minWidth: '15em', maxWidth: '15em', overflow: 'hidden', border: '3px solid #e0b4b4' }
-                      : { minHeight: '15em', maxHeight: '15em', minWidth: '15em', maxWidth: '15em', overflow: 'hidden' }
-                  }
-                >
-                  <Label corner="right" className="image-upload-label">
-                    <Icon name="upload" style={{ cursor: 'pointer' }} />
-                  </Label>
-                  {field.value ? (
-                    <Image size="tiny" src={field.value} wrapped ui={false} />
-                  ) : name === 'realtorPhoto' ? (
-                    <Image size="tiny" src={require('../../../assets/photo-placeholder.svg')} wrapped ui={false} />
-                  ) : (
-                    <Image size="tiny" src={require('../../../assets/image-placeholder.svg')} wrapped ui={false} />
-                  )}
-                  {pending ? null : <input {...getInputProps()} />}
-                  <div className="image-middle">
-                    {pending ? (
-                      <Image centered size="tiny" src={require('../../../assets/loading.gif')} style={{ background: 'unset', marginTop: '1em', opacity: 1 }} />
+            <div style={{ gridArea: 'Image' }}>
+              <div style={{ maxWidth: '15em' }} {...getRootProps({ className: 'dropzone' })} ref={fieldRef}>
+                <Item className="image-container" htmlFor={name} as="label" style={{ cursor: isDragReject ? 'not-allowed' : 'pointer' }} onClick={open}>
+                  <Card
+                    style={
+                      error
+                        ? { minHeight: '15em', maxHeight: '15em', minWidth: '15em', maxWidth: '15em', overflow: 'hidden', border: '3px solid #e0b4b4' }
+                        : { minHeight: '15em', maxHeight: '15em', minWidth: '15em', maxWidth: '15em', overflow: 'hidden' }
+                    }
+                  >
+                    <Label corner="right" className="image-upload-label">
+                      <Icon name="upload" style={{ cursor: 'pointer' }} />
+                    </Label>
+                    {field.value && !isDragReject ? (
+                      <Image size="tiny" src={field.value} wrapped ui={false} />
+                    ) : name === 'realtorPhoto' ? (
+                      <Image size="tiny" src={require('../../../assets/photo-placeholder.svg')} wrapped ui={false} />
                     ) : (
-                      <Icon name="camera" size="huge" className="image-overlay" />
+                      <Image size="tiny" src={require('../../../assets/image-placeholder.svg')} wrapped ui={false} />
                     )}
-                  </div>
-                </Card>
-              </Item>
+                    {pending ? null : <input {...getInputProps()} />}
+                    <div className="image-middle">
+                      {pending ? (
+                        <Image
+                          centered
+                          size="tiny"
+                          src={require('../../../assets/loading.gif')}
+                          style={{ background: 'unset', marginTop: '1em', opacity: 1 }}
+                        />
+                      ) : isDragReject ? (
+                        <Icon name="cancel" size="huge" className="wrong-image-overlay" />
+                      ) : (
+                        <Icon name="camera" size="huge" className="image-overlay" />
+                      )}
+                    </div>
+                  </Card>
+                </Item>
+                <b className="wrong-image-overlay">{isDragReject ? 'Unsupported file type' : ''}</b>
+              </div>
             </div>
           </Form.Field>
         );

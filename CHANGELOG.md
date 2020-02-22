@@ -1,3 +1,12 @@
+-----------------
+## Release 2.2.11-13
+
+Other fixes:
+- Fix issue #237 [Nouislider min/max values being the same]
+- Fix issue #233 [Image upload should be limited to image/jpeg and image/png only]
+- Fix issue #234 [Value of personal email notification being empty during onboarding when `Same as business notification email` is selected]
+
+----------------
 ## Release 2.2.0
 
 Changes:
