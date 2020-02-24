@@ -218,44 +218,44 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
         }}
         validationSchema={Yup.object().shape({
           realtorPhoto: Yup.string().required('Required'),
-          first: Yup.string()
-            .min(2, 'Too Short!')
-            .max(50, 'Too Long!')
-            .when('undefined', {
-              is: () => !multiUser,
-              then: Yup.string().required('Required!'),
-            }),
-          last: Yup.string()
-            .min(2, 'Too Short!')
-            .max(50, 'Too Long!')
-            .when('undefined', {
-              is: () => !multiUser,
-              then: Yup.string().required('Required!'),
-            }),
-          personalPhone: Yup.string()
-            .matches(phoneRegExp, 'Phone number is not valid')
-            .when('undefined', {
-              is: () => !multiUser,
-              then: Yup.string().required('Required!'),
-            }),
-          email: Yup.string()
-            .email('Invalid email')
-            .when('undefined', {
-              is: () => !multiUser,
-              then: Yup.string().required('Required!'),
-            }),
+          first: Yup.string().when('undefined', {
+            is: () => !multiUser,
+            then: Yup.string()
+              .min(2, 'Too Short!')
+              .max(50, 'Too Long!')
+              .required('Required!'),
+          }),
+          last: Yup.string().when('undefined', {
+            is: () => !multiUser,
+            then: Yup.string()
+              .min(2, 'Too Short!')
+              .max(50, 'Too Long!')
+              .required('Required!'),
+          }),
+          personalPhone: Yup.string().when('undefined', {
+            is: () => !multiUser,
+            then: Yup.string()
+              .matches(phoneRegExp, 'Phone number is not valid')
+              .required('Required!'),
+          }),
+          email: Yup.string().when('undefined', {
+            is: () => !multiUser,
+            then: Yup.string()
+              .email('Invalid email')
+              .required('Required!'),
+          }),
           dre: Yup.string()
             .nullable()
             .when('state', {
               is: 'CA',
               then: Yup.string().required('Required by state of California'),
             }),
-          personalNotificationEmail: Yup.string()
-            .email('Invalid email')
-            .when('undefined', {
-              is: () => !personalNotificationEmailDisabled,
-              then: Yup.string().required('Required!'),
-            }),
+          personalNotificationEmail: Yup.string().when('undefined', {
+            is: () => !personalNotificationEmailDisabled,
+            then: Yup.string()
+              .email('Invalid email')
+              .required('Required!'),
+          }),
           boards: Yup.array()
             .of(
               Yup.object({
@@ -268,56 +268,56 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
               })
             )
             .required('All MLS data is required'),
-          teamName: Yup.string()
-            .min(2, 'Too Short!')
-            .max(50, 'Too Long!')
-            .when('undefined', {
-              is: () => !multiUser,
-              then: Yup.string().required('Required!'),
-            }),
-          brokerageName: Yup.string()
-            .min(2, 'Too Short!')
-            .max(50, 'Too Long!')
-            .when('undefined', {
-              is: () => !multiUser,
-              then: Yup.string().required('Required!'),
-            }),
-          businessPhone: Yup.string()
-            .matches(phoneRegExp, 'Phone number is not valid')
-            .when('undefined', {
-              is: () => !multiUser,
-              then: Yup.string().required('Required!'),
-            }),
+          teamName: Yup.string().when('undefined', {
+            is: () => !multiUser,
+            then: Yup.string()
+              .min(2, 'Too Short!')
+              .max(50, 'Too Long!')
+              .required('Required!'),
+          }),
+          brokerageName: Yup.string().when('undefined', {
+            is: () => !multiUser,
+            then: Yup.string()
+              .min(2, 'Too Short!')
+              .max(50, 'Too Long!')
+              .required('Required!'),
+          }),
+          businessPhone: Yup.string().when('undefined', {
+            is: () => !multiUser,
+            then: Yup.string()
+              .matches(phoneRegExp, 'Phone number is not valid')
+              .required('Required!'),
+          }),
           teamLogo: Yup.string(),
           brokerageLogo: Yup.string().required('Required'),
-          address: Yup.string()
-            .min(2, 'Too Short!')
-            .max(50, 'Too Long!')
-            .when('undefined', {
-              is: () => !multiUser,
-              then: Yup.string().required('Required!'),
-            }),
-          city: Yup.string()
-            .min(2, 'Too Short!')
-            .max(50, 'Too Long!')
-            .when('undefined', {
-              is: () => !multiUser,
-              then: Yup.string().required('Required!'),
-            }),
-          state: Yup.string()
-            .min(2, 'Too Short!')
-            .max(50, 'Too Long!')
-            .when('undefined', {
-              is: () => !multiUser,
-              then: Yup.string().required('Required!'),
-            }),
-          zip: Yup.string()
-            .min(2, 'Too Short!')
-            .max(50, 'Too Long!')
-            .when('undefined', {
-              is: () => !multiUser,
-              then: Yup.string().required('Required!'),
-            }),
+          address: Yup.string().when('undefined', {
+            is: () => !multiUser,
+            then: Yup.string()
+              .min(2, 'Too Short!')
+              .max(50, 'Too Long!')
+              .required('Required!'),
+          }),
+          city: Yup.string().when('undefined', {
+            is: () => !multiUser,
+            then: Yup.string()
+              .min(2, 'Too Short!')
+              .max(50, 'Too Long!')
+              .required('Required!'),
+          }),
+          state: Yup.string().when('undefined', {
+            is: () => !multiUser,
+            then: Yup.string()
+              .min(2, 'Too Short!')
+              .max(50, 'Too Long!')
+              .required('Required!'),
+          }),
+          zip: Yup.string().when('undefined', {
+            is: () => !multiUser,
+            then: Yup.string()
+              .min(2, 'Too Short!')
+              .max(50, 'Too Long!')
+              .required('Required!'),
+          }),
           businessNotificationEmail: Yup.string()
             .email('Invalid email')
             .required('Required'),
