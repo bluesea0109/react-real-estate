@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { /*Confirm,*/ Dropdown, Form, Header, Label, Popup } from 'semantic-ui-react';
 import React, { createRef, Fragment, useEffect, useState, useReducer } from 'react';
 
-import { isMobile, maxLength, popup, required, composeValidators, differenceObjectDeep, urlRegExp } from '../utils';
+import { isMobile, maxLength, popup, required, composeValidators, differenceObjectDeep, urlRegExp, keywordRegExp } from '../utils';
 import { saveListedShortcodePending, saveSoldShortcodePending } from '../../store/modules/shortcode/actions';
 import { saveCustomizationPending } from '../../store/modules/customization/actions';
 import { Button, Icon, Image, Menu, Modal, Page, Segment } from '../Base';
@@ -21,6 +21,11 @@ const formReducer = (state, action) => {
 
 const NEW_LISTING = 'listed';
 const SOLD_LISTING = 'sold';
+
+const OLD_KWKLY_DEFAULT = 'Text KEYWORD to 59559 for details!';
+const validURL = str => !urlRegExp.test(str) && 'URL is not valid';
+const validKeyword = str => !keywordRegExp.test(str) && 'KEYWORD is not valid';
+const isValidURL = str => !!urlRegExp.test(str);
 
 let multiUserStartState;
 let singleUserStartState;
@@ -56,7 +61,7 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
       frontHeadline: bookmarkTemplate.listed.fields.filter(field => field.name === 'frontHeadline')[0],
       cta: null,
       shortenCTA: null,
-      kwkly: 'Text KEYWORD to 59559 for details!',
+      kwkly: null,
     },
     sold: {
       createMailoutsOfThisType: true,
@@ -73,14 +78,14 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
       frontHeadline: bookmarkTemplate.sold.fields.filter(field => field.name === 'frontHeadline')[0],
       cta: null,
       shortenCTA: null,
-      kwkly: 'Text KEYWORD to 59559 for details!',
+      kwkly: null,
     },
   };
 
   const newListingShortenedURL = useSelector(store => store.shortcode && store.shortcode.listed);
-  const newListingShortenedURLPending = useSelector(store => store.shortcode && store.shortcode.listedURLToShortenPending);
+  const newListingShortenedURLError = useSelector(store => store.shortcode && store.shortcode.listedURLToShortenError);
   const soldListingShortenedURL = useSelector(store => store.shortcode && store.shortcode.sold);
-  const soldListingShortenedURLPending = useSelector(store => store.shortcode && store.shortcode.soldURLToShortenPending);
+  const soldListingShortenedURLError = useSelector(store => store.shortcode && store.shortcode.soldURLToShortenError);
 
   const onLoginUserId = useSelector(store => store.onLogin.user._id);
   const onLoginMode = useSelector(store => store.onLogin.mode);
@@ -118,10 +123,68 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
 
   useEffect(() => {
     if (multiUser && customizationData && teamCustomizationData) {
+      if (customizationData.listed && customizationData.listed.cta) {
+        dispatch(saveListedShortcodePending(customizationData.listed.cta));
+      } else {
+        if (teamCustomizationData.listed && teamCustomizationData.listed.cta) {
+          dispatch(saveListedShortcodePending(teamCustomizationData.listed.cta));
+        }
+      }
+
+      if (customizationData.sold && customizationData.sold.cta) {
+        dispatch(saveSoldShortcodePending(customizationData.sold.cta));
+      } else {
+        if (teamCustomizationData.sold && teamCustomizationData.sold.cta) {
+          dispatch(saveSoldShortcodePending(teamCustomizationData.sold.cta));
+        }
+      }
+    }
+
+    if (singleUser && customizationData) {
+      if (customizationData.listed && customizationData.listed.cta) {
+        dispatch(saveListedShortcodePending(customizationData.listed.cta));
+      }
+
+      if (customizationData.sold && customizationData.sold.cta) {
+        dispatch(saveSoldShortcodePending(customizationData.sold.cta));
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [customizationData, teamCustomizationData, dispatch]);
+
+  useEffect(() => {
+    if (multiUser && customizationData && teamCustomizationData) {
       const updatedFormValues = _.merge({}, formValues, teamCustomizationData, customizationData);
       delete updatedFormValues._rev;
       delete updatedFormValues._id;
       delete updatedFormValues.onboardingComplete;
+
+      if (updatedFormValues.listed.kwkly === OLD_KWKLY_DEFAULT) {
+        updatedFormValues.listed.kwkly = null;
+      }
+
+      if (updatedFormValues.sold.kwkly === OLD_KWKLY_DEFAULT) {
+        updatedFormValues.sold.kwkly = null;
+      }
+
+      if (customizationData.listed.cta && customizationData.listed.shortenCTA) {
+        updatedFormValues.listed.cta = customizationData.listed.cta;
+        updatedFormValues.listed.shortenCTA = true;
+      }
+
+      if (customizationData.listed.kwkly && !customizationData.listed.shortenCTA) {
+        updatedFormValues.listed.kwkly = customizationData.listed.kwkly;
+      }
+
+      if (customizationData.sold.cta && customizationData.sold.shortenCTA) {
+        updatedFormValues.sold.cta = customizationData.sold.cta;
+        updatedFormValues.sold.shortenCTA = true;
+      }
+
+      if (customizationData.sold.kwkly && !customizationData.sold.shortenCTA) {
+        updatedFormValues.sold.kwkly = customizationData.sold.kwkly;
+      }
+
       setFormValues(updatedFormValues);
       multiUserStartState = updatedFormValues;
     }
@@ -131,6 +194,17 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
       delete updatedFormValues._rev;
       delete updatedFormValues._id;
       delete updatedFormValues.onboardingComplete;
+
+      if (updatedFormValues.listed.kwkly === OLD_KWKLY_DEFAULT) {
+        updatedFormValues.listed.kwkly = null;
+      }
+      updatedFormValues.listed.shortenCTA = !!customizationData.listed.cta;
+
+      if (updatedFormValues.sold.kwkly === OLD_KWKLY_DEFAULT) {
+        updatedFormValues.sold.kwkly = null;
+      }
+      updatedFormValues.sold.shortenCTA = !!customizationData.sold.cta;
+
       setFormValues(updatedFormValues);
       singleUserStartState = updatedFormValues;
     }
@@ -464,17 +538,9 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
   };
 
   const renderCTA = ({ listingType }) => {
-    const validURL = str => !urlRegExp.test(str) && 'URL is not valid';
-    const isValidURL = str => !!urlRegExp.test(str);
-
     const currentValue = formValues[listingType].cta;
     const ctaEnabled = formValues[listingType].shortenCTA;
     const shortenedURL = listingType === NEW_LISTING ? newListingShortenedURL : soldListingShortenedURL;
-
-    if (currentValue && isValidURL(currentValue)) {
-      if (listingType === NEW_LISTING && !newListingShortenedURLPending && !newListingShortenedURL) dispatch(saveListedShortcodePending(currentValue));
-      if (listingType === SOLD_LISTING && !soldListingShortenedURLPending && !soldListingShortenedURL) dispatch(saveSoldShortcodePending(currentValue));
-    }
 
     const handleCTAChange = input => {
       const eURL = input.target.value;
@@ -487,8 +553,14 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
       if (listingType === SOLD_LISTING && isValidURL(eURL)) dispatch(saveSoldShortcodePending(eURL));
     };
 
-    const error = ctaEnabled && composeValidators(required, validURL)(currentValue);
+    let serverValidationError = null;
 
+    if (ctaEnabled) {
+      if (listingType === NEW_LISTING && newListingShortenedURLError) serverValidationError = newListingShortenedURLError.message;
+      if (listingType === SOLD_LISTING && soldListingShortenedURLError) serverValidationError = soldListingShortenedURLError.message;
+    }
+
+    const error = ctaEnabled && composeValidators(required, validURL)(currentValue);
     const isVisible = ctaEnabled && !error && shortenedURL;
 
     return (
@@ -501,13 +573,10 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
               Call to action URL
             </Header>
           }
-          error={error && { content: error }}
-          // placeholder={field.default}
-          // type={field.type}
+          error={(error && { content: error }) || (serverValidationError && { content: serverValidationError })}
           onBlur={handleCTAChange}
           defaultValue={currentValue}
           disabled={!ctaEnabled}
-          style={{ opacity: ctaEnabled ? '1' : '0.4' }}
         />
         {isVisible && (
           <Label style={{ marginTop: !isMobile() && '2.75em', padding: '1em', backgroundColor: 'transparent' }}>
@@ -537,7 +606,7 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
       setFormValues(newValue);
     };
 
-    const error = !ctaEnabled && composeValidators(required)(currentValue);
+    const error = !ctaEnabled && composeValidators(required, validKeyword)(currentValue);
 
     return (
       <Form.Field>
@@ -549,12 +618,18 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
               KWKLY Call to Action
             </Header>
           }
-          error={error && { content: error }}
           onBlur={handleKwklyChange}
           defaultValue={currentValue}
           disabled={ctaEnabled}
-          style={{ opacity: !ctaEnabled ? '1' : '0.4' }}
-        />
+          labelPosition="right"
+          type="text"
+          placeholder="KEYWORD"
+        >
+          <Label style={{ opacity: !ctaEnabled ? '1' : '0.4' }}>Text </Label>
+          <input />
+          <Label style={{ opacity: !ctaEnabled ? '1' : '0.4' }}> to 59559 for details!</Label>
+        </Form.Input>
+        {error && <span className="sui-error-message">{error}</span>}
       </Form.Field>
     );
   };
