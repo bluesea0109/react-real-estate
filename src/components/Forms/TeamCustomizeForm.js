@@ -689,7 +689,7 @@ const CustomizeForm = ({ teamCustomizationData }) => {
             </Header>
             <Menu.Menu position="right">
               <span>
-                <Button primary type="submit" onClick={handleSubmit} disabled={pristineState || newListingShortenedURLError || soldListingShortenedURLError}>
+                <Button primary type="submit" onClick={handleSubmit} disabled={pristineState}>
                   Save
                 </Button>
               </span>
