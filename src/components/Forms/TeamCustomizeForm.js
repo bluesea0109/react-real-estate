@@ -662,7 +662,7 @@ const CustomizeForm = ({ teamCustomizationData }) => {
           className={ctaEnabled ? 'disabled-form-field' : null}
           label={
             <Header as="h4" style={{ opacity: !ctaEnabled ? '1' : '0.4' }}>
-              KWKLY Call to Action Phrase
+              KWKLY Call to Action Phrase {popup('Please enter your KWKLY keyword and we will put the keyword into a the KWKLY phrase for you.')}
             </Header>
           }
           onBlur={handleKwklyChange}

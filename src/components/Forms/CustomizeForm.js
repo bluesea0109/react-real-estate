@@ -204,6 +204,14 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
         }
       }
 
+      if (customizationData.listed.cta && customizationData.listed.shortenCTA) {
+        updatedFormValues.listed.shortenCTA = true;
+      }
+
+      if (customizationData.sold.cta && customizationData.sold.shortenCTA) {
+        updatedFormValues.sold.shortenCTA = true;
+      }
+
       setFormValues(updatedFormValues);
       multiUserStartState = updatedFormValues;
     }
@@ -725,10 +733,9 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
       <Form.Field>
         <Form.Input
           className={ctaEnabled ? 'disabled-form-field' : null}
-          fluid
           label={
             <Header as="h4" style={{ opacity: !ctaEnabled ? '1' : '0.4' }}>
-              KWKLY Call to Action Phrase
+              KWKLY Call to Action Phrase {popup('Please enter your KWKLY keyword and we will put the keyword into a the KWKLY phrase for you.')}
             </Header>
           }
           onBlur={handleKwklyChange}

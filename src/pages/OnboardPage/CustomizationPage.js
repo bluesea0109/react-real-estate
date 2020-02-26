@@ -24,7 +24,7 @@ const initialValues = {
     frontHeadline: 'Just Listed!',
     cta: '',
     shortenCTA: false,
-    kwkly: 'Text KEYWORD to 59559 for details!',
+    kwkly: 'KEYWORD',
   },
   sold: {
     createMailoutsOfThisType: true,
@@ -41,7 +41,7 @@ const initialValues = {
     frontHeadline: 'Just Sold!',
     cta: '',
     shortenCTA: false,
-    kwkly: 'Text KEYWORD to 59559 for details!',
+    kwkly: 'KEYWORD',
   },
 };
 
@@ -74,10 +74,27 @@ const CustomizationPage = () => {
       );
     } else {
       const patchedCustomizationAvailable = customizationAvailable;
-      if (patchedCustomizationAvailable && !patchedCustomizationAvailable.listed.kwkly)
-        patchedCustomizationAvailable.listed.kwkly = 'Text KEYWORD to 59559 for details!';
-      if (patchedCustomizationAvailable && !patchedCustomizationAvailable.sold.kwkly)
-        patchedCustomizationAvailable.sold.kwkly = 'Text KEYWORD to 59559 for details!';
+      if (patchedCustomizationAvailable) {
+        if (patchedCustomizationAvailable.sold.kwkly) {
+          if (patchedCustomizationAvailable.sold.kwkly.includes('to 59559 for details!')) {
+            patchedCustomizationAvailable.sold.kwkly = patchedCustomizationAvailable.sold.kwkly.split(' ')[1];
+          }
+        }
+
+        if (patchedCustomizationAvailable.listed.kwkly) {
+          if (patchedCustomizationAvailable.listed.kwkly.includes('to 59559 for details!')) {
+            patchedCustomizationAvailable.listed.kwkly = patchedCustomizationAvailable.listed.kwkly.split(' ')[1];
+          }
+        }
+
+        if (!patchedCustomizationAvailable.listed.kwkly) {
+          patchedCustomizationAvailable.listed.kwkly = 'KEYWORD';
+        }
+
+        if (!patchedCustomizationAvailable.sold.kwkly) {
+          patchedCustomizationAvailable.sold.kwkly = 'KEYWORD';
+        }
+      }
 
       return <CustomizeForm customizationData={patchedCustomizationAvailable || initialValues} />;
     }
@@ -94,19 +111,49 @@ const CustomizationPage = () => {
       );
     } else {
       const patchedCustomizationAvailable = customizationAvailable;
-      if (patchedCustomizationAvailable && !patchedCustomizationAvailable.listed.kwkly) {
-        patchedCustomizationAvailable.listed.kwkly = 'Text KEYWORD to 59559 for details!';
-      }
-      if (patchedCustomizationAvailable && !patchedCustomizationAvailable.sold.kwkly) {
-        patchedCustomizationAvailable.sold.kwkly = 'Text KEYWORD to 59559 for details!';
+      if (patchedCustomizationAvailable) {
+        if (patchedCustomizationAvailable.sold.kwkly) {
+          if (patchedCustomizationAvailable.sold.kwkly.includes('to 59559 for details!')) {
+            patchedCustomizationAvailable.sold.kwkly = patchedCustomizationAvailable.sold.kwkly.split(' ')[1];
+          }
+        }
+
+        if (patchedCustomizationAvailable.listed.kwkly) {
+          if (patchedCustomizationAvailable.listed.kwkly.includes('to 59559 for details!')) {
+            patchedCustomizationAvailable.listed.kwkly = patchedCustomizationAvailable.listed.kwkly.split(' ')[1];
+          }
+        }
+
+        if (!patchedCustomizationAvailable.listed.kwkly) {
+          patchedCustomizationAvailable.listed.kwkly = 'KEYWORD';
+        }
+
+        if (!patchedCustomizationAvailable.sold.kwkly) {
+          patchedCustomizationAvailable.sold.kwkly = 'KEYWORD';
+        }
       }
 
       const patchedTeamCustomizationAvailable = teamCustomizationAvailable;
-      if (patchedTeamCustomizationAvailable && !patchedTeamCustomizationAvailable.listed.kwkly) {
-        patchedTeamCustomizationAvailable.listed.kwkly = 'Text KEYWORD to 59559 for details!';
-      }
-      if (patchedTeamCustomizationAvailable && !patchedTeamCustomizationAvailable.sold.kwkly) {
-        patchedTeamCustomizationAvailable.sold.kwkly = 'Text KEYWORD to 59559 for details!';
+      if (patchedTeamCustomizationAvailable) {
+        if (patchedTeamCustomizationAvailable.sold.kwkly) {
+          if (patchedTeamCustomizationAvailable.sold.kwkly.includes('to 59559 for details!')) {
+            patchedTeamCustomizationAvailable.sold.kwkly = patchedTeamCustomizationAvailable.sold.kwkly.split(' ')[1];
+          }
+        }
+
+        if (patchedTeamCustomizationAvailable.listed.kwkly) {
+          if (patchedTeamCustomizationAvailable.listed.kwkly.includes('to 59559 for details!')) {
+            patchedTeamCustomizationAvailable.listed.kwkly = patchedTeamCustomizationAvailable.listed.kwkly.split(' ')[1];
+          }
+        }
+
+        if (!patchedTeamCustomizationAvailable.listed.kwkly) {
+          patchedTeamCustomizationAvailable.listed.kwkly = 'KEYWORD';
+        }
+
+        if (!patchedTeamCustomizationAvailable.sold.kwkly) {
+          patchedTeamCustomizationAvailable.sold.kwkly = 'KEYWORD';
+        }
       }
 
       return (

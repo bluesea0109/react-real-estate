@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { createRef, Fragment, useEffect, useState, useReducer } from 'react';
 
 import { reviewTeamCustomizationCompleted, saveTeamCustomizationPending } from '../../../store/modules/teamCustomization/actions';
-import { isMobile, popup, urlRegExp, required, minLength, maxLength, composeValidators, TrimStrAndConvertToInt } from '../../utils';
+import { isMobile, popup, urlRegExp, keywordRegExp, required, minLength, maxLength, composeValidators, TrimStrAndConvertToInt } from '../../utils';
 import { saveTeamSoldShortcodePending, saveTeamListedShortcodePending } from '../../../store/modules/teamShortcode/actions';
 import { Button, Icon, Image, Menu, Modal, Page, Segment } from '../../Base';
 import { ContentTopHeaderLayout } from '../../../layouts';
@@ -19,6 +19,11 @@ import Loading from '../../Loading';
 
 const NEW_LISTING = 'listed';
 const SOLD_LISTING = 'sold';
+
+const validURL = str => !urlRegExp.test(str) && 'URL is not valid';
+const validKeyword = str => !keywordRegExp.test(str) && 'KEYWORD is not valid';
+const isNotDefaultKeyword = str => str.toLowerCase() === 'keyword' && 'Please replace KEYWORD with other phrase';
+const isValidURL = str => !!urlRegExp.test(str);
 
 const formReducer = (state, action) => {
   return _.merge({}, state, action);
@@ -129,6 +134,14 @@ const CustomizeForm = ({ teamCustomizationData, initialRun }) => {
     if (!data.listed.defaultDisplayAgent.userId) delete data.listed.defaultDisplayAgent;
     if (!data.sold.defaultDisplayAgent.userId) delete data.sold.defaultDisplayAgent;
 
+    if (!data.sold.shortenCTA && data.sold.kwkly) {
+      data.sold.kwkly = `Text ${data.sold.kwkly} to 59559 for details!`;
+    }
+
+    if (!data.listed.shortenCTA && data.listed.kwkly) {
+      data.listed.kwkly = `Text ${data.listed.kwkly} to 59559 for details!`;
+    }
+
     setFormValues(data);
     dispatch(saveTeamCustomizationPending(data));
   };
@@ -235,7 +248,7 @@ const CustomizeForm = ({ teamCustomizationData, initialRun }) => {
         label={adjustedName}
         name={listingType + '_frontHeadline'}
         onBlur={handleChange}
-        validate={composeValidators(required, minLength(2), maxLength(formValues[listingType].frontHeadline.max))}
+        validate={composeValidators(required, minLength(2), maxLength(15))}
       />
     );
   };
@@ -349,9 +362,6 @@ const CustomizeForm = ({ teamCustomizationData, initialRun }) => {
   };
 
   const renderCTA = ({ listingType }) => {
-    const validURL = str => !urlRegExp.test(str) && 'URL is not valid';
-    const isValidURL = str => !!urlRegExp.test(str);
-
     const currentValue = formValues[listingType].cta;
     const ctaEnabled = formValues[listingType].shortenCTA;
     const shortenedURL = listingType === NEW_LISTING ? newListingShortenedURL : soldListingShortenedURL;
@@ -433,12 +443,20 @@ const CustomizeForm = ({ teamCustomizationData, initialRun }) => {
 
     return (
       <Input
-        label="KWKLY Call to Action"
+        label="KWKLY Call to Action Phrase"
         name={listingType + '_kwkly'}
         onBlur={handleKwklyChange}
-        validate={!ctaEnabled && composeValidators(required, minLength(2), maxLength(40))}
+        validate={!ctaEnabled && composeValidators(required, validKeyword, isNotDefaultKeyword, minLength(2), maxLength(40))}
         disabled={ctaEnabled}
-      />
+        labelPosition="right"
+        type="text"
+        placeholder="KEYWORD"
+        tag={popup('Please enter your KWKLY keyword and we will put the keyword into a the KWKLY phrase for you.')}
+      >
+        <Label style={{ opacity: !ctaEnabled ? '1' : '0.4' }}>Text </Label>
+        <input />
+        <Label style={{ opacity: !ctaEnabled ? '1' : '0.4' }}> to 59559 for details!</Label>
+      </Input>
     );
   };
 

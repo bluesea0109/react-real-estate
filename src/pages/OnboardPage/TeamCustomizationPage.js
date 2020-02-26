@@ -24,7 +24,7 @@ const initialValues = {
     frontHeadline: 'Just Listed!',
     cta: '',
     shortenCTA: false,
-    kwkly: 'Text KEYWORD to 59559 for details!',
+    kwkly: 'KEYWORD',
   },
   sold: {
     createMailoutsOfThisType: true,
@@ -41,7 +41,7 @@ const initialValues = {
     frontHeadline: 'Just Sold!',
     cta: '',
     shortenCTA: false,
-    kwkly: 'Text KEYWORD to 59559 for details!',
+    kwkly: 'KEYWORD',
   },
 };
 
@@ -66,10 +66,28 @@ const TeamCustomizationPage = () => {
     );
   } else {
     const patchedTeamCustomizationAvailable = teamCustomizationAvailable;
-    if (patchedTeamCustomizationAvailable && !patchedTeamCustomizationAvailable.listed.kwkly)
-      patchedTeamCustomizationAvailable.listed.kwkly = 'Text KEYWORD to 59559 for details!';
-    if (patchedTeamCustomizationAvailable && !patchedTeamCustomizationAvailable.sold.kwkly)
-      patchedTeamCustomizationAvailable.sold.kwkly = 'Text KEYWORD to 59559 for details!';
+
+    if (patchedTeamCustomizationAvailable) {
+      if (patchedTeamCustomizationAvailable.sold.kwkly) {
+        if (patchedTeamCustomizationAvailable.sold.kwkly.includes('to 59559 for details!')) {
+          patchedTeamCustomizationAvailable.sold.kwkly = patchedTeamCustomizationAvailable.sold.kwkly.split(' ')[1];
+        }
+      }
+
+      if (patchedTeamCustomizationAvailable.listed.kwkly) {
+        if (patchedTeamCustomizationAvailable.listed.kwkly.includes('to 59559 for details!')) {
+          patchedTeamCustomizationAvailable.listed.kwkly = patchedTeamCustomizationAvailable.listed.kwkly.split(' ')[1];
+        }
+      }
+
+      if (!patchedTeamCustomizationAvailable.listed.kwkly) {
+        patchedTeamCustomizationAvailable.listed.kwkly = 'KEYWORD';
+      }
+
+      if (!patchedTeamCustomizationAvailable.sold.kwkly) {
+        patchedTeamCustomizationAvailable.sold.kwkly = 'KEYWORD';
+      }
+    }
 
     return <TeamCustomizeForm teamCustomizationData={patchedTeamCustomizationAvailable || initialValues} initialRun={!teamCustomizationAvailable} />;
   }

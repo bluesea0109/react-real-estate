@@ -1,4 +1,15 @@
 -----------------
+## Release 2.2.20
+Changes:
+- Improve validation outside of onboarding for agent & team customization [Prevent saving of incorrect or invalid data]
+- Fix tab switching between New & Sold listings not triggering form validation in agent & team onboarding customization
+- Fix Cannot read property 'max' of undefined during agent & team customization onboarding
+
+Other fixes:
+- Fix issue #241 [Change KWKLY code label to be more friendly]
+- Fix issue #235 [KWKLY Code should error out if they don't modify the placeholder text]
+
+-----------------
 ## Release 2.2.11-13
 
 Other fixes:

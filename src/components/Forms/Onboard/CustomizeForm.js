@@ -6,7 +6,7 @@ import { Form, Header, Label, Popup } from 'semantic-ui-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { createRef, Fragment, useEffect, useState, useReducer } from 'react';
 
-import { isMobile, popup, urlRegExp, required, minLength, maxLength, composeValidators, differenceObjectDeep } from '../../utils';
+import { isMobile, popup, urlRegExp, keywordRegExp, required, minLength, maxLength, composeValidators, differenceObjectDeep } from '../../utils';
 import { saveCustomizationPending, reviewCustomizationCompleted } from '../../../store/modules/customization/actions';
 import { saveListedShortcodePending, saveSoldShortcodePending } from '../../../store/modules/shortcode/actions';
 import { Button, Icon, Image, Menu, Modal, Page, Segment } from '../../Base';
@@ -23,6 +23,11 @@ const formReducer = (state, action) => {
 
 const NEW_LISTING = 'listed';
 const SOLD_LISTING = 'sold';
+
+const validURL = str => !urlRegExp.test(str) && 'URL is not valid';
+const validKeyword = str => !keywordRegExp.test(str) && 'KEYWORD is not valid';
+const isNotDefaultKeyword = str => str.toLowerCase() === 'keyword' && 'Please replace KEYWORD with other phrase';
+const isValidURL = str => !!urlRegExp.test(str);
 
 const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
   const dispatch = useDispatch();
@@ -211,7 +216,7 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
         label={adjustedName}
         name={listingType + '_frontHeadline'}
         onBlur={handleChange}
-        validate={composeValidators(required, minLength(2), maxLength(formValues[listingType].frontHeadline.max))}
+        validate={composeValidators(required, minLength(2), maxLength(15))}
       />
     );
   };
@@ -308,9 +313,6 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
   };
 
   const renderCTA = ({ listingType }) => {
-    const validURL = str => !urlRegExp.test(str) && 'URL is not valid';
-    const isValidURL = str => !!urlRegExp.test(str);
-
     const currentValue = formValues[listingType].cta;
     const ctaEnabled = formValues[listingType].shortenCTA;
     const shortenedURL = listingType === NEW_LISTING ? newListingShortenedURL : soldListingShortenedURL;
@@ -392,12 +394,20 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
 
     return (
       <Input
-        label="KWKLY Call to Action"
+        label="KWKLY Call to Action Phrase"
         name={listingType + '_kwkly'}
         onBlur={handleKwklyChange}
-        validate={!ctaEnabled && composeValidators(required, minLength(2), maxLength(40))}
+        validate={!ctaEnabled && composeValidators(required, validKeyword, isNotDefaultKeyword, minLength(2), maxLength(40))}
         disabled={ctaEnabled}
-      />
+        labelPosition="right"
+        type="text"
+        placeholder="KEYWORD"
+        tag={popup('Please enter your KWKLY keyword and we will put the keyword into a the KWKLY phrase for you.')}
+      >
+        <Label style={{ opacity: !ctaEnabled ? '1' : '0.4' }}>Text </Label>
+        <input />
+        <Label style={{ opacity: !ctaEnabled ? '1' : '0.4' }}> to 59559 for details!</Label>
+      </Input>
     );
   };
 
