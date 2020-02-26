@@ -26,6 +26,7 @@ const OLD_KWKLY_DEFAULT = 'Text KEYWORD to 59559 for details!';
 const validURL = str => !urlRegExp.test(str) && 'URL is not valid';
 const validKeyword = str => !keywordRegExp.test(str) && 'KEYWORD is not valid';
 const isValidURL = str => !!urlRegExp.test(str);
+const isValidKeyword = str => !!keywordRegExp.test(str);
 
 let multiUserStartState;
 
@@ -82,8 +83,10 @@ const CustomizeForm = ({ teamCustomizationData }) => {
   };
 
   const newListingShortenedURL = useSelector(store => store.teamShortcode && store.teamShortcode.listed);
+  const newListingShortenedURLPending = useSelector(store => store.teamShortcode && store.teamShortcode.listedURLToShortenPending);
   const newListingShortenedURLError = useSelector(store => store.teamShortcode && store.teamShortcode.listedURLToShortenError);
   const soldListingShortenedURL = useSelector(store => store.teamShortcode && store.teamShortcode.sold);
+  const soldListingShortenedURLPending = useSelector(store => store.teamShortcode && store.teamShortcode.soldURLToShortenPending);
   const soldListingShortenedURLError = useSelector(store => store.teamShortcode && store.teamShortcode.soldURLToShortenError);
 
   const onLoginUserId = useSelector(store => store.onLogin.user._id);
@@ -99,6 +102,7 @@ const CustomizeForm = ({ teamCustomizationData }) => {
 
   const [step, setStep] = useState(1);
   const [formValues, setFormValues] = useReducer(formReducer, initialValues);
+  const [formError, setFormError] = useState('');
 
   // const [showSelectionAlert, setShowSelectionAlert] = useState(false);
 
@@ -139,7 +143,7 @@ const CustomizeForm = ({ teamCustomizationData }) => {
         updatedFormValues.listed.shortenCTA = !!teamCustomizationData.listed.cta;
       }
 
-      if (teamCustomizationData.sold && teamCustomizationData.sold) {
+      if (teamCustomizationData && teamCustomizationData.sold) {
         if (updatedFormValues.sold.kwkly === OLD_KWKLY_DEFAULT) {
           updatedFormValues.sold.kwkly = null;
         }
@@ -149,6 +153,18 @@ const CustomizeForm = ({ teamCustomizationData }) => {
 
       updatedFormValues.listed.createMailoutsOfThisType = true;
       updatedFormValues.sold.createMailoutsOfThisType = true;
+
+      if (updatedFormValues.sold.kwkly) {
+        if (updatedFormValues.sold.kwkly.includes('to 59559 for details!')) {
+          updatedFormValues.sold.kwkly = updatedFormValues.sold.kwkly.split(' ')[1];
+        }
+      }
+
+      if (updatedFormValues.listed.kwkly) {
+        if (updatedFormValues.listed.kwkly.includes('to 59559 for details!')) {
+          updatedFormValues.listed.kwkly = updatedFormValues.listed.kwkly.split(' ')[1];
+        }
+      }
 
       setFormValues(updatedFormValues);
       multiUserStartState = updatedFormValues;
@@ -180,6 +196,82 @@ const CustomizeForm = ({ teamCustomizationData }) => {
       delete data.sold.kwkly;
     } else {
       delete data.sold.cta;
+    }
+
+    if (!data.sold.frontHeadline) {
+      setFormError('Sold Listing Headline is missing');
+      return null;
+    }
+
+    if (!data.listed.frontHeadline) {
+      setFormError('New Listing Headline is missing');
+      return null;
+    }
+
+    if (data.sold.shortenCTA) {
+      if (!data.sold.cta) {
+        setFormError('Sold Listing Call to action URL is missing');
+        return null;
+      }
+
+      if (!isValidURL(data.sold.cta)) {
+        setFormError('Sold Listing Call to action URL is not valid');
+        return null;
+      }
+
+      if (!!soldListingShortenedURLError) {
+        setFormError(`Sold Listing Call to action ${soldListingShortenedURLError.message}`);
+        return null;
+      }
+    }
+
+    if (data.listed.shortenCTA) {
+      if (!data.listed.cta) {
+        setFormError('New Listing Call to action URL is missing');
+        return null;
+      }
+
+      if (!isValidURL(data.listed.cta)) {
+        setFormError('New Listing Call to action URL is not valid');
+        return null;
+      }
+
+      if (!!newListingShortenedURLError) {
+        setFormError(`New Listing Call to action ${newListingShortenedURLError.message}`);
+        return null;
+      }
+    }
+
+    if (!data.sold.shortenCTA) {
+      if (!data.sold.kwkly) {
+        setFormError('Sold Listing KWKLY Call to Action Phrase is missing');
+        return null;
+      }
+
+      if (!isValidKeyword(data.sold.kwkly)) {
+        setFormError('Sold Listing KWKLY Call to Action Phrase is not valid');
+        return null;
+      }
+    }
+
+    if (!data.listed.shortenCTA) {
+      if (!data.listed.kwkly) {
+        setFormError('New Listing KWKLY Call to Action Phrase is missing');
+        return null;
+      }
+
+      if (!isValidKeyword(data.listed.kwkly)) {
+        setFormError('New Listing KWKLY Call to Action Phrase is not valid');
+        return null;
+      }
+    }
+
+    if (!data.sold.shortenCTA && data.sold.kwkly) {
+      data.sold.kwkly = `Text ${data.sold.kwkly} to 59559 for details!`;
+    }
+
+    if (!data.listed.shortenCTA && data.listed.kwkly) {
+      data.listed.kwkly = `Text ${data.listed.kwkly} to 59559 for details!`;
     }
 
     dispatch(saveTeamCustomizationPending(data));
@@ -568,10 +660,9 @@ const CustomizeForm = ({ teamCustomizationData }) => {
       <Form.Field>
         <Form.Input
           className={ctaEnabled ? 'disabled-form-field' : null}
-          fluid
           label={
             <Header as="h4" style={{ opacity: !ctaEnabled ? '1' : '0.4' }}>
-              KWKLY Call to Action
+              KWKLY Call to Action Phrase
             </Header>
           }
           onBlur={handleKwklyChange}
@@ -689,7 +780,12 @@ const CustomizeForm = ({ teamCustomizationData }) => {
             </Header>
             <Menu.Menu position="right">
               <span>
-                <Button primary type="submit" onClick={handleSubmit} disabled={pristineState}>
+                <Button
+                  primary
+                  type="submit"
+                  onClick={handleSubmit}
+                  disabled={pristineState || newListingShortenedURLPending || soldListingShortenedURLPending}
+                >
                   Save
                 </Button>
               </span>
@@ -714,6 +810,18 @@ const CustomizeForm = ({ teamCustomizationData }) => {
         {/*/>*/}
 
         {renderSteps()}
+
+        <Modal basic size="tiny" open={!!formError} onClose={() => setFormError('')}>
+          <Header icon="warning" content="Unable to save!" />
+          <Modal.Content>
+            <p>{formError}</p>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button primary inverted onClick={() => setFormError('')}>
+              <Icon name="checkmark" /> OK
+            </Button>
+          </Modal.Actions>
+        </Modal>
 
         <Modal open={displayReview} basic size="tiny">
           {!postcardsPreviewIsPending && (
