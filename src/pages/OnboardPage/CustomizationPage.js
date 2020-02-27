@@ -52,11 +52,11 @@ const CustomizationPage = () => {
   const singleuser = onLoginMode === 'singleuser';
 
   const customizationPending = useSelector(store => store.customization.pending);
-  const customizationError = useSelector(store => store.customization.error && store.customization.error.message);
+  const customizationError = useSelector(store => store.customization.error?.message);
   const customizationAvailable = useSelector(store => store.customization.available);
 
   const teamCustomizationPending = useSelector(store => store.teamCustomization.pending);
-  const teamCustomizationError = useSelector(store => store.teamCustomization.error && store.teamCustomization.error.message);
+  const teamCustomizationError = useSelector(store => store.teamCustomization.error?.message);
   const teamCustomizationAvailable = useSelector(store => store.teamCustomization.available);
 
   useEffect(() => {
@@ -73,7 +73,8 @@ const CustomizationPage = () => {
         </Page>
       );
     } else {
-      const patchedCustomizationAvailable = customizationAvailable;
+      const patchedCustomizationAvailable = customizationAvailable ? Object.assign({}, customizationAvailable) : null;
+
       if (patchedCustomizationAvailable) {
         if (patchedCustomizationAvailable.sold.kwkly) {
           if (patchedCustomizationAvailable.sold.kwkly.includes('to 59559 for details!')) {
@@ -110,7 +111,8 @@ const CustomizationPage = () => {
         </Page>
       );
     } else {
-      const patchedCustomizationAvailable = customizationAvailable;
+      const patchedCustomizationAvailable = customizationAvailable ? Object.assign({}, customizationAvailable) : null;
+
       if (patchedCustomizationAvailable) {
         if (patchedCustomizationAvailable.sold.kwkly) {
           if (patchedCustomizationAvailable.sold.kwkly.includes('to 59559 for details!')) {
@@ -133,7 +135,8 @@ const CustomizationPage = () => {
         }
       }
 
-      const patchedTeamCustomizationAvailable = teamCustomizationAvailable;
+      const patchedTeamCustomizationAvailable = teamCustomizationAvailable ? Object.assign({}, teamCustomizationAvailable) : null;
+
       if (patchedTeamCustomizationAvailable) {
         if (patchedTeamCustomizationAvailable.sold.kwkly) {
           if (patchedTeamCustomizationAvailable.sold.kwkly.includes('to 59559 for details!')) {

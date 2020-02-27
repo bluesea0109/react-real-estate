@@ -49,7 +49,7 @@ const TeamCustomizationPage = () => {
   const dispatch = useDispatch();
 
   const teamCustomizationPending = useSelector(store => store.teamCustomization.pending);
-  const teamCustomizationError = useSelector(store => store.teamCustomization.error && store.teamCustomization.error.message);
+  const teamCustomizationError = useSelector(store => store.teamCustomization.error?.message);
   const teamCustomizationAvailable = useSelector(store => store.teamCustomization.available);
 
   useEffect(() => {
@@ -65,7 +65,7 @@ const TeamCustomizationPage = () => {
       </Page>
     );
   } else {
-    const patchedTeamCustomizationAvailable = teamCustomizationAvailable;
+    const patchedTeamCustomizationAvailable = teamCustomizationAvailable ? Object.assign({}, teamCustomizationAvailable) : null;
 
     if (patchedTeamCustomizationAvailable) {
       if (patchedTeamCustomizationAvailable.sold.kwkly) {
