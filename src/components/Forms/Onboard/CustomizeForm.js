@@ -211,7 +211,7 @@ const NewCustomizeForm = ({ customizationData, teamCustomizationData = null }) =
         label={adjustedName}
         name={listingType + '_frontHeadline'}
         onBlur={handleChange}
-        validate={composeValidators(required, minLength(2), maxLength(formValues[listingType].frontHeadline.max))}
+        validate={composeValidators(required, minLength(2), maxLength(15))}
       />
     );
   };
