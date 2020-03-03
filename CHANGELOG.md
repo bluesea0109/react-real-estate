@@ -1,10 +1,11 @@
 -----------------
-## Release 2.2.23
+## Release 2.2.24
 Changes:
 - Refactor agent & team customization & improve default/custom settings handling
 - Improve validation for agent & team customization
 - Fix tab switching between New & Sold listings not triggering form validation in agent & team customization
 - Fix Cannot read property 'max' of undefined during agent & team customization onboarding
+- Fix header, sidebar, and page header borders
 
 Other fixes:
 - Fix issue #241 [Change KWKLY code label to be more friendly]
