@@ -1,15 +1,16 @@
 import startCase from 'lodash/startCase';
 import { BlockPicker } from 'react-color';
 import { useDispatch, useSelector } from 'react-redux';
-import React, { createRef, useState, useEffect } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import { Dropdown, Form, Header, Label, Popup } from 'semantic-ui-react';
 
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
-import { modifyMailoutPending, changeMailoutDisplayAgentPending } from '../../store/modules/mailout/actions';
-import { isMobile, maxLength, sleep, differenceObjectDeep, objectIsEmpty } from '../utils';
+import { changeMailoutDisplayAgentPending, modifyMailoutPending } from '../../store/modules/mailout/actions';
+import { differenceObjectDeep, isMobile, maxLength, objectIsEmpty, sleep } from '../utils';
 import { Button, Icon, Image, Menu, Message, Page, Segment } from '../Base';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
-import { colors, StyledHeader } from '../helpers';
+import PageTitleHeader from '../PageTitleHeader';
+import { StyledHeader, colors } from '../helpers';
 import Loading from '../Loading';
 
 const EditCampaignForm = ({ data, handleBackClick }) => {
@@ -288,7 +289,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
   return (
     <Page basic>
       <ContentTopHeaderLayout>
-        <Segment style={isMobile() ? { marginTop: '58px' } : {}}>
+        <PageTitleHeader>
           <Menu borderless fluid secondary>
             <Menu.Item>
               <Header as="h3">Campaign Edit</Header>
@@ -307,7 +308,7 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
               </Menu.Item>
             </Menu.Menu>
           </Menu>
-        </Segment>
+        </PageTitleHeader>
       </ContentTopHeaderLayout>
 
       <ContentSpacerLayout />

@@ -10,6 +10,7 @@ import { isMobile, objectIsEmpty } from '../utils';
 import { Form } from './Base';
 
 import PreviewModal from './Common/PreviewModal';
+import PageTitleHeader from '../PageTitleHeader';
 import InputFormField from './Common/InputFormField';
 import CTAInputFormField from './Common/CTAInputFormField';
 import KWKLYInputFormField from './Common/KWKLYInputFormField';
@@ -207,7 +208,7 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
   return (
     <Page basic>
       <ContentTopHeaderLayout>
-        <Segment padded style={isMobile() ? { marginTop: '58px' } : {}}>
+        <PageTitleHeader padded>
           <Menu borderless fluid secondary>
             {peerId ? (
               <Header as="h1">
@@ -234,7 +235,7 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
               </span>
             </Menu.Menu>
           </Menu>
-        </Segment>
+        </PageTitleHeader>
       </ContentTopHeaderLayout>
 
       <Segment style={isMobile() ? { marginTop: '155px' } : { marginTop: '90px' }}>

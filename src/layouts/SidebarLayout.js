@@ -7,7 +7,7 @@ export default styled.div`
   z-index: 20;
 
   @media (min-width: 770px) {
-    border-right: 2px solid lightgrey;
+    border-right: 1px solid lightgrey;
     min-height: 100vh !important;
     min-width: 174px;
   }

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Header } from 'semantic-ui-react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { Page, Segment, Button, Modal, Icon, Message, Menu } from '../components/Base';
+import { Button, Header, Icon, Menu, Message, Modal, Page, Segment } from '../components/Base';
 import InviteTeammatesForm from '../components/Forms/InviteTeammatesForm';
 import { passwordReset } from '../store/modules/auth0/actions';
+import PageTitleHeader from '../components/PageTitleHeader';
 import { syncPending } from '../store/modules/team/actions';
 import { ContentTopHeaderLayout } from '../layouts';
 import { isMobile } from '../components/utils';
@@ -93,13 +93,13 @@ const SettingsPage = () => {
   return (
     <Page basic>
       <ContentTopHeaderLayout>
-        <Segment style={isMobile() ? { marginTop: '58px' } : {}}>
+        <PageTitleHeader>
           <Menu borderless fluid secondary>
             <Menu.Item>
               <Header as="h1">Settings</Header>
             </Menu.Item>
           </Menu>
-        </Segment>
+        </PageTitleHeader>
       </ContentTopHeaderLayout>
 
       <div style={isMobile() ? { marginTop: '80px' } : { marginTop: '85px' }}>

@@ -1,17 +1,18 @@
 import _ from 'lodash';
-import { BlockPicker } from 'react-color';
 import Nouislider from 'nouislider-react';
+import { BlockPicker } from 'react-color';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { createRef, Fragment, useEffect, useState, useReducer } from 'react';
-import { /*Confirm,*/ Dropdown, Form, Header, Label, Popup } from 'semantic-ui-react';
+import { Dropdown, Form, Label, Popup } from 'semantic-ui-react';
+import React, { Fragment, createRef, useEffect, useReducer, useState } from 'react';
 
 import { isMobile, maxLength, popup, required, composeValidators, urlRegExp, keywordRegExp, TrimStrAndConvertToInt } from '../utils';
 import { saveTeamSoldShortcodePending, saveTeamListedShortcodePending } from '../../store/modules/teamShortcode/actions';
 import { saveTeamCustomizationPending } from '../../store/modules/teamCustomization/actions';
-import { Button, Icon, Image, Menu, Modal, Page, Segment } from '../Base';
+import { Button, Header, Icon, Image, Menu, Modal, Page, Segment } from '../Base';
 import { ContentTopHeaderLayout } from '../../layouts';
-import { colors, StyledHeader } from '../helpers';
+import { StyledHeader, colors } from '../helpers';
+import PageTitleHeader from '../PageTitleHeader';
 import FlipCard from '../FlipCard';
 import Loading from '../Loading';
 
@@ -768,7 +769,7 @@ const CustomizeForm = ({ teamCustomizationData }) => {
   return (
     <Page basic>
       <ContentTopHeaderLayout>
-        <Segment padded style={isMobile() ? { marginTop: '58px' } : {}}>
+        <PageTitleHeader padded>
           <Menu borderless fluid secondary>
             <Header as="h1">
               Team Customization
@@ -791,7 +792,7 @@ const CustomizeForm = ({ teamCustomizationData }) => {
               </span>
             </Menu.Menu>
           </Menu>
-        </Segment>
+        </PageTitleHeader>
       </ContentTopHeaderLayout>
 
       <Segment style={isMobile() ? { marginTop: '170px' } : { marginTop: '110px' }}>
