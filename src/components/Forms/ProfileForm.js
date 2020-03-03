@@ -90,7 +90,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
 
   useEffect(() => {
     if (profileAvailable && teamProfileAvailable) {
-      if (formValues.userProfile.boards !== profileAvailable.boards) {
+      if (profileAvailable.boards && formValues.userProfile.boards !== profileAvailable.boards) {
         delete formValues.userProfile.boards;
       }
 

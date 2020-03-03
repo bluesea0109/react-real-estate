@@ -12,9 +12,9 @@ const initialValues = {
   listed: {
     createMailoutsOfThisType: true,
     defaultDisplayAgent: {
-      userId: null,
-      first: null,
-      last: null,
+      userId: '',
+      first: '',
+      last: '',
     },
     mailoutSize: 300,
     mailoutSizeMin: 100,
@@ -23,15 +23,15 @@ const initialValues = {
     brandColor: colors[0],
     frontHeadline: 'Just Listed!',
     cta: '',
-    shortenCTA: false,
+    shortenCTA: true,
     kwkly: 'KEYWORD',
   },
   sold: {
     createMailoutsOfThisType: true,
     defaultDisplayAgent: {
-      userId: null,
-      first: null,
-      last: null,
+      userId: '',
+      first: '',
+      last: '',
     },
     mailoutSize: 300,
     mailoutSizeMin: 100,
@@ -40,7 +40,7 @@ const initialValues = {
     brandColor: colors[0],
     frontHeadline: 'Just Sold!',
     cta: '',
-    shortenCTA: false,
+    shortenCTA: true,
     kwkly: 'KEYWORD',
   },
 };
