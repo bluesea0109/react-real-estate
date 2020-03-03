@@ -171,21 +171,21 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
         updatedFormValues.sold.kwkly = null;
       }
 
-      if (customizationData.listed.cta && customizationData.listed.shortenCTA) {
+      if (customizationData?.listed?.cta && customizationData?.listed?.shortenCTA) {
         updatedFormValues.listed.cta = customizationData.listed.cta;
         updatedFormValues.listed.shortenCTA = true;
       }
 
-      if (customizationData.listed.kwkly && !customizationData.listed.shortenCTA) {
+      if (customizationData?.listed?.kwkly && !customizationData?.listed?.shortenCTA) {
         updatedFormValues.listed.kwkly = customizationData.listed.kwkly;
       }
 
-      if (customizationData.sold.cta && customizationData.sold.shortenCTA) {
+      if (customizationData?.sold?.cta && customizationData?.sold?.shortenCTA) {
         updatedFormValues.sold.cta = customizationData.sold.cta;
         updatedFormValues.sold.shortenCTA = true;
       }
 
-      if (customizationData.sold.kwkly && !customizationData.sold.shortenCTA) {
+      if (customizationData?.sold?.kwkly && !customizationData?.sold?.shortenCTA) {
         updatedFormValues.sold.kwkly = customizationData.sold.kwkly;
       }
 
@@ -204,11 +204,11 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
         }
       }
 
-      if (customizationData.listed.cta && customizationData.listed.shortenCTA) {
+      if (customizationData?.listed?.cta && customizationData?.listed?.shortenCTA) {
         updatedFormValues.listed.shortenCTA = true;
       }
 
-      if (customizationData.sold.cta && customizationData.sold.shortenCTA) {
+      if (customizationData?.sold?.cta && customizationData?.sold?.shortenCTA) {
         updatedFormValues.sold.shortenCTA = true;
       }
 
