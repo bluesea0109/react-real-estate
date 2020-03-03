@@ -1,5 +1,5 @@
 -----------------
-## Release 2.2.26
+## Release 2.2.27
 Changes:
 - Refactor agent & team customization & improve default/custom settings handling
 - Improve validation for agent & team customization
@@ -7,6 +7,7 @@ Changes:
 - Fix Cannot read property 'max' of undefined during agent & team customization onboarding
 - Fix header, sidebar, and page header borders
 - Prevent empty values from being submitted to the backend
+- Make CTA the default for agent & team customization
 
 Other fixes:
 - Fix issue #241 [Change KWKLY code label to be more friendly]
