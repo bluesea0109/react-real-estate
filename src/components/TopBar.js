@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import AuthService from '../services/auth';
@@ -6,7 +7,7 @@ import { Button, Menu } from './Base';
 import LogoImage from './LogoImage';
 
 export default ({ auth0 }) => (
-  <Menu fluid fixed="top" style={{ border: '2px solid rgba(34,36,38,.15)', boxShadow: 'none' }}>
+  <Menu fluid fixed="top" style={{ 'border-bottom': '1px solid rgba(34,36,38,.15)', boxShadow: 'none' }}>
     <Menu.Item as="a" header>
       <LogoImage />
     </Menu.Item>

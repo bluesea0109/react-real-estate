@@ -1,19 +1,21 @@
 import _ from 'lodash';
-import { BlockPicker } from 'react-color';
 import Nouislider from 'nouislider-react';
+import React, { Fragment, createRef, useEffect, useReducer, useState } from 'react';
+import { BlockPicker } from 'react-color';
 import { useDispatch, useSelector } from 'react-redux';
+import { Dropdown, Form, Label, Popup } from 'semantic-ui-react';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { /*Confirm,*/ Dropdown, Form, Header, Label, Popup } from 'semantic-ui-react';
-import React, { createRef, Fragment, useEffect, useState, useReducer } from 'react';
 
 import { isMobile, maxLength, popup, required, composeValidators, differenceObjectDeep, urlRegExp, keywordRegExp } from '../utils';
 import { saveListedShortcodePending, saveSoldShortcodePending } from '../../store/modules/shortcode/actions';
 import { saveCustomizationPending } from '../../store/modules/customization/actions';
-import { Button, Icon, Image, Menu, Modal, Page, Segment } from '../Base';
 import { ContentTopHeaderLayout } from '../../layouts';
-import { colors, StyledHeader } from '../helpers';
+import { Button, Header, Icon, Image, Menu, Modal, Page, Segment } from '../Base';
 import FlipCard from '../FlipCard';
 import Loading from '../Loading';
+import PageTitleHeader from '../PageTitleHeader';
+import { StyledHeader, colors } from '../helpers';
 
 const formReducer = (state, action) => {
   return _.merge({}, state, action);
@@ -846,7 +848,7 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
   return (
     <Page basic>
       <ContentTopHeaderLayout>
-        <Segment padded style={isMobile() ? { marginTop: '58px' } : {}}>
+        <PageTitleHeader padded>
           <Menu borderless fluid secondary>
             {peerId ? (
               <Header as="h1">
@@ -872,10 +874,10 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
               </span>
             </Menu.Menu>
           </Menu>
-        </Segment>
+        </PageTitleHeader>
       </ContentTopHeaderLayout>
 
-      <Segment style={isMobile() ? { marginTop: '155px' } : { marginTop: '90px' }}>
+      <Segment style={isMobile() ? { marginTop: '170px' } : { marginTop: '110px' }}>
         <Menu pointing secondary>
           <Menu.Item name="newListing" active={step === 1} disabled={step === 1} onClick={prevStep} />
           <Menu.Item name="soldListing" active={step === 2} disabled={step === 2} onClick={nextStep} />

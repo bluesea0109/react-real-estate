@@ -6,8 +6,6 @@ export default styled(Menu)`
   grid-template-rows: repeat(5, 1fr);
   grid-template-columns: 1fr;
 
-  height: 160px;
-
   @media (max-width: 768px) {
     grid-template-rows: 1fr;
     grid-template-columns: repeat(5, 1fr);

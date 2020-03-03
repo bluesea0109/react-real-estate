@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Progress } from 'semantic-ui-react';
-import { useSelector, useDispatch } from 'react-redux';
 
-import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemBodyLayout, ItemLayout } from '../layouts';
-import { Button, Header, Grid, Menu, /*Message,*/ Page, Segment, Icon, Snackbar } from '../components/Base';
-import { getMailoutsPending, getMoreMailoutsPending } from '../store/modules/mailouts/actions';
-import ListHeader from '../components/MailoutListItem/ListHeader';
+import { Button, Grid, Header, Icon, Menu, Page, Segment, Snackbar } from '../components/Base';
+import Loading from '../components/Loading';
 import ImageGroup from '../components/MailoutListItem/ImageGroup';
 import ItemList from '../components/MailoutListItem/ItemList';
+import ListHeader from '../components/MailoutListItem/ListHeader';
+import PageTitleHeader from '../components/PageTitleHeader';
 import { isMobile } from '../components/utils';
-import Loading from '../components/Loading';
+import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemBodyLayout, ItemLayout } from '../layouts';
+import { getMailoutsPending, getMoreMailoutsPending } from '../store/modules/mailouts/actions';
 
 const useFetching = (getActionCreator, onboarded, dispatch) => {
   useEffect(() => {
@@ -72,13 +73,13 @@ const Dashboard = () => {
   return (
     <Page basic>
       <ContentTopHeaderLayout>
-        <Segment style={isMobile() ? { marginTop: '58px' } : { maxHeight: '74px' }}>
+        <PageTitleHeader>
           <Menu borderless fluid secondary>
             <Menu.Item>
               <Header as="h1">Dashboard</Header>
             </Menu.Item>
           </Menu>
-        </Segment>
+        </PageTitleHeader>
       </ContentTopHeaderLayout>
 
       {isInitiatingTeam && (
