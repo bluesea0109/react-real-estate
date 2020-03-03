@@ -1,4 +1,20 @@
 -----------------
+## Release 2.2.27
+Changes:
+- Refactor agent & team customization & improve default/custom settings handling
+- Improve validation for agent & team customization
+- Fix tab switching between New & Sold listings not triggering form validation in agent & team customization
+- Fix Cannot read property 'max' of undefined during agent & team customization onboarding
+- Fix header, sidebar, and page header borders
+- Prevent empty values from being submitted to the backend
+- Make CTA the default for agent & team customization
+
+Other fixes:
+- Fix issue #241 [Change KWKLY code label to be more friendly]
+- Fix issue #235 [KWKLY Code should error out if they don't modify the placeholder text]
+- Fix issue #254 [Show address in map markers]
+
+-----------------
 ## Release 2.2.11-13
 
 Other fixes:

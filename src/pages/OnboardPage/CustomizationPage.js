@@ -12,9 +12,9 @@ const initialValues = {
   listed: {
     createMailoutsOfThisType: true,
     defaultDisplayAgent: {
-      userId: null,
-      first: null,
-      last: null,
+      userId: '',
+      first: '',
+      last: '',
     },
     mailoutSize: 300,
     mailoutSizeMin: 100,
@@ -23,15 +23,15 @@ const initialValues = {
     brandColor: colors[0],
     frontHeadline: 'Just Listed!',
     cta: '',
-    shortenCTA: false,
-    kwkly: 'Text KEYWORD to 59559 for details!',
+    shortenCTA: true,
+    kwkly: 'KEYWORD',
   },
   sold: {
     createMailoutsOfThisType: true,
     defaultDisplayAgent: {
-      userId: null,
-      first: null,
-      last: null,
+      userId: '',
+      first: '',
+      last: '',
     },
     mailoutSize: 300,
     mailoutSizeMin: 100,
@@ -40,8 +40,8 @@ const initialValues = {
     brandColor: colors[0],
     frontHeadline: 'Just Sold!',
     cta: '',
-    shortenCTA: false,
-    kwkly: 'Text KEYWORD to 59559 for details!',
+    shortenCTA: true,
+    kwkly: 'KEYWORD',
   },
 };
 
@@ -52,11 +52,11 @@ const CustomizationPage = () => {
   const singleuser = onLoginMode === 'singleuser';
 
   const customizationPending = useSelector(store => store.customization.pending);
-  const customizationError = useSelector(store => store.customization.error && store.customization.error.message);
+  const customizationError = useSelector(store => store.customization.error?.message);
   const customizationAvailable = useSelector(store => store.customization.available);
 
   const teamCustomizationPending = useSelector(store => store.teamCustomization.pending);
-  const teamCustomizationError = useSelector(store => store.teamCustomization.error && store.teamCustomization.error.message);
+  const teamCustomizationError = useSelector(store => store.teamCustomization.error?.message);
   const teamCustomizationAvailable = useSelector(store => store.teamCustomization.available);
 
   useEffect(() => {
@@ -73,13 +73,7 @@ const CustomizationPage = () => {
         </Page>
       );
     } else {
-      const patchedCustomizationAvailable = customizationAvailable;
-      if (patchedCustomizationAvailable && !patchedCustomizationAvailable.listed.kwkly)
-        patchedCustomizationAvailable.listed.kwkly = 'Text KEYWORD to 59559 for details!';
-      if (patchedCustomizationAvailable && !patchedCustomizationAvailable.sold.kwkly)
-        patchedCustomizationAvailable.sold.kwkly = 'Text KEYWORD to 59559 for details!';
-
-      return <CustomizeForm customizationData={patchedCustomizationAvailable || initialValues} />;
+      return <CustomizeForm customizationData={customizationAvailable} initialValues={initialValues} />;
     }
   }
 
@@ -93,28 +87,7 @@ const CustomizationPage = () => {
         </Page>
       );
     } else {
-      const patchedCustomizationAvailable = customizationAvailable;
-      if (patchedCustomizationAvailable && !patchedCustomizationAvailable.listed.kwkly) {
-        patchedCustomizationAvailable.listed.kwkly = 'Text KEYWORD to 59559 for details!';
-      }
-      if (patchedCustomizationAvailable && !patchedCustomizationAvailable.sold.kwkly) {
-        patchedCustomizationAvailable.sold.kwkly = 'Text KEYWORD to 59559 for details!';
-      }
-
-      const patchedTeamCustomizationAvailable = teamCustomizationAvailable;
-      if (patchedTeamCustomizationAvailable && !patchedTeamCustomizationAvailable.listed.kwkly) {
-        patchedTeamCustomizationAvailable.listed.kwkly = 'Text KEYWORD to 59559 for details!';
-      }
-      if (patchedTeamCustomizationAvailable && !patchedTeamCustomizationAvailable.sold.kwkly) {
-        patchedTeamCustomizationAvailable.sold.kwkly = 'Text KEYWORD to 59559 for details!';
-      }
-
-      return (
-        <CustomizeForm
-          customizationData={patchedCustomizationAvailable || patchedTeamCustomizationAvailable || initialValues}
-          teamCustomizationData={teamCustomizationAvailable}
-        />
-      );
+      return <CustomizeForm customizationData={customizationAvailable} initialValues={teamCustomizationAvailable || initialValues} />;
     }
   }
 };

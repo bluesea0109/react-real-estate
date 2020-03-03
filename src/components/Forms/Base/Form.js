@@ -6,6 +6,7 @@ import hoistNonReactStatics from 'hoist-non-react-statics';
 import FormikDropdown from './Dropdown';
 import FormikTextArea from './TextArea';
 import FormikCheckbox from './Checkbox';
+import FormikToggle from './Toggle';
 import FormikInput from './Input';
 
 const componentFactory = schema => {
@@ -18,6 +19,7 @@ const componentFactory = schema => {
     dropdown: FormikDropdown,
     textarea: FormikTextArea,
     checkbox: FormikCheckbox,
+    toggle: FormikToggle,
   };
 
   return Object.keys(schema).map(name => {

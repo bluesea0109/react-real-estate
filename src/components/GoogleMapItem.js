@@ -49,7 +49,7 @@ export class GoogleMapItem extends Component {
                 lat: dest.lat,
                 lng: dest.lon,
               }}
-              title={dest.value && dest.value.deliveryLine}
+              title={dest?.deliveryLine}
               onClick={this.onMarkerClick}
             />
           );

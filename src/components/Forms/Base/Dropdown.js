@@ -15,11 +15,13 @@ const FormikDropdown = ({
   fast,
   disabled = false,
   tag = undefined,
+  defaultValue,
   id = `field_dropdown_${name}`,
   options,
+  onChange,
 }) => {
   const [options2, setOptions2] = useState(options);
-  const { onChange, ...safeInputProps } = inputProps;
+  const { ...safeInputProps } = inputProps;
   const DesiredField = fast === true ? FastField : Field;
   const fieldRef = React.useRef();
   useFocusOnError({ fieldRef, name });
@@ -32,6 +34,7 @@ const FormikDropdown = ({
     <DesiredField name={name} validate={validate}>
       {({ field, form }) => {
         const error = getFieldError(field, form);
+
         return (
           <Form.Field error={!!error} {...fieldProps} className={disabled ? 'disabled-form-field' : null}>
             {!!label && (
@@ -49,15 +52,16 @@ const FormikDropdown = ({
               selection
               search
               {...safeInputProps}
-              value={field.value}
+              value={defaultValue ? defaultValue : field.value}
               disabled={disabled}
               onAddItem={handleAddition}
               onChange={(e, { name, value }) => {
                 setFieldValue(form, name, value, true);
                 Promise.resolve().then(() => {
-                  onChange && onChange(e, { name, value });
+                  onChange && onChange(e, { name, value, options: options2 });
                 });
               }}
+              style={{ opacity: disabled ? 0.4 : 1 }}
             />
             {error && React.createElement(errorComponent, { message: getIn(form.errors, name) })}
           </Form.Field>

@@ -1,17 +1,17 @@
 import _ from 'lodash';
 import * as Yup from 'yup';
-import { Header } from 'semantic-ui-react';
 import { FieldArray, useFormikContext } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useReducer, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { Divider, Header, Icon, Image, Menu, Page, Segment, Snackbar } from '../Base';
 import { saveTeamProfilePending } from '../../store/modules/teamProfile/actions';
-import { Divider, Icon, Image, Menu, Page, Segment, Snackbar } from '../Base';
 import { saveProfilePending } from '../../store/modules/profile/actions';
-import { Button, Dropdown, Form, Input, FileUpload } from './Base';
+import { Button, Dropdown, FileUpload, Form, Input } from './Base';
 import { isMobile, phoneRegExp, popup, tag } from '../utils';
 import { ContentTopHeaderLayout } from '../../layouts';
+import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
 
 const changeMsg = 'This information comes from Brivity CRM. If you want to modify this information, you need to do it there.';
@@ -90,7 +90,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
 
   useEffect(() => {
     if (profileAvailable && teamProfileAvailable) {
-      if (formValues.userProfile.boards !== profileAvailable.boards) {
+      if (profileAvailable.boards && formValues.userProfile.boards !== profileAvailable.boards) {
         delete formValues.userProfile.boards;
       }
 
@@ -326,7 +326,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
         render={({ isSubmitting, values, errors }) => (
           <Form.Children>
             <ContentTopHeaderLayout>
-              <Segment style={isMobile() ? { marginTop: '58px' } : {}}>
+              <PageTitleHeader>
                 <Menu borderless fluid secondary>
                   <Menu.Item>
                     <Header as="h1">Profile</Header>
@@ -347,7 +347,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                     </Menu.Item>
                   </Menu.Menu>
                 </Menu>
-              </Segment>
+              </PageTitleHeader>
             </ContentTopHeaderLayout>
 
             {picturesError && <Snackbar error>{JSON.stringify(picturesError, 0, 2)}</Snackbar>}

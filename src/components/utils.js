@@ -34,6 +34,7 @@ export const urlRegExp = new RegExp(
     '(\\#[-a-z\\d_]*)?$',
   'i'
 ); // fragment locator
+export const keywordRegExp = /^[a-zA-Z0-9_]+$/;
 
 export const required = value => (value ? undefined : 'Required');
 export const isEmpty = value => value === undefined || value === null || value === '';

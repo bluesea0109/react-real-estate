@@ -1,0 +1,29 @@
+@import url(//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css);
+
+input[type='checkbox'] {
+  display: none !important;
+}
+
+input[type='checkbox'] + label:before {
+  font-family: 'Font Awesome 5 Free';
+  display: inline-block;
+  content: '\f205';
+  font-weight: 900;
+  font-size: xx-large;
+  vertical-align: -0.22em;
+}
+
+/* unchecked */
+input[type='checkbox'] + label:before {
+  color: #969696;
+  transform: scale(-1, 1);
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+/* checked */
+input[type='checkbox']:checked + label:before {
+  color: #59c4c4;
+  transform: scale(1, -1);
+  padding-right: 5px;
+}

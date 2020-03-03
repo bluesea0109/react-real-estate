@@ -12,9 +12,9 @@ const initialValues = {
   listed: {
     createMailoutsOfThisType: true,
     defaultDisplayAgent: {
-      userId: null,
-      first: null,
-      last: null,
+      userId: '',
+      first: '',
+      last: '',
     },
     mailoutSize: 300,
     mailoutSizeMin: 100,
@@ -23,15 +23,15 @@ const initialValues = {
     brandColor: colors[0],
     frontHeadline: 'Just Listed!',
     cta: '',
-    shortenCTA: false,
-    kwkly: 'Text KEYWORD to 59559 for details!',
+    shortenCTA: true,
+    kwkly: 'KEYWORD',
   },
   sold: {
     createMailoutsOfThisType: true,
     defaultDisplayAgent: {
-      userId: null,
-      first: null,
-      last: null,
+      userId: '',
+      first: '',
+      last: '',
     },
     mailoutSize: 300,
     mailoutSizeMin: 100,
@@ -40,8 +40,8 @@ const initialValues = {
     brandColor: colors[0],
     frontHeadline: 'Just Sold!',
     cta: '',
-    shortenCTA: false,
-    kwkly: 'Text KEYWORD to 59559 for details!',
+    shortenCTA: true,
+    kwkly: 'KEYWORD',
   },
 };
 
@@ -49,7 +49,7 @@ const TeamCustomizationPage = () => {
   const dispatch = useDispatch();
 
   const teamCustomizationPending = useSelector(store => store.teamCustomization.pending);
-  const teamCustomizationError = useSelector(store => store.teamCustomization.error && store.teamCustomization.error.message);
+  const teamCustomizationError = useSelector(store => store.teamCustomization.error?.message);
   const teamCustomizationAvailable = useSelector(store => store.teamCustomization.available);
 
   useEffect(() => {
@@ -65,13 +65,7 @@ const TeamCustomizationPage = () => {
       </Page>
     );
   } else {
-    const patchedTeamCustomizationAvailable = teamCustomizationAvailable;
-    if (patchedTeamCustomizationAvailable && !patchedTeamCustomizationAvailable.listed.kwkly)
-      patchedTeamCustomizationAvailable.listed.kwkly = 'Text KEYWORD to 59559 for details!';
-    if (patchedTeamCustomizationAvailable && !patchedTeamCustomizationAvailable.sold.kwkly)
-      patchedTeamCustomizationAvailable.sold.kwkly = 'Text KEYWORD to 59559 for details!';
-
-    return <TeamCustomizeForm teamCustomizationData={patchedTeamCustomizationAvailable || initialValues} initialRun={!teamCustomizationAvailable} />;
+    return <TeamCustomizeForm teamCustomizationData={teamCustomizationAvailable} initialValues={initialValues} />;
   }
 };
 

@@ -1,17 +1,18 @@
 import _ from 'lodash';
-import { BlockPicker } from 'react-color';
 import Nouislider from 'nouislider-react';
+import { BlockPicker } from 'react-color';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { createRef, Fragment, useEffect, useState, useReducer } from 'react';
-import { /*Confirm,*/ Dropdown, Form, Header, Label, Popup } from 'semantic-ui-react';
+import { Dropdown, Form, Label, Popup } from 'semantic-ui-react';
+import React, { Fragment, createRef, useEffect, useReducer, useState } from 'react';
 
+import { isMobile, maxLength, popup, required, composeValidators, urlRegExp, keywordRegExp, TrimStrAndConvertToInt } from '../utils';
 import { saveTeamSoldShortcodePending, saveTeamListedShortcodePending } from '../../store/modules/teamShortcode/actions';
-import { isMobile, maxLength, popup, required, composeValidators, urlRegExp, TrimStrAndConvertToInt } from '../utils';
 import { saveTeamCustomizationPending } from '../../store/modules/teamCustomization/actions';
-import { Button, Icon, Image, Menu, Modal, Page, Segment } from '../Base';
+import { Button, Header, Icon, Image, Menu, Modal, Page, Segment } from '../Base';
 import { ContentTopHeaderLayout } from '../../layouts';
-import { colors, StyledHeader } from '../helpers';
+import { StyledHeader, colors } from '../helpers';
+import PageTitleHeader from '../PageTitleHeader';
 import FlipCard from '../FlipCard';
 import Loading from '../Loading';
 
@@ -21,6 +22,12 @@ const formReducer = (state, action) => {
 
 const NEW_LISTING = 'listed';
 const SOLD_LISTING = 'sold';
+
+const OLD_KWKLY_DEFAULT = 'Text KEYWORD to 59559 for details!';
+const validURL = str => !urlRegExp.test(str) && 'URL is not valid';
+const validKeyword = str => !keywordRegExp.test(str) && 'KEYWORD is not valid';
+const isValidURL = str => !!urlRegExp.test(str);
+const isValidKeyword = str => !!keywordRegExp.test(str);
 
 let multiUserStartState;
 
@@ -43,43 +50,45 @@ const CustomizeForm = ({ teamCustomizationData }) => {
     listed: {
       createMailoutsOfThisType: true,
       defaultDisplayAgent: {
-        userId: null,
-        first: null,
-        last: null,
+        userId: '',
+        first: '',
+        last: '',
       },
       mailoutSize: 300,
       mailoutSizeMin: 100,
       mailoutSizeMax: 1000,
       templateTheme: 'bookmark',
       brandColor: colors[0],
-      frontHeadline: bookmarkTemplate.listed.fields.filter(field => field.name === 'frontHeadline')[0],
-      cta: null,
-      shortenCTA: null,
-      kwkly: 'Text KEYWORD to 59559 for details!',
+      frontHeadline: 'Just Listed!',
+      cta: '',
+      shortenCTA: true,
+      kwkly: 'KEYWORD',
     },
     sold: {
       createMailoutsOfThisType: true,
       defaultDisplayAgent: {
-        userId: null,
-        first: null,
-        last: null,
+        userId: '',
+        first: '',
+        last: '',
       },
       mailoutSize: 300,
       mailoutSizeMin: 100,
       mailoutSizeMax: 1000,
       templateTheme: 'bookmark',
       brandColor: colors[0],
-      frontHeadline: bookmarkTemplate.sold.fields.filter(field => field.name === 'frontHeadline')[0],
-      cta: null,
-      shortenCTA: null,
-      kwkly: 'Text KEYWORD to 59559 for details!',
+      frontHeadline: 'Just Sold!',
+      cta: '',
+      shortenCTA: true,
+      kwkly: 'KEYWORD',
     },
   };
 
   const newListingShortenedURL = useSelector(store => store.teamShortcode && store.teamShortcode.listed);
   const newListingShortenedURLPending = useSelector(store => store.teamShortcode && store.teamShortcode.listedURLToShortenPending);
+  const newListingShortenedURLError = useSelector(store => store.teamShortcode && store.teamShortcode.listedURLToShortenError);
   const soldListingShortenedURL = useSelector(store => store.teamShortcode && store.teamShortcode.sold);
   const soldListingShortenedURLPending = useSelector(store => store.teamShortcode && store.teamShortcode.soldURLToShortenPending);
+  const soldListingShortenedURLError = useSelector(store => store.teamShortcode && store.teamShortcode.soldURLToShortenError);
 
   const onLoginUserId = useSelector(store => store.onLogin.user._id);
   const teammates = useSelector(store => store.team.profiles);
@@ -94,6 +103,7 @@ const CustomizeForm = ({ teamCustomizationData }) => {
 
   const [step, setStep] = useState(1);
   const [formValues, setFormValues] = useReducer(formReducer, initialValues);
+  const [formError, setFormError] = useState('');
 
   // const [showSelectionAlert, setShowSelectionAlert] = useState(false);
 
@@ -111,22 +121,57 @@ const CustomizeForm = ({ teamCustomizationData }) => {
 
   useEffect(() => {
     if (teamCustomizationData) {
-      const updatedFormValues = _.merge({}, formValues, teamCustomizationData);
-      delete updatedFormValues._rev;
-      delete updatedFormValues._id;
-      delete updatedFormValues.onboardingComplete;
-      setFormValues(updatedFormValues);
-      multiUserStartState = updatedFormValues;
-
-      if (updatedFormValues.listed.cta) {
-        dispatch(saveTeamSoldShortcodePending(updatedFormValues.listed.cta));
+      if (teamCustomizationData.listed && teamCustomizationData.listed.cta) {
+        dispatch(saveTeamListedShortcodePending(teamCustomizationData.listed.cta));
       }
-      if (updatedFormValues.sold.cta) {
-        dispatch(saveTeamSoldShortcodePending(updatedFormValues.sold.cta));
+
+      if (teamCustomizationData.sold && teamCustomizationData.sold.cta) {
+        dispatch(saveTeamSoldShortcodePending(teamCustomizationData.sold.cta));
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [teamCustomizationData, setFormValues, dispatch]);
+  }, [teamCustomizationData, dispatch]);
+
+  useEffect(() => {
+    if (teamCustomizationData) {
+      const updatedFormValues = _.merge({}, formValues, teamCustomizationData);
+
+      if (teamCustomizationData && teamCustomizationData.listed) {
+        if (updatedFormValues.listed.kwkly === OLD_KWKLY_DEFAULT) {
+          updatedFormValues.listed.kwkly = null;
+        }
+
+        updatedFormValues.listed.shortenCTA = !!teamCustomizationData.listed.cta;
+      }
+
+      if (teamCustomizationData && teamCustomizationData.sold) {
+        if (updatedFormValues.sold.kwkly === OLD_KWKLY_DEFAULT) {
+          updatedFormValues.sold.kwkly = null;
+        }
+
+        updatedFormValues.sold.shortenCTA = !!teamCustomizationData.sold.cta;
+      }
+
+      updatedFormValues.listed.createMailoutsOfThisType = true;
+      updatedFormValues.sold.createMailoutsOfThisType = true;
+
+      if (updatedFormValues.sold.kwkly) {
+        if (updatedFormValues.sold.kwkly.includes('to 59559 for details!')) {
+          updatedFormValues.sold.kwkly = updatedFormValues.sold.kwkly.split(' ')[1];
+        }
+      }
+
+      if (updatedFormValues.listed.kwkly) {
+        if (updatedFormValues.listed.kwkly.includes('to 59559 for details!')) {
+          updatedFormValues.listed.kwkly = updatedFormValues.listed.kwkly.split(' ')[1];
+        }
+      }
+
+      setFormValues(updatedFormValues);
+      multiUserStartState = updatedFormValues;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [teamCustomizationData, setFormValues]);
 
   // useEffect(() => {
   //   if (!formValues.listed.createMailoutsOfThisType && !formValues.sold.createMailoutsOfThisType) {
@@ -137,16 +182,98 @@ const CustomizeForm = ({ teamCustomizationData }) => {
   // }, [formValues, setShowSelectionAlert]);
 
   const handleSubmit = () => {
-    const data = _.merge({}, teamCustomizationData, formValues);
-
-    if (!data.listed.cta) delete data.listed.cta;
-    if (!data.sold.cta) delete data.sold.cta;
-
-    if (!data.listed.kwkly) delete data.listed.kwkly;
-    if (!data.sold.kwkly) delete data.sold.kwkly;
+    const data = _.merge({}, formValues);
 
     if (!data.listed.defaultDisplayAgent.userId) delete data.listed.defaultDisplayAgent;
     if (!data.sold.defaultDisplayAgent.userId) delete data.sold.defaultDisplayAgent;
+
+    if (data.listed.shortenCTA || !data.listed.kwkly) {
+      delete data.listed.kwkly;
+    } else {
+      delete data.listed.cta;
+    }
+
+    if (data.sold.shortenCTA || !data.sold.kwkly) {
+      delete data.sold.kwkly;
+    } else {
+      delete data.sold.cta;
+    }
+
+    if (!data.sold.frontHeadline) {
+      setFormError('Sold Listing Headline is missing');
+      return null;
+    }
+
+    if (!data.listed.frontHeadline) {
+      setFormError('New Listing Headline is missing');
+      return null;
+    }
+
+    if (data.sold.shortenCTA) {
+      if (!data.sold.cta) {
+        setFormError('Sold Listing Call to action URL is missing');
+        return null;
+      }
+
+      if (!isValidURL(data.sold.cta)) {
+        setFormError('Sold Listing Call to action URL is not valid');
+        return null;
+      }
+
+      if (!!soldListingShortenedURLError) {
+        setFormError(`Sold Listing Call to action ${soldListingShortenedURLError.message}`);
+        return null;
+      }
+    }
+
+    if (data.listed.shortenCTA) {
+      if (!data.listed.cta) {
+        setFormError('New Listing Call to action URL is missing');
+        return null;
+      }
+
+      if (!isValidURL(data.listed.cta)) {
+        setFormError('New Listing Call to action URL is not valid');
+        return null;
+      }
+
+      if (!!newListingShortenedURLError) {
+        setFormError(`New Listing Call to action ${newListingShortenedURLError.message}`);
+        return null;
+      }
+    }
+
+    if (!data.sold.shortenCTA) {
+      if (!data.sold.kwkly) {
+        setFormError('Sold Listing KWKLY Call to Action Phrase is missing');
+        return null;
+      }
+
+      if (!isValidKeyword(data.sold.kwkly)) {
+        setFormError('Sold Listing KWKLY Call to Action Phrase is not valid');
+        return null;
+      }
+    }
+
+    if (!data.listed.shortenCTA) {
+      if (!data.listed.kwkly) {
+        setFormError('New Listing KWKLY Call to Action Phrase is missing');
+        return null;
+      }
+
+      if (!isValidKeyword(data.listed.kwkly)) {
+        setFormError('New Listing KWKLY Call to Action Phrase is not valid');
+        return null;
+      }
+    }
+
+    if (!data.sold.shortenCTA && data.sold.kwkly) {
+      data.sold.kwkly = `Text ${data.sold.kwkly} to 59559 for details!`;
+    }
+
+    if (!data.listed.shortenCTA && data.listed.kwkly) {
+      data.listed.kwkly = `Text ${data.listed.kwkly} to 59559 for details!`;
+    }
 
     dispatch(saveTeamCustomizationPending(data));
   };
@@ -460,17 +587,9 @@ const CustomizeForm = ({ teamCustomizationData }) => {
   };
 
   const renderCTA = ({ listingType }) => {
-    const validURL = str => !urlRegExp.test(str) && 'URL is not valid';
-    const isValidURL = str => !!urlRegExp.test(str);
-
     const currentValue = formValues[listingType].cta;
     const ctaEnabled = formValues[listingType].shortenCTA;
     const shortenedURL = listingType === NEW_LISTING ? newListingShortenedURL : soldListingShortenedURL;
-
-    if (currentValue && isValidURL(currentValue)) {
-      if (listingType === NEW_LISTING && !newListingShortenedURLPending && !newListingShortenedURL) dispatch(saveTeamListedShortcodePending(currentValue));
-      if (listingType === SOLD_LISTING && !soldListingShortenedURLPending && !soldListingShortenedURL) dispatch(saveTeamSoldShortcodePending(currentValue));
-    }
 
     const handleCTAChange = input => {
       const eURL = input.target.value;
@@ -483,8 +602,14 @@ const CustomizeForm = ({ teamCustomizationData }) => {
       if (listingType === SOLD_LISTING && isValidURL(eURL)) dispatch(saveTeamSoldShortcodePending(eURL));
     };
 
-    const error = ctaEnabled && composeValidators(required, validURL)(currentValue);
+    let serverValidationError = null;
 
+    if (ctaEnabled) {
+      if (listingType === NEW_LISTING && newListingShortenedURLError) serverValidationError = newListingShortenedURLError.message;
+      if (listingType === SOLD_LISTING && soldListingShortenedURLError) serverValidationError = soldListingShortenedURLError.message;
+    }
+
+    const error = ctaEnabled && composeValidators(required, validURL)(currentValue);
     const isVisible = ctaEnabled && !error && shortenedURL;
 
     return (
@@ -497,7 +622,7 @@ const CustomizeForm = ({ teamCustomizationData }) => {
               Call to action URL
             </Header>
           }
-          error={error && { content: error }}
+          error={(error && { content: error }) || (serverValidationError && { content: serverValidationError })}
           onBlur={handleCTAChange}
           defaultValue={currentValue}
           disabled={!ctaEnabled}
@@ -530,23 +655,29 @@ const CustomizeForm = ({ teamCustomizationData }) => {
       setFormValues(newValue);
     };
 
-    const error = !ctaEnabled && composeValidators(required)(currentValue);
+    const error = !ctaEnabled && composeValidators(required, validKeyword)(currentValue);
 
     return (
       <Form.Field>
         <Form.Input
           className={ctaEnabled ? 'disabled-form-field' : null}
-          fluid
           label={
             <Header as="h4" style={{ opacity: !ctaEnabled ? '1' : '0.4' }}>
-              KWKLY Call to Action
+              KWKLY Call to Action Phrase {popup('Please enter your KWKLY keyword and we will put the keyword into a the KWKLY phrase for you.')}
             </Header>
           }
-          error={error && { content: error }}
           onBlur={handleKwklyChange}
           defaultValue={currentValue}
           disabled={ctaEnabled}
-        />
+          labelPosition="right"
+          type="text"
+          placeholder="KEYWORD"
+        >
+          <Label style={{ opacity: !ctaEnabled ? '1' : '0.4' }}>Text </Label>
+          <input />
+          <Label style={{ opacity: !ctaEnabled ? '1' : '0.4' }}> to 59559 for details!</Label>
+        </Form.Input>
+        {error && <span className="sui-error-message">{error}</span>}
       </Form.Field>
     );
   };
@@ -638,7 +769,7 @@ const CustomizeForm = ({ teamCustomizationData }) => {
   return (
     <Page basic>
       <ContentTopHeaderLayout>
-        <Segment padded style={isMobile() ? { marginTop: '58px' } : {}}>
+        <PageTitleHeader padded>
           <Menu borderless fluid secondary>
             <Header as="h1">
               Team Customization
@@ -650,13 +781,18 @@ const CustomizeForm = ({ teamCustomizationData }) => {
             </Header>
             <Menu.Menu position="right">
               <span>
-                <Button primary type="submit" onClick={handleSubmit} disabled={pristineState}>
+                <Button
+                  primary
+                  type="submit"
+                  onClick={handleSubmit}
+                  disabled={pristineState || newListingShortenedURLPending || soldListingShortenedURLPending}
+                >
                   Save
                 </Button>
               </span>
             </Menu.Menu>
           </Menu>
-        </Segment>
+        </PageTitleHeader>
       </ContentTopHeaderLayout>
 
       <Segment style={isMobile() ? { marginTop: '170px' } : { marginTop: '110px' }}>
@@ -675,6 +811,18 @@ const CustomizeForm = ({ teamCustomizationData }) => {
         {/*/>*/}
 
         {renderSteps()}
+
+        <Modal basic size="tiny" open={!!formError} onClose={() => setFormError('')}>
+          <Header icon="warning" content="Unable to save!" />
+          <Modal.Content>
+            <p>{formError}</p>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button primary inverted onClick={() => setFormError('')}>
+              <Icon name="checkmark" /> OK
+            </Button>
+          </Modal.Actions>
+        </Modal>
 
         <Modal open={displayReview} basic size="tiny">
           {!postcardsPreviewIsPending && (
@@ -747,7 +895,7 @@ const CustomizeForm = ({ teamCustomizationData }) => {
 
           {!postcardsPreviewIsPending && (
             <Modal.Actions>
-              <Button color="green" inverted onClick={() => setDisplayReview(false)}>
+              <Button primary inverted onClick={() => setDisplayReview(false)}>
                 <Icon name="checkmark" /> OK
               </Button>
             </Modal.Actions>
@@ -755,7 +903,7 @@ const CustomizeForm = ({ teamCustomizationData }) => {
 
           {!teamCustomizationPending && (postcardsPreviewError || customizationError) && (
             <Modal.Actions>
-              <Button basic color="red" inverted onClick={() => setDisplayReview(false)}>
+              <Button secondary inverted onClick={() => setDisplayReview(false)}>
                 <Icon name="remove" /> OK
               </Button>
             </Modal.Actions>

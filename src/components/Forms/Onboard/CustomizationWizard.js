@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
-import { Menu, Segment } from '../../Base';
+import { Button, Menu, Segment } from '../../Base';
 import { isMobile } from '../../utils';
 import { Form } from '../Base';
 
-const Wizard = ({ children, initialValues = {}, onSubmit, page, setPage, controls, onLastPage, onIsSubmitting }) => {
+const Wizard = ({ children, initialValues = {}, onSubmit, page, setPage, controls, onLastPage, onIsDisabled }) => {
   const [values, setValues] = useState(initialValues);
 
   const next = values => {
@@ -38,8 +38,8 @@ const Wizard = ({ children, initialValues = {}, onSubmit, page, setPage, control
 
   return (
     <Form initialValues={values} enableReinitialize={false} validate={validate} onSubmit={handleSubmit}>
-      {({ isSubmitting }) => {
-        onIsSubmitting(isSubmitting);
+      {props => {
+        onIsDisabled(!!props.status || props.isSubmitting);
         onLastPage(isLastPage);
 
         return (
@@ -49,7 +49,7 @@ const Wizard = ({ children, initialValues = {}, onSubmit, page, setPage, control
             <Segment style={isMobile() ? { marginTop: '155px' } : { marginTop: '90px' }}>
               <Menu pointing secondary>
                 <Menu.Item name="newListing" active={page === 0} disabled={page === 0} onClick={previous} />
-                <Menu.Item name="soldListing" active={page === 1} disabled={page === 1} onClick={next} />
+                <Menu.Item as={Button} type="submit" name="soldListing" active={page === 1} disabled={!!props.status || props.isSubmitting || page === 1} />
               </Menu>
 
               {activePage}

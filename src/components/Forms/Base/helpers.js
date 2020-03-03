@@ -3,9 +3,14 @@ import { getIn, useFormikContext } from 'formik';
 
 export const getFieldError = (field, form) => {
   const { name } = field;
-  const { serverValidation } = form.status || {};
+  const serverValidation = form.status?.[name];
   const touched = getIn(form.touched, name);
   const checkTouched = serverValidation ? !touched : touched;
+
+  if (serverValidation) {
+    return serverValidation;
+  }
+
   return checkTouched && getIn(form.errors, name);
 };
 
