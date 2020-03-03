@@ -1,22 +1,23 @@
-import { Header } from 'semantic-ui-react';
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
-import { useSelector, useDispatch } from 'react-redux';
 import { useLastLocation } from 'react-router-last-location';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { submitMailoutPending, stopMailoutPending, resetMailout, updateMailoutSizePending, revertEditedMailoutPending } from '../store/modules/mailout/actions';
-import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from '../components/MailoutListItem/helpers';
-import { ContentTopHeaderLayout, ContentSpacerLayout, ContentBottomHeaderLayout, ItemBodyDataLayout, ItemBodyLayoutV2, ItemLayout } from '../layouts';
-import { Button, Grid, Menu, Message, Page, Segment, List, Popup, Input, Modal, Icon, Image } from '../components/Base';
-import PopupContent from '../components/MailoutListItem/PopupContent';
-import { getMailoutPending } from '../store/modules/mailout/actions';
-import PopupMinMax from '../components/MailoutListItem/PopupMinMax';
-import ListHeader from '../components/MailoutListItem/ListHeader';
-import ImageGroup from '../components/MailoutListItem/ImageGroup';
+import { Button, Grid, Header, Icon, Image, Input, List, Menu, Message, Modal, Page, Popup, Segment } from '../components/Base';
 import GoogleMapItem from '../components/GoogleMapItem';
-import { isMobile } from '../components/utils';
 import Loading from '../components/Loading';
+import ImageGroup from '../components/MailoutListItem/ImageGroup';
+import ListHeader from '../components/MailoutListItem/ListHeader';
+import PopupContent from '../components/MailoutListItem/PopupContent';
+import PopupMinMax from '../components/MailoutListItem/PopupMinMax';
+import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from '../components/MailoutListItem/helpers';
+import PageTitleHeader from '../components/PageTitleHeader';
+import { isMobile } from '../components/utils';
+import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemBodyDataLayout, ItemBodyLayoutV2, ItemLayout } from '../layouts';
+import { resetMailout, revertEditedMailoutPending, stopMailoutPending, submitMailoutPending, updateMailoutSizePending } from '../store/modules/mailout/actions';
+import { getMailoutPending } from '../store/modules/mailout/actions';
 
 const useFetching = (getActionCreator, dispatch, mailoutId) => {
   useEffect(() => {
@@ -183,7 +184,7 @@ const MailoutDetailsPage = () => {
   return (
     <Page basic>
       <ContentTopHeaderLayout>
-        <Segment style={isMobile() ? { marginTop: '58px' } : {}}>
+        <PageTitleHeader>
           <Menu borderless fluid secondary>
             <Menu.Item>
               <Header as="h1">Campaign Details</Header>
@@ -196,7 +197,7 @@ const MailoutDetailsPage = () => {
               </Menu.Item>
             </Menu.Menu>
           </Menu>
-        </Segment>
+        </PageTitleHeader>
         {(pendingState && !error && <Loading />) || (updatePendingState && !updateError && <Loading message="Updating listing, please wait..." />)}
       </ContentTopHeaderLayout>
 
