@@ -1,5 +1,5 @@
 -----------------
-## Release 2.2.24
+## Release 2.2.25
 Changes:
 - Refactor agent & team customization & improve default/custom settings handling
 - Improve validation for agent & team customization

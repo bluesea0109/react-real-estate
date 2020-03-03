@@ -1,8 +1,9 @@
 import _ from 'lodash';
 import { Header } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
-import React, { Fragment, useState, useReducer, useRef } from 'react';
+import React, { Fragment, useEffect, useState, useReducer, useRef } from 'react';
 
+import { saveListedShortcodePending, saveSoldShortcodePending } from '../../store/modules/shortcode/actions';
 import { saveCustomizationPending } from '../../store/modules/customization/actions';
 import { ContentTopHeaderLayout } from '../../layouts';
 import { Button, Menu, Page, Segment } from '../Base';
@@ -41,6 +42,20 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
 
   const [formValues, setFormValues] = useReducer(formReducer, customizationData);
   const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    if (customizationData) {
+      if (customizationData?.listed?.cta) {
+        dispatch(saveListedShortcodePending(customizationData.listed.cta));
+      }
+
+      if (customizationData?.sold?.cta) {
+        dispatch(saveSoldShortcodePending(customizationData.sold.cta));
+      }
+
+      setFormValues(customizationData);
+    }
+  }, [customizationData, dispatch, setFormValues]);
 
   const handleSubmit = () => {
     const data = _.merge({}, formValues);
@@ -134,7 +149,7 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
     const initialKWKLY = initialValues?.[listingType]?.kwkly;
 
     return (
-      <Form key={listingType} innerRef={formRef} onSubmit={handleSubmit} validateOnMount={true} validateOnChange={true}>
+      <Form key={listingType} innerRef={formRef} onSubmit={handleSubmit} validateOnMount={true} validateOnChange={true} enableReinitialize={true}>
         {() => (
           <Fragment>
             <Segment>{EnableCustomizationSwitch({ listingType, initialValues, formValues, setFormValues })}</Segment>
