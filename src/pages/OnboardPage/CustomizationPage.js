@@ -73,31 +73,7 @@ const CustomizationPage = () => {
         </Page>
       );
     } else {
-      const patchedCustomizationAvailable = customizationAvailable ? Object.assign({}, customizationAvailable) : null;
-
-      if (patchedCustomizationAvailable) {
-        if (patchedCustomizationAvailable.sold.kwkly) {
-          if (patchedCustomizationAvailable.sold.kwkly.includes('to 59559 for details!')) {
-            patchedCustomizationAvailable.sold.kwkly = patchedCustomizationAvailable.sold.kwkly.split(' ')[1];
-          }
-        }
-
-        if (patchedCustomizationAvailable.listed.kwkly) {
-          if (patchedCustomizationAvailable.listed.kwkly.includes('to 59559 for details!')) {
-            patchedCustomizationAvailable.listed.kwkly = patchedCustomizationAvailable.listed.kwkly.split(' ')[1];
-          }
-        }
-
-        if (!patchedCustomizationAvailable.listed.kwkly) {
-          patchedCustomizationAvailable.listed.kwkly = 'KEYWORD';
-        }
-
-        if (!patchedCustomizationAvailable.sold.kwkly) {
-          patchedCustomizationAvailable.sold.kwkly = 'KEYWORD';
-        }
-      }
-
-      return <CustomizeForm customizationData={patchedCustomizationAvailable || initialValues} />;
+      return <CustomizeForm customizationData={customizationAvailable} initialValues={initialValues} />;
     }
   }
 
@@ -111,60 +87,7 @@ const CustomizationPage = () => {
         </Page>
       );
     } else {
-      const patchedCustomizationAvailable = customizationAvailable ? Object.assign({}, customizationAvailable) : null;
-
-      if (patchedCustomizationAvailable) {
-        if (patchedCustomizationAvailable.sold.kwkly) {
-          if (patchedCustomizationAvailable.sold.kwkly.includes('to 59559 for details!')) {
-            patchedCustomizationAvailable.sold.kwkly = patchedCustomizationAvailable.sold.kwkly.split(' ')[1];
-          }
-        }
-
-        if (patchedCustomizationAvailable.listed.kwkly) {
-          if (patchedCustomizationAvailable.listed.kwkly.includes('to 59559 for details!')) {
-            patchedCustomizationAvailable.listed.kwkly = patchedCustomizationAvailable.listed.kwkly.split(' ')[1];
-          }
-        }
-
-        if (!patchedCustomizationAvailable.listed.kwkly) {
-          patchedCustomizationAvailable.listed.kwkly = 'KEYWORD';
-        }
-
-        if (!patchedCustomizationAvailable.sold.kwkly) {
-          patchedCustomizationAvailable.sold.kwkly = 'KEYWORD';
-        }
-      }
-
-      const patchedTeamCustomizationAvailable = teamCustomizationAvailable ? Object.assign({}, teamCustomizationAvailable) : null;
-
-      if (patchedTeamCustomizationAvailable) {
-        if (patchedTeamCustomizationAvailable.sold.kwkly) {
-          if (patchedTeamCustomizationAvailable.sold.kwkly.includes('to 59559 for details!')) {
-            patchedTeamCustomizationAvailable.sold.kwkly = patchedTeamCustomizationAvailable.sold.kwkly.split(' ')[1];
-          }
-        }
-
-        if (patchedTeamCustomizationAvailable.listed.kwkly) {
-          if (patchedTeamCustomizationAvailable.listed.kwkly.includes('to 59559 for details!')) {
-            patchedTeamCustomizationAvailable.listed.kwkly = patchedTeamCustomizationAvailable.listed.kwkly.split(' ')[1];
-          }
-        }
-
-        if (!patchedTeamCustomizationAvailable.listed.kwkly) {
-          patchedTeamCustomizationAvailable.listed.kwkly = 'KEYWORD';
-        }
-
-        if (!patchedTeamCustomizationAvailable.sold.kwkly) {
-          patchedTeamCustomizationAvailable.sold.kwkly = 'KEYWORD';
-        }
-      }
-
-      return (
-        <CustomizeForm
-          customizationData={patchedCustomizationAvailable || patchedTeamCustomizationAvailable || initialValues}
-          teamCustomizationData={teamCustomizationAvailable}
-        />
-      );
+      return <CustomizeForm customizationData={customizationAvailable} initialValues={teamCustomizationAvailable || initialValues} />;
     }
   }
 };

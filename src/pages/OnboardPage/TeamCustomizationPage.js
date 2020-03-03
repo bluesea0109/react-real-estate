@@ -65,31 +65,7 @@ const TeamCustomizationPage = () => {
       </Page>
     );
   } else {
-    const patchedTeamCustomizationAvailable = teamCustomizationAvailable ? Object.assign({}, teamCustomizationAvailable) : null;
-
-    if (patchedTeamCustomizationAvailable) {
-      if (patchedTeamCustomizationAvailable.sold.kwkly) {
-        if (patchedTeamCustomizationAvailable.sold.kwkly.includes('to 59559 for details!')) {
-          patchedTeamCustomizationAvailable.sold.kwkly = patchedTeamCustomizationAvailable.sold.kwkly.split(' ')[1];
-        }
-      }
-
-      if (patchedTeamCustomizationAvailable.listed.kwkly) {
-        if (patchedTeamCustomizationAvailable.listed.kwkly.includes('to 59559 for details!')) {
-          patchedTeamCustomizationAvailable.listed.kwkly = patchedTeamCustomizationAvailable.listed.kwkly.split(' ')[1];
-        }
-      }
-
-      if (!patchedTeamCustomizationAvailable.listed.kwkly) {
-        patchedTeamCustomizationAvailable.listed.kwkly = 'KEYWORD';
-      }
-
-      if (!patchedTeamCustomizationAvailable.sold.kwkly) {
-        patchedTeamCustomizationAvailable.sold.kwkly = 'KEYWORD';
-      }
-    }
-
-    return <TeamCustomizeForm teamCustomizationData={patchedTeamCustomizationAvailable || initialValues} initialRun={!teamCustomizationAvailable} />;
+    return <TeamCustomizeForm teamCustomizationData={teamCustomizationAvailable} initialValues={initialValues} />;
   }
 };
 

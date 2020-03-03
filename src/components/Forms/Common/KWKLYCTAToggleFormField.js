@@ -1,32 +1,34 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Form } from '../Base';
+import { Toggle } from '../Base';
 
-const KWKLYCTAToggleFormField = ({ listingType, formValues, setFormValues }) => {
-  const ctaEnabled = formValues[listingType].shortenCTA;
+const NEW_LISTING = 'listed';
+
+const KWKLYCTAToggleFormField = ({ listingType, initialValues, formValues, setFormValues }) => {
+  const editable = listingType === NEW_LISTING ? formValues && formValues.listed : formValues && formValues.sold;
+  const ctaEnabled = editable ? formValues?.[listingType]?.shortenCTA : initialValues?.[listingType]?.shortenCTA;
 
   const handleKwklyEnabledChange = () => {
-    const newValue = formValues;
-    newValue[listingType].shortenCTA = !ctaEnabled;
+    const newValue = Object.assign({}, formValues);
+    newValue[listingType].shortenCTA = !newValue[listingType].shortenCTA;
     setFormValues(newValue);
   };
 
-  return (
-    <Form.Field>
-      {!ctaEnabled ? (
-        <span style={{ verticalAlign: '-0.35em', color: '#59C4C4' }} onClick={handleKwklyEnabledChange}>
-          <FontAwesomeIcon icon="toggle-on" size="2x" />
-        </span>
-      ) : (
-        <span style={{ verticalAlign: '-0.35em', color: '#969696' }} onClick={handleKwklyEnabledChange}>
-          <FontAwesomeIcon icon="toggle-on" size="2x" className="fa-flip-horizontal" />
-        </span>
-      )}
-      &nbsp;
-      {!ctaEnabled ? 'Disable Kwkly' : 'Enable Kwkly'}
-    </Form.Field>
-  );
+  if (!editable) {
+    return (
+      <Toggle
+        defaultChecked={ctaEnabled}
+        label={ctaEnabled ? 'Enable Kwkly' : 'Disable Kwkly'}
+        name={listingType + '_shortenCTA'}
+        disabled={true}
+        invertInput={true}
+      />
+    );
+  } else {
+    return (
+      <Toggle label={ctaEnabled ? 'Enable Kwkly' : 'Disable Kwkly'} name={listingType + '_shortenCTA'} onChange={handleKwklyEnabledChange} invertInput={true} />
+    );
+  }
 };
 
 export default KWKLYCTAToggleFormField;

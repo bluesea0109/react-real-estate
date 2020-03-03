@@ -14,10 +14,11 @@ const SOLD_LISTING = 'sold';
 const validURL = str => !urlRegExp.test(str) && 'URL is not valid';
 const isValidURL = str => !!urlRegExp.test(str);
 
-const CTAInputFormField = ({ formType, listingType, formValues, setFormValues }) => {
+const CTAInputFormField = ({ formType, listingType, initialValues, formValues, setFormValues }) => {
   const dispatch = useDispatch();
-  const currentValue = formValues[listingType].cta;
-  const ctaEnabled = formValues[listingType].shortenCTA;
+  const editable = listingType === NEW_LISTING ? formValues && formValues.listed : formValues && formValues.sold;
+  const ctaEnabled = editable ? formValues?.[listingType]?.shortenCTA : initialValues?.[listingType]?.shortenCTA;
+  const currentValue = editable ? formValues?.[listingType]?.cta : initialValues?.[listingType]?.cta;
 
   let newListingShortenedURL;
   let newListingShortenedURLPending;
@@ -85,7 +86,7 @@ const CTAInputFormField = ({ formType, listingType, formValues, setFormValues })
   const handleCTAChange = input => {
     const eURL = input.target.value;
 
-    const newValue = formValues;
+    const newValue = Object.assign({}, formValues);
     newValue[listingType].cta = eURL;
     setFormValues(newValue);
 
@@ -102,47 +103,64 @@ const CTAInputFormField = ({ formType, listingType, formValues, setFormValues })
 
   const isVisible = ctaEnabled && shortenedURL;
 
-  const onErrors = () => {
-    if (listingType === NEW_LISTING && newListingShortenedURLError) return newListingShortenedURLError.message;
-    if (listingType === SOLD_LISTING && soldListingShortenedURLError) return soldListingShortenedURLError.message;
-  };
-
-  if (isVisible) {
-    return (
-      <Form.Group widths="2">
+  if (!editable) {
+    if (isVisible) {
+      return (
+        <Form.Group widths="2">
+          <Input label="Call to action URL" name={listingType + '_cta'} value={currentValue} disabled={true} />
+          <Label style={{ marginTop: !isMobile() && '2.5em', backgroundColor: 'transparent' }}>
+            <Icon name="linkify" />
+            Shortened URL:
+            <Label.Detail>
+              <Menu.Item href={'https://' + shortenedURL} position="left" target="_blank">
+                <span>
+                  {shortenedURL}{' '}
+                  {popup('We automatically shorten your call to action links and generate URLs for each card to provide tracking and increase conversion.')}
+                </span>
+              </Menu.Item>
+            </Label.Detail>
+          </Label>
+        </Form.Group>
+      );
+    } else {
+      return <Input label="Call to action URL" name={listingType + '_cta'} value={currentValue} disabled={true} />;
+    }
+  } else {
+    if (isVisible) {
+      return (
+        <Form.Group widths="2">
+          <Input
+            label="Call to action URL"
+            name={listingType + '_cta'}
+            onBlur={handleCTAChange}
+            validate={ctaEnabled && composeValidators(required, validURL)}
+            disabled={!ctaEnabled}
+          />
+          <Label style={{ marginTop: !isMobile() && '2.5em', backgroundColor: 'transparent' }}>
+            <Icon name="linkify" />
+            Shortened URL:
+            <Label.Detail>
+              <Menu.Item href={'https://' + shortenedURL} position="left" target="_blank">
+                <span>
+                  {shortenedURL}{' '}
+                  {popup('We automatically shorten your call to action links and generate URLs for each card to provide tracking and increase conversion.')}
+                </span>
+              </Menu.Item>
+            </Label.Detail>
+          </Label>
+        </Form.Group>
+      );
+    } else {
+      return (
         <Input
           label="Call to action URL"
           name={listingType + '_cta'}
           onBlur={handleCTAChange}
           validate={ctaEnabled && composeValidators(required, validURL)}
           disabled={!ctaEnabled}
-          errorState={onErrors()}
         />
-        <Label style={{ marginTop: !isMobile() && '2.5em', backgroundColor: 'transparent' }}>
-          <Icon name="linkify" />
-          Shortened URL:
-          <Label.Detail>
-            <Menu.Item href={'https://' + shortenedURL} position="left" target="_blank">
-              <span>
-                {shortenedURL}{' '}
-                {popup('We automatically shorten your call to action links and generate URLs for each card to provide tracking and increase conversion.')}
-              </span>
-            </Menu.Item>
-          </Label.Detail>
-        </Label>
-      </Form.Group>
-    );
-  } else {
-    return (
-      <Input
-        label="Call to action URL"
-        name={listingType + '_cta'}
-        onBlur={handleCTAChange}
-        validate={ctaEnabled && composeValidators(required, validURL)}
-        disabled={!ctaEnabled}
-        errorState={onErrors()}
-      />
-    );
+      );
+    }
   }
 };
 

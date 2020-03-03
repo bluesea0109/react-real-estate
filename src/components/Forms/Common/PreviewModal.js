@@ -7,7 +7,7 @@ import { Button, Icon, Image, Modal } from '../../Base';
 import FlipCard from '../../FlipCard';
 import Loading from '../../Loading';
 
-const PreviewModal = ({ formType }) => {
+const PreviewModal = ({ formType, formValues }) => {
   const dispatch = useDispatch();
 
   const [displayReview, setDisplayReview] = useState(false);
@@ -51,12 +51,20 @@ const PreviewModal = ({ formType }) => {
   useEffect(() => {
     let isInitialized = true;
 
-    if (isInitialized && !displayReview && postcardsPreviewIsPending) {
+    const listedIsEnabled = formValues && !!formValues.listed;
+    const soldIsEnabled = formValues && !!formValues.sold;
+    const skip = !listedIsEnabled && !soldIsEnabled;
+
+    if (isInitialized && formType === 'agent' && (customizationPending || postcardsPreviewIsPending) && skip) {
+      dispatch(reviewCustomizationCompleted());
+    }
+
+    if (isInitialized && !displayReview && postcardsPreviewIsPending && !skip) {
       setDisplayReview(true);
     }
 
     return () => (isInitialized = false);
-  }, [displayReview, setDisplayReview, postcardsPreviewIsPending]);
+  }, [displayReview, setDisplayReview, postcardsPreviewIsPending, formType, formValues, customizationPending, dispatch]);
 
   const handleReviewComplete = () => {
     setDisplayReview(false);
@@ -69,6 +77,9 @@ const PreviewModal = ({ formType }) => {
       dispatch(reviewCustomizationCompleted());
     }
   };
+
+  const listedEnabled = formValues && formValues.listed;
+  const soldEnabled = formValues && formValues.sold;
 
   return (
     <Modal open={displayReview} basic size="tiny">
@@ -92,27 +103,31 @@ const PreviewModal = ({ formType }) => {
         <Modal.Content style={{ padding: '0 45px 10px' }}>{postcardsPreviewError || customizationError}</Modal.Content>
       )}
 
-      {postcardsPreview && postcardsPreview.listed && postcardsPreview.listed.sampleBackLargeUrl && postcardsPreview.listed.sampleFrontLargeUrl && (
-        <Modal.Content image style={{ padding: '0 45px 10px' }}>
-          <FlipCard isFlipped={listedIsFlipped}>
-            <Image
-              wrapped
-              size="large"
-              src={postcardsPreview.listed.sampleFrontLargeUrl}
-              label={{ as: 'a', corner: 'right', icon: 'undo', onClick: () => setListedIsFlipped(!listedIsFlipped) }}
-            />
+      {listedEnabled &&
+        postcardsPreview &&
+        postcardsPreview.listed &&
+        postcardsPreview.listed.sampleBackLargeUrl &&
+        postcardsPreview.listed.sampleFrontLargeUrl && (
+          <Modal.Content image style={{ padding: '0 45px 10px' }}>
+            <FlipCard isFlipped={listedIsFlipped}>
+              <Image
+                wrapped
+                size="large"
+                src={postcardsPreview.listed.sampleFrontLargeUrl}
+                label={{ as: 'a', corner: 'right', icon: 'undo', onClick: () => setListedIsFlipped(!listedIsFlipped) }}
+              />
 
-            <Image
-              wrapped
-              size="large"
-              src={postcardsPreview.listed.sampleBackLargeUrl}
-              label={{ as: 'a', corner: 'right', icon: 'redo', onClick: () => setListedIsFlipped(!listedIsFlipped) }}
-            />
-          </FlipCard>
-        </Modal.Content>
-      )}
+              <Image
+                wrapped
+                size="large"
+                src={postcardsPreview.listed.sampleBackLargeUrl}
+                label={{ as: 'a', corner: 'right', icon: 'redo', onClick: () => setListedIsFlipped(!listedIsFlipped) }}
+              />
+            </FlipCard>
+          </Modal.Content>
+        )}
 
-      {postcardsPreview && postcardsPreview.sold && postcardsPreview.sold.sampleBackLargeUrl && postcardsPreview.sold.sampleFrontLargeUrl && (
+      {soldEnabled && postcardsPreview && postcardsPreview.sold && postcardsPreview.sold.sampleBackLargeUrl && postcardsPreview.sold.sampleFrontLargeUrl && (
         <Modal.Content image style={{ padding: '10px 45px 0' }}>
           <FlipCard isFlipped={soldIsFlipped}>
             <Image

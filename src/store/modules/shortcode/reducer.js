@@ -24,6 +24,7 @@ export default function shortcode(state = initialState, action) {
     case SAVE_LISTED_SHORTCODE_PENDING:
       return {
         ...state,
+        listed: null,
         listedURLToShortenError: null,
         listedURLToShortenPending: true,
         listedURLToShorten: action.payload,
@@ -46,6 +47,7 @@ export default function shortcode(state = initialState, action) {
     case SAVE_SOLD_SHORTCODE_PENDING:
       return {
         ...state,
+        sold: null,
         soldURLToShortenError: null,
         soldURLToShortenPending: true,
         soldURLToShorten: action.payload,

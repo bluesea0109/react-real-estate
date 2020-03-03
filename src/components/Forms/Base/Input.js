@@ -1,6 +1,6 @@
 import React from 'react';
+import { FastField, Field } from 'formik';
 import { Form, Input } from 'semantic-ui-react';
-import { FastField, Field, getIn } from 'formik';
 
 import { getFieldError, setFieldValue, useFocusOnError } from './helpers';
 import ErrorMessage from './ErrorMessage';
@@ -21,7 +21,6 @@ const FormikInput = ({
   id = `field_input_${name}`,
   onBlur,
   onChange,
-  errorState,
   ...rest
 }) => {
   const DesiredField = fast === true ? FastField : Field;
@@ -31,7 +30,7 @@ const FormikInput = ({
   return (
     <DesiredField name={name} validate={validate}>
       {({ field, form }) => {
-        const error = errorState || getFieldError(field, form);
+        const error = getFieldError(field, form);
 
         return (
           <Form.Field error={!!error} {...fieldProps} className={disabled ? 'disabled-form-field' : null}>
@@ -64,7 +63,7 @@ const FormikInput = ({
               />
             </InputRef>
 
-            {error && React.createElement(errorComponent, { message: errorState || getIn(form.errors, name) })}
+            {error && React.createElement(errorComponent, { message: error })}
           </Form.Field>
         );
       }}

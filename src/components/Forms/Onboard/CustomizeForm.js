@@ -1,30 +1,34 @@
 import _ from 'lodash';
 import { Header, Popup } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
-import React, { createRef, Fragment, useEffect, useState, useReducer } from 'react';
+import React, { createRef, Fragment, useState, useReducer } from 'react';
 
-import { saveSoldShortcodePending, saveListedShortcodePending } from '../../../store/modules/shortcode/actions';
 import { saveCustomizationPending } from '../../../store/modules/customization/actions';
 import { Button, Icon, Image, Menu, Page, Segment } from '../../Base';
-import { isMobile, differenceObjectDeep } from '../../utils';
 import { ContentTopHeaderLayout } from '../../../layouts';
 import { StyledHeader } from '../../helpers';
 import Wizard from './CustomizationWizard';
+import { isMobile } from '../../utils';
 
 import PreviewModal from '../Common/PreviewModal';
 import InputFormField from '../Common/InputFormField';
 import CTAInputFormField from '../Common/CTAInputFormField';
 import KWKLYInputFormField from '../Common/KWKLYInputFormField';
 import ColorPickerFormField from '../Common/ColorPickerFormField';
+import UpdateWithoutRerender from '../Common/UpdateWithoutRerender';
 import KWKLYCTAToggleFormField from '../Common/KWKLYCTAToggleFormField';
 import TemplatePictureFormField from '../Common/TemplatePictureFormField';
+import EnableCustomizationSwitch from '../Common/EnableCustomizationSwitch';
 import MailoutSizeSliderFormField from '../Common/MailoutSizeSliderFormField';
+import ValidateURLWithoutRerender from '../Common/ValidateURLWithoutRerender';
 
 const formReducer = (state, action) => {
-  return _.merge({}, state, action);
+  return _.merge({}, action);
 };
 
-const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
+const NEW_LISTING = 'listed';
+
+const CustomizeForm = ({ customizationData, initialValues }) => {
   const dispatch = useDispatch();
 
   const teammates = useSelector(store => store.team.profiles);
@@ -33,52 +37,47 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
   const profiles = [];
 
   const [formValues, setFormValues] = useReducer(formReducer, customizationData);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
   const [isLastPage, setIsLastPage] = useState(false);
   const [page, setPage] = useState(0);
 
-  useEffect(() => {
-    let isInitialized = true;
-
-    if (isInitialized && customizationData) {
-      const updatedFormValues = _.merge({}, formValues, customizationData);
-      setFormValues(updatedFormValues);
-
-      if (updatedFormValues.listed.cta) {
-        dispatch(saveListedShortcodePending(updatedFormValues.listed.cta));
-      }
-      if (updatedFormValues.sold.cta) {
-        dispatch(saveSoldShortcodePending(updatedFormValues.sold.cta));
-      }
-    }
-
-    return () => (isInitialized = false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [customizationData, teamCustomizationData, setFormValues, dispatch]);
-
   const handleSubmit = () => {
-    const allData = _.merge({}, customizationData, formValues);
+    const data = _.merge({}, formValues);
 
-    if (allData.listed.shortenCTA || !allData.listed.kwkly) {
-      delete allData.listed.kwkly;
+    if (data.listed) {
+      if (data.listed.shortenCTA) {
+        delete data.listed.kwkly;
+      } else {
+        delete data.listed.cta;
+      }
+
+      if (!data.listed.shortenCTA && data.listed.kwkly) {
+        data.listed.kwkly = `Text ${data.listed.kwkly} to 59559 for details!`;
+      }
+
+      if (!data.listed.defaultDisplayAgent.userId) {
+        delete data.listed.defaultDisplayAgent;
+      }
     }
 
-    if (allData.sold.shortenCTA || !allData.sold.kwkly) {
-      delete allData.sold.kwkly;
+    if (data.sold) {
+      if (data.sold.shortenCTA) {
+        delete data.sold.kwkly;
+      } else {
+        delete data.sold.cta;
+      }
+
+      if (!data.sold.shortenCTA && data.sold.kwkly) {
+        data.sold.kwkly = `Text ${data.sold.kwkly} to 59559 for details!`;
+      }
+
+      if (!data.sold.defaultDisplayAgent.userId) {
+        delete data.sold.defaultDisplayAgent;
+      }
     }
 
-    const diffData = differenceObjectDeep(teamCustomizationData, allData);
-    if (!diffData.listed.cta) delete diffData.listed.cta;
-    if (!diffData.sold.cta) delete diffData.sold.cta;
-
-    if (!diffData.listed.defaultDisplayAgent.userId) delete diffData.listed.defaultDisplayAgent;
-    if (!diffData.sold.defaultDisplayAgent.userId) delete diffData.sold.defaultDisplayAgent;
-
-    diffData.listed.createMailoutsOfThisType = formValues.listed.createMailoutsOfThisType;
-    diffData.sold.createMailoutsOfThisType = formValues.sold.createMailoutsOfThisType;
-
-    setFormValues(diffData);
-    dispatch(saveCustomizationPending(diffData));
+    setFormValues(data);
+    dispatch(saveCustomizationPending(data));
   };
 
   if (teammates.length > 0) {
@@ -112,50 +111,59 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
   }
 
   const Listings = ({ listingType }) => {
+    const editable = listingType === NEW_LISTING ? formValues && formValues.listed : formValues && formValues.sold;
+    const initialCTA = initialValues?.[listingType]?.cta;
+    const initialKWKLY = initialValues?.[listingType]?.kwkly;
+
     return (
       <Fragment>
+        <Segment>{EnableCustomizationSwitch({ listingType, initialValues, formValues, setFormValues })}</Segment>
+
         <Segment
           padded
           className={isMobile() ? null : 'primary-grid-container'}
           style={isMobile() ? {} : { gridTemplateRows: 'unset', gridTemplateAreas: 'unset' }}
         >
           <div>
-            <Header as="h4">Template Theme</Header>
-            {TemplatePictureFormField({ templateName: 'ribbon', listingType, formValues, setFormValues })}
+            <Header as="h5" style={{ opacity: !editable ? 0.4 : 1 }}>
+              Template Theme
+            </Header>
+            {TemplatePictureFormField({ templateName: 'ribbon', listingType, initialValues, formValues, setFormValues })}
           </div>
 
           <div>
             <p>&nbsp;</p>
-            {TemplatePictureFormField({ templateName: 'bookmark', listingType, formValues, setFormValues })}
+            {TemplatePictureFormField({ templateName: 'bookmark', listingType, initialValues, formValues, setFormValues })}
           </div>
 
           <div>
             <p>&nbsp;</p>
-            {TemplatePictureFormField({ templateName: 'stack', listingType, formValues, setFormValues })}
+            {TemplatePictureFormField({ templateName: 'stack', listingType, initialValues, formValues, setFormValues })}
           </div>
 
-          <div>
-            <Header as="h4">Brand Color</Header>
-            {ColorPickerFormField({ listingType, formValues, setFormValues })}
-          </div>
+          <div>{ColorPickerFormField({ listingType, initialValues, formValues, setFormValues })}</div>
         </Segment>
 
         <Segment padded className={isMobile() ? null : 'tertiary-grid-container'}>
-          <div>{InputFormField({ fieldName: 'frontHeadline', listingType, formValues, setFormValues })}</div>
+          <div>{InputFormField({ fieldName: 'frontHeadline', listingType, initialValues, formValues, setFormValues })}</div>
 
-          <div>
-            <Header as="h4">Number of postcards to send per listing</Header>
-            {MailoutSizeSliderFormField({ formType: 'agent', listingType, formValues, setFormValues })}
+          <div>{MailoutSizeSliderFormField({ formType: 'agent', listingType, initialValues, formValues, setFormValues })}</div>
+
+          <div style={{ display: !editable ? 'none' : 'block' }}>{KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}</div>
+
+          <div style={{ display: !editable ? 'none' : 'block' }}> </div>
+
+          <div style={{ display: !editable && !initialCTA ? 'none' : 'block' }}>
+            {CTAInputFormField({ formType: 'agent', listingType, initialValues, formValues, setFormValues })}
           </div>
 
-          <div>{KWKLYCTAToggleFormField({ listingType, formValues, setFormValues })}</div>
-
-          <div> </div>
-
-          <div>{CTAInputFormField({ formType: 'agent', listingType, formValues, setFormValues })}</div>
-
-          <div>{KWKLYInputFormField({ listingType, formValues, setFormValues })}</div>
+          <div style={{ display: !editable && !initialKWKLY ? 'none' : 'block' }}>
+            {KWKLYInputFormField({ listingType, initialValues, formValues, setFormValues })}
+          </div>
         </Segment>
+
+        <UpdateWithoutRerender formValues={formValues} />
+        <ValidateURLWithoutRerender formType="agent" />
       </Fragment>
     );
   };
@@ -178,7 +186,7 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
                         Previous
                       </Button>
                     )}
-                    <Button primary type="submit" disabled={isSubmitting}>
+                    <Button primary type="submit" disabled={isDisabled}>
                       {isLastPage ? 'Submit' : 'Next'}
                     </Button>
                   </span>
@@ -187,25 +195,17 @@ const CustomizeForm = ({ customizationData, teamCustomizationData = null }) => {
             </Segment>
           </ContentTopHeaderLayout>
         }
-        initialValues={{
-          listed_frontHeadline: formValues.listed.frontHeadline,
-          listed_cta: formValues.listed.cta,
-          listed_kwkly: formValues.listed.kwkly,
-          sold_frontHeadline: formValues.sold.frontHeadline,
-          sold_cta: formValues.sold.cta,
-          sold_kwkly: formValues.sold.kwkly,
-        }}
         onSubmit={(values, actions) => handleSubmit(values, actions)}
         page={page}
         setPage={setPage}
         onLastPage={value => setIsLastPage(value)}
-        onIsSubmitting={value => setIsSubmitting(value)}
+        onIsDisabled={value => setIsDisabled(value)}
       >
         <Listings listingType="listed" />
         <Listings listingType="sold" />
       </Wizard>
 
-      {PreviewModal({ formType: 'agent' })}
+      {PreviewModal({ formType: 'agent', formValues })}
     </Page>
   );
 };

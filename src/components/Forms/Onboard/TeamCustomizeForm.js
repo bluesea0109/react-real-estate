@@ -3,7 +3,6 @@ import { Header, Popup } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { createRef, Fragment, useEffect, useState, useReducer } from 'react';
 
-import { saveTeamSoldShortcodePending, saveTeamListedShortcodePending } from '../../../store/modules/teamShortcode/actions';
 import { saveTeamCustomizationPending } from '../../../store/modules/teamCustomization/actions';
 import { Button, Icon, Image, Menu, Page, Segment } from '../../Base';
 import { ContentTopHeaderLayout } from '../../../layouts';
@@ -16,15 +15,19 @@ import InputFormField from '../Common/InputFormField';
 import CTAInputFormField from '../Common/CTAInputFormField';
 import KWKLYInputFormField from '../Common/KWKLYInputFormField';
 import ColorPickerFormField from '../Common/ColorPickerFormField';
+import UpdateWithoutRerender from '../Common/UpdateWithoutRerender';
 import KWKLYCTAToggleFormField from '../Common/KWKLYCTAToggleFormField';
 import TemplatePictureFormField from '../Common/TemplatePictureFormField';
+import ValidateURLWithoutRerender from '../Common/ValidateURLWithoutRerender';
 import MailoutSizeSliderFormField from '../Common/MailoutSizeSliderFormField';
 
 const formReducer = (state, action) => {
-  return _.merge({}, state, action);
+  return _.merge({}, action);
 };
 
-const TeamCustomizeForm = ({ teamCustomizationData, initialRun }) => {
+const NEW_LISTING = 'listed';
+
+const TeamCustomizeForm = ({ teamCustomizationData, initialValues }) => {
   const dispatch = useDispatch();
 
   const teammates = useSelector(store => store.team.profiles);
@@ -34,45 +37,27 @@ const TeamCustomizeForm = ({ teamCustomizationData, initialRun }) => {
   const profiles = [];
 
   const [formValues, setFormValues] = useReducer(formReducer, teamCustomizationData);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
   const [isLastPage, setIsLastPage] = useState(false);
   const [page, setPage] = useState(0);
 
   useEffect(() => {
     let isInitialized = true;
 
-    if (isInitialized && teamCustomizationData) {
-      const updatedFormValues = _.merge({}, formValues, teamCustomizationData);
+    if (isInitialized && !teamCustomizationData) {
+      const updatedFormValues = _.merge({}, formValues, initialValues);
 
       setFormValues(updatedFormValues);
-
-      if (updatedFormValues.listed.cta) {
-        dispatch(saveTeamListedShortcodePending(updatedFormValues.listed.cta));
-      }
-
-      if (updatedFormValues.sold.cta) {
-        dispatch(saveTeamSoldShortcodePending(updatedFormValues.sold.cta));
-      }
     }
 
     return () => (isInitialized = false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [teamCustomizationData, setFormValues, dispatch]);
+  }, [teamCustomizationData, initialValues, setFormValues, dispatch]);
 
   const handleSubmit = (values, actions) => {
-    const data = _.merge({}, teamCustomizationData, formValues);
+    const data = _.merge({}, formValues);
 
-    data.listed.createMailoutsOfThisType = true;
-    data.listed.frontHeadline = values.listed_frontHeadline;
-    data.listed.cta = values.listed_cta;
-    data.listed.kwkly = values.listed_kwkly;
-
-    data.sold.createMailoutsOfThisType = true;
-    data.sold.frontHeadline = values.sold_frontHeadline;
-    data.sold.cta = values.sold_cta;
-    data.sold.kwkly = values.sold_kwkly;
-
-    if (initialRun) {
+    if (!teamCustomizationData) {
       data.listed.defaultDisplayAgent = {
         userId: firstTeamAdmin && firstTeamAdmin.userId,
         first: firstTeamAdmin && firstTeamAdmin.first,
@@ -85,26 +70,24 @@ const TeamCustomizeForm = ({ teamCustomizationData, initialRun }) => {
       };
     }
 
-    if (!data.listed.cta) delete data.listed.cta;
-    if (!data.sold.cta) delete data.sold.cta;
-
-    if (data.listed.shortenCTA || !data.listed.kwkly) {
+    if (data.listed.shortenCTA) {
       delete data.listed.kwkly;
+    } else {
+      delete data.listed.cta;
     }
 
-    if (data.sold.shortenCTA || !data.sold.kwkly) {
+    if (data.sold.shortenCTA) {
       delete data.sold.kwkly;
-    }
-
-    if (!data.listed.defaultDisplayAgent.userId) delete data.listed.defaultDisplayAgent;
-    if (!data.sold.defaultDisplayAgent.userId) delete data.sold.defaultDisplayAgent;
-
-    if (!data.sold.shortenCTA && data.sold.kwkly) {
-      data.sold.kwkly = `Text ${data.sold.kwkly} to 59559 for details!`;
+    } else {
+      delete data.sold.cta;
     }
 
     if (!data.listed.shortenCTA && data.listed.kwkly) {
       data.listed.kwkly = `Text ${data.listed.kwkly} to 59559 for details!`;
+    }
+
+    if (!data.sold.shortenCTA && data.sold.kwkly) {
+      data.sold.kwkly = `Text ${data.sold.kwkly} to 59559 for details!`;
     }
 
     setFormValues(data);
@@ -142,6 +125,8 @@ const TeamCustomizeForm = ({ teamCustomizationData, initialRun }) => {
   }
 
   const Listings = ({ listingType }) => {
+    const editable = listingType === NEW_LISTING ? formValues && formValues.listed : formValues && formValues.sold;
+
     return (
       <Fragment>
         <Segment
@@ -150,42 +135,41 @@ const TeamCustomizeForm = ({ teamCustomizationData, initialRun }) => {
           style={isMobile() ? {} : { gridTemplateRows: 'unset', gridTemplateAreas: 'unset' }}
         >
           <div>
-            <Header as="h4">Template Theme</Header>
-            {TemplatePictureFormField({ templateName: 'ribbon', listingType, formValues, setFormValues })}
+            <Header as="h5" style={{ opacity: !editable ? 0.4 : 1 }}>
+              Template Theme
+            </Header>
+            {TemplatePictureFormField({ templateName: 'ribbon', listingType, initialValues, formValues, setFormValues })}
           </div>
 
           <div>
             <p>&nbsp;</p>
-            {TemplatePictureFormField({ templateName: 'bookmark', listingType, formValues, setFormValues })}
+            {TemplatePictureFormField({ templateName: 'bookmark', listingType, initialValues, formValues, setFormValues })}
           </div>
 
           <div>
             <p>&nbsp;</p>
-            {TemplatePictureFormField({ templateName: 'stack', listingType, formValues, setFormValues })}
+            {TemplatePictureFormField({ templateName: 'stack', listingType, initialValues, formValues, setFormValues })}
           </div>
 
-          <div>
-            <Header as="h4">Brand Color</Header>
-            {ColorPickerFormField({ listingType, formValues, setFormValues })}
-          </div>
+          <div>{ColorPickerFormField({ listingType, initialValues, formValues, setFormValues })}</div>
         </Segment>
 
         <Segment padded className={isMobile() ? null : 'tertiary-grid-container'}>
-          {InputFormField({ fieldName: 'frontHeadline', listingType, formValues, setFormValues })}
+          {InputFormField({ fieldName: 'frontHeadline', listingType, initialValues, formValues, setFormValues })}
 
-          <div>
-            <Header as="h4">Number of postcards to send per listing</Header>
-            {MailoutSizeSliderFormField({ formType: 'team', listingType, formValues, setFormValues })}
-          </div>
+          <div>{MailoutSizeSliderFormField({ formType: 'team', listingType, initialValues, formValues, setFormValues })}</div>
 
-          <div>{KWKLYCTAToggleFormField({ listingType, formValues, setFormValues })}</div>
+          <div>{KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}</div>
 
           <div> </div>
 
-          <div>{CTAInputFormField({ formType: 'team', listingType, formValues, setFormValues })}</div>
+          <div>{CTAInputFormField({ formType: 'team', listingType, initialValues, formValues, setFormValues })}</div>
 
-          <div>{KWKLYInputFormField({ listingType, formValues, setFormValues })}</div>
+          <div>{KWKLYInputFormField({ listingType, initialValues, formValues, setFormValues })}</div>
         </Segment>
+
+        <UpdateWithoutRerender formValues={formValues} />
+        <ValidateURLWithoutRerender formType="team" />
       </Fragment>
     );
   };
@@ -212,7 +196,7 @@ const TeamCustomizeForm = ({ teamCustomizationData, initialRun }) => {
                         Previous
                       </Button>
                     )}
-                    <Button primary type="submit" disabled={isSubmitting}>
+                    <Button primary type="submit" disabled={isDisabled}>
                       {isLastPage ? 'Submit' : 'Next'}
                     </Button>
                   </span>
@@ -221,25 +205,17 @@ const TeamCustomizeForm = ({ teamCustomizationData, initialRun }) => {
             </Segment>
           </ContentTopHeaderLayout>
         }
-        initialValues={{
-          listed_frontHeadline: formValues.listed.frontHeadline,
-          listed_cta: formValues.listed.cta,
-          listed_kwkly: formValues.listed.kwkly,
-          sold_frontHeadline: formValues.sold.frontHeadline,
-          sold_cta: formValues.sold.cta,
-          sold_kwkly: formValues.sold.kwkly,
-        }}
         onSubmit={(values, actions) => handleSubmit(values, actions)}
         page={page}
         setPage={setPage}
         onLastPage={value => setIsLastPage(value)}
-        onIsSubmitting={value => setIsSubmitting(value)}
+        onIsDisabled={value => setIsDisabled(value)}
       >
         <Listings listingType="listed" />
         <Listings listingType="sold" />
       </Wizard>
 
-      {PreviewModal({ formType: 'team' })}
+      {PreviewModal({ formType: 'team', formValues })}
     </Page>
   );
 };
