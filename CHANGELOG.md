@@ -1,8 +1,9 @@
 -----------------
-## Release 2.2.20
+## Release 2.2.2x
 Changes:
-- Improve validation outside of onboarding for agent & team customization [Prevent saving of incorrect or invalid data]
-- Fix tab switching between New & Sold listings not triggering form validation in agent & team onboarding customization
+- Refactor agent & team customization & improve default/custom settings handling
+- Improve validation for agent & team customization
+- Fix tab switching between New & Sold listings not triggering form validation in agent & team customization
 - Fix Cannot read property 'max' of undefined during agent & team customization onboarding
 
 Other fixes:
