@@ -10,6 +10,7 @@ Changes:
 Other fixes:
 - Fix issue #241 [Change KWKLY code label to be more friendly]
 - Fix issue #235 [KWKLY Code should error out if they don't modify the placeholder text]
+- Fix issue #254 [Show address in map markers]
 
 -----------------
 ## Release 2.2.11-13
