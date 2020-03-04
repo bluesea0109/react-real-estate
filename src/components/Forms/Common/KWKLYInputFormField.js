@@ -10,7 +10,7 @@ const isNotDefaultKeyword = str => str.toLowerCase() === 'keyword' && 'Please re
 const NEW_LISTING = 'listed';
 
 const KWKLYInputFormField = ({ listingType, initialValues, formValues, setFormValues }) => {
-  const editable = listingType === NEW_LISTING ? formValues && formValues.listed : formValues && formValues.sold;
+  const editable = listingType === NEW_LISTING ? !!formValues?.listed : !!formValues?.sold;
   const ctaEnabled = editable ? formValues?.[listingType]?.shortenCTA : initialValues?.[listingType]?.shortenCTA;
   let currentValue = editable ? formValues?.[listingType]?.kwkly : initialValues?.[listingType]?.kwkly;
 

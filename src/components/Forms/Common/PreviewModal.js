@@ -20,6 +20,9 @@ const PreviewModal = ({ formType, formValues }) => {
   let postcardsPreviewError;
   let postcardsPreview;
 
+  const onboardedStatus = useSelector(store => store.onboarded.status);
+  const inOnboardingMode = onboardedStatus === false;
+
   const teamCustomizationPending = useSelector(store => store.teamCustomization && store.teamCustomization.pending);
   const teamCustomizationError = useSelector(store => store.teamCustomization && store.teamCustomization.error && store.teamCustomization.error.message);
   const teamPostcardsPreviewIsPending = useSelector(store => store.teamPostcards && store.teamPostcards.pending);
@@ -69,11 +72,11 @@ const PreviewModal = ({ formType, formValues }) => {
   const handleReviewComplete = () => {
     setDisplayReview(false);
 
-    if (formType === 'team') {
+    if (formType === 'team' && inOnboardingMode) {
       dispatch(reviewTeamCustomizationCompleted());
     }
 
-    if (formType === 'agent') {
+    if (formType === 'agent' && inOnboardingMode) {
       dispatch(reviewCustomizationCompleted());
     }
   };
@@ -149,11 +152,13 @@ const PreviewModal = ({ formType, formValues }) => {
 
       {!postcardsPreviewIsPending && (
         <Modal.Actions>
-          <Button secondary inverted onClick={() => setDisplayReview(false)}>
-            <Icon name="remove" /> Edit
-          </Button>
+          {inOnboardingMode && (
+            <Button secondary inverted onClick={() => setDisplayReview(false)}>
+              <Icon name="remove" /> Edit
+            </Button>
+          )}
           <Button primary onClick={handleReviewComplete}>
-            <Icon name="checkmark" /> Continue
+            <Icon name="checkmark" /> {inOnboardingMode ? 'Continue' : 'OK'}
           </Button>
         </Modal.Actions>
       )}
