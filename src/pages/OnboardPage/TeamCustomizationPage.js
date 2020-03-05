@@ -3,47 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { getTeamCustomizationPending } from '../../store/modules/teamCustomization/actions';
 import TeamCustomizeForm from '../../components/Forms/Onboard/TeamCustomizeForm';
+import { initialValues } from '../../components/helpers';
 import { ContentTopHeaderLayout } from '../../layouts';
-import { colors } from '../../components/helpers';
 import Loading from '../../components/Loading';
 import { Page } from '../../components/Base';
-
-const initialValues = {
-  listed: {
-    createMailoutsOfThisType: true,
-    defaultDisplayAgent: {
-      userId: '',
-      first: '',
-      last: '',
-    },
-    mailoutSize: 300,
-    mailoutSizeMin: 100,
-    mailoutSizeMax: 1000,
-    templateTheme: 'bookmark',
-    brandColor: colors[0],
-    frontHeadline: 'Just Listed!',
-    cta: '',
-    shortenCTA: true,
-    kwkly: 'KEYWORD',
-  },
-  sold: {
-    createMailoutsOfThisType: true,
-    defaultDisplayAgent: {
-      userId: '',
-      first: '',
-      last: '',
-    },
-    mailoutSize: 300,
-    mailoutSizeMin: 100,
-    mailoutSizeMax: 1000,
-    templateTheme: 'bookmark',
-    brandColor: colors[0],
-    frontHeadline: 'Just Sold!',
-    cta: '',
-    shortenCTA: true,
-    kwkly: 'KEYWORD',
-  },
-};
 
 const TeamCustomizationPage = () => {
   const dispatch = useDispatch();

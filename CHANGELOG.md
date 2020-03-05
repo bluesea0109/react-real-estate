@@ -1,5 +1,5 @@
 -----------------
-## Release 2.2.27
+## Release 2.2.31
 Changes:
 - Refactor agent & team customization & improve default/custom settings handling
 - Improve validation for agent & team customization
@@ -8,6 +8,7 @@ Changes:
 - Fix header, sidebar, and page header borders
 - Prevent empty values from being submitted to the backend
 - Make CTA the default for agent & team customization
+- Fix api scrubEmptyStrings method wipeing false values
 
 Other fixes:
 - Fix issue #241 [Change KWKLY code label to be more friendly]

@@ -10,7 +10,7 @@ const NEW_LISTING = 'listed';
 
 const AgentDropdownFormField = ({ listingType, initialValues, formValues, setFormValues }) => {
   const currentValue = (formValues && formValues[listingType]?.defaultDisplayAgent?.userId) || initialValues[listingType]?.defaultDisplayAgent?.userId;
-  const editable = listingType === NEW_LISTING ? formValues && formValues.listed : formValues && formValues.sold;
+  const editable = listingType === NEW_LISTING ? !!formValues?.listed : !!formValues?.sold;
 
   const onLoginUserId = useSelector(store => store.onLogin.user._id);
   const teammates = useSelector(store => store.team.profiles);

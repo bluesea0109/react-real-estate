@@ -8,7 +8,7 @@ const NEW_LISTING = 'listed';
 
 const ColorPickerFormField = ({ listingType, initialValues, formValues, setFormValues }) => {
   const currentValue = (formValues && formValues[listingType]?.brandColor) || initialValues[listingType].brandColor;
-  const editable = listingType === NEW_LISTING ? formValues && formValues.listed : formValues && formValues.sold;
+  const editable = listingType === NEW_LISTING ? !!formValues?.listed : !!formValues?.sold;
 
   const handleColorChange = value => {
     const newValue = Object.assign({}, formValues);

@@ -5,7 +5,7 @@ import { Toggle } from '../Base';
 const NEW_LISTING = 'listed';
 
 const KWKLYCTAToggleFormField = ({ listingType, initialValues, formValues, setFormValues }) => {
-  const editable = listingType === NEW_LISTING ? formValues && formValues.listed : formValues && formValues.sold;
+  const editable = listingType === NEW_LISTING ? !!formValues?.listed : !!formValues?.sold;
   const ctaEnabled = editable ? formValues?.[listingType]?.shortenCTA : initialValues?.[listingType]?.shortenCTA;
 
   const handleKwklyEnabledChange = () => {

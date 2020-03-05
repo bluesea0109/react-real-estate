@@ -16,7 +16,7 @@ const isValidURL = str => !!urlRegExp.test(str);
 
 const CTAInputFormField = ({ formType, listingType, initialValues, formValues, setFormValues }) => {
   const dispatch = useDispatch();
-  const editable = listingType === NEW_LISTING ? formValues && formValues.listed : formValues && formValues.sold;
+  const editable = listingType === NEW_LISTING ? !!formValues?.listed : !!formValues?.sold;
   const ctaEnabled = editable ? formValues?.[listingType]?.shortenCTA : initialValues?.[listingType]?.shortenCTA;
   const currentValue = editable ? formValues?.[listingType]?.cta : initialValues?.[listingType]?.cta;
 

@@ -12,7 +12,7 @@ const MARGIN = 10;
 const NEW_LISTING = 'listed';
 
 const MailoutSizeSliderFormField = ({ formType, listingType, initialValues, formValues, setFormValues }) => {
-  const editable = listingType === NEW_LISTING ? formValues && formValues.listed : formValues && formValues.sold;
+  const editable = listingType === NEW_LISTING ? !!formValues?.listed : !!formValues?.sold;
 
   let currentMailoutSize;
   let currentMailoutSizeMin;

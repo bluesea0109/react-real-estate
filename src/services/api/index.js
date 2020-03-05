@@ -38,7 +38,7 @@ async function handleResponse(response) {
 function scrubEmptyStrings(obj) {
   return JSON.parse(
     JSON.stringify(obj, (key, value) => {
-      return value === '' || !value ? undefined : value;
+      return value === '' || value === null ? undefined : value;
     })
   );
 }

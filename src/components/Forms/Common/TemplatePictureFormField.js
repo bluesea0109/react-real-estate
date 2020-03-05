@@ -4,7 +4,7 @@ const NEW_LISTING = 'listed';
 
 const TemplatePictureFormField = ({ templateName, listingType, initialValues, formValues, setFormValues }) => {
   const currentValue = (formValues && formValues[listingType]?.templateTheme) || initialValues[listingType].templateTheme;
-  const editable = listingType === NEW_LISTING ? formValues && formValues.listed : formValues && formValues.sold;
+  const editable = listingType === NEW_LISTING ? !!formValues?.listed : !!formValues?.sold;
 
   const resolveSource = type => {
     const types = {

@@ -7,3 +7,40 @@ export const StyledHeader = styled(Header)`
   min-width: 18em;
   display: inline-block;
 `;
+
+export const initialValues = {
+  listed: {
+    createMailoutsOfThisType: true,
+    defaultDisplayAgent: {
+      userId: '',
+      first: '',
+      last: '',
+    },
+    mailoutSize: 300,
+    mailoutSizeMin: 100,
+    mailoutSizeMax: 1000,
+    templateTheme: 'bookmark',
+    brandColor: colors[0],
+    frontHeadline: 'Just Listed!',
+    cta: '',
+    shortenCTA: true,
+    kwkly: 'KEYWORD',
+  },
+  sold: {
+    createMailoutsOfThisType: true,
+    defaultDisplayAgent: {
+      userId: '',
+      first: '',
+      last: '',
+    },
+    mailoutSize: 300,
+    mailoutSizeMin: 100,
+    mailoutSizeMax: 1000,
+    templateTheme: 'bookmark',
+    brandColor: colors[0],
+    frontHeadline: 'Just Sold!',
+    cta: '',
+    shortenCTA: true,
+    kwkly: 'KEYWORD',
+  },
+};
