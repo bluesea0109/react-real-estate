@@ -130,6 +130,7 @@ const CTAInputFormField = ({ formType, listingType, initialValues, formValues, s
       return (
         <Form.Group widths="2">
           <Input
+            type="url"
             label="Call to action URL"
             name={listingType + '_cta'}
             onBlur={handleCTAChange}
