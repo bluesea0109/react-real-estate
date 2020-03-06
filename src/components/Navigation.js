@@ -6,7 +6,7 @@ import { Dropdown, Header, Popup } from 'semantic-ui-react';
 import React, { createRef, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { StepLayout, StepsLayout, NavigationLayout, MobileDisabledLayout, MobileEnabledLayout } from '../layouts';
+import { StepLayout, StepsLayout, MobileDisabledLayout, MobileEnabledLayout, NavigationLayout } from '../layouts';
 import { selectPeerId, deselectPeerId } from '../store/modules/peer/actions';
 import { Dimmer, Menu, Initials, Icon, Step } from './Base';
 
@@ -18,9 +18,20 @@ const iconWithTextStyle = {
   margin: '0 .5em 0 2.5em',
 };
 
+const smallIconWithTextStyle = {
+  margin: '0 .5em 0 0em',
+  width: '15px',
+};
+
+const noIconTextStyle = {
+  margin: '0 0.5em 0 4.4em',
+};
+
 const sidebarTextStyle = {
   fontSize: '1em',
+  width: '100%',
   marginLeft: '-.5em',
+  backgroundColor: 'white',
 };
 
 const StyledUserSelectorDropdown = styled(Dropdown)`
@@ -31,11 +42,6 @@ const StyledUserSelectorDropdown = styled(Dropdown)`
 const StyledHeader = styled(Header)`
   min-width: max-content !important;
   display: inline-block;
-`;
-
-const StyledCustomizationDropdown = styled(Dropdown)`
-  min-width: 8.3em !important;
-  max-width: 8.3em !important;
 `;
 
 const mql = window.matchMedia('(max-width: 599px)');
@@ -127,7 +133,8 @@ export default () => {
         location.pathname !== '/profile' &&
         location.pathname !== '/dashboard' &&
         location.pathname !== '/customization' &&
-        location.pathname !== '/settings'
+        location.pathname !== '/settings' &&
+        location.pathname !== '/dashboard/archived'
       ) {
         history.push(`/dashboard`);
       }
@@ -137,7 +144,8 @@ export default () => {
         location.pathname !== '/profile' &&
         location.pathname !== '/dashboard' &&
         location.pathname !== '/customization' &&
-        location.pathname !== '/settings'
+        location.pathname !== '/settings' &&
+        location.pathname !== '/dashboard/archived'
       ) {
         history.push(`/dashboard`);
       }
@@ -169,68 +177,6 @@ export default () => {
   });
 
   const handleProfileSelect = (e, { value }) => setActiveUser(value);
-
-  const handleCustomizationDropdown = (e, { value }) => {
-    // console.log('handleCustomizationDropdown');
-    // console.log('value: ', value);
-    // return setActiveCustomizationItem(value);
-  };
-
-  const renderCustomizationDropdown = () => {
-    if (mql.matches) {
-      return (
-        <span style={{ display: 'inline-flex' }}>
-          <FontAwesomeIcon icon="paint-brush" style={{ marginLeft: '0.5em', marginRight: '-0.5em', marginTop: 'auto', marginBottom: 'auto' }} />
-          <Dropdown floating>
-            <Dropdown.Menu>
-              <Dropdown.Item
-                as={Link}
-                text="Team"
-                value="team"
-                onClick={handleCustomizationDropdown}
-                to="/customization/team"
-                active={activeItem === '/customization/team'}
-              />
-              <Dropdown.Item
-                as={Link}
-                text="Personal"
-                value="personal"
-                onClick={handleCustomizationDropdown}
-                to="/customization"
-                active={activeItem === '/customization'}
-              />
-            </Dropdown.Menu>
-          </Dropdown>
-        </span>
-      );
-    } else {
-      return (
-        <span>
-          <FontAwesomeIcon icon="paint-brush" style={iconWithTextStyle} />
-          <StyledCustomizationDropdown floating text="Customization">
-            <Dropdown.Menu>
-              <Dropdown.Item
-                as={Link}
-                text="Team"
-                value="personal"
-                onClick={handleCustomizationDropdown}
-                to="/customization/team"
-                active={activeItem === '/customization/team'}
-              />
-              <Dropdown.Item
-                as={Link}
-                text="Personal"
-                value="mine"
-                onClick={handleCustomizationDropdown}
-                to="/customization"
-                active={activeItem === '/customization'}
-              />
-            </Dropdown.Menu>
-          </StyledCustomizationDropdown>
-        </span>
-      );
-    }
-  };
 
   const onProfile = !completedProfile;
   const onTeamCustomization = !completedTeamCustomization && completedProfile;
@@ -326,28 +272,60 @@ export default () => {
             />
           </Menu.Item>
         )}
-
         <Menu.Item as={Link} color="teal" name="dashboard" active={activeItem === '/dashboard'} to="/dashboard" style={{ lineHeight: 2.6 }}>
           <MobileEnabledLayout style={iconOnlyStyle}>
             <FontAwesomeIcon icon="tachometer-alt" />
           </MobileEnabledLayout>
           <MobileDisabledLayout>
-            <FontAwesomeIcon icon="tachometer-alt" style={iconWithTextStyle} /> Dashboard
+            <FontAwesomeIcon icon="tachometer-alt" style={iconWithTextStyle} /> Dashboard <FontAwesomeIcon icon="caret-down" style={{ marginLeft: '0.2em' }} />
           </MobileDisabledLayout>
         </Menu.Item>
-        {multiUser && isAdmin && !selectedPeerId ? (
-          <Menu.Item color="teal" name="customization" active={activeItem === '/customization'} style={{ lineHeight: 2.6 }}>
-            {renderCustomizationDropdown()}
-          </Menu.Item>
-        ) : (
-          <Menu.Item as={Link} color="teal" name="customization" active={activeItem === '/customization'} to="/customization" style={{ lineHeight: 2.6 }}>
-            <MobileEnabledLayout style={iconOnlyStyle}>
-              <FontAwesomeIcon icon="paint-brush" />
-            </MobileEnabledLayout>
-            <MobileDisabledLayout>
-              <FontAwesomeIcon icon="paint-brush" style={iconWithTextStyle} /> Customization
-            </MobileDisabledLayout>
-          </Menu.Item>
+        {location.pathname.includes('/dashboard') && (
+          <Menu.Menu style={{ marginTop: !isMobile() ? '-1.2em' : '' }}>
+            <Menu.Item
+              as={Link}
+              color="teal"
+              name="archived"
+              active={activeItem === '/dashboard/archived'}
+              to="/dashboard/archived"
+              style={{ lineHeight: 2.6 }}
+            >
+              <MobileEnabledLayout style={iconOnlyStyle}>
+                <FontAwesomeIcon icon="archive" />
+              </MobileEnabledLayout>
+              <MobileDisabledLayout style={noIconTextStyle}>
+                <FontAwesomeIcon icon="archive" style={smallIconWithTextStyle} /> Archive
+              </MobileDisabledLayout>
+            </Menu.Item>
+          </Menu.Menu>
+        )}
+        <Menu.Item as={Link} color="teal" name="customization" active={activeItem === '/customization'} to="/customization" style={{ lineHeight: 2.6 }}>
+          <MobileEnabledLayout style={iconOnlyStyle}>
+            <FontAwesomeIcon icon="paint-brush" />
+          </MobileEnabledLayout>
+          <MobileDisabledLayout>
+            <FontAwesomeIcon icon="paint-brush" style={iconWithTextStyle} /> Customization{' '}
+            {multiUser && isAdmin && !selectedPeerId && <FontAwesomeIcon icon="caret-down" style={{ marginLeft: '0.2em' }} />}
+          </MobileDisabledLayout>
+        </Menu.Item>
+        {multiUser && isAdmin && !selectedPeerId && location.pathname.includes('/customization') && (
+          <Menu.Menu style={{ marginTop: !isMobile() ? '-1.2em' : '' }}>
+            <Menu.Item
+              as={Link}
+              color="teal"
+              name="customization/team"
+              active={activeItem === '/customization/team'}
+              to="/customization/team"
+              style={{ lineHeight: 2.6 }}
+            >
+              <MobileEnabledLayout style={iconOnlyStyle}>
+                <FontAwesomeIcon icon="users" />
+              </MobileEnabledLayout>
+              <MobileDisabledLayout style={noIconTextStyle}>
+                <FontAwesomeIcon icon="users" style={smallIconWithTextStyle} /> Team
+              </MobileDisabledLayout>
+            </Menu.Item>
+          </Menu.Menu>
         )}
         <Menu.Item as={Link} color="teal" name="profile" active={activeItem === '/profile'} to="/profile" style={{ lineHeight: 2.6 }}>
           <MobileEnabledLayout style={iconOnlyStyle}>

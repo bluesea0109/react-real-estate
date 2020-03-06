@@ -27,6 +27,12 @@ import {
   REVERT_EDITED_MAILOUT_PENDING,
   REVERT_EDITED_MAILOUT_SUCCESS,
   REVERT_EDITED_MAILOUT_ERROR,
+  ARCHIVE_MAILOUT_PENDING,
+  ARCHIVE_MAILOUT_ERROR,
+  ARCHIVE_MAILOUT_SUCCESS,
+  UNDO_ARCHIVE_MAILOUT_PENDING,
+  UNDO_ARCHIVE_MAILOUT_SUCCESS,
+  UNDO_ARCHIVE_MAILOUT_ERROR,
 } from './actions';
 
 const initialState = {
@@ -39,6 +45,7 @@ const initialState = {
   updatePending: false,
   changeDisplayAgentPending: false,
   revertEditedPending: false,
+  archivePending: false,
 
   mailoutId: null,
   mailoutEdit: null,
@@ -46,6 +53,7 @@ const initialState = {
   mailoutDisplayAgent: null,
   needsUpdate: null,
   details: null,
+  archiveId: null,
 
   error: null,
   modifyError: null,
@@ -56,6 +64,7 @@ const initialState = {
   updateError: null,
   changeDisplayAgentError: null,
   revertEditedError: null,
+  archiveError: null,
 };
 
 export default function mailout(state = initialState, action) {
@@ -277,7 +286,44 @@ export default function mailout(state = initialState, action) {
         revertEditedPending: false,
         revertEditedError: action.error,
       };
-
+    case ARCHIVE_MAILOUT_PENDING:
+      return {
+        ...state,
+        archiveId: action.payload,
+        archivePending: true,
+      };
+    case ARCHIVE_MAILOUT_SUCCESS:
+      return {
+        ...state,
+        archiveId: null,
+        archivePending: false,
+      };
+    case ARCHIVE_MAILOUT_ERROR:
+      return {
+        ...state,
+        archivePending: false,
+        archiveId: null,
+        archiveError: action.error,
+      };
+    case UNDO_ARCHIVE_MAILOUT_PENDING:
+      return {
+        ...state,
+        archiveId: action.payload,
+        archivePending: true,
+      };
+    case UNDO_ARCHIVE_MAILOUT_SUCCESS:
+      return {
+        ...state,
+        archiveId: null,
+        archivePending: false,
+      };
+    case UNDO_ARCHIVE_MAILOUT_ERROR:
+      return {
+        ...state,
+        archivePending: false,
+        archiveId: null,
+        archiveError: action.error,
+      };
     default:
       return state;
   }

@@ -38,6 +38,14 @@ export const REVERT_EDITED_MAILOUT_PENDING = 'REVERT_EDITED_MAILOUT_PENDING';
 export const REVERT_EDITED_MAILOUT_SUCCESS = 'REVERT_EDITED_MAILOUT_SUCCESS';
 export const REVERT_EDITED_MAILOUT_ERROR = 'REVERT_EDITED_MAILOUT_ERROR';
 
+export const ARCHIVE_MAILOUT_PENDING = 'ARCHIVE_MAILOUT_PENDING';
+export const ARCHIVE_MAILOUT_SUCCESS = 'ARCHIVE_MAILOUT_SUCCESS';
+export const ARCHIVE_MAILOUT_ERROR = 'ARCHIVE_MAILOUT_ERROR';
+
+export const UNDO_ARCHIVE_MAILOUT_PENDING = 'UNDO_ARCHIVE_MAILOUT_PENDING';
+export const UNDO_ARCHIVE_MAILOUT_SUCCESS = 'UNDO_ARCHIVE_MAILOUT_SUCCESS';
+export const UNDO_ARCHIVE_MAILOUT_ERROR = 'UNDO_ARCHIVE_MAILOUT_ERROR';
+
 export function getMailoutPending(payload) {
   return createAction(GET_MAILOUT_PENDING, payload);
 }
@@ -148,4 +156,28 @@ export function revertEditedMailoutSuccess(payload) {
 
 export function revertEditedMailoutError(error) {
   return createErrorAction(REVERT_EDITED_MAILOUT_ERROR, error);
+}
+
+export function archiveMailoutPending(payload) {
+  return createAction(ARCHIVE_MAILOUT_PENDING, payload);
+}
+
+export function archiveMailoutSuccess(payload) {
+  return createAction(ARCHIVE_MAILOUT_SUCCESS, payload);
+}
+
+export function archiveMailoutError(error) {
+  return createErrorAction(ARCHIVE_MAILOUT_ERROR, error);
+}
+
+export function undoArchiveMailoutPending(payload) {
+  return createAction(UNDO_ARCHIVE_MAILOUT_PENDING, payload);
+}
+
+export function undoArchiveMailoutSuccess(payload) {
+  return createAction(UNDO_ARCHIVE_MAILOUT_SUCCESS, payload);
+}
+
+export function undoArchiveMailoutError(error) {
+  return createErrorAction(UNDO_ARCHIVE_MAILOUT_ERROR, error);
 }

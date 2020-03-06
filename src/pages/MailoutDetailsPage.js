@@ -122,7 +122,7 @@ const MailoutDetailsPage = () => {
     if (lastLocation.pathname === `/dashboard/edit/${mailoutId}` || lastLocation.pathname === `/dashboard/${mailoutId}`) {
       history.push(`/dashboard`);
     }
-    if (lastLocation.pathname === `/dashboard`) {
+    if (lastLocation.pathname === `/dashboard` || `/dashboard/archived`) {
       history.goBack();
     }
   };

@@ -183,6 +183,9 @@ const directory = {
         front: ({ userId, mailoutId }) => ({ path: `/api/user/${userId}/mailout/${mailoutId}/render/preview/html/front`, method: 'get' }),
         back: ({ userId, mailoutId }) => ({ path: `/api/user/${userId}/mailout/${mailoutId}/render/preview/html/back`, method: 'get' }),
       },
+      ignored: () => ({ path: `/api/user/mailout/ignored`, method: 'get' }),
+      archive: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/archive`, method: 'post' }),
+      unarchive: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/archive`, method: 'del' }),
     },
     customization: {
       get: () => ({ path: `/api/user/settings/branding`, method: 'get' }),
@@ -252,6 +255,9 @@ const directory = {
         }),
         back: ({ userId, peerId, mailoutId }) => ({ path: `/api/user/${userId}/peer/${peerId}/mailout/${mailoutId}/render/preview/html/back`, method: 'get' }),
       },
+      ignored: peerId => ({ path: `/api/user/peer/${peerId}/mailout/ignored`, method: 'get' }),
+      archive: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/archive`, method: 'post' }),
+      unarchive: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/archive`, method: 'del' }),
     },
     customization: {
       get: peerId => ({ path: `/api/user/peer/${peerId}/settings/branding`, method: 'get' }),

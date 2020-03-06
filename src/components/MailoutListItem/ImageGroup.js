@@ -8,8 +8,17 @@ import { Image } from '../Base';
 const mql = window.matchMedia('(max-width: 599px)');
 const resizePictures = () => (mql.matches ? { width: '100%' } : { width: '48%' });
 
-const ImageGroup = ({ img1src, img2src, linkTo }) => {
+const ImageGroup = ({ img1src, img2src, linkTo, status }) => {
   if (!img1src || !img2src) return;
+
+  if (status === 'archived' || status === 'hide') {
+    return (
+      <ItemBodyPicturesLayout>
+        <Image src={img1src} style={resizePictures()} className="bm-transform-effect image-frame-border" />
+        <Image src={img2src} style={resizePictures()} className="bm-transform-effect image-frame-border" />
+      </ItemBodyPicturesLayout>
+    );
+  }
 
   if (linkTo) {
     return (
