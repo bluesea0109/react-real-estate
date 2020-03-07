@@ -71,7 +71,7 @@ const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickAppro
         {mailoutDetailPage && <Header as="h3">{data.details && data.details.displayAddress}</Header>}
       </span>
       <ItemHeaderMenuLayout>
-        {mailoutDetailPage && enableRevertEdit && (
+        {canSend(data.mailoutStatus) && mailoutDetailPage && enableRevertEdit && (
           <span>
             <Button secondary inverted onClick={onClickRevertEdit} disabled={lockControls} loading={lockControls}>
               Revert & Unlock
