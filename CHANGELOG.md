@@ -1,4 +1,10 @@
 -----------------
+## Release 2.2.33
+Other fixes:
+- Fix issue #259 - Only show Revert & Unlock on unsent
+- Fix issue #260 - Allow a user to have no MLS# and Agent ID
+
+-----------------
 ## Release 2.2.31
 Changes:
 - Refactor agent & team customization & improve default/custom settings handling
