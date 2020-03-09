@@ -7,6 +7,7 @@ import {
   getMoreMailoutsSuccess,
   getMoreMailoutsError,
   resetMailouts,
+  getMailoutsPending,
 } from './actions';
 import ApiService from '../../../services/api/index';
 import { SELECT_PEER_ID, DESELECT_PEER_ID } from '../peer/actions';
@@ -61,16 +62,9 @@ export function* checkIfPeerSelectedGetMailout() {
   }
 }
 
-export function* checkIfPeerSelectedResetAndGetMailout() {
-  const peerId = yield select(getSelectedPeerId);
-
+export function* resetAndGetMailoutSaga() {
   yield put(resetMailouts());
-
-  if (peerId) {
-    yield getMailoutSaga({ peerId });
-  } else {
-    yield getMailoutSaga({});
-  }
+  yield put(getMailoutsPending());
 }
 
 export function* checkIfPeerSelectedGetMoreMailout() {
@@ -86,6 +80,6 @@ export function* checkIfPeerSelectedGetMoreMailout() {
 export default function*() {
   yield takeLatest(GET_MAILOUTS_PENDING, checkIfPeerSelectedGetMailout);
   yield takeLatest(GET_MORE_MAILOUTS_PENDING, checkIfPeerSelectedGetMoreMailout);
-  yield takeLatest(SELECT_PEER_ID, checkIfPeerSelectedResetAndGetMailout);
-  yield takeLatest(DESELECT_PEER_ID, checkIfPeerSelectedResetAndGetMailout);
+  yield takeLatest(SELECT_PEER_ID, resetAndGetMailoutSaga);
+  yield takeLatest(DESELECT_PEER_ID, resetAndGetMailoutSaga);
 }
