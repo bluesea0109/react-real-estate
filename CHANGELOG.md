@@ -1,4 +1,9 @@
 -----------------
+## Release 2.2.34
+Other fixes:
+- Fix issue #263 - Correctly show loading state on peer switching
+
+-----------------
 ## Release 2.2.33
 Other fixes:
 - Fix issue #259 - Only show Revert & Unlock on unsent
