@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Progress } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemBodyLayout, ItemLayout } from '../layouts';
 import { getMailoutsPending, getMoreMailoutsPending } from '../store/modules/mailouts/actions';
 import { Button, Grid, Header, Icon, Menu, Page, Segment, Snackbar } from '../components/Base';
-import ImageGroup from '../components/MailoutListItem/ImageGroup';
+import IframeGroup from '../components/MailoutListItem/IframeGroup';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ItemList from '../components/MailoutListItem/ItemList';
 import PageTitleHeader from '../components/PageTitleHeader';
@@ -55,16 +55,61 @@ const Dashboard = () => {
     boundFetchMoreMailouts(page + 1);
   };
 
+  const mailoutItemElementArray = [];
+
+  function handleIntersect(entries, observer) {
+    entries.forEach((entry, index) => {
+      const frontIframe = entry.target.querySelector('#bm-iframe-front');
+      const backIframe = entry.target.querySelector('#bm-iframe-back');
+
+      if (entry.isIntersecting) {
+        if (!frontIframe.src) {
+          frontIframe.src = frontIframe.title;
+        }
+        if (!backIframe.src) {
+          backIframe.src = backIframe.title;
+        }
+      }
+    });
+  }
+
+  const createObserver = useCallback(() => {
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.2,
+    };
+
+    const observer = new IntersectionObserver(handleIntersect, options);
+
+    if (mailoutItemElementArray.length > 0) {
+      mailoutItemElementArray.forEach(mailoutItemElement => {
+        return observer.observe(mailoutItemElement);
+      });
+    }
+  }, [mailoutItemElementArray]);
+
+  useEffect(() => {
+    if (mailoutList.length > 0) {
+      mailoutList.map((item, index) => {
+        const mailoutItemElement = document.querySelector(`#mailout-iframe-set-${index}`);
+
+        return mailoutItemElementArray.push(mailoutItemElement);
+      });
+
+      createObserver();
+    }
+  }, [mailoutList, mailoutItemElementArray, createObserver]);
+
   const MailoutsList = ({ list }) => {
     if (list[0].started) return null;
 
-    return list.map(item => (
+    return list.map((item, index) => (
       <ItemLayout fluid key={`${item.userId}-${item._id}-${item.mlsNum}`}>
-        {ListHeader({ data: item })}
+        <ListHeader data={item} />
         <ItemBodyLayout attached style={{ padding: 10 }}>
-          {ImageGroup({ img1src: item.sampleBackLargeUrl, img2src: item.sampleFrontLargeUrl, linkTo: `dashboard/${item._id}` })}
-
-          {ItemList({ data: item })}
+          <IframeGroup index={index} item={item} linkTo={`dashboard/${item._id}`} />
+          <ItemList data={item} />
         </ItemBodyLayout>
       </ItemLayout>
     ));
@@ -112,22 +157,14 @@ const Dashboard = () => {
           <Grid>
             <Grid.Row>
               <Grid.Column width={16}>
-                <Grid.Row>
-                  <Grid.Column width={16}>
-                    <MailoutsList list={mailoutList} />
-                  </Grid.Column>
-                </Grid.Row>
+                <MailoutsList list={mailoutList} />
               </Grid.Column>
             </Grid.Row>
 
             {(isInitiatingTeam || isInitiatingUser || mailoutsPendingState) && (
               <Grid.Row>
                 <Grid.Column width={16}>
-                  <Grid.Row>
-                    <Grid.Column width={16}>
-                      <Loading />
-                    </Grid.Column>
-                  </Grid.Row>
+                  <Loading />
                 </Grid.Column>
               </Grid.Row>
             )}

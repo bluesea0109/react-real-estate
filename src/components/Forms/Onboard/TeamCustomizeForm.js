@@ -10,9 +10,9 @@ import { StyledHeader } from '../../helpers';
 import Wizard from './CustomizationWizard';
 import { isMobile } from '../../utils';
 
-import PreviewModal from '../Common/PreviewModal';
 import InputFormField from '../Common/InputFormField';
 import CTAInputFormField from '../Common/CTAInputFormField';
+import RenderPreviewModal from '../Common/RenderPreviewModal';
 import KWKLYInputFormField from '../Common/KWKLYInputFormField';
 import ColorPickerFormField from '../Common/ColorPickerFormField';
 import UpdateWithoutRerender from '../Common/UpdateWithoutRerender';
@@ -215,7 +215,7 @@ const TeamCustomizeForm = ({ teamCustomizationData, initialValues }) => {
         <Listings listingType="sold" />
       </Wizard>
 
-      {PreviewModal({ formType: 'team', formValues })}
+      {RenderPreviewModal({ formType: 'team', formValues })}
     </Page>
   );
 };

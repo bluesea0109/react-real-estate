@@ -10,6 +10,8 @@ export const SAVE_TEAM_CUSTOMIZATION_ERROR = 'SAVE_TEAM_CUSTOMIZATION_ERROR';
 
 export const REVIEW_TEAM_CUSTOMIZATION_COMPLETED = 'REVIEW_TEAM_CUSTOMIZATION_COMPLETED';
 
+export const PREVIEW_TEAM_CUSTOMIZATION_COMPLETED = 'PREVIEW_TEAM_CUSTOMIZATION_COMPLETED';
+
 export function getTeamCustomizationPending() {
   return createAction(GET_TEAM_CUSTOMIZATION_PENDING);
 }
@@ -36,4 +38,8 @@ export function saveTeamCustomizationError(error) {
 
 export function reviewTeamCustomizationCompleted() {
   return createAction(REVIEW_TEAM_CUSTOMIZATION_COMPLETED);
+}
+
+export function previewTeamCustomizationCompleted() {
+  return createAction(PREVIEW_TEAM_CUSTOMIZATION_COMPLETED);
 }

@@ -6,6 +6,7 @@ import {
   SAVE_TEAM_CUSTOMIZATION_SUCCESS,
   SAVE_TEAM_CUSTOMIZATION_ERROR,
   REVIEW_TEAM_CUSTOMIZATION_COMPLETED,
+  PREVIEW_TEAM_CUSTOMIZATION_COMPLETED,
 } from './actions';
 
 const initialState = {
@@ -14,6 +15,7 @@ const initialState = {
   available: null,
   toSave: null,
   reviewed: false,
+  preview: false,
 };
 
 export default function teamCustomization(state = initialState, action) {
@@ -55,6 +57,7 @@ export default function teamCustomization(state = initialState, action) {
         available: action.payload,
         toSave: null,
         error: null,
+        preview: true,
       };
 
     case SAVE_TEAM_CUSTOMIZATION_ERROR:
@@ -68,6 +71,12 @@ export default function teamCustomization(state = initialState, action) {
       return {
         ...state,
         reviewed: true,
+      };
+
+    case PREVIEW_TEAM_CUSTOMIZATION_COMPLETED:
+      return {
+        ...state,
+        preview: false,
       };
 
     default:

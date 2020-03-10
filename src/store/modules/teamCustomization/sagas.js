@@ -10,7 +10,6 @@ import {
 } from './actions';
 import ApiService from '../../../services/api/index';
 import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
-import { generateTeamPostcardsPreviewPending } from '../teamPostcards/actions';
 
 export const teamCustomizationToSave = state => state.teamCustomization.toSave;
 
@@ -33,7 +32,6 @@ export function* saveTeamCustomizationSaga() {
     const response = yield call(ApiService[method], path, teamCustomization);
 
     yield put(saveTeamCustomizationSuccess(response));
-    yield put(generateTeamPostcardsPreviewPending());
   } catch (err) {
     yield put(saveTeamCustomizationError(err));
   }
