@@ -4,7 +4,9 @@ import { useLastLocation } from 'react-router-last-location';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Button, Grid, Header, Icon, Image, Input, List, Menu, Message, Modal, Page, Popup, Segment } from '../components/Base';
+import { resetMailout, revertEditedMailoutPending, stopMailoutPending, submitMailoutPending, updateMailoutSizePending } from '../store/modules/mailout/actions';
+import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from '../components/MailoutListItem/helpers';
+import { Button, Grid, Header, Icon, Input, List, Menu, Message, Modal, Page, Popup, Segment } from '../components/Base';
 import PopupContent from '../components/MailoutListItem/PopupContent';
 import { getMailoutPending } from '../store/modules/mailout/actions';
 import PopupMinMax from '../components/MailoutListItem/PopupMinMax';
@@ -12,10 +14,9 @@ import ListHeader from '../components/MailoutListItem/ListHeader';
 import PageTitleHeader from '../components/PageTitleHeader';
 import GoogleMapItem from '../components/GoogleMapItem';
 import { isMobile } from '../components/utils';
+import FlipCard from '../components/FlipCard';
 import Loading from '../components/Loading';
 import ApiService from '../services/api';
-import { resetMailout, revertEditedMailoutPending, stopMailoutPending, submitMailoutPending, updateMailoutSizePending } from '../store/modules/mailout/actions';
-import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from '../components/MailoutListItem/helpers';
 import {
   ContentBottomHeaderLayout,
   ContentSpacerLayout,
@@ -44,6 +45,7 @@ const MailoutDetailsPage = () => {
   const [editRecipients, setEditRecipients] = useState(false);
   const [frontLoaded, setFrontLoaded] = useState(false);
   const [backLoaded, setBackLoaded] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
   const [working, setWorking] = useState(false);
 
   const pendingState = useSelector(store => store.mailout.pending);
@@ -216,6 +218,40 @@ const MailoutDetailsPage = () => {
     }
   };
 
+  const FrontIframe = () => (
+    <Segment compact textAlign="center" loading={!frontLoaded} style={{ border: 'none', padding: '2px', margin: 'auto' }}>
+      <iframe
+        id="bm-iframe-front"
+        title={`bm-iframe-front-${details?._id}`}
+        name="front"
+        src={frontURL}
+        width={isMobile() ? '300' : '600'}
+        height={isMobile() ? '204' : '408'}
+        frameBorder="0"
+        sandbox="allow-same-origin allow-scripts"
+        onLoad={handleOnload}
+        className="image-frame-border"
+      />
+    </Segment>
+  );
+
+  const BackIframe = () => (
+    <Segment compact textAlign="center" loading={!backLoaded} style={{ border: 'none', padding: '2px', margin: 'auto' }}>
+      <iframe
+        id="bm-iframe-back"
+        title={`bm-iframe-back-${details?._id}`}
+        name="back"
+        src={backURL}
+        width={isMobile() ? '300' : '600'}
+        height={isMobile() ? '204' : '408'}
+        frameBorder="0"
+        sandbox="allow-same-origin allow-scripts"
+        onLoad={handleOnload}
+        className="image-frame-border"
+      />
+    </Segment>
+  );
+
   return (
     <Page basic>
       <ContentTopHeaderLayout>
@@ -239,11 +275,20 @@ const MailoutDetailsPage = () => {
       <ContentSpacerLayout />
 
       <Modal open={showConsentModal} onClose={() => setShowConsentModal(false)} basic size="small">
-        <Modal.Content image>
-          <Image wrapped size="medium" src={details && details.sampleFrontLargeUrl} />
-          <Modal.Description>
-            <Image wrapped size="medium" src={details && details.sampleBackLargeUrl} />
-          </Modal.Description>
+        <Modal.Header>
+          Preview
+          <Button primary inverted floated="right" onClick={() => setIsFlipped(true)} disabled={isFlipped}>
+            Flip Back
+          </Button>
+          <Button primary inverted floated="right" onClick={() => setIsFlipped(false)} disabled={!isFlipped}>
+            Flip Forward
+          </Button>
+        </Modal.Header>
+        <Modal.Content>
+          <FlipCard isFlipped={isFlipped}>
+            <FrontIframe />
+            <BackIframe />
+          </FlipCard>
         </Modal.Content>
         <Modal.Content>
           <Modal.Description style={{ textAlign: 'center' }}>
@@ -285,34 +330,8 @@ const MailoutDetailsPage = () => {
 
                   <ItemBodyLayoutV2 attached style={isMobile() ? { padding: 10, marginTop: '129px' } : { padding: 10, marginTop: '89px' }}>
                     <ItemBodyIframeLayout horizontal={!isMobile()} style={{ border: 'none', boxShadow: 'none' }}>
-                      <Segment compact textAlign="center" loading={!frontLoaded} style={{ border: 'none', padding: '2px' }}>
-                        <iframe
-                          id="bm-iframe-front"
-                          title={`bm-iframe-front-${details._id}`}
-                          name="front"
-                          src={frontURL}
-                          width={isMobile() ? '300' : '600'}
-                          height={isMobile() ? '204' : '408'}
-                          frameBorder="0"
-                          sandbox="allow-same-origin allow-scripts"
-                          onLoad={handleOnload}
-                          className="image-frame-border"
-                        />
-                      </Segment>
-                      <Segment compact textAlign="center" loading={!backLoaded} style={{ border: 'none', padding: '2px' }}>
-                        <iframe
-                          id="bm-iframe-back"
-                          title={`bm-iframe-back-${details._id}`}
-                          name="back"
-                          src={backURL}
-                          width={isMobile() ? '300' : '600'}
-                          height={isMobile() ? '204' : '408'}
-                          frameBorder="0"
-                          sandbox="allow-same-origin allow-scripts"
-                          onLoad={handleOnload}
-                          className="image-frame-border"
-                        />
-                      </Segment>
+                      <FrontIframe />
+                      <BackIframe />
                     </ItemBodyIframeLayout>
 
                     <ItemBodyDataLayout relaxed>
