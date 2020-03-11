@@ -75,16 +75,11 @@ export function* resetAndGetMailoutSaga() {
   yield put(resetMailouts());
 
   const location = yield document.location.pathname;
-  console.log('location', location);
 
   if (location.includes('/dashboard/archived')) {
     yield put(getArchivedMailoutsPending());
-    console.log('matched: /dashboard/archived');
-    console.log('triggering: getArchivedMailoutsPending()');
   } else if (location.includes('/dashboard')) {
     yield put(getMailoutsPending());
-    console.log('matched: /dashboard');
-    console.log('triggering: getMailoutsPending()');
   }
 }
 
