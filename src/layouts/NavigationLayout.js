@@ -8,7 +8,8 @@ export default styled(Menu)`
 
   @media (max-width: 768px) {
     grid-template-rows: 1fr;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(6, 1fr);
+    justify-content: space-between;
 
     height: 60px;
     margin: 0 !important;

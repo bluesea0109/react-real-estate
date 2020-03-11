@@ -16,6 +16,7 @@ import CustomizationTeamPage from './pages/CustomizationTeamPage';
 import ProfilePage from './pages/ProfilePage';
 import SettingsPage from './pages/SettingsPage';
 import EmptyPage from './pages/EmptyPage';
+import ArchivedPage from './pages/ArchivedPage';
 // import onRouteChanges from './onRouteChange';
 //
 // onRouteChanges(route => {
@@ -32,6 +33,7 @@ export default () => {
       <Route path="/login" component={LoginPage} />
       <PrivateRoute path="/onboard" component={OnboardPage} />
       <PrivateRoute exact path="/dashboard" component={DashboardPage} />
+      <PrivateRoute exact path="/dashboard/archived" component={ArchivedPage} />
       <PrivateRoute exact path="/dashboard/:mailoutId" component={MailoutDetailsPage} />
       <PrivateRoute exact path="/dashboard/edit/:mailoutId" component={MailoutEditPage} />
       <PrivateRoute exact path="/customization" component={CustomizationPage} />

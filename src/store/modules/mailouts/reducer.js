@@ -10,14 +10,24 @@ import {
   GENERATE_MAILOUTS_PENDING,
   GENERATE_MAILOUTS_SUCCESS,
   GENERATE_MAILOUTS_ERROR,
+  GET_ARCHIVED_MAILOUTS_PENDING,
+  GET_ARCHIVED_MAILOUTS_SUCCESS,
+  GET_ARCHIVED_MAILOUTS_ERROR,
+  GET_MORE_ARCHIVED_MAILOUTS_PENDING,
+  GET_MORE_ARCHIVED_MAILOUTS_SUCCESS,
+  GET_MORE_ARCHIVED_MAILOUTS_ERROR,
 } from './actions';
+import { ARCHIVE_MAILOUT_SUCCESS, UNDO_ARCHIVE_MAILOUT_SUCCESS } from '../mailout/actions';
 
 const initialState = {
   pending: false,
+  pendingArchived: false,
   generatePending: false,
   canLoadMore: false,
   page: 1,
   list: [],
+  archivedPage: 1,
+  archived: [],
   error: null,
   generateError: false,
 };
@@ -79,6 +89,8 @@ export default function mailouts(state = initialState, action) {
         ...state,
         canLoadMore: false,
         page: 1,
+        archivedPage: 1,
+        archived: [],
         list: [],
         error: null,
       };
@@ -102,7 +114,58 @@ export default function mailouts(state = initialState, action) {
         generatePending: false,
         generateError: action.error,
       };
+    case GET_ARCHIVED_MAILOUTS_PENDING:
+      return {
+        ...state,
+        archivedPage: 1,
+        pendingArchived: true,
+      };
 
+    case GET_ARCHIVED_MAILOUTS_SUCCESS:
+      return {
+        ...state,
+        pendingArchived: false,
+        archived: action.payload,
+      };
+
+    case GET_ARCHIVED_MAILOUTS_ERROR:
+      return {
+        ...state,
+        pendingArchived: false,
+        error: action.error,
+      };
+    case GET_MORE_ARCHIVED_MAILOUTS_PENDING:
+      return {
+        ...state,
+        pendingArchived: true,
+        archivedPage: action.payload,
+      };
+
+    case GET_MORE_ARCHIVED_MAILOUTS_SUCCESS:
+      const getMoreArchivedMailoutsNewList = state.archived.concat(action.payload);
+
+      return {
+        ...state,
+        pendingArchived: false,
+        archived: getMoreArchivedMailoutsNewList,
+      };
+
+    case GET_MORE_ARCHIVED_MAILOUTS_ERROR:
+      return {
+        ...state,
+        pendingArchived: false,
+        error: action.error,
+      };
+    case ARCHIVE_MAILOUT_SUCCESS:
+      return {
+        ...state,
+        list: state.list.filter(item => item._id !== action.payload._id),
+      };
+    case UNDO_ARCHIVE_MAILOUT_SUCCESS:
+      return {
+        ...state,
+        archived: state.archived.filter(item => item._id !== action.payload._id),
+      };
     default:
       return state;
   }
