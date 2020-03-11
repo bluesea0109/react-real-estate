@@ -285,7 +285,7 @@ const MailoutDetailsPage = () => {
 
                   <ItemBodyLayoutV2 attached style={isMobile() ? { padding: 10, marginTop: '129px' } : { padding: 10, marginTop: '89px' }}>
                     <ItemBodyIframeLayout horizontal={!isMobile()} style={{ border: 'none', boxShadow: 'none' }}>
-                      <Segment textAlign="center" loading={!frontLoaded} style={{ border: 'none' }}>
+                      <Segment compact textAlign="center" loading={!frontLoaded} style={{ border: 'none', padding: '2px' }}>
                         <iframe
                           id="bm-iframe-front"
                           title={`bm-iframe-front-${details._id}`}
@@ -299,7 +299,7 @@ const MailoutDetailsPage = () => {
                           className="image-frame-border"
                         />
                       </Segment>
-                      <Segment textAlign="center" loading={!backLoaded} style={{ border: 'none' }}>
+                      <Segment compact textAlign="center" loading={!backLoaded} style={{ border: 'none', padding: '2px' }}>
                         <iframe
                           id="bm-iframe-back"
                           title={`bm-iframe-back-${details._id}`}
