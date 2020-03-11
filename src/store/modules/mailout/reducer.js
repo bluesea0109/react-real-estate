@@ -12,12 +12,6 @@ import {
   UPDATE_MAILOUT_SIZE_PENDING,
   UPDATE_MAILOUT_SIZE_SUCCESS,
   UPDATE_MAILOUT_SIZE_ERROR,
-  CHECK_IF_MAILOUT_NEEDS_UPDATE_PENDING,
-  CHECK_IF_MAILOUT_NEEDS_UPDATE_SUCCESS,
-  CHECK_IF_MAILOUT_NEEDS_UPDATE_ERROR,
-  UPDATE_MAILOUT_PENDING,
-  UPDATE_MAILOUT_SUCCESS,
-  UPDATE_MAILOUT_ERROR,
   MODIFY_MAILOUT_PENDING,
   MODIFY_MAILOUT_SUCCESS,
   MODIFY_MAILOUT_ERROR,
@@ -41,8 +35,6 @@ const initialState = {
   submitPending: false,
   stopPending: false,
   updateMailoutSizePending: false,
-  needsUpdatePending: false,
-  updatePending: false,
   changeDisplayAgentPending: false,
   revertEditedPending: false,
   archivePending: false,
@@ -51,7 +43,6 @@ const initialState = {
   mailoutEdit: null,
   mailoutSize: null,
   mailoutDisplayAgent: null,
-  needsUpdate: null,
   details: null,
   archiveId: null,
 
@@ -60,8 +51,6 @@ const initialState = {
   submitError: null,
   stopError: null,
   updateMailoutSizeError: null,
-  needsUpdateError: null,
-  updateError: null,
   changeDisplayAgentError: null,
   revertEditedError: null,
   archiveError: null,
@@ -190,51 +179,6 @@ export default function mailout(state = initialState, action) {
         ...state,
         updateMailoutSizePending: false,
         updateMailoutSizeError: action.error,
-      };
-
-    case CHECK_IF_MAILOUT_NEEDS_UPDATE_PENDING:
-      return {
-        ...state,
-        needsUpdatePending: false,
-        needsUpdate: null,
-        needsUpdateError: null,
-      };
-
-    case CHECK_IF_MAILOUT_NEEDS_UPDATE_SUCCESS:
-      return {
-        ...state,
-        needsUpdatePending: true,
-        needsUpdate: action.payload,
-        needsUpdateError: null,
-      };
-
-    case CHECK_IF_MAILOUT_NEEDS_UPDATE_ERROR:
-      return {
-        ...state,
-        needsUpdatePending: false,
-        needsUpdateError: action.error,
-      };
-
-    case UPDATE_MAILOUT_PENDING:
-      return {
-        ...state,
-        updatePending: true,
-        updateError: null,
-      };
-
-    case UPDATE_MAILOUT_SUCCESS:
-      return {
-        ...state,
-        updatePending: false,
-        details: action.payload,
-        updateError: null,
-      };
-
-    case UPDATE_MAILOUT_ERROR:
-      return {
-        ...state,
-        updatePending: false,
-        updateError: action.error,
       };
 
     case CHANGE_MAILOUT_DISPLAY_AGENT_PENDING:
