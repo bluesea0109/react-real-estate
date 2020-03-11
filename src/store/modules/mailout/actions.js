@@ -18,14 +18,6 @@ export const UPDATE_MAILOUT_SIZE_PENDING = 'UPDATE_MAILOUT_SIZE_PENDING';
 export const UPDATE_MAILOUT_SIZE_SUCCESS = 'UPDATE_MAILOUT_SIZE_SUCCESS';
 export const UPDATE_MAILOUT_SIZE_ERROR = 'UPDATE_MAILOUT_SIZE_ERROR';
 
-export const CHECK_IF_MAILOUT_NEEDS_UPDATE_PENDING = 'CHECK_IF_MAILOUT_NEEDS_UPDATE_PENDING';
-export const CHECK_IF_MAILOUT_NEEDS_UPDATE_SUCCESS = 'CHECK_IF_MAILOUT_NEEDS_UPDATE_SUCCESS';
-export const CHECK_IF_MAILOUT_NEEDS_UPDATE_ERROR = 'CHECK_IF_MAILOUT_NEEDS_UPDATE_ERROR';
-
-export const UPDATE_MAILOUT_PENDING = 'UPDATE_MAILOUT_PENDING';
-export const UPDATE_MAILOUT_SUCCESS = 'UPDATE_MAILOUT_SUCCESS';
-export const UPDATE_MAILOUT_ERROR = 'UPDATE_MAILOUT_ERROR';
-
 export const MODIFY_MAILOUT_PENDING = 'MODIFY_MAILOUT_PENDING';
 export const MODIFY_MAILOUT_SUCCESS = 'MODIFY_MAILOUT_SUCCESS';
 export const MODIFY_MAILOUT_ERROR = 'MODIFY_MAILOUT_ERROR';
@@ -96,30 +88,6 @@ export function updateMailoutSizeSuccess(payload) {
 
 export function updateMailoutSizeError(error) {
   return createErrorAction(UPDATE_MAILOUT_SIZE_ERROR, error);
-}
-
-export function checkIfMailoutNeedsUpdatePending() {
-  return createAction(CHECK_IF_MAILOUT_NEEDS_UPDATE_PENDING);
-}
-
-export function checkIfMailoutNeedsUpdateSuccess(payload) {
-  return createAction(CHECK_IF_MAILOUT_NEEDS_UPDATE_SUCCESS, payload);
-}
-
-export function checkIfMailoutNeedsUpdateError(error) {
-  return createErrorAction(CHECK_IF_MAILOUT_NEEDS_UPDATE_ERROR, error);
-}
-
-export function updateMailoutPending() {
-  return createAction(UPDATE_MAILOUT_PENDING);
-}
-
-export function updateMailoutSuccess(payload) {
-  return createAction(UPDATE_MAILOUT_SUCCESS, payload);
-}
-
-export function updateMailoutError(error) {
-  return createErrorAction(UPDATE_MAILOUT_ERROR, error);
 }
 
 export function modifyMailoutPending(payload) {
