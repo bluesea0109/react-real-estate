@@ -72,11 +72,20 @@ export function* checkIfPeerSelectedGetMailout() {
 }
 
 export function* resetAndGetMailoutSaga() {
-  let location = yield document.location.pathname;
-
   yield put(resetMailouts());
-  yield location === '/dashboard' && put(getMailoutsPending());
-  yield location === '/dashboard/archived' && put(getArchivedMailoutsPending());
+
+  const location = yield document.location.pathname;
+  console.log('location', location);
+
+  if (location.includes('/dashboard/archived')) {
+    yield put(getArchivedMailoutsPending());
+    console.log('matched: /dashboard/archived');
+    console.log('triggering: getArchivedMailoutsPending()');
+  } else if (location.includes('/dashboard')) {
+    yield put(getMailoutsPending());
+    console.log('matched: /dashboard');
+    console.log('triggering: getMailoutsPending()');
+  }
 }
 
 export function* checkIfPeerSelectedGetMoreMailout() {
