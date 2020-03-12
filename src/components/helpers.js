@@ -8,6 +8,10 @@ export const StyledHeader = styled(Header)`
   display: inline-block;
 `;
 
+export const iframeLinkStyle = { position: 'absolute', top: 0, left: 0, display: 'inline-block', width: '300px', height: '204px', zIndex: 5 };
+export const iframeTransformMobile = 'translate(-25.15%, -25.39%) scale(0.53, 0.545)';
+export const iframeTransformDesktop = 'scale(1.06, 1.099)';
+
 export const initialValues = {
   listed: {
     createMailoutsOfThisType: true,

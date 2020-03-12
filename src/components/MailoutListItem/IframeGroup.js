@@ -4,11 +4,10 @@ import { useSelector } from 'react-redux';
 import { Segment } from 'semantic-ui-react';
 import React, { useCallback, useState } from 'react';
 
+import { iframeTransformMobile, iframeLinkStyle } from '../helpers';
 import { ItemBodyIframeLayout } from '../../layouts';
 import ApiService from '../../services/api/index';
 import { isMobile } from '../utils';
-
-const linkStyle = { position: 'absolute', top: 0, left: 0, display: 'inline-block', width: '300px', height: '204px', zIndex: 5 };
 
 const IframeGroup = ({ index, item, linkTo = null }) => {
   const peerId = useSelector(store => store.peer.peerId);
@@ -33,7 +32,7 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
 
       body.style.overflow = 'hidden';
       body.style['pointer-events'] = 'none';
-      body.style.transform = 'translate(-25%,-25%) scale(0.5)';
+      body.style.transform = iframeTransformMobile;
 
       if (name === 'front') {
         setFrontLoaded(true);
@@ -50,7 +49,7 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
     return (
       <ItemBodyIframeLayout horizontal={!isMobile()} style={{ border: 'none', boxShadow: 'none' }} id={`mailout-iframe-set-${index}`}>
         <Segment textAlign="center" loading={!frontLoaded} style={{ border: 'none' }}>
-          <div style={{ width: '300px', height: '204px' }} className="bm-transform-effect image-frame-border">
+          <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className="bm-transform-effect image-frame-border">
             <iframe
               id="bm-iframe-front"
               title={frontURL + '?dashboard=true'}
@@ -62,11 +61,11 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
               sandbox="allow-same-origin allow-scripts"
               onLoad={handleOnload}
             />
-            <Link to={linkTo} style={linkStyle} />
+            <Link to={linkTo} style={iframeLinkStyle} />
           </div>
         </Segment>
         <Segment textAlign="center" loading={!backLoaded} style={{ border: 'none' }}>
-          <div style={{ width: '300px', height: '204px' }} className="bm-transform-effect image-frame-border">
+          <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className="bm-transform-effect image-frame-border">
             <iframe
               id="bm-iframe-back"
               title={backURL + '?dashboard=true'}
@@ -78,7 +77,7 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
               sandbox="allow-same-origin allow-scripts"
               onLoad={handleOnload}
             />
-            <Link to={linkTo} style={linkStyle} />
+            <Link to={linkTo} style={iframeLinkStyle} />
           </div>
         </Segment>
       </ItemBodyIframeLayout>
@@ -87,32 +86,34 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
     return (
       <ItemBodyIframeLayout horizontal={!isMobile()} style={{ border: 'none', boxShadow: 'none' }} id={`mailout-iframe-set-${index}`}>
         <Segment textAlign="center" loading={!frontLoaded} style={{ border: 'none' }}>
-          <iframe
-            id="bm-iframe-front"
-            title={frontURL}
-            name="front"
-            src={null}
-            width="300"
-            height="204"
-            frameBorder="0"
-            sandbox="allow-same-origin allow-scripts"
-            onLoad={handleOnload}
-            className="image-frame-border"
-          />
+          <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className="bm-transform-effect image-frame-border">
+            <iframe
+              id="bm-iframe-front"
+              title={frontURL}
+              name="front"
+              src={null}
+              width="300"
+              height="204"
+              frameBorder="none"
+              sandbox="allow-same-origin allow-scripts"
+              onLoad={handleOnload}
+            />
+          </div>
         </Segment>
         <Segment textAlign="center" loading={!backLoaded} style={{ border: 'none' }}>
-          <iframe
-            id="bm-iframe-back"
-            title={backURL}
-            name="back"
-            src={null}
-            width="300"
-            height="204"
-            frameBorder="0"
-            sandbox="allow-same-origin allow-scripts"
-            onLoad={handleOnload}
-            className="image-frame-border"
-          />
+          <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className="bm-transform-effect image-frame-border">
+            <iframe
+              id="bm-iframe-back"
+              title={backURL}
+              name="back"
+              src={null}
+              width="300"
+              height="204"
+              frameBorder="none"
+              sandbox="allow-same-origin allow-scripts"
+              onLoad={handleOnload}
+            />
+          </div>
         </Segment>
       </ItemBodyIframeLayout>
     );
