@@ -4,16 +4,17 @@ import { Segment } from 'semantic-ui-react';
 
 import { previewTeamCustomizationCompleted, reviewTeamCustomizationCompleted } from '../../../store/modules/teamCustomization/actions';
 import { previewCustomizationCompleted, reviewCustomizationCompleted } from '../../../store/modules/customization/actions';
+import { iframeTransformDesktop, iframeTransformMobile } from '../../helpers';
 import { Button, Icon, Modal } from '../../Base';
 import ApiService from '../../../services/api';
+import { isMobile } from '../../utils';
 import FlipCard from '../../FlipCard';
 import Loading from '../../Loading';
 
 const RenderPreviewModal = ({ formType, formValues }) => {
   const dispatch = useDispatch();
 
-  const [listedIsFlipped, setListedIsFlipped] = useState(false);
-  const [soldIsFlipped, setSoldIsFlipped] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
 
   const [listedFrontLoaded, setListedFrontLoaded] = useState(false);
   const [listedBackLoaded, setListedBackLoaded] = useState(false);
@@ -82,7 +83,7 @@ const RenderPreviewModal = ({ formType, formValues }) => {
 
       body.style.overflow = 'hidden';
       body.style['pointer-events'] = 'none';
-      // body.style.transform = 'translate(-25%,-25%) scale(0.5)';
+      body.style.transform = isMobile() ? iframeTransformMobile : iframeTransformDesktop;
 
       if (name === 'listed-front') {
         setListedFrontLoaded(true);
@@ -141,9 +142,6 @@ const RenderPreviewModal = ({ formType, formValues }) => {
     }
   };
 
-  const listedEnabled = formValues && formValues.listed;
-  const soldEnabled = formValues && formValues.sold;
-
   if (customizationPending) {
     return (
       <Modal open={customizationPreview} basic size="tiny">
@@ -175,85 +173,81 @@ const RenderPreviewModal = ({ formType, formValues }) => {
         <Modal open={customizationPreview} basic size="tiny">
           <Modal.Header>
             Preview
-            <Button primary inverted floated="right" onClick={() => [setListedIsFlipped(true), setSoldIsFlipped(true)]}>
+            <Button primary inverted floated="right" onClick={() => setIsFlipped(true)} disabled={isFlipped}>
               Flip Back
             </Button>
-            <Button primary inverted floated="right" onClick={() => [setListedIsFlipped(false), setSoldIsFlipped(false)]}>
+            <Button primary inverted floated="right" onClick={() => setIsFlipped(false)} disabled={!isFlipped}>
               Flip Forward
             </Button>
           </Modal.Header>
 
-          {listedEnabled && (
-            <Modal.Content image style={{ padding: '0 45px 10px' }}>
-              <FlipCard isFlipped={listedIsFlipped}>
-                <Segment textAlign="center" loading={!listedFrontLoaded} style={{ border: 'none' }}>
-                  <iframe
-                    id="bm-iframe-listed-front"
-                    title={`bm-iframe-listed-front-${formType}`}
-                    name="listed-front"
-                    src={listedPostcardFrontURL}
-                    width="600"
-                    height="408"
-                    frameBorder="0"
-                    sandbox="allow-same-origin allow-scripts"
-                    onLoad={handleOnload}
-                    className="image-frame-border"
-                  />
-                </Segment>
+          <Modal.Content image style={{ padding: '0 45px 10px' }}>
+            <FlipCard isFlipped={isFlipped}>
+              <Segment textAlign="center" loading={!listedFrontLoaded} style={{ border: 'none', padding: '2px', margin: 'auto' }}>
+                <iframe
+                  id="bm-iframe-listed-front"
+                  title={`bm-iframe-listed-front-${formType}`}
+                  name="listed-front"
+                  src={listedPostcardFrontURL}
+                  width={isMobile() ? '300' : '600'}
+                  height={isMobile() ? '204' : '408'}
+                  frameBorder="0"
+                  sandbox="allow-same-origin allow-scripts"
+                  onLoad={handleOnload}
+                  className="image-frame-border"
+                />
+              </Segment>
 
-                <Segment textAlign="center" loading={!listedBackLoaded} style={{ border: 'none' }}>
-                  <iframe
-                    id="bm-iframe-listed-back"
-                    title={`bm-iframe-listed-back-${formType}`}
-                    name="listed-back"
-                    src={listedPostcardBackURL}
-                    width="600"
-                    height="408"
-                    frameBorder="0"
-                    sandbox="allow-same-origin allow-scripts"
-                    onLoad={handleOnload}
-                    className="image-frame-border"
-                  />
-                </Segment>
-              </FlipCard>
-            </Modal.Content>
-          )}
+              <Segment textAlign="center" loading={!listedBackLoaded} style={{ border: 'none', padding: '2px', margin: 'auto' }}>
+                <iframe
+                  id="bm-iframe-listed-back"
+                  title={`bm-iframe-listed-back-${formType}`}
+                  name="listed-back"
+                  src={listedPostcardBackURL}
+                  width={isMobile() ? '300' : '600'}
+                  height={isMobile() ? '204' : '408'}
+                  frameBorder="0"
+                  sandbox="allow-same-origin allow-scripts"
+                  onLoad={handleOnload}
+                  className="image-frame-border"
+                />
+              </Segment>
+            </FlipCard>
+          </Modal.Content>
 
-          {soldEnabled && (
-            <Modal.Content image style={{ padding: '10px 45px 0' }}>
-              <FlipCard isFlipped={soldIsFlipped}>
-                <Segment textAlign="center" loading={!soldFrontLoaded} style={{ border: 'none' }}>
-                  <iframe
-                    id="bm-iframe-sold-front"
-                    title={`bm-iframe-sold-front-${formType}`}
-                    name="sold-front"
-                    src={soldPostcardFrontURL}
-                    width="600"
-                    height="408"
-                    frameBorder="0"
-                    sandbox="allow-same-origin allow-scripts"
-                    onLoad={handleOnload}
-                    className="image-frame-border"
-                  />
-                </Segment>
+          <Modal.Content image style={{ padding: '10px 45px 0' }}>
+            <FlipCard isFlipped={isFlipped}>
+              <Segment textAlign="center" loading={!soldFrontLoaded} style={{ border: 'none', padding: '2px', margin: 'auto' }}>
+                <iframe
+                  id="bm-iframe-sold-front"
+                  title={`bm-iframe-sold-front-${formType}`}
+                  name="sold-front"
+                  src={soldPostcardFrontURL}
+                  width={isMobile() ? '300' : '600'}
+                  height={isMobile() ? '204' : '408'}
+                  frameBorder="0"
+                  sandbox="allow-same-origin allow-scripts"
+                  onLoad={handleOnload}
+                  className="image-frame-border"
+                />
+              </Segment>
 
-                <Segment textAlign="center" loading={!soldBackLoaded} style={{ border: 'none' }}>
-                  <iframe
-                    id="bm-iframe-sold-back"
-                    title={`bm-iframe-sold-back-${formType}`}
-                    name="sold-back"
-                    src={soldPostcardBackURL}
-                    width="600"
-                    height="408"
-                    frameBorder="0"
-                    sandbox="allow-same-origin allow-scripts"
-                    onLoad={handleOnload}
-                    className="image-frame-border"
-                  />
-                </Segment>
-              </FlipCard>
-            </Modal.Content>
-          )}
+              <Segment textAlign="center" loading={!soldBackLoaded} style={{ border: 'none', padding: '2px', margin: 'auto' }}>
+                <iframe
+                  id="bm-iframe-sold-back"
+                  title={`bm-iframe-sold-back-${formType}`}
+                  name="sold-back"
+                  src={soldPostcardBackURL}
+                  width={isMobile() ? '300' : '600'}
+                  height={isMobile() ? '204' : '408'}
+                  frameBorder="0"
+                  sandbox="allow-same-origin allow-scripts"
+                  onLoad={handleOnload}
+                  className="image-frame-border"
+                />
+              </Segment>
+            </FlipCard>
+          </Modal.Content>
 
           <Modal.Actions>
             {inOnboardingMode && (

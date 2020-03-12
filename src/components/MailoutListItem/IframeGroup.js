@@ -86,7 +86,7 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
     return (
       <ItemBodyIframeLayout horizontal={!isMobile()} style={{ border: 'none', boxShadow: 'none' }} id={`mailout-iframe-set-${index}`}>
         <Segment textAlign="center" loading={!frontLoaded} style={{ border: 'none' }}>
-          <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className="bm-transform-effect image-frame-border">
+          <div style={{ width: '300px', height: '204px', overflow: 'hidden' }}>
             <iframe
               id="bm-iframe-front"
               title={frontURL}
@@ -101,7 +101,7 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
           </div>
         </Segment>
         <Segment textAlign="center" loading={!backLoaded} style={{ border: 'none' }}>
-          <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className="bm-transform-effect image-frame-border">
+          <div style={{ width: '300px', height: '204px', overflow: 'hidden' }}>
             <iframe
               id="bm-iframe-back"
               title={backURL}
