@@ -20,6 +20,7 @@ import {
   changeMailoutDisplayAgentSuccess,
   changeMailoutDisplayAgentError,
   REVERT_EDITED_MAILOUT_PENDING,
+  REVERT_EDITED_MAILOUT_SUCCESS,
   revertEditedMailoutSuccess,
   revertEditedMailoutError,
   ARCHIVE_MAILOUT_PENDING,
@@ -268,6 +269,7 @@ export function* checkIfPeerSelectedUndoArchiveMailoutSaga(action) {
 
 export default function*() {
   yield takeLatest(GET_MAILOUT_PENDING, checkIfPeerSelectedGetMailoutSaga);
+  yield takeLatest(REVERT_EDITED_MAILOUT_SUCCESS, checkIfPeerSelectedGetMailoutSaga);
   yield takeLatest(MODIFY_MAILOUT_PENDING, checkIfPeerSelectedModifyMailoutSaga);
   yield takeLatest(SUBMIT_MAILOUT_PENDING, checkIfPeerSelectedSubmitMailoutSaga);
   yield takeLatest(STOP_MAILOUT_PENDING, checkIfPeerSelectedStopMailoutSaga);
