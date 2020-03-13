@@ -4,7 +4,7 @@ import { useLastLocation } from 'react-router-last-location';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { resetMailout, revertEditedMailoutPending, stopMailoutPending, submitMailoutPending, updateMailoutSizePending } from '../store/modules/mailout/actions';
+import { resetMailout, revertMailoutEditPending, stopMailoutPending, submitMailoutPending, updateMailoutSizePending } from '../store/modules/mailout/actions';
 import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from '../components/MailoutListItem/helpers';
 import { Button, Grid, Header, Icon, Input, List, Menu, Message, Modal, Page, Popup, Segment } from '../components/Base';
 import { iframeTransformMobile, iframeTransformDesktop } from '../components/helpers';
@@ -139,7 +139,7 @@ const MailoutDetailsPage = () => {
   };
 
   const handleRevertEditedMailoutClick = () => {
-    dispatch(revertEditedMailoutPending());
+    dispatch(revertMailoutEditPending());
   };
 
   const handleEditMailoutDetailsClick = () => {

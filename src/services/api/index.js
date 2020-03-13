@@ -168,7 +168,11 @@ const directory = {
     mailout: {
       list: () => ({ path: `/api/user/mailout`, method: 'get' }),
       get: mailoutId => ({ path: `/api/user/mailout/${mailoutId}?include_destinations=true`, method: 'get' }),
-      edit: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'put' }),
+      edit: {
+        get: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'get' }),
+        update: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'put' }),
+        revert: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'del' }),
+      },
       mailoutSize: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit/mailoutSize`, method: 'put' }),
       stop: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/stop`, method: 'post' }),
       submit: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/submit`, method: 'post' }),
@@ -176,7 +180,6 @@ const directory = {
         path: `/api/user/mailout/${mailoutId}/edit/mailoutDisplayAgent?peerId=${displayAgentUserId}`,
         method: 'get',
       }),
-      revertEdited: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'del' }),
       render: {
         front: ({ userId, mailoutId }) => ({ path: `/api/user/${userId}/mailout/${mailoutId}/render/preview/html/front`, method: 'get' }),
         back: ({ userId, mailoutId }) => ({ path: `/api/user/${userId}/mailout/${mailoutId}/render/preview/html/back`, method: 'get' }),
@@ -235,7 +238,11 @@ const directory = {
     mailout: {
       list: peerId => ({ path: `/api/user/peer/${peerId}/mailout`, method: 'get' }),
       get: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}?include_destinations=true`, method: 'get' }),
-      edit: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit`, method: 'put' }),
+      edit: {
+        get: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit`, method: 'get' }),
+        update: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit`, method: 'put' }),
+        revert: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit`, method: 'del' }),
+      },
       mailoutSize: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit/mailoutSize`, method: 'put' }),
       stop: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/stop`, method: 'post' }),
       submit: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/submit`, method: 'post' }),
@@ -243,7 +250,6 @@ const directory = {
         path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit/mailoutDisplayAgent?peerId=${displayAgentUserId}`,
         method: 'get',
       }),
-      revertEdited: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit`, method: 'del' }),
       render: {
         front: ({ userId, peerId, mailoutId }) => ({
           path: `/api/user/${userId}/peer/${peerId}/mailout/${mailoutId}/render/preview/html/front`,
