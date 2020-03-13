@@ -18,17 +18,21 @@ export const UPDATE_MAILOUT_SIZE_PENDING = 'UPDATE_MAILOUT_SIZE_PENDING';
 export const UPDATE_MAILOUT_SIZE_SUCCESS = 'UPDATE_MAILOUT_SIZE_SUCCESS';
 export const UPDATE_MAILOUT_SIZE_ERROR = 'UPDATE_MAILOUT_SIZE_ERROR';
 
-export const MODIFY_MAILOUT_PENDING = 'MODIFY_MAILOUT_PENDING';
-export const MODIFY_MAILOUT_SUCCESS = 'MODIFY_MAILOUT_SUCCESS';
-export const MODIFY_MAILOUT_ERROR = 'MODIFY_MAILOUT_ERROR';
-
 export const CHANGE_MAILOUT_DISPLAY_AGENT_PENDING = 'CHANGE_MAILOUT_DISPLAY_AGENT_PENDING';
 export const CHANGE_MAILOUT_DISPLAY_AGENT_SUCCESS = 'CHANGE_MAILOUT_DISPLAY_AGENT_SUCCESS';
 export const CHANGE_MAILOUT_DISPLAY_AGENT_ERROR = 'CHANGE_MAILOUT_DISPLAY_AGENT_ERROR';
 
-export const REVERT_EDITED_MAILOUT_PENDING = 'REVERT_EDITED_MAILOUT_PENDING';
-export const REVERT_EDITED_MAILOUT_SUCCESS = 'REVERT_EDITED_MAILOUT_SUCCESS';
-export const REVERT_EDITED_MAILOUT_ERROR = 'REVERT_EDITED_MAILOUT_ERROR';
+export const GET_MAILOUT_EDIT_PENDING = 'GET_MAILOUT_EDIT_PENDING';
+export const GET_MAILOUT_EDIT_SUCCESS = 'GET_MAILOUT_EDIT_SUCCESS';
+export const GET_MAILOUT_EDIT_ERROR = 'GET_MAILOUT_EDIT_ERROR';
+
+export const UPDATE_MAILOUT_EDIT_PENDING = 'UPDATE_MAILOUT_EDIT_PENDING';
+export const UPDATE_MAILOUT_EDIT_SUCCESS = 'UPDATE_MAILOUT_EDIT_SUCCESS';
+export const UPDATE_MAILOUT_EDIT_ERROR = 'UPDATE_MAILOUT_EDIT_ERROR';
+
+export const REVERT_MAILOUT_EDIT_PENDING = 'REVERT_MAILOUT_EDIT_PENDING';
+export const REVERT_MAILOUT_EDIT_SUCCESS = 'REVERT_MAILOUT_EDIT_SUCCESS';
+export const REVERT_MAILOUT_EDIT_ERROR = 'REVERT_MAILOUT_EDIT_ERROR';
 
 export const ARCHIVE_MAILOUT_PENDING = 'ARCHIVE_MAILOUT_PENDING';
 export const ARCHIVE_MAILOUT_SUCCESS = 'ARCHIVE_MAILOUT_SUCCESS';
@@ -90,18 +94,6 @@ export function updateMailoutSizeError(error) {
   return createErrorAction(UPDATE_MAILOUT_SIZE_ERROR, error);
 }
 
-export function modifyMailoutPending(payload) {
-  return createAction(MODIFY_MAILOUT_PENDING, payload);
-}
-
-export function modifyMailoutSuccess(payload) {
-  return createAction(MODIFY_MAILOUT_SUCCESS, payload);
-}
-
-export function modifyMailoutError(error) {
-  return createErrorAction(MODIFY_MAILOUT_ERROR, error);
-}
-
 export function changeMailoutDisplayAgentPending(payload) {
   return createAction(CHANGE_MAILOUT_DISPLAY_AGENT_PENDING, payload);
 }
@@ -114,16 +106,40 @@ export function changeMailoutDisplayAgentError(error) {
   return createErrorAction(CHANGE_MAILOUT_DISPLAY_AGENT_ERROR, error);
 }
 
-export function revertEditedMailoutPending() {
-  return createAction(REVERT_EDITED_MAILOUT_PENDING);
+export function getMailoutEditPending() {
+  return createAction(GET_MAILOUT_EDIT_PENDING);
 }
 
-export function revertEditedMailoutSuccess(payload) {
-  return createAction(REVERT_EDITED_MAILOUT_SUCCESS, payload);
+export function getMailoutEditSuccess(payload) {
+  return createAction(GET_MAILOUT_EDIT_SUCCESS, payload);
 }
 
-export function revertEditedMailoutError(error) {
-  return createErrorAction(REVERT_EDITED_MAILOUT_ERROR, error);
+export function getMailoutEditError(error) {
+  return createErrorAction(GET_MAILOUT_EDIT_ERROR, error);
+}
+
+export function updateMailoutEditPending(payload) {
+  return createAction(UPDATE_MAILOUT_EDIT_PENDING, payload);
+}
+
+export function updateMailoutEditSuccess(payload) {
+  return createAction(UPDATE_MAILOUT_EDIT_SUCCESS, payload);
+}
+
+export function updateMailoutEditError(error) {
+  return createErrorAction(UPDATE_MAILOUT_EDIT_ERROR, error);
+}
+
+export function revertMailoutEditPending() {
+  return createAction(REVERT_MAILOUT_EDIT_PENDING);
+}
+
+export function revertMailoutEditSuccess(payload) {
+  return createAction(REVERT_MAILOUT_EDIT_SUCCESS, payload);
+}
+
+export function revertMailoutEditError(error) {
+  return createErrorAction(REVERT_MAILOUT_EDIT_ERROR, error);
 }
 
 export function archiveMailoutPending(payload) {
