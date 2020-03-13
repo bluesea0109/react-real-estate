@@ -48,7 +48,7 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
   if (linkTo) {
     return (
       <ItemBodyIframeLayout horizontal={!isMobile()} style={{ border: 'none', boxShadow: 'none' }} id={`mailout-iframe-set-${index}`}>
-        <Segment textAlign="center" loading={!frontLoaded} style={{ border: 'none' }}>
+        <Segment textAlign="center" loading={!item?._id || !frontLoaded} style={{ border: 'none' }}>
           <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className="bm-transform-effect image-frame-border">
             <iframe
               id="bm-iframe-front"
@@ -60,11 +60,12 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
               frameBorder="none"
               sandbox="allow-same-origin allow-scripts"
               onLoad={handleOnload}
+              style={{ visibility: !item?._id || !frontLoaded ? 'hidden' : 'visible' }}
             />
             <Link to={linkTo} style={iframeLinkStyle} />
           </div>
         </Segment>
-        <Segment textAlign="center" loading={!backLoaded} style={{ border: 'none' }}>
+        <Segment textAlign="center" loading={!item?._id || !backLoaded} style={{ border: 'none' }}>
           <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className="bm-transform-effect image-frame-border">
             <iframe
               id="bm-iframe-back"
@@ -76,6 +77,7 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
               frameBorder="none"
               sandbox="allow-same-origin allow-scripts"
               onLoad={handleOnload}
+              style={{ visibility: !item?._id || !backLoaded ? 'hidden' : 'visible' }}
             />
             <Link to={linkTo} style={iframeLinkStyle} />
           </div>
@@ -85,7 +87,7 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
   } else {
     return (
       <ItemBodyIframeLayout horizontal={!isMobile()} style={{ border: 'none', boxShadow: 'none' }} id={`mailout-iframe-set-${index}`}>
-        <Segment textAlign="center" loading={!frontLoaded} style={{ border: 'none' }}>
+        <Segment textAlign="center" loading={!item?._id || !frontLoaded} style={{ border: 'none' }}>
           <div style={{ width: '300px', height: '204px', overflow: 'hidden' }}>
             <iframe
               id="bm-iframe-front"
@@ -97,10 +99,11 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
               frameBorder="none"
               sandbox="allow-same-origin allow-scripts"
               onLoad={handleOnload}
+              style={{ visibility: !item?._id || !frontLoaded ? 'hidden' : 'visible' }}
             />
           </div>
         </Segment>
-        <Segment textAlign="center" loading={!backLoaded} style={{ border: 'none' }}>
+        <Segment textAlign="center" loading={!item?._id || !backLoaded} style={{ border: 'none' }}>
           <div style={{ width: '300px', height: '204px', overflow: 'hidden' }}>
             <iframe
               id="bm-iframe-back"
@@ -112,6 +115,7 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
               frameBorder="none"
               sandbox="allow-same-origin allow-scripts"
               onLoad={handleOnload}
+              style={{ visibility: !item?._id || !backLoaded ? 'hidden' : 'visible' }}
             />
           </div>
         </Segment>

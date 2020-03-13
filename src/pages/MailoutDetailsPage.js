@@ -220,7 +220,7 @@ const MailoutDetailsPage = () => {
   };
 
   const FrontIframe = () => (
-    <Segment compact textAlign="center" loading={!frontLoaded} style={{ border: 'none', padding: '1px', margin: 'auto' }}>
+    <Segment compact textAlign="center" loading={!details?._id || !frontLoaded} style={{ border: 'none', padding: '1px', margin: 'auto' }}>
       <iframe
         id="bm-iframe-front"
         title={`bm-iframe-front-${details?._id}`}
@@ -232,12 +232,13 @@ const MailoutDetailsPage = () => {
         sandbox="allow-same-origin allow-scripts"
         onLoad={handleOnload}
         className="image-frame-border"
+        style={{ visibility: !details?._id || !frontLoaded ? 'hidden' : 'visible' }}
       />
     </Segment>
   );
 
   const BackIframe = () => (
-    <Segment compact textAlign="center" loading={!backLoaded} style={{ border: 'none', padding: '1px', margin: 'auto' }}>
+    <Segment compact textAlign="center" loading={!details?._id || !backLoaded} style={{ border: 'none', padding: '1px', margin: 'auto' }}>
       <iframe
         id="bm-iframe-back"
         title={`bm-iframe-back-${details?._id}`}
@@ -249,6 +250,7 @@ const MailoutDetailsPage = () => {
         sandbox="allow-same-origin allow-scripts"
         onLoad={handleOnload}
         className="image-frame-border"
+        style={{ visibility: !details?._id || !backLoaded ? 'hidden' : 'visible' }}
       />
     </Segment>
   );
