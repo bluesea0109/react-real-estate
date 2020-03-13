@@ -1,4 +1,15 @@
 -----------------
+## Release 2.3.0
+Changes:
+- Add Archive dashboard functionality
+- Replace image based mailout preview(s) with rendered HTML
+- Improve agent & team customization preview speed
+- Improve mailouts initialization and details access speed
+
+Other fixes:
+- Fix issue with dashboard & campaign details not displaying properly on mobile devices + other general display improvements
+
+-----------------
 ## Release 2.2.34
 Other fixes:
 - Fix issue #263 - Correctly show loading state on peer switching
