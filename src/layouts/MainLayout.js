@@ -5,7 +5,7 @@ export default styled.div`
 
   display: grid;
   grid-template-rows: [header] 60px [body] 110vh;
-  grid-template-columns: [sidebar] 185px [content] 1fr;
+  grid-template-columns: [sidebar] 175px [content] 1fr;
   grid-template-areas:
     'header header'
     'sidebar content';
