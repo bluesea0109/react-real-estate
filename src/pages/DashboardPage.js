@@ -153,7 +153,7 @@ const Dashboard = () => {
       {error && <Snackbar error>{error}</Snackbar>}
 
       {mailoutList.length > 0 && (
-        <Segment style={{ marginTop: '79px' }}>
+        <Segment style={isMobile() ? { padding: '0', paddingTop: '4.5em', marginLeft: '-1em', marginRight: '-1em' } : { marginTop: '79px' }}>
           <Grid>
             <Grid.Row>
               <Grid.Column width={16}>

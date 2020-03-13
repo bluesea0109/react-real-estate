@@ -111,7 +111,7 @@ const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickAppro
             <Icon name="archive" /> Unarchive
           </Button>
         )}
-        {!isArchived && !mailoutDetailPage && (
+        {!isArchived && !mailoutDetailPage && canSend(data.mailoutStatus) && (
           <Dropdown
             loading={data._id === archiveId && archivePending}
             disabled={data._id === archiveId && archivePending}

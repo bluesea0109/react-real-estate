@@ -473,3 +473,9 @@ h1 {
 .ui.page.modals.dimmer.transition.visible.active {
   background-color: rgba(0, 0, 0, 0.95) !important;
 }
+
+/* Mobile Only */
+.ui.container.remove-margins {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}

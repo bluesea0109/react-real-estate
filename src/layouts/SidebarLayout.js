@@ -5,7 +5,6 @@ export default styled.div`
   position: fixed;
   top: 60px;
   z-index: 20;
-  width: 185px;
 
   @media (min-width: 770px) {
     border-right: 1px solid lightgrey;
