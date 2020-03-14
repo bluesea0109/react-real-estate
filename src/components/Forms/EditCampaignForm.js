@@ -5,15 +5,17 @@ import React, { createRef, useEffect, useState } from 'react';
 import { Dropdown, Form, Header, Label, Popup } from 'semantic-ui-react';
 
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
-import { changeMailoutDisplayAgentPending, modifyMailoutPending } from '../../store/modules/mailout/actions';
+import { changeMailoutDisplayAgentPending, updateMailoutEditPending } from '../../store/modules/mailout/actions';
 import { differenceObjectDeep, isMobile, maxLength, objectIsEmpty, sleep } from '../utils';
 import { Button, Icon, Image, Menu, Message, Page, Segment } from '../Base';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
-import PageTitleHeader from '../PageTitleHeader';
 import { StyledHeader, colors } from '../helpers';
+import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
 
-const EditCampaignForm = ({ data, handleBackClick }) => {
+const blacklistNames = ['brandColor', 'frontImgUrl', 'agentPicture', 'brokerageLogo', 'teamLogo', 'backUrl', 'frontAgentUrl'];
+
+const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const dispatch = useDispatch();
   const bookmarkTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.bookmark);
   const ribbonTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.ribbon);
@@ -22,27 +24,22 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
   const onLoginMode = useSelector(store => store.onLogin.mode);
   const multiUser = onLoginMode === 'multiuser';
 
-  const modifyPending = useSelector(store => store.mailout.modifyPending);
-  const modifyError = useSelector(store => store.mailout.modifyError);
+  const updateMailoutEditIsPending = useSelector(store => store.mailout.updateMailoutEditPending);
+  const updateMailoutEditError = useSelector(store => store.mailout.updateMailoutEditError?.message);
   const changeDisplayAgentPending = useSelector(store => store.mailout.changeDisplayAgentPending);
-  const changeDisplayAgentError = useSelector(store => store.mailout.changeDisplayAgentError);
+  const changeDisplayAgentError = useSelector(store => store.mailout.changeDisplayAgentError?.message);
 
   const teammates = useSelector(store => store.team.profiles);
 
-  const currentListingStatus = data.listingStatus;
-  const currentMailoutDisplayAgentUserID = data.mailoutDisplayAgent ? data.mailoutDisplayAgent.userId : data.userId;
-  const currentTemplateTheme = data.templateTheme;
-  const currentMailoutDisplayAgent = data.mailoutDisplayAgent || { userId: data.userId };
-  const currentMergeVariables = data.mergeVariables;
-  const currentBrandColor = currentMergeVariables[0];
-
-  const blacklistNames = ['brandColor', 'frontImgUrl', 'agentPicture', 'brokerageLogo', 'teamLogo', 'backUrl', 'frontAgentUrl'];
-  const convertedMergeVariables = Object.assign({}, ...currentMergeVariables.map(object => ({ [object.name]: object.value })));
+  const currentListingStatus = mailoutDetails?.listingStatus;
+  const currentTemplateTheme = mailoutDetails?.templateTheme;
+  const currentMailoutDisplayAgentUserID = mailoutDetails.mailoutDisplayAgent ? mailoutDetails.mailoutDisplayAgent.userId : mailoutDetails.userId;
+  const currentMailoutDisplayAgent = mailoutDetails.mailoutDisplayAgent || { userId: mailoutDetails.userId };
 
   const [templateTheme, setTemplateTheme] = useState(currentTemplateTheme);
-  const [selectedBrandColor, setSelectedBrandColor] = useState(currentBrandColor.value);
+  const [selectedBrandColor, setSelectedBrandColor] = useState(mailoutEdit?.mergeVariables?.brandColor);
   const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(currentMailoutDisplayAgent);
-  const [formValues, setFormValues] = useState(convertedMergeVariables);
+  const [formValues, setFormValues] = useState(mailoutEdit?.mergeVariables);
 
   /* This is a hack to enable fields to updated while enabling use to edit them as well
    * TODO: find a more permanents (correct) solution to this problem */
@@ -64,22 +61,22 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
       }
     }
 
-    if (modifyPending || changeDisplayAgentPending) {
+    if (updateMailoutEditIsPending || changeDisplayAgentPending) {
       delaySwitchOn();
     } else {
       delaySwitchOff();
     }
 
     return () => (isInitialized = false);
-  }, [modifyPending, changeDisplayAgentPending, setFormValuesHaveChanged]);
+  }, [updateMailoutEditIsPending, changeDisplayAgentPending, setFormValuesHaveChanged]);
 
   useEffect(() => {
-    const diff = differenceObjectDeep(formValues, convertedMergeVariables);
+    const diff = differenceObjectDeep(formValues, mailoutEdit.mergeVariables);
 
     if (!objectIsEmpty(diff) && formValuesHaveChanged) {
-      setFormValues(convertedMergeVariables);
+      setFormValues(mailoutEdit.mergeVariables);
     }
-  }, [convertedMergeVariables, formValues, setFormValues, formValuesHaveChanged]);
+  }, [mailoutEdit.mergeVariables, formValues, setFormValues, formValuesHaveChanged]);
 
   const handleEditSubmitClick = async () => {
     const newMergeVariables = [];
@@ -92,12 +89,12 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
     const newData = Object.assign(
       {},
       { templateTheme },
-      { mergeVariables: currentMergeVariables },
+      { mergeVariables: mailoutEdit?.mergeVariables },
       { mergeVariables: newMergeVariables },
       { mailoutDisplayAgent }
     );
 
-    dispatch(modifyMailoutPending(newData));
+    dispatch(updateMailoutEditPending(newData));
     await sleep(500);
     handleBackClick();
   };
@@ -300,8 +297,8 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
                   primary
                   inverted
                   onClick={() => handleBackClick()}
-                  loading={modifyPending || changeDisplayAgentPending}
-                  disabled={modifyPending || changeDisplayAgentPending}
+                  loading={updateMailoutEditIsPending || changeDisplayAgentPending}
+                  disabled={updateMailoutEditIsPending || changeDisplayAgentPending}
                 >
                   Back
                 </Button>
@@ -317,12 +314,17 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
         <ContentBottomHeaderLayout>
           <ItemHeaderLayout attached="top" block style={isMobile() ? { marginTop: '56px' } : {}}>
             <span style={{ gridArea: 'label' }}>
-              <Label size="large" color={resolveLabelStatus(data.listingStatus)} ribbon style={{ textTransform: 'capitalize', top: '-0.9em', left: '-2.7em' }}>
-                {data.listingStatus}
+              <Label
+                size="large"
+                color={resolveLabelStatus(currentListingStatus)}
+                ribbon
+                style={{ textTransform: 'capitalize', top: '-0.9em', left: '-2.7em' }}
+              >
+                {currentListingStatus}
               </Label>
             </span>
             <span style={{ gridArea: 'address', alignSelf: 'center' }}>
-              <Header as="h3">{data.details.displayAddress}</Header>
+              <Header as="h3">{mailoutDetails?.details?.displayAddress}</Header>
             </span>
 
             <ItemHeaderMenuLayout>
@@ -331,8 +333,8 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
                   primary
                   type="submit"
                   onClick={handleEditSubmitClick}
-                  loading={modifyPending || changeDisplayAgentPending}
-                  disabled={modifyPending || changeDisplayAgentPending}
+                  loading={updateMailoutEditIsPending || changeDisplayAgentPending}
+                  disabled={updateMailoutEditIsPending || changeDisplayAgentPending}
                 >
                   Save
                 </Button>
@@ -340,12 +342,12 @@ const EditCampaignForm = ({ data, handleBackClick }) => {
             </ItemHeaderMenuLayout>
           </ItemHeaderLayout>
 
-          {modifyPending && <Loading message="Saving campaign..." />}
+          {updateMailoutEditIsPending && <Loading message="Saving campaign..." />}
 
-          {modifyError && (
+          {updateMailoutEditError && (
             <Message negative>
               <Message.Header>We're sorry, something went wrong.</Message.Header>
-              <p>{modifyError}</p>
+              <p>{updateMailoutEditError}</p>
             </Message>
           )}
 

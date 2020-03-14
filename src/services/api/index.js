@@ -146,6 +146,18 @@ const directory = {
       get: () => ({ path: `/api/user/team/settings/profile`, method: 'get' }),
       save: () => ({ path: `/api/user/team/settings/profile`, method: 'put' }),
     },
+    postcard: {
+      render: {
+        listed: {
+          front: ({ userId }) => ({ path: `/api/user/${userId}/team/postcard/render/listed/html/front`, method: 'get' }),
+          back: ({ userId }) => ({ path: `/api/user/${userId}/team/postcard/render/listed/html/back`, method: 'get' }),
+        },
+        sold: {
+          front: ({ userId }) => ({ path: `/api/user/${userId}/team/postcard/render/sold/html/front`, method: 'get' }),
+          back: ({ userId }) => ({ path: `/api/user/${userId}/team/postcard/render/sold/html/back`, method: 'get' }),
+        },
+      },
+    },
   },
 
   user: {
@@ -156,17 +168,25 @@ const directory = {
     mailout: {
       list: () => ({ path: `/api/user/mailout`, method: 'get' }),
       get: mailoutId => ({ path: `/api/user/mailout/${mailoutId}?include_destinations=true`, method: 'get' }),
-      edit: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'put' }),
+      edit: {
+        get: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'get' }),
+        update: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'put' }),
+        revert: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'del' }),
+      },
       mailoutSize: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit/mailoutSize`, method: 'put' }),
       stop: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/stop`, method: 'post' }),
       submit: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/submit`, method: 'post' }),
-      needsUpdate: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/needsUpdate`, method: 'get' }),
-      update: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/update`, method: 'post' }),
       changeAgent: (mailoutId, displayAgentUserId) => ({
         path: `/api/user/mailout/${mailoutId}/edit/mailoutDisplayAgent?peerId=${displayAgentUserId}`,
         method: 'get',
       }),
-      revertEdited: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'del' }),
+      render: {
+        front: ({ userId, mailoutId }) => ({ path: `/api/user/${userId}/mailout/${mailoutId}/render/preview/html/front`, method: 'get' }),
+        back: ({ userId, mailoutId }) => ({ path: `/api/user/${userId}/mailout/${mailoutId}/render/preview/html/back`, method: 'get' }),
+      },
+      ignored: () => ({ path: `/api/user/mailout/ignored`, method: 'get' }),
+      archive: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/archive`, method: 'post' }),
+      unarchive: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/archive`, method: 'del' }),
     },
     customization: {
       get: () => ({ path: `/api/user/settings/branding`, method: 'get' }),
@@ -196,6 +216,18 @@ const directory = {
     password: {
       reset: () => ({ path: `/api/user/settings/password/reset`, method: 'post' }),
     },
+    postcard: {
+      render: {
+        listed: {
+          front: ({ userId }) => ({ path: `/api/user/${userId}/postcard/render/listed/html/front`, method: 'get' }),
+          back: ({ userId }) => ({ path: `/api/user/${userId}/postcard/render/listed/html/back`, method: 'get' }),
+        },
+        sold: {
+          front: ({ userId }) => ({ path: `/api/user/${userId}/postcard/render/sold/html/front`, method: 'get' }),
+          back: ({ userId }) => ({ path: `/api/user/${userId}/postcard/render/sold/html/back`, method: 'get' }),
+        },
+      },
+    },
   },
 
   peer: {
@@ -206,17 +238,28 @@ const directory = {
     mailout: {
       list: peerId => ({ path: `/api/user/peer/${peerId}/mailout`, method: 'get' }),
       get: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}?include_destinations=true`, method: 'get' }),
-      edit: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit`, method: 'put' }),
+      edit: {
+        get: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit`, method: 'get' }),
+        update: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit`, method: 'put' }),
+        revert: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit`, method: 'del' }),
+      },
       mailoutSize: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit/mailoutSize`, method: 'put' }),
       stop: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/stop`, method: 'post' }),
       submit: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/submit`, method: 'post' }),
-      needsUpdate: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/needsUpdate`, method: 'get' }),
-      update: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/update`, method: 'post' }),
       changeAgent: (mailoutId, peerId, displayAgentUserId) => ({
         path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit/mailoutDisplayAgent?peerId=${displayAgentUserId}`,
         method: 'get',
       }),
-      revertEdited: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit`, method: 'del' }),
+      render: {
+        front: ({ userId, peerId, mailoutId }) => ({
+          path: `/api/user/${userId}/peer/${peerId}/mailout/${mailoutId}/render/preview/html/front`,
+          method: 'get',
+        }),
+        back: ({ userId, peerId, mailoutId }) => ({ path: `/api/user/${userId}/peer/${peerId}/mailout/${mailoutId}/render/preview/html/back`, method: 'get' }),
+      },
+      ignored: peerId => ({ path: `/api/user/peer/${peerId}/mailout/ignored`, method: 'get' }),
+      archive: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/archive`, method: 'post' }),
+      unarchive: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/archive`, method: 'del' }),
     },
     customization: {
       get: peerId => ({ path: `/api/user/peer/${peerId}/settings/branding`, method: 'get' }),
@@ -245,6 +288,18 @@ const directory = {
     },
     password: {
       reset: peerId => ({ path: `/api/user/peer/${peerId}/settings/password/reset`, method: 'post' }),
+    },
+    postcard: {
+      render: {
+        listed: {
+          front: ({ userId, peerId }) => ({ path: `/api/user/${userId}/peer/${peerId}/postcard/render/listed/html/front`, method: 'get' }),
+          back: ({ userId, peerId }) => ({ path: `/api/user/${userId}/peer/${peerId}/postcard/render/listed/html/back`, method: 'get' }),
+        },
+        sold: {
+          front: ({ userId, peerId }) => ({ path: `/api/user/${userId}/peer/${peerId}/postcard/render/sold/html/front`, method: 'get' }),
+          back: ({ userId, peerId }) => ({ path: `/api/user/${userId}/peer/${peerId}/postcard/render/sold/html/back`, method: 'get' }),
+        },
+      },
     },
   },
 

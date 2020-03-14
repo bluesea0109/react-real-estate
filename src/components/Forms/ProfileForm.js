@@ -267,7 +267,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                   .required('MLS Agent ID is require'),
               })
             )
-            .required('All MLS data is required'),
+            .notRequired(),
           teamName: Yup.string().when('undefined', {
             is: () => !multiUser,
             then: Yup.string()
@@ -478,7 +478,6 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                                 primary
                                 inverted
                                 icon
-                                disabled={values.boards.length === 1}
                                 onClick={() => arrayHelpers.remove(index)}
                                 style={isMobile() ? { cursor: 'pointer' } : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }}
                                 aria-label="remove mls"

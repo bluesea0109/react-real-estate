@@ -12,7 +12,6 @@ import {
 import ApiService from '../../../services/api/index';
 import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
 import { DESELECT_PEER_ID, SELECT_PEER_ID } from '../peer/actions';
-import { generatePostcardsPreviewPending } from '../postcards/actions';
 
 export const getSelectedPeerId = state => state.peer.peerId;
 export const customizationToSave = state => state.customization.toSave;
@@ -51,7 +50,6 @@ export function* saveCustomizationSaga({ peerId = null }) {
     const response = yield call(ApiService[method], path, customization);
 
     yield put(saveCustomizationSuccess(response));
-    if (!emptyCustomization) yield put(generatePostcardsPreviewPending());
     if (emptyCustomization) yield put(reviewCustomizationCompleted());
 
     if (peerId) {

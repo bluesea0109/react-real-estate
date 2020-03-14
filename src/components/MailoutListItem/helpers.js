@@ -23,7 +23,8 @@ export const resolveMailoutStatusIcon = mailoutStatus => {
   if (mailoutStatus === 'calculated') return 'eye';
   if (mailoutStatus === 'submitted') return 'sync-alt';
   // if (mailoutStatus === 'scheduled') return 'eye' // this has been sent to lob
-  if (mailoutStatus === 'excluded') return 'ban';
+  if (mailoutStatus === 'hide') return 'ban';
+  if (mailoutStatus === 'archived') return 'archive';
   if (mailoutStatus === 'errored') return 'exclamation-triangle';
   if (mailoutStatus === 'cancelled') return 'times';
 
@@ -35,7 +36,8 @@ export const resolveMailoutStatus = mailoutStatus => {
   if (mailoutStatus === 'calculated') return 'Awaiting Approval';
   if (mailoutStatus === 'submitted') return 'Processing';
   // if (mailoutStatus === 'scheduled') return 'Awaiting Approval' // this has been sent to lob
-  if (mailoutStatus === 'excluded') return 'Excluded';
+  if (mailoutStatus === 'hide') return 'Excluded';
+  if (mailoutStatus === 'archived') return 'Archived';
   if (mailoutStatus === 'errored') return 'Errored';
   if (mailoutStatus === 'cancelled') return 'Canceled';
 
@@ -50,11 +52,15 @@ export const resolveMailoutStatusColor = mailoutStatus => {
   if (mailoutStatus === 'excluded') return '#555555';
   if (mailoutStatus === 'errored') return '#f2714d';
   if (mailoutStatus === 'cancelled') return '#f2714d';
+  if (mailoutStatus === 'hide') return '#555555';
+  if (mailoutStatus === 'archived') return 'grey';
 
   return '#59c4c4';
 };
 
-export const resolveLabelStatus = listingStatus => {
+export const resolveLabelStatus = (listingStatus, mailoutStatus) => {
+  if (mailoutStatus === 'hide') return 'grey';
+  if (mailoutStatus === 'archived') return 'grey';
   if (listingStatus === 'sold') return 'orange';
   if (listingStatus === 'listed') return 'teal';
 

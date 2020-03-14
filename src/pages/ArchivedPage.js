@@ -3,7 +3,7 @@ import { Progress } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemBodyLayout, ItemLayout } from '../layouts';
-import { getMailoutsPending, getMoreMailoutsPending } from '../store/modules/mailouts/actions';
+import { getArchivedMailoutsPending, getMoreArchivedMailoutsPending } from '../store/modules/mailouts/actions';
 import { Button, Grid, Header, Icon, Menu, Page, Segment, Snackbar } from '../components/Base';
 import IframeGroup from '../components/MailoutListItem/IframeGroup';
 import ListHeader from '../components/MailoutListItem/ListHeader';
@@ -22,7 +22,7 @@ const useFetching = (getActionCreator, onboarded, dispatch) => {
   }, [getActionCreator, onboarded, dispatch]);
 };
 
-const Dashboard = () => {
+const Archive = () => {
   const dispatch = useDispatch();
   const isInitiatingTeam = useSelector(store => store.teamInitialize.polling);
   const initiatingTeamState = useSelector(store => store.teamInitialize.available);
@@ -35,15 +35,15 @@ const Dashboard = () => {
   const currentUserCompleted = initiatingUserState && initiatingUserState.campaignsCompleted;
 
   const onboarded = useSelector(store => store.onboarded.status);
-  const mailoutsPendingState = useSelector(store => store.mailouts.pending);
+  const mailoutsPendingState = useSelector(store => store.mailouts.pendingArchived);
   const canLoadMore = useSelector(store => store.mailouts.canLoadMore);
-  const page = useSelector(store => store.mailouts.page);
-  const mailoutList = useSelector(store => store.mailouts.list);
+  const page = useSelector(store => store.mailouts.archivePage);
+  const mailoutList = useSelector(store => store.mailouts.archived);
   const error = useSelector(store => store.mailouts.error && store.mailouts.error.message);
 
-  useFetching(getMailoutsPending, onboarded, useDispatch());
+  useFetching(getArchivedMailoutsPending, onboarded, useDispatch());
 
-  const boundFetchMoreMailouts = value => dispatch(getMoreMailoutsPending(value));
+  const boundFetchMoreMailouts = value => dispatch(getMoreArchivedMailoutsPending(value));
 
   const handleClick = e => {
     boundFetchMoreMailouts(page + 1);
@@ -108,7 +108,7 @@ const Dashboard = () => {
       <ItemLayout fluid key={`${item.userId}-${item._id}-${item.mlsNum}`}>
         <ListHeader data={item} />
         <ItemBodyLayout attached style={{ padding: 10 }}>
-          <IframeGroup index={index} item={item} linkTo={`dashboard/${item._id}`} />
+          <IframeGroup index={index} item={item} />
           <ItemList data={item} />
         </ItemBodyLayout>
       </ItemLayout>
@@ -121,7 +121,7 @@ const Dashboard = () => {
         <PageTitleHeader>
           <Menu borderless fluid secondary>
             <Menu.Item>
-              <Header as="h1">Dashboard</Header>
+              <Header as="h1">Archived</Header>
             </Menu.Item>
           </Menu>
         </PageTitleHeader>
@@ -153,7 +153,7 @@ const Dashboard = () => {
       {error && <Snackbar error>{error}</Snackbar>}
 
       {mailoutList.length > 0 && (
-        <Segment style={isMobile() ? { padding: '0', paddingTop: '4.5em', marginLeft: '-1em', marginRight: '-1em' } : { marginTop: '79px' }}>
+        <Segment style={{ marginTop: '79px' }}>
           <Grid>
             <Grid.Row>
               <Grid.Column width={16}>
@@ -188,4 +188,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Archive;

@@ -1,22 +1,32 @@
-import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLastLocation } from 'react-router-last-location';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { resetMailout, revertEditedMailoutPending, stopMailoutPending, submitMailoutPending, updateMailoutSizePending } from '../store/modules/mailout/actions';
+import { resetMailout, revertMailoutEditPending, stopMailoutPending, submitMailoutPending, updateMailoutSizePending } from '../store/modules/mailout/actions';
 import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from '../components/MailoutListItem/helpers';
-import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemBodyDataLayout, ItemBodyLayoutV2, ItemLayout } from '../layouts';
-import { Button, Grid, Header, Icon, Image, Input, List, Menu, Message, Modal, Page, Popup, Segment } from '../components/Base';
+import { Button, Grid, Header, Icon, Input, List, Menu, Message, Modal, Page, Popup, Segment } from '../components/Base';
+import { iframeTransformMobile, iframeTransformDesktop } from '../components/helpers';
 import PopupContent from '../components/MailoutListItem/PopupContent';
 import { getMailoutPending } from '../store/modules/mailout/actions';
 import PopupMinMax from '../components/MailoutListItem/PopupMinMax';
-import ImageGroup from '../components/MailoutListItem/ImageGroup';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import PageTitleHeader from '../components/PageTitleHeader';
+import { isMobile, min1200Width } from '../components/utils';
 import GoogleMapItem from '../components/GoogleMapItem';
-import { isMobile } from '../components/utils';
+import FlipCard from '../components/FlipCard';
 import Loading from '../components/Loading';
+import ApiService from '../services/api';
+import {
+  ContentBottomHeaderLayout,
+  ContentSpacerLayout,
+  ContentTopHeaderLayout,
+  ItemBodyDataLayout,
+  ItemBodyIframeLayout,
+  ItemBodyLayoutV2,
+  ItemLayout,
+} from '../layouts';
 
 const useFetching = (getActionCreator, dispatch, mailoutId) => {
   useEffect(() => {
@@ -24,23 +34,20 @@ const useFetching = (getActionCreator, dispatch, mailoutId) => {
   }, [getActionCreator, dispatch, mailoutId]);
 };
 
-// function useInput({ type, initalState }) {
-//   const [value, setValue] = useState(initalState);
-//   const input = <Input value={value} onChange={e => setValue(e.target.value)} type={type} />;
-//   return [value, input];
-// }
-
 const MailoutDetailsPage = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const { mailoutId } = useParams();
   const lastLocation = useLastLocation();
-  const [editRecipients, setEditRecipients] = useState(false);
-  // const [recipientsNumber, userRecipientsNumber] = useInput({ type: "text", initalState: 0 });
+
   const [currentNumberOfRecipients, setCurrentNumberOfRecipients] = useState(0);
   const [newNumberOfRecipients, setNewNumberOfRecipients] = useState(0);
-  const [working, setWorking] = useState(false);
   const [showConsentModal, setShowConsentModal] = useState(false);
+  const [editRecipients, setEditRecipients] = useState(false);
+  const [frontLoaded, setFrontLoaded] = useState(false);
+  const [backLoaded, setBackLoaded] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [working, setWorking] = useState(false);
 
   const pendingState = useSelector(store => store.mailout.pending);
   const modifyPendingState = useSelector(store => store.mailout.modifyPending);
@@ -61,6 +68,38 @@ const MailoutDetailsPage = () => {
   const listingDefaults = teamCustomization && teamCustomization[listingType];
   const mailoutSizeMin = listingDefaults && listingDefaults.mailoutSizeMin;
   const mailoutSizeMax = listingDefaults && listingDefaults.mailoutSizeMax;
+
+  const peerId = useSelector(store => store.peer.peerId);
+
+  const frontURL = peerId
+    ? ApiService.directory.peer.mailout.render.front({ userId: details?.userId, peerId, mailoutId: details?._id }).path
+    : ApiService.directory.user.mailout.render.front({ userId: details?.userId, mailoutId: details?._id }).path;
+
+  const backURL = peerId
+    ? ApiService.directory.peer.mailout.render.back({ userId: details?.userId, peerId, mailoutId: details?._id }).path
+    : ApiService.directory.user.mailout.render.back({ userId: details?.userId, mailoutId: details?._id }).path;
+
+  const handleOnload = useCallback(
+    event => {
+      const {
+        name,
+        document: { body },
+      } = event.target.contentWindow;
+
+      body.style.overflow = 'hidden';
+      body.style['pointer-events'] = 'none';
+      body.style.transform = isMobile() ? iframeTransformMobile : iframeTransformDesktop;
+
+      if (name === 'front') {
+        setFrontLoaded(true);
+      }
+
+      if (name === 'back') {
+        setBackLoaded(true);
+      }
+    },
+    [setFrontLoaded, setBackLoaded]
+  );
 
   useEffect(() => {
     if (!pendingState && !!error) {
@@ -86,7 +125,7 @@ const MailoutDetailsPage = () => {
     if (lastLocation.pathname === `/dashboard/edit/${mailoutId}` || lastLocation.pathname === `/dashboard/${mailoutId}`) {
       history.push(`/dashboard`);
     }
-    if (lastLocation.pathname === `/dashboard`) {
+    if (lastLocation.pathname === `/dashboard` || `/dashboard/archived`) {
       history.goBack();
     }
   };
@@ -100,7 +139,7 @@ const MailoutDetailsPage = () => {
   };
 
   const handleRevertEditedMailoutClick = () => {
-    dispatch(revertEditedMailoutPending());
+    dispatch(revertMailoutEditPending());
   };
 
   const handleEditMailoutDetailsClick = () => {
@@ -180,6 +219,42 @@ const MailoutDetailsPage = () => {
     }
   };
 
+  const FrontIframe = () => (
+    <Segment compact textAlign="center" loading={!details?._id || !frontLoaded} style={{ border: 'none', padding: '1px', margin: 'auto' }}>
+      <iframe
+        id="bm-iframe-front"
+        title={`bm-iframe-front-${details?._id}`}
+        name="front"
+        src={frontURL}
+        width={isMobile() ? '300' : '588'}
+        height={isMobile() ? '204' : '400'}
+        frameBorder="0"
+        sandbox="allow-same-origin allow-scripts"
+        onLoad={handleOnload}
+        className="image-frame-border"
+        style={{ visibility: !details?._id || !frontLoaded ? 'hidden' : 'visible' }}
+      />
+    </Segment>
+  );
+
+  const BackIframe = () => (
+    <Segment compact textAlign="center" loading={!details?._id || !backLoaded} style={{ border: 'none', padding: '1px', margin: 'auto' }}>
+      <iframe
+        id="bm-iframe-back"
+        title={`bm-iframe-back-${details?._id}`}
+        name="back"
+        src={backURL}
+        width={isMobile() ? '300' : '588'}
+        height={isMobile() ? '204' : '400'}
+        frameBorder="0"
+        sandbox="allow-same-origin allow-scripts"
+        onLoad={handleOnload}
+        className="image-frame-border"
+        style={{ visibility: !details?._id || !backLoaded ? 'hidden' : 'visible' }}
+      />
+    </Segment>
+  );
+
   return (
     <Page basic>
       <ContentTopHeaderLayout>
@@ -203,11 +278,20 @@ const MailoutDetailsPage = () => {
       <ContentSpacerLayout />
 
       <Modal open={showConsentModal} onClose={() => setShowConsentModal(false)} basic size="small">
-        <Modal.Content image>
-          <Image wrapped size="medium" src={details && details.sampleFrontLargeUrl} />
-          <Modal.Description>
-            <Image wrapped size="medium" src={details && details.sampleBackLargeUrl} />
-          </Modal.Description>
+        <Modal.Header>
+          Preview
+          <Button primary inverted floated="right" onClick={() => setIsFlipped(true)} disabled={isFlipped}>
+            Flip Back
+          </Button>
+          <Button primary inverted floated="right" onClick={() => setIsFlipped(false)} disabled={!isFlipped}>
+            Flip Forward
+          </Button>
+        </Modal.Header>
+        <Modal.Content>
+          <FlipCard isFlipped={isFlipped}>
+            <FrontIframe />
+            <BackIframe />
+          </FlipCard>
         </Modal.Content>
         <Modal.Content>
           <Modal.Description style={{ textAlign: 'center' }}>
@@ -227,12 +311,12 @@ const MailoutDetailsPage = () => {
         </Modal.Actions>
       </Modal>
 
-      <Segment style={isMobile() ? { marginTop: '129px' } : { marginTop: '34px' }}>
+      <Segment style={isMobile() ? { marginTop: '-1rem', marginLeft: '-1rem', marginRight: '-1rem' } : { marginTop: '34px' }}>
         <Grid>
           <Grid.Row>
             <Grid.Column width={16}>
               {!pendingState && !error && !updatePendingState && !updateError && details && (
-                <ItemLayout fluid key={details._id}>
+                <ItemLayout fluid key={details._id} className={isMobile() ? 'remove-margins' : undefined}>
                   <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
                     {
                       <ListHeader
@@ -247,8 +331,11 @@ const MailoutDetailsPage = () => {
                     }
                   </ContentBottomHeaderLayout>
 
-                  <ItemBodyLayoutV2 attached style={isMobile() ? { padding: 10, marginTop: '129px' } : { padding: 10, marginTop: '89px' }}>
-                    {ImageGroup({ img1src: details.sampleBackLargeUrl, img2src: details.sampleFrontLargeUrl })}
+                  <ItemBodyLayoutV2 attached style={isMobile() ? { padding: 0, marginTop: '173px' } : { padding: 0, marginTop: '89px' }}>
+                    <ItemBodyIframeLayout horizontal={min1200Width()} style={{ border: 'none', boxShadow: 'none' }}>
+                      <FrontIframe />
+                      <BackIframe />
+                    </ItemBodyIframeLayout>
 
                     <ItemBodyDataLayout relaxed>
                       <List.Item>

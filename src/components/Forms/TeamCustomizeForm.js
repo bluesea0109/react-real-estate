@@ -10,10 +10,10 @@ import { Button, Menu, Page, Segment } from '../Base';
 import { isMobile, objectIsEmpty } from '../utils';
 import { Form } from './Base';
 
-import PreviewModal from './Common/PreviewModal';
 import PageTitleHeader from '../PageTitleHeader';
 import InputFormField from './Common/InputFormField';
 import CTAInputFormField from './Common/CTAInputFormField';
+import RenderPreviewModal from './Common/RenderPreviewModal';
 import KWKLYInputFormField from './Common/KWKLYInputFormField';
 import ColorPickerFormField from './Common/ColorPickerFormField';
 import UpdateWithoutRerender from './Common/UpdateWithoutRerender';
@@ -240,7 +240,7 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
         {renderSteps()}
       </Segment>
 
-      {PreviewModal({ formType: 'team', formValues })}
+      {RenderPreviewModal({ formType: 'team', formValues })}
     </Page>
   );
 };
