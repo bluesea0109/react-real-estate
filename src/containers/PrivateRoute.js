@@ -19,12 +19,17 @@ const PrivateRoute = ({ component: Component, path, auth0, onLogin, templates, s
       if (!auth0.authenticated && !auth0.error) {
         await history.push('/');
       } else {
-        if (
-          (!onLogin.pending && !onLogin.error && !onLogin.userProfile) ||
-          (!onLogin.pending && !onLogin.error && onLogin.userProfile && !onLogin.userProfile.setupComplete) ||
-          (!onLogin.pending && !onLogin.error && onLogin.userBranding && !onLogin.userBranding.onboardingComplete)
-        ) {
-          history.push('/onboard');
+        if (!onLogin.pending && !onLogin.error) {
+          if (
+            !onLogin.teamProfile ||
+            !onLogin.teamBranding ||
+            !onLogin.userProfile ||
+            !onLogin.userBranding ||
+            (onLogin.userProfile && !onLogin.userProfile.setupComplete) ||
+            (onLogin.userBranding && !onLogin.userBranding.onboardingComplete)
+          ) {
+            history.push('/onboard');
+          }
         }
 
         if (localStorage.getItem('routerDestination')) {
