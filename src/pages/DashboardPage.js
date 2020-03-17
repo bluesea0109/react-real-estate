@@ -39,7 +39,7 @@ const Dashboard = () => {
   const canLoadMore = useSelector(store => store.mailouts.canLoadMore);
   const page = useSelector(store => store.mailouts.page);
   const mailoutList = useSelector(store => store.mailouts.list);
-  const error = useSelector(store => store.mailouts.error && store.mailouts.error.message);
+  const error = useSelector(store => store.mailouts.error?.message);
 
   useFetching(getMailoutsPending, onboarded, useDispatch());
 

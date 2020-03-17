@@ -54,32 +54,32 @@ const initialValues = {
 
 const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
   const dispatch = useDispatch();
-  const boards = useSelector(store => store.boards && store.boards.available);
-  const states = useSelector(store => store.states && store.states.available);
+  const boards = useSelector(store => store.boards.available);
+  const states = useSelector(store => store.states.available);
 
-  const onLoginMode = useSelector(store => store.onLogin.mode);
+  const onLoginMode = useSelector(store => store.onLogin?.mode);
   const multiUser = onLoginMode === 'multiuser';
-  const isAdminOnLogin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
+  const isAdminOnLogin = useSelector(store => store.onLogin?.permissions?.teamAdmin);
   const selectedPeerId = useSelector(store => store.peer.peerId);
-  const currentProfileRole = useSelector(store => store.profile.available && store.profile.available.brivitySync.role);
+  const currentProfileRole = useSelector(store => store.profile.available?.brivitySync?.role);
   const isAdmin = selectedPeerId ? currentProfileRole === 'Administrator' : isAdminOnLogin;
 
-  const picturesPending = useSelector(store => store.pictures && store.pictures.pending);
-  const picturesError = useSelector(store => store.pictures && store.pictures.error);
+  const picturesPending = useSelector(store => store.pictures.pending);
+  const picturesError = useSelector(store => store.pictures.error);
 
-  const realtorPhoto = useSelector(store => store.onLogin && store.onLogin.realtorPhoto && store.onLogin.realtorPhoto.resized);
-  const teamLogo = useSelector(store => store.onLogin && store.onLogin.teamLogo && store.onLogin.teamLogo.resized);
-  const brokerageLogo = useSelector(store => store.onLogin && store.onLogin.brokerageLogo && store.onLogin.brokerageLogo.resized);
+  const realtorPhoto = useSelector(store => store.onLogin?.realtorPhoto?.resized);
+  const teamLogo = useSelector(store => store.onLogin?.teamLogo?.resized);
+  const brokerageLogo = useSelector(store => store.onLogin?.brokerageLogo?.resized);
 
-  const picturesRealtorPhoto = useSelector(store => store.pictures && store.pictures.realtorPhoto && store.pictures.realtorPhoto.resized);
-  const picturesTeamLogo = useSelector(store => store.pictures && store.pictures.teamLogo && store.pictures.teamLogo.resized);
-  const picturesBrokerageLogo = useSelector(store => store.pictures && store.pictures.brokerageLogo && store.pictures.brokerageLogo.resized);
+  const picturesRealtorPhoto = useSelector(store => store.pictures.realtorPhoto?.resized);
+  const picturesTeamLogo = useSelector(store => store.pictures.teamLogo?.resized);
+  const picturesBrokerageLogo = useSelector(store => store.pictures.brokerageLogo?.resized);
 
   const profileChangePending = useSelector(store => store.profile.pending);
   const profileSavePending = useSelector(store => store.profile.savePending);
-  const profileSaveError = useSelector(store => store.profile.saveError && store.profile.saveError.message);
+  const profileSaveError = useSelector(store => store.profile.saveError?.message);
   const teamProfileSavePending = useSelector(store => store.teamProfile.savePending);
-  const teamProfileSaveError = useSelector(store => store.profile.saveError && store.profile.saveError.message);
+  const teamProfileSaveError = useSelector(store => store.teamProfile.saveError?.message);
   const mailoutsGeneratePending = useSelector(store => store.mailouts.generatePending);
 
   const isInitiatingTeam = useSelector(store => store.teamInitialize.polling);

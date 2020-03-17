@@ -38,7 +38,7 @@ const FormikDropdown = ({
         return (
           <Form.Field error={!!error} {...fieldProps} className={disabled ? 'disabled-form-field' : null}>
             {!!label && (
-              <label htmlFor={id} onClick={() => fieldRef.open()} style={{ opacity: disabled ? '0.4' : 1 }}>
+              <label htmlFor={id} onClick={() => fieldRef.current.open()} style={{ opacity: disabled ? '0.4' : 1 }}>
                 {label} {tag}
               </label>
             )}

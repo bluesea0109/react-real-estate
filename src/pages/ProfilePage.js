@@ -9,7 +9,7 @@ const ProfilePage = () => {
   const dispatch = useDispatch();
   const [currentPeerState, setCurrentPeerState] = useState(null);
 
-  const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
+  const isAdmin = useSelector(store => store.onLogin?.permissions?.teamAdmin);
   const profileAvailable = useSelector(store => store.profile.available);
   const teamProfileAvailable = useSelector(store => store.teamProfile.available);
   const peerId = useSelector(store => store.peer.peerId);

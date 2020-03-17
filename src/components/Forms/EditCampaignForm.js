@@ -17,11 +17,11 @@ const blacklistNames = ['brandColor', 'frontImgUrl', 'agentPicture', 'brokerageL
 
 const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const dispatch = useDispatch();
-  const bookmarkTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.bookmark);
-  const ribbonTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.ribbon);
-  const stackTemplate = useSelector(store => store.templates && store.templates.available && store.templates.available.stack);
+  const bookmarkTemplate = useSelector(store => store.templates.available?.bookmark);
+  const ribbonTemplate = useSelector(store => store.templates.available?.ribbon);
+  const stackTemplate = useSelector(store => store.templates.available?.stack);
 
-  const onLoginMode = useSelector(store => store.onLogin.mode);
+  const onLoginMode = useSelector(store => store.onLogin?.mode);
   const multiUser = onLoginMode === 'multiuser';
 
   const updateMailoutEditIsPending = useSelector(store => store.mailout.updateMailoutEditPending);
@@ -33,7 +33,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
   const currentListingStatus = mailoutDetails?.listingStatus;
   const currentTemplateTheme = mailoutDetails?.templateTheme;
-  const currentMailoutDisplayAgentUserID = mailoutDetails.mailoutDisplayAgent ? mailoutDetails.mailoutDisplayAgent.userId : mailoutDetails.userId;
+  const currentMailoutDisplayAgentUserID = mailoutDetails.mailoutDisplayAgent ? mailoutDetails.mailoutDisplayAgent?.userId : mailoutDetails.userId;
   const currentMailoutDisplayAgent = mailoutDetails.mailoutDisplayAgent || { userId: mailoutDetails.userId };
 
   const [templateTheme, setTemplateTheme] = useState(currentTemplateTheme);
@@ -344,7 +344,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
           {updateMailoutEditIsPending && <Loading message="Saving campaign..." />}
 
-          {updateMailoutEditError && (
+          {!!updateMailoutEditError && (
             <Message negative>
               <Message.Header>We're sorry, something went wrong.</Message.Header>
               <p>{updateMailoutEditError}</p>
@@ -353,7 +353,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
           {changeDisplayAgentPending && <Loading message="Updating postcard details..." />}
 
-          {changeDisplayAgentError && (
+          {!!changeDisplayAgentError && (
             <Message negative>
               <Message.Header>We're sorry, something went wrong.</Message.Header>
               <p>{changeDisplayAgentError}</p>
@@ -390,7 +390,14 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           {multiUser && (
             <div>
               <Header as="h4">Display Agent</Header>
-              <Dropdown placeholder="Select Display Agent" fluid selection options={profiles} value={mailoutDisplayAgent.userId} onChange={handleAgentChange} />
+              <Dropdown
+                placeholder="Select Display Agent"
+                fluid
+                selection
+                options={profiles}
+                value={mailoutDisplayAgent?.userId}
+                onChange={handleAgentChange}
+              />
             </div>
           )}
         </Segment>
