@@ -12,12 +12,12 @@ import { isMobile } from '../components/utils';
 const SettingsPage = () => {
   const dispatch = useDispatch();
   const passwordResetPending = useSelector(store => store.auth0.passwordResetPending);
-  const passwordResetStatus = useSelector(store => store.auth0.passwordResetDetails && store.auth0.passwordResetDetails.ok);
+  const passwordResetStatus = useSelector(store => store.auth0.passwordResetDetails?.ok);
   const isSyncing = useSelector(store => store.team.syncPending);
   const syncResponse = useSelector(store => store.team.syncResponse);
-  const syncError = useSelector(store => store.team.syncError);
-  const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
-  const onLoginMode = useSelector(store => store.onLogin.mode);
+  const syncError = useSelector(store => store.team.syncError?.message);
+  const isAdmin = useSelector(store => store.onLogin?.permissions?.teamAdmin);
+  const onLoginMode = useSelector(store => store.onLogin?.mode);
   const multiUser = onLoginMode === 'multiuser';
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -71,7 +71,7 @@ const SettingsPage = () => {
           <Icon name="sync" /> Sync Now
         </Button>
 
-        {syncResponse && syncResponse.ok && (
+        {syncResponse?.ok && (
           <Message info>
             <Message.Header>Last Successful Sync</Message.Header>
             <p>

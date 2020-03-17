@@ -80,12 +80,11 @@ export default () => {
   const selectedPeerId = useSelector(store => store.peer.peerId);
   const teammates = useSelector(store => store.team.profiles);
 
-  const mailoutpendingState = useSelector(store => store.mailout.pending);
-  const mailoutmodifyPendingState = useSelector(store => store.mailout.modifyPending);
+  const mailoutPendingState = useSelector(store => store.mailout.pending);
+  const updateMailoutEditPendingState = useSelector(store => store.mailout.updateMailoutEditPending);
   const mailoutSubmitPendingState = useSelector(store => store.mailout.submitPending);
   const mailoutStopPendingState = useSelector(store => store.mailout.stopPending);
   const mailoutUpdateMailoutSizePendingState = useSelector(store => store.mailout.updateMailoutSizePending);
-  const mailoutUpdatePendingState = useSelector(store => store.mailout.updatePending);
 
   const profiles = [];
 
@@ -155,21 +154,9 @@ export default () => {
 
   useEffect(() => {
     const busyState =
-      mailoutpendingState ||
-      mailoutmodifyPendingState ||
-      mailoutSubmitPendingState ||
-      mailoutStopPendingState ||
-      mailoutUpdateMailoutSizePendingState ||
-      mailoutUpdatePendingState;
+      mailoutPendingState || updateMailoutEditPendingState || mailoutSubmitPendingState || mailoutStopPendingState || mailoutUpdateMailoutSizePendingState;
     setAppIsBusy(busyState);
-  }, [
-    mailoutpendingState,
-    mailoutmodifyPendingState,
-    mailoutSubmitPendingState,
-    mailoutStopPendingState,
-    mailoutUpdateMailoutSizePendingState,
-    mailoutUpdatePendingState,
-  ]);
+  }, [mailoutPendingState, updateMailoutEditPendingState, mailoutSubmitPendingState, mailoutStopPendingState, mailoutUpdateMailoutSizePendingState]);
 
   const renderLabel = label => ({
     color: 'blue',

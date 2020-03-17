@@ -50,19 +50,17 @@ const MailoutDetailsPage = () => {
   const [working, setWorking] = useState(false);
 
   const pendingState = useSelector(store => store.mailout.pending);
-  const modifyPendingState = useSelector(store => store.mailout.modifyPending);
+  const updateMailoutEditPendingState = useSelector(store => store.mailout.updateMailoutEditPending);
   const submitPendingState = useSelector(store => store.mailout.submitPending);
   const stopPendingState = useSelector(store => store.mailout.stopPending);
   const updateMailoutSizePendingState = useSelector(store => store.mailout.updateMailoutSizePending);
-  const updatePendingState = useSelector(store => store.mailout.updatePending);
 
-  const isUpdateMailoutSizeError = useSelector(store => store.mailout.updateMailoutSizeError && store.mailout.updateMailoutSizeError.message);
+  const isUpdateMailoutSizeError = useSelector(store => store.mailout.updateMailoutSizeError?.message);
   const details = useSelector(store => store.mailout.details);
-  const error = useSelector(store => store.mailout.error && store.mailout.error.message);
-  const updateError = useSelector(store => store.mailout.updateError && store.mailout.updateError.message);
+  const error = useSelector(store => store.mailout.error?.message);
 
   const teamCustomization = useSelector(store => store.teamCustomization.available);
-  const onLoginMode = useSelector(store => store.onLogin.mode);
+  const onLoginMode = useSelector(store => store.onLogin?.mode);
   const multiUser = onLoginMode === 'multiuser';
   const listingType = details && details.listingStatus;
   const listingDefaults = teamCustomization && teamCustomization[listingType];
@@ -116,9 +114,9 @@ const MailoutDetailsPage = () => {
   useFetching(getMailoutPending, useDispatch(), mailoutId);
 
   useEffect(() => {
-    const busyState = pendingState || modifyPendingState || submitPendingState || stopPendingState || updateMailoutSizePendingState || updatePendingState;
+    const busyState = pendingState || updateMailoutEditPendingState || submitPendingState || stopPendingState || updateMailoutSizePendingState;
     setWorking(busyState);
-  }, [pendingState, modifyPendingState, submitPendingState, stopPendingState, updateMailoutSizePendingState, updatePendingState]);
+  }, [pendingState, updateMailoutEditPendingState, submitPendingState, stopPendingState, updateMailoutSizePendingState]);
 
   const handleBackClick = () => {
     dispatch(resetMailout());
@@ -272,7 +270,7 @@ const MailoutDetailsPage = () => {
             </Menu.Menu>
           </Menu>
         </PageTitleHeader>
-        {(pendingState && !error && <Loading />) || (updatePendingState && !updateError && <Loading message="Updating listing, please wait..." />)}
+        {pendingState && !error && <Loading />}
       </ContentTopHeaderLayout>
 
       <ContentSpacerLayout />
@@ -315,7 +313,7 @@ const MailoutDetailsPage = () => {
         <Grid>
           <Grid.Row>
             <Grid.Column width={16}>
-              {!pendingState && !error && !updatePendingState && !updateError && details && (
+              {!pendingState && !error && details && (
                 <ItemLayout fluid key={details._id} className={isMobile() ? 'remove-margins' : undefined}>
                   <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
                     {
@@ -390,13 +388,12 @@ const MailoutDetailsPage = () => {
                 </ItemLayout>
               )}
 
-              {!pendingState && !error && !updatePendingState && !updateError && details && <GoogleMapItem data={details} />}
+              {!pendingState && !error && details && <GoogleMapItem data={details} />}
             </Grid.Column>
           </Grid.Row>
         </Grid>
       </Segment>
       {error && <Message error>Oh snap! {error}.</Message>}
-      {updateError && <Message error>Oh snap! {updateError}.</Message>}
     </Page>
   );
 };

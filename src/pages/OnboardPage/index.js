@@ -17,7 +17,7 @@ const OnboardPage = () => {
   const pathname = location.pathname;
 
   const isOnboarded = useSelector(store => store.onboarded.status);
-  const isMultimode = useSelector(store => store.onLogin.mode === 'multiuser');
+  const isMultimode = useSelector(store => store.onLogin?.mode === 'multiuser');
   const completedProfile = useSelector(store => store.onboarded.completedProfile);
   const completedTeamCustomization = useSelector(store => store.onboarded.completedTeamCustomization);
   const completedCustomization = useSelector(store => store.onboarded.completedCustomization);
