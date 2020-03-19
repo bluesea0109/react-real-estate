@@ -105,13 +105,20 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
   const triggerSubmit = () => {
     if (formRef.current && !formRef.current.status) {
       formRef.current.handleSubmit();
+    } else {
+      if (page === 1 && !!formRef.current.status?.sold_cta) {
+        setPage(page + 1);
+      }
+      if (page === 2 && !!formRef.current.status?.listed_cta) {
+        setPage(page - 1);
+      }
     }
   };
 
   const nextPage = () => {
     if (formRef.current) {
       formRef.current.validateForm().then(errors => {
-        if (objectIsEmpty(errors) && !formRef.current.status) {
+        if ((objectIsEmpty(errors) && !formRef.current.status) || (page === 1 && !!formRef.current.status?.sold_cta)) {
           setPage(page + 1);
         } else if (!formRef.current.status) {
           formRef.current.handleSubmit();
@@ -123,7 +130,7 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
   const prevPage = () => {
     if (formRef.current) {
       formRef.current.validateForm().then(errors => {
-        if (objectIsEmpty(errors) && !formRef.current.status) {
+        if ((objectIsEmpty(errors) && !formRef.current.status) || (page === 2 && !!formRef.current.status?.listed_cta)) {
           setPage(page - 1);
         } else if (!formRef.current.status) {
           formRef.current.handleSubmit();
