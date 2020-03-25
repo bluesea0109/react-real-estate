@@ -1,7 +1,7 @@
 {
   "name": "beta-brivitymarketer-com",
   "homepage": "/v2/",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "private": true,
   "scripts": {
     "start": "PORT=8082 react-scripts start",
@@ -14,7 +14,8 @@
     "create": "node utils/create-campaigns",
     "reset": "node utils/resetDevDb",
     "commit": "node utils/commit",
-    "push-to-production": "git checkout production && git merge master && git push origin production && git checkout master"
+    "push-to-production": "git checkout production && git merge master && git push origin production && git checkout master",
+    "postinstall": "node utils/postinstall"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "1.2.26",
