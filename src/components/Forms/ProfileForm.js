@@ -77,9 +77,11 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
 
   const profileChangePending = useSelector(store => store.profile.pending);
   const profileSavePending = useSelector(store => store.profile.savePending);
-  const profileSaveError = useSelector(store => store.profile.saveError?.message);
+  const profileSaveErrorMessage = useSelector(store => store.profile.saveError?.message);
+  const profileSaveErrorStatusCode = useSelector(store => store.profile.saveError?.statusCode);
   const teamProfileSavePending = useSelector(store => store.teamProfile.savePending);
-  const teamProfileSaveError = useSelector(store => store.teamProfile.saveError?.message);
+  const teamProfileSaveErrorMessage = useSelector(store => store.teamProfile.saveError?.message);
+  const teamProfileSaveErrorStatusCode = useSelector(store => store.teamProfile.saveError?.statusCode);
   const mailoutsGeneratePending = useSelector(store => store.mailouts.generatePending);
 
   const isInitiatingTeam = useSelector(store => store.teamInitialize.polling);
@@ -352,9 +354,13 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
 
             {picturesError && <Snackbar error>{JSON.stringify(picturesError, 0, 2)}</Snackbar>}
 
-            {profileSaveError && <Snackbar error>{JSON.stringify(profileSaveError, 0, 2)}</Snackbar>}
+            {profileSaveErrorMessage && profileSaveErrorStatusCode !== 412 && <Snackbar error>{profileSaveErrorMessage}</Snackbar>}
 
-            {teamProfileSaveError && <Snackbar error>{JSON.stringify(teamProfileSaveError, 0, 2)}</Snackbar>}
+            {teamProfileSaveErrorMessage && teamProfileSaveErrorStatusCode !== 412 && <Snackbar error>{teamProfileSaveErrorMessage}</Snackbar>}
+
+            {((teamProfileSaveErrorMessage && teamProfileSaveErrorStatusCode === 412) || (profileSaveErrorMessage && profileSaveErrorStatusCode === 412)) && (
+              <Snackbar error>The data on the page has changed and the save has failed. Please reload to get the latest data.</Snackbar>
+            )}
 
             <Segment style={isMobile() ? { marginTop: '6em' } : { marginTop: '6.5em' }}>
               <Header as="h2">
