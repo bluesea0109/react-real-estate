@@ -1,11 +1,12 @@
 {
   "name": "beta-brivitymarketer-com",
   "homepage": "/v2/",
-  "version": "2.3.4",
+  "version": "2.3.5",
   "private": true,
   "scripts": {
     "start": "PORT=8082 react-scripts start",
     "build": "(export REACT_APP_SENTRY_RELEASE=$(node -pe \"require('./package.json').version\"); react-scripts build && node utils/sentry.js)",
+    "build-local": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "./node_modules/.bin/eslint --ext .js,.jsx --ignore-pattern public tmp artifacts .",
