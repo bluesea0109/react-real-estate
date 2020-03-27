@@ -1,4 +1,13 @@
 -----------------
+## Release 2.4.0
+Changes:
+- First time dashboard is shown there is messaging about missing listings
+
+Other fixes:
+- Fix issue #290 More work on recursive 'Text Text RachNH to 59559 for details! to 59559 for details!'
+- Fix issue #292 Improved Readme
+- Fix issue #293 Work to fix various sentry recorded issues
+-----------------
 ## Release 2.3.0
 Changes:
 - Add Archive dashboard functionality

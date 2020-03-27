@@ -19,6 +19,14 @@
 > To build the project
 - `npm run build`
 
+### Push to production
+
+while being on master
+ - update the CHANGELOG.md and or README.md
+ - manually commit the above two files to git
+ - finalize it using ```npm run commit [patch|minor|major]```
+ - followed by ```npm run push-to-production```
+
 ### General Info
 
 #### API Service
