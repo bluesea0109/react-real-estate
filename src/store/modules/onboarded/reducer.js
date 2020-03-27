@@ -4,6 +4,7 @@ import {
   SET_COMPLETED_TEAM_CUSTOMIZATION,
   SET_COMPLETED_CUSTOMIZATION,
   SET_COMPLETED_INVITE_TEAMMATES,
+  SET_COMPLETED_DASHBOARD_MODAL
 } from './actions';
 
 const initialState = {
@@ -12,6 +13,7 @@ const initialState = {
   completedTeamCustomization: false,
   completedCustomization: false,
   completedInviteTeammates: false,
+  seenDashboardModel: false
 };
 
 export default function onboarded(state = initialState, action) {
@@ -48,6 +50,12 @@ export default function onboarded(state = initialState, action) {
       return {
         ...state,
         completedInviteTeammates: true,
+      };
+
+    case SET_COMPLETED_DASHBOARD_MODAL:
+      return {
+        ...state,
+        seenDashboardModel: true,
       };
 
     default:

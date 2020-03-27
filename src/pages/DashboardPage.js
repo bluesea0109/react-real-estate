@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemBodyLayout, ItemLayout } from '../layouts';
 import { getMailoutsPending, getMoreMailoutsPending } from '../store/modules/mailouts/actions';
-import { Button, Grid, Header, Icon, Menu, Page, Segment, Snackbar } from '../components/Base';
+import { setCompletedDashboardModal } from '../store/modules/onboarded/actions'
+import { Button, Grid, Header, Icon, Menu, Modal, Page, Segment, Snackbar } from '../components/Base';
 import IframeGroup from '../components/MailoutListItem/IframeGroup';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ItemList from '../components/MailoutListItem/ItemList';
@@ -35,6 +36,7 @@ const Dashboard = () => {
   const currentUserCompleted = initiatingUserState && initiatingUserState.campaignsCompleted;
 
   const onboarded = useSelector(store => store.onboarded.status);
+  const seenDashboardModel = useSelector(store => store.onboarded.seenDashboardModel) || localStorage.getItem('seenDashboardModel');
   const mailoutsPendingState = useSelector(store => store.mailouts.pending);
   const canLoadMore = useSelector(store => store.mailouts.canLoadMore);
   const page = useSelector(store => store.mailouts.page);
@@ -44,6 +46,8 @@ const Dashboard = () => {
   useFetching(getMailoutsPending, onboarded, useDispatch());
 
   const boundFetchMoreMailouts = value => dispatch(getMoreMailoutsPending(value));
+
+  const dismissDashboardExplanation = value => dispatch(setCompletedDashboardModal(value))
 
   const handleClick = e => {
     boundFetchMoreMailouts(page + 1);
@@ -154,6 +158,28 @@ const Dashboard = () => {
 
       {mailoutList.length > 0 && (
         <Segment style={isMobile() ? { padding: '0', paddingTop: '4.5em', marginLeft: '-1em', marginRight: '-1em' } : { marginTop: '79px' }}>
+
+          <Modal open={!seenDashboardModel} basic size='small'>
+            <Modal.Header>
+              Welcome to your dashboard!
+            </Modal.Header>
+            <Modal.Content>
+              <p>We have generated some initial campaigns for you! Please note, when you initially sign up, you may not see all listings due to:</p>
+              <ul>
+                <li>Listings older than 6 months are not included</li>
+                <li>We only show a maximum of 15 previous listings from the past</li>
+                <li>For some boards, sold listings wont show up yet. But upcoming sold listings will create new campaigns</li>
+                <li>We exclude listing types (e.g. commercial/land) and locations (e.g. rural locations) that are difficult for our system to target</li>
+                <li>We find your listings based on the MLS board/agent id in the Profile section of each user. Modifying agent ids it will adjust this list</li>
+              </ul>
+            </Modal.Content>
+            <Modal.Actions>
+              <Button onClick={dismissDashboardExplanation} color='green' inverted>
+                <Icon name='checkmark' /> Ok
+              </Button>
+            </Modal.Actions>
+          </Modal>
+
           <Grid>
             <Grid.Row>
               <Grid.Column width={16}>
