@@ -36,7 +36,7 @@ const Dashboard = () => {
   const currentUserCompleted = initiatingUserState && initiatingUserState.campaignsCompleted;
 
   const onboarded = useSelector(store => store.onboarded.status);
-  const seenDashboardModel = useSelector(store => store.onboarded.seenDashboardModel)
+  const seenDashboardModel = useSelector(store => store.onboarded.seenDashboardModel) || localStorage.getItem('seenDashboardModel');
   const mailoutsPendingState = useSelector(store => store.mailouts.pending);
   const canLoadMore = useSelector(store => store.mailouts.canLoadMore);
   const page = useSelector(store => store.mailouts.page);
