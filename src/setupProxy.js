@@ -4,7 +4,7 @@ module.exports = function(app) {
   app.use(
     '/api',
     proxy({
-      target: 'https://gabby-alf-voucher-development.eks.rmcloud.com/',
+      target: process.env.REACT_APP_DEV_PROXY,
       changeOrigin: true,
     })
   );

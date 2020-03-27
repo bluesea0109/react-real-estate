@@ -15,12 +15,11 @@ const KWKLYInputFormField = ({ listingType, initialValues, formValues, setFormVa
   let currentValue = editable ? formValues?.[listingType]?.kwkly : initialValues?.[listingType]?.kwkly;
 
   if (currentValue && currentValue.includes('to 59559 for details!')) {
-    currentValue = currentValue.split(' ')[1];
+    currentValue = currentValue.replace(/Text /g, '').replace(/ to 59559 for details!/g, '');
   }
 
   if (formValues?.[listingType]?.kwkly?.includes('to 59559 for details!')) {
-    // We probably should not be doing this, since mutating a state value directly is a no-no
-    formValues[listingType].kwkly = formValues[listingType].kwkly.split(' ')[1];
+    formValues[listingType].kwkly = formValues[listingType].kwkly.replace(/Text /g, '').replace(/ to 59559 for details!/g, '');
   }
 
   const handleKwklyChange = input => {

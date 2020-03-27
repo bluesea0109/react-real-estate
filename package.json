@@ -1,11 +1,12 @@
 {
   "name": "beta-brivitymarketer-com",
   "homepage": "/v2/",
-  "version": "2.3.3",
+  "version": "2.11.0",
   "private": true,
   "scripts": {
     "start": "PORT=8082 react-scripts start",
     "build": "(export REACT_APP_SENTRY_RELEASE=$(node -pe \"require('./package.json').version\"); react-scripts build && node utils/sentry.js)",
+    "build-local": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "./node_modules/.bin/eslint --ext .js,.jsx --ignore-pattern public tmp artifacts .",
@@ -14,7 +15,8 @@
     "create": "node utils/create-campaigns",
     "reset": "node utils/resetDevDb",
     "commit": "node utils/commit",
-    "push-to-production": "git checkout production && git merge master && git push origin production && git checkout master"
+    "push-to-production": "git checkout production && git merge master && git push origin production && git checkout master",
+    "postinstall": "node utils/postinstall"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "1.2.26",

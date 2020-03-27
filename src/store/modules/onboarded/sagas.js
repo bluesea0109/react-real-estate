@@ -4,6 +4,7 @@ import { setCompletedProfile, setCompletedTeamCustomization, setCompletedCustomi
 
 import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
 import { SAVE_PROFILE_SUCCESS } from '../profile/actions';
+import { SET_COMPLETED_DASHBOARD_MODAL } from './actions';
 import { SAVE_TEAM_PROFILE_SUCCESS } from '../teamProfile/actions';
 import { REVIEW_CUSTOMIZATION_COMPLETED } from '../customization/actions';
 import { INVITE_USERS_SUCCESS, SKIP_INVITE_USERS } from '../inviteUsers/actions';
@@ -191,6 +192,10 @@ export function* initialOnboardingSaga() {
   }
 }
 
+export function* recordSeenDashboardModelSaga() {
+  yield localStorage.setItem('seenDashboardModel', true);
+}
+
 export default function*() {
   yield takeLatest(GET_ON_LOGIN_SUCCESS, initialOnboardingSaga);
   yield takeLatest(SAVE_PROFILE_SUCCESS, profileSetupOnboardingSaga);
@@ -199,4 +204,5 @@ export default function*() {
   yield takeLatest(REVIEW_CUSTOMIZATION_COMPLETED, customizationOnboardingSaga);
   yield takeLatest(INVITE_USERS_SUCCESS, invitationOnboardingSaga);
   yield takeLatest(SKIP_INVITE_USERS, invitationOnboardingSaga);
+  yield takeLatest(SET_COMPLETED_DASHBOARD_MODAL, recordSeenDashboardModelSaga)
 }
