@@ -421,7 +421,7 @@ const MailoutDetailsPage = () => {
                   id="top-download"
                   style={{margin: "5px", fontSize: "17px"}}
               >
-                <a href={csvURL}><span role="img" aria-label="save">💾</span> Download Campaign Destinations.csv</a>
+                <a href={csvURL}>Download Campaign Destinations.csv</a>
               </div>
               )}
               {!pendingState && !error && details && (
@@ -446,7 +446,7 @@ const MailoutDetailsPage = () => {
                     id="bottom-download"
                     style={{margin: "5px", fontSize: "17px"}}
                 >
-                  <a href={csvURL}><span role="img" aria-label="save">💾</span> Download Campaign Destinations.csv</a>
+                  <a href={csvURL}>Download Campaign Destinations.csv</a>
                 </div>
               )}
             </Grid.Column>
