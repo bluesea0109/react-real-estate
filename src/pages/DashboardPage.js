@@ -170,7 +170,7 @@ const Dashboard = () => {
                 <li>We only show a maximum of 15 previous listings from the past</li>
                 <li>For some boards, sold listings wont show up yet. But upcoming sold listings will create new campaigns</li>
                 <li>We exclude listing types (e.g. commercial/land) and locations (e.g. rural locations) that are difficult for our system to target</li>
-                <li>We find your listings based on the MLS board/agent id in the Profile section of each user. Modifying agent ids it will adjust this list</li>
+                <li>We find your listings based on the MLS board/agent id in the Profile section of each user. Modifying agent ids will adjust this list</li>
               </ul>
             </Modal.Content>
             <Modal.Actions>
