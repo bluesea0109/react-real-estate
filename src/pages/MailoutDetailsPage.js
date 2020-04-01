@@ -234,7 +234,7 @@ const MailoutDetailsPage = () => {
         let status = '-'
         if (dest.status && dest.status !== 'unknown') status = dest.status
         return (
-          <Table.Row>
+          <Table.Row key={dest.id}>
             <Table.Cell>{dest?.deliveryLine}</Table.Cell>
             <Table.Cell>{dest?.expected_delivery_date}</Table.Cell>
             <Table.Cell>{status}</Table.Cell>
@@ -423,7 +423,7 @@ const MailoutDetailsPage = () => {
                   id="top-download"
                   style={{margin: "5px", fontSize: "17px"}}
               >
-                <a class="ui secondary button" href={csvURL}>Download All Recipients as CSV</a>
+                <a className="ui secondary button" href={csvURL}>Download All Recipients as CSV</a>
               </div>
               )}
               {!pendingState && !error && details && resolveMailoutStatus(details.mailoutStatus) === 'Sent' && (
@@ -448,7 +448,7 @@ const MailoutDetailsPage = () => {
                     id="bottom-download"
                     style={{margin: "5px", fontSize: "17px"}}
                 >
-                  <a class="ui secondary button" href={csvURL}>Download All Recipients as CSV</a>
+                  <a className="ui secondary button" href={csvURL}>Download All Recipients as CSV</a>
                 </div>
               )}
             </Grid.Column>
