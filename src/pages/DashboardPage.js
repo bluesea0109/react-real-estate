@@ -86,7 +86,7 @@ const Dashboard = () => {
 
     const observer = new IntersectionObserver(handleIntersect, options);
 
-    if (mailoutItemElementArray.length > 0) {
+    if (mailoutItemElementArray && mailoutItemElementArray.length > 0) {
       mailoutItemElementArray.forEach(mailoutItemElement => {
         return observer.observe(mailoutItemElement);
       });
@@ -94,7 +94,7 @@ const Dashboard = () => {
   }, [mailoutItemElementArray]);
 
   useEffect(() => {
-    if (mailoutList.length > 0) {
+    if (mailoutList && mailoutList.length > 0) {
       mailoutList.map((item, index) => {
         const mailoutItemElement = document.querySelector(`#mailout-iframe-set-${index}`);
 
@@ -143,7 +143,7 @@ const Dashboard = () => {
         </ContentBottomHeaderLayout>
       )}
 
-      {!isInitiatingTeam && !isInitiatingUser && !mailoutsPendingState && mailoutList.length === 0 && (
+      {!isInitiatingTeam && !isInitiatingUser && !mailoutsPendingState && mailoutList && mailoutList.length === 0 && (
         <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
           <Segment placeholder style={{ marginRight: '-1em' }}>
             <Header icon>
@@ -156,7 +156,7 @@ const Dashboard = () => {
 
       {error && <Snackbar error>{error}</Snackbar>}
 
-      {mailoutList.length > 0 && (
+      {mailoutList && mailoutList.length > 0 && (
         <Segment style={isMobile() ? { padding: '0', paddingTop: '4.5em', marginLeft: '-1em', marginRight: '-1em' } : { marginTop: '79px' }}>
 
           <Modal open={!seenDashboardModel} basic size='small'>
