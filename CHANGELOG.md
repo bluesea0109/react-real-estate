@@ -1,4 +1,12 @@
 -----------------
+## Release 2.5.0
+Changes:
+- Postcard short url visits will trigger a lead email being sent to the notification email for the campaign.
+- Postcard short url visits will create a lead in Brivity CRM.
+- For sent campaigns, the details page now has a 'Download All Recipients as CSV' button.
+- For sent campaigns, the page now shows a table of all destinations and their address, delivery date. status, cta count, cta date.
+
+-----------------
 ## Release 2.4.0
 Changes:
 - First time dashboard is shown there is messaging about missing listings
