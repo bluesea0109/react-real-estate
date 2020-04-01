@@ -37,7 +37,7 @@ const Archive = () => {
   const onboarded = useSelector(store => store.onboarded.status);
   const mailoutsPendingState = useSelector(store => store.mailouts.pendingArchived);
   const canLoadMore = useSelector(store => store.mailouts.canLoadMore);
-  const page = useSelector(store => store.mailouts.archivePage);
+  const page = useSelector(store => store.mailouts.archivePage) || 1;
   const mailoutList = useSelector(store => store.mailouts.archived);
   const error = useSelector(store => store.mailouts.error && store.mailouts.error.message);
 
