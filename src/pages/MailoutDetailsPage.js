@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLastLocation } from 'react-router-last-location';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { format } from 'date-fns'
 
 import { resetMailout, revertMailoutEditPending, stopMailoutPending, submitMailoutPending, updateMailoutSizePending } from '../store/modules/mailout/actions';
 import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from '../components/MailoutListItem/helpers';
-import { Button, Grid, Header, Icon, Input, List, Menu, Message, Modal, Page, Popup, Segment } from '../components/Base';
+import { Button, Grid, Header, Icon, Input, List, Menu, Message, Modal, Page, Popup, Segment, Table } from '../components/Base';
 import { iframeTransformMobile, iframeTransformDesktop } from '../components/helpers';
 import PopupContent from '../components/MailoutListItem/PopupContent';
 import { getMailoutPending } from '../store/modules/mailout/actions';
@@ -76,6 +77,10 @@ const MailoutDetailsPage = () => {
   const backURL = peerId
     ? ApiService.directory.peer.mailout.render.back({ userId: details?.userId, peerId, mailoutId: details?._id }).path
     : ApiService.directory.user.mailout.render.back({ userId: details?.userId, mailoutId: details?._id }).path;
+
+  const csvURL = peerId
+  ? ApiService.directory.peer.mailout.csv({ userId: details?.userId, peerId, mailoutId: details?._id }).path
+  : ApiService.directory.user.mailout.csv({ userId: details?.userId, mailoutId: details?._id }).path;
 
   const handleOnload = useCallback(
     event => {
@@ -216,6 +221,30 @@ const MailoutDetailsPage = () => {
       );
     }
   };
+
+  const renderDestinations = () => {
+
+    return (
+      details.destinations &&
+      details.destinations.map((dest, index) => {
+        let ctaDate = ''
+        if (dest.first_cta_interaction) ctaDate = format(dest.first_cta_interaction, 'MM/dd/yyyy')
+        let ctaInteractions = ''
+        if (dest.cta_interactions) ctaInteractions = dest.cta_interactions
+        let status = '-'
+        if (dest.status && dest.status !== 'unknown') status = dest.status
+        return (
+          <Table.Row key={dest.id}>
+            <Table.Cell>{dest?.deliveryLine}</Table.Cell>
+            <Table.Cell>{dest?.expected_delivery_date}</Table.Cell>
+            <Table.Cell>{status}</Table.Cell>
+            <Table.Cell>{ctaInteractions}</Table.Cell>
+            <Table.Cell>{ctaDate}</Table.Cell>
+          </Table.Row>
+        );
+      })
+    );
+  }
 
   const FrontIframe = () => (
     <Segment compact textAlign="center" loading={!details?._id || !frontLoaded} style={{ border: 'none', padding: '1px', margin: 'auto' }}>
@@ -387,8 +416,41 @@ const MailoutDetailsPage = () => {
                   </ItemBodyLayoutV2>
                 </ItemLayout>
               )}
-
               {!pendingState && !error && details && <GoogleMapItem data={details} />}
+
+              {!pendingState && !error && details && resolveMailoutStatus(details.mailoutStatus) === 'Sent' && (
+              <div
+                  id="top-download"
+                  style={{margin: "5px", fontSize: "17px"}}
+              >
+                <a className="ui secondary button" href={csvURL}>Download All Recipients as CSV</a>
+              </div>
+              )}
+              {!pendingState && !error && details && resolveMailoutStatus(details.mailoutStatus) === 'Sent' && (
+                <Table singleLine>
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>Address</Table.HeaderCell>
+                      <Table.HeaderCell>Delivery Date</Table.HeaderCell>
+                      <Table.HeaderCell>Status</Table.HeaderCell>
+                      <Table.HeaderCell>CTA count</Table.HeaderCell>
+                      <Table.HeaderCell>CTA date</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+
+                  <Table.Body>
+                    {renderDestinations()}
+                  </Table.Body>
+                </Table>
+              )}
+              {!pendingState && !error && details && resolveMailoutStatus(details.mailoutStatus) === 'Sent' && (
+                <div
+                    id="bottom-download"
+                    style={{margin: "5px", fontSize: "17px"}}
+                >
+                  <a className="ui secondary button" href={csvURL}>Download All Recipients as CSV</a>
+                </div>
+              )}
             </Grid.Column>
           </Grid.Row>
         </Grid>
