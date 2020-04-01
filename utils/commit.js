@@ -6,7 +6,7 @@ const exec = util.promisify(require('child_process').exec);
 const spawn = require('child_process').spawnSync;
 
 async function version(versionType) {
-  const { stdout, stderr } = await exec(`npm version ${versionType} --no-git-tag-version --force`);
+  const { stdout, stderr } = await exec(`npm version ${versionType} --no-git-tag-version`);
   if (stderr) throw stderr;
   return stdout;
 }
@@ -21,7 +21,6 @@ const run = async () => {
   try {
     const versionType = process.argv[2];
     const gitMessage = process.argv[3];
-
     if (versionType !== 'patch' && versionType !== 'minor' && versionType !== 'major') throw new Error('You need to specify npm version! [patch|minor|major]');
     if (!gitMessage) throw new Error('You need to provide a git commit message!');
 
