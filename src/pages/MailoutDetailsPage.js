@@ -228,14 +228,16 @@ const MailoutDetailsPage = () => {
       details.destinations &&
       details.destinations.map((dest, index) => {
         let ctaDate = ''
-        if (dest.first_cta_interaction) ctaDate = format(dest.first_cta_interaction)
+        if (dest.first_cta_interaction) ctaDate = format(dest.first_cta_interaction, 'MM/dd/yyyy')
         let ctaInteractions = ''
         if (dest.cta_interactions) ctaInteractions = dest.cta_interactions
+        let status = '-'
+        if (dest.status && dest.status !== 'unknown') status = dest.status
         return (
           <Table.Row>
             <Table.Cell>{dest?.deliveryLine}</Table.Cell>
             <Table.Cell>{dest?.expected_delivery_date}</Table.Cell>
-            <Table.Cell>{dest?.status}</Table.Cell>
+            <Table.Cell>{status}</Table.Cell>
             <Table.Cell>{ctaInteractions}</Table.Cell>
             <Table.Cell>{ctaDate}</Table.Cell>
           </Table.Row>
@@ -416,15 +418,15 @@ const MailoutDetailsPage = () => {
               )}
               {!pendingState && !error && details && <GoogleMapItem data={details} />}
 
-              {!pendingState && !error && details && (
+              {!pendingState && !error && details && resolveMailoutStatus(details.mailoutStatus) === 'Sent' && (
               <div
                   id="top-download"
                   style={{margin: "5px", fontSize: "17px"}}
               >
-                <a href={csvURL}>Download Campaign Destinations.csv</a>
+                <a class="ui secondary button" href={csvURL}>Download All Recipients as CSV</a>
               </div>
               )}
-              {!pendingState && !error && details && (
+              {!pendingState && !error && details && resolveMailoutStatus(details.mailoutStatus) === 'Sent' && (
                 <Table singleLine>
                   <Table.Header>
                     <Table.Row>
@@ -441,12 +443,12 @@ const MailoutDetailsPage = () => {
                   </Table.Body>
                 </Table>
               )}
-              {!pendingState && !error && details && (
+              {!pendingState && !error && details && resolveMailoutStatus(details.mailoutStatus) === 'Sent' && (
                 <div
                     id="bottom-download"
                     style={{margin: "5px", fontSize: "17px"}}
                 >
-                  <a href={csvURL}>Download Campaign Destinations.csv</a>
+                  <a class="ui secondary button" href={csvURL}>Download All Recipients as CSV</a>
                 </div>
               )}
             </Grid.Column>
