@@ -16,7 +16,8 @@ import {
   getMailoutsPending,
   getArchivedMailoutsPending,
   ADD_CAMPAIGN_START,
-  addCampaignError
+  addCampaignError,
+  addCampaignSuccess
 } from './actions';
 import ApiService from '../../../services/api/index';
 import { SELECT_PEER_ID, DESELECT_PEER_ID } from '../peer/actions';
@@ -163,7 +164,11 @@ export function* addCampaignStartSaga() {
     const data = { mlsNum, skipEmailNotification: true };
     const response = yield call(ApiService[method], path, data);
 
-    console.log(response)
+    yield put(resetMailouts());
+    document.getElementById('addCampaignInput').value = ''
+    yield put(addCampaignSuccess(response));
+    yield put(getMailoutsPending());
+
   } catch (err) {
     yield put(addCampaignError(err));
   }

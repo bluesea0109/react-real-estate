@@ -182,7 +182,9 @@ export default function mailouts(state = initialState, action) {
     case ADD_CAMPAIGN_SUCCESS:
       return {
         ...state,
-        addCampaignMlsNumPending: false
+        addCampaignMlsNum: null,
+        addCampaignMlsNumPending: false,
+        error: null
       }
     case ADD_CAMPAIGN_ERROR:
       return {

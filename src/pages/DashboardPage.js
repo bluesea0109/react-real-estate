@@ -137,7 +137,7 @@ const Dashboard = () => {
             </Menu.Item>
             <Menu.Item>
             <div className="ui action input">
-              <Input type="text" placeholder="MLS #..." id="addCampaignInput"/>
+              <Input type="text" placeholder="Property MLS Number" id="addCampaignInput" />
               {addCampaignMlsNumPendingState && (
                 <Button loading className="ui button">Add Campaign</Button>
               )}
