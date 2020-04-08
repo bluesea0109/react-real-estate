@@ -1,4 +1,9 @@
 -----------------
+## Release 2.6.0
+Changes:
+- Create a campaign from an mls number.
+
+-----------------
 ## Release 2.5.0
 Changes:
 - Postcard short url visits will trigger a lead email being sent to the notification email for the campaign.
