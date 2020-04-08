@@ -3,9 +3,9 @@ import { Progress } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemBodyLayout, ItemLayout } from '../layouts';
-import { getMailoutsPending, getMoreMailoutsPending } from '../store/modules/mailouts/actions';
+import { getMailoutsPending, getMoreMailoutsPending, addCampaignStart } from '../store/modules/mailouts/actions';
 import { setCompletedDashboardModal } from '../store/modules/onboarded/actions'
-import { Button, Grid, Header, Icon, Menu, Modal, Page, Segment, Snackbar } from '../components/Base';
+import { Button, Grid, Header, Icon, Input, Menu, Modal, Page, Segment, Snackbar } from '../components/Base';
 import IframeGroup from '../components/MailoutListItem/IframeGroup';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ItemList from '../components/MailoutListItem/ItemList';
@@ -38,6 +38,7 @@ const Dashboard = () => {
   const onboarded = useSelector(store => store.onboarded.status);
   const seenDashboardModel = useSelector(store => store.onboarded.seenDashboardModel) || localStorage.getItem('seenDashboardModel');
   const mailoutsPendingState = useSelector(store => store.mailouts.pending);
+  const addCampaignMlsNumPendingState = useSelector(store => store.mailouts.addCampaignMlsNumPending)
   const canLoadMore = useSelector(store => store.mailouts.canLoadMore);
   const page = useSelector(store => store.mailouts.page);
   const mailoutList = useSelector(store => store.mailouts.list);
@@ -52,6 +53,13 @@ const Dashboard = () => {
   const handleClick = e => {
     boundFetchMoreMailouts(page + 1);
   };
+
+  const addCampaign = e => {
+    let value = document.getElementById('addCampaignInput').value
+    if (!value) return
+    if (!value.length) return
+    dispatch(addCampaignStart(value))
+  }
 
   const handleKeyPress = e => {
     // Prevent the default action to stop scrolling when space is pressed
@@ -126,6 +134,17 @@ const Dashboard = () => {
           <Menu borderless fluid secondary>
             <Menu.Item>
               <Header as="h1">Dashboard</Header>
+            </Menu.Item>
+            <Menu.Item>
+            <div className="ui action input">
+              <Input type="text" placeholder="MLS #..." id="addCampaignInput"/>
+              {addCampaignMlsNumPendingState && (
+                <Button loading className="ui button">Add Campaign</Button>
+              )}
+              {!addCampaignMlsNumPendingState && (
+                <Button className="ui button" onClick={addCampaign}>Add Campaign</Button>
+              )}
+              </div>
             </Menu.Item>
           </Menu>
         </PageTitleHeader>

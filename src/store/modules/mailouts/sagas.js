@@ -15,6 +15,8 @@ import {
   getMoreArchivedMailoutsError,
   getMailoutsPending,
   getArchivedMailoutsPending,
+  ADD_CAMPAIGN_START,
+  addCampaignError
 } from './actions';
 import ApiService from '../../../services/api/index';
 import { SELECT_PEER_ID, DESELECT_PEER_ID } from '../peer/actions';
@@ -23,6 +25,8 @@ import { call, put, select, takeLatest } from '@redux-saga/core/effects';
 export const getSelectedPeerId = state => state.peer.peerId;
 export const getMailoutsPage = state => state.mailouts.page;
 export const getArchivedMailoutsPage = state => state.mailouts.archivedPage;
+export const getAddCampaignMlsNum = state => state.mailouts.addCampaignMlsNum
+
 const limit = 25;
 const hideArchived = { hideExcluded: true, hideArchived: true };
 
@@ -148,6 +152,24 @@ export function* checkIfPeerSelectedGetMoreArchivedMailout() {
   }
 }
 
+export function* addCampaignStartSaga() {
+  const peerId = yield select(getSelectedPeerId);
+  const mlsNum = yield select(getAddCampaignMlsNum);
+  try {
+    const { path, method } = peerId
+      ? ApiService.directory.peer.mailout.byMls(mlsNum, peerId)
+      : ApiService.directory.user.mailout.byMls(mlsNum);
+
+    const data = { mlsNum, skipEmailNotification: true };
+    const response = yield call(ApiService[method], path, data);
+
+    console.log(response)
+  } catch (err) {
+    yield put(addCampaignError(err));
+  }
+}
+
+
 export default function*() {
   yield takeLatest(GET_MAILOUTS_PENDING, checkIfPeerSelectedGetMailout);
   yield takeLatest(GET_MORE_MAILOUTS_PENDING, checkIfPeerSelectedGetMoreMailout);
@@ -155,4 +177,5 @@ export default function*() {
   yield takeLatest(GET_MORE_ARCHIVED_MAILOUTS_PENDING, checkIfPeerSelectedGetMoreArchivedMailout);
   yield takeLatest(SELECT_PEER_ID, resetAndGetMailoutSaga);
   yield takeLatest(DESELECT_PEER_ID, resetAndGetMailoutSaga);
+  yield takeLatest(ADD_CAMPAIGN_START, addCampaignStartSaga);
 }

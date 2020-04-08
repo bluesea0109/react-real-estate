@@ -21,6 +21,11 @@ export const GET_MORE_ARCHIVED_MAILOUTS_PENDING = 'GET_MORE_ARCHIVED_MAILOUTS_PE
 export const GET_MORE_ARCHIVED_MAILOUTS_SUCCESS = 'GET_MORE_ARCHIVED_MAILOUTS_SUCCESS';
 export const GET_MORE_ARCHIVED_MAILOUTS_ERROR = 'GET_MORE_ARCHIVED_MAILOUTS_ERROR';
 
+export const ADD_CAMPAIGN_START = 'ADD_CAMPAIGN_START';
+export const ADD_CAMPAIGN_PENDING = 'ADD_CAMPAIGN_PENDING';
+export const ADD_CAMPAIGN_SUCCESS = 'ADD_CAMPAIGN_SUCCESS';
+export const ADD_CAMPAIGN_ERROR = 'ADD_CAMPAIGN_ERROR';
+
 export function getMailoutsPending() {
   return createAction(GET_MAILOUTS_PENDING);
 }
@@ -87,4 +92,20 @@ export function getMoreArchivedMailoutsSuccess(payload) {
 
 export function getMoreArchivedMailoutsError(error) {
   return createErrorAction(GET_MORE_ARCHIVED_MAILOUTS_SUCCESS, error);
+}
+
+export function addCampaignStart(payload) {
+  return createAction(ADD_CAMPAIGN_START, payload);
+}
+
+export function addCampaignPending() {
+  return createAction(ADD_CAMPAIGN_PENDING);
+}
+
+export function addCampaignSuccess() {
+  return createAction(ADD_CAMPAIGN_SUCCESS);
+}
+
+export function addCampaignError(error) {
+  return createErrorAction(ADD_CAMPAIGN_ERROR, error);
 }

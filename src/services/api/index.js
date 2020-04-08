@@ -169,6 +169,7 @@ const directory = {
       list: () => ({ path: `/api/user/mailout`, method: 'get' }),
       get: mailoutId => ({ path: `/api/user/mailout/${mailoutId}?include_destinations=true`, method: 'get' }),
       csv: ({userId, mailoutId}) => ({ path: `/api/user/${userId}/mailout/${mailoutId}/csv` }),
+      byMls: mlsNum => ({ path: `/api/user/mailout/byMls`, method: 'post' }),
       edit: {
         get: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'get' }),
         update: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'put' }),
@@ -240,6 +241,7 @@ const directory = {
       list: peerId => ({ path: `/api/user/peer/${peerId}/mailout`, method: 'get' }),
       get: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}?include_destinations=true`, method: 'get' }),
       csv: (userId, mailoutId, peerId) => ({ path: `/api/user/${userId}/peer/${peerId}/mailout/${mailoutId}/csv` }),
+      byMls: (mlsNum, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/byMls`, method: 'post' }),
       edit: {
         get: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit`, method: 'get' }),
         update: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit`, method: 'put' }),

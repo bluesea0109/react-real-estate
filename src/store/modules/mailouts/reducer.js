@@ -16,6 +16,10 @@ import {
   GET_MORE_ARCHIVED_MAILOUTS_PENDING,
   GET_MORE_ARCHIVED_MAILOUTS_SUCCESS,
   GET_MORE_ARCHIVED_MAILOUTS_ERROR,
+  ADD_CAMPAIGN_START,
+  // ADD_CAMPAIGN_PENDING,
+  ADD_CAMPAIGN_SUCCESS,
+  ADD_CAMPAIGN_ERROR
 } from './actions';
 import { ARCHIVE_MAILOUT_SUCCESS, UNDO_ARCHIVE_MAILOUT_SUCCESS } from '../mailout/actions';
 
@@ -30,6 +34,8 @@ const initialState = {
   archived: [],
   error: null,
   generateError: false,
+  addCampaignMlsNum: null,
+  addCampaignMlsNumPending: false
 };
 
 export default function mailouts(state = initialState, action) {
@@ -166,6 +172,24 @@ export default function mailouts(state = initialState, action) {
         ...state,
         archived: state.archived.filter(item => item._id !== action.payload._id),
       };
+    case ADD_CAMPAIGN_START:
+      return {
+        ...state,
+        addCampaignMlsNum: action.payload,
+        addCampaignMlsNumPending: true,
+        error: null
+      };
+    case ADD_CAMPAIGN_SUCCESS:
+      return {
+        ...state,
+        addCampaignMlsNumPending: false
+      }
+    case ADD_CAMPAIGN_ERROR:
+      return {
+        ...state,
+        addCampaignMlsNumPending: false,
+        error: action.error
+      }
     default:
       return state;
   }
