@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemBodyLayout, ItemLayout } from '../layouts';
 import { getMailoutsPending, getMoreMailoutsPending, addCampaignStart } from '../store/modules/mailouts/actions';
 import { setCompletedDashboardModal } from '../store/modules/onboarded/actions'
-import { Button, Grid, Header, Icon, Input, Menu, Modal, Page, Segment, Snackbar } from '../components/Base';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Grid, Header, Icon, Input, Menu, Modal, Page, Popup, Segment, Snackbar } from '../components/Base';
 import IframeGroup from '../components/MailoutListItem/IframeGroup';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ItemList from '../components/MailoutListItem/ItemList';
@@ -145,6 +146,12 @@ const Dashboard = () => {
                 <Button className="ui button" onClick={addCampaign}>Add Campaign</Button>
               )}
               </div>
+              <Popup
+                flowing
+                trigger={<FontAwesomeIcon icon="info-circle" style={{ marginLeft: '.5em', color: '#2DB5AD' }} />}
+                content="Dont see a listing? Enter the MLS number and click Add Campaign."
+                position="top right"
+              />
             </Menu.Item>
           </Menu>
         </PageTitleHeader>
