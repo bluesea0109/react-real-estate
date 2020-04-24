@@ -2,7 +2,7 @@ import startCase from 'lodash/startCase';
 import { BlockPicker } from 'react-color';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { createRef, useEffect, useState } from 'react';
-import { Dropdown, Form, Header, Label, Popup } from 'semantic-ui-react';
+import { Dropdown, Form, Header, Label, Popup, Checkbox } from 'semantic-ui-react';
 
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import { changeMailoutDisplayAgentPending, updateMailoutEditPending } from '../../store/modules/mailout/actions';
@@ -40,6 +40,8 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const [selectedBrandColor, setSelectedBrandColor] = useState(mailoutEdit?.mergeVariables?.brandColor);
   const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(currentMailoutDisplayAgent);
   const [formValues, setFormValues] = useState(mailoutEdit?.mergeVariables);
+  const [ctaUrl, setCtaUrl] = useState(mailoutDetails.cta)
+  const [shortenCTA, setShortenCTA] = useState(mailoutDetails.shortenCTA)
 
   /* This is a hack to enable fields to updated while enabling use to edit them as well
    * TODO: find a more permanents (correct) solution to this problem */
@@ -91,7 +93,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
       { templateTheme },
       { mergeVariables: mailoutEdit?.mergeVariables },
       { mergeVariables: newMergeVariables },
-      { mailoutDisplayAgent }
+      { mailoutDisplayAgent } // add the   "ctas" object here
     );
 
     dispatch(updateMailoutEditPending(newData));
@@ -407,6 +409,51 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
         </Header>
 
         {renderThemeSpecificData()}
+
+        <div>
+          <Header as="h4">Override call to action URL</Header>
+          <Form.Field>
+            <Checkbox
+              radio
+              label='Dont Override'
+              name='checkboxRadioGroup'
+              value='this'
+              checked={!ctaUrl}
+              onClick={() => setCtaUrl(null)}
+            />
+          </Form.Field>
+          <Form.Field>
+            <Checkbox
+              radio
+              label='Override call to action URL'
+              name='checkboxRadioGroup'
+              value='that'
+              checked={ctaUrl && !shortenCTA}
+              onClick={() => {
+                setCtaUrl('https://google.com')
+                setShortenCTA(false)
+              }}
+            />
+          </Form.Field>
+          <Form.Field>
+            <Checkbox
+              radio
+              label='Override call to action URL, and shorten it on the postcard. (Enable Lead Tracking)'
+              name='checkboxRadioGroup'
+              value='that'
+              checked={ctaUrl && shortenCTA}
+              onClick={() => {
+                setCtaUrl('https://google.com')
+                setShortenCTA(true)
+              }}
+            />
+          </Form.Field>
+          {ctaUrl && (
+            <div class="ui fluid input">
+              <input type="text" placeholder="URL" value={ctaUrl} onChange={e => setCtaUrl(e.target.value)} />
+            </div>
+          )}
+        </div>
       </Segment>
     </Page>
   );
