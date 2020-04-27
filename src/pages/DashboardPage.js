@@ -123,6 +123,9 @@ const Dashboard = () => {
         <ItemBodyLayout attached style={{ padding: 10 }}>
           <IframeGroup index={index} item={item} linkTo={`dashboard/${item._id}`} />
           <ItemList data={item} />
+          {item.cta && (<div className="customPostcardCTA">
+            Custom CTA: <a href={item.cta} target="blank">{item.cta}</a>
+          </div>)}
         </ItemBodyLayout>
       </ItemLayout>
     ));

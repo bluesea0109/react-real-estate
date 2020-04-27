@@ -479,3 +479,7 @@ h1 {
   margin-left: 0 !important;
   margin-right: 0 !important;
 }
+
+.details-customPostcardCTA {
+  padding: 10px 20px;
+}

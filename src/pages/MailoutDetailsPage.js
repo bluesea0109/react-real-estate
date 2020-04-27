@@ -413,6 +413,9 @@ const MailoutDetailsPage = () => {
                         </List.Content>
                       </List.Item>
                     </ItemBodyDataLayout>
+                    {details.cta && (<div className="details-customPostcardCTA">
+                      Custom CTA: <a href={details.cta} target="blank">{details.cta}</a>
+                    </div>)}
                   </ItemBodyLayoutV2>
                 </ItemLayout>
               )}
