@@ -432,7 +432,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           <Form.Field>
             <Checkbox
               radio
-              label='Dont Customize - Use default'
+              label='Don\'t Customize - use default'
               name='checkboxRadioGroup'
               value='this'
               checked={!ctaUrl}
@@ -445,7 +445,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           <Form.Field>
             <Checkbox
               radio
-              label='Customize call to action URL. Url will be shortend and lead tracking enabled'
+              label='Customize call to action URL - URL will be shortened and lead tracking enabled'
               name='checkboxRadioGroup'
               value='that'
               checked={ctaUrl && shortenCTA}
