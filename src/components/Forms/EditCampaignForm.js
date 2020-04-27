@@ -458,7 +458,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           <Form.Field>
             <Checkbox
               radio
-              label='Customize call to action URL, and shorten it.'
+              label='Customize call to action URL, and shorten it'
               name='checkboxRadioGroup'
               value='that'
               checked={ctaUrl && shortenCTA}
