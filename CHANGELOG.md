@@ -1,4 +1,9 @@
 -----------------
+## Release 2.7.0
+Changes:
+- Change the CTA url at the campaign level. Allows cta to point to a property page much easier.
+
+-----------------
 ## Release 2.6.0
 Changes:
 - Create a campaign from an mls number.
