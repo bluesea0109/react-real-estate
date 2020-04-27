@@ -40,9 +40,18 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const [selectedBrandColor, setSelectedBrandColor] = useState(mailoutEdit?.mergeVariables?.brandColor);
   const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(currentMailoutDisplayAgent);
   const [formValues, setFormValues] = useState(mailoutEdit?.mergeVariables);
+
+  //const defaultCTAUrl = useSelector(store => store.)
   const [ctaUrl, setCtaUrl] = useState(mailoutDetails.cta)
   const [shortenCTA, setShortenCTA] = useState(mailoutDetails.shortenCTA)
-
+  const defaultCTAUrl = useSelector(store => {
+    let bestCta = mailoutDetails.cta
+    if (!bestCta) bestCta = store.onLogin.userBranding[currentListingStatus]?.cta
+    if (!bestCta) bestCta = store.onLogin.teamBranding[currentListingStatus]?.cta
+    if (!bestCta) bestCta = store.onLogin.teamProfile.website
+    if (!bestCta) return 'https://www.google.com'
+    return bestCta
+  })
   /* This is a hack to enable fields to updated while enabling use to edit them as well
    * TODO: find a more permanents (correct) solution to this problem */
   const [formValuesHaveChanged, setFormValuesHaveChanged] = useState(false);
@@ -95,6 +104,14 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
       { mergeVariables: newMergeVariables },
       { mailoutDisplayAgent } // add the   "ctas" object here
     );
+    if (ctaUrl) {
+      newData.ctas = {
+        cta: ctaUrl,
+        shortenCTA: shortenCTA
+      }
+    } else {
+      newData.ctas = { dontOverride: true }
+    }
 
     dispatch(updateMailoutEditPending(newData));
     await sleep(500);
@@ -411,26 +428,16 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
         {renderThemeSpecificData()}
 
         <div>
-          <Header as="h4">Override call to action URL</Header>
+          <Header as="h4">Customize call to action URL</Header>
           <Form.Field>
             <Checkbox
               radio
-              label='Dont Override'
+              label='Dont Customize'
               name='checkboxRadioGroup'
               value='this'
               checked={!ctaUrl}
-              onClick={() => setCtaUrl(null)}
-            />
-          </Form.Field>
-          <Form.Field>
-            <Checkbox
-              radio
-              label='Override call to action URL'
-              name='checkboxRadioGroup'
-              value='that'
-              checked={ctaUrl && !shortenCTA}
               onClick={() => {
-                setCtaUrl('https://google.com')
+                setCtaUrl(false)
                 setShortenCTA(false)
               }}
             />
@@ -438,18 +445,31 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           <Form.Field>
             <Checkbox
               radio
-              label='Override call to action URL, and shorten it on the postcard. (Enable Lead Tracking)'
+              label='Customize call to action URL'
+              name='checkboxRadioGroup'
+              value='that'
+              checked={ctaUrl && !shortenCTA}
+              onClick={() => {
+                setCtaUrl(ctaUrl || defaultCTAUrl)
+                setShortenCTA(false)
+              }}
+            />
+          </Form.Field>
+          <Form.Field>
+            <Checkbox
+              radio
+              label='Customize call to action URL, and shorten it.'
               name='checkboxRadioGroup'
               value='that'
               checked={ctaUrl && shortenCTA}
               onClick={() => {
-                setCtaUrl('https://google.com')
+                setCtaUrl(ctaUrl || defaultCTAUrl)
                 setShortenCTA(true)
               }}
             />
           </Form.Field>
           {ctaUrl && (
-            <div class="ui fluid input">
+            <div className="ui fluid input">
               <input type="text" placeholder="URL" value={ctaUrl} onChange={e => setCtaUrl(e.target.value)} />
             </div>
           )}
