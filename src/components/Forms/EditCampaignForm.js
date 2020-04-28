@@ -432,7 +432,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           <Form.Field>
             <Checkbox
               radio
-              label='Don\'t Customize - use default'
+              label="Don't Customize - use default"
               name='checkboxRadioGroup'
               value='this'
               checked={!ctaUrl}
