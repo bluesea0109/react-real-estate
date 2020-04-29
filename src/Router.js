@@ -11,6 +11,7 @@ import OnboardPage from './pages/OnboardPage';
 import DashboardPage from './pages/DashboardPage';
 import MailoutDetailsPage from './pages/MailoutDetailsPage';
 import MailoutEditPage from './pages/MailoutEditPage';
+import MailoutDestinationsPage from './pages/MailoutDestinationsPage';
 import CustomizationPage from './pages/CustomizationPage';
 import CustomizationTeamPage from './pages/CustomizationTeamPage';
 import ProfilePage from './pages/ProfilePage';
@@ -36,6 +37,8 @@ export default () => {
       <PrivateRoute exact path="/dashboard/archived" component={ArchivedPage} />
       <PrivateRoute exact path="/dashboard/:mailoutId" component={MailoutDetailsPage} />
       <PrivateRoute exact path="/dashboard/edit/:mailoutId" component={MailoutEditPage} />
+      <PrivateRoute exact path="/dashboard/edit/:mailoutId/destinations" component={MailoutDestinationsPage} />
+
       <PrivateRoute exact path="/customization" component={CustomizationPage} />
       <PrivateRoute path="/customization/team" component={CustomizationTeamPage} />
       <PrivateRoute path="/profile" component={ProfilePage} />

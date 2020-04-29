@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format } from 'date-fns'
 
-import { resetMailout, revertMailoutEditPending, stopMailoutPending, submitMailoutPending, updateMailoutSizePending } from '../store/modules/mailout/actions';
+import { resetMailout, revertMailoutEditPending, stopMailoutPending, submitMailoutPending } from '../store/modules/mailout/actions';
 import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from '../components/MailoutListItem/helpers';
 import { Button, Grid, Header, Icon, Input, List, Menu, Message, Modal, Page, Popup, Segment, Table } from '../components/Base';
 import { iframeTransformMobile, iframeTransformDesktop } from '../components/helpers';
@@ -42,9 +42,8 @@ const MailoutDetailsPage = () => {
   const lastLocation = useLastLocation();
 
   const [currentNumberOfRecipients, setCurrentNumberOfRecipients] = useState(0);
-  const [newNumberOfRecipients, setNewNumberOfRecipients] = useState(0);
   const [showConsentModal, setShowConsentModal] = useState(false);
-  const [editRecipients, setEditRecipients] = useState(false);
+
   const [frontLoaded, setFrontLoaded] = useState(false);
   const [backLoaded, setBackLoaded] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
@@ -56,7 +55,7 @@ const MailoutDetailsPage = () => {
   const stopPendingState = useSelector(store => store.mailout.stopPending);
   const updateMailoutSizePendingState = useSelector(store => store.mailout.updateMailoutSizePending);
 
-  const isUpdateMailoutSizeError = useSelector(store => store.mailout.updateMailoutSizeError?.message);
+
   const details = useSelector(store => store.mailout.details);
   const error = useSelector(store => store.mailout.error?.message);
 
@@ -149,77 +148,34 @@ const MailoutDetailsPage = () => {
     history.push(`/dashboard/edit/${details._id}`);
   };
 
-  const toggleRecipientsEditState = () => {
-    if (!newNumberOfRecipients || newNumberOfRecipients === 0) setNewNumberOfRecipients(currentNumberOfRecipients);
-
-    setEditRecipients(!editRecipients);
-  };
-
-  const submitNewValues = newNumber => {
-    setNewNumberOfRecipients(newNumber);
-    let parsedNewNumberOfRecipients = parseInt(newNumber, 10);
-    if (isNaN(parsedNewNumberOfRecipients)) {
-      parsedNewNumberOfRecipients = currentNumberOfRecipients;
-    }
-
-    if (multiUser) {
-      let chosenNumber = parsedNewNumberOfRecipients;
-      if (chosenNumber < mailoutSizeMin) chosenNumber = mailoutSizeMin;
-      if (chosenNumber > mailoutSizeMax) chosenNumber = mailoutSizeMax;
-
-      setCurrentNumberOfRecipients(chosenNumber);
-
-      if (currentNumberOfRecipients !== chosenNumber) {
-        dispatch(updateMailoutSizePending(chosenNumber));
-      }
-    } else {
-      if (currentNumberOfRecipients !== parsedNewNumberOfRecipients) {
-        dispatch(updateMailoutSizePending(parsedNewNumberOfRecipients));
-      }
-    }
-  };
+  const handleEditDestinationsClick = () => {
+    history.push(`/dashboard/edit/${details._id}/destinations`);
+  }
 
   const RenderRecipients = () => {
     const enableEditRecipients = resolveMailoutStatus(details.mailoutStatus) !== 'Sent' && resolveMailoutStatus(details.mailoutStatus) !== 'Processing';
-    const [newNumber, setNewNumber] = useState(newNumberOfRecipients);
-
-    if (editRecipients) {
-      return (
-        <Button as="div" labelPosition="left">
-          <Input
-            key="newNumberOfRecipients"
-            style={{ maxWidth: '4.5em', maxHeight: '2em' }}
-            value={newNumber}
-            onChange={props => setNewNumber(props.target.value)}
-          />
-          <Button icon secondary onClick={() => [toggleRecipientsEditState(), submitNewValues(newNumber)]} style={{ marginLeft: '10px', minWidth: '5em' }}>
-            Save
+    return (
+      <Button as="div" labelPosition="left">
+        <Input
+          className="display-only"
+          style={{ maxWidth: '4.5em', maxHeight: '2em' }}
+          value={currentNumberOfRecipients}
+        />
+        {enableEditRecipients && (
+          <Button
+            icon
+            primary
+            onClick={handleEditDestinationsClick}
+            style={{ marginLeft: '10px', minWidth: '5em' }}
+            disabled={updateMailoutSizePendingState}
+            loading={updateMailoutSizePendingState}
+          >
+            Change
           </Button>
-        </Button>
-      );
-    } else {
-      return (
-        <Button as="div" labelPosition="left">
-          <Input
-            className="display-only"
-            style={{ maxWidth: '4.5em', maxHeight: '2em' }}
-            value={(!isUpdateMailoutSizeError && newNumberOfRecipients) || currentNumberOfRecipients}
-          />
-          {enableEditRecipients && (
-            <Button
-              icon
-              primary
-              onClick={toggleRecipientsEditState}
-              style={{ marginLeft: '10px', minWidth: '5em' }}
-              disabled={updateMailoutSizePendingState}
-              loading={updateMailoutSizePendingState}
-            >
-              Change
-            </Button>
-          )}
-        </Button>
-      );
-    }
+        )}
+      </Button>
+    );
+
   };
 
   const renderDestinations = () => {
