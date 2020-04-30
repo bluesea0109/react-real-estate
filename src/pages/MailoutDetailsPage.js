@@ -385,7 +385,7 @@ const MailoutDetailsPage = () => {
                 <a className="ui secondary button" href={csvURL}>Download All Recipients as CSV</a>
               </div>
               )}
-              {!pendingState && !error && details && resolveMailoutStatus(details.mailoutStatus) === 'Sent' && (
+              {!pendingState && !error && details &&  (
                 <Table singleLine>
                   <Table.Header>
                     <Table.Row>
