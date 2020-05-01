@@ -55,7 +55,6 @@ const MailoutDetailsPage = () => {
   const stopPendingState = useSelector(store => store.mailout.stopPending);
   const updateMailoutSizePendingState = useSelector(store => store.mailout.updateMailoutSizePending);
 
-
   const details = useSelector(store => store.mailout.details);
   const error = useSelector(store => store.mailout.error?.message);
 
@@ -63,6 +62,7 @@ const MailoutDetailsPage = () => {
   const onLoginMode = useSelector(store => store.onLogin?.mode);
   const multiUser = onLoginMode === 'multiuser';
   const listingType = details && details.listingStatus;
+  const destinationsOptionsMode = details && details.destinationsOptions?.mode
   const listingDefaults = teamCustomization && teamCustomization[listingType];
   const mailoutSizeMin = listingDefaults && listingDefaults.mailoutSizeMin;
   const mailoutSizeMax = listingDefaults && listingDefaults.mailoutSizeMax;
@@ -375,8 +375,13 @@ const MailoutDetailsPage = () => {
                   </ItemBodyLayoutV2>
                 </ItemLayout>
               )}
-              {!pendingState && !error && details && <GoogleMapItem data={details} />}
+              {!pendingState && !error && details && destinationsOptionsMode !== 'userUploaded' && <GoogleMapItem data={details} />}
 
+              {!pendingState && destinationsOptionsMode === 'userUploaded' && (
+                <div>
+                  Upload: {details.destinationsOptions?.userUploaded?.filename}
+                </div>
+              )}
               {!pendingState && !error && details && resolveMailoutStatus(details.mailoutStatus) === 'Sent' && (
               <div
                   id="top-download"
