@@ -368,4 +368,5 @@ export default {
   put,
   del,
   directory,
+  handleResponse
 };
