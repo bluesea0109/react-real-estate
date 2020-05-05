@@ -1,26 +1,20 @@
 import auth from '../../services/auth';
 import api from '../../services/api'
 
-import startCase from 'lodash/startCase';
-import { BlockPicker } from 'react-color';
-import { useDispatch, useSelector } from 'react-redux';
-import React, { createRef, useEffect, useState } from 'react';
-import { Dropdown, Form, Header, Label, Popup, Checkbox } from 'semantic-ui-react';
+import { useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { Dropdown, Form, Header, Label, Checkbox } from 'semantic-ui-react';
 
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
-import { changeMailoutDisplayAgentPending, updateMailoutEditPending } from '../../store/modules/mailout/actions';
-import { differenceObjectDeep, isMobile, maxLength, objectIsEmpty, sleep } from '../utils';
-import { Button, Icon, Image, Menu, Message, Page, Segment } from '../Base';
+import { isMobile } from '../utils';
+import { Button, Menu, Page, Segment } from '../Base';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
-import { StyledHeader, colors } from '../helpers';
 import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
 
 const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleBackClick }) => {
-  const dispatch = useDispatch();
 
   const updateMailoutDestinationsIsPending = useSelector(store => store.mailout.updateMailoutDestinationsPending);
-  const updateMailoutDestinationsError = useSelector(store => store.mailout.updateMailoutDestinationsError?.message);
   const currentListingStatus = mailoutDetails?.listingStatus;
 
   const [destinationsOptionsMode, setDestinationsOptionsMode] = useState(mailoutDetails.destinationsOptions?.mode || 'ai')
@@ -89,7 +83,6 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
           setIsCsvBrivityFormat(0)
           const headerValues = []
           headers.forEach((header, i) => {
-            const contextRef = createRef();
             headerValues.push({
               key: i,
               text: header,
