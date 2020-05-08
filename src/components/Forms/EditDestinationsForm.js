@@ -8,7 +8,12 @@ import React, { createRef, useEffect, useState } from 'react';
 import { Dropdown, Form, Header, Label, Popup, Checkbox } from 'semantic-ui-react';
 
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
-import { changeMailoutDisplayAgentPending, updateMailoutEditPending } from '../../store/modules/mailout/actions';
+import {
+  changeMailoutDisplayAgentPending,
+  updateMailoutEditPending,
+  mailoutPolygonCoordinates,
+  updateMailoutEditPolygonCoordinates,
+} from '../../store/modules/mailout/actions';
 import { differenceObjectDeep, isMobile, maxLength, objectIsEmpty, sleep } from '../utils';
 import { Button, Icon, Image, Menu, Message, Page, Segment } from '../Base';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
@@ -16,6 +21,7 @@ import { StyledHeader, colors } from '../helpers';
 import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
 import PolygonGoogleMapsHOC from './PolygonGoogleMaps/PolygonGoogleMapsHOC';
+import { connect } from 'formik';
 
 const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleBackClick }) => {
   const dispatch = useDispatch();
@@ -34,6 +40,13 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const [cityColumn, setCityColumn] = useState(null);
   const [stateColumn, setStateColumn] = useState(null);
   const [zipColumn, setZipColumn] = useState(null);
+  const [polygonCoordinates, setPolygonCoordinates] = useState(null);
+
+  useEffect(() => {
+    console.log(polygonCoordinates);
+    // *Uncomment for redux action
+    // dispatch.updateMailoutEditPolygonCoordinates(polygonCoordinates);
+  }, [polygonCoordinates]);
 
   const handleEditSubmitClick = async () => {
     if (!csvFile) return handleBackClick();
@@ -290,7 +303,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                   </Form.Field>
                 </div>
               )}
-              <PolygonGoogleMapsHOC />
+              <PolygonGoogleMapsHOC setPolygonCoordinates={setPolygonCoordinates} />
             </div>
           )}
         </Form>

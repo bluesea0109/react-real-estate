@@ -12,7 +12,7 @@ const onLoad = () => console.log('script loaded');
 
 const onError = err => console.log('onError: ', err);
 
-const PolygonGoogleMapsHOC = () => {
+const PolygonGoogleMapsHOC = ({ setPolygonCoordinates }) => {
   return (
     <LoadScript
       id={loaderId}
@@ -26,7 +26,7 @@ const PolygonGoogleMapsHOC = () => {
       libraries={googleMapsLibraries}
       preventGoogleFontsLoading
     >
-      <PolygonGoogleMapsCore />
+      <PolygonGoogleMapsCore setPolygonCoordinates={setPolygonCoordinates} />
     </LoadScript>
   );
 };
