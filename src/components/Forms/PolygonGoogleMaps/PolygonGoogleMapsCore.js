@@ -39,10 +39,10 @@ const onPolygonComplete = (polygon, setPolygonCoordinates) => {
   polygon.setEditable(true);
 
   // !fix `google` global object accessing (change to _google/local scope);
-  google.maps.event.addListener(polygon.getPath(), 'insert_at', (index, obj) => {
+  google.maps.event.addListener(polygon.getPath(), 'insert_at', (index, obj) => { // eslint-disable-line
     coordinates = getCoordinates(polygon, setPolygonCoordinates);
   });
-  google.maps.event.addListener(polygon.getPath(), 'set_at', (index, obj) => {
+  google.maps.event.addListener(polygon.getPath(), 'set_at', (index, obj) => { // eslint-disable-line
     coordinates = getCoordinates(polygon, setPolygonCoordinates);
   });
   latestPolygon = polygon;
@@ -80,8 +80,8 @@ const PolygonGoogleMapsCore = ({ setPolygonCoordinates }) => {
               options={{
                 drawingControl: true,
                 drawingControlOptions: {
-                  position: google.maps.ControlPosition.TOP_LEFT,
-                  drawingModes: [google.maps.drawing.OverlayType.POLYGON],
+                  position: google.maps.ControlPosition.TOP_LEFT, // eslint-disable-line
+                  drawingModes: [google.maps.drawing.OverlayType.POLYGON], // eslint-disable-line
                 },
                 polygonOptions: {
                   draggable: true,
