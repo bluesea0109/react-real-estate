@@ -21,6 +21,7 @@ import {
   UPDATE_MAILOUT_EDIT_PENDING,
   UPDATE_MAILOUT_EDIT_SUCCESS,
   UPDATE_MAILOUT_EDIT_ERROR,
+  UPDATE_MAILOUT_EDIT_POLYGON_COORDINATES,
   REVERT_MAILOUT_EDIT_PENDING,
   REVERT_MAILOUT_EDIT_SUCCESS,
   REVERT_MAILOUT_EDIT_ERROR,
@@ -43,6 +44,7 @@ const initialState = {
   revertMailoutEditPending: false,
   archivePending: false,
 
+  mailoutPolygonCoordinates: null,
   mailoutId: null,
   mailoutEdit: null,
   mailoutSize: null,
@@ -241,6 +243,12 @@ export default function mailout(state = initialState, action) {
         updateMailoutEditPending: false,
         updateMailoutEditError: action.error,
       };
+
+    case UPDATE_MAILOUT_EDIT_POLYGON_COORDINATES:
+      return {
+        ...state,
+        mailoutPolygonCoordinates: action.payload,
+      }
 
     case REVERT_MAILOUT_EDIT_PENDING:
       return {
