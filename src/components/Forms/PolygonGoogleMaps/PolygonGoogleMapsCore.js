@@ -16,7 +16,7 @@ const onMapLoad = map => {
 };
 
 const drawingManagerOnLoad = drawingManager => {
-  console.log({ drawingManager });
+  // console.log({ drawingManager });
 };
 
 const getCoordinates = (polygonArray, setPolygonCoordinates) => {
@@ -26,7 +26,6 @@ const getCoordinates = (polygonArray, setPolygonCoordinates) => {
     .map(el => {
       return { lat: el.lat(), lng: el.lng() };
     });
-  console.warn(array);
   setPolygonCoordinates(array);
   return array;
 };
@@ -41,16 +40,10 @@ const onPolygonComplete = (polygon, setPolygonCoordinates) => {
 
   google.maps.event.addListener(polygon.getPath(), 'insert_at', (index, obj) => {
     coordinates = getCoordinates(polygon, setPolygonCoordinates);
-    console.log(2);
-    console.log({ coordinates });
   });
   google.maps.event.addListener(polygon.getPath(), 'set_at', (index, obj) => {
     coordinates = getCoordinates(polygon, setPolygonCoordinates);
-    console.log(3);
-    console.log({ coordinates });
   });
-  console.log('default');
-  console.log({ coordinates });
   latestPolygon = polygon;
 };
 
@@ -78,6 +71,7 @@ const PolygonGoogleMapsCore = ({ setPolygonCoordinates }) => {
             onClick={onClick}
             onLoad={onMapLoad}
           >
+          {/* {ifLoadedPageBackIn ? <Polygon /> : <DrawingManager />} */}
             <DrawingManager
               drawingMode="polygon"
               onLoad={drawingManagerOnLoad}
