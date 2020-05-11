@@ -38,6 +38,7 @@ const onPolygonComplete = (polygon, setPolygonCoordinates) => {
   latestPolygon && latestPolygon.setMap(null);
   polygon.setEditable(true);
 
+  // !fix `google` global object accessing (change to _google/local scope);
   google.maps.event.addListener(polygon.getPath(), 'insert_at', (index, obj) => {
     coordinates = getCoordinates(polygon, setPolygonCoordinates);
   });
@@ -71,7 +72,7 @@ const PolygonGoogleMapsCore = ({ setPolygonCoordinates }) => {
             onClick={onClick}
             onLoad={onMapLoad}
           >
-          {/* {ifLoadedPageBackIn ? <Polygon /> : <DrawingManager />} */}
+          {/* {ifLoadedPageBackIn ? <Polygon /> : <DrawingManger />} */}
             <DrawingManager
               drawingMode="polygon"
               onLoad={drawingManagerOnLoad}
