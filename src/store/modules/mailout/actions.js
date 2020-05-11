@@ -30,6 +30,8 @@ export const UPDATE_MAILOUT_EDIT_PENDING = 'UPDATE_MAILOUT_EDIT_PENDING';
 export const UPDATE_MAILOUT_EDIT_SUCCESS = 'UPDATE_MAILOUT_EDIT_SUCCESS';
 export const UPDATE_MAILOUT_EDIT_ERROR = 'UPDATE_MAILOUT_EDIT_ERROR';
 
+export const UPDATE_MAILOUT_EDIT_POLYGON_COORDINATES = 'UPDATE_MAILOUT_EDIT_POLYGON_COORDINATES';
+
 export const REVERT_MAILOUT_EDIT_PENDING = 'REVERT_MAILOUT_EDIT_PENDING';
 export const REVERT_MAILOUT_EDIT_SUCCESS = 'REVERT_MAILOUT_EDIT_SUCCESS';
 export const REVERT_MAILOUT_EDIT_ERROR = 'REVERT_MAILOUT_EDIT_ERROR';
@@ -128,6 +130,10 @@ export function updateMailoutEditSuccess(payload) {
 
 export function updateMailoutEditError(error) {
   return createErrorAction(UPDATE_MAILOUT_EDIT_ERROR, error);
+}
+
+export function updateMailoutEditPolygonCoordinates(payload) {
+  return createAction(UPDATE_MAILOUT_EDIT_POLYGON_COORDINATES, payload);
 }
 
 export function revertMailoutEditPending() {
