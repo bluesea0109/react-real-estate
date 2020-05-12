@@ -219,6 +219,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
           {destinationsOptionsMode === 'aiGuided' && (
             <div className="ui fluid">
               <h2>guidance settings</h2>
+              <PolygonGoogleMapsHOC setPolygonCoordinates={setPolygonCoordinates} />
             </div>
           )}
           {destinationsOptionsMode === 'userUploaded' && (
@@ -298,7 +299,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                   </Form.Field>
                 </div>
               )}
-              <PolygonGoogleMapsHOC setPolygonCoordinates={setPolygonCoordinates} />
+
             </div>
           )}
         </Form>
