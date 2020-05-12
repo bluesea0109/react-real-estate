@@ -48,27 +48,17 @@ const onPolygonComplete = (polygon, setPolygonCoordinates) => {
   latestPolygon = polygon;
 };
 
-const PolygonGoogleMapsCore = ({ setPolygonCoordinates }) => {
+const PolygonGoogleMapsCore = ({ setPolygonCoordinates, data }) => {
   return (
     <div style={{ marginTop: '30px' }}>
-      <div style={{ textAlign: 'right', marginBottom: '10px' }}>
-        <Button
-          secondary
-          onClick={() => {
-            latestPolygon.setMap(null);
-            setPolygonCoordinates(null);
-          }}
-        >
-          Delete Shape
-        </Button>
-      </div>
+
       <div className="map">
         <div className="map-container">
           <GoogleMap
             id="polygon-map-mailout"
             mapContainerStyle={{ height: '400px', width: '100%' }}
             zoom={12}
-            center={center}
+            center={{ lat: data.details && data.details.latitude, lng: data.details && data.details.longitude }}
             onClick={onClick}
             onLoad={onMapLoad}
           >

@@ -3,7 +3,7 @@ import api from '../../services/api';
 
 import { useSelector } from 'react-redux';
 import React, { useState, createRef, useEffect } from 'react';
-import { Dropdown, Form, Header, Label, Checkbox } from 'semantic-ui-react';
+import { Dropdown, Form, Header, Label, List, Checkbox } from 'semantic-ui-react';
 
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import {
@@ -20,6 +20,24 @@ import Loading from '../Loading';
 import PolygonGoogleMapsCore from './PolygonGoogleMaps/PolygonGoogleMapsCore';
 import { connect } from 'formik';
 
+const propertyTypeOptions = [
+  { text: 'Single-Family', key: 'Single-Family', value: 'Single-Family'},
+  { text: 'Condo', key: 'Condo', value: 'Condo'},
+
+  { text: 'Apartment', key: 'Apartment', value: 'Apartment'},
+  { text: 'Cooperative (Co-op)', key: 'Cooperative (Co-op)', value: 'Cooperative (Co-op)'},
+  { text: 'Duplex', key: 'Duplex', value: 'Duplex'},
+  { text: 'Multi-Family', key: 'Multi-Family', value: 'Multi-Family'},
+  { text: 'Mobile/Manufactured',key: 'Mobile/Manufactured', value: 'Mobile/Manufactured'},
+  { text: 'Miscellaneous', key: 'Miscellaneous', value: 'Miscellaneous'},
+  { text: 'Quadruplex', key: 'Quadruplex', value: 'Quadruplex'},
+  { text: 'Timeshare', key: 'Timeshare', value: 'Timeshare'},
+  { text: 'Triplex', key: 'Triplex', value: 'Triplex'},
+  { text: 'Vacant', key: 'Vacant', value: 'Vacant' }
+]
+
+
+
 const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleBackClick }) => {
 
   const updateMailoutDestinationsIsPending = useSelector(store => store.mailout.updateMailoutDestinationsPending);
@@ -35,7 +53,19 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const [cityColumn, setCityColumn] = useState(null);
   const [stateColumn, setStateColumn] = useState(null);
   const [zipColumn, setZipColumn] = useState(null);
+
   const [polygonCoordinates, setPolygonCoordinates] = useState(null);
+  const [searchPropertyTypes, setSearchPropertyTypes] = useState([])
+  const [searchBedsMin, setSearchBedsMin] = useState('')
+  const [searchBedsMax, setSearchBedsMax] = useState('')
+  const [searchBathsMin, setSearchBathsMin] = useState('')
+  const [searchBathsMax, setSearchBathsMax] = useState('')
+  const [searchSizeMin, setSearchSizeMin] = useState('')
+  const [searchSizeMax, setSearchSizeMax] = useState('')
+  const [searchSaleDateMin, setSearchSaleDateMin] = useState('')
+  const [searchSaleDateMax, setSearchSaleDateMax] = useState('')
+  const [searchSalePriceMin, setSearchSalePriceMin] = useState('')
+  const [searchSalePriceMax, setSearchSalePriceMax] = useState('')
 
   useEffect(() => {
     console.log(polygonCoordinates);
@@ -179,47 +209,142 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
         ></Segment>
         <Form>
           <Header as="h4">How should destinations be selected?</Header>
-          <Form.Field>
-            <Checkbox
-              radio
-              label="Automatically"
-              name="checkboxRadioGroup"
-              value="this"
-              checked={destinationsOptionsMode === 'ai'}
-              onClick={() => {
-                setDestinationsOptionsMode('ai');
-              }}
-            />
-          </Form.Field>
-          <Form.Field>
-            <Checkbox
-              radio
-              label="Automatically with some guidance"
-              name="checkboxRadioGroup"
-              value="that"
-              checked={destinationsOptionsMode === 'aiGuided'}
-              onClick={() => {
-                setDestinationsOptionsMode('aiGuided');
-              }}
-            />
-          </Form.Field>
-          <Form.Field>
-            <Checkbox
-              radio
-              label="Manually from file"
-              name="checkboxRadioGroup"
-              value="that"
-              checked={destinationsOptionsMode === 'userUploaded'}
-              onClick={() => {
-                setDestinationsOptionsMode('userUploaded');
-              }}
-            />
-          </Form.Field>
-
-          {destinationsOptionsMode === 'aiGuided' && (
+          <List horizontal>
+            <List.Item>
+              <Checkbox
+                radio
+                label="Automatically"
+                name="checkboxRadioGroup"
+                value="this"
+                checked={destinationsOptionsMode === 'ai'}
+                onClick={() => {
+                  setDestinationsOptionsMode('ai');
+                }}
+              />
+            </List.Item>
+            <List.Item>
+              <Checkbox
+                radio
+                label="Search"
+                name="checkboxRadioGroup"
+                value="that"
+                checked={destinationsOptionsMode === 'manual'}
+                onClick={() => {
+                  setDestinationsOptionsMode('manual');
+                }}
+              />
+            </List.Item>
+            <List.Item>
+              <Checkbox
+                radio
+                label="From a CSV file"
+                name="checkboxRadioGroup"
+                value="that"
+                checked={destinationsOptionsMode === 'userUploaded'}
+                onClick={() => {
+                  setDestinationsOptionsMode('userUploaded');
+                }}
+              />
+            </List.Item>
+          </List>
+          {destinationsOptionsMode === 'manual' && (
             <div className="ui fluid">
-              <h2>guidance settings</h2>
-              <PolygonGoogleMapsCore setPolygonCoordinates={setPolygonCoordinates} />
+              <div>Use the map to draw the outline of the area to choose destinations from.</div>
+              <PolygonGoogleMapsCore setPolygonCoordinates={setPolygonCoordinates} data={mailoutDetails} />
+              {polygonCoordinates && (
+                <div>
+                  <Form.Field>
+                    <label>Property Types</label>
+                    <Dropdown
+                      options={propertyTypeOptions}
+                      selection
+                      clearable
+                      multiple
+                      value={searchPropertyTypes}
+                      onChange={(e, input) => setSearchPropertyTypes(input.value)}
+                    />
+                  </Form.Field>
+                  <Form.Group widths='equal'>
+                    <Form.Field
+                      label="Min Beds"
+                      control="input"
+                      min={0}
+                      value={searchBedsMin}
+                      onChange={(e, input) => {
+                        if (e.target.value.match(/[^0-9]/g)) return
+                        setSearchBedsMin(e.target.value)
+                      }}
+                    />
+                    <Form.Field
+                      label="Max Beds"
+                      control="input"
+                      min={0}
+                      value={searchBedsMax}
+                      onChange={(e, input) => setSearchBedsMax(e.target.value)}
+                    />
+                    <Form.Field
+                      label="Min Baths"
+                      control="input"
+                      min={0}
+                      value={searchBathsMin}
+                      onChange={(e, input) => {
+                        if (e.target.value.match(/[^0-9]/g)) return
+                        setSearchBathsMin(e.target.value)
+                      }}
+                    />
+                    <Form.Field
+                      label="Max Baths"
+                      control="input"
+                      min={0}
+                      value={searchBathsMax}
+                      onChange={(e, input) => setSearchBathsMax(e.target.value)}
+                    />
+                  </Form.Group>
+                  <Form.Group widths='equal'>
+                    <Form.Field
+                      label="Min Sqft"
+                      control="input"
+                      min={0}
+                      value={searchSizeMin}
+                      onChange={(e, input) => {
+                        if (e.target.value.match(/[^0-9]/g)) return
+                        setSearchSizeMin(e.target.value)
+                      }}
+                    />
+                    <Form.Field
+                      label="Max Sqft"
+                      control="input"
+                      min={0}
+                      value={searchSizeMax}
+                      onChange={(e, input) => setSearchSizeMax(e.target.value)}
+                    />
+                  </Form.Group>
+                  <Form.Group widths='equal'>
+                    <Form.Field
+                      label="Min Last Sale Price"
+                      control="input"
+                      min={0}
+                      value={searchSalePriceMin}
+                      onChange={(e, input) => {
+                        if (e.target.value.match(/[^0-9]/g)) return
+                        setSearchSalePriceMin(e.target.value)
+                      }}
+                    />
+                    <Form.Field
+                      label="Max Last Sale Price"
+                      control="input"
+                      min={0}
+                      value={searchSalePriceMax}
+                      onChange={(e, input) => {
+                        if (e.target.value.match(/[^0-9]/g)) return
+                        setSearchSalePriceMax(e.target.value)
+                      }}
+                    />
+                  </Form.Group>
+                </div>
+              )}
+
+
             </div>
           )}
           {destinationsOptionsMode === 'userUploaded' && (
@@ -230,7 +355,6 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                   <div>Uploaded: {new Date(mailoutDetails.destinationsOptions?.userUploaded?.created).toString()}</div>
                 </div>
               )}
-              <h3>Upload CSV file</h3>
               <div>Warning: Choosing a file, and clicking save, will clear all existing destinations</div>
               <input name="destinations" type="file" onChange={handleFileChange}></input>
               {!isCsvBrivityFormat && (
