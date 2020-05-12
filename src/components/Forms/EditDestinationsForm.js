@@ -55,7 +55,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const [stateColumn, setStateColumn] = useState(null);
   const [zipColumn, setZipColumn] = useState(null);
 
-  const [polygonCoordinates, setPolygonCoordinates] = useState(null);
+  const [polygonCoordinates, setPolygonCoordinates] = useState([]);
   const [searchPropertyTypes, setSearchPropertyTypes] = useState([])
   const [searchBedsMin, setSearchBedsMin] = useState('')
   const [searchBedsMax, setSearchBedsMax] = useState('')
@@ -294,7 +294,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
           {destinationsOptionsMode === 'manual' && (
             <div className="ui fluid">
               <div>Use the map to draw the outline of the area to choose destinations from.</div>
-              <PolygonGoogleMapsCore setPolygonCoordinates={setPolygonCoordinates} data={mailoutDetails} />
+              <PolygonGoogleMapsCore polygonCoordinates={polygonCoordinates} setPolygonCoordinates={setPolygonCoordinates} data={mailoutDetails} />
               {polygonCoordinates && (
                 <div>
                   <Form.Field>

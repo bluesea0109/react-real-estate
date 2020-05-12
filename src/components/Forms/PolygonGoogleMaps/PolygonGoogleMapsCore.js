@@ -1,5 +1,5 @@
 import React from 'react';
-import { GoogleMap, DrawingManager } from '@react-google-maps/api';
+import { GoogleMap, DrawingManager, Polygon } from '@react-google-maps/api';
 import { Button } from '../Base';
 
 const center = {
@@ -48,7 +48,10 @@ const onPolygonComplete = (polygon, setPolygonCoordinates) => {
   latestPolygon = polygon;
 };
 
-const PolygonGoogleMapsCore = ({ setPolygonCoordinates, data }) => {
+const PolygonGoogleMapsCore = ({ polygonCoordinates, setPolygonCoordinates, data }) => {
+  let path = []
+  console.log('polygonCoordinates', polygonCoordinates)
+  if (polygonCoordinates && polygonCoordinates.length) path = polygonCoordinates.map(c => ({lng: c[0], lat: c[1]}) )
   return (
     <div style={{ marginTop: '30px' }}>
 
@@ -62,7 +65,21 @@ const PolygonGoogleMapsCore = ({ setPolygonCoordinates, data }) => {
             onClick={onClick}
             onLoad={onMapLoad}
           >
-          {/* {ifLoadedPageBackIn ? <Polygon /> : <DrawingManger />} */}
+
+            {polygonCoordinates && polygonCoordinates.length && (
+              <Polygon
+                path={path}
+                key={1}
+                editable={true}
+                options={{
+                   strokeColor: "#FF0000",
+                   strokeOpacity: 0.8,
+                   strokeWeight: 2,
+                   fillColor: "#FF0000",
+                   fillOpacity: 0.35
+                 }}
+              />
+            )}
             <DrawingManager
               drawingMode="polygon"
               onLoad={drawingManagerOnLoad}
