@@ -33,7 +33,7 @@ const getCoordinates = (polygonArray, setPolygonCoordinates) => {
 let latestPolygon;
 
 const onPolygonComplete = (polygon, setPolygonCoordinates) => {
-  let coordinates = getCoordinates(polygon, setPolygonCoordinates);
+  let coordinates = getCoordinates(polygon, setPolygonCoordinates); // eslint-disable-line
 
   latestPolygon && latestPolygon.setMap(null);
   polygon.setEditable(true);

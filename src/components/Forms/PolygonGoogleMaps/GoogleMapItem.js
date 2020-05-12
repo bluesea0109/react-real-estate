@@ -1,11 +1,7 @@
+import PropTypes from 'prop-types';
 import React, { Fragment, Component } from 'react';
-import { GoogleMap } from '@react-google-maps/api';
+import { GoogleMap, Marker } from '@react-google-maps/api';
 import { Segment } from '../../Base';
-
-const center = {
-  lat: 40.7608,
-  lng: -111.891,
-};
 
 const containerStyle = {
   position: 'relative',
@@ -13,33 +9,94 @@ const containerStyle = {
   height: '100%',
 };
 
-const onClick = (...args) => {
-  // console.log('onClick args: ', args);
-};
+export class GoogleMapItem extends Component {
+  state = {
+    showingInfoWindow: false,
+    activeMarker: {},
+    selectedPlace: {},
+  };
 
-const onMapLoad = map => {
-  // console.log('map: ', map);
-};
+  onMarkerClick = (props, marker, e) =>
+    this.setState({
+      selectedPlace: props,
+      activeMarker: marker,
+      showingInfoWindow: true,
+    });
 
-const DestinationsDisplay = ({ data }) => {
-  return (
-    <Fragment>
-      <Segment attached style={{ height: '50vh', top: '-1px' }}>
+  onMapClicked = props => {
+    if (this.state.showingInfoWindow) {
+      this.setState({
+        showingInfoWindow: false,
+        activeMarker: null,
+      });
+    }
+  };
+
+  render() {
+    const { data } = this.props;
+
+    const displayMarkers = () => {
+      return (
+        data.destinations &&
+        data.destinations.map((dest, index) => {
+          return (
+            <Marker
+              key={index}
+              id={index}
+              icon={{ url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png' }}
+              position={{
+                lat: dest.lat,
+                lng: dest.lon,
+              }}
+              title={dest?.deliveryLine}
+              onClick={this.onMarkerClick}
+            />
+          );
+        })
+      );
+    };
+
+    const mainMarker = () => {
+      return (
+        <Marker
+          icon={{ url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' }}
+          position={{
+            lat: data.details && data.details.latitude,
+            lng: data.details && data.details.longitude,
+          }}
+          title={data.details && data.details.displayAddress}
+          onClick={this.onMarkerClick}
+        >
+          &nsbs;
+        </Marker>
+      );
+    };
+
+    return (
+      <Fragment>
+        <Segment attached style={{ height: '50vh', top: '-1px' }}>
 
           <GoogleMap
             id="destinations-map-display"
             mapContainerStyle={containerStyle}
             zoom={12}
             center={{ lat: data.details && data.details.latitude, lng: data.details && data.details.longitude }}
-            onClick={onClick}
-            onLoad={onMapLoad}
+            onClick={this.onMapClicked}
           >
-          {/* {ifLoadedPageBackIn ? <Polygon /> : <DrawingManger />} */}
+
+            {displayMarkers()}
+            {mainMarker()}
+
           </GoogleMap>
 
-      </Segment>
-    </Fragment>
-  );
+        </Segment>
+      </Fragment>
+    )
+  }
 };
 
-export default DestinationsDisplay;
+GoogleMapItem.propTypes = {
+  props: PropTypes.object,
+};
+
+export default GoogleMapItem
