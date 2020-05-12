@@ -17,7 +17,7 @@ import { Button, Icon, Image, Menu, Message, Page, Segment } from '../Base';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
 import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
-import PolygonGoogleMapsHOC from './PolygonGoogleMaps/PolygonGoogleMapsHOC';
+import PolygonGoogleMapsCore from './PolygonGoogleMaps/PolygonGoogleMapsCore';
 import { connect } from 'formik';
 
 const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleBackClick }) => {
@@ -219,7 +219,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
           {destinationsOptionsMode === 'aiGuided' && (
             <div className="ui fluid">
               <h2>guidance settings</h2>
-              <PolygonGoogleMapsHOC setPolygonCoordinates={setPolygonCoordinates} />
+              <PolygonGoogleMapsCore setPolygonCoordinates={setPolygonCoordinates} />
             </div>
           )}
           {destinationsOptionsMode === 'userUploaded' && (

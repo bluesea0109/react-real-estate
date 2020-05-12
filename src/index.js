@@ -16,6 +16,8 @@ import * as serviceWorker from './serviceWorker';
 import configureStore from './store/configure';
 import registerIcons from './registerIcons';
 import AuthService from './services/auth';
+import PolygonGoogleMapsHOC from './components/Forms/PolygonGoogleMaps/PolygonGoogleMapsHOC';
+
 
 if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_SENTRY_RELEASE) {
   try {
@@ -38,7 +40,9 @@ ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <LastLocationProvider>
-        <App />
+        <PolygonGoogleMapsHOC>
+          <App />
+        </PolygonGoogleMapsHOC>
       </LastLocationProvider>
     </BrowserRouter>
   </Provider>,

@@ -15,7 +15,7 @@ import PopupMinMax from '../components/MailoutListItem/PopupMinMax';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import PageTitleHeader from '../components/PageTitleHeader';
 import { isMobile, min1200Width } from '../components/utils';
-import GoogleMapItem from '../components/GoogleMapItem';
+import GoogleMapItem from '../components/Forms/PolygonGoogleMaps/GoogleMapItem';
 import FlipCard from '../components/FlipCard';
 import Loading from '../components/Loading';
 import ApiService from '../services/api';
@@ -375,7 +375,9 @@ const MailoutDetailsPage = () => {
                   </ItemBodyLayoutV2>
                 </ItemLayout>
               )}
-              {!pendingState && !error && details && destinationsOptionsMode !== 'userUploaded' && <GoogleMapItem data={details} />}
+              {!pendingState && !error && details && destinationsOptionsMode !== 'userUploaded' && (
+                  <GoogleMapItem data={details} />
+              )}
 
               {!pendingState && destinationsOptionsMode === 'userUploaded' && (
                 <div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { LoadScript } from '@react-google-maps/api';
-import PolygonGoogleMapsCore from './PolygonGoogleMapsCore';
+
 
 const loaderId = "poly-map-1";
 
@@ -12,7 +12,7 @@ const onLoad = () => console.log('script loaded');
 
 const onError = err => console.log('onError: ', err);
 
-const PolygonGoogleMapsHOC = ({ setPolygonCoordinates }) => {
+const PolygonGoogleMapsHOC = ({children}) => {
   return (
     <LoadScript
       id={loaderId}
@@ -26,7 +26,7 @@ const PolygonGoogleMapsHOC = ({ setPolygonCoordinates }) => {
       libraries={googleMapsLibraries}
       preventGoogleFontsLoading
     >
-      <PolygonGoogleMapsCore setPolygonCoordinates={setPolygonCoordinates} />
+      {children}
     </LoadScript>
   );
 };
