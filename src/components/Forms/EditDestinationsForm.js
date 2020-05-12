@@ -67,6 +67,8 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const [searchSaleDateMax, setSearchSaleDateMax] = useState('')
   const [searchSalePriceMin, setSearchSalePriceMin] = useState('')
   const [searchSalePriceMax, setSearchSalePriceMax] = useState('')
+  const [runningSearch, setRunningSearch] = useState(false)
+  const [searchResults, setSearchResults] = useState(null)
 
   useEffect(() => {
     console.log(polygonCoordinates);
@@ -79,6 +81,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
 
     if (!polygonCoordinates) return
 
+    setRunningSearch(true)
     let coordinates = cloneDeep(polygonCoordinates)
     let first = cloneDeep(coordinates[0])
     coordinates.push(first)
@@ -109,8 +112,9 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     headers['authorization'] = `Bearer ${accessToken}`;
 
     const response = await fetch(path, { headers, method: 'post', body, credentials: 'include' });
-    const details = await api.handleResponse(response);
-    console.log(details)
+    const results = await api.handleResponse(response)
+    setRunningSearch(false)
+    setSearchResults(results)
   }
 
 
@@ -379,12 +383,21 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                       }}
                     />
                   </Form.Group>
-                  <Button
-                    secondary
-                    onClick={() => handleDestinationSearch()}
-                  >
-                    Load Destinations
-                  </Button>
+                  {!searchResults && (
+                    <Button
+                      secondary
+                      onClick={() => handleDestinationSearch()}
+                      loading={runningSearch}
+                    >
+                      Load Destinations
+                    </Button>
+                  )}
+                  {searchResults && (
+                    <div>
+                      <h2>Results!</h2>
+                      <div>{searchResults.resultCount} Destinations Found</div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

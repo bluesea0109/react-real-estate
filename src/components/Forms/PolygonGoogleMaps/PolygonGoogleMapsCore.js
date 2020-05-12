@@ -74,7 +74,6 @@ const PolygonGoogleMapsCore = ({ setPolygonCoordinates, data }) => {
                   drawingModes: [google.maps.drawing.OverlayType.POLYGON], // eslint-disable-line
                 },
                 polygonOptions: {
-                  draggable: true,
                   clickable: true,
                   editable: true,
                 },
