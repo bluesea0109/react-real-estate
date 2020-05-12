@@ -24,7 +24,7 @@ const getCoordinates = (polygonArray, setPolygonCoordinates) => {
     .getPath()
     .getArray()
     .map(el => {
-      return { lat: el.lat(), lng: el.lng() };
+      return [ el.lng(), el.lat()]  ;
     });
   setPolygonCoordinates(array);
   return array;

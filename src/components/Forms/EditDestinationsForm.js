@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash'
 import auth from '../../services/auth';
 import api from '../../services/api';
 
@@ -73,6 +74,46 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     // dispatch.updateMailoutEditPolygonCoordinates(polygonCoordinates);
   }, [polygonCoordinates]);
 
+  const handleDestinationSearch = async () => {
+    const path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/search/byPolygon`
+
+    if (!polygonCoordinates) return
+
+    let coordinates = cloneDeep(polygonCoordinates)
+    let first = cloneDeep(coordinates[0])
+    coordinates.push(first)
+    let polygon = {
+      type: 'Feature',
+      properties: {},
+      geometry: {
+        type: 'Polygon',
+        coordinates: [coordinates]
+      }
+    }
+
+    let criteria = {}
+    if (searchPropertyTypes && searchPropertyTypes.length) criteria.propertyTypes = searchPropertyTypes
+    if (searchBedsMin !== '') criteria.bedsMin = Number(searchBedsMin)
+    if (searchBedsMax !== '') criteria.bedsMax = Number(searchBedsMax)
+    if (searchBathsMin !== '') criteria.bathsMin = Number(searchBathsMin)
+    if (searchBathsMax !== '') criteria.bathsMax = Number(searchBathsMax)
+    if (searchSizeMin !== '') criteria.sizeMin = Number(searchSizeMin)
+    if (searchSizeMax !== '') criteria.sizeMax = Number(searchSizeMax)
+    if (searchSalePriceMin !== '') criteria.salePriceMin = Number(searchSalePriceMin)
+    if (searchSalePriceMax !== '') criteria.salePriceMax = Number(searchSalePriceMax)
+
+    let body = JSON.stringify({polygon, criteria})
+
+    const headers = {};
+    const accessToken = await auth.getAccessToken();
+    headers['authorization'] = `Bearer ${accessToken}`;
+
+    const response = await fetch(path, { headers, method: 'post', body, credentials: 'include' });
+    const details = await api.handleResponse(response);
+    console.log(details)
+  }
+
+
   const handleEditSubmitClick = async () => {
     if (!csvFile) return handleBackClick();
     const path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/csv`;
@@ -94,7 +135,6 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
 
     const response = await fetch(path, { headers, method: 'post', body: formData, credentials: 'include' });
     const details = await api.handleResponse(response);
-    console.log(details);
     handleBackClick();
 
     // dispatch(updateMailoutDestinationsIsPending({}));
@@ -299,8 +339,6 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                       value={searchBathsMax}
                       onChange={(e, input) => setSearchBathsMax(e.target.value)}
                     />
-                  </Form.Group>
-                  <Form.Group widths='equal'>
                     <Form.Field
                       label="Min Sqft"
                       control="input"
@@ -341,10 +379,14 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                       }}
                     />
                   </Form.Group>
+                  <Button
+                    secondary
+                    onClick={() => handleDestinationSearch()}
+                  >
+                    Load Destinations
+                  </Button>
                 </div>
               )}
-
-
             </div>
           )}
           {destinationsOptionsMode === 'userUploaded' && (
