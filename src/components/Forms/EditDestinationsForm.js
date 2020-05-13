@@ -77,15 +77,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const [searchResults, setSearchResults] = useState(null)
 
   useEffect(() => {
-    console.log(polygonCoordinates);
-    // *Uncomment for redux action
-    // dispatch.updateMailoutEditPolygonCoordinates(polygonCoordinates);
-  }, [polygonCoordinates]);
-
-
-  useEffect(() => {
     let ready = true
-    console.log(firstNameColumn, deliveryLineColumn)
     if (firstNameColumn === null) ready = false
     if (deliveryLineColumn === null) ready = false
     if (cityColumn === null) ready = false
