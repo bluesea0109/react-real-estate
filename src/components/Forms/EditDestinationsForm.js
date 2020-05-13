@@ -76,6 +76,11 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const [runningSearch, setRunningSearch] = useState(false)
   const [searchResults, setSearchResults] = useState(null)
 
+  // ** clear the search results when an existing search is edited
+  useEffect(() => {
+    if (searchResults) setSearchResults(null)
+  }, [polygonCoordinates, searchPropertyTypes, searchBedsMin, searchBedsMax, searchBathsMin, searchBathsMax, searchSizeMin, searchSizeMax, searchSaleDateMin, searchSaleDateMax, searchSalePriceMin, searchSalePriceMax])
+
   // ** only set saveDetails to ready when all the required columns are filled out
   useEffect(() => {
     let ready = true
@@ -87,7 +92,6 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     if (!ready) setSaveDetails({destinationsOptionsMode: 'userUploaded', ready: false})
     else setSaveDetails({destinationsOptionsMode: 'userUploaded', ready: true})
   }, [firstNameColumn, lastNameColumn, deliveryLineColumn, cityColumn, stateColumn, zipColumn])
-
 
   const handleDestinationSearch = async () => {
     if (!polygonCoordinates) return
@@ -151,19 +155,14 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     console.log(saveDetails)
     if (!saveDetails || !saveDetails.ready) return // somehow got here, but not ready
     if (saveDetails.destinationsOptionsMode === 'manual') {
-      console.log('manual')
-      console.log(searchResults)
       let searchTimestampId = searchResults.searchTimestampId
-      console.log(searchTimestampId)
       if (!searchTimestampId) return
       const path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/search/${searchTimestampId}/use`
-      console.log(path)
       const headers = {};
       const accessToken = await auth.getAccessToken();
       headers['authorization'] = `Bearer ${accessToken}`;
       const response = await fetch(path, { headers, method: 'post', credentials: 'include' });
       const details = await api.handleResponse(response)
-      console.log(details)
     }
     if (saveDetails.destinationsOptionsMode === 'userUploaded') {
       if (!csvFile) return handleBackClick();
@@ -559,7 +558,6 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                   </Form.Field>
                 </div>
               )}
-
             </div>
           )}
         </Form>
