@@ -496,3 +496,7 @@ h1 {
 #csvUnrecognized {
   padding: 10px 0;
 }
+
+#searchResultsCount {
+  padding-top: 10px;
+}

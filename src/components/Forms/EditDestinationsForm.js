@@ -447,7 +447,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
 
                   {searchResults && (
                     <div>
-                      <h3>{searchResults.resultCount} Destinations Found</h3>
+                      <h3 id="searchResultsCount">{searchResults.resultCount} Destinations Found</h3>
                       {searchResults.withinBounds && (
                         <Message success visible={true}>
                           <Message.Header>Ready to Save</Message.Header>
