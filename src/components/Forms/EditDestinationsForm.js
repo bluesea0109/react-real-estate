@@ -76,6 +76,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const [runningSearch, setRunningSearch] = useState(false)
   const [searchResults, setSearchResults] = useState(null)
 
+  // ** only set saveDetails to ready when all the required columns are filled out
   useEffect(() => {
     let ready = true
     if (firstNameColumn === null) ready = false
@@ -89,10 +90,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
 
 
   const handleDestinationSearch = async () => {
-    const path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/search/byPolygon`
-
     if (!polygonCoordinates) return
-
     setRunningSearch(true)
     setSearchResults(null)
     setSaveDetails({destinationsOptionsMode: 'manual', ready: false})
@@ -120,12 +118,11 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     if (searchSalePriceMin !== '') criteria.salePriceMin = Number(searchSalePriceMin)
     if (searchSalePriceMax !== '') criteria.salePriceMax = Number(searchSalePriceMax)
 
+    const path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/search/byPolygon`
     let body = JSON.stringify({polygon, criteria})
-
     const headers = {};
     const accessToken = await auth.getAccessToken();
     headers['authorization'] = `Bearer ${accessToken}`;
-
     const response = await fetch(path, { headers, method: 'post', body, credentials: 'include' });
     const results = await api.handleResponse(response)
     setRunningSearch(false)
@@ -150,32 +147,44 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   }
 
 
-  const handleEditSubmitClick = async () => {
-    if (!csvFile) return handleBackClick();
-    const path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/csv`;
-    const formData = new FormData();
-    formData.append('destinations', csvFile);
-
-    if (!isCsvBrivityFormat) {
-      formData.append('firstNameColumn', firstNameColumn);
-      if (lastNameColumn && lastNameColumn !== null) formData.append('lastNameColumn', lastNameColumn);
-      formData.append('deliveryLineColumn', deliveryLineColumn);
-      formData.append('cityColumn', cityColumn);
-      formData.append('stateColumn', stateColumn);
-      formData.append('zipColumn', zipColumn);
+  const handleSubmitClick = async () => {
+    console.log(saveDetails)
+    if (!saveDetails || !saveDetails.ready) return // somehow got here, but not ready
+    if (saveDetails.destinationsOptionsMode === 'manual') {
+      console.log('manual')
+      console.log(searchResults)
+      let searchTimestampId = searchResults.searchTimestampId
+      console.log(searchTimestampId)
+      if (!searchTimestampId) return
+      const path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/search/${searchTimestampId}/use`
+      console.log(path)
+      const headers = {};
+      const accessToken = await auth.getAccessToken();
+      headers['authorization'] = `Bearer ${accessToken}`;
+      const response = await fetch(path, { headers, method: 'post', credentials: 'include' });
+      const details = await api.handleResponse(response)
+      console.log(details)
     }
-
-    const headers = {};
-    const accessToken = await auth.getAccessToken();
-    headers['authorization'] = `Bearer ${accessToken}`;
-
-    const response = await fetch(path, { headers, method: 'post', body: formData, credentials: 'include' });
-    const details = await api.handleResponse(response);
-    handleBackClick();
-
-    // dispatch(updateMailoutDestinationsIsPending({}));
-    // await sleep(500);
-    // handleBackClick();
+    if (saveDetails.destinationsOptionsMode === 'userUploaded') {
+      if (!csvFile) return handleBackClick();
+      const path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/csv`;
+      const formData = new FormData();
+      formData.append('destinations', csvFile);
+      if (!isCsvBrivityFormat) {
+        formData.append('firstNameColumn', firstNameColumn);
+        if (lastNameColumn && lastNameColumn !== null) formData.append('lastNameColumn', lastNameColumn);
+        formData.append('deliveryLineColumn', deliveryLineColumn);
+        formData.append('cityColumn', cityColumn);
+        formData.append('stateColumn', stateColumn);
+        formData.append('zipColumn', zipColumn);
+      }
+      const headers = {};
+      const accessToken = await auth.getAccessToken();
+      headers['authorization'] = `Bearer ${accessToken}`;
+      const response = await fetch(path, { headers, method: 'post', body: formData, credentials: 'include' });
+      const details = await api.handleResponse(response);
+    }
+    handleBackClick()
   };
 
   // https://stackoverflow.com/questions/41610811/react-js-how-to-send-a-multipart-form-data-to-server
@@ -268,7 +277,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                 <Button
                   primary
                   type="submit"
-                  onClick={handleEditSubmitClick}
+                  onClick={handleSubmitClick}
                   loading={updateMailoutDestinationsIsPending}
                   disabled={!(saveDetails.ready && saveDetails.destinationsOptionsMode === destinationsOptionsMode) }
                 >
