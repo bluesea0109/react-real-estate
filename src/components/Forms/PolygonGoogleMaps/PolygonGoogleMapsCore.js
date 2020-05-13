@@ -50,7 +50,6 @@ const onPolygonComplete = (polygon, setPolygonCoordinates) => {
 
 const PolygonGoogleMapsCore = ({ polygonCoordinates, setPolygonCoordinates, data }) => {
   let path = []
-  console.log('polygonCoordinates', polygonCoordinates)
   if (polygonCoordinates && polygonCoordinates.length) path = polygonCoordinates.map(c => ({lng: c[0], lat: c[1]}) )
   return (
     <div style={{ marginTop: '30px' }}>

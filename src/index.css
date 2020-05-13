@@ -483,3 +483,16 @@ h1 {
 .details-customPostcardCTA {
   padding: 10px 20px;
 }
+
+#chooseDestinationsMethod {
+  padding-bottom: 10px;
+}
+
+#destinationCSVFile {
+  border: none;
+  padding: 15px 0px;
+}
+
+#csvUnrecognized {
+  padding: 10px 0;
+}

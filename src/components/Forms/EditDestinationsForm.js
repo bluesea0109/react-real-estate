@@ -45,6 +45,12 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const currentListingStatus = mailoutDetails?.listingStatus;
 
   const [destinationsOptionsMode, setDestinationsOptionsMode] = useState(mailoutDetails.destinationsOptions?.mode || 'ai');
+  const [saveDetails, setSaveDetails] = useState({
+    destinationsOptionsMode: mailoutDetails.destinationsOptions?.mode || 'ai',
+    ready: false
+  })
+
+
   const [csvFile, setCsvFile] = useState(0);
   const [isCsvBrivityFormat, setIsCsvBrivityFormat] = useState(1);
   const [csvHeaders, setCsvHeaders] = useState([]);
@@ -75,6 +81,20 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     // *Uncomment for redux action
     // dispatch.updateMailoutEditPolygonCoordinates(polygonCoordinates);
   }, [polygonCoordinates]);
+
+
+  useEffect(() => {
+    let ready = true
+    console.log(firstNameColumn, deliveryLineColumn)
+    if (firstNameColumn === null) ready = false
+    if (deliveryLineColumn === null) ready = false
+    if (cityColumn === null) ready = false
+    if (stateColumn === null) ready = false
+    if (zipColumn === null) ready = false
+    if (!ready) setSaveDetails({destinationsOptionsMode: 'userUploaded', ready: false})
+    else setSaveDetails({destinationsOptionsMode: 'userUploaded', ready: true})
+  }, [firstNameColumn, lastNameColumn, deliveryLineColumn, cityColumn, stateColumn, zipColumn])
+
 
   const handleDestinationSearch = async () => {
     const path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/search/byPolygon`
@@ -114,6 +134,22 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     const response = await fetch(path, { headers, method: 'post', body, credentials: 'include' });
     const results = await api.handleResponse(response)
     setRunningSearch(false)
+
+    if (results.resultCount >= results.userMailoutSize.mailoutSizeMin && results.resultCount <= results.userMailoutSize.mailoutSizeMin) {
+      results.withinBounds = true
+    }
+    if (results.resultCount < results.userMailoutSize.mailoutSizeMin) {
+      results.withinBounds = false
+      results.underfilled = true
+      results.underfilledBy = results.userMailoutSize.mailoutSizeMin - results.resultCount
+      results.overfilled = false
+    }
+    if (results.resultCount > results.userMailoutSize.mailoutSizeMax) {
+      results.withinBounds = false
+      results.underfilled = false
+      results.overfilled = true
+      results.overfilledBy = results.resultCount - results.userMailoutSize.mailoutSizeMax
+    }
     setSearchResults(results)
   }
 
@@ -165,9 +201,13 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
       if (headers[9] !== 'Home State/Province') brivityFormat = false;
       if (headers[10] !== 'Home Postal Code') brivityFormat = false;
 
-      if (brivityFormat) setIsCsvBrivityFormat(1);
+      if (brivityFormat) {
+        setIsCsvBrivityFormat(1);
+        setSaveDetails({destinationsOptionsMode: 'userUploaded', ready: true})
+      }
       else {
         setIsCsvBrivityFormat(0);
+        setSaveDetails({destinationsOptionsMode: 'userUploaded', ready: false})
         const headerValues = [];
         headers.forEach((header, i) => {
           const contextRef = createRef();
@@ -234,7 +274,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                   type="submit"
                   onClick={handleEditSubmitClick}
                   loading={updateMailoutDestinationsIsPending}
-                  disabled={updateMailoutDestinationsIsPending}
+                  disabled={!(saveDetails.ready && saveDetails.destinationsOptionsMode === destinationsOptionsMode) }
                 >
                   Save
                 </Button>
@@ -253,7 +293,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
         ></Segment>
         <Form>
           <Header as="h4">How should destinations be selected?</Header>
-          <List horizontal>
+          <List horizontal id="chooseDestinationsMethod">
             <List.Item>
               <Checkbox
                 radio
@@ -295,7 +335,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
             <div className="ui fluid">
               <div>Use the map to draw the outline of the area to choose destinations from.</div>
               <PolygonGoogleMapsCore polygonCoordinates={polygonCoordinates} setPolygonCoordinates={setPolygonCoordinates} data={mailoutDetails} />
-              {polygonCoordinates && (
+              {polygonCoordinates && polygonCoordinates.length && (
                 <div>
                   <Form.Field>
                     <label>Property Types</label>
@@ -324,7 +364,10 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                       control="input"
                       min={0}
                       value={searchBedsMax}
-                      onChange={(e, input) => setSearchBedsMax(e.target.value)}
+                      onChange={(e, input) => {
+                        if (e.target.value.match(/[^0-9]/g)) return
+                        setSearchBedsMax(e.target.value)
+                      }}
                     />
                     <Form.Field
                       label="Min Baths"
@@ -341,7 +384,10 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                       control="input"
                       min={0}
                       value={searchBathsMax}
-                      onChange={(e, input) => setSearchBathsMax(e.target.value)}
+                      onChange={(e, input) => {
+                        if (e.target.value.match(/[^0-9]/g)) return
+                        setSearchBathsMax(e.target.value)
+                      }}
                     />
                     <Form.Field
                       label="Min Sqft"
@@ -358,7 +404,10 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                       control="input"
                       min={0}
                       value={searchSizeMax}
-                      onChange={(e, input) => setSearchSizeMax(e.target.value)}
+                      onChange={(e, input) => {
+                        if (e.target.value.match(/[^0-9]/g)) return
+                        setSearchSizeMax(e.target.value)
+                      }}
                     />
                   </Form.Group>
                   <Form.Group widths='equal'>
@@ -389,13 +438,17 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                       onClick={() => handleDestinationSearch()}
                       loading={runningSearch}
                     >
-                      Load Destinations
+                      Search
                     </Button>
                   )}
                   {searchResults && (
                     <div>
                       <h2>Results!</h2>
                       <div>{searchResults.resultCount} Destinations Found</div>
+                      {searchResults.withinBounds && (
+                        <div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -406,15 +459,16 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
             <div className="ui fluid">
               {mailoutDetails.destinationsOptions?.userUploaded?.filename && (
                 <div>
-                  <div>Existing File: {mailoutDetails.destinationsOptions?.userUploaded?.filename}</div>
-                  <div>Uploaded: {new Date(mailoutDetails.destinationsOptions?.userUploaded?.created).toString()}</div>
+                  <div><b>Existing File</b>: {mailoutDetails.destinationsOptions?.userUploaded?.filename}</div>
+                  <div><b>Uploaded</b>: {new Date(mailoutDetails.destinationsOptions?.userUploaded?.created).toString()}</div>
                 </div>
               )}
+
+              <input id="destinationCSVFile" name="destinations" type="file" onChange={handleFileChange}></input>
               <div>Warning: Choosing a file, and clicking save, will clear all existing destinations</div>
-              <input name="destinations" type="file" onChange={handleFileChange}></input>
               {!isCsvBrivityFormat && (
                 <div>
-                  <div>The csv file is not in a recognized brivity format. Please match the fields</div>
+                  <div id="csvUnrecognized">The csv file is not in a recognized brivity format. Please match the fields</div>
                   <Form.Field>
                     <label>First Name</label>
                     <Dropdown
@@ -423,6 +477,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                       selection
                       value={firstNameColumn}
                       onChange={(e, input) => setFirstNameColumn(input.value)}
+
                     />
                   </Form.Field>
                   <Form.Field>
