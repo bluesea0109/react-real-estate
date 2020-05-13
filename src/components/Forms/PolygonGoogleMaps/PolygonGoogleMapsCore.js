@@ -1,11 +1,5 @@
 import React from 'react';
 import { GoogleMap, DrawingManager, Polygon } from '@react-google-maps/api';
-import { Button } from '../Base';
-
-const center = {
-  lat: 40.7608,
-  lng: -111.891,
-};
 
 const onClick = (...args) => {
   // console.log('onClick args: ', args);

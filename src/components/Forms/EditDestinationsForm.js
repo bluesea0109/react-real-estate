@@ -3,23 +3,16 @@ import auth from '../../services/auth';
 import api from '../../services/api';
 
 import { useSelector } from 'react-redux';
-import React, { useState, createRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Checkbox, Dropdown, Form, Header, Label, List, Message } from 'semantic-ui-react';
 
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
-import {
-  changeMailoutDisplayAgentPending,
-  updateMailoutEditPending,
-  mailoutPolygonCoordinates,
-  updateMailoutEditPolygonCoordinates,
-} from '../../store/modules/mailout/actions';
-import { differenceObjectDeep, isMobile, maxLength, objectIsEmpty, sleep } from '../utils';
-import { Button, Icon, Image, Menu, Page, Segment } from '../Base';
+import { isMobile } from '../utils';
+import { Button, Menu, Page, Segment } from '../Base';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
 import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
 import PolygonGoogleMapsCore from './PolygonGoogleMaps/PolygonGoogleMapsCore';
-import { connect } from 'formik';
 
 const propertyTypeOptions = [
   { text: 'Single-Family', key: 'Single-Family', value: 'Single-Family'},
@@ -69,8 +62,8 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const [searchBathsMax, setSearchBathsMax] = useState('')
   const [searchSizeMin, setSearchSizeMin] = useState('')
   const [searchSizeMax, setSearchSizeMax] = useState('')
-  const [searchSaleDateMin, setSearchSaleDateMin] = useState('')
-  const [searchSaleDateMax, setSearchSaleDateMax] = useState('')
+  // const [searchSaleDateMin, setSearchSaleDateMin] = useState('')
+  // const [searchSaleDateMax, setSearchSaleDateMax] = useState('')
   const [searchSalePriceMin, setSearchSalePriceMin] = useState('')
   const [searchSalePriceMax, setSearchSalePriceMax] = useState('')
   const [runningSearch, setRunningSearch] = useState(false)
@@ -79,7 +72,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   // ** clear the search results when an existing search is edited
   useEffect(() => {
     if (searchResults) setSearchResults(null)
-  }, [polygonCoordinates, searchPropertyTypes, searchBedsMin, searchBedsMax, searchBathsMin, searchBathsMax, searchSizeMin, searchSizeMax, searchSaleDateMin, searchSaleDateMax, searchSalePriceMin, searchSalePriceMax])
+  }, [searchResults, polygonCoordinates, searchPropertyTypes, searchBedsMin, searchBedsMax, searchBathsMin, searchBathsMax, searchSizeMin, searchSizeMax, searchSalePriceMin, searchSalePriceMax])
 
   // ** only set saveDetails to ready when all the required columns are filled out
   useEffect(() => {
@@ -162,7 +155,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
       const accessToken = await auth.getAccessToken();
       headers['authorization'] = `Bearer ${accessToken}`;
       const response = await fetch(path, { headers, method: 'post', credentials: 'include' });
-      const details = await api.handleResponse(response)
+      await api.handleResponse(response)
     }
     if (saveDetails.destinationsOptionsMode === 'userUploaded') {
       if (!csvFile) return handleBackClick();
@@ -181,7 +174,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
       const accessToken = await auth.getAccessToken();
       headers['authorization'] = `Bearer ${accessToken}`;
       const response = await fetch(path, { headers, method: 'post', body: formData, credentials: 'include' });
-      const details = await api.handleResponse(response);
+      await api.handleResponse(response);
     }
     handleBackClick()
   };
@@ -214,7 +207,6 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
         setSaveDetails({destinationsOptionsMode: 'userUploaded', ready: false})
         const headerValues = [];
         headers.forEach((header, i) => {
-          const contextRef = createRef();
           headerValues.push({
             key: i,
             text: header,
