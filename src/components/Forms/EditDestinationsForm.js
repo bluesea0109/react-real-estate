@@ -4,7 +4,7 @@ import api from '../../services/api';
 
 import { useSelector } from 'react-redux';
 import React, { useState, createRef, useEffect } from 'react';
-import { Dropdown, Form, Header, Label, List, Checkbox } from 'semantic-ui-react';
+import { Checkbox, Dropdown, Form, Header, Label, List, Message } from 'semantic-ui-react';
 
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import {
@@ -14,7 +14,7 @@ import {
   updateMailoutEditPolygonCoordinates,
 } from '../../store/modules/mailout/actions';
 import { differenceObjectDeep, isMobile, maxLength, objectIsEmpty, sleep } from '../utils';
-import { Button, Icon, Image, Menu, Message, Page, Segment } from '../Base';
+import { Button, Icon, Image, Menu, Page, Segment } from '../Base';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
 import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
@@ -102,6 +102,9 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     if (!polygonCoordinates) return
 
     setRunningSearch(true)
+    setSearchResults(null)
+    setSaveDetails({destinationsOptionsMode: 'manual', ready: false})
+
     let coordinates = cloneDeep(polygonCoordinates)
     let first = cloneDeep(coordinates[0])
     coordinates.push(first)
@@ -135,7 +138,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     const results = await api.handleResponse(response)
     setRunningSearch(false)
 
-    if (results.resultCount >= results.userMailoutSize.mailoutSizeMin && results.resultCount <= results.userMailoutSize.mailoutSizeMin) {
+    if (results.resultCount >= results.userMailoutSize.mailoutSizeMin && results.resultCount <= results.userMailoutSize.mailoutSizeMax) {
       results.withinBounds = true
     }
     if (results.resultCount < results.userMailoutSize.mailoutSizeMin) {
@@ -151,6 +154,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
       results.overfilledBy = results.resultCount - results.userMailoutSize.mailoutSizeMax
     }
     setSearchResults(results)
+    setSaveDetails({destinationsOptionsMode: 'manual', ready: true})
   }
 
 
@@ -432,22 +436,43 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                       }}
                     />
                   </Form.Group>
-                  {!searchResults && (
-                    <Button
-                      secondary
-                      onClick={() => handleDestinationSearch()}
-                      loading={runningSearch}
-                    >
-                      Search
-                    </Button>
-                  )}
+
+                  <Button
+                    secondary
+                    onClick={() => handleDestinationSearch()}
+                    loading={runningSearch}
+                  >
+                    Search
+                  </Button>
+
                   {searchResults && (
                     <div>
-                      <h2>Results!</h2>
-                      <div>{searchResults.resultCount} Destinations Found</div>
+                      <h3>{searchResults.resultCount} Destinations Found</h3>
                       {searchResults.withinBounds && (
-                        <div>
-                        </div>
+                        <Message success visible={true}>
+                          <Message.Header>Ready to Save</Message.Header>
+                          <p>Click 'Save' to accept these destinations.</p>
+                        </Message>
+                      )}
+                      {searchResults.underfilled && (
+                        <Message warning visible={true}>
+                          <Message.Header>Under campaign budget</Message.Header>
+                          <p>You are {searchResults.underfilledBy} short of your minimum budget of {searchResults.userMailoutSize.mailoutSizeMin}. Choose an action:</p>
+                          <Message.List>
+                             <Message.Item>Widen your search parameters to find more,</Message.Item>
+                             <Message.Item>Click 'Save' to accept this limited amount</Message.Item>
+                          </Message.List>
+                        </Message>
+                      )}
+                      {searchResults.overfilled && (
+                        <Message warning visible={true}>
+                          <Message.Header>Over your campaign budget</Message.Header>
+                          <p>You are {searchResults.overfilledBy} over of your maxiumn budget of {searchResults.userMailoutSize.mailoutSizeMax}. Choose an action:</p>
+                         <Message.List>
+                            <Message.Item>Limit your search parameters to find less</Message.Item>
+                            <Message.Item>Click 'Save' to accept this larger amount.</Message.Item>
+                         </Message.List>
+                      </Message>
                       )}
                     </div>
                   )}
