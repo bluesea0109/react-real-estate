@@ -72,7 +72,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   // ** clear the search results when an existing search is edited
   useEffect(() => {
     if (searchResults) setSearchResults(null)
-  }, [searchResults, polygonCoordinates, searchPropertyTypes, searchBedsMin, searchBedsMax, searchBathsMin, searchBathsMax, searchSizeMin, searchSizeMax, searchSalePriceMin, searchSalePriceMax])
+  }, [polygonCoordinates, searchPropertyTypes, searchBedsMin, searchBedsMax, searchBathsMin, searchBathsMax, searchSizeMin, searchSizeMax, searchSalePriceMin, searchSalePriceMax]) // eslint-disable-line
 
   // ** only set saveDetails to ready when all the required columns are filled out
   useEffect(() => {
