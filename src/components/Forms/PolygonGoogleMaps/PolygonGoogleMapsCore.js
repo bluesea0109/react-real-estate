@@ -1,5 +1,5 @@
 import React from 'react';
-import { GoogleMap, DrawingManager, Polygon } from '@react-google-maps/api';
+import { GoogleMap, DrawingManager, Marker, Polygon } from '@react-google-maps/api';
 
 const onClick = (...args) => {
   // console.log('onClick args: ', args);
@@ -43,8 +43,26 @@ const onPolygonComplete = (polygon, setPolygonCoordinates) => {
 };
 
 const PolygonGoogleMapsCore = ({ polygonCoordinates, setPolygonCoordinates, data }) => {
+
   let path = []
   if (polygonCoordinates && polygonCoordinates.length) path = polygonCoordinates.map(c => ({lng: c[0], lat: c[1]}) )
+
+  const mainMarker = () => {
+    return (
+      <Marker
+        icon={{ url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' }}
+        position={{
+          lat: data.details && data.details.latitude,
+          lng: data.details && data.details.longitude,
+        }}
+        title={data.details && data.details.displayAddress}
+      >
+        &nsbs;
+      </Marker>
+    );
+  };
+
+
   return (
     <div style={{ marginTop: '30px' }}>
 
@@ -58,6 +76,8 @@ const PolygonGoogleMapsCore = ({ polygonCoordinates, setPolygonCoordinates, data
             onClick={onClick}
             onLoad={onMapLoad}
           >
+
+            {mainMarker()}
 
             {polygonCoordinates && polygonCoordinates.length && (
               <Polygon

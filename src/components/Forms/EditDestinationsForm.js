@@ -43,6 +43,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     ready: false
   })
 
+  const [numberOfDestinations, setNumberOfDestinations] = useState(mailoutDetails.mailoutSize)
 
   const [csvFile, setCsvFile] = useState(0);
   const [isCsvBrivityFormat, setIsCsvBrivityFormat] = useState(1);
@@ -68,6 +69,23 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const [searchSalePriceMax, setSearchSalePriceMax] = useState('')
   const [runningSearch, setRunningSearch] = useState(false)
   const [searchResults, setSearchResults] = useState(null)
+
+  useEffect(() => {
+    let existingModeAi = true
+    if (mailoutDetails.destinationsOptions?.mode !== 'ai') existingModeAi = false
+    if (!existingModeAi && destinationsOptionsMode === 'ai') {
+      return setSaveDetails({
+        destinationsOptionsMode: 'ai',
+        ready: true
+      })
+    }
+    if (existingModeAi && numberOfDestinations !== mailoutDetails.mailoutSize) {
+      return setSaveDetails({
+        destinationsOptionsMode: 'ai',
+        ready: true
+      })
+    }
+  }, [destinationsOptionsMode, numberOfDestinations])
 
   // ** clear the search results when an existing search is edited
   useEffect(() => {
@@ -147,6 +165,15 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const handleSubmitClick = async () => {
     console.log(saveDetails)
     if (!saveDetails || !saveDetails.ready) return // somehow got here, but not ready
+    if (saveDetails.destinationsOptionsMode === 'ai') {
+      const path = `/api/user/mailout/${mailoutDetails._id}/edit/mailoutSize`
+      const body = JSON.stringify({ mailoutSize: numberOfDestinations })
+      const headers = {};
+      const accessToken = await auth.getAccessToken();
+      headers['authorization'] = `Bearer ${accessToken}`;
+      const response = await fetch(path, { headers, method: 'put', body, credentials: 'include' });
+      await api.handleResponse(response)
+    }
     if (saveDetails.destinationsOptionsMode === 'manual') {
       let searchTimestampId = searchResults.searchTimestampId
       if (!searchTimestampId) return
@@ -327,6 +354,18 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
               />
             </List.Item>
           </List>
+          {destinationsOptionsMode === 'ai' && (
+            <Form.Field
+              label="Number of destinations"
+              control="input"
+              min={0}
+              value={numberOfDestinations}
+              onChange={(e, input) => {
+                if (e.target.value.match(/[^0-9]/g)) return
+                setNumberOfDestinations(e.target.value)
+              }}
+            />
+          )}
           {destinationsOptionsMode === 'manual' && (
             <div className="ui fluid">
               <div>Use the map to draw the outline of the area to choose destinations from.</div>
