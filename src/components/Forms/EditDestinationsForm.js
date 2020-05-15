@@ -34,6 +34,7 @@ const propertyTypeOptions = [
 
 const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleBackClick }) => {
 
+  const peerId = useSelector(store => store.peer.peerId);
   const updateMailoutDestinationsIsPending = useSelector(store => store.mailout.updateMailoutDestinationsPending);
   const currentListingStatus = mailoutDetails?.listingStatus;
 
@@ -133,7 +134,8 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     if (searchSalePriceMin !== '') criteria.salePriceMin = Number(searchSalePriceMin)
     if (searchSalePriceMax !== '') criteria.salePriceMax = Number(searchSalePriceMax)
 
-    const path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/search/byPolygon`
+    let path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/search/byPolygon`
+    if (peerId) path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/destinationOptions/search/byPolygon`
     let body = JSON.stringify({polygon, criteria})
     const headers = {};
     const accessToken = await auth.getAccessToken();
@@ -166,7 +168,8 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     console.log(saveDetails)
     if (!saveDetails || !saveDetails.ready) return // somehow got here, but not ready
     if (saveDetails.destinationsOptionsMode === 'ai') {
-      const path = `/api/user/mailout/${mailoutDetails._id}/edit/mailoutSize`
+      let path = `/api/user/mailout/${mailoutDetails._id}/edit/mailoutSize`
+      if (peerId) path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/mailoutSize`
       const body = JSON.stringify({ mailoutSize: numberOfDestinations })
       const headers = {};
       const accessToken = await auth.getAccessToken();
@@ -177,7 +180,8 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     if (saveDetails.destinationsOptionsMode === 'manual') {
       let searchTimestampId = searchResults.searchTimestampId
       if (!searchTimestampId) return
-      const path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/search/${searchTimestampId}/use`
+      let path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/search/${searchTimestampId}/use`
+      if (peerId) path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/destinationOptions/search/${searchTimestampId}/use`
       const headers = {};
       const accessToken = await auth.getAccessToken();
       headers['authorization'] = `Bearer ${accessToken}`;
@@ -186,7 +190,8 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     }
     if (saveDetails.destinationsOptionsMode === 'userUploaded') {
       if (!csvFile) return handleBackClick();
-      const path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/csv`;
+      let path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/csv`;
+      if (peerId) path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/destinationOptions/csv`;
       const formData = new FormData();
       formData.append('destinations', csvFile);
       if (!isCsvBrivityFormat) {
