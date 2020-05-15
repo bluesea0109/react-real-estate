@@ -35,7 +35,7 @@ const propertyTypeOptions = [
 const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleBackClick }) => {
 
   const peerId = useSelector(store => store.peer.peerId);
-  const updateMailoutDestinationsIsPending = useSelector(store => store.mailout.updateMailoutDestinationsPending);
+  const [saving, setSaving] = useState(false);
   const currentListingStatus = mailoutDetails?.listingStatus;
 
   const [destinationsOptionsMode, setDestinationsOptionsMode] = useState(mailoutDetails.destinationsOptions?.mode || 'ai');
@@ -86,7 +86,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
         ready: true
       })
     }
-  }, [destinationsOptionsMode, numberOfDestinations])
+  }, [destinationsOptionsMode, numberOfDestinations]) // eslint-disable-line
 
   // ** clear the search results when an existing search is edited
   useEffect(() => {
@@ -165,7 +165,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
 
 
   const handleSubmitClick = async () => {
-    console.log(saveDetails)
+    setSaving(true)
     if (!saveDetails || !saveDetails.ready) return // somehow got here, but not ready
     if (saveDetails.destinationsOptionsMode === 'ai') {
       let path = `/api/user/mailout/${mailoutDetails._id}/edit/mailoutSize`
@@ -265,8 +265,8 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                   primary
                   inverted
                   onClick={() => handleBackClick()}
-                  loading={updateMailoutDestinationsIsPending}
-                  disabled={updateMailoutDestinationsIsPending}
+                  loading={saving}
+                  disabled={saving}
                 >
                   Back
                 </Button>
@@ -301,7 +301,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                   primary
                   type="submit"
                   onClick={handleSubmitClick}
-                  loading={updateMailoutDestinationsIsPending}
+                  loading={saving}
                   disabled={!(saveDetails.ready && saveDetails.destinationsOptionsMode === destinationsOptionsMode) }
                 >
                   Save
@@ -310,7 +310,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
             </ItemHeaderMenuLayout>
           </ItemHeaderLayout>
 
-          {updateMailoutDestinationsIsPending && <Loading message="Saving ..." />}
+          {saving && <Loading message="Saving ..." />}
         </ContentBottomHeaderLayout>
 
         <Segment
