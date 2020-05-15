@@ -8,7 +8,7 @@ import { Checkbox, Dropdown, Form, Header, Label, List, Message } from 'semantic
 
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import { isMobile } from '../utils';
-import { Button, Menu, Page, Segment } from '../Base';
+import { Button, Menu, Page, Segment, Snackbar } from '../Base';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
 import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
@@ -36,6 +36,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
 
   const peerId = useSelector(store => store.peer.peerId);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null)
   const currentListingStatus = mailoutDetails?.listingStatus;
 
   const [destinationsOptionsMode, setDestinationsOptionsMode] = useState(mailoutDetails.destinationsOptions?.mode || 'ai');
@@ -167,48 +168,54 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const handleSubmitClick = async () => {
     setSaving(true)
     if (!saveDetails || !saveDetails.ready) return // somehow got here, but not ready
-    if (saveDetails.destinationsOptionsMode === 'ai') {
-      let path = `/api/user/mailout/${mailoutDetails._id}/edit/mailoutSize`
-      if (peerId) path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/mailoutSize`
-      const body = JSON.stringify({ mailoutSize: numberOfDestinations })
-      const headers = {};
-      const accessToken = await auth.getAccessToken();
-      headers['authorization'] = `Bearer ${accessToken}`;
-      const response = await fetch(path, { headers, method: 'put', body, credentials: 'include' });
-      await api.handleResponse(response)
-    }
-    if (saveDetails.destinationsOptionsMode === 'manual') {
-      let searchTimestampId = searchResults.searchTimestampId
-      if (!searchTimestampId) return
-      let path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/search/${searchTimestampId}/use`
-      if (peerId) path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/destinationOptions/search/${searchTimestampId}/use`
-      const headers = {};
-      const accessToken = await auth.getAccessToken();
-      headers['authorization'] = `Bearer ${accessToken}`;
-      const response = await fetch(path, { headers, method: 'post', credentials: 'include' });
-      await api.handleResponse(response)
-    }
-    if (saveDetails.destinationsOptionsMode === 'userUploaded') {
-      if (!csvFile) return handleBackClick();
-      let path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/csv`;
-      if (peerId) path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/destinationOptions/csv`;
-      const formData = new FormData();
-      formData.append('destinations', csvFile);
-      if (!isCsvBrivityFormat) {
-        formData.append('firstNameColumn', firstNameColumn);
-        if (lastNameColumn && lastNameColumn !== null) formData.append('lastNameColumn', lastNameColumn);
-        formData.append('deliveryLineColumn', deliveryLineColumn);
-        formData.append('cityColumn', cityColumn);
-        formData.append('stateColumn', stateColumn);
-        formData.append('zipColumn', zipColumn);
+    try {
+      if (saveDetails.destinationsOptionsMode === 'ai') {
+        let path = `/api/user/mailout/${mailoutDetails._id}/edit/mailoutSize`
+        if (peerId) path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/mailoutSize`
+        const body = JSON.stringify({ mailoutSize: numberOfDestinations })
+        const headers = {};
+        const accessToken = await auth.getAccessToken();
+        headers['authorization'] = `Bearer ${accessToken}`;
+        const response = await fetch(path, { headers, method: 'put', body, credentials: 'include' });
+        await api.handleResponse(response)
       }
-      const headers = {};
-      const accessToken = await auth.getAccessToken();
-      headers['authorization'] = `Bearer ${accessToken}`;
-      const response = await fetch(path, { headers, method: 'post', body: formData, credentials: 'include' });
-      await api.handleResponse(response);
+      if (saveDetails.destinationsOptionsMode === 'manual') {
+        let searchTimestampId = searchResults.searchTimestampId
+        if (!searchTimestampId) return
+        let path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/search/${searchTimestampId}/use`
+        if (peerId) path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/destinationOptions/search/${searchTimestampId}/use`
+        const headers = {};
+        const accessToken = await auth.getAccessToken();
+        headers['authorization'] = `Bearer ${accessToken}`;
+        const response = await fetch(path, { headers, method: 'post', credentials: 'include' });
+        await api.handleResponse(response)
+      }
+      if (saveDetails.destinationsOptionsMode === 'userUploaded') {
+        if (!csvFile) return handleBackClick();
+        let path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/csv`;
+        if (peerId) path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/destinationOptions/csv`;
+        const formData = new FormData();
+        formData.append('destinations', csvFile);
+        if (!isCsvBrivityFormat) {
+          formData.append('firstNameColumn', firstNameColumn);
+          if (lastNameColumn && lastNameColumn !== null) formData.append('lastNameColumn', lastNameColumn);
+          formData.append('deliveryLineColumn', deliveryLineColumn);
+          formData.append('cityColumn', cityColumn);
+          formData.append('stateColumn', stateColumn);
+          formData.append('zipColumn', zipColumn);
+        }
+        const headers = {};
+        const accessToken = await auth.getAccessToken();
+        headers['authorization'] = `Bearer ${accessToken}`;
+        const response = await fetch(path, { headers, method: 'post', body: formData, credentials: 'include' });
+        await api.handleResponse(response);
+      }
+      handleBackClick()
+    } catch (e) {
+      console.log(e)
+      setSaving(false)
+      setError(e.message)
     }
-    handleBackClick()
   };
 
   // https://stackoverflow.com/questions/41610811/react-js-how-to-send-a-multipart-form-data-to-server
@@ -277,6 +284,8 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
       </ContentTopHeaderLayout>
 
       <ContentSpacerLayout />
+
+      {error && <Snackbar error>{error}</Snackbar>}
 
       <Segment>
         <ContentBottomHeaderLayout>

@@ -30,11 +30,12 @@ const MailoutDestinationsPage = () => {
 
   const handleBackClick = () => {
     if (lastLocation.pathname === `/dashboard/edit/${mailoutId}`) {
-      history.push(`/dashboard/${mailoutId}`);
+      return history.push(`/dashboard/${mailoutId}`);
     }
     if (lastLocation.pathname === `/dashboard/${mailoutId}`) {
-      history.goBack();
+      return history.goBack();
     }
+    return history.push(`/dashboard/${mailoutId}`);
   };
 
   return (
