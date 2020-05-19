@@ -85,11 +85,11 @@ const PolygonGoogleMapsCore = ({ polygonCoordinates, setPolygonCoordinates, data
                 key={1}
                 editable={true}
                 options={{
-                   strokeColor: "#FF0000",
-                   strokeOpacity: 0.8,
+                   strokeColor: "#59C4C4",
+                   strokeOpacity: 0.9,
                    strokeWeight: 2,
-                   fillColor: "#FF0000",
-                   fillOpacity: 0.35
+                   fillColor: "#59C4C4",
+                   fillOpacity: 0.30
                  }}
               />
             )}
@@ -106,6 +106,11 @@ const PolygonGoogleMapsCore = ({ polygonCoordinates, setPolygonCoordinates, data
                 polygonOptions: {
                   clickable: true,
                   editable: true,
+                  strokeColor: "#59C4C4",
+                  strokeOpacity: 0.9,
+                  strokeWeight: 2,
+                  fillColor: "#59C4C4",
+                  fillOpacity: 0.30
                 },
               }}
             />

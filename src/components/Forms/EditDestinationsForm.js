@@ -346,7 +346,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
             <List.Item>
               <Checkbox
                 radio
-                label="Search"
+                label="Via map search"
                 name="checkboxRadioGroup"
                 value="that"
                 checked={destinationsOptionsMode === 'manual'}
@@ -372,6 +372,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
             <Form.Field
               label="Number of destinations"
               control="input"
+              width={3}
               min={0}
               value={numberOfDestinations}
               onChange={(e, input) => {
@@ -382,10 +383,10 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
           )}
           {destinationsOptionsMode === 'manual' && (
             <div className="ui fluid">
-              <div>Use the map to draw the outline of the area to choose destinations from.</div>
+              <div>Click "Draw" to draw a custom destination area on the map.</div>
               <PolygonGoogleMapsCore polygonCoordinates={polygonCoordinates} setPolygonCoordinates={setPolygonCoordinates} data={mailoutDetails} />
               {polygonCoordinates && polygonCoordinates.length && (
-                <div>
+                <div id="mapSearchFields">
                   <Form.Field>
                     <label>Property Types</label>
                     <Dropdown
@@ -483,7 +484,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                   </Form.Group>
 
                   <Button
-                    secondary
+                    primary
                     onClick={() => handleDestinationSearch()}
                     loading={runningSearch}
                   >
@@ -535,10 +536,14 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
               )}
 
               <input id="destinationCSVFile" name="destinations" type="file" onChange={handleFileChange}></input>
-              <div>Warning: Choosing a file, and clicking save, will clear all existing destinations</div>
+              <div id="csvUnrecognized">Upload your own CSV to use for targeting (max. 50 MB). NOTE: Choosing a file and clicking save will clear all existing destinations.</div>
               {!isCsvBrivityFormat && (
                 <div>
-                  <div id="csvUnrecognized">The csv file is not in a recognized brivity format. Please match the fields</div>
+
+                  <Message negative visible={true}>
+                    <Message.Header>The CSV file is not in a recognized Brivity format</Message.Header>
+                    <p>Please match the CSV columns to the destination fields, using the selections below.</p>
+                  </Message>
                   <Form.Field>
                     <label>First Name</label>
                     <Dropdown
