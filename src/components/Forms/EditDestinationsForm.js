@@ -4,7 +4,7 @@ import api from '../../services/api';
 
 import { useSelector } from 'react-redux';
 import React, { useState, useEffect } from 'react';
-import { Checkbox, Dropdown, Form, Header, Label, List, Message } from 'semantic-ui-react';
+import { Checkbox, Dropdown, Form, Header, Label, List, Message, Select } from 'semantic-ui-react';
 
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import { isMobile } from '../utils';
@@ -30,6 +30,30 @@ const propertyTypeOptions = [
   { text: 'Vacant', key: 'Vacant', value: 'Vacant' }
 ]
 
+const saleDateOptions = [
+  { text: '1 month ago', value: 1 },
+  { text: '3 months ago', value: 3 },
+  { text: '6 months ago', value: 6 },
+  { text: '9 months ago', value: 9 },
+  { text: '1 year ago', value: 12 },
+  { text: '1.5 years ago', value: 18 },
+  { text: '2 years ago', value: 24 },
+  { text: '3 years ago', value: 36 },
+  { text: '4 years ago', value: 48 },
+  { text: '5 years ago', value: 60 },
+  { text: '6 years ago', value: 72 },
+  { text: '7 years ago', value: 84 },
+  { text: '8 years ago', value: 96 },
+  { text: '9 years ago', value: 108 },
+  { text: '10 years ago', value: 120 },
+
+  { text: '15 years ago', value: 180 },
+  { text: '20 years ago', value: 240 },
+  { text: '25 years ago', value: 300 },
+  { text: '30 years ago', value: 360 },
+  { text: '35 years ago', value: 420 }
+
+]
 
 
 const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleBackClick }) => {
@@ -65,8 +89,8 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const [searchBathsMax, setSearchBathsMax] = useState('')
   const [searchSizeMin, setSearchSizeMin] = useState('')
   const [searchSizeMax, setSearchSizeMax] = useState('')
-  // const [searchSaleDateMin, setSearchSaleDateMin] = useState('')
-  // const [searchSaleDateMax, setSearchSaleDateMax] = useState('')
+  const [searchSaleDateMin, setSearchSaleDateMin] = useState('')
+  const [searchSaleDateMax, setSearchSaleDateMax] = useState('')
   const [searchSalePriceMin, setSearchSalePriceMin] = useState('')
   const [searchSalePriceMax, setSearchSalePriceMax] = useState('')
   const [runningSearch, setRunningSearch] = useState(false)
@@ -134,6 +158,8 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     if (searchSizeMax !== '') criteria.sizeMax = Number(searchSizeMax)
     if (searchSalePriceMin !== '') criteria.salePriceMin = Number(searchSalePriceMin)
     if (searchSalePriceMax !== '') criteria.salePriceMax = Number(searchSalePriceMax)
+    if (searchSaleDateMin) criteria.saleDateMin = Number(searchSaleDateMin)
+    if (searchSaleDateMax) criteria.saleDateMax = Number(searchSaleDateMax)
 
     let path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/search/byPolygon`
     if (peerId) path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/destinationOptions/search/byPolygon`
@@ -479,6 +505,26 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                       onChange={(e, input) => {
                         if (e.target.value.match(/[^0-9]/g)) return
                         setSearchSalePriceMax(e.target.value)
+                      }}
+                    />
+                    <Form.Field
+                      control={Select}
+                      clearable={true}
+                      label='Min Last Sale Date'
+                      options={saleDateOptions}
+                      placeholder='Earliest Sale Date'
+                      onChange={(e, input) => {
+                        setSearchSaleDateMin(input.value)
+                      }}
+                    />
+                    <Form.Field
+                      control={Select}
+                      clearable={true}
+                      label='Max Last Sale Date'
+                      options={saleDateOptions}
+                      placeholder='Oldest Sale Date'
+                      onChange={(e, input) => {
+                        setSearchSaleDateMax(input.value)
                       }}
                     />
                   </Form.Group>
