@@ -567,9 +567,9 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                     />
                   </Form.Field>
                   <Form.Field>
-                    <label>Delivery Line</label>
+                    <label>Address</label>
                     <Dropdown
-                      placeholder="Select Delivery Line Column"
+                      placeholder="Select Address Column"
                       options={csvHeaders}
                       selection
                       value={deliveryLineColumn}
