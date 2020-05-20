@@ -418,7 +418,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
             <div className="ui fluid">
               <div>Click "Draw" to draw a custom destination area on the map.</div>
               <PolygonGoogleMapsCore polygonCoordinates={polygonCoordinates} setPolygonCoordinates={setPolygonCoordinates} data={mailoutDetails} />
-              {polygonCoordinates && polygonCoordinates.length && (
+              {!!polygonCoordinates.length && (
                 <div id="mapSearchFields">
                   <Form.Field>
                     <label>Property Types</label>
