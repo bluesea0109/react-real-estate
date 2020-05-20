@@ -237,6 +237,13 @@ h1 {
   grid-row-gap: 1em;
 }
 
+#brandColourPickerIcon {
+  position: relative;
+  z-index: 10;
+  top: -144px;
+  left: 86px;
+}
+
 .block-picker {
   /*background-color: red;*/
   box-shadow: unset !important;
