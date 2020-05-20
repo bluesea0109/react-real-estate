@@ -536,16 +536,19 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                     />
                   </Form.Group>
 
-                  <Button
-                    primary
-                    onClick={() => handleDestinationSearch()}
-                    loading={runningSearch}
-                  >
-                    Search
-                  </Button>
+                  <div id="searchBoxGrid">
+                    <div id="seachButtonHolder">
+                      <Button
+                        primary
+                        onClick={() => handleDestinationSearch()}
+                        loading={runningSearch}
+                      >
+                        Search
+                      </Button>
+                    </div>
 
                   {searchResults && (
-                    <div>
+                    <div id="searchResultMessages">
                       <h3 id="searchResultsCount">{searchResults.resultCount} Destinations Found</h3>
                       {searchResults.withinBounds && (
                         <Message success visible={true}>
@@ -575,6 +578,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                       )}
                     </div>
                   )}
+                  </div>
                 </div>
               )}
             </div>

@@ -511,3 +511,21 @@ h1 {
 #searchResultsCount {
   padding-top: 10px;
 }
+
+#searchBoxGrid {
+  height: 300px;
+}
+
+#seachButtonHolder {
+  min-height: 300px;
+  height: 300px;
+  float: left;
+}
+
+#searchButtonHolder button {
+  margin-bottom: 100px;
+}
+
+#searchResultMessages {
+  padding-left: 100px;
+}
