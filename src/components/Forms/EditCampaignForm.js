@@ -1,5 +1,5 @@
 import startCase from 'lodash/startCase';
-import { BlockPicker } from 'react-color';
+import { BlockPicker, ChromePicker } from 'react-color';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { createRef, useEffect, useState } from 'react';
 import { Dropdown, Form, Header, Label, Popup, Checkbox } from 'semantic-ui-react';
@@ -38,6 +38,8 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
   const [templateTheme, setTemplateTheme] = useState(currentTemplateTheme);
   const [selectedBrandColor, setSelectedBrandColor] = useState(mailoutEdit?.mergeVariables?.brandColor);
+  const [displayColorPicker, setDisplayColorPicker] = useState(false)
+  const [tempColor, setTempColor] = useState(mailoutEdit?.mergeVariables?.brandColor)
   const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(currentMailoutDisplayAgent);
   const [formValues, setFormValues] = useState(mailoutEdit?.mergeVariables);
 
@@ -52,6 +54,26 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     if (!bestCta) return 'https://www.google.com'
     return bestCta
   })
+
+  const popover = {
+    position: 'absolute',
+    zIndex: '11',
+    top: '125px'
+  }
+  const cover = {
+    position: 'fixed',
+    top: '0px',
+    right: '0px',
+    bottom: '0px',
+    left: '0px',
+  }
+  const handleColorPickerClick = () => setDisplayColorPicker(!displayColorPicker)
+  const handleColorPickerClose = () => {
+    setDisplayColorPicker(false)
+    setSelectedBrandColor(tempColor)
+  }
+
+
   /* This is a hack to enable fields to updated while enabling use to edit them as well
    * TODO: find a more permanents (correct) solution to this problem */
   const [formValuesHaveChanged, setFormValuesHaveChanged] = useState(false);
@@ -403,7 +425,12 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
           <div>
             <Header as="h4">Brand Color</Header>
-            <BlockPicker triangle="hide" width="200px" color={selectedBrandColor} colors={colors} onChangeComplete={setSelectedBrandColor} />
+            <BlockPicker triangle="hide" width="200px" color={selectedBrandColor} colors={colors} onChange={setTempColor} onChangeComplete={value => setSelectedBrandColor(value) && setTempColor(value)} />
+            <Icon id="brandColourPickerIcon" bordered link color='grey' name="eye dropper" onClick={ handleColorPickerClick } />
+            { displayColorPicker ? <div style={ popover }>
+                <div style={ cover } onClick={ handleColorPickerClose } />
+                <ChromePicker color={tempColor} onChange={value => setTempColor(value)} />
+              </div> : null }
           </div>
 
           {multiUser && (
