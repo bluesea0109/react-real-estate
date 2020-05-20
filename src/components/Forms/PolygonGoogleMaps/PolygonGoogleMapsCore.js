@@ -72,6 +72,9 @@ const PolygonGoogleMapsCore = ({ polygonCoordinates, setPolygonCoordinates, data
             id="polygon-map-mailout"
             mapContainerStyle={{ height: '400px', width: '100%' }}
             zoom={12}
+            options={{
+              streetViewControl: false
+            }}
             center={{ lat: data.details && data.details.latitude, lng: data.details && data.details.longitude }}
             onClick={onClick}
             onLoad={onMapLoad}

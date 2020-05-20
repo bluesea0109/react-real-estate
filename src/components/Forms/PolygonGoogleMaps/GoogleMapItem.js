@@ -80,6 +80,9 @@ export class GoogleMapItem extends Component {
             id="destinations-map-display"
             mapContainerStyle={containerStyle}
             zoom={12}
+            options={{
+              streetViewControl: false
+            }}
             center={{ lat: data.details && data.details.latitude, lng: data.details && data.details.longitude }}
             onClick={this.onMapClicked}
           >
