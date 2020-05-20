@@ -242,6 +242,8 @@ h1 {
   z-index: 10;
   top: -144px;
   left: 86px;
+  color: white!important;
+  box-shadow: 0 0 0 0.1em rgba(255,255,255) inset;
 }
 
 .block-picker {
