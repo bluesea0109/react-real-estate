@@ -1,6 +1,7 @@
 import { cloneDeep } from 'lodash'
 import auth from '../../services/auth';
 import api from '../../services/api';
+import { subMonths } from 'date-fns';
 
 import { useSelector } from 'react-redux';
 import React, { useState, useEffect } from 'react';
@@ -158,8 +159,14 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     if (searchSizeMax !== '') criteria.sizeMax = Number(searchSizeMax)
     if (searchSalePriceMin !== '') criteria.salePriceMin = Number(searchSalePriceMin)
     if (searchSalePriceMax !== '') criteria.salePriceMax = Number(searchSalePriceMax)
-    if (searchSaleDateMin) criteria.saleDateMin = Number(searchSaleDateMin)
-    if (searchSaleDateMax) criteria.saleDateMax = Number(searchSaleDateMax)
+    if (searchSaleDateMin) {
+      let minDate = subMonths(Date.now(), Number(searchSaleDateMin))
+      criteria.saleDateMin = minDate.getTime()
+    }
+    if (searchSaleDateMax) {
+      let maxDate = subMonths(Date.now(), Number(searchSaleDateMax))
+      criteria.saleDateMax = maxDate.getTime()
+    }
 
     let path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/search/byPolygon`
     if (peerId) path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/destinationOptions/search/byPolygon`
