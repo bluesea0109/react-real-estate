@@ -74,6 +74,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
 
   const [csvFile, setCsvFile] = useState(0);
   const [isCsvBrivityFormat, setIsCsvBrivityFormat] = useState(1);
+  const [isCsvBrivityMailingFormat, setIsCsvBrivityMailingFormat] = useState(0);
   const [csvHeaders, setCsvHeaders] = useState([]);
   const [firstNameColumn, setFirstNameColumn] = useState(null);
   const [lastNameColumn, setLastNameColumn] = useState(null);
@@ -237,6 +238,13 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
           formData.append('stateColumn', stateColumn);
           formData.append('zipColumn', zipColumn);
         }
+        if (isCsvBrivityMailingFormat) {
+          formData.append('firstNameColumn', 2);
+          formData.append('deliveryLineColumn', 4);
+          formData.append('cityColumn', 5);
+          formData.append('stateColumn', 6);
+          formData.append('zipColumn', 7);
+        }
         const headers = {};
         const accessToken = await auth.getAccessToken();
         headers['authorization'] = `Bearer ${accessToken}`;
@@ -263,19 +271,37 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
       let headers = firstLine.split(',');
 
       let brivityFormat = true;
+      let mailoutFormat = false
       if (headers[0] !== 'First Name') brivityFormat = false;
       if (headers[1] !== 'Last Name') brivityFormat = false;
-      if (headers[7] !== 'Home Street Address') brivityFormat = false;
-      if (headers[8] !== 'Home City') brivityFormat = false;
-      if (headers[9] !== 'Home State/Province') brivityFormat = false;
-      if (headers[10] !== 'Home Postal Code') brivityFormat = false;
+
+      if (headers[2] === 'Envelope Salutation') {
+        mailoutFormat = true
+        if (headers[4] !== 'Mailing Street Address') brivityFormat = false;
+        if (headers[5] !== 'Mailing City') brivityFormat = false;
+        if (headers[6] !== 'Mailing State/Province') brivityFormat = false;
+        if (headers[7] !== 'Mailing Postal Code') brivityFormat = false;
+      } else if (headers[7] === 'Home Street Address') {
+        mailoutFormat = false
+        // split into two formats
+        if (headers[7] !== 'Home Street Address') brivityFormat = false;
+        if (headers[8] !== 'Home City') brivityFormat = false;
+        if (headers[9] !== 'Home State/Province') brivityFormat = false;
+        if (headers[10] !== 'Home Postal Code') brivityFormat = false;
+      } else {
+        brivityFormat = false
+        mailoutFormat = false
+      }
 
       if (brivityFormat) {
-        setIsCsvBrivityFormat(1);
+        setIsCsvBrivityFormat(1)
+        if (mailoutFormat) setIsCsvBrivityMailingFormat(1)
+        else setIsCsvBrivityMailingFormat(0)
         setSaveDetails({destinationsOptionsMode: 'userUploaded', ready: true})
       }
       else {
-        setIsCsvBrivityFormat(0);
+        setIsCsvBrivityFormat(0)
+        setIsCsvBrivityMailingFormat(0)
         setSaveDetails({destinationsOptionsMode: 'userUploaded', ready: false})
         const headerValues = [];
         headers.forEach((header, i) => {
