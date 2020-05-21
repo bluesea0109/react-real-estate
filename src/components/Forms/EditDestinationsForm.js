@@ -74,7 +74,6 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
 
   const [csvFile, setCsvFile] = useState(0);
   const [isCsvBrivityFormat, setIsCsvBrivityFormat] = useState(1);
-  const [isCsvBrivityMailingFormat, setIsCsvBrivityMailingFormat] = useState(0);
   const [csvHeaders, setCsvHeaders] = useState([]);
   const [firstNameColumn, setFirstNameColumn] = useState(null);
   const [lastNameColumn, setLastNameColumn] = useState(null);
@@ -237,14 +236,10 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
           formData.append('cityColumn', cityColumn);
           formData.append('stateColumn', stateColumn);
           formData.append('zipColumn', zipColumn);
+        } else {
+          formData.append('brivityFormat', true)
         }
-        if (isCsvBrivityMailingFormat) {
-          formData.append('firstNameColumn', 2);
-          formData.append('deliveryLineColumn', 4);
-          formData.append('cityColumn', 5);
-          formData.append('stateColumn', 6);
-          formData.append('zipColumn', 7);
-        }
+
         const headers = {};
         const accessToken = await auth.getAccessToken();
         headers['authorization'] = `Bearer ${accessToken}`;
@@ -270,38 +265,36 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
       let firstLine = text.split('\n').shift();
       let headers = firstLine.split(',');
 
-      let brivityFormat = true;
-      let mailoutFormat = false
-      if (headers[0] !== 'First Name') brivityFormat = false;
-      if (headers[1] !== 'Last Name') brivityFormat = false;
-
-      if (headers[2] === 'Envelope Salutation') {
-        mailoutFormat = true
-        if (headers[4] !== 'Mailing Street Address') brivityFormat = false;
-        if (headers[5] !== 'Mailing City') brivityFormat = false;
-        if (headers[6] !== 'Mailing State/Province') brivityFormat = false;
-        if (headers[7] !== 'Mailing Postal Code') brivityFormat = false;
-      } else if (headers[7] === 'Home Street Address') {
-        mailoutFormat = false
-        // split into two formats
-        if (headers[7] !== 'Home Street Address') brivityFormat = false;
-        if (headers[8] !== 'Home City') brivityFormat = false;
-        if (headers[9] !== 'Home State/Province') brivityFormat = false;
-        if (headers[10] !== 'Home Postal Code') brivityFormat = false;
-      } else {
-        brivityFormat = false
-        mailoutFormat = false
+      let brivityFormat = false
+      let found = {
+        envelopeSalutation: false,
+        firstNameColumn: false,
+        lastNameColumn: false,
+        deliveryLineColumn: false,
+        cityColumn: false,
+        stateColumn: false,
+        zipColumn: false
       }
-
+      headers.forEach((h, i) => {
+        if (h === 'First Name') found.firstNameColumn = true
+        if (h === 'Last Name') found.lastNameColumn = true
+        if (h === 'Envelope Salutation') found.envelopeSalutation = true
+        if (h === 'Home Street Address') found.deliveryLineColumn = true
+        if (h === 'Home City') found.cityColumn = true
+        if (h === 'Home State/Province') found.stateColumn = true
+        if (h === 'Home Postal Code') found.zipColumn = true
+        if (h === 'Mailing Street Address') found.deliveryLineColumn = true
+        if (h === 'Mailing City') found.cityColumn = true
+        if (h === 'Mailing State/Province') found.stateColumn = true
+        if (h === 'Mailing Postal Code') found.zipColumn = true
+      })
+      if (found.deliveryLineColumn && found.cityColumn && found.stateColumn && found.zipColumn) brivityFormat = true
       if (brivityFormat) {
         setIsCsvBrivityFormat(1)
-        if (mailoutFormat) setIsCsvBrivityMailingFormat(1)
-        else setIsCsvBrivityMailingFormat(0)
         setSaveDetails({destinationsOptionsMode: 'userUploaded', ready: true})
       }
       else {
         setIsCsvBrivityFormat(0)
-        setIsCsvBrivityMailingFormat(0)
         setSaveDetails({destinationsOptionsMode: 'userUploaded', ready: false})
         const headerValues = [];
         headers.forEach((header, i) => {
