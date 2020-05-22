@@ -1,4 +1,15 @@
 -----------------
+## Release 3.0.x
+Changes:
+- Edit destinations now allows for three ways to select destinations
+- Enhanced automated destination selection to work much better
+- Added map search, with property filtering, to select destinations
+- Added CSV file upload to use as destinations
+- CSV upload will detect a brivity file export format automatically
+- Unknown CSV files will ask the user to pick which columns map to the destination address fields
+- Added a color picker so agents can choose none standard color options for their branding
+
+-----------------
 ## Release 2.7.0
 Changes:
 - Change the CTA url at the campaign level. Allows cta to point to a property page much easier.
