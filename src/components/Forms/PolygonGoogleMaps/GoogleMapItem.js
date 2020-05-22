@@ -59,7 +59,7 @@ export class GoogleMapItem extends Component {
     const mainMarker = () => {
       return (
         <Marker
-          icon={{ url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' }}
+          icon={{ url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png' }}
           position={{
             lat: data.details && data.details.latitude,
             lng: data.details && data.details.longitude,
