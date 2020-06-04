@@ -531,3 +531,13 @@ h1 {
 #searchResultMessages {
   padding-left: 100px;
 }
+
+#postcardCoverFile {
+  visibility: hidden;
+}
+
+#postcardUploadText {
+  cursor: pointer;
+  position: relative;
+  top: -16px;
+}

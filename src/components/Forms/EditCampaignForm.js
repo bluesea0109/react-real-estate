@@ -4,10 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import React, { createRef, useEffect, useState } from 'react';
 import { Dropdown, Form, Header, Label, Popup, Checkbox } from 'semantic-ui-react';
 
+import auth from '../../services/auth';
+import api from '../../services/api';
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import { changeMailoutDisplayAgentPending, updateMailoutEditPending } from '../../store/modules/mailout/actions';
 import { differenceObjectDeep, isMobile, maxLength, objectIsEmpty, sleep } from '../utils';
-import { Button, Icon, Image, Menu, Message, Page, Segment } from '../Base';
+import { Button, Icon, Image, Menu, Message, Page, Segment, Snackbar } from '../Base';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
 import { StyledHeader, colors } from '../helpers';
 import PageTitleHeader from '../PageTitleHeader';
@@ -16,11 +18,11 @@ import Loading from '../Loading';
 const blacklistNames = ['brandColor', 'frontImgUrl', 'agentPicture', 'brokerageLogo', 'teamLogo', 'backUrl', 'frontAgentUrl'];
 
 const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
+  const peerId = useSelector(store => store.peer.peerId)
   const dispatch = useDispatch();
   const bookmarkTemplate = useSelector(store => store.templates.available?.bookmark);
   const ribbonTemplate = useSelector(store => store.templates.available?.ribbon);
   const stackTemplate = useSelector(store => store.templates.available?.stack);
-
   const onLoginMode = useSelector(store => store.onLogin?.mode);
   const multiUser = onLoginMode === 'multiuser';
 
@@ -36,12 +38,15 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const currentMailoutDisplayAgentUserID = mailoutDetails.mailoutDisplayAgent ? mailoutDetails.mailoutDisplayAgent?.userId : mailoutDetails.userId;
   const currentMailoutDisplayAgent = mailoutDetails.mailoutDisplayAgent || { userId: mailoutDetails.userId };
 
+  const [error, setError] = useState(null)
+
   const [templateTheme, setTemplateTheme] = useState(currentTemplateTheme);
   const [selectedBrandColor, setSelectedBrandColor] = useState(mailoutEdit?.mergeVariables?.brandColor);
   const [displayColorPicker, setDisplayColorPicker] = useState(false)
   const [tempColor, setTempColor] = useState(mailoutEdit?.mergeVariables?.brandColor)
   const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(currentMailoutDisplayAgent);
   const [formValues, setFormValues] = useState(mailoutEdit?.mergeVariables);
+  const [coverPhoto, setCoverPhoto] = useState(mailoutDetails.details.coverPhoto)
 
   //const defaultCTAUrl = useSelector(store => store.)
   const [ctaUrl, setCtaUrl] = useState(mailoutDetails.cta)
@@ -111,12 +116,42 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     }
   }, [mailoutEdit.mergeVariables, formValues, setFormValues, formValuesHaveChanged]);
 
+  const triggerFileDialog = () => document.getElementById('postcardCoverFile').click()
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    // do some checking
+    let ok = false
+    if (file.type === 'image/png') ok = true
+    if (file.type === 'image/jpeg') ok = true
+    if (!ok) return setError('File needs to be a jpg or png')
+
+    const formData = new FormData();
+    formData.append('listingPhoto', file);
+    try {
+      let path = `/api/user/mailout/${mailoutDetails._id}/edit/listingPhoto/resize`
+      if (peerId) path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/listingPhoto/resize`
+
+      const headers = {};
+      const accessToken = await auth.getAccessToken();
+      headers['authorization'] = `Bearer ${accessToken}`;
+      const response = await fetch(path, { headers, method: 'post', body: formData, credentials: 'include' });
+      let {imageUrl} = await api.handleResponse(response)
+      setTimeout(() => {
+        setCoverPhoto(imageUrl)
+      }, 1000)
+    } catch (e) {
+       setError(e.message)
+    }
+  }
+
   const handleEditSubmitClick = async () => {
     const newMergeVariables = [];
     newMergeVariables.push({ name: 'brandColor', value: selectedBrandColor.hex || selectedBrandColor });
+    newMergeVariables.push({ name: 'frontImgUrl', value: coverPhoto})
 
     Object.keys(formValues)
-      .filter(key => key !== 'brandColor')
+      .filter(key => key !== 'brandColor' && key !== 'frontImgUrl')
       .forEach(key => newMergeVariables.push({ name: key, value: formValues[key] }));
 
     const newData = Object.assign(
@@ -351,6 +386,8 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
       <ContentSpacerLayout />
 
+      {error && <Snackbar error>{error}</Snackbar>}
+
       <Segment>
         <ContentBottomHeaderLayout>
           <ItemHeaderLayout attached="top" block style={isMobile() ? { marginTop: '56px' } : {}}>
@@ -422,7 +459,12 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
             <p>&nbsp;</p>
             {renderTemplatePicture('stack')}
           </div>
-
+        </Segment>
+        <Segment
+          basic
+          padded
+          className={isMobile() ? null : 'secondary-grid-container'}
+        >
           <div>
             <Header as="h4">Brand Color</Header>
             <BlockPicker triangle="hide" width="200px" color={selectedBrandColor} colors={colors} onChange={setTempColor} onChangeComplete={value => setSelectedBrandColor(value) && setTempColor(value)} />
@@ -433,6 +475,12 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
               </div> : null }
           </div>
 
+          <div>
+            <Header as="h4">Cover Photo</Header>
+            <img src={coverPhoto} alt="postcard cover" />
+            <input id="postcardCoverFile" name="postcardcover" type="file" onChange={handleFileChange}></input>
+            <a onClick={triggerFileDialog} id="postcardUploadText">Upload new cover photo</a>
+          </div>
           {multiUser && (
             <div>
               <Header as="h4">Display Agent</Header>
