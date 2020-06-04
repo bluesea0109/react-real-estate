@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import startCase from 'lodash/startCase';
 import { BlockPicker, ChromePicker } from 'react-color';
 import { useDispatch, useSelector } from 'react-redux';
@@ -46,7 +47,11 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const [tempColor, setTempColor] = useState(mailoutEdit?.mergeVariables?.brandColor)
   const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(currentMailoutDisplayAgent);
   const [formValues, setFormValues] = useState(mailoutEdit?.mergeVariables);
-  const [coverPhoto, setCoverPhoto] = useState(mailoutDetails.details.coverPhoto)
+
+  let _coverPhotoMv = _.get(mailoutDetails, 'mergeVariables', []).find( mv => mv.name === 'frontImgUrl')
+  let _coverPhoto = _.get(_coverPhotoMv, 'value', _.get(mailoutDetails, 'details.coverPhoto'))
+
+  const [coverPhoto, setCoverPhoto] = useState(_coverPhoto)
 
   //const defaultCTAUrl = useSelector(store => store.)
   const [ctaUrl, setCtaUrl] = useState(mailoutDetails.cta)
@@ -479,6 +484,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
             <Header as="h4">Cover Photo</Header>
             <img src={coverPhoto} alt="postcard cover" />
             <input id="postcardCoverFile" name="postcardcover" type="file" onChange={handleFileChange}></input>
+            <br/>
             <a onClick={triggerFileDialog} id="postcardUploadText">Upload new cover photo</a>
           </div>
           {multiUser && (
