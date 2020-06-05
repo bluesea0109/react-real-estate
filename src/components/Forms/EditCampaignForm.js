@@ -52,6 +52,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   let _coverPhoto = _.get(_coverPhotoMv, 'value', _.get(mailoutDetails, 'details.coverPhoto'))
 
   const [coverPhoto, setCoverPhoto] = useState(_coverPhoto)
+  const [photoUpdating, setPhotoUpdating] = useState(false)
 
   //const defaultCTAUrl = useSelector(store => store.)
   const [ctaUrl, setCtaUrl] = useState(mailoutDetails.cta)
@@ -134,6 +135,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     const formData = new FormData();
     formData.append('listingPhoto', file);
     try {
+      setPhotoUpdating(true)
       let path = `/api/user/mailout/${mailoutDetails._id}/edit/listingPhoto/resize`
       if (peerId) path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/listingPhoto/resize`
 
@@ -144,8 +146,10 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
       let {imageUrl} = await api.handleResponse(response)
       setTimeout(() => {
         setCoverPhoto(imageUrl)
+        setPhotoUpdating(false)
       }, 1000)
     } catch (e) {
+       setPhotoUpdating(false)
        setError(e.message)
     }
   }
@@ -482,10 +486,19 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
           <div>
             <Header as="h4">Cover Photo</Header>
-            <img src={coverPhoto} alt="postcard cover" />
+            {photoUpdating && (
+              <span>Please wait...</span>
+            )}
+            {!photoUpdating && (
+              <div>
+                <img src={coverPhoto} alt="postcard cover" />
+                <br/>
+                <a onClick={triggerFileDialog} id="postcardUploadText">Upload new cover photo</a>
+                <br/>
+                (preferred size: 1875x990)
+              </div>
+            )}
             <input id="postcardCoverFile" name="postcardcover" type="file" onChange={handleFileChange}></input>
-            <br/>
-            <a onClick={triggerFileDialog} id="postcardUploadText">Upload new cover photo</a>
           </div>
           {multiUser && (
             <div>
