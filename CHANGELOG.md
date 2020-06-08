@@ -1,4 +1,9 @@
 -----------------
+## Release 3.1.x
+Changes:
+- Edit campaign lets a user change a cover photo by selecting a different mls picture (left/right buttons) or upload a photo from their computer
+
+-----------------
 ## Release 3.0.x
 Changes:
 - Edit destinations now allows for three ways to select destinations
