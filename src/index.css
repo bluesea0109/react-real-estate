@@ -532,6 +532,11 @@ h1 {
   padding-left: 100px;
 }
 
+#uploadCoverGroup {
+  position: relative;
+  float: right;
+}
+
 #postcardCoverFile {
   visibility: hidden;
 }
@@ -539,5 +544,9 @@ h1 {
 #postcardUploadText {
   cursor: pointer;
   position: relative;
-  top: -16px;
+  color: #59C4C4;
+}
+
+#postcardUploadText:visited {
+  color: #59C4C4;
 }

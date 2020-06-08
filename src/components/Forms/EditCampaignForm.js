@@ -52,6 +52,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   let _coverPhoto = _.get(_coverPhotoMv, 'value', _.get(mailoutDetails, 'details.coverPhoto'))
 
   const [coverPhoto, setCoverPhoto] = useState(_coverPhoto)
+  const [coverPhotoIndex, setCoverPhotoIndex] = useState(0)
   const [photoUpdating, setPhotoUpdating] = useState(false)
 
   //const defaultCTAUrl = useSelector(store => store.)
@@ -152,6 +153,26 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
        setPhotoUpdating(false)
        setError(e.message)
     }
+  }
+
+  const changeCoverPhotoInc = () => {
+    let length = _.get(mailoutDetails, 'raw.photos.length')
+    let currentPhoto = _.get(mailoutDetails, 'details.coverPhoto')
+    let daIndex = coverPhotoIndex + 1
+    if (daIndex >= length) daIndex = 0
+    setCoverPhotoIndex(daIndex)
+    let imageUrl = currentPhoto.replace(/\/\d+\.jpg/, `/${daIndex}.jpg`)
+    setCoverPhoto(imageUrl)
+  }
+
+  const changeCoverPhotoDec = () => {
+    let length = _.get(mailoutDetails, 'raw.photos.length')
+    let currentPhoto = _.get(mailoutDetails, 'details.coverPhoto')
+    let daIndex = coverPhotoIndex - 1
+    if (daIndex < 0) daIndex = length - 1
+    setCoverPhotoIndex(daIndex)
+    let imageUrl = currentPhoto.replace(/\/\d+\.jpg/, `/${daIndex}.jpg`)
+    setCoverPhoto(imageUrl)
   }
 
   const handleEditSubmitClick = async () => {
@@ -485,7 +506,9 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           </div>
 
           <div>
-            <Header as="h4">Cover Photo</Header>
+            <Header as="h4">
+              Cover Photo
+            </Header>
             {photoUpdating && (
               <span>Please wait...</span>
             )}
@@ -493,9 +516,19 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
               <div>
                 <img src={coverPhoto} alt="postcard cover" />
                 <br/>
-                <a href="#/ignore" onClick={triggerFileDialog} id="postcardUploadText">Upload new cover photo</a>
-                <br/>
-                (preferred size: 1875x990)
+                <Button.Group icon>
+                  <Button onClick={() => changeCoverPhotoDec()}>
+                    <Icon name='angle left' />
+                  </Button>
+                  <Button onClick={() => changeCoverPhotoInc()}>
+                    <Icon name='angle right' />
+                  </Button>
+                </Button.Group>
+                <div id="uploadCoverGroup">
+                  <a href="#/ignore" onClick={triggerFileDialog} id="postcardUploadText">Upload new cover photo</a>
+                  <br/>
+                  (preferred size: 1875x990)
+                </div>
               </div>
             )}
             <input id="postcardCoverFile" name="postcardcover" type="file" onChange={handleFileChange}></input>
