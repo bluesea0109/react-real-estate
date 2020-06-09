@@ -550,3 +550,30 @@ h1 {
 #postcardUploadText:visited {
   color: #59C4C4;
 }
+
+#selectAddCampaignType {
+  margin-bottom: 10px;
+}
+
+#newCampaignType button {
+  width: 265px;
+}
+
+#uploadCardFront {
+  border: 1px dashed #666;
+  border-radius: 2px;
+  background-color: #DDD;
+  width: 265px;
+  cursor: pointer;
+}
+
+#uploadCardFront i {
+  position: relative;
+  float: left;
+  top: -30px;
+}
+
+#uploadCardFront div {
+  position: relative;
+  left: 30px;
+}

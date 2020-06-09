@@ -215,14 +215,14 @@ const Dashboard = () => {
           </Modal>
 
 
-          <Modal open={showAddCampaign} dimmer="blurring">
+          <Modal open={showAddCampaign} dimmer="blurring"  centered={false}>
             <Modal.Header>
               Add Campaign
             </Modal.Header>
             <Modal.Content>
               <p>Enter a property MLS number to import a listing, or you can create a custom campaign and upload your own design.</p>
 
-              <List horizontal>
+              <List horizontal id="selectAddCampaignType">
                 <List.Item>
                   <Checkbox
                     radio
@@ -249,10 +249,80 @@ const Dashboard = () => {
                 </List.Item>
               </List>
 
+              {useMLSNumberToAddCampaign && (
+                <div>
+                  <Input type="text" fluid placeholder="Property MLS Number" id="addCampaignInput" />
+                </div>
+              )}
+              {!useMLSNumberToAddCampaign && (
+                <div id="newCampaignType">
+                  <h5>Campaign Type</h5>
+                  <Grid>
+                    <Grid.Row columns={3}>
+                      <Grid.Column>
+                        <Button inverted primary size='huge' toggle active={false}>
+                          <Icon name='world' />
+                          Market Listing
+                        </Button>
+                      </Grid.Column>
+                      <Grid.Column>
+                        <Button inverted primary size='huge' toggle active={false}>
+                          <Icon name='world' />
+                          Home Value
+                        </Button>
+                      </Grid.Column>
+                      <Grid.Column>
+                        <Button inverted primary size='huge' toggle active={false} >
+                          <Icon name='world' />
+                          Event
+                        </Button>
+                      </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row columns={3}>
+                      <Grid.Column>
+                        <Button inverted primary size='huge' toggle active={false} >
+                          <Icon name='world' />
+                          Sphere
+                        </Button>
+                      </Grid.Column>
+                      <Grid.Column>
+                        <Button inverted primary size='huge' toggle active={false} >
+                          <Icon name='world' />
+                          Farm Area
+                        </Button>
+                      </Grid.Column>
+                      <Grid.Column>
+                        <Button inverted primary size='huge' toggle active={false} >
+                          <Icon name='world' />
+                          Recruiting
+                        </Button>
+                      </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row columns={1}>
+                      <Grid.Column>
+                        <Button inverted primary size='huge' toggle active={false} >
+                          <Icon name='world' />
+                          Other
+                        </Button>
+                      </Grid.Column>
+                    </Grid.Row>
+                  </Grid>
+                  <h5>Card Front</h5>
+                  <div id="uploadCardFront">
+
+                    <div>
+                      <b>Upload Your Own Design</b><br/>
+                      (4.25"x6.25" PDF, PNG or JPEG - max 5MB)
+                    </div>
+                    <Icon name="upload" />
+                  </div>
+                </div>
+              )}
+
             </Modal.Content>
             <Modal.Actions>
-              <Button onClick={cancelAddCampaign}>Cancel</Button>
-              <Button onClick={finsihAddCampaign}>Add Campaign</Button>
+              <Button inverted primary onClick={cancelAddCampaign}>Cancel</Button>
+              <Button primary onClick={finsihAddCampaign}>Add Campaign</Button>
             </Modal.Actions>
           </Modal>
 
