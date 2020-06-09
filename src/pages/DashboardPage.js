@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Progress } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -6,6 +6,7 @@ import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemBodyLayout, Item
 import { getMailoutsPending, getMoreMailoutsPending, addCampaignStart } from '../store/modules/mailouts/actions';
 import { setCompletedDashboardModal } from '../store/modules/onboarded/actions'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Form, Checkbox, List } from 'semantic-ui-react';
 import { Button, Grid, Header, Icon, Input, Menu, Modal, Page, Popup, Segment, Snackbar } from '../components/Base';
 import IframeGroup from '../components/MailoutListItem/IframeGroup';
 import ListHeader from '../components/MailoutListItem/ListHeader';
@@ -44,6 +45,8 @@ const Dashboard = () => {
   const page = useSelector(store => store.mailouts.page);
   const mailoutList = useSelector(store => store.mailouts.list);
   const error = useSelector(store => store.mailouts.error?.message);
+  const [showAddCampaign, setShowAddCampaign] = useState(false)
+  const [useMLSNumberToAddCampaign, setUseMLSNumberToAddCampaign] = useState(true)
 
   useFetching(getMailoutsPending, onboarded, useDispatch());
 
@@ -56,10 +59,19 @@ const Dashboard = () => {
   };
 
   const addCampaign = e => {
-    let value = document.getElementById('addCampaignInput').value
-    if (!value) return
-    if (!value.length) return
-    dispatch(addCampaignStart(value))
+    setShowAddCampaign(true)
+    // let value = document.getElementById('addCampaignInput').value
+    // if (!value) return
+    // if (!value.length) return
+    // dispatch(addCampaignStart(value))
+  }
+
+  const cancelAddCampaign = e => {
+    setShowAddCampaign(false)
+  }
+
+  const finsihAddCampaign = e => {
+
   }
 
   const handleKeyPress = e => {
@@ -141,7 +153,6 @@ const Dashboard = () => {
             </Menu.Item>
             <Menu.Item>
             <div className="ui action input">
-              <Input type="text" placeholder="Property MLS Number" id="addCampaignInput" />
               {addCampaignMlsNumPendingState && (
                 <Button loading className="ui button">Add Campaign</Button>
               )}
@@ -149,12 +160,6 @@ const Dashboard = () => {
                 <Button className="ui button" onClick={addCampaign}>Add Campaign</Button>
               )}
               </div>
-              <Popup
-                flowing
-                trigger={<FontAwesomeIcon icon="info-circle" style={{ marginLeft: '.5em', color: '#2DB5AD' }} />}
-                content="Dont see a listing? Enter the MLS number and click Add Campaign."
-                position="top right"
-              />
             </Menu.Item>
           </Menu>
         </PageTitleHeader>
@@ -208,6 +213,49 @@ const Dashboard = () => {
               </Button>
             </Modal.Actions>
           </Modal>
+
+
+          <Modal open={showAddCampaign} dimmer="blurring">
+            <Modal.Header>
+              Add Campaign
+            </Modal.Header>
+            <Modal.Content>
+              <p>Enter a property MLS number to import a listing, or you can create a custom campaign and upload your own design.</p>
+
+              <List horizontal>
+                <List.Item>
+                  <Checkbox
+                    radio
+                    label="MLS Number"
+                    name='checkboxRadioGroup'
+                    value='this'
+                    checked={useMLSNumberToAddCampaign}
+                    onClick={() => {
+                      setUseMLSNumberToAddCampaign(true)
+                    }}
+                  />
+                </List.Item>
+                <List.Item>
+                  <Checkbox
+                    radio
+                    label='Custom Campaign'
+                    name='checkboxRadioGroup'
+                    value='that'
+                    checked={!useMLSNumberToAddCampaign}
+                    onClick={() => {
+                      setUseMLSNumberToAddCampaign(false)
+                    }}
+                  />
+                </List.Item>
+              </List>
+
+            </Modal.Content>
+            <Modal.Actions>
+              <Button onClick={cancelAddCampaign}>Cancel</Button>
+              <Button onClick={finsihAddCampaign}>Add Campaign</Button>
+            </Modal.Actions>
+          </Modal>
+
 
           <Grid>
             <Grid.Row>
