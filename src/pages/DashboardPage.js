@@ -391,7 +391,12 @@ const Dashboard = () => {
             </Modal.Content>
             <Modal.Actions>
               <Button inverted primary onClick={cancelAddCampaign}>Cancel</Button>
-              <Button primary onClick={finsihAddCampaign}>Add Campaign</Button>
+              <Button primary
+                onClick={finsihAddCampaign}
+                disabled={(!useMLSNumberToAddCampaign && (!CampaignCoverUpload || !AddCampaignType))}
+              >
+                Add Campaign
+              </Button>
             </Modal.Actions>
           </Modal>
 
