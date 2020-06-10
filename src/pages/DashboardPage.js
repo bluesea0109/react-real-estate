@@ -2,6 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Progress } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import auth from '../services/auth';
+import api from '../services/api';
+
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemBodyLayout, ItemLayout } from '../layouts';
 import { getMailoutsPending, getMoreMailoutsPending, addCampaignStart } from '../store/modules/mailouts/actions';
 import { setCompletedDashboardModal } from '../store/modules/onboarded/actions'
@@ -27,6 +30,7 @@ const useFetching = (getActionCreator, onboarded, dispatch) => {
 
 const Dashboard = () => {
   const dispatch = useDispatch();
+  const peerId = useSelector(store => store.peer.peerId)
   const isInitiatingTeam = useSelector(store => store.teamInitialize.polling);
   const initiatingTeamState = useSelector(store => store.teamInitialize.available);
   const currentTeamUserTotal = initiatingTeamState && initiatingTeamState.currentUserTotal;
@@ -46,7 +50,11 @@ const Dashboard = () => {
   const mailoutList = useSelector(store => store.mailouts.list);
   const error = useSelector(store => store.mailouts.error?.message);
   const [showAddCampaign, setShowAddCampaign] = useState(false)
+  const [photoUpdating, setPhotoUpdating] = useState(false)
   const [useMLSNumberToAddCampaign, setUseMLSNumberToAddCampaign] = useState(true)
+  const [AddCampaignType, setAddCampaignType] = useState(null)
+  const [CampaignCoverUpload, setCampaignCoverUpload] = useState(null)
+  const [UploadingInProgress, setUploadingInProgress] = useState(false)
 
   useFetching(getMailoutsPending, onboarded, useDispatch());
 
@@ -58,17 +66,48 @@ const Dashboard = () => {
     boundFetchMoreMailouts(page + 1);
   };
 
-  const addCampaign = e => {
-    setShowAddCampaign(true)
-    // let value = document.getElementById('addCampaignInput').value
-    // if (!value) return
-    // if (!value.length) return
-    // dispatch(addCampaignStart(value))
+  const triggerFileDialog = () => document.getElementById('cardFrontCoverFile').click()
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    // do some checking
+    let ok = false
+    if (file.type === 'image/png') ok = true
+    if (file.type === 'image/jpeg') ok = true
+    //if (!ok) return setError('File needs to be a jpg or png')
+
+    setUploadingInProgress(true)
+
+    const formData = new FormData();
+    formData.append('front', file);
+    try {
+      setPhotoUpdating(true)
+      let path = `/api/user/mailout/create/front`
+      if (peerId) path = `/api/user/peer/${peerId}/mailout/create/front`
+
+      const headers = {};
+      const accessToken = await auth.getAccessToken();
+      headers['authorization'] = `Bearer ${accessToken}`;
+      const response = await fetch(path, { headers, method: 'post', body: formData, credentials: 'include' });
+      let {url, contentType} = await api.handleResponse(response)
+      setTimeout(() => {
+        console.log(url, contentType)
+        setUploadingInProgress(false)
+        setCampaignCoverUpload({
+          name: file.name,
+          url,
+          contentType
+        })
+      }, 1000)
+    } catch (e) {
+      setUploadingInProgress(false)
+       //setError(e.message)
+    }
   }
 
-  const cancelAddCampaign = e => {
-    setShowAddCampaign(false)
-  }
+
+  const addCampaign = e => setShowAddCampaign(true)
+
+  const cancelAddCampaign = e => setShowAddCampaign(false)
 
   const finsihAddCampaign = e => {
 
@@ -99,6 +138,7 @@ const Dashboard = () => {
   }
 
   const createObserver = useCallback(() => {
+    if (showAddCampaign) return
     const options = {
       root: null,
       rootMargin: '0px',
@@ -220,6 +260,7 @@ const Dashboard = () => {
               Add Campaign
             </Modal.Header>
             <Modal.Content>
+             <div id="addCampaignHolder">
               <p>Enter a property MLS number to import a listing, or you can create a custom campaign and upload your own design.</p>
 
               <List horizontal id="selectAddCampaignType">
@@ -260,65 +301,93 @@ const Dashboard = () => {
                   <Grid>
                     <Grid.Row columns={3}>
                       <Grid.Column>
-                        <Button inverted primary size='huge' toggle active={false}>
-                          <Icon name='world' />
+                        <Button inverted primary size='big' toggle
+                          active={AddCampaignType === 'MarketListing'}
+                          onClick={() => setAddCampaignType('MarketListing')}
+                        >
+                          <Icon name='home' />
                           Market Listing
                         </Button>
                       </Grid.Column>
                       <Grid.Column>
-                        <Button inverted primary size='huge' toggle active={false}>
-                          <Icon name='world' />
+                        <Button inverted primary size='big' toggle
+                          active={AddCampaignType === 'HomeValue'}
+                          onClick={() => setAddCampaignType('HomeValue')}
+                        >
+                          <Icon name='dollar sign' />
                           Home Value
                         </Button>
                       </Grid.Column>
                       <Grid.Column>
-                        <Button inverted primary size='huge' toggle active={false} >
-                          <Icon name='world' />
+                        <Button inverted primary size='big' toggle
+                          active={AddCampaignType === 'Event'}
+                          onClick={() => setAddCampaignType('Event')}
+                         >
+                          <Icon name='calendar check outline' />
                           Event
                         </Button>
                       </Grid.Column>
                     </Grid.Row>
                     <Grid.Row columns={3}>
                       <Grid.Column>
-                        <Button inverted primary size='huge' toggle active={false} >
-                          <Icon name='world' />
+                        <Button inverted primary size='big' toggle
+                          active={AddCampaignType === 'Sphere'}
+                          onClick={() => setAddCampaignType('Sphere')}
+                         >
+                          <Icon name='address book outline' />
                           Sphere
                         </Button>
                       </Grid.Column>
                       <Grid.Column>
-                        <Button inverted primary size='huge' toggle active={false} >
-                          <Icon name='world' />
+                        <Button inverted primary size='big' toggle
+                          active={AddCampaignType === 'FarmArea'}
+                          onClick={() => setAddCampaignType('FarmArea')}
+                         >
+                          <Icon name='map outline' />
                           Farm Area
                         </Button>
                       </Grid.Column>
                       <Grid.Column>
-                        <Button inverted primary size='huge' toggle active={false} >
-                          <Icon name='world' />
+                        <Button inverted primary size='big' toggle
+                          active={AddCampaignType === 'Recruiting'}
+                          onClick={() => setAddCampaignType('Recruiting')}
+                        >
+                          <Icon name='user plus' />
                           Recruiting
                         </Button>
                       </Grid.Column>
                     </Grid.Row>
                     <Grid.Row columns={1}>
                       <Grid.Column>
-                        <Button inverted primary size='huge' toggle active={false} >
-                          <Icon name='world' />
+                        <Button inverted primary size='big' toggle
+                          active={AddCampaignType === 'Other'}
+                          onClick={() => setAddCampaignType('Other')}
+                         >
+                          <Icon name='crosshairs' />
                           Other
                         </Button>
                       </Grid.Column>
                     </Grid.Row>
                   </Grid>
                   <h5>Card Front</h5>
-                  <div id="uploadCardFront">
+                  {!UploadingInProgress && (
+                    <div id="uploadCardFront" onClick={triggerFileDialog}>
 
-                    <div>
-                      <b>Upload Your Own Design</b><br/>
-                      (4.25"x6.25" PDF, PNG or JPEG - max 5MB)
+                      <div>
+                        {CampaignCoverUpload && (<b>{CampaignCoverUpload.name}</b>)}
+                        {!CampaignCoverUpload && (<b>Upload Your Own Design</b>)}
+                        <br/>
+                        (4.25"x6.25" PDF, PNG or JPEG - max 5MB)
+                      </div>
+                      <Icon name="upload" size="big" />
+                      <input id="cardFrontCoverFile" name="postcardcover" type="file" onChange={handleFileChange}></input>
                     </div>
-                    <Icon name="upload" />
-                  </div>
+                  )}
+                  {UploadingInProgress && (<p>Please wait...</p>)}
+
                 </div>
               )}
-
+             </div>
             </Modal.Content>
             <Modal.Actions>
               <Button inverted primary onClick={cancelAddCampaign}>Cancel</Button>
@@ -330,7 +399,7 @@ const Dashboard = () => {
           <Grid>
             <Grid.Row>
               <Grid.Column width={16}>
-                <MailoutsList list={mailoutList} />
+                {!showAddCampaign && (<MailoutsList list={mailoutList} />)}
               </Grid.Column>
             </Grid.Row>
 
