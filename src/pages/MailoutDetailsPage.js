@@ -7,7 +7,7 @@ import { format } from 'date-fns'
 
 import { resetMailout, revertMailoutEditPending, stopMailoutPending, submitMailoutPending } from '../store/modules/mailout/actions';
 import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from '../components/MailoutListItem/helpers';
-import { Button, Grid, Header, Icon, Input, List, Menu, Message, Modal, Page, Popup, Segment, Table } from '../components/Base';
+import { Button, Grid, Header, Icon, Input, Image, List, Menu, Message, Modal, Page, Popup, Segment, Table } from '../components/Base';
 import { iframeTransformMobile, iframeTransformDesktop } from '../components/helpers';
 import PopupContent from '../components/MailoutListItem/PopupContent';
 import { getMailoutPending } from '../store/modules/mailout/actions';
@@ -205,13 +205,7 @@ const MailoutDetailsPage = () => {
   const FrontIframe = () => (
     <div>
     {details.frontResourceUrl && (
-      <Segment compact style={{ border: 'none', padding: '1px', margin: 'auto' }}>
-        <img src={details.frontResourceUrl}
-          width={isMobile() ? '300' : '588'}
-          height={isMobile() ? '204' : '400'}
-          className="image-frame-border"
-        />
-      </Segment>
+        <Image src={details.frontResourceUrl} style={{ width: isMobile() ? '300px' : '588px' }} />
     )}
     {!details.frontResourceUrl && (
       <Segment compact textAlign="center" loading={!details?._id || !frontLoaded} style={{ border: 'none', padding: '1px', margin: 'auto' }}>

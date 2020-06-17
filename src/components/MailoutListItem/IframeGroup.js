@@ -8,6 +8,11 @@ import { iframeTransformMobile, iframeLinkStyle } from '../helpers';
 import { ItemBodyIframeLayout } from '../../layouts';
 import ApiService from '../../services/api/index';
 import { isMobile } from '../utils';
+import { Image } from '../Base';
+
+const mql = window.matchMedia('(max-width: 599px)');
+const resizePictures = () => (mql.matches ? { width: '300px' } : { width: '300px' });
+
 
 const IframeGroup = ({ index, item, linkTo = null }) => {
   const peerId = useSelector(store => store.peer.peerId);
@@ -50,11 +55,10 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
       <ItemBodyIframeLayout horizontal={!isMobile()} style={{ border: 'none', boxShadow: 'none' }} id={`mailout-iframe-set-${index}`}>
       {item.frontResourceUrl && (
         <Segment textAlign="center" style={{ border: 'none' }}>
-          <img src={item.frontResourceUrl}
-            width="300"
-            height="204"
-          />
-          <Link to={linkTo} style={iframeLinkStyle} />
+
+          <Link to={linkTo}>
+            <Image src={item.frontResourceUrl} style={resizePictures()} className="bm-transform-effect image-frame-border" />
+          </Link>
         </Segment>
       )}
       {!item.frontResourceUrl && (

@@ -29,7 +29,7 @@ const ApproveAndSendButton = ({ data, mailoutDetailPage, onClickApproveAndSend, 
           </Link>
         )}
         {canPickDestinations(data.mailoutStatus) && (
-          <Link to={`dashboard/${data._id}/destinations`}>
+          <Link to={`dashboard/edit/${data._id}/destinations`}>
             <Button primary>
               <MobileDisabledLayout>
                 <Fragment>Choose Destinations</Fragment>

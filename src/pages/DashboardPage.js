@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
+
 import { Progress } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -29,6 +31,7 @@ const useFetching = (getActionCreator, onboarded, dispatch) => {
 };
 
 const Dashboard = () => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const peerId = useSelector(store => store.peer.peerId)
   const isInitiatingTeam = useSelector(store => store.teamInitialize.polling);
@@ -109,8 +112,27 @@ const Dashboard = () => {
 
   const cancelAddCampaign = e => setShowAddCampaign(false)
 
-  const finsihAddCampaign = e => {
+  const finsihAddCampaign = async e => {
+    if (useMLSNumberToAddCampaign) {
 
+    } else {
+      let path = `/api/user/mailout/withCover/4by6`
+      if (peerId) path = `/api/user/peer/${peerId}/mailout/withCover/4by6`
+
+      const headers = {}
+      const accessToken = await auth.getAccessToken()
+      headers['authorization'] = `Bearer ${accessToken}`
+      const formData = new FormData()
+      formData.append('createdBy', 'user')
+      formData.append('skipEmailNotification', true)
+      formData.append('frontResourceUrl', CampaignCoverUpload.url)
+
+      const response = await fetch(path, { headers, method: 'post', body: formData, credentials: 'include' });
+      let doc = await api.handleResponse(response)
+      console.log(doc)
+      return history.push(`/dashboard/edit/${doc._id}/destinations`);
+
+    }
   }
 
   const handleKeyPress = e => {
