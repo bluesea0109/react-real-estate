@@ -505,34 +505,36 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
               </div> : null }
           </div>
 
-          <div>
-            <Header as="h4">
-              Cover Photo
-            </Header>
-            {photoUpdating && (
-              <span>Please wait...</span>
-            )}
-            {!photoUpdating && (
-              <div>
-                <img src={coverPhoto} alt="postcard cover" />
-                <br/>
-                <Button.Group icon>
-                  <Button onClick={() => changeCoverPhotoDec()}>
-                    <Icon name='angle left' />
-                  </Button>
-                  <Button onClick={() => changeCoverPhotoInc()}>
-                    <Icon name='angle right' />
-                  </Button>
-                </Button.Group>
-                <div id="uploadCoverGroup">
-                  <a href="#/ignore" onClick={triggerFileDialog} id="postcardUploadText">Upload new cover photo</a>
+          {!mailoutDetails.frontResourceUrl && (
+            <div>
+              <Header as="h4">
+                Cover Photo
+              </Header>
+              {photoUpdating && (
+                <span>Please wait...</span>
+              )}
+              {!photoUpdating && (
+                <div>
+                  <img src={coverPhoto} alt="postcard cover" />
                   <br/>
-                  (preferred size: 1875x990)
+                  <Button.Group icon>
+                    <Button onClick={() => changeCoverPhotoDec()}>
+                      <Icon name='angle left' />
+                    </Button>
+                    <Button onClick={() => changeCoverPhotoInc()}>
+                      <Icon name='angle right' />
+                    </Button>
+                  </Button.Group>
+                  <div id="uploadCoverGroup">
+                    <a href="#/ignore" onClick={triggerFileDialog} id="postcardUploadText">Upload new cover photo</a>
+                    <br/>
+                    (preferred size: 1875x990)
+                  </div>
                 </div>
-              </div>
-            )}
-            <input id="postcardCoverFile" name="postcardcover" type="file" onChange={handleFileChange}></input>
-          </div>
+              )}
+              <input id="postcardCoverFile" name="postcardcover" type="file" onChange={handleFileChange}></input>
+            </div>
+          )}
           {multiUser && (
             <div>
               <Header as="h4">Display Agent</Header>

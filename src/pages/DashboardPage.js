@@ -127,7 +127,7 @@ const Dashboard = () => {
       const backIframe = entry.target.querySelector('#bm-iframe-back');
 
       if (entry.isIntersecting) {
-        if (!frontIframe.src) {
+        if (frontIframe && !frontIframe.src) {
           frontIframe.src = frontIframe.title;
         }
         if (!backIframe.src) {

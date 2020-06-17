@@ -47,6 +47,20 @@ const PolygonGoogleMapsCore = ({ polygonCoordinates, setPolygonCoordinates, data
   let path = []
   if (polygonCoordinates && polygonCoordinates.length) path = polygonCoordinates.map(c => ({lng: c[0], lat: c[1]}) )
 
+  let center = { lat: 44.5049368, lng: -105.7491507 }
+  let zoom = 4
+  if (data.details) {
+    if (data.details.latitude) center.lat = data.details.latitude
+    if (data.details.longitude) center.lng = data.details.longitude
+    zoom = 12
+  } else if (polygonCoordinates && polygonCoordinates.length) {
+    let first = polygonCoordinates[0]
+    center.lng = first[0]
+    center.lat = first[1]
+    zoom = 12
+  }
+
+
   const mainMarker = () => {
     return (
       <Marker
@@ -71,16 +85,16 @@ const PolygonGoogleMapsCore = ({ polygonCoordinates, setPolygonCoordinates, data
           <GoogleMap
             id="polygon-map-mailout"
             mapContainerStyle={{ height: '400px', width: '100%' }}
-            zoom={12}
+            zoom={zoom}
             options={{
               streetViewControl: false
             }}
-            center={{ lat: data.details && data.details.latitude, lng: data.details && data.details.longitude }}
+            center={center}
             onClick={onClick}
             onLoad={onMapLoad}
           >
 
-            {mainMarker()}
+            {data.details && data.details.latitude && mainMarker()}
 
             {polygonCoordinates && polygonCoordinates.length && (
               <Polygon

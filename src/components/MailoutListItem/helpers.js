@@ -13,13 +13,17 @@ export const canSend = mailoutStatus => {
   return mailoutStatus === 'calculated';
 };
 
+export const canPickDestinations = mailoutStatus => {
+  return mailoutStatus === 'created';
+}
+
 export const formatDate = created => {
   if (!created || typeof created !== 'number') return '-';
   return format(new Date(created), 'MM/dd/yyyy');
 };
 
 export const resolveMailoutStatusIcon = mailoutStatus => {
-  if (mailoutStatus === 'created') return 'sync-alt';
+  if (mailoutStatus === 'created') return 'edit';
   if (mailoutStatus === 'calculated') return 'eye';
   if (mailoutStatus === 'submitted') return 'sync-alt';
   // if (mailoutStatus === 'scheduled') return 'eye' // this has been sent to lob
@@ -32,7 +36,7 @@ export const resolveMailoutStatusIcon = mailoutStatus => {
 };
 
 export const resolveMailoutStatus = mailoutStatus => {
-  if (mailoutStatus === 'created') return 'Processing';
+  if (mailoutStatus === 'created') return 'Created';
   if (mailoutStatus === 'calculated') return 'Awaiting Approval';
   if (mailoutStatus === 'submitted') return 'Processing';
   // if (mailoutStatus === 'scheduled') return 'Awaiting Approval' // this has been sent to lob

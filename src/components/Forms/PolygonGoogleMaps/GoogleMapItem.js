@@ -35,6 +35,19 @@ export class GoogleMapItem extends Component {
   render() {
     const { data } = this.props;
 
+    let center = { lat: 44.5049368, lng: -105.7491507 }
+    let zoom = 4
+    if (data.details) {
+      if (data.details.latitude) center.lat = data.details.latitude
+      if (data.details.longitude) center.lng = data.details.longitude
+      zoom = 12
+    } else if (data.destinations && data.destinations.length) {
+      let first = data.destinations[0]
+      center.lng = first.lon
+      center.lat = first.lat
+      zoom = 12
+    }
+
     const displayMarkers = () => {
       return (
         data.destinations &&
@@ -79,16 +92,16 @@ export class GoogleMapItem extends Component {
           <GoogleMap
             id="destinations-map-display"
             mapContainerStyle={containerStyle}
-            zoom={12}
+            zoom={zoom}
             options={{
               streetViewControl: false
             }}
-            center={{ lat: data.details && data.details.latitude, lng: data.details && data.details.longitude }}
+            center={center}
             onClick={this.onMapClicked}
           >
 
             {displayMarkers()}
-            {mainMarker()}
+            {data.details && data.details.latitude && mainMarker()}
 
           </GoogleMap>
 

@@ -63,12 +63,14 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null)
   const currentListingStatus = mailoutDetails?.listingStatus;
+  const isCampaign = mailoutDetails?.subtype === 'campaign'
 
-  const [destinationsOptionsMode, setDestinationsOptionsMode] = useState(mailoutDetails.destinationsOptions?.mode || 'ai');
+  const [destinationsOptionsMode, setDestinationsOptionsMode] = useState(mailoutDetails.destinationsOptions?.mode || isCampaign ? 'userUploaded': 'ai');
   const [saveDetails, setSaveDetails] = useState({
-    destinationsOptionsMode: mailoutDetails.destinationsOptions?.mode || 'ai',
+    destinationsOptionsMode: mailoutDetails.destinationsOptions?.mode || isCampaign ? 'userUploaded': 'ai',
     ready: false
   })
+  console.log(saveDetails)
 
   const [numberOfDestinations, setNumberOfDestinations] = useState(mailoutDetails.mailoutSize)
 
@@ -383,18 +385,20 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
         <Form>
           <Header as="h4">How should destinations be selected?</Header>
           <List horizontal id="chooseDestinationsMethod">
-            <List.Item>
-              <Checkbox
-                radio
-                label="Automatically"
-                name="checkboxRadioGroup"
-                value="this"
-                checked={destinationsOptionsMode === 'ai'}
-                onClick={() => {
-                  setDestinationsOptionsMode('ai');
-                }}
-              />
-            </List.Item>
+            {!isCampaign && (
+              <List.Item>
+                <Checkbox
+                  radio
+                  label="Automatically fsd"
+                  name="checkboxRadioGroup"
+                  value="this"
+                  checked={destinationsOptionsMode === 'ai'}
+                  onClick={() => {
+                    setDestinationsOptionsMode('ai');
+                  }}
+                />
+              </List.Item>
+            )}
             <List.Item>
               <Checkbox
                 radio

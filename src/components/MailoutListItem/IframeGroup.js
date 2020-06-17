@@ -48,6 +48,16 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
   if (linkTo) {
     return (
       <ItemBodyIframeLayout horizontal={!isMobile()} style={{ border: 'none', boxShadow: 'none' }} id={`mailout-iframe-set-${index}`}>
+      {item.frontResourceUrl && (
+        <Segment textAlign="center" style={{ border: 'none' }}>
+          <img src={item.frontResourceUrl}
+            width="300"
+            height="204"
+          />
+          <Link to={linkTo} style={iframeLinkStyle} />
+        </Segment>
+      )}
+      {!item.frontResourceUrl && (
         <Segment textAlign="center" loading={!item?._id || !frontLoaded} style={{ border: 'none' }}>
           <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className="bm-transform-effect image-frame-border">
             <iframe
@@ -65,6 +75,9 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
             <Link to={linkTo} style={iframeLinkStyle} />
           </div>
         </Segment>
+      )}
+
+
         <Segment textAlign="center" loading={!item?._id || !backLoaded} style={{ border: 'none' }}>
           <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className="bm-transform-effect image-frame-border">
             <iframe

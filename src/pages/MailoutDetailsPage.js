@@ -203,28 +203,41 @@ const MailoutDetailsPage = () => {
   }
 
   const FrontIframe = () => (
-    <Segment compact textAlign="center" loading={!details?._id || !frontLoaded} style={{ border: 'none', padding: '1px', margin: 'auto' }}>
-      <iframe
-        id="bm-iframe-front"
-        title={`bm-iframe-front-${details?._id}`}
-        name="front"
-        src={frontURL}
-        width={isMobile() ? '300' : '588'}
-        height={isMobile() ? '204' : '400'}
-        frameBorder="0"
-        sandbox="allow-same-origin allow-scripts"
-        onLoad={handleOnload}
-        className="image-frame-border"
-        style={{ visibility: !details?._id || !frontLoaded ? 'hidden' : 'visible' }}
-      />
-    </Segment>
+    <div>
+    {details.frontResourceUrl && (
+      <Segment compact style={{ border: 'none', padding: '1px', margin: 'auto' }}>
+        <img src={details.frontResourceUrl}
+          width={isMobile() ? '300' : '588'}
+          height={isMobile() ? '204' : '400'}
+          className="image-frame-border"
+        />
+      </Segment>
+    )}
+    {!details.frontResourceUrl && (
+      <Segment compact textAlign="center" loading={!details?._id || !frontLoaded} style={{ border: 'none', padding: '1px', margin: 'auto' }}>
+        <iframe
+          id="bm-iframe-front"
+          title={`bm-iframe-front-${details._id}`}
+          name="front"
+          src={frontURL}
+          width={isMobile() ? '300' : '588'}
+          height={isMobile() ? '204' : '400'}
+          frameBorder="0"
+          sandbox="allow-same-origin allow-scripts"
+          onLoad={handleOnload}
+          className="image-frame-border"
+          style={{ visibility: !details?._id || !frontLoaded ? 'hidden' : 'visible' }}
+        />
+      </Segment>
+    )}
+    </div>
   );
 
   const BackIframe = () => (
     <Segment compact textAlign="center" loading={!details?._id || !backLoaded} style={{ border: 'none', padding: '1px', margin: 'auto' }}>
       <iframe
         id="bm-iframe-back"
-        title={`bm-iframe-back-${details?._id}`}
+        title={`bm-iframe-back-${details._id}`}
         name="back"
         src={backURL}
         width={isMobile() ? '300' : '588'}
@@ -375,7 +388,7 @@ const MailoutDetailsPage = () => {
                   </ItemBodyLayoutV2>
                 </ItemLayout>
               )}
-              {!pendingState && !error && details && destinationsOptionsMode !== 'userUploaded' && (
+              {!pendingState && !error && details && details.mailoutStatus !== 'created' &&destinationsOptionsMode !== 'userUploaded' && (
                   <GoogleMapItem data={details} />
               )}
 

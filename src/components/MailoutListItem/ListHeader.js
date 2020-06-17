@@ -4,7 +4,7 @@ import React, { Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { MobileDisabledLayout, MobileEnabledLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
-import { canSend, resolveLabelStatus, resolveMailoutStatus } from './helpers';
+import { canSend, canPickDestinations, resolveLabelStatus, resolveMailoutStatus } from './helpers';
 import { Button, Header } from '../Base';
 import { Label, Icon, Dropdown } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,6 +21,18 @@ const ApproveAndSendButton = ({ data, mailoutDetailPage, onClickApproveAndSend, 
             <Button primary>
               <MobileDisabledLayout>
                 <Fragment>Review & Send</Fragment>
+              </MobileDisabledLayout>
+              <MobileEnabledLayout>
+                <FontAwesomeIcon icon="thumbs-up" />
+              </MobileEnabledLayout>
+            </Button>
+          </Link>
+        )}
+        {canPickDestinations(data.mailoutStatus) && (
+          <Link to={`dashboard/${data._id}/destinations`}>
+            <Button primary>
+              <MobileDisabledLayout>
+                <Fragment>Choose Destinations</Fragment>
               </MobileDisabledLayout>
               <MobileEnabledLayout>
                 <FontAwesomeIcon icon="thumbs-up" />
