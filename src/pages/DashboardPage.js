@@ -114,7 +114,11 @@ const Dashboard = () => {
 
   const finsihAddCampaign = async e => {
     if (useMLSNumberToAddCampaign) {
-
+      let value = document.getElementById('addCampaignInput').value
+      if (!value) return
+      if (!value.length) return
+      setShowAddCampaign(false)
+      dispatch(addCampaignStart(value))
     } else {
       let path = `/api/user/mailout/withCover/4by6`
       if (peerId) path = `/api/user/peer/${peerId}/mailout/withCover/4by6`
@@ -129,7 +133,6 @@ const Dashboard = () => {
 
       const response = await fetch(path, { headers, method: 'post', body: formData, credentials: 'include' });
       let doc = await api.handleResponse(response)
-      console.log(doc)
       return history.push(`/dashboard/edit/${doc._id}/destinations`);
 
     }

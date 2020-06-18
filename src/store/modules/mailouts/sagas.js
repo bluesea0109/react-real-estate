@@ -165,7 +165,6 @@ export function* addCampaignStartSaga() {
     const response = yield call(ApiService[method], path, data);
 
     yield put(resetMailouts());
-    document.getElementById('addCampaignInput').value = ''
     yield put(addCampaignSuccess(response));
     yield put(getMailoutsPending());
 
