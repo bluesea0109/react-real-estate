@@ -10,9 +10,8 @@ import api from '../services/api';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemBodyLayout, ItemLayout } from '../layouts';
 import { getMailoutsPending, getMoreMailoutsPending, addCampaignStart } from '../store/modules/mailouts/actions';
 import { setCompletedDashboardModal } from '../store/modules/onboarded/actions'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Form, Checkbox, List } from 'semantic-ui-react';
-import { Button, Grid, Header, Icon, Input, Menu, Modal, Page, Popup, Segment, Snackbar } from '../components/Base';
+import { Checkbox, List } from 'semantic-ui-react';
+import { Button, Grid, Header, Icon, Input, Menu, Modal, Page, Segment, Snackbar } from '../components/Base';
 import IframeGroup from '../components/MailoutListItem/IframeGroup';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ItemList from '../components/MailoutListItem/ItemList';
@@ -53,7 +52,6 @@ const Dashboard = () => {
   const mailoutList = useSelector(store => store.mailouts.list);
   const error = useSelector(store => store.mailouts.error?.message);
   const [showAddCampaign, setShowAddCampaign] = useState(false)
-  const [photoUpdating, setPhotoUpdating] = useState(false)
   const [useMLSNumberToAddCampaign, setUseMLSNumberToAddCampaign] = useState(true)
   const [AddCampaignType, setAddCampaignType] = useState(null)
   const [CampaignCoverUpload, setCampaignCoverUpload] = useState(null)
@@ -73,17 +71,16 @@ const Dashboard = () => {
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     // do some checking
-    let ok = false
-    if (file.type === 'image/png') ok = true
-    if (file.type === 'image/jpeg') ok = true
-    //if (!ok) return setError('File needs to be a jpg or png')
+    // let ok = false
+    // if (file.type === 'image/png') ok = true
+    // if (file.type === 'image/jpeg') ok = true
+    // if (!ok) return setError('File needs to be a jpg or png')
 
     setUploadingInProgress(true)
 
     const formData = new FormData();
     formData.append('front', file);
     try {
-      setPhotoUpdating(true)
       let path = `/api/user/mailout/create/front`
       if (peerId) path = `/api/user/peer/${peerId}/mailout/create/front`
 
@@ -177,7 +174,7 @@ const Dashboard = () => {
         return observer.observe(mailoutItemElement);
       });
     }
-  }, [mailoutItemElementArray]);
+  }, [mailoutItemElementArray, showAddCampaign]);
 
   useEffect(() => {
     if (mailoutList && mailoutList.length > 0) {
