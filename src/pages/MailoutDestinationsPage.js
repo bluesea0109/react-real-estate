@@ -8,6 +8,13 @@ import EditDestinationsForm from '../components/Forms/EditDestinationsForm';
 import { Message } from '../components/Base';
 import Loading from '../components/Loading';
 
+const useFetching = (getActionCreator, dispatch, mailoutId) => {
+  useEffect(() => {
+    dispatch(getActionCreator(mailoutId));
+  }, [getActionCreator, dispatch, mailoutId]);
+};
+
+
 const MailoutDestinationsPage = () => {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -22,6 +29,8 @@ const MailoutDestinationsPage = () => {
   const mailoutEditPending = useSelector(store => store.mailout.getMailoutEditPending);
   const mailoutDestinationsEdit = useSelector(store => store.mailout.mailoutDestinationsEdit);
   const mailoutEditError = useSelector(store => store.mailout.getMailoutEditError?.message);
+
+  useFetching(getMailoutPending, useDispatch(), mailoutId);
 
   useEffect(() => {
     if (!mailoutDetails) dispatch(getMailoutPending(mailoutId));
