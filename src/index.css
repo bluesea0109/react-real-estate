@@ -567,12 +567,17 @@ h1 {
   width: 200px;
 }
 
+#newCampaignType button.active {
+  background-color: #59C4C4 !important;
+}
+
 #uploadCardFront {
   border: 1px dashed #666;
   border-radius: 2px;
   background-color: #EFEFEF;
   width: 350px;
   min-height: 70px;
+  max-height: 308px;
   padding: 20px;
   cursor: pointer;
 }

@@ -214,13 +214,13 @@ const Dashboard = () => {
             <Menu.Item>
               <Header as="h1">Dashboard</Header>
             </Menu.Item>
-            <Menu.Item>
-            <div className="ui action input">
+            <Menu.Item position="right">
+              <div className="right menu">
               {addCampaignMlsNumPendingState && (
-                <Button loading className="ui button">Add Campaign</Button>
+                <Button loading primary>Add Campaign</Button>
               )}
               {!addCampaignMlsNumPendingState && (
-                <Button className="ui button" onClick={addCampaign}>Add Campaign</Button>
+                <Button primary onClick={addCampaign}>Add Campaign</Button>
               )}
               </div>
             </Menu.Item>
