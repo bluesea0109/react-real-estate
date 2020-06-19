@@ -65,9 +65,9 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const currentListingStatus = mailoutDetails?.listingStatus;
   const isCampaign = mailoutDetails?.subtype === 'campaign'
 
-  const [destinationsOptionsMode, setDestinationsOptionsMode] = useState(mailoutDetails.destinationsOptions?.mode || isCampaign ? 'userUploaded': 'ai');
+  const [destinationsOptionsMode, setDestinationsOptionsMode] = useState(mailoutDetails.destinationsOptions?.mode || isCampaign ? 'manual': 'ai');
   const [saveDetails, setSaveDetails] = useState({
-    destinationsOptionsMode: mailoutDetails.destinationsOptions?.mode || isCampaign ? 'userUploaded': 'ai',
+    destinationsOptionsMode: mailoutDetails.destinationsOptions?.mode || isCampaign ? 'manual': 'ai',
     ready: false
   })
   console.log(saveDetails)
@@ -389,7 +389,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
               <List.Item>
                 <Checkbox
                   radio
-                  label="Automatically fsd"
+                  label="Automatically"
                   name="checkboxRadioGroup"
                   value="this"
                   checked={destinationsOptionsMode === 'ai'}
