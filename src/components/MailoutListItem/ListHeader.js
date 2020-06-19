@@ -96,12 +96,12 @@ const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickAppro
         {!mailoutDetailPage && !isArchived && (
           <Link to={`/dashboard/${data._id}`} className="ui header">
             <Header as="h3" className="bm-color-effect">
-              {data.details && data.details.displayAddress}
+              {data.name || data.details?.displayAddress}
             </Header>
           </Link>
         )}
-        {!mailoutDetailPage && isArchived && <Header as="h3">{data.details && data.details.displayAddress}</Header>}
-        {mailoutDetailPage && <Header as="h3">{data.details && data.details.displayAddress}</Header>}
+        {!mailoutDetailPage && isArchived && <Header as="h3">{data.name || data.details?.displayAddress}</Header>}
+        {mailoutDetailPage && <Header as="h3">{data.name || data.details?.displayAddress}</Header>}
       </span>
       <ItemHeaderMenuLayout>
         {canSend(data.mailoutStatus) && mailoutDetailPage && enableRevertEdit && (

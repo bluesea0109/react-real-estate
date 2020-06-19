@@ -127,6 +127,7 @@ const Dashboard = () => {
       formData.append('createdBy', 'user')
       formData.append('skipEmailNotification', true)
       formData.append('frontResourceUrl', CampaignCoverUpload.url)
+      formData.append('name', AddCampaignType)
 
       const response = await fetch(path, { headers, method: 'post', body: formData, credentials: 'include' });
       let doc = await api.handleResponse(response)
@@ -324,8 +325,8 @@ const Dashboard = () => {
                     <Grid.Row columns={3}>
                       <Grid.Column>
                         <Button inverted primary size='big' toggle
-                          active={AddCampaignType === 'MarketListing'}
-                          onClick={() => setAddCampaignType('MarketListing')}
+                          active={AddCampaignType === 'Market Listing'}
+                          onClick={() => setAddCampaignType('Market Listing')}
                         >
                           <Icon name='home' />
                           Market Listing
@@ -333,8 +334,8 @@ const Dashboard = () => {
                       </Grid.Column>
                       <Grid.Column>
                         <Button inverted primary size='big' toggle
-                          active={AddCampaignType === 'HomeValue'}
-                          onClick={() => setAddCampaignType('HomeValue')}
+                          active={AddCampaignType === 'Home Value'}
+                          onClick={() => setAddCampaignType('Home Value')}
                         >
                           <Icon name='dollar sign' />
                           Home Value
@@ -362,8 +363,8 @@ const Dashboard = () => {
                       </Grid.Column>
                       <Grid.Column>
                         <Button inverted primary size='big' toggle
-                          active={AddCampaignType === 'FarmArea'}
-                          onClick={() => setAddCampaignType('FarmArea')}
+                          active={AddCampaignType === 'Farm Area'}
+                          onClick={() => setAddCampaignType('Farm Area')}
                          >
                           <Icon name='map outline' />
                           Farm Area

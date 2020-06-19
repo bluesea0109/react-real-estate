@@ -432,7 +432,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
               </Label>
             </span>
             <span style={{ gridArea: 'address', alignSelf: 'center' }}>
-              <Header as="h3">{mailoutDetails?.details?.displayAddress}</Header>
+              <Header as="h3">{mailoutDetails.name || mailoutDetails?.details?.displayAddress}</Header>
             </span>
 
             <ItemHeaderMenuLayout>
