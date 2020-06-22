@@ -10,8 +10,6 @@ import ApiService from '../../services/api/index';
 import { isMobile } from '../utils';
 import { Image } from '../Base';
 
-const mql = window.matchMedia('(max-width: 599px)');
-
 const IframeGroup = ({ index, item, linkTo = null }) => {
   const peerId = useSelector(store => store.peer.peerId);
 
