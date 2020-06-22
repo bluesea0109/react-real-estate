@@ -11,8 +11,6 @@ import { isMobile } from '../utils';
 import { Image } from '../Base';
 
 const mql = window.matchMedia('(max-width: 599px)');
-const resizePictures = () => (mql.matches ? { width: '300px' } : { width: '300px' });
-
 
 const IframeGroup = ({ index, item, linkTo = null }) => {
   const peerId = useSelector(store => store.peer.peerId);
