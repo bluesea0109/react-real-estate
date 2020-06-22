@@ -1,4 +1,9 @@
 -----------------
+## Release 4.0
+
+This version allows a user to create a campaign from an image as the front of the postcard. Therefore postcards no longer need to be tied to listings, To use this feature, a user will click the button 'Add Campaign' from the dashboard, and then choose 'Custom Campaign'.  From there they upload the front of the postcard in a JPG or PNG, choose destinations, and then they are ready to send!
+
+-----------------
 ## Release 3.1.x
 Changes:
 - Edit campaign lets a user change a cover photo by selecting a different mls picture (left/right buttons) or upload a photo from their computer
