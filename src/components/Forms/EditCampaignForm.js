@@ -35,6 +35,11 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const teammates = useSelector(store => store.team.profiles);
 
   const currentListingStatus = mailoutDetails?.listingStatus;
+  let renderFrontDetails = true
+  let renderBackDetails = true
+  if (mailoutDetails.frontResourceUrl) renderFrontDetails = false
+  if (mailoutDetails.backResourceUrl) renderBackDetails = false
+
   const currentTemplateTheme = mailoutDetails?.templateTheme;
   const currentMailoutDisplayAgentUserID = mailoutDetails.mailoutDisplayAgent ? mailoutDetails.mailoutDisplayAgent?.userId : mailoutDetails.userId;
   const currentMailoutDisplayAgent = mailoutDetails.mailoutDisplayAgent || { userId: mailoutDetails.userId };
@@ -283,14 +288,20 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     setFormValues(newValues);
   };
 
-  const renderThemeSpecificData = () => {
+  const renderThemeSpecificData = (side) => {
     switch (templateTheme) {
       case 'ribbon':
         const ribbonFields = ribbonTemplate[currentListingStatus].fields
-          .filter(field => !blacklistNames.includes(field.name))
+          .filter(field => {
+            let passes = true
+            if (blacklistNames.includes(field.name)) passes = false
+            if (side && field.sides && !_.includes(field.sides, side)) passes = false
+            return passes
+          })
           .map(field => {
             let fieldName = startCase(field.name);
             const error = maxLength(field.max)(formValues[field.name]);
+            console.log(field)
 
             if (fieldName.includes('Url')) fieldName = fieldName.replace(/Url/g, 'URL');
             if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
@@ -320,7 +331,12 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
       case 'bookmark':
         const bookmarkFields = bookmarkTemplate[currentListingStatus].fields
-          .filter(field => !blacklistNames.includes(field.name))
+          .filter(field => {
+            let passes = true
+            if (blacklistNames.includes(field.name)) passes = false
+            if (side && field.sides && !_.includes(field.sides, side)) passes = false
+            return passes
+          })
           .map(field => {
             let fieldName = startCase(field.name);
             const error = maxLength(field.max)(formValues[field.name]);
@@ -353,7 +369,12 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
       case 'stack':
         const stackFields = stackTemplate[currentListingStatus].fields
-          .filter(field => !blacklistNames.includes(field.name))
+          .filter(field => {
+            let passes = true
+            if (blacklistNames.includes(field.name)) passes = false
+            if (side && field.sides && !_.includes(field.sides, side)) passes = false
+            return passes
+          })
           .map(field => {
             let fieldName = startCase(field.name);
             const error = maxLength(field.max)(formValues[field.name]);
@@ -490,6 +511,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
             {renderTemplatePicture('stack')}
           </div>
         </Segment>
+
         <Segment
           basic
           padded
@@ -550,11 +572,19 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           )}
         </Segment>
 
-        <Header as="h4" style={{ marginLeft: '1.5em', marginBottom: '-0.5em' }}>
-          Change Postcard details
-        </Header>
+        {renderFrontDetails && (
+          <Header as="h4" style={{ marginLeft: '1.5em', marginBottom: '-0.5em' }}>
+            Front Postcard details
+          </Header>
+        )}
+        {renderFrontDetails && (renderThemeSpecificData('front'))}
 
-        {renderThemeSpecificData()}
+        {renderBackDetails && (
+          <Header as="h4" style={{ marginLeft: '1.5em', marginBottom: '-0.5em' }}>
+            Back Postcard details
+          </Header>
+        )}
+        {renderBackDetails && (renderThemeSpecificData('back'))}
 
         <div>
           <Header as="h4">Customize call to action URL</Header>

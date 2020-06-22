@@ -57,7 +57,7 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
         <Segment textAlign="center" style={{ border: 'none' }}>
 
           <Link to={linkTo}>
-            <Image src={item.frontResourceUrl} style={resizePictures()} className="bm-transform-effect image-frame-border" />
+            <Image src={item.frontResourceUrl} style={{maxWidth: '300px', minWidth: '290px', height: '204px', overflow: 'hidden'}} className="bm-transform-effect image-frame-border" />
           </Link>
         </Segment>
       )}

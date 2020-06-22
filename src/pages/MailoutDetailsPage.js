@@ -205,7 +205,7 @@ const MailoutDetailsPage = () => {
   const FrontIframe = () => (
     <div>
     {details.frontResourceUrl && (
-        <Image src={details.frontResourceUrl} style={{ width: isMobile() ? '300px' : '588px' }} />
+        <Image src={details.frontResourceUrl} style={{ height: '400px', maxWidth: '588px', minWidth: '580px'   }} />
     )}
     {!details.frontResourceUrl && (
       <Segment compact textAlign="center" loading={!details?._id || !frontLoaded} style={{ border: 'none', padding: '1px', margin: 'auto' }}>
