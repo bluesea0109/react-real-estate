@@ -400,7 +400,7 @@ const Dashboard = () => {
                         {CampaignCoverUpload && (<b>{CampaignCoverUpload.name}</b>)}
                         {!CampaignCoverUpload && (<b>Upload Your Own Design</b>)}
                         <br/>
-                        (4.25"x6.25" PDF, PNG or JPEG - max 5MB)
+                        (4.25"x6.25" PNG or JPEG - max 5MB)
                       </div>
                       <Icon name="upload" size="big" />
                       <input id="cardFrontCoverFile" name="postcardcover" type="file" onChange={handleFileChange}></input>
