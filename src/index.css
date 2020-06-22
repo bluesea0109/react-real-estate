@@ -559,6 +559,10 @@ h1 {
   padding: 0 110px;
 }
 
+#addCampaignHolder p {
+  margin-bottom: 25px;
+}
+
 #selectAddCampaignType {
   margin-bottom: 20px;
 }
