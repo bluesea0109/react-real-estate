@@ -493,6 +493,23 @@ h1 {
   padding: 10px 20px;
 }
 
+.details-customPostcardCTA a {
+  color: #59C4C4;
+}
+
+.details-customPostcardCTA a:visited {
+  color: #59C4C4;
+}
+
+.customPostcardCTA a {
+  color: #59C4C4;
+}
+
+.customPostcardCTA a:visited {
+  color: #59C4C4;
+}
+
+
 #chooseDestinationsMethod {
   padding-bottom: 10px;
 }
