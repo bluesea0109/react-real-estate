@@ -253,6 +253,153 @@ const Dashboard = () => {
 
       {error && <Snackbar error>{error}</Snackbar>}
 
+
+      <Modal open={showAddCampaign} dimmer="blurring"  centered={false}>
+        <Modal.Header>
+          Add Campaign
+        </Modal.Header>
+        <Modal.Content>
+         <div id="addCampaignHolder">
+          <p>Enter a property MLS number to import a listing, or you can create a custom campaign and upload your own design.</p>
+
+          <List horizontal id="selectAddCampaignType">
+            <List.Item>
+              <Checkbox
+                radio
+                label="MLS Number"
+                name='checkboxRadioGroup'
+                value='this'
+                checked={useMLSNumberToAddCampaign}
+                onClick={() => {
+                  setUseMLSNumberToAddCampaign(true)
+                }}
+              />
+            </List.Item>
+            <List.Item>
+              <Checkbox
+                radio
+                label='Custom Campaign'
+                name='checkboxRadioGroup'
+                value='that'
+                checked={!useMLSNumberToAddCampaign}
+                onClick={() => {
+                  setUseMLSNumberToAddCampaign(false)
+                }}
+              />
+            </List.Item>
+          </List>
+
+          {useMLSNumberToAddCampaign && (
+            <div>
+              <Input type="text" fluid placeholder="Property MLS Number" id="addCampaignInput" />
+            </div>
+          )}
+          {!useMLSNumberToAddCampaign && (
+            <div id="newCampaignType">
+              <h5>Campaign Type</h5>
+              <Grid>
+                <Grid.Row columns={3}>
+                  <Grid.Column>
+                    <Button inverted primary size='big' toggle
+                      active={AddCampaignType === 'Market Listing'}
+                      onClick={() => setAddCampaignType('Market Listing')}
+                    >
+                      <Icon name='home' />
+                      Market Listing
+                    </Button>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Button inverted primary size='big' toggle
+                      active={AddCampaignType === 'Home Value'}
+                      onClick={() => setAddCampaignType('Home Value')}
+                    >
+                      <Icon name='dollar sign' />
+                      Home Value
+                    </Button>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Button inverted primary size='big' toggle
+                      active={AddCampaignType === 'Event'}
+                      onClick={() => setAddCampaignType('Event')}
+                     >
+                      <Icon name='calendar check outline' />
+                      Event
+                    </Button>
+                  </Grid.Column>
+                </Grid.Row>
+                <Grid.Row columns={3}>
+                  <Grid.Column>
+                    <Button inverted primary size='big' toggle
+                      active={AddCampaignType === 'Sphere'}
+                      onClick={() => setAddCampaignType('Sphere')}
+                     >
+                      <Icon name='address book outline' />
+                      Sphere
+                    </Button>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Button inverted primary size='big' toggle
+                      active={AddCampaignType === 'Farm Area'}
+                      onClick={() => setAddCampaignType('Farm Area')}
+                     >
+                      <Icon name='map outline' />
+                      Farm Area
+                    </Button>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Button inverted primary size='big' toggle
+                      active={AddCampaignType === 'Recruiting'}
+                      onClick={() => setAddCampaignType('Recruiting')}
+                    >
+                      <Icon name='user plus' />
+                      Recruiting
+                    </Button>
+                  </Grid.Column>
+                </Grid.Row>
+                <Grid.Row columns={1}>
+                  <Grid.Column>
+                    <Button inverted primary size='big' toggle
+                      active={AddCampaignType === 'Other'}
+                      onClick={() => setAddCampaignType('Other')}
+                     >
+                      <Icon name='crosshairs' />
+                      Other
+                    </Button>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+              <h5>Card Front</h5>
+              {!UploadingInProgress && (
+                <div id="uploadCardFront" onClick={triggerFileDialog}>
+
+                  <div>
+                    {CampaignCoverUpload && (<b>{CampaignCoverUpload.name}</b>)}
+                    {!CampaignCoverUpload && (<b>Upload Your Own Design</b>)}
+                    <br/>
+                    (4.25"x6.25" PNG or JPEG - max 5MB)
+                  </div>
+                  <Icon name="upload" size="big" />
+                  <input id="cardFrontCoverFile" name="postcardcover" type="file" onChange={handleFileChange}></input>
+                </div>
+              )}
+              {UploadingInProgress && (<p>Please wait...</p>)}
+
+            </div>
+          )}
+         </div>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button inverted primary onClick={cancelAddCampaign}>Cancel</Button>
+          <Button primary
+            onClick={finsihAddCampaign}
+            disabled={(!useMLSNumberToAddCampaign && (!CampaignCoverUpload || !AddCampaignType))}
+          >
+            Add Campaign
+          </Button>
+        </Modal.Actions>
+      </Modal>
+
+
       {mailoutList && mailoutList.length > 0 && (
         <Segment style={isMobile() ? { padding: '0', paddingTop: '4.5em', marginLeft: '-1em', marginRight: '-1em' } : { marginTop: '79px' }}>
 
@@ -276,153 +423,6 @@ const Dashboard = () => {
               </Button>
             </Modal.Actions>
           </Modal>
-
-
-          <Modal open={showAddCampaign} dimmer="blurring"  centered={false}>
-            <Modal.Header>
-              Add Campaign
-            </Modal.Header>
-            <Modal.Content>
-             <div id="addCampaignHolder">
-              <p>Enter a property MLS number to import a listing, or you can create a custom campaign and upload your own design.</p>
-
-              <List horizontal id="selectAddCampaignType">
-                <List.Item>
-                  <Checkbox
-                    radio
-                    label="MLS Number"
-                    name='checkboxRadioGroup'
-                    value='this'
-                    checked={useMLSNumberToAddCampaign}
-                    onClick={() => {
-                      setUseMLSNumberToAddCampaign(true)
-                    }}
-                  />
-                </List.Item>
-                <List.Item>
-                  <Checkbox
-                    radio
-                    label='Custom Campaign'
-                    name='checkboxRadioGroup'
-                    value='that'
-                    checked={!useMLSNumberToAddCampaign}
-                    onClick={() => {
-                      setUseMLSNumberToAddCampaign(false)
-                    }}
-                  />
-                </List.Item>
-              </List>
-
-              {useMLSNumberToAddCampaign && (
-                <div>
-                  <Input type="text" fluid placeholder="Property MLS Number" id="addCampaignInput" />
-                </div>
-              )}
-              {!useMLSNumberToAddCampaign && (
-                <div id="newCampaignType">
-                  <h5>Campaign Type</h5>
-                  <Grid>
-                    <Grid.Row columns={3}>
-                      <Grid.Column>
-                        <Button inverted primary size='big' toggle
-                          active={AddCampaignType === 'Market Listing'}
-                          onClick={() => setAddCampaignType('Market Listing')}
-                        >
-                          <Icon name='home' />
-                          Market Listing
-                        </Button>
-                      </Grid.Column>
-                      <Grid.Column>
-                        <Button inverted primary size='big' toggle
-                          active={AddCampaignType === 'Home Value'}
-                          onClick={() => setAddCampaignType('Home Value')}
-                        >
-                          <Icon name='dollar sign' />
-                          Home Value
-                        </Button>
-                      </Grid.Column>
-                      <Grid.Column>
-                        <Button inverted primary size='big' toggle
-                          active={AddCampaignType === 'Event'}
-                          onClick={() => setAddCampaignType('Event')}
-                         >
-                          <Icon name='calendar check outline' />
-                          Event
-                        </Button>
-                      </Grid.Column>
-                    </Grid.Row>
-                    <Grid.Row columns={3}>
-                      <Grid.Column>
-                        <Button inverted primary size='big' toggle
-                          active={AddCampaignType === 'Sphere'}
-                          onClick={() => setAddCampaignType('Sphere')}
-                         >
-                          <Icon name='address book outline' />
-                          Sphere
-                        </Button>
-                      </Grid.Column>
-                      <Grid.Column>
-                        <Button inverted primary size='big' toggle
-                          active={AddCampaignType === 'Farm Area'}
-                          onClick={() => setAddCampaignType('Farm Area')}
-                         >
-                          <Icon name='map outline' />
-                          Farm Area
-                        </Button>
-                      </Grid.Column>
-                      <Grid.Column>
-                        <Button inverted primary size='big' toggle
-                          active={AddCampaignType === 'Recruiting'}
-                          onClick={() => setAddCampaignType('Recruiting')}
-                        >
-                          <Icon name='user plus' />
-                          Recruiting
-                        </Button>
-                      </Grid.Column>
-                    </Grid.Row>
-                    <Grid.Row columns={1}>
-                      <Grid.Column>
-                        <Button inverted primary size='big' toggle
-                          active={AddCampaignType === 'Other'}
-                          onClick={() => setAddCampaignType('Other')}
-                         >
-                          <Icon name='crosshairs' />
-                          Other
-                        </Button>
-                      </Grid.Column>
-                    </Grid.Row>
-                  </Grid>
-                  <h5>Card Front</h5>
-                  {!UploadingInProgress && (
-                    <div id="uploadCardFront" onClick={triggerFileDialog}>
-
-                      <div>
-                        {CampaignCoverUpload && (<b>{CampaignCoverUpload.name}</b>)}
-                        {!CampaignCoverUpload && (<b>Upload Your Own Design</b>)}
-                        <br/>
-                        (4.25"x6.25" PNG or JPEG - max 5MB)
-                      </div>
-                      <Icon name="upload" size="big" />
-                      <input id="cardFrontCoverFile" name="postcardcover" type="file" onChange={handleFileChange}></input>
-                    </div>
-                  )}
-                  {UploadingInProgress && (<p>Please wait...</p>)}
-
-                </div>
-              )}
-             </div>
-            </Modal.Content>
-            <Modal.Actions>
-              <Button inverted primary onClick={cancelAddCampaign}>Cancel</Button>
-              <Button primary
-                onClick={finsihAddCampaign}
-                disabled={(!useMLSNumberToAddCampaign && (!CampaignCoverUpload || !AddCampaignType))}
-              >
-                Add Campaign
-              </Button>
-            </Modal.Actions>
-          </Modal>
-
 
           <Grid>
             <Grid.Row>
