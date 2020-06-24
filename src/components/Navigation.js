@@ -330,6 +330,16 @@ export default () => {
             <FontAwesomeIcon icon="cog" style={iconWithTextStyle} /> Settings
           </MobileDisabledLayout>
         </Menu.Item>
+        {multiUser && isAdmin && !selectedPeerId && (
+          <Menu.Item as={Link} color="teal" name="billing" active={activeItem === '/billing'} to="/billing" style={{ lineHeight: 2.6 }}>
+            <MobileEnabledLayout style={iconOnlyStyle}>
+              <FontAwesomeIcon icon="credit-card" />
+            </MobileEnabledLayout>
+            <MobileDisabledLayout>
+              <FontAwesomeIcon icon="credit-card" style={iconWithTextStyle} /> Billing
+            </MobileDisabledLayout>
+          </Menu.Item>
+        )}
       </NavigationLayout>
     </Dimmer.Dimmable>
   );

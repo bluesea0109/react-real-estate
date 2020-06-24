@@ -16,6 +16,7 @@ import CustomizationPage from './pages/CustomizationPage';
 import CustomizationTeamPage from './pages/CustomizationTeamPage';
 import ProfilePage from './pages/ProfilePage';
 import SettingsPage from './pages/SettingsPage';
+import BillingPage from './pages/BillingPage';
 import EmptyPage from './pages/EmptyPage';
 import ArchivedPage from './pages/ArchivedPage';
 // import onRouteChanges from './onRouteChange';
@@ -43,6 +44,7 @@ export default () => {
       <PrivateRoute path="/customization/team" component={CustomizationTeamPage} />
       <PrivateRoute path="/profile" component={ProfilePage} />
       <PrivateRoute path="/settings" component={SettingsPage} />
+      <PrivateRoute path="/billing" component={BillingPage} />
       <Route path="*" component={EmptyPage} />
     </Switch>
   );
