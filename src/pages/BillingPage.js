@@ -1,23 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Loading from '../components/Loading';
-import { Button, Header, Icon, Menu, Message, Modal, Page, Segment } from '../components/Base';
+import { Header, Menu, Page, Segment } from '../components/Base';
 import { Table } from 'semantic-ui-react';
 import { format } from 'date-fns';
 
-
-import InviteTeammatesForm from '../components/Forms/InviteTeammatesForm';
-import { passwordReset } from '../store/modules/auth0/actions';
 import PageTitleHeader from '../components/PageTitleHeader';
-import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../layouts';
+import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout } from '../layouts';
 import { isMobile } from '../components/utils';
 import auth from '../services/auth';
 import api from '../services/api';
 
 
 const BillingPage = () => {
-  const dispatch = useDispatch();
   const isAdmin = useSelector(store => store.onLogin?.permissions?.teamAdmin);
   const onLoginMode = useSelector(store => store.onLogin?.mode);
   const multiUser = onLoginMode === 'multiuser';
