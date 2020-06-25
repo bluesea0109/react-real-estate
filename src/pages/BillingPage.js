@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Loading from '../components/Loading';
 import { Button, Header, Icon, Menu, Message, Modal, Page, Segment } from '../components/Base';
 import { Table } from 'semantic-ui-react';
+import { format } from 'date-fns';
+
 
 import InviteTeammatesForm from '../components/Forms/InviteTeammatesForm';
 import { passwordReset } from '../store/modules/auth0/actions';
@@ -36,8 +39,23 @@ const BillingPage = () => {
     fetchData()
   }, [billingDetails])
 
+  const tableBody = () => {
 
-  console.log(billingDetails)
+    return billingDetails.billings.map((item, index) => (
+      <Table.Row key="{item.id}">
+        <Table.Cell>{format(new Date(item.billingDate), 'MM/dd/yyyy')}</Table.Cell>
+        <Table.Cell>
+          <Link to={`dashboard/${item.id}`}>{item.name}</Link>
+        </Table.Cell>
+        <Table.Cell>{item.recipientCount}</Table.Cell>
+        <Table.Cell>${item.creditsAmountApplied || '0.00'}</Table.Cell>
+        <Table.Cell>{item.userProfile.first} {item.userProfile.last}</Table.Cell>
+        <Table.Cell>{item.approvedByUser.first} {item.approvedByUser.last}</Table.Cell>
+        <Table.Cell>${(Number(item.amount_in_cents) + Number(item.tax_amount_in_cents)) / 100}</Table.Cell>
+      </Table.Row>
+    ));
+  };
+
   return (
     <Page basic>
       <ContentTopHeaderLayout>
@@ -61,25 +79,21 @@ const BillingPage = () => {
               {!billingDetails && <Loading message="Retriving billing information..." />}
             </ContentBottomHeaderLayout>
             {billingDetails && (
-              <Table celled>
+              <Table basic='very' className="BillingTable">
                  <Table.Header>
                    <Table.Row>
                      <Table.HeaderCell>Date</Table.HeaderCell>
                      <Table.HeaderCell>Campaign Title</Table.HeaderCell>
-                     <Table.HeaderCell>Postcards Sent</Table.HeaderCell>
-                     <Table.HeaderCell>Credits Used</Table.HeaderCell>
-                     <Table.HeaderCell>Total Amount</Table.HeaderCell>
+                     <Table.HeaderCell>Recipients</Table.HeaderCell>
+                     <Table.HeaderCell>Credits Applied</Table.HeaderCell>
+                     <Table.HeaderCell>Profile</Table.HeaderCell>
+                     <Table.HeaderCell>Approved By</Table.HeaderCell>
+                     <Table.HeaderCell>Cost</Table.HeaderCell>
                    </Table.Row>
                  </Table.Header>
 
                  <Table.Body>
-                   <Table.Row>
-                     <Table.Cell>March 21, 2020</Table.Cell>
-                     <Table.Cell>123 Link Road</Table.Cell>
-                     <Table.Cell>180</Table.Cell>
-                     <Table.Cell>0</Table.Cell>
-                     <Table.Cell>$128.27</Table.Cell>
-                   </Table.Row>
+                   {tableBody()}
                  </Table.Body>
                 </Table>
             )}

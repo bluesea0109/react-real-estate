@@ -613,3 +613,11 @@ h1 {
   position: relative;
   left: 48px;
 }
+
+.BillingTable a {
+  color: #59C4C4;
+}
+
+.BillingTable a:visited {
+  color: #59C4C4;
+}
