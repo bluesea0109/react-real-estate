@@ -616,8 +616,10 @@ h1 {
 
 .BillingTable a {
   color: #59C4C4;
+  font-weight: 600;
 }
 
 .BillingTable a:visited {
   color: #59C4C4;
+  font-weight: 600;
 }
