@@ -72,7 +72,7 @@ const BillingPage = () => {
           <Segment>
 
             <ContentBottomHeaderLayout>
-              {!billingDetails && <Loading message="Retriving billing information..." />}
+              {!billingDetails && <Loading message="Retrieving billing information..." />}
             </ContentBottomHeaderLayout>
             {billingDetails && (
               <Table basic='very' className="BillingTable">
