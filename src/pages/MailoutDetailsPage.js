@@ -70,16 +70,16 @@ const MailoutDetailsPage = () => {
   const peerId = useSelector(store => store.peer.peerId);
 
   const frontURL = peerId
-    ? ApiService.directory.peer.mailout.render.front({ userId: details?.userId, peerId, mailoutId: details?._id }).path
-    : ApiService.directory.user.mailout.render.front({ userId: details?.userId, mailoutId: details?._id }).path;
+    ? `/api/user/${details?.userId}/peer/${peerId}/mailout/${details?._id}/render/preview/html/front`
+    : `/api/user/${details?.userId}/mailout/${details?._id}/render/preview/html/front`
 
   const backURL = peerId
-    ? ApiService.directory.peer.mailout.render.back({ userId: details?.userId, peerId, mailoutId: details?._id }).path
-    : ApiService.directory.user.mailout.render.back({ userId: details?.userId, mailoutId: details?._id }).path;
+  ? `/api/user/${details?.userId}/peer/${peerId}/mailout/${details?._id}/render/preview/html/back`
+  : `/api/user/${details?.userId}/mailout/${details?._id}/render/preview/html/back`
 
   const csvURL = peerId
-  ? ApiService.directory.peer.mailout.csv({ userId: details?.userId, peerId, mailoutId: details?._id }).path
-  : ApiService.directory.user.mailout.csv({ userId: details?.userId, mailoutId: details?._id }).path;
+  ? `/api/user/${details?.userId}/peer/${peerId}/mailout/${details?._id}/csv`
+  : `/api/user/${details?.userId}/mailout/${details?._id}/csv`
 
   const handleOnload = useCallback(
     event => {
@@ -113,6 +113,7 @@ const MailoutDetailsPage = () => {
     if (details && details.recipientCount) {
       setCurrentNumberOfRecipients(details.recipientCount);
     }
+
   }, [details, currentNumberOfRecipients]);
 
   useFetching(getMailoutPending, useDispatch(), mailoutId);
