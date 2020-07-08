@@ -18,7 +18,6 @@ import { isMobile, min1200Width } from '../components/utils';
 import GoogleMapItem from '../components/Forms/PolygonGoogleMaps/GoogleMapItem';
 import FlipCard from '../components/FlipCard';
 import Loading from '../components/Loading';
-import ApiService from '../services/api';
 import {
   ContentBottomHeaderLayout,
   ContentSpacerLayout,
