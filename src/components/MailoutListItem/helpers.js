@@ -14,7 +14,7 @@ export const canSend = mailoutStatus => {
 };
 
 export const canPickDestinations = mailoutStatus => {
-  return mailoutStatus === 'created';
+  return mailoutStatus === 'created' || mailoutStatus === 'calculation-deferred';
 }
 
 export const formatDate = created => {
@@ -24,6 +24,7 @@ export const formatDate = created => {
 
 export const resolveMailoutStatusIcon = mailoutStatus => {
   if (mailoutStatus === 'created') return 'edit';
+  if (mailoutStatus === 'calculation-deferred') return 'edit';
   if (mailoutStatus === 'calculated') return 'eye';
   if (mailoutStatus === 'submitted') return 'sync-alt';
   // if (mailoutStatus === 'scheduled') return 'eye' // this has been sent to lob
@@ -37,6 +38,7 @@ export const resolveMailoutStatusIcon = mailoutStatus => {
 
 export const resolveMailoutStatus = mailoutStatus => {
   if (mailoutStatus === 'created') return 'Created';
+  if (mailoutStatus === 'calculation-deferred') return 'Created';
   if (mailoutStatus === 'calculated') return 'Awaiting Approval';
   if (mailoutStatus === 'submitted') return 'Processing';
   // if (mailoutStatus === 'scheduled') return 'Awaiting Approval' // this has been sent to lob
@@ -50,6 +52,7 @@ export const resolveMailoutStatus = mailoutStatus => {
 
 export const resolveMailoutStatusColor = mailoutStatus => {
   if (mailoutStatus === 'created') return '#666666';
+  if (mailoutStatus === 'calculation-deferred') return '#666666';
   if (mailoutStatus === 'calculated') return '#000000';
   if (mailoutStatus === 'submitted') return '#666666';
   // if (mailoutStatus === 'scheduled') return '#000000' // this has been sent to lob

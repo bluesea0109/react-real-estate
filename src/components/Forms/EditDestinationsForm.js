@@ -64,6 +64,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const [error, setError] = useState(null)
   const currentListingStatus = mailoutDetails?.listingStatus;
   const isCampaign = mailoutDetails?.subtype === 'campaign'
+  const isCalculationDeferred = (mailoutDetails?.mailoutStatus === 'calculation-deferred')
 
   const [destinationsOptionsMode, setDestinationsOptionsMode] = useState(mailoutDetails.destinationsOptions?.mode || isCampaign ? 'manual': 'ai');
   const [saveDetails, setSaveDetails] = useState({
@@ -365,7 +366,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                   type="submit"
                   onClick={handleSubmitClick}
                   loading={saving}
-                  disabled={!(saveDetails.ready && saveDetails.destinationsOptionsMode === destinationsOptionsMode) }
+                  disabled={!isCalculationDeferred && !(saveDetails.ready && saveDetails.destinationsOptionsMode === destinationsOptionsMode) }
                 >
                   Save
                 </Button>
