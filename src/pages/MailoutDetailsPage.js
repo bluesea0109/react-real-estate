@@ -1,5 +1,7 @@
 import { useHistory, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
+import auth from '../services/auth';
+import api from '../services/api';
 import { useLastLocation } from 'react-router-last-location';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -47,6 +49,7 @@ const MailoutDetailsPage = () => {
   const [backLoaded, setBackLoaded] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
   const [working, setWorking] = useState(false);
+  const [DestinationCalculation, setDestinationCalculation] = useState(false)
 
   const pendingState = useSelector(store => store.mailout.pending);
   const updateMailoutEditPendingState = useSelector(store => store.mailout.updateMailoutEditPending);
@@ -116,6 +119,24 @@ const MailoutDetailsPage = () => {
   }, [details, currentNumberOfRecipients]);
 
   useFetching(getMailoutPending, useDispatch(), mailoutId);
+
+  useEffect(() => {
+    async function calculateDestinations () {
+      setDestinationCalculation(true)
+      let path = `/api/user/mailout/${details._id}/edit/mailoutSize`
+      if (peerId) path = `/api/user/peer/${peerId}/mailout/${details._id}/edit/mailoutSize`
+      let mailoutSize = details.mailoutSize
+      const body = JSON.stringify({ mailoutSize })
+      const headers = {};
+      const accessToken = await auth.getAccessToken();
+      headers['authorization'] = `Bearer ${accessToken}`;
+      const response = await fetch(path, { headers, method: 'put', body, credentials: 'include' });
+      await api.handleResponse(response)
+      setDestinationCalculation(false)
+      window.location.reload()  // TODO: remove this, make a react/redux reload state
+    }
+    if (details?.mailoutStatus === 'calculation-deferred') calculateDestinations()
+  }, [details, peerId])
 
   useEffect(() => {
     const busyState = pendingState || updateMailoutEditPendingState || submitPendingState || stopPendingState || updateMailoutSizePendingState;
@@ -301,6 +322,7 @@ const MailoutDetailsPage = () => {
         </Modal.Actions>
       </Modal>
 
+      {!DestinationCalculation && (
       <Segment style={isMobile() ? { marginTop: '-1rem', marginLeft: '-1rem', marginRight: '-1rem' } : { marginTop: '34px' }}>
         <Grid>
           <Grid.Row>
@@ -428,6 +450,8 @@ const MailoutDetailsPage = () => {
           </Grid.Row>
         </Grid>
       </Segment>
+      )}
+      {DestinationCalculation && <Loading message="Calculating destinaions, please wait..."/>}
       {error && <Message error>Oh snap! {error}.</Message>}
     </Page>
   );
