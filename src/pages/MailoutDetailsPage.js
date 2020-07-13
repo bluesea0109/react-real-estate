@@ -133,10 +133,10 @@ const MailoutDetailsPage = () => {
       const response = await fetch(path, { headers, method: 'put', body, credentials: 'include' });
       await api.handleResponse(response)
       setDestinationCalculation(false)
-      window.location.reload()  // TODO: remove this, make a react/redux reload state
+      dispatch(getMailoutPending(mailoutId));
     }
     if (details?.mailoutStatus === 'calculation-deferred') calculateDestinations()
-  }, [details, peerId])
+  }, [details, peerId, dispatch, mailoutId])
 
   useEffect(() => {
     const busyState = pendingState || updateMailoutEditPendingState || submitPendingState || stopPendingState || updateMailoutSizePendingState;
