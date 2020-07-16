@@ -28,8 +28,6 @@ const BillingPage = () => {
       headers['authorization'] = `Bearer ${accessToken}`;
       const response = await fetch(path, { headers, method: 'get', credentials: 'include' });
       const results = await api.handleResponse(response)
-
-      console.log(results)
       setBillingDetails(results)
     }
     fetchData()
