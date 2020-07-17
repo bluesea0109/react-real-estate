@@ -11,7 +11,7 @@ import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemBodyLayout, Item
 import { getMailoutsPending, getMoreMailoutsPending, addCampaignStart } from '../store/modules/mailouts/actions';
 import { setCompletedDashboardModal } from '../store/modules/onboarded/actions'
 import { Checkbox, List } from 'semantic-ui-react';
-import { Button, Grid, Header, Icon, Input, Menu, Modal, Page, Segment, Snackbar } from '../components/Base';
+import { Button, Grid, Header, Icon, Input, Menu, Modal, Message, Page, Segment, Snackbar } from '../components/Base';
 import IframeGroup from '../components/MailoutListItem/IframeGroup';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ItemList from '../components/MailoutListItem/ItemList';
@@ -370,8 +370,8 @@ const Dashboard = () => {
               </Grid>
               <h5>Card Front</h5>
               {!UploadingInProgress && (
+                <div>
                 <div id="uploadCardFront" onClick={triggerFileDialog}>
-
                   <div>
                     {CampaignCoverUpload && (<b>{CampaignCoverUpload.name}</b>)}
                     {!CampaignCoverUpload && (<b>Upload Your Own Design</b>)}
@@ -380,6 +380,11 @@ const Dashboard = () => {
                   </div>
                   <Icon name="upload" size="big" />
                   <input id="cardFrontCoverFile" name="postcardcover" type="file" onChange={handleFileChange}></input>
+                </div>
+                <Message warning>
+                  <Message.Header>Include a safe zone of 1/2&quot; inch!</Message.Header>
+                  <p>Make sure no critical elements are within 1/2&quot; from the edge of the image. <br/>It risks being cropped during the postcard production.</p>
+                </Message>
                 </div>
               )}
               {UploadingInProgress && (<p>Please wait...</p>)}
