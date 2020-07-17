@@ -15,8 +15,6 @@ import api from '../services/api';
 
 const BillingPage = () => {
   const isAdmin = useSelector(store => store.onLogin?.permissions?.teamAdmin);
-  const onLoginMode = useSelector(store => store.onLogin?.mode);
-  const multiUser = onLoginMode === 'multiuser';
   const [billingDetails, setBillingDetails] = useState(null)
 
   useEffect(() => {
@@ -32,7 +30,7 @@ const BillingPage = () => {
       setBillingDetails(results)
     }
     fetchData()
-  }, [billingDetails])
+  }, [billingDetails, isAdmin])
 
   const tableBody = () => {
 
