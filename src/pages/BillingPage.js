@@ -23,6 +23,7 @@ const BillingPage = () => {
     async function fetchData () {
       if (billingDetails) return
       let path = `/api/user/team/settings/billings`
+      if (!isAdmin) path = `/api/user/settings/billings`
       const headers = {};
       const accessToken = await auth.getAccessToken();
       headers['authorization'] = `Bearer ${accessToken}`;
@@ -63,37 +64,30 @@ const BillingPage = () => {
       </ContentTopHeaderLayout>
       <ContentSpacerLayout />
       <div style={isMobile() ? { marginTop: '80px' } : { marginTop: '85px' }}>
+        <Segment>
+          <ContentBottomHeaderLayout>
+            {!billingDetails && <Loading message="Retrieving billing information..." />}
+          </ContentBottomHeaderLayout>
+          {billingDetails && (
+            <Table basic='very' className="BillingTable">
+               <Table.Header>
+                 <Table.Row>
+                   <Table.HeaderCell>Date</Table.HeaderCell>
+                   <Table.HeaderCell>Campaign Title</Table.HeaderCell>
+                   <Table.HeaderCell>Recipients</Table.HeaderCell>
+                   <Table.HeaderCell>Credits Applied</Table.HeaderCell>
+                   <Table.HeaderCell>Profile</Table.HeaderCell>
+                   <Table.HeaderCell>Approved By</Table.HeaderCell>
+                   <Table.HeaderCell>Cost</Table.HeaderCell>
+                 </Table.Row>
+               </Table.Header>
 
-        {multiUser && isAdmin && (
-
-
-          <Segment>
-
-            <ContentBottomHeaderLayout>
-              {!billingDetails && <Loading message="Retrieving billing information..." />}
-            </ContentBottomHeaderLayout>
-            {billingDetails && (
-              <Table basic='very' className="BillingTable">
-                 <Table.Header>
-                   <Table.Row>
-                     <Table.HeaderCell>Date</Table.HeaderCell>
-                     <Table.HeaderCell>Campaign Title</Table.HeaderCell>
-                     <Table.HeaderCell>Recipients</Table.HeaderCell>
-                     <Table.HeaderCell>Credits Applied</Table.HeaderCell>
-                     <Table.HeaderCell>Profile</Table.HeaderCell>
-                     <Table.HeaderCell>Approved By</Table.HeaderCell>
-                     <Table.HeaderCell>Cost</Table.HeaderCell>
-                   </Table.Row>
-                 </Table.Header>
-
-                 <Table.Body>
-                   {tableBody()}
-                 </Table.Body>
-                </Table>
-            )}
-
-          </Segment>
-        )}
+               <Table.Body>
+                 {tableBody()}
+               </Table.Body>
+              </Table>
+          )}
+        </Segment>
       </div>
     </Page>
   );

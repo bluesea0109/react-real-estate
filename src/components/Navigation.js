@@ -330,7 +330,7 @@ export default () => {
             <FontAwesomeIcon icon="cog" style={iconWithTextStyle} /> Settings
           </MobileDisabledLayout>
         </Menu.Item>
-        {multiUser && isAdmin && !selectedPeerId && (
+        {!selectedPeerId && (
           <Menu.Item as={Link} color="teal" name="billing" active={activeItem === '/billing'} to="/billing" style={{ lineHeight: 2.6 }}>
             <MobileEnabledLayout style={iconOnlyStyle}>
               <FontAwesomeIcon icon="credit-card" />
