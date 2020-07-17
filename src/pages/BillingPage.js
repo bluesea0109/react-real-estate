@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Loading from '../components/Loading';
-import { Header, Menu, Page, Segment } from '../components/Base';
+import { Header, Menu, Page, Segment, Image, Card } from '../components/Base';
 import { Table } from 'semantic-ui-react';
 import { format } from 'date-fns';
 
@@ -59,16 +59,20 @@ const BillingPage = () => {
             <Menu.Item>
               <Header as="h1">Billing</Header>
             </Menu.Item>
+
           </Menu>
+          {!isAdmin && billingDetails && !billingDetails.billings.length && (
+            <p id="billingSubHeader">Billing is connected to your team&apos;s administrator by default. If a user would like to be billed directly, please contact <a href="mailto:support@brivity.com">support@brivity.com</a></p>
+          )}
         </PageTitleHeader>
       </ContentTopHeaderLayout>
       <ContentSpacerLayout />
-      <div style={isMobile() ? { marginTop: '80px' } : { marginTop: '85px' }}>
+      <div style={isMobile() ? { marginTop: '80px' } : { marginTop: '95px' }}>
         <Segment>
           <ContentBottomHeaderLayout>
             {!billingDetails && <Loading message="Retrieving billing information..." />}
           </ContentBottomHeaderLayout>
-          {billingDetails && (
+          {billingDetails && !!billingDetails.billings.length && (
             <Table basic='very' className="BillingTable">
                <Table.Header>
                  <Table.Row>
@@ -86,6 +90,17 @@ const BillingPage = () => {
                  {tableBody()}
                </Table.Body>
               </Table>
+          )}
+          {billingDetails && !billingDetails.billings.length && (
+            <Card centered style={{ minWidth: '380px', boxShadow: 'none' }}>
+
+              <Image centered  size='large' src={require('../assets/Billing_empty_state.png')} style={{ background: 'unset', marginTop: '1em' }} />
+              <Card.Content style={{ borderTop: 'none' }}>
+                <Header as="h5" textAlign="center">
+                  <Header.Content style={{ width: '380px', textAlign: 'center' }}>Your billing invoices will appear here</Header.Content>
+                </Header>
+              </Card.Content>
+            </Card>
           )}
         </Segment>
       </div>

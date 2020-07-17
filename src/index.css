@@ -623,3 +623,13 @@ h1 {
   color: #59C4C4;
   font-weight: 600;
 }
+
+#billingSubHeader {
+  margin-top: -18px;
+  margin-left: 13px;
+}
+
+#billingSubHeader a {
+  color: #59C4C4;
+  font-weight: 600;
+}
