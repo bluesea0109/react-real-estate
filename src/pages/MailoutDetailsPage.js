@@ -451,7 +451,7 @@ const MailoutDetailsPage = () => {
         </Grid>
       </Segment>
       )}
-      {DestinationCalculation && <Loading message="Calculating destinaions, please wait..."/>}
+      {DestinationCalculation && <Loading message="Calculating destinations, please wait..."/>}
       {error && <Message error>Oh snap! {error}.</Message>}
     </Page>
   );
