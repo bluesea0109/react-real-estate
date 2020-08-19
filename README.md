@@ -21,11 +21,19 @@
 
 ### Push to production
 
+Accumulate all the changes you want to deploy into the master branch.
+Then check beta.brivitymarketer.com to ensure it functions correctly.
+
 while being on master
+ - update package.json/package-lock.json bump the version number. Try and represent the MAJOR.MINOR.PATCH version.
  - update the CHANGELOG.md and or README.md
- - manually commit the above two files to git
- - finalize it using ```npm run commit [patch|minor|major]```
- - followed by ```npm run push-to-production```
+ - commit the above files to git, ```git commit -m "1.2.3 - deploy the wizardsnozzlehopper"
+ - then checkout out the production branch ```git checkout production``` and make sure all up to date ```git pull origin production```
+ - merge master into production ```git merge master```
+ - watch the build on https://gitlab.rmcloud.com/gabby/alf-react/pipelines for success
+ - login to production and see the version in the browser tab reflects the deploy version. Sometimes it caches heavy so page reloads and relogins might help.
+ 
+
 
 ### General Info
 
