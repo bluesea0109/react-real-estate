@@ -4,8 +4,8 @@ import api from '../../services/api';
 import { subMonths } from 'date-fns';
 
 import { useSelector } from 'react-redux';
-import React, { useState, useEffect } from 'react';
-import { Checkbox, Dropdown, Form, Header, Label, List, Message, Select } from 'semantic-ui-react';
+import React, { useState, useEffect, Fragment } from 'react';
+import { Checkbox, Dropdown, Form, Header, Label, List, Message, Select, Input } from 'semantic-ui-react';
 
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import { isMobile } from '../utils';
@@ -84,6 +84,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const [cityColumn, setCityColumn] = useState(null);
   const [stateColumn, setStateColumn] = useState(null);
   const [zipColumn, setZipColumn] = useState(null);
+  const [currentResident, setCurrentResident] = useState(false);
 
   const [polygonCoordinates, setPolygonCoordinates] = useState([]);
   const [searchPropertyTypes, setSearchPropertyTypes] = useState([])
@@ -292,6 +293,10 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
         if (h === 'Mailing Postal Code') found.zipColumn = true
       })
       if (found.deliveryLineColumn && found.cityColumn && found.stateColumn && found.zipColumn) brivityFormat = true
+
+      // If there is no first or last name set the currentResident flag to true
+      if (!found.firstNameColumn && !found.lastNameColumn) setCurrentResident(true);
+
       if (brivityFormat) {
         setIsCsvBrivityFormat(1)
         setSaveDetails({destinationsOptionsMode: 'userUploaded', ready: true})
@@ -625,28 +630,37 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                     <Message.Header>The CSV file is not in a recognized Brivity format</Message.Header>
                     <p>Please match the CSV columns to the destination fields, using the selections below.</p>
                   </Message>
-                  <Form.Field>
-                    <label>First Name</label>
-                    <Dropdown
-                      placeholder="Select First Name Column"
-                      options={csvHeaders}
-                      selection
-                      value={firstNameColumn}
-                      onChange={(e, input) => setFirstNameColumn(input.value)}
-
-                    />
-                  </Form.Field>
-                  <Form.Field>
-                    <label>Last Name</label>
-                    <Dropdown
-                      placeholder="Select Last Name Column"
-                      options={csvHeaders}
-                      selection
-                      clearable
-                      value={lastNameColumn}
-                      onChange={(e, input) => setLastNameColumn(input.value)}
-                    />
-                  </Form.Field>
+                  {currentResident && (
+                    <Form.Field>
+                      <label>First Name</label>
+                      <Input disabled>Current Resident</Input>
+                    </Form.Field>
+                  )}
+                  {!currentResident && (
+                    <Fragment>
+                      <Form.Field>
+                        <label>First Name</label>
+                        <Dropdown
+                            placeholder="Select First Name Column"
+                            options={csvHeaders}
+                            selection
+                            value={firstNameColumn}
+                            onChange={(e, input) => setFirstNameColumn(input.value)}
+                        />
+                      </Form.Field>
+                      <Form.Field>
+                        <label>Last Name</label>
+                        <Dropdown
+                            placeholder="Select Last Name Column"
+                            options={csvHeaders}
+                            selection
+                            clearable
+                            value={lastNameColumn}
+                            onChange={(e, input) => setLastNameColumn(input.value)}
+                        />
+                      </Form.Field>
+                    </Fragment>
+                  )}
                   <Form.Field>
                     <label>Address</label>
                     <Dropdown
