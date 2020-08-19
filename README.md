@@ -28,11 +28,13 @@ while being on master
  - update package.json/package-lock.json bump the version number. Try and represent the MAJOR.MINOR.PATCH version.
  - update the CHANGELOG.md and or README.md
  - commit the above files to git, ```git commit -m "1.2.3 - deploy the wizardsnozzlehopper"
+ - push to master ```git push origin master```
  - then checkout out the production branch ```git checkout production``` and make sure all up to date ```git pull origin production```
  - merge master into production ```git merge master```
+ - push to production ```git push origin production```
  - watch the build on https://gitlab.rmcloud.com/gabby/alf-react/pipelines for success
  - login to production and see the version in the browser tab reflects the deploy version. Sometimes it caches heavy so page reloads and relogins might help.
- 
+
 
 
 ### General Info
