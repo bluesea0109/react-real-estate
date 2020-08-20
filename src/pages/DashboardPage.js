@@ -23,6 +23,8 @@ const useFetching = (getActionCreator, onboarded, dispatch) => {
   useEffect(() => {
     // In order to prevent unnecessary call to the api when we are expecting an redirect,
     // we check for the existence of routerDestination used by the PrivatePath to route to a specific URL
+    console.log(localStorage.getItem('routerDestination'))
+    console.log(onboarded);
     if (!localStorage.getItem('routerDestination') && onboarded) {
       dispatch(getActionCreator());
     }

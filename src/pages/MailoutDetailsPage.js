@@ -145,6 +145,8 @@ const MailoutDetailsPage = () => {
 
   const handleBackClick = () => {
     dispatch(resetMailout());
+    console.log(lastLocation.pathname);
+    console.log(mailoutId);
     if (lastLocation.pathname === `/dashboard/edit/${mailoutId}` || lastLocation.pathname === `/dashboard/${mailoutId}`) {
       history.push(`/dashboard`);
     }
