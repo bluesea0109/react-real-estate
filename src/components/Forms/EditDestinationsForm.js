@@ -85,6 +85,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const [stateColumn, setStateColumn] = useState(null);
   const [zipColumn, setZipColumn] = useState(null);
   const [currentResident, setCurrentResident] = useState(false);
+  const [lastName, setLastName] = useState(false);
 
   const [polygonCoordinates, setPolygonCoordinates] = useState([]);
   const [searchPropertyTypes, setSearchPropertyTypes] = useState([])
@@ -296,6 +297,9 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
 
       // If there is no first or last name set the currentResident flag to true
       if (!found.firstNameColumn && !found.lastNameColumn) setCurrentResident(true);
+
+      // If there is a lastName set the lastName flag to true
+      if (found.lastNameColumn) setLastName(true);
 
       if (brivityFormat) {
         setIsCsvBrivityFormat(1)
@@ -648,17 +652,19 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                             onChange={(e, input) => setFirstNameColumn(input.value)}
                         />
                       </Form.Field>
-                      <Form.Field>
-                        <label>Last Name</label>
-                        <Dropdown
+                      {lastName && (
+                        <Form.Field>
+                          <label>Last Name</label>
+                          <Dropdown
                             placeholder="Select Last Name Column"
                             options={csvHeaders}
                             selection
                             clearable
                             value={lastNameColumn}
                             onChange={(e, input) => setLastNameColumn(input.value)}
-                        />
-                      </Form.Field>
+                          />
+                        </Form.Field>
+                      )}
                     </Fragment>
                   )}
                   <Form.Field>
