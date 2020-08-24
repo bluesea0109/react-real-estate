@@ -84,8 +84,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const [cityColumn, setCityColumn] = useState(null);
   const [stateColumn, setStateColumn] = useState(null);
   const [zipColumn, setZipColumn] = useState(null);
-  const [currentResident, setCurrentResident] = useState(false);
-  const [lastName, setLastName] = useState(false);
+  const [currentResident, setCurrentResident] = useState(true);
 
   const [polygonCoordinates, setPolygonCoordinates] = useState([]);
   const [searchPropertyTypes, setSearchPropertyTypes] = useState([])
@@ -127,14 +126,23 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   // ** only set saveDetails to ready when all the required columns are filled out
   useEffect(() => {
     let ready = true
-    if (firstNameColumn === null) ready = false
     if (deliveryLineColumn === null) ready = false
     if (cityColumn === null) ready = false
     if (stateColumn === null) ready = false
     if (zipColumn === null) ready = false
     if (!ready) setSaveDetails({destinationsOptionsMode: 'userUploaded', ready: false})
     else setSaveDetails({destinationsOptionsMode: 'userUploaded', ready: true})
-  }, [firstNameColumn, lastNameColumn, deliveryLineColumn, cityColumn, stateColumn, zipColumn])
+  }, [deliveryLineColumn, cityColumn, stateColumn, zipColumn])
+
+  useEffect(() => {
+    console.log('firstNameColumn = ', firstNameColumn);
+    console.log('lastNameColumn = ', lastNameColumn)
+    if(firstNameColumn === 0 || lastNameColumn === 0){
+      setCurrentResident(false);
+    }else{
+      setCurrentResident(true);
+    }
+  }, [firstNameColumn, lastNameColumn])
 
   const handleDestinationSearch = async () => {
     if (!polygonCoordinates) return
@@ -235,7 +243,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
         const formData = new FormData();
         formData.append('destinations', csvFile);
         if (!isCsvBrivityFormat) {
-          formData.append('firstNameColumn', firstNameColumn);
+          if (firstNameColumn && firstNameColumn !== null) formData.append('firstNameColumn', firstNameColumn);
           if (lastNameColumn && lastNameColumn !== null) formData.append('lastNameColumn', lastNameColumn);
           formData.append('deliveryLineColumn', deliveryLineColumn);
           formData.append('cityColumn', cityColumn);
@@ -295,12 +303,6 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
       })
       if (found.deliveryLineColumn && found.cityColumn && found.stateColumn && found.zipColumn) brivityFormat = true
 
-      // If there is no first or last name set the currentResident flag to true
-      if (!found.firstNameColumn && !found.lastNameColumn) setCurrentResident(true);
-
-      // If there is a lastName set the lastName flag to true
-      if (found.lastNameColumn) setLastName(true);
-
       if (brivityFormat) {
         setIsCsvBrivityFormat(1)
         setSaveDetails({destinationsOptionsMode: 'userUploaded', ready: true})
@@ -321,6 +323,8 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     };
     reader.readAsText(file, 'UTF-8');
   };
+
+  console.log('currentResident = ', currentResident);
 
   return (
     <Page basic>
@@ -633,42 +637,37 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                   <Message negative visible={true}>
                     <Message.Header>The CSV file is not in a recognized Brivity format</Message.Header>
                     <p>Please match the CSV columns to the destination fields, using the selections below.</p>
+                    {currentResident && (
+                      <Fragment>
+                        <Message.Header>* Please Note - "Current Resident" will be used on Name Line</Message.Header>
+                        <p>First and Last name choices will be used if available and selected.</p>
+                      </Fragment>
+                    )}
                   </Message>
-                  {currentResident && (
-                    <Form.Field>
-                      <label>First Name</label>
-                      <Input disabled>Current Resident</Input>
-                    </Form.Field>
-                  )}
-                  {!currentResident && (
-                    <Fragment>
-                      <Form.Field>
-                        <label>First Name</label>
-                        <Dropdown
-                            placeholder="Select First Name Column"
-                            options={csvHeaders}
-                            selection
-                            value={firstNameColumn}
-                            onChange={(e, input) => setFirstNameColumn(input.value)}
-                        />
-                      </Form.Field>
-                      {lastName && (
-                        <Form.Field>
-                          <label>Last Name</label>
-                          <Dropdown
-                            placeholder="Select Last Name Column"
-                            options={csvHeaders}
-                            selection
-                            clearable
-                            value={lastNameColumn}
-                            onChange={(e, input) => setLastNameColumn(input.value)}
-                          />
-                        </Form.Field>
-                      )}
-                    </Fragment>
-                  )}
                   <Form.Field>
-                    <label>Address</label>
+                    <label>First Name</label>
+                    <Dropdown
+                        placeholder="Select First Name Column"
+                        options={csvHeaders}
+                        selection
+                        clearable
+                        value={firstNameColumn}
+                        onChange={(e, input) => setFirstNameColumn(input.value)}
+                    />
+                  </Form.Field>
+                  <Form.Field>
+                    <label>Last Name</label>
+                    <Dropdown
+                      placeholder="Select Last Name Column"
+                      options={csvHeaders}
+                      selection
+                      clearable
+                      value={lastNameColumn}
+                      onChange={(e, input) => setLastNameColumn(input.value)}
+                    />
+                  </Form.Field>
+                  <Form.Field>
+                    <label>Address*</label>
                     <Dropdown
                       placeholder="Select Address Column"
                       options={csvHeaders}
@@ -678,7 +677,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                     />
                   </Form.Field>
                   <Form.Field>
-                    <label>City</label>
+                    <label>City*</label>
                     <Dropdown
                       placeholder="Select City Column"
                       options={csvHeaders}
@@ -688,7 +687,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                     />
                   </Form.Field>
                   <Form.Field>
-                    <label>State</label>
+                    <label>State*</label>
                     <Dropdown
                       placeholder="Select State Column"
                       options={csvHeaders}
@@ -698,7 +697,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                     />
                   </Form.Field>
                   <Form.Field>
-                    <label>Zip</label>
+                    <label>Zip*</label>
                     <Dropdown
                       placeholder="Select Zip Column"
                       options={csvHeaders}
