@@ -4,11 +4,11 @@ import api from '../../services/api';
 import { subMonths } from 'date-fns';
 
 import { useSelector } from 'react-redux';
-import React, { useState, useEffect } from 'react';
-import { Checkbox, Dropdown, Form, Header, Label, List, Message, Select } from 'semantic-ui-react';
+import React, { useState, useEffect, Fragment } from 'react';
+import { Checkbox, Dropdown, Form, Header, Label, List, Message, Select, Input } from 'semantic-ui-react';
 
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
-import { isMobile } from '../utils';
+import { isMobile, tag } from '../utils';
 import { Button, Menu, Page, Segment, Snackbar } from '../Base';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
 import PageTitleHeader from '../PageTitleHeader';
@@ -71,7 +71,6 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     destinationsOptionsMode: mailoutDetails.destinationsOptions?.mode || isCampaign ? 'manual': 'ai',
     ready: false
   })
-  console.log(saveDetails)
 
   const [numberOfDestinations, setNumberOfDestinations] = useState(mailoutDetails.mailoutSize)
 
@@ -84,6 +83,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const [cityColumn, setCityColumn] = useState(null);
   const [stateColumn, setStateColumn] = useState(null);
   const [zipColumn, setZipColumn] = useState(null);
+  const [currentResident, setCurrentResident] = useState(true);
 
   const [polygonCoordinates, setPolygonCoordinates] = useState([]);
   const [searchPropertyTypes, setSearchPropertyTypes] = useState([])
@@ -125,14 +125,21 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   // ** only set saveDetails to ready when all the required columns are filled out
   useEffect(() => {
     let ready = true
-    if (firstNameColumn === null) ready = false
     if (deliveryLineColumn === null) ready = false
     if (cityColumn === null) ready = false
     if (stateColumn === null) ready = false
     if (zipColumn === null) ready = false
     if (!ready) setSaveDetails({destinationsOptionsMode: 'userUploaded', ready: false})
     else setSaveDetails({destinationsOptionsMode: 'userUploaded', ready: true})
-  }, [firstNameColumn, lastNameColumn, deliveryLineColumn, cityColumn, stateColumn, zipColumn])
+  }, [deliveryLineColumn, cityColumn, stateColumn, zipColumn])
+
+  useEffect(() => {
+    if(typeof firstNameColumn === "number" || typeof lastNameColumn === "number"){
+      setCurrentResident(false);
+    }else{
+      setCurrentResident(true);
+    }
+  }, [firstNameColumn, lastNameColumn])
 
   const handleDestinationSearch = async () => {
     if (!polygonCoordinates) return
@@ -233,7 +240,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
         const formData = new FormData();
         formData.append('destinations', csvFile);
         if (!isCsvBrivityFormat) {
-          formData.append('firstNameColumn', firstNameColumn);
+          if (firstNameColumn && firstNameColumn !== null) formData.append('firstNameColumn', firstNameColumn);
           if (lastNameColumn && lastNameColumn !== null) formData.append('lastNameColumn', lastNameColumn);
           formData.append('deliveryLineColumn', deliveryLineColumn);
           formData.append('cityColumn', cityColumn);
@@ -292,6 +299,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
         if (h === 'Mailing Postal Code') found.zipColumn = true
       })
       if (found.deliveryLineColumn && found.cityColumn && found.stateColumn && found.zipColumn) brivityFormat = true
+
       if (brivityFormat) {
         setIsCsvBrivityFormat(1)
         setSaveDetails({destinationsOptionsMode: 'userUploaded', ready: true})
@@ -624,20 +632,26 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                   <Message negative visible={true}>
                     <Message.Header>The CSV file is not in a recognized Brivity format</Message.Header>
                     <p>Please match the CSV columns to the destination fields, using the selections below.</p>
+                    {currentResident && (
+                      <Fragment>
+                        <Message.Header>* Please Note - "Current Resident" will be used on Name Line</Message.Header>
+                        <p>First and Last name choices will be used if available and selected.</p>
+                      </Fragment>
+                    )}
                   </Message>
                   <Form.Field>
                     <label>First Name</label>
                     <Dropdown
-                      placeholder="Select First Name Column"
-                      options={csvHeaders}
-                      selection
-                      value={firstNameColumn}
-                      onChange={(e, input) => setFirstNameColumn(input.value)}
-
+                        placeholder="Select First Name Column"
+                        options={csvHeaders}
+                        selection
+                        clearable
+                        value={firstNameColumn}
+                        onChange={(e, input) => setFirstNameColumn(input.value)}
                     />
                   </Form.Field>
                   <Form.Field>
-                    <label>Last Name</label>
+                  <label>Last Name</label>
                     <Dropdown
                       placeholder="Select Last Name Column"
                       options={csvHeaders}
@@ -648,7 +662,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                     />
                   </Form.Field>
                   <Form.Field>
-                    <label>Address</label>
+                    <label>Address {tag('Required')}</label>
                     <Dropdown
                       placeholder="Select Address Column"
                       options={csvHeaders}
@@ -658,7 +672,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                     />
                   </Form.Field>
                   <Form.Field>
-                    <label>City</label>
+                    <label>City {tag('Required')}</label>
                     <Dropdown
                       placeholder="Select City Column"
                       options={csvHeaders}
@@ -668,7 +682,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                     />
                   </Form.Field>
                   <Form.Field>
-                    <label>State</label>
+                    <label>State {tag('Required')}</label>
                     <Dropdown
                       placeholder="Select State Column"
                       options={csvHeaders}
@@ -678,7 +692,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                     />
                   </Form.Field>
                   <Form.Field>
-                    <label>Zip</label>
+                    <label>Zip {tag('Required')}</label>
                     <Dropdown
                       placeholder="Select Zip Column"
                       options={csvHeaders}
