@@ -8,7 +8,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { Checkbox, Dropdown, Form, Header, Label, List, Message, Select, Input } from 'semantic-ui-react';
 
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
-import { isMobile } from '../utils';
+import { isMobile, tag } from '../utils';
 import { Button, Menu, Page, Segment, Snackbar } from '../Base';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
 import PageTitleHeader from '../PageTitleHeader';
@@ -71,7 +71,6 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     destinationsOptionsMode: mailoutDetails.destinationsOptions?.mode || isCampaign ? 'manual': 'ai',
     ready: false
   })
-  console.log(saveDetails)
 
   const [numberOfDestinations, setNumberOfDestinations] = useState(mailoutDetails.mailoutSize)
 
@@ -135,9 +134,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   }, [deliveryLineColumn, cityColumn, stateColumn, zipColumn])
 
   useEffect(() => {
-    console.log('firstNameColumn = ', firstNameColumn);
-    console.log('lastNameColumn = ', lastNameColumn)
-    if(firstNameColumn === 0 || lastNameColumn === 0){
+    if(typeof firstNameColumn === "number" || typeof lastNameColumn === "number"){
       setCurrentResident(false);
     }else{
       setCurrentResident(true);
@@ -323,8 +320,6 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     };
     reader.readAsText(file, 'UTF-8');
   };
-
-  console.log('currentResident = ', currentResident);
 
   return (
     <Page basic>
@@ -656,7 +651,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                     />
                   </Form.Field>
                   <Form.Field>
-                    <label>Last Name</label>
+                  <label>Last Name</label>
                     <Dropdown
                       placeholder="Select Last Name Column"
                       options={csvHeaders}
@@ -667,7 +662,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                     />
                   </Form.Field>
                   <Form.Field>
-                    <label>Address*</label>
+                    <label>Address {tag('Required')}</label>
                     <Dropdown
                       placeholder="Select Address Column"
                       options={csvHeaders}
@@ -677,7 +672,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                     />
                   </Form.Field>
                   <Form.Field>
-                    <label>City*</label>
+                    <label>City {tag('Required')}</label>
                     <Dropdown
                       placeholder="Select City Column"
                       options={csvHeaders}
@@ -687,7 +682,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                     />
                   </Form.Field>
                   <Form.Field>
-                    <label>State*</label>
+                    <label>State {tag('Required')}</label>
                     <Dropdown
                       placeholder="Select State Column"
                       options={csvHeaders}
@@ -697,7 +692,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                     />
                   </Form.Field>
                   <Form.Field>
-                    <label>Zip*</label>
+                    <label>Zip {tag('Required')}</label>
                     <Dropdown
                       placeholder="Select Zip Column"
                       options={csvHeaders}
