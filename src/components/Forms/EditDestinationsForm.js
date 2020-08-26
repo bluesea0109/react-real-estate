@@ -5,7 +5,7 @@ import { subMonths } from 'date-fns';
 
 import { useSelector } from 'react-redux';
 import React, { useState, useEffect, Fragment } from 'react';
-import { Checkbox, Dropdown, Form, Header, Label, List, Message, Select, Input } from 'semantic-ui-react';
+import { Checkbox, Dropdown, Form, Header, Label, List, Message, Select } from 'semantic-ui-react';
 
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import { isMobile, tag } from '../utils';
