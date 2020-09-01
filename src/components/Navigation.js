@@ -130,6 +130,7 @@ export default () => {
       dispatch(selectPeerId(activeUser));
       if (
         location.pathname !== '/profile' &&
+        location.pathname !== '/listings' &&
         location.pathname !== '/dashboard' &&
         location.pathname !== '/customization' &&
         location.pathname !== '/settings' &&
@@ -141,6 +142,7 @@ export default () => {
       dispatch(deselectPeerId());
       if (
         location.pathname !== '/profile' &&
+        location.pathname !== '/listings' &&
         location.pathname !== '/dashboard' &&
         location.pathname !== '/customization' &&
         location.pathname !== '/settings' &&
@@ -259,12 +261,20 @@ export default () => {
             />
           </Menu.Item>
         )}
+        <Menu.Item as={Link} color="teal" name="listings" active={activeItem === '/listings'} to="/listings" style={{ lineHeight: 2.6 }}>
+          <MobileEnabledLayout style={iconOnlyStyle}>
+            <FontAwesomeIcon icon="home" />
+          </MobileEnabledLayout>
+          <MobileDisabledLayout>
+            <FontAwesomeIcon icon="home" style={iconWithTextStyle} /> Listings
+          </MobileDisabledLayout>
+        </Menu.Item>
         <Menu.Item as={Link} color="teal" name="dashboard" active={activeItem === '/dashboard'} to="/dashboard" style={{ lineHeight: 2.6 }}>
           <MobileEnabledLayout style={iconOnlyStyle}>
             <FontAwesomeIcon icon="tachometer-alt" />
           </MobileEnabledLayout>
           <MobileDisabledLayout>
-            <FontAwesomeIcon icon="tachometer-alt" style={iconWithTextStyle} /> Dashboard <FontAwesomeIcon icon="caret-down" style={{ marginLeft: '0.2em' }} />
+            <FontAwesomeIcon icon="tachometer-alt" style={iconWithTextStyle} /> Postcards <FontAwesomeIcon icon="caret-down" style={{ marginLeft: '0.2em' }} />
           </MobileDisabledLayout>
         </Menu.Item>
         {location.pathname.includes('/dashboard') && (

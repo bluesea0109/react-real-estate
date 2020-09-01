@@ -9,6 +9,7 @@ import LoginPage from './containers/LoginPage';
 import CallbackPage from './containers/CallbackPage';
 import OnboardPage from './pages/OnboardPage';
 import DashboardPage from './pages/DashboardPage';
+import ListingsPage from './pages/ListingsPage';
 import MailoutDetailsPage from './pages/MailoutDetailsPage';
 import MailoutEditPage from './pages/MailoutEditPage';
 import MailoutDestinationsPage from './pages/MailoutDestinationsPage';
@@ -34,6 +35,7 @@ export default () => {
       <Route path="/callback" component={CallbackPage} />
       <Route path="/login" component={LoginPage} />
       <PrivateRoute path="/onboard" component={OnboardPage} />
+      <PrivateRoute exact path="/listings" component={ListingsPage} />
       <PrivateRoute exact path="/dashboard" component={DashboardPage} />
       <PrivateRoute exact path="/dashboard/archived" component={ArchivedPage} />
       <PrivateRoute exact path="/dashboard/:mailoutId" component={MailoutDetailsPage} />
