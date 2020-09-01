@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Loading from '../components/Loading';
-import { Header, Menu, Page, Segment, Image, Card } from '../components/Base';
+import { Header, Menu, Page, Segment } from '../components/Base';
 import { Table } from 'semantic-ui-react';
-import { format } from 'date-fns';
 
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout } from '../layouts';
