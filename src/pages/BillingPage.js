@@ -43,7 +43,12 @@ const BillingPage = () => {
         <Table.Cell>{item.recipientCount}</Table.Cell>
         <Table.Cell>${item.creditsAmountApplied || '0.00'}</Table.Cell>
         <Table.Cell>{item.userProfile.first} {item.userProfile.last}</Table.Cell>
-        <Table.Cell>{item.approvedByUser.first} {item.approvedByUser.last}</Table.Cell>
+        {item.approvedByUser && (
+          <Table.Cell>{item.approvedByUser.first} {item.approvedByUser.last}</Table.Cell>
+        )}
+        {!item.approvedByUser && (
+          <Table.Cell></Table.Cell>
+        )}
         <Table.Cell>${(Number(item.amount_in_cents) + Number(item.tax_amount_in_cents)) / 100}</Table.Cell>
       </Table.Row>
     ));
