@@ -296,6 +296,15 @@ export default () => {
             </Menu.Item>
           </Menu.Menu>
         )}
+        <Menu.Item as={Link} color="teal" name="ads" active={activeItem === '/ads'} to="/ads" style={{ lineHeight: 2.6 }}>
+          <MobileEnabledLayout style={iconOnlyStyle}>
+            <FontAwesomeIcon icon="home" />
+          </MobileEnabledLayout>
+          <MobileDisabledLayout>
+            <FontAwesomeIcon icon="home" style={iconWithTextStyle} /> Ads
+          </MobileDisabledLayout>
+        </Menu.Item>
+
         <Menu.Item as={Link} color="teal" name="customization" active={activeItem === '/customization'} to="/customization" style={{ lineHeight: 2.6 }}>
           <MobileEnabledLayout style={iconOnlyStyle}>
             <FontAwesomeIcon icon="paint-brush" />
