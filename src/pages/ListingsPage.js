@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import Loading from '../components/Loading';
 import { Header, Menu, Page, Segment } from '../components/Base';
 import { Table } from 'semantic-ui-react';
@@ -12,11 +13,13 @@ import api from '../services/api';
 
 const EmptyPage = () => {
   const [listingDetails, setListingDetails] = useState(null)
+  const peerId = useSelector(store => store.peer.peerId)
 
   useEffect(() => {
     async function fetchData () {
       if (listingDetails) return
       let path = `/api/user/listings?forgeBlueroofToken=true`
+      if (peerId) path = `/api/user/peer/${peerId}/listings?forgeBlueroofToken=true`
       const headers = {};
       const accessToken = await auth.getAccessToken();
       headers['authorization'] = `Bearer ${accessToken}`;
@@ -25,7 +28,7 @@ const EmptyPage = () => {
       setListingDetails(results)
     }
     fetchData()
-  }, [listingDetails])
+  }, [listingDetails, peerId])
 
   const tableBody = () => {
 
