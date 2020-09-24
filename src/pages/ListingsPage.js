@@ -95,7 +95,7 @@ const ListingsPage = () => {
                     className="icon cardIconButton"
                   >
                     <Dropdown.Menu>
-                      <Dropdown.Item onClick={() => 
+                      <Dropdown.Item onClick={() =>
                         window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`
                         }>
                         View Facebook Ad
@@ -111,24 +111,24 @@ const ListingsPage = () => {
     }
   };
 
-  const tableBody = () => {
-
-    let createQS = (item) => {
-      let params = {...listingDetails.adProduct.qs}
-      params.listing = item.mlsNum
-      params.mls = item.blueroofMlsId
-      return Object.keys(params).map(param => `${param}=${params[param]}`).join('&')
-    }
-
-    return listingDetails.listings.map((item, index) => (
-      <Table.Row key="{item.mlsNum}">
-        <Table.Cell>{item.streetAddress}</Table.Cell>
-        <Table.Cell>{item.mlsNum}</Table.Cell>
-        <Table.Cell>{item.standardStatus}</Table.Cell>
-        <Table.Cell><a href={`${listingDetails.adProduct.url}?${createQS(item)}`}>Create Ad</a></Table.Cell>
-      </Table.Row>
-    ));
-  };
+  // const tableBody = () => {
+  //
+  //   let createQS = (item) => {
+  //     let params = {...listingDetails.adProduct.qs}
+  //     params.listing = item.mlsNum
+  //     params.mls = item.blueroofMlsId
+  //     return Object.keys(params).map(param => `${param}=${params[param]}`).join('&')
+  //   }
+  //
+  //   return listingDetails.listings.map((item, index) => (
+  //     <Table.Row key="{item.mlsNum}">
+  //       <Table.Cell>{item.streetAddress}</Table.Cell>
+  //       <Table.Cell>{item.mlsNum}</Table.Cell>
+  //       <Table.Cell>{item.standardStatus}</Table.Cell>
+  //       <Table.Cell><a href={`${listingDetails.adProduct.url}?${createQS(item)}`}>Create Ad</a></Table.Cell>
+  //     </Table.Row>
+  //   ));
+  // };
   console.log({listingDetails});
   return (
     <Page basic>
