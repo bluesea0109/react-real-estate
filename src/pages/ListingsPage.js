@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Loading from '../components/Loading';
 import { Header, Menu, Page } from '../components/Base';
-import { Table, Grid, Segment, Dropdown } from 'semantic-ui-react';
+import { Grid, Segment, Dropdown } from 'semantic-ui-react';
 
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout } from '../layouts';
