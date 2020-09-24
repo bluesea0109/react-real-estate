@@ -633,3 +633,125 @@ h1 {
   color: #59C4C4;
   font-weight: 600;
 }
+/* Listings page */
+/* .listingsMainContainer {
+  margin: 0!important;
+  width: 100%!important;
+  padding: 8px!important;
+} */
+.listingCardBodyContainer {
+  padding: 16px;
+}
+.listingCardImgContainer {
+  height: 175px;
+}
+.listingCardImg {
+  height: 100%;
+  width: 100%;
+  background-position: center;
+  background-size: cover;
+  border-radius: 6px 6px 0px 0px;
+}
+.cardSegment {
+  padding: 0px!important;
+  border-radius: 6px!important;
+  color: #666666!important;
+}
+.cardFont {
+  font-family: 'Open Sans'!important;
+}
+.agentProfileImgContainer {
+  height: 50px;
+  width: 50px;
+}
+.agentProfileImg {
+  height: 100%;
+  width: 100%;
+  background-position: center;
+  background-size: cover;
+  border-radius: 27px;
+}
+.normalFontWeight {
+  font-weight: 500;
+}
+.capsText {
+  text-transform: uppercase;
+}
+.centeredRowGrid {
+  display: flex!important;
+  align-items: center!important;
+  flex-direction: row!important;
+}
+.leftCenteredColumnGrid {
+  justify-content: left;
+  align-items: center;
+  display: flex;
+}
+.cardIconButton {
+  border-radius: 25px!important;
+}
+.alignEnd {
+  text-align: end;
+}
+.noMargin {
+  margin: 0!important;
+}
+.noPaddingTop {
+  padding-top: 0px!important;
+}
+.noPaddingRight {
+  padding-right: 0px!important;
+}
+.noPaddingBottom {
+  padding-bottom: 0px!important;
+}
+.noPaddingLeft {
+  padding-left: 0px!important;
+}
+.cardTopMarginXS {
+  margin-top: 4px!important;
+}
+.cardTopMarginS {
+  margin-top: 8px!important;
+}
+.cardTopMarginM {
+  margin-top: 16px!important;
+}
+.cardBottomMargin {
+  margin-bottom: -4px!important
+}
+.statusPill {
+  background-color: lightgrey;
+  color: #666;
+  border-radius: 13px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 4px;
+}
+.floatPill {
+  background-color: #fff;
+  box-shadow: 0px 8px 9px -3px rgba(0,0,0,0.49);
+  padding: 2px 16px;
+}
+.redPill {
+  background-color: rgba(242, 113, 77, 0.2);
+  color: #F2714D;
+}
+.listingCardImgContainer{
+  position: relative;
+}
+.imgPillContainer{
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 16px;
+}
+
+/* overrides */
+/* //!should be removed or reworked later */
+/* this was cahnged for fixing the issue of the listings card grid not being able to accomodate 4 cards in a row becase of the ridiculous margins on both sides, the margins were taken care of in class 'ListingsMainContainer' but the screen breaks were overwritting it.*/
+/* .ui.grid.container {
+  width: 100%!important;
+} */
