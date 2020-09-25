@@ -642,8 +642,11 @@ h1 {
 .listingCardBodyContainer {
   padding: 16px;
 }
+.mainGridContainer {
+  margin-right: -92px!important;
+}
 .listingCardImgContainer {
-  height: 175px;
+  height: 280px;
 }
 .listingCardImg {
   height: 100%;
@@ -742,11 +745,17 @@ h1 {
   position: relative;
 }
 .imgPillContainer{
-  z-index: 10;
+  z-index: 1;
   position: absolute;
   top: 0;
   right: 0;
   padding: 16px;
+}
+
+@media (min-width: 1920px) {
+  .agentInfoContainer{
+    padding-left: 16px!important;
+  }
 }
 
 /* overrides */

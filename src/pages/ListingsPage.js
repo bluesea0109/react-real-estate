@@ -36,8 +36,8 @@ const ListingsPage = () => {
       console.log(listingItem.photos.length > 0 ? listingItem.photos[0].url : '')
       const title = listingItem.streetAddress;
       const subtitle = `${listingItem.city}, ${listingItem.state} ${listingItem.postalCode}`;
-      const price = listingItem.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-      const bed = '4 bed'
+      const price = `$${listingItem.price.toLocaleString('en', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
+      const bed = '4 bed';
       const bath = '3 bath';
       const sqft = '2,392 sqft';
 
@@ -49,7 +49,7 @@ const ListingsPage = () => {
       }
 
       return(
-        <Grid.Column>
+        <Grid.Column mobile={16} tablet={8} computer={8} largeScreen={5} widescreen={4} >
           <Segment className="cardSegment">
             <div className="cardImgWrapper">
               <div className="listingCardImgContainer">
@@ -72,13 +72,13 @@ const ListingsPage = () => {
               <Header as="h5" className="noMargin cardTopMarginS cardFont">{price}<span className="normalFontWeight"> | </span>{bed}<span className="normalFontWeight"> | </span>{bath}<span className="normalFontWeight"> | </span>{sqft}</Header>
               <Header as="h6" className="noMargin cardTopMarginM cardFont">MLS #: <span className="normalFontWeight">12345</span></Header>
               <Grid className="centeredRowGrid cardTopMarginS cardBottomMargin">
-                <Grid.Column width={3}>
+                <Grid.Column mobile={3} tablet={3} computer={3} largeScreen={3}  widescreen={2} >
                   <div className='agentProfileImgContainer'>
                     <div className="agentProfileImg" style={{ backgroundImage: `url(https://www.andrewcollings.com/wp-content/uploads/2019/06/Hero-01-009-Chicago-Studio-Corporate-Headshot.jpg-V.jpg-1024x683-JPG60.JPG-1024x683.jpg)` }} />
                   </div>
                 </Grid.Column>
-                <Grid.Column width={9} className="leftCenteredColumnGrid">
-                  <Grid.Row>
+                <Grid.Column mobile={9} tablet={9} computer={9} largeScreen={9} widescreen={10}  className="leftCenteredColumnGrid">
+                  <Grid.Row className="agentInfoContainer">
                     <Grid.Column>
                       <Header as="h4">Kyle Williams</Header>
                     </Grid.Column>
@@ -87,7 +87,7 @@ const ListingsPage = () => {
                     </Grid.Column>
                   </Grid.Row>
                 </Grid.Column>
-                <Grid.Column width={4} className="alignEnd">
+                <Grid.Column mobile={4} tablet={4} computer={4} largeScreen={4} widescreen={4}  className="alignEnd">
                   <Dropdown
                     icon="ellipsis horizontal"
                     direction="left"
@@ -163,17 +163,12 @@ const ListingsPage = () => {
                 </Table.Body>
               </Table>
           )} */}
-          <Grid container doubling stackable columns={3} className="listingsMainContainer" >
+          {/* <Grid container doubling stackable columns={4} className='listingsMainContainer' > */}
+          {/* <Grid container doubling stackable className='listingsMainContainer' > */}
+          <Grid stackable className='mainGridContainer' >
             {listingDetails ? listingDetails.listings.map((item, i) => {
               return <ListingCard key={i} listingItem={item} />
             }) : undefined}
-
-            {/* <ListingCard />
-            <ListingCard />
-            <ListingCard />
-            <ListingCard />
-            <ListingCard />
-            <ListingCard /> */}
           </Grid>
         </div>
       </div>
