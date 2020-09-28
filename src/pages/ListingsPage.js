@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Loading from '../components/Loading';
 import { Header, Menu, Page } from '../components/Base';
-import { Table, Grid, Segment, Dropdown } from 'semantic-ui-react';
+import { Grid, Segment, Dropdown } from 'semantic-ui-react';
 
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout } from '../layouts';
@@ -95,9 +95,7 @@ const ListingsPage = () => {
                     className="icon cardIconButton"
                   >
                     <Dropdown.Menu>
-                      <Dropdown.Item onClick={() => 
-                        window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`
-                        }>
+                      <Dropdown.Item onClick={() => window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`}>
                         View Facebook Ad
                       </Dropdown.Item>
                     </Dropdown.Menu>
@@ -110,26 +108,6 @@ const ListingsPage = () => {
       );
     }
   };
-
-  const tableBody = () => {
-
-    let createQS = (item) => {
-      let params = {...listingDetails.adProduct.qs}
-      params.listing = item.mlsNum
-      params.mls = item.blueroofMlsId
-      return Object.keys(params).map(param => `${param}=${params[param]}`).join('&')
-    }
-
-    return listingDetails.listings.map((item, index) => (
-      <Table.Row key="{item.mlsNum}">
-        <Table.Cell>{item.streetAddress}</Table.Cell>
-        <Table.Cell>{item.mlsNum}</Table.Cell>
-        <Table.Cell>{item.standardStatus}</Table.Cell>
-        <Table.Cell><a href={`${listingDetails.adProduct.url}?${createQS(item)}`}>Create Ad</a></Table.Cell>
-      </Table.Row>
-    ));
-  };
-  console.log({listingDetails});
   return (
     <Page basic>
       <ContentTopHeaderLayout>
@@ -147,24 +125,6 @@ const ListingsPage = () => {
           <ContentBottomHeaderLayout>
             {!listingDetails && <Loading message="Loading Listings..." />}
           </ContentBottomHeaderLayout>
-          {/* {listingDetails && (
-            <Table basic='very' className="BillingTable">
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Address</Table.HeaderCell>
-                    <Table.HeaderCell>MLS</Table.HeaderCell>
-                    <Table.HeaderCell>Status</Table.HeaderCell>
-                    <Table.HeaderCell>Actions</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-
-                <Table.Body>
-                  {tableBody()}
-                </Table.Body>
-              </Table>
-          )} */}
-          {/* <Grid container doubling stackable columns={4} className='listingsMainContainer' > */}
-          {/* <Grid container doubling stackable className='listingsMainContainer' > */}
           <Grid stackable className='mainGridContainer' >
             {listingDetails ? listingDetails.listings.map((item, i) => {
               return <ListingCard key={i} listingItem={item} />
