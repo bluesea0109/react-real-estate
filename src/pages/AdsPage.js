@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import Loading from '../components/Loading';
 import { Header, Menu, Page, Segment, Icon } from '../components/Base';
-import { Table } from 'semantic-ui-react';
+import { Table, Loader } from 'semantic-ui-react';
 
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout } from '../layouts';
@@ -54,7 +54,21 @@ const EmptyPage = () => {
 
   const tableBody = () => {
     return adDetails.map((item, index) => (
-      <Table.Row key={index}>
+      item.pending ?
+        <Table.Row key={index}>
+        <Table.Cell className="marketerGrey adTableItemCampaignCell"><b>{item.campaignName}</b></Table.Cell>
+        <Table.Cell />
+        <Table.Cell textAlign='center'>
+          <Loader active inline size='tiny'>Pending</Loader>
+        </Table.Cell>
+        <Table.Cell />
+        <Table.Cell />
+        <Table.Cell />
+        <Table.Cell />
+        <Table.Cell />
+      </Table.Row>
+      :
+        <Table.Row key={index}>
         <Table.Cell className="marketerGrey adTableItemCampaignCell"><b>{item.campaignName}</b></Table.Cell>
         <Table.Cell>
           <div className="adTableItemPreviewContainer">
@@ -72,6 +86,7 @@ const EmptyPage = () => {
         <Table.Cell className="marketerGrey">Leads</Table.Cell>
         <Table.Cell><StatusPill type="solid" color="yellow">Paused</StatusPill></Table.Cell>
       </Table.Row>
+      
     ));
   };
   console.log({adDetails});
