@@ -17,7 +17,7 @@ const EmptyPage = () => {
   const [adDetails, setAdDetails] = useState(null)
   const peerId = useSelector(store => store.peer.peerId)
 
-  const fetchData =  async() => {
+  const fetchData =  useCallback(async() => {
     if (adDetails) return
     let path = `/api/user/ads/list`
     if (peerId) path = `/api/user/peer/${peerId}/ads/list`
@@ -29,7 +29,7 @@ const EmptyPage = () => {
     const results = await api.handleResponse(response);
     let orderedResults = results.reverse();
     if(orderedResults !== adDetails) setAdDetails(orderedResults);
-  }
+  }, [adDetails, peerId]);
 
   useEffect(() => {
     const interval = setInterval(() => {
