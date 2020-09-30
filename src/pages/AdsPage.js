@@ -29,7 +29,6 @@ const EmptyPage = () => {
     const response = await fetch(path, { headers, method: 'get', credentials: 'include' });
     const results = await api.handleResponse(response);
     let orderedResults = results.reverse();
-    console.log(orderedResults);
     if(orderedResults !== adDetails) setAdDetails(orderedResults);
   }
 
