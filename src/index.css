@@ -697,7 +697,10 @@ h1 {
   text-align: end;
 }
 .noMargin {
-  margin: 0!important;
+  margin: 0px!important;
+}
+.noMarginBottom {
+  margin-bottom: 0px!important;
 }
 .noPaddingTop {
   padding-top: 0px!important;
@@ -774,12 +777,22 @@ h1 {
 .listingCardImgContainer{
   position: relative;
 }
-.imgPillContainer{
+.imgPillContainer {
   z-index: 1;
   position: absolute;
   top: 0;
   right: 0;
   padding: 16px;
+}
+.adItemPreviewContainer {
+  height: 40px;
+}
+.adItemPreview {
+  height: 100%;
+  width: 64px;
+  background-position: center;
+  background-size: cover;
+  border-radius: 6px;
 }
 
 @media (min-width: 1920px) {

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import Loading from '../components/Loading';
-import { Header, Menu, Page, Segment } from '../components/Base';
+import { Header, Menu, Page, Segment, Icon } from '../components/Base';
 import { Table } from 'semantic-ui-react';
 
 import PageTitleHeader from '../components/PageTitleHeader';
@@ -30,22 +30,50 @@ const EmptyPage = () => {
       const results = await api.handleResponse(response)
       setAdDetails(results)
     }
-    console.log({adDetails});
     fetchData()
   }, [adDetails, peerId])
+
+
+  const timeDiff = (startDate, endDate) => {
+    // let epochStart = Date.parse(startDate);
+    // let epochEnd = Date.parse(endDate);
+    let epochDiff = Date.parse(endDate) - Date.parse(startDate);
+    let days = Math.floor(epochDiff/8.64e7);
+    // /8.64e7
+    return days;
+  }
+  const getDateFromStr = (dateStr) => {
+    let unix = Date.parse(dateStr);
+    let date = new Date(dateStr);
+
+    let day = date.getDate();
+    let month = date.getMonth();
+    let year = date.getFullYear();
+    let display = `${month + 1}/${day}/${year}`
+    
+    return String(display);
+  }
 
   const tableBody = () => {
     return adDetails.map((item, index) => (
       <Table.Row key="{item.mlsNum}">
         {/* https://photos.brivity.com/images/21/photo/1/3/2/1/0/6/9/24.jpg?v=0 */}
         <Table.Cell>{item.campaignName}</Table.Cell>
-        <Table.Cell>Picture</Table.Cell>
-        <Table.Cell>{item.startDate} - {item.endDate}</Table.Cell>
-        <Table.Cell>{item.budget}</Table.Cell>
-        <Table.Cell>$0</Table.Cell>
-        <Table.Cell>Fb & Insta</Table.Cell>
+        <Table.Cell>
+          <div className="adItemPreviewContainer">
+            <div className="adItemPreview" style={{backgroundImage: `url(${item.previewUrl ? item.previewUrl : 'https://reactnativecode.com/wp-content/uploads/2018/02/Default_Image_Thumbnail.png'})`}} />
+          </div>
+        </Table.Cell>
+        <Table.Cell>
+          {item.startDate && item.endDate ? <Header as="h5" sub className="noMarginBottom">{`${timeDiff(item.startDate, item.endDate)} days`
+          }</Header> : '-'}
+          {item.startDate && item.endDate ? <span>{`${getDateFromStr(item.startDate)} - ${getDateFromStr(item.endDate)}`}</span> : '-'}
+        </Table.Cell>
+        <Table.Cell>{item.budget ? `$${Math.trunc(Number(item.budget))}` : '-'}</Table.Cell>
+        <Table.Cell>{item.budget ? '$0' : '-'}</Table.Cell>
+        <Table.Cell><div><Icon name="facebook" size="large" /><Icon name="instagram" size="large" /></div></Table.Cell>
         <Table.Cell>Leads</Table.Cell>
-        <Table.Cell><StatusPill type="solid" color="red">Pending</StatusPill></Table.Cell>
+        <Table.Cell><StatusPill type="solid" color="yellow">Paused</StatusPill></Table.Cell>
       </Table.Row>
     ));
   };
