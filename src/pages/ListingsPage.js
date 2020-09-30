@@ -7,6 +7,7 @@ import { Grid, Segment, Dropdown } from 'semantic-ui-react';
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout } from '../layouts';
 import { isMobile } from '../components/utils';
+import StatusPill from '../components/StatusPill';
 
 import auth from '../services/auth';
 import api from '../services/api';
@@ -33,7 +34,6 @@ const ListingsPage = () => {
   const ListingCard = ({listingItem}) => {
     if(!listingItem) return (<Grid.Column><Segment className="cardSegment">Loading...</Segment></Grid.Column>)
     else{
-      console.log(listingItem.photos.length > 0 ? listingItem.photos[0].url : '')
       const title = listingItem.streetAddress;
       const subtitle = `${listingItem.city}, ${listingItem.state} ${listingItem.postalCode}`;
       const price = `$${listingItem.price.toLocaleString('en', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
@@ -47,7 +47,6 @@ const ListingsPage = () => {
         params.mls = item.blueroofMlsId
         return Object.keys(params).map(param => `${param}=${params[param]}`).join('&');
       }
-
       return(
         <Grid.Column mobile={16} tablet={8} computer={8} largeScreen={5} widescreen={4} >
           <Segment className="cardSegment">
@@ -56,7 +55,7 @@ const ListingsPage = () => {
                 <div className="listingCardImg" style={{ backgroundImage:`url(${listingItem.photos.length > 0 ? listingItem.photos[0].url : 'https://i0.wp.com/reviveyouthandfamily.org/wp-content/uploads/2016/11/house-placeholder.jpg?ssl=1'})`}} />
               </div>
               <div className="imgPillContainer">
-                <div className="statusPill floatPill capsText">Listing</div>
+                <StatusPill type="paper">Listing</StatusPill>
               </div>
             </div>
             <div className="listingCardBodyContainer">
@@ -65,7 +64,7 @@ const ListingsPage = () => {
                   <Header as="h3" className="cardFont">{title}</Header>
                 </Grid.Column>
                 <Grid.Column width={6} className='noPaddingTop noPaddingRight noPaddingBottom'>
-                  <div className="statusPill redPill capsText">Pending</div>
+                  <StatusPill type="opaque" color={listingItem.standardStatus === 'Pending' && 'red'}>{listingItem.standardStatus}</StatusPill>
                 </Grid.Column>
               </Grid>
               <Header as="h4" className="normalFontWeight noMargin cardFont cardTopMarginXS">{subtitle}</Header>

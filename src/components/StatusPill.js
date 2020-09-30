@@ -39,7 +39,7 @@ const StatusPill = ({children, type, color}) => {
       }
     }
   } else if(type === 'paper'){
-    return (<div className="statusPill floatPill">){children}</div>);
+    return (<div className="statusPill floatPill">{children}</div>);
   } else{
     return (<div className="statusPill">{children}</div>)
   }

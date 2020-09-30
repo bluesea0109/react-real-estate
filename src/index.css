@@ -787,26 +787,37 @@ h1 {
   right: 0;
   padding: 16px;
 }
-.adItemPreviewContainer {
+.adTableItemPreviewContainer {
   height: 40px;
 }
-.adItemPreview {
+.adTableItemPreview {
   height: 100%;
   width: 64px;
   background-position: center;
   background-size: cover;
   border-radius: 6px;
 }
+.adTableItemCampaignCell {
+  font-size: 1.20em!important;
+}
+.adTableItemFacebookLogo{
+  color: #4267B2;
+}
+.adTableItemInstagramLogo {
+  background: #d6249f;
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+}
+.marketerGrey {
+  color: #666!important;
+}
 
 @media (min-width: 1920px) {
   .agentInfoContainer{
     padding-left: 16px!important;
   }
+  .mainGridContainer {
+    margin-right: 0px!important;
+  }
 }
-
-/* overrides */
-/* //!should be removed or reworked later */
-/* this was cahnged for fixing the issue of the listings card grid not being able to accomodate 4 cards in a row becase of the ridiculous margins on both sides, the margins were taken care of in class 'ListingsMainContainer' but the screen breaks were overwritting it.*/
-/* .ui.grid.container {
-  width: 100%!important;
-} */

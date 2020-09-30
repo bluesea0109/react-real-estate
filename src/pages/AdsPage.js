@@ -34,16 +34,14 @@ const EmptyPage = () => {
   }, [adDetails, peerId])
 
 
-  const timeDiff = (startDate, endDate) => {
-    // let epochStart = Date.parse(startDate);
-    // let epochEnd = Date.parse(endDate);
+  const daysTimeDiff = (startDate, endDate) => {
     let epochDiff = Date.parse(endDate) - Date.parse(startDate);
     let days = Math.floor(epochDiff/8.64e7);
-    // /8.64e7
-    return days;
+
+    if (days > 1) return String(`${days} days`);
+    else return String(`${days} day`);
   }
   const getDateFromStr = (dateStr) => {
-    let unix = Date.parse(dateStr);
     let date = new Date(dateStr);
 
     let day = date.getDate();
@@ -56,35 +54,33 @@ const EmptyPage = () => {
 
   const tableBody = () => {
     return adDetails.map((item, index) => (
-      <Table.Row key="{item.mlsNum}">
-        {/* https://photos.brivity.com/images/21/photo/1/3/2/1/0/6/9/24.jpg?v=0 */}
-        <Table.Cell>{item.campaignName}</Table.Cell>
+      <Table.Row key={index}>
+        <Table.Cell className="marketerGrey adTableItemCampaignCell"><b>{item.campaignName}</b></Table.Cell>
         <Table.Cell>
-          <div className="adItemPreviewContainer">
-            <div className="adItemPreview" style={{backgroundImage: `url(${item.previewUrl ? item.previewUrl : 'https://reactnativecode.com/wp-content/uploads/2018/02/Default_Image_Thumbnail.png'})`}} />
+          <div className="adTableItemPreviewContainer">
+            <div className="adTableItemPreview" style={{backgroundImage: `url(${item.previewUrl ? item.previewUrl : 'https://reactnativecode.com/wp-content/uploads/2018/02/Default_Image_Thumbnail.png'})`}} />
           </div>
         </Table.Cell>
-        <Table.Cell>
-          {item.startDate && item.endDate ? <Header as="h5" sub className="noMarginBottom">{`${timeDiff(item.startDate, item.endDate)} days`
+        <Table.Cell className="marketerGrey">
+          {item.startDate && item.endDate ? <Header as="h5" sub className="noMarginBottom">{`${daysTimeDiff(item.startDate, item.endDate)}`
           }</Header> : '-'}
           {item.startDate && item.endDate ? <span>{`${getDateFromStr(item.startDate)} - ${getDateFromStr(item.endDate)}`}</span> : '-'}
         </Table.Cell>
-        <Table.Cell>{item.budget ? `$${Math.trunc(Number(item.budget))}` : '-'}</Table.Cell>
-        <Table.Cell>{item.budget ? '$0' : '-'}</Table.Cell>
-        <Table.Cell><div><Icon name="facebook" size="large" /><Icon name="instagram" size="large" /></div></Table.Cell>
-        <Table.Cell>Leads</Table.Cell>
+        <Table.Cell className="marketerGrey">{item.budget ? `$${Math.trunc(Number(item.budget))}` : '-'}</Table.Cell>
+        <Table.Cell className="marketerGrey">{item.budget ? '$0' : '-'}</Table.Cell>
+        <Table.Cell><div><Icon name="facebook" size="large" className="adTableItemFacebookLogo" /><Icon name="instagram" size="large" className="adTableItemInstagramLogo" /></div></Table.Cell>
+        <Table.Cell className="marketerGrey">Leads</Table.Cell>
         <Table.Cell><StatusPill type="solid" color="yellow">Paused</StatusPill></Table.Cell>
       </Table.Row>
     ));
   };
-  console.log(adDetails);
   return (
     <Page basic>
       <ContentTopHeaderLayout>
         <PageTitleHeader>
           <Menu borderless fluid secondary>
             <Menu.Item>
-              <Header as="h1">Ads</Header>
+              <Header as="h1">Paid Ads</Header>
             </Menu.Item>
           </Menu>
         </PageTitleHeader>
@@ -96,23 +92,23 @@ const EmptyPage = () => {
             {!adDetails && <Loading message="Loading Listings..." />}
           </ContentBottomHeaderLayout>
           {adDetails && (
-            <Table basic='very' className="BillingTable">
-               <Table.Header>
-                 <Table.Row>
-                   <Table.HeaderCell>Campaign</Table.HeaderCell>
-                   <Table.HeaderCell>Preview</Table.HeaderCell>
-                   <Table.HeaderCell>Duration</Table.HeaderCell>
-                   <Table.HeaderCell>Budget</Table.HeaderCell>
-                   <Table.HeaderCell>Spent</Table.HeaderCell>
-                   <Table.HeaderCell>Platforms</Table.HeaderCell>
-                   <Table.HeaderCell>Goal</Table.HeaderCell>
-                   <Table.HeaderCell className="alignCenter">Status</Table.HeaderCell>
-                 </Table.Row>
-               </Table.Header>
-               <Table.Body>
-                 {tableBody()}
-               </Table.Body>
-              </Table>
+            <Table basic='very' className="BillingTable"> 
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell className="marketerGrey">Campaign</Table.HeaderCell>
+                  <Table.HeaderCell className="marketerGrey">Preview</Table.HeaderCell>
+                  <Table.HeaderCell className="marketerGrey">Duration</Table.HeaderCell>
+                  <Table.HeaderCell className="marketerGrey">Budget</Table.HeaderCell>
+                  <Table.HeaderCell className="marketerGrey">Spent</Table.HeaderCell>
+                  <Table.HeaderCell className="marketerGrey">Platforms</Table.HeaderCell>
+                  <Table.HeaderCell className="marketerGrey">Goal</Table.HeaderCell>
+                  <Table.HeaderCell className="marketerGrey alignCenter">Status</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {tableBody()}
+              </Table.Body>
+            </Table>
           )}
         </Segment>
       </div>
