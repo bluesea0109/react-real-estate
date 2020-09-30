@@ -642,8 +642,11 @@ h1 {
 .listingCardBodyContainer {
   padding: 16px;
 }
+.mainGridContainer {
+  margin-right: -92px!important;
+}
 .listingCardImgContainer {
-  height: 175px;
+  height: 280px;
 }
 .listingCardImg {
   height: 100%;
@@ -690,11 +693,17 @@ h1 {
 .cardIconButton {
   border-radius: 25px!important;
 }
+.alignCenter {
+  text-align: center!important;
+}
 .alignEnd {
-  text-align: end;
+  text-align: end!important;
 }
 .noMargin {
-  margin: 0!important;
+  margin: 0px!important;
+}
+.noMarginBottom {
+  margin-bottom: 0px!important;
 }
 .noPaddingTop {
   padding-top: 0px!important;
@@ -721,37 +730,94 @@ h1 {
   margin-bottom: -4px!important
 }
 .statusPill {
-  background-color: lightgrey;
+  background-color: #B2B2B2;
   color: #666;
   border-radius: 13px;
   text-align: center;
   font-size: 10px;
   font-weight: 700;
   padding: 2px 4px;
+  text-transform: uppercase;
 }
+/* special pills */
 .floatPill {
   background-color: #fff;
   box-shadow: 0px 8px 9px -3px rgba(0,0,0,0.49);
   padding: 2px 16px;
 }
-.redPill {
+/* opaque pills */
+.redPillOpaque {
   background-color: rgba(242, 113, 77, 0.2);
   color: #F2714D;
 }
+.greenPillOpaque {
+  background-color: #00c85333;
+  color: #00C853
+}
+/* solid pills */
+.solidPill {
+  color: #fff;
+}
+.greenPillSolid { 
+  background-color: #00C853
+}
+.yellowPillSolid {
+  background-color: #FFC82C;
+}
+.redPillSolid {
+  background-color: #FF5216
+}
+.greyPillSolid {
+  background-color: #B2B2B2;
+}
+.lightBluePillSolid {
+  background-color: #85D7FF;
+}
+.bluePillSolid {
+  background-color: #009EEB;
+}
+
 .listingCardImgContainer{
   position: relative;
 }
-.imgPillContainer{
-  z-index: 10;
+.imgPillContainer {
+  z-index: 1;
   position: absolute;
   top: 0;
   right: 0;
   padding: 16px;
 }
+.adTableItemPreviewContainer {
+  height: 40px;
+}
+.adTableItemPreview {
+  height: 100%;
+  width: 64px;
+  background-position: center;
+  background-size: cover;
+  border-radius: 6px;
+}
+.adTableItemCampaignCell {
+  font-size: 1.20em!important;
+}
+.adTableItemFacebookLogo{
+  color: #4267B2;
+}
+.adTableItemInstagramLogo {
+  background: #d6249f;
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+}
+.marketerGrey {
+  color: #666!important;
+}
 
-/* overrides */
-/* //!should be removed or reworked later */
-/* this was cahnged for fixing the issue of the listings card grid not being able to accomodate 4 cards in a row becase of the ridiculous margins on both sides, the margins were taken care of in class 'ListingsMainContainer' but the screen breaks were overwritting it.*/
-/* .ui.grid.container {
-  width: 100%!important;
-} */
+@media (min-width: 1920px) {
+  .agentInfoContainer{
+    padding-left: 16px!important;
+  }
+  .mainGridContainer {
+    margin-right: 0px!important;
+  }
+}
