@@ -17,8 +17,7 @@ const EmptyPage = () => {
   const [adDetails, setAdDetails] = useState(null)
   const peerId = useSelector(store => store.peer.peerId)
 
-  const fetchData = useCallback( async() => {
-    console.log('%cTriggered Fetch', 'color: #fada55');
+  const fetchData =  async() => {
     if (adDetails) return
     let path = `/api/user/ads/list`
     if (peerId) path = `/api/user/peer/${peerId}/ads/list`
@@ -28,13 +27,14 @@ const EmptyPage = () => {
     headers['authorization'] = `Bearer ${accessToken}`;
     const response = await fetch(path, { headers, method: 'get', credentials: 'include' });
     const results = await api.handleResponse(response);
-    setAdDetails(results.reverse())
-  }, [adDetails, peerId]);
+    let orderedResults = results.reverse();
+    if(orderedResults !== adDetails) setAdDetails(orderedResults);
+  }
 
   useEffect(() => {
     const interval = setInterval(() => {
       fetchData();
-    }, 10000);
+    }, 4000);
 
     return () => clearInterval(interval);
   }, [fetchData])
@@ -99,7 +99,6 @@ const EmptyPage = () => {
       
     ));
   };
-  console.log({adDetails});
   return (
     <Page basic>
       <ContentTopHeaderLayout>
