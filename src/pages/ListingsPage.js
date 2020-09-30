@@ -95,7 +95,7 @@ const ListingsPage = () => {
                   >
                     <Dropdown.Menu>
                       <Dropdown.Item onClick={() => window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`}>
-                        View Facebook Ad
+                        Create Facebook Ad
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>

@@ -28,9 +28,9 @@ const EmptyPage = () => {
       headers['authorization'] = `Bearer ${accessToken}`;
       const response = await fetch(path, { headers, method: 'get', credentials: 'include' });
       const results = await api.handleResponse(response)
-      setAdDetails(results)
+      setAdDetails(results.reverse())
     }
-    fetchData()
+    fetchData();
   }, [adDetails, peerId])
 
 
@@ -74,6 +74,7 @@ const EmptyPage = () => {
       </Table.Row>
     ));
   };
+  console.log({adDetails});
   return (
     <Page basic>
       <ContentTopHeaderLayout>
