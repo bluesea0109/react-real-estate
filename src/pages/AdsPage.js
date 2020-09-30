@@ -17,21 +17,32 @@ const EmptyPage = () => {
   const [adDetails, setAdDetails] = useState(null)
   const peerId = useSelector(store => store.peer.peerId)
 
-  useEffect(() => {
-    async function fetchData () {
-      if (adDetails) return
-      let path = `/api/user/ads/list`
-      if (peerId) path = `/api/user/peer/${peerId}/ads/list`
 
-      const headers = {};
-      const accessToken = await auth.getAccessToken();
-      headers['authorization'] = `Bearer ${accessToken}`;
-      const response = await fetch(path, { headers, method: 'get', credentials: 'include' });
-      const results = await api.handleResponse(response)
-      setAdDetails(results.reverse())
-    }
+  const fetchData =  async() => {
+    console.log('%cTriggered Fetch', 'color: #fada55');
+    if (adDetails) return
+    let path = `/api/user/ads/list`
+    if (peerId) path = `/api/user/peer/${peerId}/ads/list`
+
+    const headers = {};
+    const accessToken = await auth.getAccessToken();
+    headers['authorization'] = `Bearer ${accessToken}`;
+    const response = await fetch(path, { headers, method: 'get', credentials: 'include' });
+    const results = await api.handleResponse(response);
+    setAdDetails(results.reverse())
+  }
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchData();
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [])
+
+  useEffect(() => {
     fetchData();
-  }, [adDetails, peerId])
+  }, [adDetails, peerId]);
 
 
   const daysTimeDiff = (startDate, endDate) => {
