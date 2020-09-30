@@ -106,7 +106,7 @@ const EmptyPage = () => {
                    <Table.HeaderCell>Spent</Table.HeaderCell>
                    <Table.HeaderCell>Platforms</Table.HeaderCell>
                    <Table.HeaderCell>Goal</Table.HeaderCell>
-                   <Table.HeaderCell>Status</Table.HeaderCell>
+                   <Table.HeaderCell className="alignCenter">Status</Table.HeaderCell>
                  </Table.Row>
                </Table.Header>
                <Table.Body>

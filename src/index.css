@@ -693,8 +693,11 @@ h1 {
 .cardIconButton {
   border-radius: 25px!important;
 }
+.alignCenter {
+  text-align: center!important;
+}
 .alignEnd {
-  text-align: end;
+  text-align: end!important;
 }
 .noMargin {
   margin: 0px!important;
