@@ -8,6 +8,7 @@ import { Table } from 'semantic-ui-react';
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout } from '../layouts';
 import { isMobile } from '../components/utils';
+import StatusPill from '../components/StatusPill';
 
 import auth from '../services/auth';
 import api from '../services/api';
@@ -29,20 +30,26 @@ const EmptyPage = () => {
       const results = await api.handleResponse(response)
       setAdDetails(results)
     }
+    console.log({adDetails});
     fetchData()
   }, [adDetails, peerId])
 
   const tableBody = () => {
     return adDetails.map((item, index) => (
       <Table.Row key="{item.mlsNum}">
+        {/* https://photos.brivity.com/images/21/photo/1/3/2/1/0/6/9/24.jpg?v=0 */}
         <Table.Cell>{item.campaignName}</Table.Cell>
-        <Table.Cell></Table.Cell>
+        <Table.Cell>Picture</Table.Cell>
         <Table.Cell>{item.startDate} - {item.endDate}</Table.Cell>
         <Table.Cell>{item.budget}</Table.Cell>
+        <Table.Cell>$0</Table.Cell>
+        <Table.Cell>Fb & Insta</Table.Cell>
+        <Table.Cell>Leads</Table.Cell>
+        <Table.Cell><StatusPill type="solid" color="red">Pending</StatusPill></Table.Cell>
       </Table.Row>
     ));
   };
-
+  console.log(adDetails);
   return (
     <Page basic>
       <ContentTopHeaderLayout>
@@ -64,13 +71,16 @@ const EmptyPage = () => {
             <Table basic='very' className="BillingTable">
                <Table.Header>
                  <Table.Row>
-                   <Table.HeaderCell>Campaign Name</Table.HeaderCell>
+                   <Table.HeaderCell>Campaign</Table.HeaderCell>
                    <Table.HeaderCell>Preview</Table.HeaderCell>
-                   <Table.HeaderCell>Dates</Table.HeaderCell>
+                   <Table.HeaderCell>Duration</Table.HeaderCell>
                    <Table.HeaderCell>Budget</Table.HeaderCell>
+                   <Table.HeaderCell>Spent</Table.HeaderCell>
+                   <Table.HeaderCell>Platforms</Table.HeaderCell>
+                   <Table.HeaderCell>Goal</Table.HeaderCell>
+                   <Table.HeaderCell>Status</Table.HeaderCell>
                  </Table.Row>
                </Table.Header>
-
                <Table.Body>
                  {tableBody()}
                </Table.Body>

@@ -724,23 +724,53 @@ h1 {
   margin-bottom: -4px!important
 }
 .statusPill {
-  background-color: lightgrey;
+  background-color: #B2B2B2;
   color: #666;
   border-radius: 13px;
   text-align: center;
   font-size: 10px;
   font-weight: 700;
   padding: 2px 4px;
+  text-transform: uppercase;
 }
+/* special pills */
 .floatPill {
   background-color: #fff;
   box-shadow: 0px 8px 9px -3px rgba(0,0,0,0.49);
   padding: 2px 16px;
 }
-.redPill {
+/* opaque pills */
+.redPillOpaque {
   background-color: rgba(242, 113, 77, 0.2);
   color: #F2714D;
 }
+.greenPillOpaque {
+  background-color: #00c85333;
+  color: #00C853
+}
+/* solid pills */
+.solidPill {
+  color: #fff;
+}
+.greenPillSolid { 
+  background-color: #00C853
+}
+.yellowPillSolid {
+  background-color: #FFC82C;
+}
+.redPillSolid {
+  background-color: #FF5216
+}
+.greyPillSolid {
+  background-color: #B2B2B2;
+}
+.lightBluePillSolid {
+  background-color: #85D7FF;
+}
+.bluePillSolid {
+  background-color: #009EEB;
+}
+
 .listingCardImgContainer{
   position: relative;
 }
