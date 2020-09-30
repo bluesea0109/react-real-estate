@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 
 import Loading from '../components/Loading';
@@ -17,8 +17,7 @@ const EmptyPage = () => {
   const [adDetails, setAdDetails] = useState(null)
   const peerId = useSelector(store => store.peer.peerId)
 
-
-  const fetchData =  async() => {
+  const fetchData = useCallback( async() => {
     console.log('%cTriggered Fetch', 'color: #fada55');
     if (adDetails) return
     let path = `/api/user/ads/list`
@@ -30,7 +29,7 @@ const EmptyPage = () => {
     const response = await fetch(path, { headers, method: 'get', credentials: 'include' });
     const results = await api.handleResponse(response);
     setAdDetails(results.reverse())
-  }
+  }, [adDetails, peerId]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -38,11 +37,11 @@ const EmptyPage = () => {
     }, 10000);
 
     return () => clearInterval(interval);
-  }, [])
+  }, [fetchData])
 
   useEffect(() => {
     fetchData();
-  }, [adDetails, peerId]);
+  }, [adDetails, peerId, fetchData]);
 
 
   const daysTimeDiff = (startDate, endDate) => {
