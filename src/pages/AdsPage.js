@@ -18,7 +18,7 @@ const EmptyPage = () => {
   const peerId = useSelector(store => store.peer.peerId)
 
   const fetchData =  useCallback(async() => {
-    if (adDetails) return
+    // if (adDetails) return
     let path = `/api/user/ads/list`
     if (peerId) path = `/api/user/peer/${peerId}/ads/list`
 
@@ -58,7 +58,7 @@ const EmptyPage = () => {
     let month = date.getMonth();
     let year = date.getFullYear();
     let display = `${month + 1}/${day}/${year}`
-    
+
     return String(display);
   }
 
@@ -96,7 +96,7 @@ const EmptyPage = () => {
         <Table.Cell className="marketerGrey">Leads</Table.Cell>
         <Table.Cell><StatusPill type="solid" color="yellow">Paused</StatusPill></Table.Cell>
       </Table.Row>
-      
+
     ));
   };
   return (
@@ -117,7 +117,7 @@ const EmptyPage = () => {
             {!adDetails && <Loading message="Loading Listings..." />}
           </ContentBottomHeaderLayout>
           {adDetails && (
-            <Table basic='very' className="BillingTable"> 
+            <Table basic='very' className="BillingTable">
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell className="marketerGrey">Campaign</Table.HeaderCell>
