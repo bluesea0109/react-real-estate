@@ -6,20 +6,22 @@ import { Dropdown, Header, Popup } from 'semantic-ui-react';
 import React, { createRef, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { StepLayout, StepsLayout, MobileDisabledLayout, MobileEnabledLayout, NavigationLayout } from '../layouts';
+import { StepLayout, StepsLayout, MobileDisabledLayout, NavigationLayout } from '../layouts';
 import { selectPeerId, deselectPeerId } from '../store/modules/peer/actions';
 import { Dimmer, Menu, Initials, Icon, Step } from './Base';
+
+import SideNaveToggle from './SideNaveToggle';
 
 const iconOnlyStyle = {
   margin: '0 auto 0 auto',
 };
 
 const iconWithTextStyle = {
-  margin: '0 .5em 0 2.5em',
+  margin: '0em 1em 0em 1.55em',
 };
 
 const smallIconWithTextStyle = {
-  margin: '0 .5em 0 0em',
+  margin: '0 .5em 0 -.6em',
   width: '15px',
 };
 
@@ -34,6 +36,11 @@ const sidebarTextStyle = {
   backgroundColor: 'white',
 };
 
+const menuItemStyles = {
+  lineHeight: 2.6,
+  fontSize: '18px',
+};
+
 const StyledUserSelectorDropdown = styled(Dropdown)`
   min-width: 8.3em !important;
   max-width: 8.3em !important;
@@ -45,7 +52,7 @@ const StyledHeader = styled(Header)`
 `;
 
 const mql = window.matchMedia('(max-width: 599px)');
-const menuSpacing = () => (mql.matches ? {} : { marginLeft: '2.5em' });
+const menuSpacing = () => (mql.matches ? {} : { marginLeft: '.5em' });
 const isMobile = () => mql.matches;
 
 export default () => {
@@ -242,105 +249,80 @@ export default () => {
   }
 
   return (
-    <Dimmer.Dimmable blurring dimmed={appIsBusy}>
-      <Dimmer active={appIsBusy} inverted />
-      <NavigationLayout text style={isMobile() ? { backgroundColor: 'white' } : {}}>
-        {multiUser && (
-          <Menu.Item style={menuSpacing()}>
-            <StyledUserSelectorDropdown
-              search
-              floating
-              scrolling
-              selection
-              options={profiles}
-              onChange={handleProfileSelect}
-              value={activeUser}
-              renderLabel={renderLabel}
-            />
-          </Menu.Item>
-        )}
-        <Menu.Item as={Link} color="teal" name="dashboard" active={activeItem === '/dashboard'} to="/dashboard" style={{ lineHeight: 2.6 }}>
-          <MobileEnabledLayout style={iconOnlyStyle}>
-            <FontAwesomeIcon icon="tachometer-alt" />
-          </MobileEnabledLayout>
-          <MobileDisabledLayout>
-            <FontAwesomeIcon icon="tachometer-alt" style={iconWithTextStyle} /> Dashboard <FontAwesomeIcon icon="caret-down" style={{ marginLeft: '0.2em' }} />
-          </MobileDisabledLayout>
-        </Menu.Item>
-        {location.pathname.includes('/dashboard') && (
-          <Menu.Menu style={{ marginTop: !isMobile() ? '-1.2em' : '' }}>
-            <Menu.Item
-              as={Link}
-              color="teal"
-              name="archived"
-              active={activeItem === '/dashboard/archived'}
-              to="/dashboard/archived"
-              style={{ lineHeight: 2.6 }}
-            >
-              <MobileEnabledLayout style={iconOnlyStyle}>
-                <FontAwesomeIcon icon="archive" />
-              </MobileEnabledLayout>
-              <MobileDisabledLayout style={noIconTextStyle}>
-                <FontAwesomeIcon icon="archive" style={smallIconWithTextStyle} /> Archive
-              </MobileDisabledLayout>
+    <SideNaveToggle>
+      <Dimmer.Dimmable blurring dimmed={appIsBusy}>
+        <Dimmer active={appIsBusy} inverted />
+        <NavigationLayout text style={isMobile() ? { backgroundColor: 'white' } : {}}>
+          {multiUser && (
+            <Menu.Item style={menuSpacing()}>
+              <StyledUserSelectorDropdown
+                search
+                floating
+                scrolling
+                selection
+                options={profiles}
+                onChange={handleProfileSelect}
+                value={activeUser}
+                renderLabel={renderLabel}
+              />
             </Menu.Item>
-          </Menu.Menu>
-        )}
-        <Menu.Item as={Link} color="teal" name="customization" active={activeItem === '/customization'} to="/customization" style={{ lineHeight: 2.6 }}>
-          <MobileEnabledLayout style={iconOnlyStyle}>
-            <FontAwesomeIcon icon="paint-brush" />
-          </MobileEnabledLayout>
-          <MobileDisabledLayout>
-            <FontAwesomeIcon icon="paint-brush" style={iconWithTextStyle} /> Customization{' '}
-            {multiUser && isAdmin && !selectedPeerId && <FontAwesomeIcon icon="caret-down" style={{ marginLeft: '0.2em' }} />}
-          </MobileDisabledLayout>
-        </Menu.Item>
-        {multiUser && isAdmin && !selectedPeerId && location.pathname.includes('/customization') && (
-          <Menu.Menu style={{ marginTop: !isMobile() ? '-1.2em' : '' }}>
-            <Menu.Item
-              as={Link}
-              color="teal"
-              name="customization/team"
-              active={activeItem === '/customization/team'}
-              to="/customization/team"
-              style={{ lineHeight: 2.6 }}
-            >
-              <MobileEnabledLayout style={iconOnlyStyle}>
-                <FontAwesomeIcon icon="users" />
-              </MobileEnabledLayout>
-              <MobileDisabledLayout style={noIconTextStyle}>
-                <FontAwesomeIcon icon="users" style={smallIconWithTextStyle} /> Team
-              </MobileDisabledLayout>
-            </Menu.Item>
-          </Menu.Menu>
-        )}
-        <Menu.Item as={Link} color="teal" name="profile" active={activeItem === '/profile'} to="/profile" style={{ lineHeight: 2.6 }}>
-          <MobileEnabledLayout style={iconOnlyStyle}>
-            <FontAwesomeIcon icon="user" />
-          </MobileEnabledLayout>
-          <MobileDisabledLayout>
-            <FontAwesomeIcon icon="user" style={iconWithTextStyle} /> Profile
-          </MobileDisabledLayout>
-        </Menu.Item>
-        <Menu.Item as={Link} color="teal" name="settings" active={activeItem === '/settings'} to="/settings" style={{ lineHeight: 2.6 }}>
-          <MobileEnabledLayout style={iconOnlyStyle}>
-            <FontAwesomeIcon icon="cog" />
-          </MobileEnabledLayout>
-          <MobileDisabledLayout>
-            <FontAwesomeIcon icon="cog" style={iconWithTextStyle} /> Settings
-          </MobileDisabledLayout>
-        </Menu.Item>
-        {!selectedPeerId && (
-          <Menu.Item as={Link} color="teal" name="billing" active={activeItem === '/billing'} to="/billing" style={{ lineHeight: 2.6 }}>
-            <MobileEnabledLayout style={iconOnlyStyle}>
-              <FontAwesomeIcon icon="credit-card" />
-            </MobileEnabledLayout>
+          )}
+          <Menu.Item as={Link} color="teal" name="dashboard" active={activeItem === '/dashboard'} to="/dashboard" style={menuItemStyles}>
             <MobileDisabledLayout>
-              <FontAwesomeIcon icon="credit-card" style={iconWithTextStyle} /> Billing
+              <FontAwesomeIcon icon="tachometer-alt" style={iconWithTextStyle} /> Dashboard{' '}
+              <FontAwesomeIcon icon="caret-down" style={{ marginLeft: '0.2em' }} />
             </MobileDisabledLayout>
           </Menu.Item>
-        )}
-      </NavigationLayout>
-    </Dimmer.Dimmable>
+          {location.pathname.includes('/dashboard') && (
+            <Menu.Menu style={{ marginTop: !isMobile() ? '-1.2em' : '' }}>
+              <Menu.Item as={Link} color="teal" name="archived" active={activeItem === '/dashboard/archived'} to="/dashboard/archived" style={menuItemStyles}>
+                <MobileDisabledLayout style={noIconTextStyle}>
+                  <FontAwesomeIcon icon="archive" style={smallIconWithTextStyle} /> Archive
+                </MobileDisabledLayout>
+              </Menu.Item>
+            </Menu.Menu>
+          )}
+          <Menu.Item as={Link} color="teal" name="customization" active={activeItem === '/customization'} to="/customization" style={menuItemStyles}>
+            <MobileDisabledLayout>
+              <FontAwesomeIcon icon="paint-brush" style={iconWithTextStyle} /> Customization{' '}
+              {multiUser && isAdmin && !selectedPeerId && <FontAwesomeIcon icon="caret-down" style={{ marginLeft: '0.2em' }} />}
+            </MobileDisabledLayout>
+          </Menu.Item>
+          {multiUser && isAdmin && !selectedPeerId && location.pathname.includes('/customization') && (
+            <Menu.Menu style={{ marginTop: !isMobile() ? '-1.2em' : '' }}>
+              <Menu.Item
+                as={Link}
+                color="teal"
+                name="customization/team"
+                active={activeItem === '/customization/team'}
+                to="/customization/team"
+                style={{ lineHeight: 2.6 }}
+              >
+                <MobileDisabledLayout style={noIconTextStyle}>
+                  <FontAwesomeIcon icon="users" style={smallIconWithTextStyle} /> Team
+                </MobileDisabledLayout>
+              </Menu.Item>
+            </Menu.Menu>
+          )}
+          <Menu.Item as={Link} color="teal" name="profile" active={activeItem === '/profile'} to="/profile" style={menuItemStyles}>
+            <MobileDisabledLayout>
+              <FontAwesomeIcon icon="user" style={iconWithTextStyle} /> Profile
+            </MobileDisabledLayout>
+          </Menu.Item>
+          <Menu.Item as={Link} color="teal" name="settings" active={activeItem === '/settings'} to="/settings" style={menuItemStyles}>
+            <MobileDisabledLayout>
+              <FontAwesomeIcon icon="cog" style={iconWithTextStyle} /> Settings
+            </MobileDisabledLayout>
+          </Menu.Item>
+          {!selectedPeerId && (
+            <Menu.Item as={Link} color="teal" name="billing" active={activeItem === '/billing'} to="/billing" style={menuItemStyles}>
+              <MobileDisabledLayout>
+                <FontAwesomeIcon icon="credit-card" style={iconWithTextStyle} /> Billing
+              </MobileDisabledLayout>
+            </Menu.Item>
+          )}
+        </NavigationLayout>
+      </Dimmer.Dimmable>
+    </SideNaveToggle>
   );
 };

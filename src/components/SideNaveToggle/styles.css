@@ -1,0 +1,30 @@
+.ui.left.overlay.sidebar {
+  /* visibility: visible; */
+  transform: translate3d(-80%, 0, 0);
+}
+.toggle-container {
+  width: 56px;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.21);
+  transition: 0.4s;
+  background-color: white;
+  height: 100vh;
+  overflow: hidden;
+  position: absolute;
+  z-index: 99999999999999;
+}
+
+.expand {
+  width: 250px;
+}
+
+.pushable {
+  overflow-x: visible;
+}
+
+.ui.sidebar {
+  overflow-y: visible !important;
+}
+
+.ui-menu {
+  display: flex !important;
+}
