@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'semantic-ui-css/semantic.min.css';
-import './styles.css';
+import './styles.scss';
 
-import { Checkbox, Grid, Menu, Segment, Sidebar } from 'semantic-ui-react';
+import { Grid, Menu, Segment, Sidebar } from 'semantic-ui-react';
 
 function useWindowSize() {
   const [windowSize, setWindowSize] = useState({
@@ -45,9 +45,10 @@ const SidebarSlider = ({ children }) => {
     <>
       {isMobile ? (
         <>
-          <Grid.Column>
+          <Grid.Column style={{ paddingTop: '1em', paddingLeft: '1em' }}>
             <FontAwesomeIcon
               icon="bars"
+              style={{ fontSize: '1.9em', color: '#808080' }}
               onClick={() => {
                 if (!moblileVisible) {
                   setMobileVisible(true);

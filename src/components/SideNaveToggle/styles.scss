@@ -1,0 +1,90 @@
+.ui.left.overlay.sidebar {
+  /* visibility: visible; */
+  // transform: translate3d(-80%, 0, 0);
+}
+.toggle-container {
+  width: 56px;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.21);
+  transition: 0.4s;
+  background-color: white;
+  height: 100vh;
+  overflow: hidden;
+  position: absolute;
+  z-index: 99999999999999;
+}
+
+.expand {
+  width: 225px;
+}
+
+.noDropdown {
+  transition: 0.2s;
+  height: 0px;
+  overflow: hidden;
+}
+
+.accordionDrop {
+  height: 60px;
+  width: 100%;
+  overflow: visible;
+}
+
+@media screen and (max-width: 599px) {
+  .accordionDrop {
+    margin-top: 0px;
+  }
+  .ui.text.menu {
+    margin-left: -2px !important;
+  }
+}
+
+.pushable {
+  overflow-x: visible;
+}
+
+.ui.sidebar {
+  overflow-y: visible !important;
+}
+
+.ui-menu {
+  display: flex !important;
+}
+
+.ui.text.menu {
+  display: block !important;
+  margin-left: 0px;
+}
+
+.ui.text.menu .item {
+  border-bottom: 1px solid #eaedf0;
+}
+
+.ui.menu .teal.active.item {
+  border-bottom: 1px solid #eaedf0 !important;
+}
+.active.item {
+  border-left: 5px solid #00b5ad !important;
+  border-bottom: 1px solid #eaedf0 !important;
+
+  .iconWithStyle {
+    margin: 0em 1em 0em 0.3em;
+  }
+}
+
+.ui.accordion .title:not(.ui) {
+  padding: 0px;
+}
+
+.iconWithStyle {
+  margin: 0em 1em 0em 0.56em;
+}
+
+.ui.icon.menu .item {
+  text-align: left;
+}
+
+.ismobile {
+  -webkit-box-shadow: 2px 2px 6px 0px rgba(50, 50, 50, 0.14);
+  -moz-box-shadow: 2px 2px 6px 0px rgba(50, 50, 50, 0.14);
+  box-shadow: 2px 2px 6px 0px rgba(50, 50, 50, 0.14);
+}
