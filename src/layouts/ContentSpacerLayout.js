@@ -11,6 +11,7 @@ export default styled.div`
   position: fixed;
   top: 136px;
   z-index: 5;
+  width: 100vw;
 
   @media (max-width: 768px) {
     top: 65px;

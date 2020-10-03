@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useHistory } from 'react-router';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Dropdown, Header, Popup, Accordion } from 'semantic-ui-react';
+import { Dropdown, Header, Popup } from 'semantic-ui-react';
 import React, { createRef, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -55,15 +55,8 @@ export default () => {
   const [activeItem, setActiveItem] = useState('');
   const [activeUser, setActiveUser] = useState('');
   const [appIsBusy, setAppIsBusy] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(1);
   const [dropdown, setDropdown] = useState('');
-
-  const handleAccoridonDrop = (e, titleProps) => {
-    const { index } = titleProps;
-    const newIndex = activeIndex === index ? -1 : index;
-
-    setActiveIndex(newIndex);
-  };
+  const [moblileVisible, setMobileVisible] = React.useState(false);
 
   const isAuthenticated = useSelector(store => store.auth0.authenticated);
   const onLoginPending = useSelector(store => store.onLogin.pending);
@@ -250,117 +243,147 @@ export default () => {
     }
   }
 
+  const mobileCollapse = () => {
+    if (moblileVisible) {
+      setMobileVisible(false);
+    }
+  };
+
   return (
-    <SideNaveToggle>
+    <SideNaveToggle moblileVisible={moblileVisible} setMobileVisible={setMobileVisible}>
       <Dimmer.Dimmable blurring dimmed={appIsBusy}>
         <Dimmer active={appIsBusy} inverted />
-        <Accordion fluid>
-          <NavigationLayout
-            text
-            style={
-              isMobile()
-                ? {
-                    WebkitBoxShadow: '2px 2px 6px 0px rgba(50, 50, 50, 0.14)',
-                    MozBoxShadow: '2px 2px 6px 0px rgba(50, 50, 50, 0.14)',
-                    BoxShadow: '2px 2px 6px 0px rgba(50, 50, 50, 0.14)',
-                    backgroundColor: 'white',
-                    height: '100vh',
-                  }
-                : {}
-            }
+
+        <NavigationLayout
+          text
+          style={
+            isMobile()
+              ? {
+                  WebkitBoxShadow: '2px 2px 6px 0px rgba(50, 50, 50, 0.14)',
+                  MozBoxShadow: '2px 2px 6px 0px rgba(50, 50, 50, 0.14)',
+                  BoxShadow: '2px 2px 6px 0px rgba(50, 50, 50, 0.14)',
+                  backgroundColor: 'white',
+                  height: '100vh',
+                }
+              : {}
+          }
+        >
+          {multiUser && (
+            <Menu.Item style={menuSpacing()}>
+              <StyledUserSelectorDropdown
+                search
+                floating
+                scrolling
+                selection
+                options={profiles}
+                onChange={handleProfileSelect}
+                value={activeUser}
+                renderLabel={renderLabel}
+              />
+            </Menu.Item>
+          )}
+          <div
+            onMouseEnter={() => {
+              setDropdown('accordionDrop');
+            }}
+            onMouseLeave={() => {
+              setDropdown('');
+            }}
+            onClick={mobileCollapse}
           >
-            {multiUser && (
-              <Menu.Item style={menuSpacing()}>
-                <StyledUserSelectorDropdown
-                  search
-                  floating
-                  scrolling
-                  selection
-                  options={profiles}
-                  onChange={handleProfileSelect}
-                  value={activeUser}
-                  renderLabel={renderLabel}
-                />
-              </Menu.Item>
-            )}
-            <Accordion.Title
-              active={activeIndex === 0}
-              index={0}
-              onClick={handleAccoridonDrop}
-              onMouseEnter={() => {
-                setDropdown('accordionDrop');
-              }}
-              onMouseLeave={() => {
-                setDropdown('');
-              }}
+            <Menu.Item as={Link} color="teal" name="dashboard" active={activeItem === '/dashboard'} to="/dashboard" style={menuItemStyles}>
+              <MobileDisabledLayout>
+                <FontAwesomeIcon icon="tachometer-alt" className="iconWithStyle" /> Dashboard{' '}
+                <FontAwesomeIcon icon="caret-down" style={{ marginLeft: '0.2em' }} />
+              </MobileDisabledLayout>
+            </Menu.Item>
+          </div>
+          <div
+            className={isMobile() ? 'accordionDrop' : `noDropdown ${dropdown}`}
+            onMouseEnter={() => {
+              setDropdown('accordionDrop');
+            }}
+            onMouseLeave={() => {
+              setDropdown('');
+            }}
+          >
+            <Menu.Item
+              as={Link}
+              color="teal"
+              name="archived"
+              active={activeItem === '/dashboard/archived'}
+              to="/dashboard/archived"
+              style={menuItemStyles}
+              onClick={mobileCollapse}
             >
-              <Menu.Item as={Link} color="teal" name="dashboard" active={activeItem === '/dashboard'} to="/dashboard" style={menuItemStyles}>
-                <MobileDisabledLayout>
-                  <FontAwesomeIcon icon="tachometer-alt" className="iconWithStyle" /> Dashboard{' '}
-                  <FontAwesomeIcon icon="caret-down" style={{ marginLeft: '0.2em' }} />
+              <MobileDisabledLayout style={noIconTextStyle}>
+                <FontAwesomeIcon icon="archive" style={smallIconWithTextStyle} /> Archive
+              </MobileDisabledLayout>
+            </Menu.Item>
+          </div>
+          <Menu.Item
+            as={Link}
+            color="teal"
+            name="customization"
+            active={activeItem === '/customization'}
+            to="/customization"
+            style={menuItemStyles}
+            onClick={mobileCollapse}
+          >
+            <MobileDisabledLayout>
+              <FontAwesomeIcon icon="paint-brush" className="iconWithStyle" /> Customization{' '}
+              {multiUser && isAdmin && !selectedPeerId && <FontAwesomeIcon icon="caret-down" style={{ marginLeft: '0.2em' }} />}
+            </MobileDisabledLayout>
+          </Menu.Item>
+
+          {multiUser && isAdmin && !selectedPeerId && location.pathname.includes('/customization') && (
+            <Menu.Menu style={{ marginTop: !isMobile() ? '-1.2em' : '' }}>
+              <Menu.Item
+                as={Link}
+                color="teal"
+                name="customization/team"
+                active={activeItem === '/customization/team'}
+                to="/customization/team"
+                style={{ lineHeight: 2.6 }}
+                onClick={mobileCollapse}
+              >
+                <MobileDisabledLayout style={noIconTextStyle}>
+                  <FontAwesomeIcon icon="users" style={smallIconWithTextStyle} /> Team
                 </MobileDisabledLayout>
               </Menu.Item>
-            </Accordion.Title>
-            <div
-              className={`noDropdown ${dropdown}`}
-              onMouseEnter={() => {
-                setDropdown('accordionDrop');
-              }}
-              onMouseLeave={() => {
-                setDropdown('');
+            </Menu.Menu>
+          )}
+
+          <Menu.Item as={Link} color="teal" name="profile" active={activeItem === '/profile'} to="/profile" style={menuItemStyles} onClick={mobileCollapse}>
+            <MobileDisabledLayout>
+              <FontAwesomeIcon icon="user" className="iconWithStyle" /> Profile
+            </MobileDisabledLayout>
+          </Menu.Item>
+          <Menu.Item as={Link} color="teal" name="settings" active={activeItem === '/settings'} to="/settings" style={menuItemStyles} onClick={mobileCollapse}>
+            <MobileDisabledLayout>
+              <FontAwesomeIcon icon="cog" className="iconWithStyle" /> Settings
+            </MobileDisabledLayout>
+          </Menu.Item>
+          {!selectedPeerId && (
+            <Menu.Item
+              as={Link}
+              color="teal"
+              name="billing"
+              active={activeItem === '/billing'}
+              to="/billing"
+              style={menuItemStyles}
+              onClick={() => {
+                if (moblileVisible) {
+                  setMobileVisible(false);
+                }
               }}
             >
-              <Accordion.Content active={activeIndex === 0}>
-                <Menu.Item as={Link} color="teal" name="archived" active={activeItem === '/dashboard/archived'} to="/dashboard/archived" style={menuItemStyles}>
-                  <MobileDisabledLayout style={noIconTextStyle}>
-                    <FontAwesomeIcon icon="archive" style={smallIconWithTextStyle} /> Archive
-                  </MobileDisabledLayout>
-                </Menu.Item>
-              </Accordion.Content>
-            </div>
-            <Menu.Item as={Link} color="teal" name="customization" active={activeItem === '/customization'} to="/customization" style={menuItemStyles}>
               <MobileDisabledLayout>
-                <FontAwesomeIcon icon="paint-brush" className="iconWithStyle" /> Customization{' '}
-                {multiUser && isAdmin && !selectedPeerId && <FontAwesomeIcon icon="caret-down" style={{ marginLeft: '0.2em' }} />}
+                <FontAwesomeIcon icon="credit-card" className="iconWithStyle" /> Billing
               </MobileDisabledLayout>
             </Menu.Item>
-
-            {multiUser && isAdmin && !selectedPeerId && location.pathname.includes('/customization') && (
-              <Menu.Menu style={{ marginTop: !isMobile() ? '-1.2em' : '' }}>
-                <Menu.Item
-                  as={Link}
-                  color="teal"
-                  name="customization/team"
-                  active={activeItem === '/customization/team'}
-                  to="/customization/team"
-                  style={{ lineHeight: 2.6 }}
-                >
-                  <MobileDisabledLayout style={noIconTextStyle}>
-                    <FontAwesomeIcon icon="users" style={smallIconWithTextStyle} /> Team
-                  </MobileDisabledLayout>
-                </Menu.Item>
-              </Menu.Menu>
-            )}
-
-            <Menu.Item as={Link} color="teal" name="profile" active={activeItem === '/profile'} to="/profile" style={menuItemStyles}>
-              <MobileDisabledLayout>
-                <FontAwesomeIcon icon="user" className="iconWithStyle" /> Profile
-              </MobileDisabledLayout>
-            </Menu.Item>
-            <Menu.Item as={Link} color="teal" name="settings" active={activeItem === '/settings'} to="/settings" style={menuItemStyles}>
-              <MobileDisabledLayout>
-                <FontAwesomeIcon icon="cog" className="iconWithStyle" /> Settings
-              </MobileDisabledLayout>
-            </Menu.Item>
-            {!selectedPeerId && (
-              <Menu.Item as={Link} color="teal" name="billing" active={activeItem === '/billing'} to="/billing" style={menuItemStyles}>
-                <MobileDisabledLayout>
-                  <FontAwesomeIcon icon="credit-card" className="iconWithStyle" /> Billing
-                </MobileDisabledLayout>
-              </Menu.Item>
-            )}
-          </NavigationLayout>
-        </Accordion>
+          )}
+        </NavigationLayout>
       </Dimmer.Dimmable>
     </SideNaveToggle>
   );

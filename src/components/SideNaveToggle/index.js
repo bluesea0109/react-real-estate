@@ -29,11 +29,8 @@ function useWindowSize() {
   return windowSize;
 }
 
-const SidebarSlider = ({ children }) => {
+const SidebarSlider = ({ children, moblileVisible, setMobileVisible }) => {
   const [toggle, setToggle] = useState('');
-  //mobile state
-  const [moblileVisible, setMobileVisible] = React.useState(false);
-
   const [isMobile, setIsMobile] = useState(window.matchMedia('(max-width: 768px)').matches);
   const size = useWindowSize();
 
