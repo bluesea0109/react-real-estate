@@ -125,34 +125,34 @@ export default () => {
     });
   }
 
-  useEffect(() => {
-    if (loggedInUser && !activeUser) {
-      setActiveUser(loggedInUser._id);
-    } else if (loggedInUser && activeUser !== loggedInUser._id) {
-      dispatch(selectPeerId(activeUser));
-      if (
-        location.pathname !== '/profile' &&
-        location.pathname !== '/dashboard' &&
-        location.pathname !== '/customization' &&
-        location.pathname !== '/settings' &&
-        location.pathname !== '/dashboard/archived'
-      ) {
-        history.push(`/dashboard`);
-      }
-    } else if (loggedInUser && activeUser === loggedInUser._id && selectedPeerId) {
-      dispatch(deselectPeerId());
-      if (
-        location.pathname !== '/profile' &&
-        location.pathname !== '/dashboard' &&
-        location.pathname !== '/customization' &&
-        location.pathname !== '/settings' &&
-        location.pathname !== '/dashboard/archived'
-      ) {
-        history.push(`/dashboard`);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loggedInUser, activeUser, selectedPeerId, dispatch, history]);
+  // useEffect(() => {
+  //   if (loggedInUser && !activeUser) {
+  //     setActiveUser(loggedInUser._id);
+  //   } else if (loggedInUser && activeUser !== loggedInUser._id) {
+  //     dispatch(selectPeerId(activeUser));
+  //     if (
+  //       location.pathname !== '/profile' &&
+  //       location.pathname !== '/dashboard' &&
+  //       location.pathname !== '/customization' &&
+  //       location.pathname !== '/settings' &&
+  //       location.pathname !== '/dashboard/archived'
+  //     ) {
+  //       history.push(`/dashboard`);
+  //     }
+  //   } else if (loggedInUser && activeUser === loggedInUser._id && selectedPeerId) {
+  //     dispatch(deselectPeerId());
+  //     if (
+  //       location.pathname !== '/profile' &&
+  //       location.pathname !== '/dashboard' &&
+  //       location.pathname !== '/customization' &&
+  //       location.pathname !== '/settings' &&
+  //       location.pathname !== '/dashboard/archived'
+  //     ) {
+  //       history.push(`/dashboard`);
+  //     }
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [loggedInUser, activeUser, selectedPeerId, dispatch, history]);
 
   useEffect(() => {
     const busyState =
@@ -268,7 +268,7 @@ export default () => {
               : {}
           }
         >
-          {multiUser && (
+          {/* {multiUser && (
             <Menu.Item style={menuSpacing()}>
               <StyledUserSelectorDropdown
                 search
@@ -281,7 +281,7 @@ export default () => {
                 renderLabel={renderLabel}
               />
             </Menu.Item>
-          )}
+          )} */}
           <div
             onMouseEnter={() => {
               setDropdown('accordionDrop');
