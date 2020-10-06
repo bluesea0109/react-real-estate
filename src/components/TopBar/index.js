@@ -3,24 +3,48 @@ import { useHistory } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectPeerId, deselectPeerId } from '../store/modules/peer/actions';
+import { selectPeerId, deselectPeerId } from '../../store/modules/peer/actions';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Initials, Icon } from './Base';
-import AuthService from '../services/auth';
-import { Button, Menu } from './Base';
-import LogoImage from './LogoImage';
+import { Initials, Icon, Button, Menu } from '../Base';
+import AuthService from '../../services/auth';
+import LogoImage from '../LogoImage';
 
 import { Dropdown, Popup, Header } from 'semantic-ui-react';
+import './styles.scss';
 
 const StyledUserSelectorDropdown = styled(Dropdown)`
   min-width: 8.3em !important;
   max-width: 8.3em !important;
+  height: 40px;
+  border-radius: 20px;
 `;
 const StyledHeader = styled(Header)`
   min-width: max-content !important;
   display: inline-block;
 `;
+
+const logoutIcon = {
+  marginLeft: '1px',
+  width: '35px',
+  background: '#E6E6E6',
+  height: '35px',
+  padding: ' 9px',
+  borderRadius: '40px',
+};
+
+const logoutButton = {
+  padding: '6px 0px 5px 0px',
+  boxShadow: 'none',
+};
+
+const logoutText = {
+  marginTop: '7px',
+  marginLeft: '10px',
+  fontWeight: '600',
+  fontSize: '16px',
+  color: '#3B3B3B',
+};
 
 const mql = window.matchMedia('(max-width: 599px)');
 const menuSpacing = () => (mql.matches ? {} : { marginLeft: '.5em' });
@@ -38,6 +62,7 @@ export default ({ auth0 }) => {
   const onLoginMode = useSelector(store => store.onLogin.mode);
   const multiUser = onLoginMode === 'multiuser';
 
+  console.log('teamates', teammates);
   useEffect(() => {
     if (loggedInUser && !activeUser) {
       setActiveUser(loggedInUser._id);
@@ -78,8 +103,11 @@ export default ({ auth0 }) => {
       text: 'Logout',
       value: 0,
       content: (
-        <Button basic onClick={AuthService.signOut} style={{ boxShadow: 'none' }}>
-          Log Out <FontAwesomeIcon icon="sign-out-alt" style={{ marginLeft: '0.5em' }} />
+        <Button basic onClick={AuthService.signOut} style={logoutButton}>
+          <div style={{ display: 'flex' }}>
+            <FontAwesomeIcon icon="sign-out-alt" style={logoutIcon} />
+            <p style={logoutText}>Log Out</p>
+          </div>
         </Button>
       ),
     },
@@ -125,6 +153,7 @@ export default ({ auth0 }) => {
             {multiUser && (
               <Menu.Item style={menuSpacing()}>
                 <StyledUserSelectorDropdown
+                  className="activeDropdown"
                   search
                   floating
                   scrolling

@@ -7,7 +7,6 @@ import React, { createRef, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { StepLayout, StepsLayout, MobileDisabledLayout, NavigationLayout } from '../layouts';
-import { selectPeerId, deselectPeerId } from '../store/modules/peer/actions';
 import { Dimmer, Menu, Initials, Icon, Step } from './Base';
 
 import SideNaveToggle from './SideNaveToggle';
@@ -16,6 +15,10 @@ import './SideNaveToggle/styles.scss';
 const smallIconWithTextStyle = {
   margin: '0 .5em 0 -.6em',
   width: '15px',
+};
+const teamIconStyle = {
+  width: '18px',
+  margin: '0 0.4em 0 -0.6em',
 };
 
 const noIconTextStyle = {
@@ -56,6 +59,7 @@ export default () => {
   const [activeUser, setActiveUser] = useState('');
   const [appIsBusy, setAppIsBusy] = useState(false);
   const [dropdown, setDropdown] = useState('');
+  const [dropdownCustom, setDropdownCustom] = useState('');
   const [moblileVisible, setMobileVisible] = React.useState(false);
 
   const isAuthenticated = useSelector(store => store.auth0.authenticated);
@@ -124,35 +128,6 @@ export default () => {
       });
     });
   }
-
-  // useEffect(() => {
-  //   if (loggedInUser && !activeUser) {
-  //     setActiveUser(loggedInUser._id);
-  //   } else if (loggedInUser && activeUser !== loggedInUser._id) {
-  //     dispatch(selectPeerId(activeUser));
-  //     if (
-  //       location.pathname !== '/profile' &&
-  //       location.pathname !== '/dashboard' &&
-  //       location.pathname !== '/customization' &&
-  //       location.pathname !== '/settings' &&
-  //       location.pathname !== '/dashboard/archived'
-  //     ) {
-  //       history.push(`/dashboard`);
-  //     }
-  //   } else if (loggedInUser && activeUser === loggedInUser._id && selectedPeerId) {
-  //     dispatch(deselectPeerId());
-  //     if (
-  //       location.pathname !== '/profile' &&
-  //       location.pathname !== '/dashboard' &&
-  //       location.pathname !== '/customization' &&
-  //       location.pathname !== '/settings' &&
-  //       location.pathname !== '/dashboard/archived'
-  //     ) {
-  //       history.push(`/dashboard`);
-  //     }
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [loggedInUser, activeUser, selectedPeerId, dispatch, history]);
 
   useEffect(() => {
     const busyState =
@@ -268,20 +243,6 @@ export default () => {
               : {}
           }
         >
-          {/* {multiUser && (
-            <Menu.Item style={menuSpacing()}>
-              <StyledUserSelectorDropdown
-                search
-                floating
-                scrolling
-                selection
-                options={profiles}
-                onChange={handleProfileSelect}
-                value={activeUser}
-                renderLabel={renderLabel}
-              />
-            </Menu.Item>
-          )} */}
           <div
             onMouseEnter={() => {
               setDropdown('accordionDrop');
@@ -321,37 +282,55 @@ export default () => {
               </MobileDisabledLayout>
             </Menu.Item>
           </div>
-          <Menu.Item
-            as={Link}
-            color="teal"
-            name="customization"
-            active={activeItem === '/customization'}
-            to="/customization"
-            style={menuItemStyles}
+          <div
+            onMouseEnter={() => {
+              setDropdownCustom('accordionDropCustom');
+            }}
+            onMouseLeave={() => {
+              setDropdownCustom('');
+            }}
             onClick={mobileCollapse}
           >
-            <MobileDisabledLayout>
-              <FontAwesomeIcon icon="paint-brush" className="iconWithStyle" /> Customization{' '}
-              {multiUser && isAdmin && !selectedPeerId && <FontAwesomeIcon icon="caret-down" style={{ marginLeft: '0.2em' }} />}
-            </MobileDisabledLayout>
-          </Menu.Item>
+            <Menu.Item
+              as={Link}
+              color="teal"
+              name="customization"
+              active={activeItem === '/customization'}
+              to="/customization"
+              style={menuItemStyles}
+              onClick={mobileCollapse}
+            >
+              <MobileDisabledLayout>
+                <FontAwesomeIcon icon="paint-brush" className="iconWithStyle" /> Customization{' '}
+                {multiUser && isAdmin && !selectedPeerId && <FontAwesomeIcon icon="caret-down" style={{ marginLeft: '0.2em' }} />}
+              </MobileDisabledLayout>
+            </Menu.Item>
+          </div>
 
-          {multiUser && isAdmin && !selectedPeerId && location.pathname.includes('/customization') && (
-            <Menu.Menu style={{ marginTop: !isMobile() ? '-1.2em' : '' }}>
+          {multiUser && isAdmin && !selectedPeerId && (
+            <div
+              className={isMobile() ? 'accordionDropCustom' : `noDropdown ${dropdownCustom}`}
+              onMouseEnter={() => {
+                setDropdownCustom('accordionDropCustom');
+              }}
+              onMouseLeave={() => {
+                setDropdownCustom('');
+              }}
+            >
               <Menu.Item
                 as={Link}
                 color="teal"
                 name="customization/team"
                 active={activeItem === '/customization/team'}
                 to="/customization/team"
-                style={{ lineHeight: 2.6 }}
+                style={menuItemStyles}
                 onClick={mobileCollapse}
               >
                 <MobileDisabledLayout style={noIconTextStyle}>
-                  <FontAwesomeIcon icon="users" style={smallIconWithTextStyle} /> Team
+                  <FontAwesomeIcon icon="users" style={teamIconStyle} /> Team
                 </MobileDisabledLayout>
               </Menu.Item>
-            </Menu.Menu>
+            </div>
           )}
 
           <Menu.Item as={Link} color="teal" name="profile" active={activeItem === '/profile'} to="/profile" style={menuItemStyles} onClick={mobileCollapse}>

@@ -1,0 +1,22 @@
+.activeDropdown {
+  .active.item {
+    border-left: none !important;
+  }
+}
+.ui.selection.dropdown {
+  border-radius: 20px;
+}
+
+.ui.floating.dropdown > .menu {
+  margin-top: 1.15em !important;
+}
+
+.ui.active.selection.dropdown {
+  border-bottom-left-radius: 20px !important;
+  border-bottom-right-radius: 20px !important;
+}
+
+.ui.selection.active.dropdown {
+  border-color: #e6e6e6 !important;
+  box-shadow: none !important;
+}

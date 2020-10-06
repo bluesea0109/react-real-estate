@@ -19,7 +19,8 @@
   overflow: hidden;
 }
 
-.accordionDrop {
+.accordionDrop,
+.accordionDropCustom {
   height: 60px;
   width: 100%;
   overflow: visible;
@@ -29,7 +30,8 @@
 }
 
 @media screen and (max-width: 599px) {
-  .accordionDrop {
+  .accordionDrop,
+  .accordionDropCustom {
     margin-top: 0px;
   }
   .ui.text.menu {
