@@ -550,7 +550,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
                   <div id="uploadCoverGroup">
                     <a href="#/ignore" onClick={triggerFileDialog} id="postcardUploadText">Upload new cover photo</a>
                     <br/>
-                    (preferred size: 1875x990)
+                    (preferred size: 1375x990)
                   </div>
                 </div>
               )}
