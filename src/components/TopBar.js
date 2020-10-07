@@ -7,7 +7,7 @@ import LogoImage from './LogoImage';
 
 export default ({ auth0 }) => (
   <Menu fluid fixed="top" style={{ borderBottom: '1px solid rgba(34,36,38,.15)', boxShadow: 'none' }}>
-    <Menu.Item as="a" header>
+    <Menu.Item as="a" href="/" header>
       <LogoImage />
     </Menu.Item>
     <Menu.Menu position="right">
