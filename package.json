@@ -56,8 +56,6 @@
   "devDependencies": {
     "@sentry/cli": "1.49.0",
     "http-proxy-middleware": "0.20.0",
-    "husky": "4.2.1",
-    "lint-staged": "10.0.3",
     "prettier": "1.19.1",
     "react-test-renderer": "16.12.0",
     "request": "2.88.0",
@@ -70,17 +68,6 @@
   },
   "eslintConfig": {
     "extends": "react-app"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
-      "npm run format",
-      "git add"
-    ]
   },
   "browserslist": {
     "production": [
