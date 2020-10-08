@@ -70,7 +70,6 @@ export default ({ auth0 }) => {
   const onLoginMode = useSelector(store => store.onLogin.mode);
   const multiUser = onLoginMode === 'multiuser';
 
-  console.log('teamates', teammates);
   useEffect(() => {
     if (loggedInUser && !activeUser) {
       setActiveUser(loggedInUser._id);
