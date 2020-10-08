@@ -26,26 +26,34 @@ const StyledHeader = styled(Header)`
 
 const logoutIcon = {
   marginLeft: '1px',
-  width: '35px',
+  width: '32px',
   background: '#E6E6E6',
-  height: '35px',
-  padding: ' 9px',
+  height: '32px',
+  padding: ' 8px',
   borderRadius: '40px',
 };
 
 const logoutButton = {
   padding: '6px 0px 5px 0px',
   boxShadow: 'none',
+  width: '100%',
 };
 
 const logoutText = {
   marginTop: '7px',
-  marginLeft: '10px',
+  marginLeft: '19px',
   fontWeight: '600',
   fontSize: '16px',
   color: '#3B3B3B',
 };
 
+const dropdownPicStyle = {
+  height: '32px',
+  display: 'block',
+  overflow: 'hidden',
+  borderRadius: '50px',
+  width: '32px',
+};
 const mql = window.matchMedia('(max-width: 599px)');
 const menuSpacing = () => (mql.matches ? {} : { marginLeft: '.5em' });
 
@@ -122,14 +130,30 @@ export default ({ auth0 }) => {
       const contextRef = createRef();
       const currentUserIconWithPopup = <Popup context={contextRef} content="Currently logged in user" trigger={<Icon name="user" />} />;
       const setupCompletedIconWithPopup = <Popup context={contextRef} content="Setup Completed" trigger={<Icon name="check circle" color="teal" />} />;
+      const realtorPhoto = profile.realtorPhoto;
+      let imageProp = realtorPhoto.length ? { avatar: true, src: realtorPhoto } : null;
 
       return profiles.push({
         key: index + 1,
-        text: profile.first,
+        text: (
+          <span style={{ display: 'flex' }}>
+            {realtorPhoto.length ? (
+              <>
+                <span style={dropdownPicStyle}>
+                  <img src={realtorPhoto} alt="Brivity Marketer" />
+                </span>
+                <p style={{ marginTop: '6px', marginLeft: '11px' }}> {profile.first}</p>
+              </>
+            ) : (
+              <Initials firstName={profile.first} lastName={profile.last} />
+            )}
+          </span>
+        ),
         value: profile.userId,
+        image: imageProp,
         content: (
-          <StyledHeader as="h4" ref={contextRef}>
-            <Initials firstName={profile.first} lastName={profile.last} />
+          <StyledHeader as="h4" ref={contextRef} style={{ marginTop: '7px' }}>
+            {imageProp === null ? <Initials firstName={profile.first} lastName={profile.last} /> : null}
             &nbsp; &nbsp;
             {profile.first}&nbsp;
             {profile.last}&nbsp;
@@ -154,9 +178,7 @@ export default ({ auth0 }) => {
               <Menu.Item style={menuSpacing()}>
                 <StyledUserSelectorDropdown
                   className="activeDropdown"
-                  search
                   floating
-                  scrolling
                   selection
                   options={profiles}
                   onChange={handleProfileSelect}

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;1,800&display=swap');
 .activeDropdown {
   .active.item {
     border-left: none !important;
@@ -5,6 +6,7 @@
 }
 .ui.selection.dropdown {
   border-radius: 20px;
+  padding: 0.2em 2.1em 0.78571429em 0.2em;
 }
 
 .ui.floating.dropdown > .menu {
@@ -19,4 +21,45 @@
 .ui.selection.active.dropdown {
   border-color: #e6e6e6 !important;
   box-shadow: none !important;
+}
+
+.ui.avatar.image {
+  width: 32px;
+  height: 32px;
+  border-radius: 50px;
+}
+
+.ui.dropdown .menu > .item > .image,
+.ui.dropdown .menu > .item > img {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  max-height: none;
+  width: 32px;
+  height: 32px;
+}
+.ui.menu .ui.dropdown .menu > .item {
+  padding: 9px 12px 9px !important;
+}
+
+.ui.search.dropdown .menu {
+  max-height: 43.028571rem;
+}
+
+.ui.mini.image {
+  width: 32px;
+}
+
+.button:hover {
+  p {
+    color: #59c4c4 !important;
+  }
+}
+
+.menu {
+  h4,
+  p {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+  }
 }

@@ -1,8 +1,7 @@
 import styled from 'styled-components';
-import { useHistory } from 'react-router';
 import { Link, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { Dropdown, Header, Popup } from 'semantic-ui-react';
+import { useSelector } from 'react-redux';
+import { Header, Popup } from 'semantic-ui-react';
 import React, { createRef, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -37,26 +36,17 @@ const menuItemStyles = {
   fontSize: '18px',
 };
 
-const StyledUserSelectorDropdown = styled(Dropdown)`
-  min-width: 8.3em !important;
-  max-width: 8.3em !important;
-`;
-
 const StyledHeader = styled(Header)`
   min-width: max-content !important;
   display: inline-block;
 `;
 
 const mql = window.matchMedia('(max-width: 599px)');
-const menuSpacing = () => (mql.matches ? {} : { marginLeft: '.5em' });
 const isMobile = () => mql.matches;
 
 export default () => {
-  const history = useHistory();
-  const dispatch = useDispatch();
   const location = useLocation();
   const [activeItem, setActiveItem] = useState('');
-  const [activeUser, setActiveUser] = useState('');
   const [appIsBusy, setAppIsBusy] = useState(false);
   const [dropdown, setDropdown] = useState('');
   const [dropdownCustom, setDropdownCustom] = useState('');
@@ -134,13 +124,6 @@ export default () => {
       mailoutPendingState || updateMailoutEditPendingState || mailoutSubmitPendingState || mailoutStopPendingState || mailoutUpdateMailoutSizePendingState;
     setAppIsBusy(busyState);
   }, [mailoutPendingState, updateMailoutEditPendingState, mailoutSubmitPendingState, mailoutStopPendingState, mailoutUpdateMailoutSizePendingState]);
-
-  const renderLabel = label => ({
-    color: 'blue',
-    content: `${label.text2}`,
-  });
-
-  const handleProfileSelect = (e, { value }) => setActiveUser(value);
 
   const onProfile = !completedProfile;
   const onTeamCustomization = !completedTeamCustomization && completedProfile;

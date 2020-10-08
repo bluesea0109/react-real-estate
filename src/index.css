@@ -242,8 +242,8 @@ h1 {
   z-index: 10;
   top: -144px;
   left: 86px;
-  color: white!important;
-  box-shadow: 0 0 0 0.1em rgba(255,255,255) inset;
+  color: white !important;
+  box-shadow: 0 0 0 0.1em rgba(255, 255, 255) inset;
 }
 
 .block-picker {
@@ -494,21 +494,20 @@ h1 {
 }
 
 .details-customPostcardCTA a {
-  color: #59C4C4;
+  color: #59c4c4;
 }
 
 .details-customPostcardCTA a:visited {
-  color: #59C4C4;
+  color: #59c4c4;
 }
 
 .customPostcardCTA a {
-  color: #59C4C4;
+  color: #59c4c4;
 }
 
 .customPostcardCTA a:visited {
-  color: #59C4C4;
+  color: #59c4c4;
 }
-
 
 #chooseDestinationsMethod {
   padding-bottom: 10px;
@@ -565,11 +564,11 @@ h1 {
 #postcardUploadText {
   cursor: pointer;
   position: relative;
-  color: #59C4C4;
+  color: #59c4c4;
 }
 
 #postcardUploadText:visited {
-  color: #59C4C4;
+  color: #59c4c4;
 }
 
 #addCampaignHolder {
@@ -589,13 +588,13 @@ h1 {
 }
 
 #newCampaignType button.active {
-  background-color: #59C4C4 !important;
+  background-color: #59c4c4 !important;
 }
 
 #uploadCardFront {
   border: 1px dashed #666;
   border-radius: 2px;
-  background-color: #EFEFEF;
+  background-color: #efefef;
   width: 350px;
   min-height: 70px;
   max-height: 90px;
@@ -615,12 +614,12 @@ h1 {
 }
 
 .BillingTable a {
-  color: #59C4C4;
+  color: #59c4c4;
   font-weight: 600;
 }
 
 .BillingTable a:visited {
-  color: #59C4C4;
+  color: #59c4c4;
   font-weight: 600;
 }
 
@@ -630,6 +629,6 @@ h1 {
 }
 
 #billingSubHeader a {
-  color: #59C4C4;
+  color: #59c4c4;
   font-weight: 600;
 }
