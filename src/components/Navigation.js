@@ -1,26 +1,23 @@
 import styled from 'styled-components';
-import { useHistory } from 'react-router';
 import { Link, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { Dropdown, Header, Popup } from 'semantic-ui-react';
+import { useSelector } from 'react-redux';
+import { Header, Popup } from 'semantic-ui-react';
 import React, { createRef, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { StepLayout, StepsLayout, MobileDisabledLayout, MobileEnabledLayout, NavigationLayout } from '../layouts';
-import { selectPeerId, deselectPeerId } from '../store/modules/peer/actions';
+import { StepLayout, StepsLayout, MobileDisabledLayout, NavigationLayout } from '../layouts';
 import { Dimmer, Menu, Initials, Icon, Step } from './Base';
 
-const iconOnlyStyle = {
-  margin: '0 auto 0 auto',
-};
-
-const iconWithTextStyle = {
-  margin: '0 .5em 0 2.5em',
-};
+import SideNaveToggle from './SideNaveToggle';
+import './SideNaveToggle/styles.scss';
 
 const smallIconWithTextStyle = {
-  margin: '0 .5em 0 0em',
+  margin: '0 .5em 0 -.6em',
   width: '15px',
+};
+const teamIconStyle = {
+  width: '18px',
+  margin: '0 0.4em 0 -0.6em',
 };
 
 const noIconTextStyle = {
@@ -34,10 +31,10 @@ const sidebarTextStyle = {
   backgroundColor: 'white',
 };
 
-const StyledUserSelectorDropdown = styled(Dropdown)`
-  min-width: 8.3em !important;
-  max-width: 8.3em !important;
-`;
+const menuItemStyles = {
+  lineHeight: 2.6,
+  fontSize: '18px',
+};
 
 const StyledHeader = styled(Header)`
   min-width: max-content !important;
@@ -45,16 +42,15 @@ const StyledHeader = styled(Header)`
 `;
 
 const mql = window.matchMedia('(max-width: 599px)');
-const menuSpacing = () => (mql.matches ? {} : { marginLeft: '2.5em' });
 const isMobile = () => mql.matches;
 
 export default () => {
-  const history = useHistory();
-  const dispatch = useDispatch();
   const location = useLocation();
   const [activeItem, setActiveItem] = useState('');
-  const [activeUser, setActiveUser] = useState('');
   const [appIsBusy, setAppIsBusy] = useState(false);
+  const [dropdown, setDropdown] = useState('');
+  const [dropdownCustom, setDropdownCustom] = useState('');
+  const [moblileVisible, setMobileVisible] = React.useState(false);
 
   const isAuthenticated = useSelector(store => store.auth0.authenticated);
   const onLoginPending = useSelector(store => store.onLogin.pending);
@@ -124,46 +120,10 @@ export default () => {
   }
 
   useEffect(() => {
-    if (loggedInUser && !activeUser) {
-      setActiveUser(loggedInUser._id);
-    } else if (loggedInUser && activeUser !== loggedInUser._id) {
-      dispatch(selectPeerId(activeUser));
-      if (
-        location.pathname !== '/profile' &&
-        location.pathname !== '/dashboard' &&
-        location.pathname !== '/customization' &&
-        location.pathname !== '/settings' &&
-        location.pathname !== '/dashboard/archived'
-      ) {
-        history.push(`/dashboard`);
-      }
-    } else if (loggedInUser && activeUser === loggedInUser._id && selectedPeerId) {
-      dispatch(deselectPeerId());
-      if (
-        location.pathname !== '/profile' &&
-        location.pathname !== '/dashboard' &&
-        location.pathname !== '/customization' &&
-        location.pathname !== '/settings' &&
-        location.pathname !== '/dashboard/archived'
-      ) {
-        history.push(`/dashboard`);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loggedInUser, activeUser, selectedPeerId, dispatch, history]);
-
-  useEffect(() => {
     const busyState =
       mailoutPendingState || updateMailoutEditPendingState || mailoutSubmitPendingState || mailoutStopPendingState || mailoutUpdateMailoutSizePendingState;
     setAppIsBusy(busyState);
   }, [mailoutPendingState, updateMailoutEditPendingState, mailoutSubmitPendingState, mailoutStopPendingState, mailoutUpdateMailoutSizePendingState]);
-
-  const renderLabel = label => ({
-    color: 'blue',
-    content: `${label.text2}`,
-  });
-
-  const handleProfileSelect = (e, { value }) => setActiveUser(value);
 
   const onProfile = !completedProfile;
   const onTeamCustomization = !completedTeamCustomization && completedProfile;
@@ -241,106 +201,152 @@ export default () => {
     }
   }
 
+  const mobileCollapse = () => {
+    if (moblileVisible) {
+      setMobileVisible(false);
+    }
+  };
+
   return (
-    <Dimmer.Dimmable blurring dimmed={appIsBusy}>
-      <Dimmer active={appIsBusy} inverted />
-      <NavigationLayout text style={isMobile() ? { backgroundColor: 'white' } : {}}>
-        {multiUser && (
-          <Menu.Item style={menuSpacing()}>
-            <StyledUserSelectorDropdown
-              search
-              floating
-              scrolling
-              selection
-              options={profiles}
-              onChange={handleProfileSelect}
-              value={activeUser}
-              renderLabel={renderLabel}
-            />
-          </Menu.Item>
-        )}
-        <Menu.Item as={Link} color="teal" name="dashboard" active={activeItem === '/dashboard'} to="/dashboard" style={{ lineHeight: 2.6 }}>
-          <MobileEnabledLayout style={iconOnlyStyle}>
-            <FontAwesomeIcon icon="tachometer-alt" />
-          </MobileEnabledLayout>
-          <MobileDisabledLayout>
-            <FontAwesomeIcon icon="tachometer-alt" style={iconWithTextStyle} /> Dashboard <FontAwesomeIcon icon="caret-down" style={{ marginLeft: '0.2em' }} />
-          </MobileDisabledLayout>
-        </Menu.Item>
-        {location.pathname.includes('/dashboard') && (
-          <Menu.Menu style={{ marginTop: !isMobile() ? '-1.2em' : '' }}>
+    <SideNaveToggle moblileVisible={moblileVisible} setMobileVisible={setMobileVisible}>
+      <Dimmer.Dimmable blurring dimmed={appIsBusy}>
+        <Dimmer active={appIsBusy} inverted />
+
+        <NavigationLayout
+          text
+          style={
+            isMobile()
+              ? {
+                  WebkitBoxShadow: '2px 2px 6px 0px rgba(50, 50, 50, 0.14)',
+                  MozBoxShadow: '2px 2px 6px 0px rgba(50, 50, 50, 0.14)',
+                  BoxShadow: '2px 2px 6px 0px rgba(50, 50, 50, 0.14)',
+                  backgroundColor: 'white',
+                  height: '100vh',
+                }
+              : {}
+          }
+        >
+          <div
+            onMouseEnter={() => {
+              setDropdown('accordionDrop');
+            }}
+            onMouseLeave={() => {
+              setDropdown('');
+            }}
+            onClick={mobileCollapse}
+          >
+            <Menu.Item as={Link} color="teal" name="dashboard" active={activeItem === '/dashboard'} to="/dashboard" style={menuItemStyles}>
+              <MobileDisabledLayout>
+                <FontAwesomeIcon icon="tachometer-alt" className="iconWithStyle" /> Dashboard{' '}
+                <FontAwesomeIcon icon="caret-down" style={{ marginLeft: '0.2em' }} />
+              </MobileDisabledLayout>
+            </Menu.Item>
+          </div>
+          <div
+            className={isMobile() ? 'accordionDrop' : `noDropdown ${dropdown}`}
+            onMouseEnter={() => {
+              setDropdown('accordionDrop');
+            }}
+            onMouseLeave={() => {
+              setDropdown('');
+            }}
+          >
             <Menu.Item
               as={Link}
               color="teal"
               name="archived"
               active={activeItem === '/dashboard/archived'}
               to="/dashboard/archived"
-              style={{ lineHeight: 2.6 }}
+              style={menuItemStyles}
+              onClick={mobileCollapse}
             >
-              <MobileEnabledLayout style={iconOnlyStyle}>
-                <FontAwesomeIcon icon="archive" />
-              </MobileEnabledLayout>
               <MobileDisabledLayout style={noIconTextStyle}>
                 <FontAwesomeIcon icon="archive" style={smallIconWithTextStyle} /> Archive
               </MobileDisabledLayout>
             </Menu.Item>
-          </Menu.Menu>
-        )}
-        <Menu.Item as={Link} color="teal" name="customization" active={activeItem === '/customization'} to="/customization" style={{ lineHeight: 2.6 }}>
-          <MobileEnabledLayout style={iconOnlyStyle}>
-            <FontAwesomeIcon icon="paint-brush" />
-          </MobileEnabledLayout>
-          <MobileDisabledLayout>
-            <FontAwesomeIcon icon="paint-brush" style={iconWithTextStyle} /> Customization{' '}
-            {multiUser && isAdmin && !selectedPeerId && <FontAwesomeIcon icon="caret-down" style={{ marginLeft: '0.2em' }} />}
-          </MobileDisabledLayout>
-        </Menu.Item>
-        {multiUser && isAdmin && !selectedPeerId && location.pathname.includes('/customization') && (
-          <Menu.Menu style={{ marginTop: !isMobile() ? '-1.2em' : '' }}>
+          </div>
+          <div
+            onMouseEnter={() => {
+              setDropdownCustom('accordionDropCustom');
+            }}
+            onMouseLeave={() => {
+              setDropdownCustom('');
+            }}
+            onClick={mobileCollapse}
+          >
             <Menu.Item
               as={Link}
               color="teal"
-              name="customization/team"
-              active={activeItem === '/customization/team'}
-              to="/customization/team"
-              style={{ lineHeight: 2.6 }}
+              name="customization"
+              active={activeItem === '/customization'}
+              to="/customization"
+              style={menuItemStyles}
+              onClick={mobileCollapse}
             >
-              <MobileEnabledLayout style={iconOnlyStyle}>
-                <FontAwesomeIcon icon="users" />
-              </MobileEnabledLayout>
-              <MobileDisabledLayout style={noIconTextStyle}>
-                <FontAwesomeIcon icon="users" style={smallIconWithTextStyle} /> Team
+              <MobileDisabledLayout>
+                <FontAwesomeIcon icon="paint-brush" className="iconWithStyle" /> Customization{' '}
+                {multiUser && isAdmin && !selectedPeerId && <FontAwesomeIcon icon="caret-down" style={{ marginLeft: '0.2em' }} />}
               </MobileDisabledLayout>
             </Menu.Item>
-          </Menu.Menu>
-        )}
-        <Menu.Item as={Link} color="teal" name="profile" active={activeItem === '/profile'} to="/profile" style={{ lineHeight: 2.6 }}>
-          <MobileEnabledLayout style={iconOnlyStyle}>
-            <FontAwesomeIcon icon="user" />
-          </MobileEnabledLayout>
-          <MobileDisabledLayout>
-            <FontAwesomeIcon icon="user" style={iconWithTextStyle} /> Profile
-          </MobileDisabledLayout>
-        </Menu.Item>
-        <Menu.Item as={Link} color="teal" name="settings" active={activeItem === '/settings'} to="/settings" style={{ lineHeight: 2.6 }}>
-          <MobileEnabledLayout style={iconOnlyStyle}>
-            <FontAwesomeIcon icon="cog" />
-          </MobileEnabledLayout>
-          <MobileDisabledLayout>
-            <FontAwesomeIcon icon="cog" style={iconWithTextStyle} /> Settings
-          </MobileDisabledLayout>
-        </Menu.Item>
-        {!selectedPeerId && (
-          <Menu.Item as={Link} color="teal" name="billing" active={activeItem === '/billing'} to="/billing" style={{ lineHeight: 2.6 }}>
-            <MobileEnabledLayout style={iconOnlyStyle}>
-              <FontAwesomeIcon icon="credit-card" />
-            </MobileEnabledLayout>
+          </div>
+
+          {multiUser && isAdmin && !selectedPeerId && (
+            <div
+              className={isMobile() ? 'accordionDropCustom' : `noDropdown ${dropdownCustom}`}
+              onMouseEnter={() => {
+                setDropdownCustom('accordionDropCustom');
+              }}
+              onMouseLeave={() => {
+                setDropdownCustom('');
+              }}
+            >
+              <Menu.Item
+                as={Link}
+                color="teal"
+                name="customization/team"
+                active={activeItem === '/customization/team'}
+                to="/customization/team"
+                style={menuItemStyles}
+                onClick={mobileCollapse}
+              >
+                <MobileDisabledLayout style={noIconTextStyle}>
+                  <FontAwesomeIcon icon="users" style={teamIconStyle} /> Team
+                </MobileDisabledLayout>
+              </Menu.Item>
+            </div>
+          )}
+
+          <Menu.Item as={Link} color="teal" name="profile" active={activeItem === '/profile'} to="/profile" style={menuItemStyles} onClick={mobileCollapse}>
             <MobileDisabledLayout>
-              <FontAwesomeIcon icon="credit-card" style={iconWithTextStyle} /> Billing
+              <FontAwesomeIcon icon="user" className="iconWithStyle" /> Profile
             </MobileDisabledLayout>
           </Menu.Item>
-        )}
-      </NavigationLayout>
-    </Dimmer.Dimmable>
+          <Menu.Item as={Link} color="teal" name="settings" active={activeItem === '/settings'} to="/settings" style={menuItemStyles} onClick={mobileCollapse}>
+            <MobileDisabledLayout>
+              <FontAwesomeIcon icon="cog" className="iconWithStyle" /> Settings
+            </MobileDisabledLayout>
+          </Menu.Item>
+          {!selectedPeerId && (
+            <Menu.Item
+              as={Link}
+              color="teal"
+              name="billing"
+              active={activeItem === '/billing'}
+              to="/billing"
+              style={menuItemStyles}
+              onClick={() => {
+                if (moblileVisible) {
+                  setMobileVisible(false);
+                }
+              }}
+            >
+              <MobileDisabledLayout>
+                <FontAwesomeIcon icon="credit-card" className="iconWithStyle" /> Billing
+              </MobileDisabledLayout>
+            </Menu.Item>
+          )}
+        </NavigationLayout>
+      </Dimmer.Dimmable>
+    </SideNaveToggle>
   );
 };
