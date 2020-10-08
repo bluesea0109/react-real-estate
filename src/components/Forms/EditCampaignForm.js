@@ -133,6 +133,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     // do some checking
+    if (!file) return;
     let ok = false
     if (file.type === 'image/png') ok = true
     if (file.type === 'image/jpeg') ok = true
