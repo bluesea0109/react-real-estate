@@ -35,11 +35,12 @@ const BillingPage = () => {
   const tableBody = () => {
 
     return billingDetails.billings.map((item, index) => (
-      <Table.Row key="{item.id}">
+      <Table.Row key={item.id}>
         <Table.Cell>{format(new Date(item.billingDate), 'MM/dd/yyyy')}</Table.Cell>
         <Table.Cell>
           <Link to={`dashboard/${item.id}`}>{item.name}</Link>
         </Table.Cell>
+        <Table.Cell>{item.size ? `${item.size}" Postcard` : `4x6" Postcard`}</Table.Cell>
         <Table.Cell>{item.recipientCount}</Table.Cell>
         <Table.Cell>${item.creditsAmountApplied || '0.00'}</Table.Cell>
         <Table.Cell>{item.userProfile.first} {item.userProfile.last}</Table.Cell>
@@ -81,6 +82,7 @@ const BillingPage = () => {
                  <Table.Row>
                    <Table.HeaderCell>Date</Table.HeaderCell>
                    <Table.HeaderCell>Campaign Title</Table.HeaderCell>
+                   <Table.HeaderCell>Campaign Type</Table.HeaderCell>
                    <Table.HeaderCell>Recipients</Table.HeaderCell>
                    <Table.HeaderCell>Credits Applied</Table.HeaderCell>
                    <Table.HeaderCell>Profile</Table.HeaderCell>
