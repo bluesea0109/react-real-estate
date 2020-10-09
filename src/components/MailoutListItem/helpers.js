@@ -1,10 +1,13 @@
 import Dinero from 'dinero.js/build/esm/dinero.js';
 import { format } from 'date-fns';
 
-export const calculateCost = recipientCount => {
+export const calculateCost = (recipientCount, size='4x6') => {
   if (!recipientCount || typeof recipientCount !== 'number') return '-';
+  let unitCost = 59;
+  if (size === '6x9') unitCost = 89;
+  if (size === '6 x 11') unitCost = 109;
   // The amount is represented in cents
-  return Dinero({ amount: 59, currency: 'USD' })
+  return Dinero({ amount: unitCost, currency: 'USD' })
     .multiply(recipientCount)
     .toFormat('$0,0.00');
 };

@@ -23,6 +23,7 @@ import TemplatePictureFormField from './Common/TemplatePictureFormField';
 import EnableCustomizationSwitch from './Common/EnableCustomizationSwitch';
 import MailoutSizeSliderFormField from './Common/MailoutSizeSliderFormField';
 import ValidateURLWithoutRerender from './Common/ValidateURLWithoutRerender';
+import TemplatePostcardSizeField from './Common/TemplatePostcardSizeField';
 
 const formReducer = (state, action) => {
   return _.merge({}, action);
@@ -191,9 +192,21 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
 
               <div>{InputFormField({ fieldName: 'frontHeadline', listingType, initialValues, formValues, setFormValues })}</div>
 
-              <div style={{ display: !editable ? 'none' : 'block', paddingTop: isMobile() ? 'unset' : '3.85em' }}>
-                {KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr',
+                gridTemplateRows: '1fr 50px'
+                }}>
+                <div style={{display: 'flex', justifyContent: 'flex-start', padding: '0.5rem'}}>
+                  <>{TemplatePostcardSizeField({ postcardSize: '4x6', listingType, initialValues, formValues, setFormValues })}</>
+                  <>{TemplatePostcardSizeField({ postcardSize: '6x9', listingType, initialValues, formValues, setFormValues })}</>
+                  <>{TemplatePostcardSizeField({ postcardSize: '6x11', listingType, initialValues, formValues, setFormValues })}</>
+                </div>
+                <div style={{ display: !editable ? 'none' : 'block', paddingTop: isMobile() ? 'unset' : '1.5em' }}>
+                  {KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}
+                </div>
               </div>
+
 
               <div>{MailoutSizeSliderFormField({ formType: 'agent', listingType, initialValues, formValues, setFormValues })}</div>
 
