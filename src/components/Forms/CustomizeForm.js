@@ -202,7 +202,7 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
                   <>{TemplatePostcardSizeField({ postcardSize: '6x9', listingType, initialValues, formValues, setFormValues })}</>
                   <>{TemplatePostcardSizeField({ postcardSize: '6x11', listingType, initialValues, formValues, setFormValues })}</>
                 </div>
-                <div style={{ display: !editable ? 'none' : 'block', paddingTop: isMobile() ? 'unset' : '1.5em' }}>
+                <div style={{ display: !editable ? 'none' : 'block', paddingTop: '1.5em' }}>
                   {KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}
                 </div>
               </div>
