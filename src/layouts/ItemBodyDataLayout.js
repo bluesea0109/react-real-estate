@@ -3,14 +3,11 @@ import styled from 'styled-components';
 
 export default styled(List)`
   grid-area: data;
-  justify-items: center;
+  justify-items: start;
 
   display: grid;
-  grid-template-rows: 1fr;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 10px;
+  grid-template-rows: 100px;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 
-  @media (max-width: 768px) {
-    grid-template-rows: 2fr;
-    grid-template-columns: 1fr 1fr;
-  }
 `;
