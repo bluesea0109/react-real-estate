@@ -4,7 +4,7 @@
   "version": "4.2.2",
   "private": true,
   "scripts": {
-    "start": "PORT=8082 react-scripts start",
+    "start": "cross-env PORT=8082 react-scripts start",
     "build": "(export REACT_APP_SENTRY_RELEASE=$(node -pe \"require('./package.json').version\"); react-scripts build && node utils/sentry.js)",
     "build-local": "react-scripts build",
     "test": "react-scripts test",
@@ -55,6 +55,7 @@
   },
   "devDependencies": {
     "@sentry/cli": "1.49.0",
+    "cross-env": "^7.0.2",
     "http-proxy-middleware": "0.20.0",
     "prettier": "1.19.1",
     "react-test-renderer": "16.12.0",
