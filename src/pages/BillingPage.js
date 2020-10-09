@@ -40,7 +40,7 @@ const BillingPage = () => {
         <Table.Cell>
           <Link to={`dashboard/${item.id}`}>{item.name}</Link>
         </Table.Cell>
-        <Table.Cell>{item.size ? `${item.size}" Postcard` : `4x6" Postcard`}</Table.Cell>
+        <Table.Cell>{item.postcardSize ? `${item.postcardSize}" Postcard` : `4x6" Postcard`}</Table.Cell>
         <Table.Cell>{item.recipientCount}</Table.Cell>
         <Table.Cell>${item.creditsAmountApplied || '0.00'}</Table.Cell>
         <Table.Cell>{item.userProfile.first} {item.userProfile.last}</Table.Cell>
