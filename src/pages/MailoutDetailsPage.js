@@ -370,6 +370,12 @@ const MailoutDetailsPage = () => {
                       </List.Item>
                       <List.Item>
                         <List.Content>
+                          <List.Header>Size</List.Header>
+                          <List.Description>{`${details.postcardSize ? details.postcardSize : "4x6"}" / ${calculateCost(1)}`}</List.Description>
+                        </List.Content>
+                      </List.Item>
+                      <List.Item>
+                        <List.Content>
                           <List.Header>Cost</List.Header>
                           <List.Description>{calculateCost(details.recipientCount)}</List.Description>
                         </List.Content>
