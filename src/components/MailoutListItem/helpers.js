@@ -5,7 +5,7 @@ export const calculateCost = (recipientCount, size='4x6') => {
   if (!recipientCount || typeof recipientCount !== 'number') return '-';
   let unitCost = 59;
   if (size === '6x9') unitCost = 89;
-  if (size === '6 x 11') unitCost = 109;
+  if (size === '6x11') unitCost = 109;
   // The amount is represented in cents
   return Dinero({ amount: unitCost, currency: 'USD' })
     .multiply(recipientCount)
