@@ -25,7 +25,7 @@ const PostcardButton = (props) => (
         color='grey'
         fitted
         name='home'
-        size={props.postcardSize === '6x9' ? 'large' : props.postcardSize === '6x11' ? 'large' : ''}
+        size={props.postcardSize === '6x9' ? 'large' : props.postcardSize === '6x11' ? 'large' : undefined}
       ></Icon>
     </div>
     <span style={{
