@@ -607,7 +607,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
                       <a href="#/ignore" onClick={triggerFileDialog} id="postcardUploadText">Upload new cover photo</a>
                       <br/>
                       <span style={currentPostcardSize !== postcardSize ? {color: '#9F3A38', fontWeight: 'bold'} : {}}>
-                        {postcardSize === '6x11' ? '(preferred size: 6468x1485)' : postcardSize === '6x9' ? '(preferred size: 2060x1485)' : '(preferred size: 1375x990)'}
+                        {postcardSize === '6x11' ? '(preferred size: 3438x1485)' : postcardSize === '6x9' ? '(preferred size: 2060x1485)' : '(preferred size: 1375x990)'}
                       </span>
                     </div>
                   </div>
