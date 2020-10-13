@@ -14,10 +14,9 @@ import { Dropdown, Popup, Header } from 'semantic-ui-react';
 import './styles.scss';
 
 const StyledUserSelectorDropdown = styled(Dropdown)`
-  min-width: 8.3em !important;
-  max-width: 8.3em !important;
   height: 40px;
   border-radius: 20px;
+  max-width:400px;
 `;
 const StyledHeader = styled(Header)`
   min-width: max-content !important;
