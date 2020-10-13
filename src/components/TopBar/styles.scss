@@ -3,9 +3,12 @@
     border-left: none !important;
   }
 }
-.ui.selection.dropdown {
-  border-radius: 20px;
-  padding: 0.2em 2.1em 0.78571429em 0.2em;
+.top{
+  .ui.selection.dropdown {
+    border-radius: 20px;
+    padding: 0.2em 2.1em 0.78571429em 0.2em;
+    min-width:100px;
+  }
 }
 
 .ui.floating.dropdown > .menu {
