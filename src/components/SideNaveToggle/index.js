@@ -29,8 +29,7 @@ function useWindowSize() {
   return windowSize;
 }
 
-const SidebarSlider = ({ children, moblileVisible, setMobileVisible }) => {
-  const [toggle, setToggle] = useState('');
+const SidebarSlider = ({ children, moblileVisible, setMobileVisible, toggle, setToggle }) => {
   const [isMobile, setIsMobile] = useState(window.matchMedia('(max-width: 768px)').matches);
   const size = useWindowSize();
 
