@@ -25,6 +25,7 @@ export default function PostcardSizeButton({ postcardSize }) {
           fitted
           name='home'
           size={postcardSize === '6x9' ? 'large' : postcardSize === '6x11' ? 'large' : undefined}
+          style={postcardSize === '4x6' ? {transform: 'translateY(-2px)'} : undefined}
         ></Icon>
       </div>
       <span style={{
