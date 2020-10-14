@@ -548,11 +548,6 @@ h1 {
   padding-left: 100px;
 }
 
-#uploadCoverGroup {
-  position: relative;
-  float: right;
-}
-
 #postcardCoverFile {
   visibility: hidden;
 }
