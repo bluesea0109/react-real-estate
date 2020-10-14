@@ -6,10 +6,10 @@ import { Segment } from './Base';
 
 const PageTitleHeader = ({ children, ...rest }) => {
   const style = {
-    boxShadow: 'none',
     border: 'none',
-    borderBottom: '1px solid lightgrey',
-    borderRadius: 0,
+    borderRadius: "4px",
+    boxShadow:"rgba(34, 36, 38, 0) 0px 2px 0px 0px, rgba(34, 36, 38, 0.1) 0px 2px 5px 0px",
+    padding:"6px 6px 9px 10px",
   };
 
   return (

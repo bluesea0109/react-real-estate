@@ -231,7 +231,7 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
     <Page basic>
       <ContentTopHeaderLayout>
         <PageTitleHeader padded>
-          <Menu borderless fluid secondary>
+          <Menu borderless fluid secondary style={{padding:"12px 6px 9px 15px"}}>
             {peerId ? (
               <Header as="h1">
                 {peersName}'s Customization
@@ -260,7 +260,7 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
         </PageTitleHeader>
       </ContentTopHeaderLayout>
 
-      <Segment style={isMobile() ? { marginTop: '155px' } : { marginTop: '90px' }}>
+      <Segment style={isMobile() ? { marginTop: '155px' } : { marginTop: '22px' }}>
         <Menu pointing secondary>
           <Menu.Item
             name="newListing"

@@ -362,7 +362,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
               <Snackbar error>The data on the page has changed and the save has failed. Please reload to get the latest data.</Snackbar>
             )}
 
-            <Segment style={isMobile() ? { marginTop: '6em' } : { marginTop: '6.5em' }}>
+            <Segment style={isMobile() ? { marginTop: '6em' } : { marginTop: '22px' }}>
               <Header as="h2">
                 Personal
                 {selectedPeerId ? (

@@ -46,7 +46,7 @@ const Wizard = ({ children, initialValues = {}, onSubmit, page, setPage, control
           <Form.Children>
             {controls}
 
-            <Segment style={isMobile() ? { marginTop: '155px' } : { marginTop: '90px' }}>
+            <Segment style={isMobile() ? { marginTop: '155px' } : { marginTop: '22px' }}>
               <Menu pointing secondary>
                 <Menu.Item name="newListing" active={page === 0} disabled={page === 0} onClick={previous} />
                 <Menu.Item as={Button} type="submit" name="soldListing" active={page === 1} disabled={!!props.status || props.isSubmitting || page === 1} />
