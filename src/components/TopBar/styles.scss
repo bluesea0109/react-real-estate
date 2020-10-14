@@ -41,6 +41,7 @@
 }
 .ui.menu .ui.dropdown .menu > .item {
   padding: 9px 12px 9px !important;
+  display:flex;
 }
 
 .ui.search.dropdown .menu {
@@ -72,4 +73,18 @@
 
 .ui.selection.dropdown .menu{
   max-height:990px;
+  min-width:0px !important;
+}
+
+  @media only screen and (min-width: 768px) {
+  .ui.selection.dropdown .menu {
+    max-height:990px;
+  }
+}
+
+.ui.dropdown .menu{
+  min-width:max-content !important;
+}
+.ui.selection.active.dropdown .menu{
+  min-width:max-content !important;
 }
