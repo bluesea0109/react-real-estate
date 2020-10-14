@@ -264,22 +264,6 @@ export default () => {
               <FontAwesomeIcon icon="archive" className="iconWithStyle" /> Archive
             </MobileDisabledLayout>
           </Menu.Item>
-        
-          {multiUser && isAdmin && !selectedPeerId && (
-              <Menu.Item
-                as={Link}
-                color="teal"
-                name="customization/team"
-                active={activeItem === '/customization/team'}
-                to="/customization/team"
-                style={menuItemStyles}
-                onClick={mobileCollapse}
-              >
-                <MobileDisabledLayout >
-                  <FontAwesomeIcon icon="users" className="teamIconStyle" /> Team
-                </MobileDisabledLayout>
-              </Menu.Item>
-          )}
 
           <Menu.Item as={Link} color="teal" name="settings" active={activeItem === '/settings' || activeItem === '/customization' || activeItem === '/profile' || activeItem === '/billing'} to="/settings" style={menuItemStyles} onClick={mobileCollapse}>
             <MobileDisabledLayout>
@@ -292,6 +276,19 @@ export default () => {
 
           <div className={isMobile() ? 'accordionDrop' : `noDropdown ${dropdown}`}>
             <Menu.Menu>
+            {multiUser && isAdmin && !selectedPeerId && (
+              <Menu.Item
+                as={Link}
+                color="teal"
+                name="customization/team"
+                active={activeItem === '/customization/team'}
+                to="/customization/team"
+                style={subMenuItemStyles}
+                onClick={mobileCollapse}
+              >
+                <MobileDisabledLayout>Team Customization</MobileDisabledLayout>
+              </Menu.Item>
+            )}
               <Menu.Item
                 as={Link}
                 color="teal"
@@ -301,7 +298,7 @@ export default () => {
                 style={subMenuItemStyles}
                 onClick={mobileCollapse}
               >
-                <MobileDisabledLayout>Customization</MobileDisabledLayout>
+                <MobileDisabledLayout>Personal Customization</MobileDisabledLayout>
               </Menu.Item>
 
               <Menu.Item
