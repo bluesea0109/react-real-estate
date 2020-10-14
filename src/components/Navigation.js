@@ -10,19 +10,7 @@ import { Dimmer, Menu, Initials, Icon, Step } from './Base';
 
 import SideNaveToggle from './SideNaveToggle';
 import './SideNaveToggle/styles.scss';
-
-const smallIconWithTextStyle = {
-  margin: '0 .5em 0 -.6em',
-  width: '15px',
-};
-const teamIconStyle = {
-  width: '18px',
-  margin: '0 0.4em 0 -0.6em',
-};
-
-const noIconTextStyle = {
-  margin: '0 0.5em 0 4.4em',
-};
+import {ReactComponent as Cog} from "../assets/cog.svg";
 
 const sidebarTextStyle = {
   fontSize: '1em',
@@ -33,13 +21,40 @@ const sidebarTextStyle = {
 
 const menuItemStyles = {
   lineHeight: 2.6,
-  fontSize: '18px',
+  fontSize: '16px',
+  height: '56px',
+  borderBottom:"1px solid #eaedf0 !important",
+  padding: '0.5em',
+};
+
+const subMenuItemStyles = {
+  lineHeight: 1,
+  fontSize: '14px',
+  paddingLeft:"40px",
+  paddingTop:"4px",
+  paddingBottom:"10px",
+};
+
+const subMenuItemBillingStyle = {
+  lineHeight: 1,
+  fontSize: '14px',
+  paddingLeft:"40px",
+  paddingBottom:"18px",
 };
 
 const StyledHeader = styled(Header)`
   min-width: max-content !important;
   display: inline-block;
 `;
+
+const menuP = {
+  lineHeight: "2.6",
+  fontSize: "40px !important",
+  height: "56px",
+  padding: "0.5em",
+  marginLeft: "16px",
+  marginTop:"-2px",
+};
 
 const mql = window.matchMedia('(max-width: 599px)');
 const isMobile = () => mql.matches;
@@ -49,7 +64,7 @@ export default () => {
   const [activeItem, setActiveItem] = useState('');
   const [appIsBusy, setAppIsBusy] = useState(false);
   const [dropdown, setDropdown] = useState('');
-  const [dropdownCustom, setDropdownCustom] = useState('');
+  const [toggle, setToggle] = useState('');
   const [moblileVisible, setMobileVisible] = React.useState(false);
 
   const isAuthenticated = useSelector(store => store.auth0.authenticated);
@@ -120,10 +135,12 @@ export default () => {
   }
 
   useEffect(() => {
+    toggle ? setDropdown('accordionDrop') : setDropdown('');
+
     const busyState =
       mailoutPendingState || updateMailoutEditPendingState || mailoutSubmitPendingState || mailoutStopPendingState || mailoutUpdateMailoutSizePendingState;
     setAppIsBusy(busyState);
-  }, [mailoutPendingState, updateMailoutEditPendingState, mailoutSubmitPendingState, mailoutStopPendingState, mailoutUpdateMailoutSizePendingState]);
+  }, [mailoutPendingState, updateMailoutEditPendingState, mailoutSubmitPendingState, mailoutStopPendingState, mailoutUpdateMailoutSizePendingState, toggle]);
 
   const onProfile = !completedProfile;
   const onTeamCustomization = !completedTeamCustomization && completedProfile;
@@ -208,7 +225,7 @@ export default () => {
   };
 
   return (
-    <SideNaveToggle moblileVisible={moblileVisible} setMobileVisible={setMobileVisible}>
+    <SideNaveToggle moblileVisible={moblileVisible} setMobileVisible={setMobileVisible} toggle={toggle} setToggle={setToggle}>
       <Dimmer.Dimmable blurring dimmed={appIsBusy}>
         <Dimmer active={appIsBusy} inverted />
 
@@ -226,125 +243,95 @@ export default () => {
               : {}
           }
         >
-          <div
-            onMouseEnter={() => {
-              setDropdown('accordionDrop');
-            }}
-            onMouseLeave={() => {
-              setDropdown('');
-            }}
-            onClick={mobileCollapse}
-          >
+          <div onClick={mobileCollapse}>
             <Menu.Item as={Link} color="teal" name="dashboard" active={activeItem === '/dashboard'} to="/dashboard" style={menuItemStyles}>
               <MobileDisabledLayout>
-                <FontAwesomeIcon icon="tachometer-alt" className="iconWithStyle" /> Dashboard{' '}
-                <FontAwesomeIcon icon="caret-down" style={{ marginLeft: '0.2em' }} />
-              </MobileDisabledLayout>
-            </Menu.Item>
-          </div>
-          <div
-            className={isMobile() ? 'accordionDrop' : `noDropdown ${dropdown}`}
-            onMouseEnter={() => {
-              setDropdown('accordionDrop');
-            }}
-            onMouseLeave={() => {
-              setDropdown('');
-            }}
-          >
-            <Menu.Item
-              as={Link}
-              color="teal"
-              name="archived"
-              active={activeItem === '/dashboard/archived'}
-              to="/dashboard/archived"
-              style={menuItemStyles}
-              onClick={mobileCollapse}
-            >
-              <MobileDisabledLayout style={noIconTextStyle}>
-                <FontAwesomeIcon icon="archive" style={smallIconWithTextStyle} /> Archive
-              </MobileDisabledLayout>
-            </Menu.Item>
-          </div>
-          <div
-            onMouseEnter={() => {
-              setDropdownCustom('accordionDropCustom');
-            }}
-            onMouseLeave={() => {
-              setDropdownCustom('');
-            }}
-            onClick={mobileCollapse}
-          >
-            <Menu.Item
-              as={Link}
-              color="teal"
-              name="customization"
-              active={activeItem === '/customization'}
-              to="/customization"
-              style={menuItemStyles}
-              onClick={mobileCollapse}
-            >
-              <MobileDisabledLayout>
-                <FontAwesomeIcon icon="paint-brush" className="iconWithStyle" /> Customization{' '}
-                {multiUser && isAdmin && !selectedPeerId && <FontAwesomeIcon icon="caret-down" style={{ marginLeft: '0.2em' }} />}
+                <FontAwesomeIcon icon="tachometer-alt" className="iconWithStyle" /> Dashboard
               </MobileDisabledLayout>
             </Menu.Item>
           </div>
 
-          {multiUser && isAdmin && !selectedPeerId && (
-            <div
-              className={isMobile() ? 'accordionDropCustom' : `noDropdown ${dropdownCustom}`}
-              onMouseEnter={() => {
-                setDropdownCustom('accordionDropCustom');
-              }}
-              onMouseLeave={() => {
-                setDropdownCustom('');
-              }}
-            >
+          <Menu.Item
+            as={Link}
+            color="teal"
+            name="archived"
+            active={activeItem === '/dashboard/archived'}
+            to="/dashboard/archived"
+            style={menuItemStyles}
+            onClick={mobileCollapse}
+          >
+            <MobileDisabledLayout>
+              <FontAwesomeIcon icon="archive" className="iconWithStyle" /> Archive
+            </MobileDisabledLayout>
+          </Menu.Item>
+
+          <Menu.Item as={Link} color="teal" name="settings" active={activeItem === '/settings' || activeItem === '/customization' || activeItem === '/profile' || activeItem === '/billing'} to="/settings" style={menuItemStyles} onClick={mobileCollapse}>
+            <MobileDisabledLayout>
+              <span style={{display:"flex"}}>
+                <Cog className="cogIconStyle"/>
+                <span style={menuP}>Settings</span> 
+              </span>
+            </MobileDisabledLayout>
+          </Menu.Item>
+
+          <div className={isMobile() ? 'accordionDrop' : `noDropdown ${dropdown}`}>
+            <Menu.Menu>
+            {multiUser && isAdmin && !selectedPeerId && (
               <Menu.Item
                 as={Link}
                 color="teal"
                 name="customization/team"
                 active={activeItem === '/customization/team'}
                 to="/customization/team"
-                style={menuItemStyles}
+                style={subMenuItemStyles}
                 onClick={mobileCollapse}
               >
-                <MobileDisabledLayout style={noIconTextStyle}>
-                  <FontAwesomeIcon icon="users" style={teamIconStyle} /> Team
-                </MobileDisabledLayout>
+                <MobileDisabledLayout>Team Customization</MobileDisabledLayout>
               </Menu.Item>
-            </div>
-          )}
+            )}
+              <Menu.Item
+                as={Link}
+                color="teal"
+                name="customization"
+                active={activeItem === '/customization'}
+                to="/customization"
+                style={subMenuItemStyles}
+                onClick={mobileCollapse}
+              >
+                <MobileDisabledLayout>Personal Customization</MobileDisabledLayout>
+              </Menu.Item>
 
-          <Menu.Item as={Link} color="teal" name="profile" active={activeItem === '/profile'} to="/profile" style={menuItemStyles} onClick={mobileCollapse}>
-            <MobileDisabledLayout>
-              <FontAwesomeIcon icon="user" className="iconWithStyle" /> Profile
-            </MobileDisabledLayout>
-          </Menu.Item>
-          <Menu.Item as={Link} color="teal" name="settings" active={activeItem === '/settings'} to="/settings" style={menuItemStyles} onClick={mobileCollapse}>
-            <MobileDisabledLayout>
-              <FontAwesomeIcon icon="cog" className="iconWithStyle" /> Settings
-            </MobileDisabledLayout>
-          </Menu.Item>
-          {!selectedPeerId && (
-            <Menu.Item
-              as={Link}
-              color="teal"
-              name="billing"
-              active={activeItem === '/billing'}
-              to="/billing"
-              style={menuItemStyles}
-              onClick={() => {
-                if (moblileVisible) {
-                  setMobileVisible(false);
-                }
-              }}
-            >
-              <MobileDisabledLayout>
-                <FontAwesomeIcon icon="credit-card" className="iconWithStyle" /> Billing
-              </MobileDisabledLayout>
-            </Menu.Item>
-          )}
+              <Menu.Item
+                as={Link}
+                color="teal"
+                name="profile"
+                active={activeItem === '/profile'}
+                to="/profile"
+                style={subMenuItemStyles}
+                onClick={mobileCollapse}
+              >
+                <MobileDisabledLayout>Profile</MobileDisabledLayout>
+              </Menu.Item>
+
+              {!selectedPeerId && (
+                <Menu.Item
+                  as={Link}
+                  color="teal"
+                  name="billing"
+                  active={activeItem === '/billing'}
+                  to="/billing"
+                  style={subMenuItemBillingStyle }
+                  onClick={() => {
+                    if (moblileVisible) {
+                      setMobileVisible(false);
+                    }
+                  }}
+                >
+                  <MobileDisabledLayout>Billing</MobileDisabledLayout>
+                </Menu.Item>
+              )}
+            </Menu.Menu>
+          </div>
         </NavigationLayout>
       </Dimmer.Dimmable>
     </SideNaveToggle>

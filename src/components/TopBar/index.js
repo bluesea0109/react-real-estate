@@ -14,14 +14,14 @@ import { Dropdown, Popup, Header } from 'semantic-ui-react';
 import './styles.scss';
 
 const StyledUserSelectorDropdown = styled(Dropdown)`
-  min-width: 8.3em !important;
-  max-width: 8.3em !important;
   height: 40px;
   border-radius: 20px;
+  max-width:400px;
 `;
 const StyledHeader = styled(Header)`
   min-width: max-content !important;
   display: inline-block;
+  margin-top: 0px;
 `;
 
 const logoutIcon = {
@@ -151,14 +151,18 @@ export default ({ auth0 }) => {
         value: profile.userId,
         image: imageProp,
         content: (
-          <StyledHeader as="h4" ref={contextRef} style={{ marginTop: '7px' }}>
+          <StyledHeader as="h4" ref={contextRef}>
             {imageProp === null ? <Initials firstName={profile.first} lastName={profile.last} /> : null}
             &nbsp; &nbsp;
             {profile.first}&nbsp;
             {profile.last}&nbsp;
             {profile.permissions && profile.permissions.teamAdmin ? '(Admin)' : '(Agent)'}&nbsp;
+            <span>
             {currentUser ? currentUserIconWithPopup : null}
+            </span>
+            <span>
             {setupComplete ? setupCompletedIconWithPopup : null}
+            </span>
           </StyledHeader>
         ),
       });
