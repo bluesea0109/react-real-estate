@@ -120,7 +120,7 @@ export default ({ auth0 }) => {
     },
   ];
 
-  if (teammates.length > 0) {
+  if (teammates && teammates.length > 0) {
     teammates.map((profile, index) => {
       const setupComplete = profile.doc.setupComplete;
       const currentUser = profile.userId === loggedInUser._id;
@@ -130,13 +130,13 @@ export default ({ auth0 }) => {
       const currentUserIconWithPopup = <Popup context={contextRef} content="Currently logged in user" trigger={<Icon name="user" />} />;
       const setupCompletedIconWithPopup = <Popup context={contextRef} content="Setup Completed" trigger={<Icon name="check circle" color="teal" />} />;
       const realtorPhoto = profile.realtorPhoto;
-      let imageProp = realtorPhoto.length ? { avatar: true, src: realtorPhoto } : null;
+      let imageProp = realtorPhoto && realtorPhoto.length ? { avatar: true, src: realtorPhoto } : null;
 
       return profiles.push({
         key: index + 1,
         text: (
           <span style={{ display: 'flex' }}>
-            {realtorPhoto.length ? (
+            {realtorPhoto && realtorPhoto.length ? (
               <>
                 <span style={dropdownPicStyle}>
                   <img src={realtorPhoto} alt="Brivity Marketer" />
