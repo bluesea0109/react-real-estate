@@ -41,7 +41,7 @@ const logoutButton = {
 
 const logoutText = {
   marginTop: '7px',
-  marginLeft: '19px',
+  marginLeft: '12px',
   fontWeight: '600',
   fontSize: '16px',
   color: '#3B3B3B',
@@ -144,7 +144,10 @@ export default ({ auth0 }) => {
                 <p style={{ marginTop: '6px', marginLeft: '11px' }}> {profile.first}</p>
               </>
             ) : (
+              <>
               <Initials firstName={profile.first} lastName={profile.last} />
+              <p style={{marginTop: '6px', marginLeft: '11px'}}>{profile.first}</p>
+              </>
             )}
           </span>
         ),

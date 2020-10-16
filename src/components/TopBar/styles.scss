@@ -50,6 +50,7 @@
 
 .ui.mini.image {
   width: 32px;
+  margin-right:1px;
 }
 
 .button:hover {
@@ -85,6 +86,11 @@
 .ui.dropdown .menu{
   min-width:max-content !important;
 }
+
 .ui.selection.active.dropdown .menu{
   min-width:max-content !important;
+}
+
+.ui.dropdown .menu>.item>.image{
+  margin-right:0px;
 }

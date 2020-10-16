@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="19px" viewBox="0 0 18 19" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Group</title>
+    <g id="Marketer-+-Ads" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Nav-Expanded-Hover-Onboarding" transform="translate(-20.000000, -70.000000)" fill-rule="nonzero">
+            <g id="Group" transform="translate(20.000000, 70.285696)">
+                <path d="M8.57143879,17.1428776 C13.3035873,17.1428776 17.1428776,13.3035873 17.1428776,8.57143879 C17.1428776,3.83929029 13.3035873,0 8.57143879,0 C3.83929029,0 0,3.83929029 0,8.57143879 C0,13.3035873 3.83929029,17.1428776 8.57143879,17.1428776 Z" id="step1Path" fill="#666666"></path>
+                <path d="M9.95703125,12.7143044 L9.95703125,4.1478982 L8.46875,4.1478982 L5.70898438,6.34516382 L6.58203125,7.43500757 L7.56640625,6.64399195 C7.68359375,6.55024195 7.89257812,6.35297632 8.19335938,6.05219507 L8.19335938,6.05219507 L8.1640625,6.94282007 L8.14648438,7.7572732 L8.14648438,12.7143044 L9.95703125,12.7143044 Z" id="1" fill="#FFFFFF"></path>
+            </g>
+        </g>
+    </g>
+</svg>
