@@ -11,12 +11,16 @@ import { Dimmer, Menu, Initials, Icon, Step } from './Base';
 import SideNaveToggle from './SideNaveToggle';
 import './SideNaveToggle/styles.scss';
 import {ReactComponent as Cog} from "../assets/cog.svg";
+import {ReactComponent as Icon1} from "../assets/1-icon.svg";
+import {ReactComponent as Icon2} from "../assets/2-icon.svg";
+import {ReactComponent as Icon3} from "../assets/3-icon.svg";
+import {ReactComponent as Icon4} from "../assets/4-icon.svg";
 
 const sidebarTextStyle = {
-  fontSize: '1em',
+  fontSize: '16px',
   width: '100%',
-  marginLeft: '-.5em',
-  backgroundColor: 'white',
+  marginLeft: '16px',
+  marginTop:'-3px',
 };
 
 const menuItemStyles = {
@@ -155,18 +159,19 @@ export default () => {
   if (loadingCompleted && !onboarded) {
     if (multiUser && isAdmin) {
       return (
+        <SideNaveToggle moblileVisible={moblileVisible} setMobileVisible={setMobileVisible} toggle={toggle} setToggle={setToggle}>
         <StepsLayout vertical={!mql.matches}>
           <StepLayout active={onProfile} completed={completedProfile}>
-            <Icon name="user" />
+            <Icon1 id="num1"/>
             {mql.matches ? null : (
               <Step.Content>
-                <Step.Title style={sidebarTextStyle}>Fill in your profile</Step.Title>
+                <Step.Title style={sidebarTextStyle}>Profile</Step.Title>
               </Step.Content>
             )}
           </StepLayout>
 
           <StepLayout active={onTeamCustomization} completed={completedTeamCustomization}>
-            <Icon name="paint brush" />
+            <Icon2 id="num2"/>
             {mql.matches ? null : (
               <Step.Content>
                 <Step.Title style={sidebarTextStyle}>Customize Team</Step.Title>
@@ -175,7 +180,7 @@ export default () => {
           </StepLayout>
 
           <StepLayout active={onCustomization} completed={completedCustomization}>
-            <Icon name="paint brush" />
+            <Icon3 id="num3"/>
             {mql.matches ? null : (
               <Step.Content>
                 <Step.Title style={sidebarTextStyle}>Customize</Step.Title>
@@ -184,7 +189,7 @@ export default () => {
           </StepLayout>
 
           <StepLayout active={onInviteTeammates} completed={completedInviteTeammates}>
-            <Icon name="cog" />
+            <Icon4 id="num4"/>
             {mql.matches ? null : (
               <Step.Content>
                 <Step.Title style={sidebarTextStyle}>Invite Teammates</Step.Title>
@@ -192,9 +197,11 @@ export default () => {
             )}
           </StepLayout>
         </StepsLayout>
+        </SideNaveToggle>
       );
     } else {
       return (
+        <SideNaveToggle moblileVisible={moblileVisible} setMobileVisible={setMobileVisible} toggle={toggle} setToggle={setToggle}>
         <StepsLayout vertical={!mql.matches}>
           <StepLayout active={onProfileSingleUser} completed={completedProfile}>
             <Icon name="user" />
@@ -214,6 +221,7 @@ export default () => {
             )}
           </StepLayout>
         </StepsLayout>
+        </SideNaveToggle>
       );
     }
   }
