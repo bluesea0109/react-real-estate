@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export default styled.div`
   grid-area: sidebar;
   position: fixed;
-  top: 65px;
+  top: 61px;
   z-index: 20;
 
   @media (min-width: 770px) {

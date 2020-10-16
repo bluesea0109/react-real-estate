@@ -55,7 +55,7 @@ const dropdownPicStyle = {
   width: '32px',
 };
 const mql = window.matchMedia('(max-width: 599px)');
-const menuSpacing = () => (mql.matches ? {} : { marginLeft: '.5em' });
+const menuSpacing = () => (mql.matches ? {} : { marginLeft: '.5em', padding:'0px 14px' });
 
 export default ({ auth0 }) => {
   const history = useHistory();
@@ -69,6 +69,7 @@ export default ({ auth0 }) => {
 
   const onLoginMode = useSelector(store => store.onLogin.mode);
   const multiUser = onLoginMode === 'multiuser';
+  const completedInviteTeammates = useSelector(store => store.onboarded.completedInviteTeammates);
 
   useEffect(() => {
     if (loggedInUser && !activeUser) {
@@ -180,7 +181,7 @@ export default ({ auth0 }) => {
       <Menu.Menu position="right">
         {auth0.authenticated && (
           <Fragment>
-            {multiUser && (
+            {(multiUser && completedInviteTeammates) && (
               <Menu.Item style={menuSpacing()}>
                 <StyledUserSelectorDropdown
                   className="activeDropdown"
