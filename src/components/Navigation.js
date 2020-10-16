@@ -154,8 +154,6 @@ export default () => {
   const onProfileSingleUser = !completedProfile;
   const onCustomizationSingleUser = !completedCustomization && completedProfile;
 
-  console.log('COMPLETED', completedInviteTeammates)
-
   if (!loadingCompleted) return null;
 
   if (loadingCompleted && !onboarded) {
