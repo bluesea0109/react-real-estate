@@ -162,7 +162,7 @@ export default () => {
         <SideNaveToggle moblileVisible={moblileVisible} setMobileVisible={setMobileVisible} toggle={toggle} setToggle={setToggle}>
         <StepsLayout vertical={!mql.matches}>
           <StepLayout active={onProfile} completed={completedProfile}>
-            <Icon1 id="num1"/>
+            <Icon1/>
             {mql.matches ? null : (
               <Step.Content>
                 <Step.Title style={sidebarTextStyle}>Profile</Step.Title>
@@ -171,7 +171,7 @@ export default () => {
           </StepLayout>
 
           <StepLayout active={onTeamCustomization} completed={completedTeamCustomization}>
-            <Icon2 id="num2"/>
+            <Icon2/>
             {mql.matches ? null : (
               <Step.Content>
                 <Step.Title style={sidebarTextStyle}>Customize Team</Step.Title>
@@ -180,7 +180,7 @@ export default () => {
           </StepLayout>
 
           <StepLayout active={onCustomization} completed={completedCustomization}>
-            <Icon3 id="num3"/>
+            <Icon3/>
             {mql.matches ? null : (
               <Step.Content>
                 <Step.Title style={sidebarTextStyle}>Customize</Step.Title>
@@ -189,7 +189,7 @@ export default () => {
           </StepLayout>
 
           <StepLayout active={onInviteTeammates} completed={completedInviteTeammates}>
-            <Icon4 id="num4"/>
+            <Icon4/>
             {mql.matches ? null : (
               <Step.Content>
                 <Step.Title style={sidebarTextStyle}>Invite Teammates</Step.Title>
@@ -207,7 +207,7 @@ export default () => {
             <Icon name="user" />
             {mql.matches ? null : (
               <Step.Content>
-                <Step.Title style={sidebarTextStyle}>Fill in your profile</Step.Title>
+                <Step.Title style={sidebarTextStyle}>Profile</Step.Title>
               </Step.Content>
             )}
           </StepLayout>
