@@ -16,7 +16,6 @@ import { getMailoutPending } from '../store/modules/mailout/actions';
 import PopupMinMax from '../components/MailoutListItem/PopupMinMax';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import PageTitleHeader from '../components/PageTitleHeader';
-import { min1200Width } from '../components/utils';
 import GoogleMapItem from '../components/Forms/PolygonGoogleMaps/GoogleMapItem';
 import FlipCard from '../components/FlipCard';
 import Loading from '../components/Loading';
@@ -30,6 +29,7 @@ import {
   ItemLayout,
 } from '../layouts';
 import { useIsMobile } from '../components/Hooks/useIsMobile';
+import { useWindowSize } from '../components/Hooks/useWindowSize';
 
 const useFetching = (getActionCreator, dispatch, mailoutId) => {
   useEffect(() => {
@@ -39,6 +39,7 @@ const useFetching = (getActionCreator, dispatch, mailoutId) => {
 
 const MailoutDetailsPage = () => {
   const isMobile = useIsMobile();
+  const windowSize = useWindowSize();
   const history = useHistory();
   const dispatch = useDispatch();
   const { mailoutId } = useParams();
@@ -70,6 +71,9 @@ const MailoutDetailsPage = () => {
   const listingDefaults = teamCustomization && teamCustomization[listingType];
   const mailoutSizeMin = listingDefaults && listingDefaults.mailoutSizeMin;
   const mailoutSizeMax = listingDefaults && listingDefaults.mailoutSizeMax;
+  const min1200Width = windowSize.width > 1200;
+
+  console.log(`min1200Width: ${min1200Width}`)
 
   const peerId = useSelector(store => store.peer.peerId);
 
@@ -346,7 +350,7 @@ const MailoutDetailsPage = () => {
                   </ContentBottomHeaderLayout>
 
                   <ItemBodyLayoutV2 attached style={isMobile ? { padding: 0, marginTop: '173px' } : { padding: 0, marginTop: '89px' }}>
-                    <ItemBodyIframeLayout horizontal={min1200Width()} style={{ border: 'none', boxShadow: 'none' }}>
+                    <ItemBodyIframeLayout horizontal={min1200Width} style={{ border: 'none', boxShadow: 'none' }}>
                       <FrontIframe />
                       <BackIframe />
                     </ItemBodyIframeLayout>
