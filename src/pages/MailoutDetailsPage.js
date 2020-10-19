@@ -21,7 +21,6 @@ import FlipCard from '../components/FlipCard';
 import Loading from '../components/Loading';
 import {
   ContentBottomHeaderLayout,
-  ContentSpacerLayout,
   ContentTopHeaderLayout,
   ItemBodyDataLayout,
   ItemBodyIframeLayout,
@@ -291,9 +290,6 @@ const MailoutDetailsPage = () => {
         </PageTitleHeader>
         {pendingState && !error && <Loading />}
       </ContentTopHeaderLayout>
-
-      <ContentSpacerLayout />
-
       <Modal open={showConsentModal} onClose={() => setShowConsentModal(false)} basic size="small">
         <Modal.Header>
           Preview

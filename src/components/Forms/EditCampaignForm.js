@@ -7,7 +7,7 @@ import { Dropdown, Form, Header, Label, Popup, Checkbox } from 'semantic-ui-reac
 
 import auth from '../../services/auth';
 import api from '../../services/api';
-import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
+import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import { changeMailoutDisplayAgentPending, updateMailoutEditPending } from '../../store/modules/mailout/actions';
 import { differenceObjectDeep, maxLength, objectIsEmpty, sleep } from '../utils';
 import { Button, Icon, Image, Menu, Message, Page, Segment, Snackbar } from '../Base';
@@ -439,8 +439,6 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           </Menu>
         </PageTitleHeader>
       </ContentTopHeaderLayout>
-
-      <ContentSpacerLayout />
 
       {error && <Snackbar error>{error}</Snackbar>}
 
