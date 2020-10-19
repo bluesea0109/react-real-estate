@@ -7,10 +7,13 @@ import React, { useCallback, useState } from 'react';
 import { iframeTransformMobile, iframeLinkStyle } from '../helpers';
 import { ItemBodyIframeLayout } from '../../layouts';
 import ApiService from '../../services/api/index';
-import { isMobile } from '../utils';
 import { Image } from '../Base';
+import { useIsMobile } from '../Hooks/useIsMobile';
 
 const IframeGroup = ({ index, item, linkTo = null }) => {
+
+  const isMobile = useIsMobile();
+
   const peerId = useSelector(store => store.peer.peerId);
 
   const [frontLoaded, setFrontLoaded] = useState(false);
@@ -56,7 +59,7 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
 
   if (linkTo) {
     return (
-      <ItemBodyIframeLayout horizontal={!isMobile()} style={{ border: 'none', boxShadow: 'none' }} id={`mailout-iframe-set-${index}`}>
+      <ItemBodyIframeLayout horizontal={!isMobile} style={{ border: 'none', boxShadow: 'none' }} id={`mailout-iframe-set-${index}`}>
       {item.frontResourceUrl && (
         <Segment textAlign="center" style={{ border: 'none' }}>
 
@@ -107,7 +110,7 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
     );
   } else {
     return (
-      <ItemBodyIframeLayout horizontal={!isMobile()} style={{ border: 'none', boxShadow: 'none' }} id={`mailout-iframe-set-${index}`}>
+      <ItemBodyIframeLayout horizontal={!isMobile} style={{ border: 'none', boxShadow: 'none' }} id={`mailout-iframe-set-${index}`}>
         <Segment textAlign="center" loading={!item?._id || !frontLoaded} style={{ border: 'none' }}>
           <div style={{ width: '300px', height: '204px', overflow: 'hidden' }}>
             <iframe

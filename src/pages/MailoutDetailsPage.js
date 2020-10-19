@@ -16,7 +16,7 @@ import { getMailoutPending } from '../store/modules/mailout/actions';
 import PopupMinMax from '../components/MailoutListItem/PopupMinMax';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import PageTitleHeader from '../components/PageTitleHeader';
-import { isMobile, min1200Width } from '../components/utils';
+import { min1200Width } from '../components/utils';
 import GoogleMapItem from '../components/Forms/PolygonGoogleMaps/GoogleMapItem';
 import FlipCard from '../components/FlipCard';
 import Loading from '../components/Loading';
@@ -29,6 +29,7 @@ import {
   ItemBodyLayoutV2,
   ItemLayout,
 } from '../layouts';
+import { useIsMobile } from '../components/Hooks/useIsMobile';
 
 const useFetching = (getActionCreator, dispatch, mailoutId) => {
   useEffect(() => {
@@ -37,6 +38,7 @@ const useFetching = (getActionCreator, dispatch, mailoutId) => {
 };
 
 const MailoutDetailsPage = () => {
+  const isMobile = useIsMobile();
   const history = useHistory();
   const dispatch = useDispatch();
   const { mailoutId } = useParams();
@@ -92,7 +94,7 @@ const MailoutDetailsPage = () => {
 
       body.style.overflow = 'hidden';
       body.style['pointer-events'] = 'none';
-      body.style.transform = isMobile() ? iframeTransformMobile : iframeTransformDesktop;
+      body.style.transform = isMobile ? iframeTransformMobile : iframeTransformDesktop;
 
       if (name === 'front') {
         setFrontLoaded(true);
@@ -102,7 +104,7 @@ const MailoutDetailsPage = () => {
         setBackLoaded(true);
       }
     },
-    [setFrontLoaded, setBackLoaded]
+    [setFrontLoaded, setBackLoaded, isMobile]
   );
 
   useEffect(() => {
@@ -235,8 +237,8 @@ const MailoutDetailsPage = () => {
           title={`bm-iframe-front-${details._id}`}
           name="front"
           src={frontURL}
-          width={isMobile() ? '300' : '588'}
-          height={isMobile() ? '204' : '400'}
+          width={isMobile ? '300' : '588'}
+          height={isMobile ? '204' : '400'}
           frameBorder="0"
           sandbox="allow-same-origin allow-scripts"
           onLoad={handleOnload}
@@ -255,8 +257,8 @@ const MailoutDetailsPage = () => {
         title={`bm-iframe-back-${details._id}`}
         name="back"
         src={backURL}
-        width={isMobile() ? '300' : '588'}
-        height={isMobile() ? '204' : '400'}
+        width={isMobile ? '300' : '588'}
+        height={isMobile ? '204' : '400'}
         frameBorder="0"
         sandbox="allow-same-origin allow-scripts"
         onLoad={handleOnload}
@@ -323,13 +325,13 @@ const MailoutDetailsPage = () => {
       </Modal>
 
       {!DestinationCalculation && (
-      <Segment style={isMobile() ? { marginTop: '-1rem', marginLeft: '-1rem', marginRight: '-1rem' } : { marginTop: '34px' }}>
+      <Segment style={isMobile ? { marginTop: '-1rem', marginLeft: '-1rem', marginRight: '-1rem' } : { marginTop: '34px' }}>
         <Grid>
           <Grid.Row>
             <Grid.Column width={16}>
               {!pendingState && !error && details && (
-                <ItemLayout fluid key={details._id} className={isMobile() ? 'remove-margins' : undefined}>
-                  <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
+                <ItemLayout fluid key={details._id} className={isMobile ? 'remove-margins' : undefined}>
+                  <ContentBottomHeaderLayout style={isMobile ? { marginTop: '60px' } : {}}>
                     {
                       <ListHeader
                         data={details}
@@ -343,7 +345,7 @@ const MailoutDetailsPage = () => {
                     }
                   </ContentBottomHeaderLayout>
 
-                  <ItemBodyLayoutV2 attached style={isMobile() ? { padding: 0, marginTop: '173px' } : { padding: 0, marginTop: '89px' }}>
+                  <ItemBodyLayoutV2 attached style={isMobile ? { padding: 0, marginTop: '173px' } : { padding: 0, marginTop: '89px' }}>
                     <ItemBodyIframeLayout horizontal={min1200Width()} style={{ border: 'none', boxShadow: 'none' }}>
                       <FrontIframe />
                       <BackIframe />

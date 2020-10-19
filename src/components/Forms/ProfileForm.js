@@ -9,10 +9,11 @@ import { Divider, Header, Icon, Image, Menu, Page, Segment, Snackbar } from '../
 import { saveTeamProfilePending } from '../../store/modules/teamProfile/actions';
 import { saveProfilePending } from '../../store/modules/profile/actions';
 import { Button, Dropdown, FileUpload, Form, Input } from './Base';
-import { isMobile, phoneRegExp, popup, tag } from '../utils';
+import { phoneRegExp, popup, tag } from '../utils';
 import { ContentTopHeaderLayout } from '../../layouts';
 import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
+import { useIsMobile } from '../Hooks/useIsMobile';
 
 const changeMsg = 'This information comes from Brivity CRM. If you want to modify this information, you need to do it there.';
 
@@ -53,6 +54,9 @@ const initialValues = {
 };
 
 const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
+
+  const isMobile = useIsMobile();
+
   const dispatch = useDispatch();
   const boards = useSelector(store => store.boards.available);
   const states = useSelector(store => store.states.available);
@@ -362,7 +366,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
               <Snackbar error>The data on the page has changed and the save has failed. Please reload to get the latest data.</Snackbar>
             )}
 
-            <Segment style={isMobile() ? { marginTop: '6em' } : { marginTop: '22px' }}>
+            <Segment style={isMobile ? { marginTop: '6em' } : { marginTop: '22px' }}>
               <Header as="h2">
                 Personal
                 {selectedPeerId ? (
@@ -376,7 +380,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
 
               <div
                 style={
-                  isMobile()
+                  isMobile
                     ? {}
                     : {
                         display: 'grid',
@@ -399,7 +403,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                   tag={tag('Required')}
                 />
 
-                {isMobile() ? null : (
+                {isMobile ? null : (
                   <div style={{ gridArea: 'Picture' }}>
                     <Image size="large" src={require('../../assets/onboard-profile.png')} alt="Brivity Marketer Mailout" />
                   </div>
@@ -474,7 +478,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                       {values.boards &&
                         values.boards.map((board, index) => (
                           <Segment basic key={index} style={{ paddingTop: 0, paddingBottom: 0 }}>
-                            <div style={isMobile() ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 45px', gridColumnGap: '2em' }}>
+                            <div style={isMobile ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 45px', gridColumnGap: '2em' }}>
                               <Form.Group widths="2">
                                 <Dropdown label="MLS" name={`boards[${index}].name`} options={boards} tag={tag('Required')} />
                                 <Input label="MLS Agent ID" name={`boards.${index}.mlsId`} tag={tag('Required')} />
@@ -485,7 +489,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                                 inverted
                                 icon
                                 onClick={() => arrayHelpers.remove(index)}
-                                style={isMobile() ? { cursor: 'pointer' } : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }}
+                                style={isMobile ? { cursor: 'pointer' } : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }}
                                 aria-label="remove mls"
                               >
                                 <Icon name="trash" />
@@ -515,7 +519,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
 
                 <div
                   style={
-                    isMobile()
+                    isMobile
                       ? {}
                       : {
                           display: 'grid',

@@ -9,8 +9,8 @@ import IframeGroup from '../components/MailoutListItem/IframeGroup';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ItemList from '../components/MailoutListItem/ItemList';
 import PageTitleHeader from '../components/PageTitleHeader';
-import { isMobile } from '../components/utils';
 import Loading from '../components/Loading';
+import { useIsMobile } from '../components/Hooks/useIsMobile';
 
 const useFetching = (getActionCreator, onboarded, dispatch) => {
   useEffect(() => {
@@ -23,6 +23,7 @@ const useFetching = (getActionCreator, onboarded, dispatch) => {
 };
 
 const Archive = () => {
+  const isMobile = useIsMobile();
   const dispatch = useDispatch();
   const isInitiatingTeam = useSelector(store => store.teamInitialize.polling);
   const initiatingTeamState = useSelector(store => store.teamInitialize.available);
@@ -128,19 +129,19 @@ const Archive = () => {
       </ContentTopHeaderLayout>
 
       {isInitiatingTeam && (
-        <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
+        <ContentBottomHeaderLayout style={isMobile ? { marginTop: '60px' } : {}}>
           <Progress value={currentTeamUserCompleted} total={currentTeamUserTotal} progress="ratio" inverted success size="tiny" />
         </ContentBottomHeaderLayout>
       )}
 
       {isInitiatingUser && (
-        <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
+        <ContentBottomHeaderLayout style={isMobile ? { marginTop: '60px' } : {}}>
           <Progress value={currentUserCompleted} total={currentUserTotal} progress="ratio" inverted success size="tiny" />
         </ContentBottomHeaderLayout>
       )}
 
       {!isInitiatingTeam && !isInitiatingUser && !mailoutsPendingState && mailoutList.length === 0 && (
-        <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
+        <ContentBottomHeaderLayout style={isMobile ? { marginTop: '60px' } : {}}>
           <Segment placeholder style={{ marginRight: '-1em' }}>
             <Header icon>
               <Icon name="file outline" />

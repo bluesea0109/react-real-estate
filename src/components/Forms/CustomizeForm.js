@@ -7,7 +7,7 @@ import { saveListedShortcodePending, saveSoldShortcodePending } from '../../stor
 import { saveCustomizationPending } from '../../store/modules/customization/actions';
 import { ContentTopHeaderLayout } from '../../layouts';
 import { Button, Menu, Page, Segment } from '../Base';
-import { isMobile, objectIsEmpty } from '../utils';
+import { objectIsEmpty } from '../utils';
 import { Form } from './Base';
 
 import PageTitleHeader from '../PageTitleHeader';
@@ -23,6 +23,7 @@ import TemplatePictureFormField from './Common/TemplatePictureFormField';
 import EnableCustomizationSwitch from './Common/EnableCustomizationSwitch';
 import MailoutSizeSliderFormField from './Common/MailoutSizeSliderFormField';
 import ValidateURLWithoutRerender from './Common/ValidateURLWithoutRerender';
+import { useIsMobile } from '../Hooks/useIsMobile';
 
 const formReducer = (state, action) => {
   return _.merge({}, action);
@@ -31,6 +32,9 @@ const formReducer = (state, action) => {
 const NEW_LISTING = 'listed';
 
 const CustomizeForm = ({ customizationData, initialValues }) => {
+
+  const isMobile = useIsMobile();
+
   const dispatch = useDispatch();
   const formRef = useRef();
 
@@ -163,8 +167,8 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
 
             <Segment
               padded
-              className={isMobile() ? null : 'primary-grid-container'}
-              style={isMobile() ? {} : { gridTemplateRows: 'unset', gridTemplateAreas: 'unset' }}
+              className={isMobile ? null : 'primary-grid-container'}
+              style={isMobile ? {} : { gridTemplateRows: 'unset', gridTemplateAreas: 'unset' }}
             >
               <div>
                 <Header as="h5" style={{ opacity: !editable ? 0.4 : 1 }}>
@@ -186,12 +190,12 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
               <div>{ColorPickerFormField({ listingType, initialValues, formValues, setFormValues })}</div>
             </Segment>
 
-            <Segment padded className={isMobile() ? null : 'tertiary-grid-container'}>
+            <Segment padded className={isMobile ? null : 'tertiary-grid-container'}>
               <div>{AgentDropdownFormField({ listingType, initialValues, formValues, setFormValues })}</div>
 
               <div>{InputFormField({ fieldName: 'frontHeadline', listingType, initialValues, formValues, setFormValues })}</div>
 
-              <div style={{ display: !editable ? 'none' : 'block', paddingTop: isMobile() ? 'unset' : '3.85em' }}>
+              <div style={{ display: !editable ? 'none' : 'block', paddingTop: isMobile ? 'unset' : '3.85em' }}>
                 {KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}
               </div>
 
@@ -260,7 +264,7 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
         </PageTitleHeader>
       </ContentTopHeaderLayout>
 
-      <Segment style={isMobile() ? { marginTop: '155px' } : { marginTop: '22px' }}>
+      <Segment style={isMobile ? { marginTop: '155px' } : { marginTop: '22px' }}>
         <Menu pointing secondary>
           <Menu.Item
             name="newListing"

@@ -7,11 +7,12 @@ import { previewCustomizationCompleted, reviewCustomizationCompleted } from '../
 import { iframeTransformDesktop, iframeTransformMobile } from '../../helpers';
 import { Button, Icon, Modal } from '../../Base';
 import ApiService from '../../../services/api';
-import { isMobile } from '../../utils';
 import FlipCard from '../../FlipCard';
 import Loading from '../../Loading';
+import { useIsMobile } from '../../Hooks/useIsMobile';
 
 const RenderPreviewModal = ({ formType, formValues }) => {
+  const isMobile = useIsMobile();
   const dispatch = useDispatch();
 
   const [isFlipped, setIsFlipped] = useState(false);
@@ -83,7 +84,7 @@ const RenderPreviewModal = ({ formType, formValues }) => {
 
       body.style.overflow = 'hidden';
       body.style['pointer-events'] = 'none';
-      body.style.transform = isMobile() ? iframeTransformMobile : iframeTransformDesktop;
+      body.style.transform = isMobile ? iframeTransformMobile : iframeTransformDesktop;
 
       if (name === 'listed-front') {
         setListedFrontLoaded(true);
@@ -99,7 +100,7 @@ const RenderPreviewModal = ({ formType, formValues }) => {
         setSoldBackLoaded(true);
       }
     },
-    [setListedFrontLoaded, setListedBackLoaded, setSoldFrontLoaded, setSoldBackLoaded]
+    [setListedFrontLoaded, setListedBackLoaded, setSoldFrontLoaded, setSoldBackLoaded, isMobile]
   );
 
   useEffect(() => {
@@ -189,8 +190,8 @@ const RenderPreviewModal = ({ formType, formValues }) => {
                   title={`bm-iframe-listed-front-${formType}`}
                   name="listed-front"
                   src={listedPostcardFrontURL}
-                  width={isMobile() ? '300' : '600'}
-                  height={isMobile() ? '204' : '408'}
+                  width={isMobile ? '300' : '600'}
+                  height={isMobile ? '204' : '408'}
                   frameBorder="0"
                   sandbox="allow-same-origin allow-scripts"
                   onLoad={handleOnload}
@@ -204,8 +205,8 @@ const RenderPreviewModal = ({ formType, formValues }) => {
                   title={`bm-iframe-listed-back-${formType}`}
                   name="listed-back"
                   src={listedPostcardBackURL}
-                  width={isMobile() ? '300' : '600'}
-                  height={isMobile() ? '204' : '408'}
+                  width={isMobile ? '300' : '600'}
+                  height={isMobile ? '204' : '408'}
                   frameBorder="0"
                   sandbox="allow-same-origin allow-scripts"
                   onLoad={handleOnload}
@@ -223,8 +224,8 @@ const RenderPreviewModal = ({ formType, formValues }) => {
                   title={`bm-iframe-sold-front-${formType}`}
                   name="sold-front"
                   src={soldPostcardFrontURL}
-                  width={isMobile() ? '300' : '600'}
-                  height={isMobile() ? '204' : '408'}
+                  width={isMobile ? '300' : '600'}
+                  height={isMobile ? '204' : '408'}
                   frameBorder="0"
                   sandbox="allow-same-origin allow-scripts"
                   onLoad={handleOnload}
@@ -238,8 +239,8 @@ const RenderPreviewModal = ({ formType, formValues }) => {
                   title={`bm-iframe-sold-back-${formType}`}
                   name="sold-back"
                   src={soldPostcardBackURL}
-                  width={isMobile() ? '300' : '600'}
-                  height={isMobile() ? '204' : '408'}
+                  width={isMobile ? '300' : '600'}
+                  height={isMobile ? '204' : '408'}
                   frameBorder="0"
                   sandbox="allow-same-origin allow-scripts"
                   onLoad={handleOnload}
