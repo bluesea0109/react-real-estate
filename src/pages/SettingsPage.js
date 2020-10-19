@@ -102,7 +102,7 @@ const SettingsPage = () => {
         </PageTitleHeader>
       </ContentTopHeaderLayout>
 
-      <div style={isMobile() ? { marginTop: '80px' } : { marginTop: '85px' }}>
+      <div style={isMobile() ? { marginTop: '80px' } : { marginTop: '22px' }}>
         {renderPasswordChange()}
 
         {multiUser && isAdmin && <InviteTeammatesForm settingsPage={true} />}

@@ -202,7 +202,7 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
     <Page basic>
       <ContentTopHeaderLayout>
         <PageTitleHeader padded>
-          <Menu borderless fluid secondary>
+          <Menu borderless fluid secondary style={{padding:"12px 6px 9px 15px"}}>
             <Header as="h1">
               Team Customization
               <Header.Subheader>
@@ -228,7 +228,7 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
         </PageTitleHeader>
       </ContentTopHeaderLayout>
 
-      <Segment style={isMobile() ? { marginTop: '155px' } : { marginTop: '90px' }}>
+      <Segment style={isMobile() ? { marginTop: '155px' } : { marginTop: '22px' }}>
         <Menu pointing secondary>
           <Menu.Item
             name="newListing"

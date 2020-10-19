@@ -7,7 +7,7 @@ import { Table } from 'semantic-ui-react';
 import { format } from 'date-fns';
 
 import PageTitleHeader from '../components/PageTitleHeader';
-import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout } from '../layouts';
+import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
 import { isMobile } from '../components/utils';
 import auth from '../services/auth';
 import api from '../services/api';
@@ -69,8 +69,7 @@ const BillingPage = () => {
           )}
         </PageTitleHeader>
       </ContentTopHeaderLayout>
-      <ContentSpacerLayout />
-      <div style={isMobile() ? { marginTop: '80px' } : { marginTop: '95px' }}>
+      <div style={isMobile() ? { marginTop: '80px' } : { marginTop: '22px' }}>
         <Segment>
           <ContentBottomHeaderLayout>
             {!billingDetails && <Loading message="Retrieving billing information..." />}
