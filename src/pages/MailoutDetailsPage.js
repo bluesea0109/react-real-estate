@@ -21,7 +21,6 @@ import FlipCard from '../components/FlipCard';
 import Loading from '../components/Loading';
 import {
   ContentBottomHeaderLayout,
-  ContentSpacerLayout,
   ContentTopHeaderLayout,
   ItemBodyDataLayout,
   ItemBodyIframeLayout,
@@ -72,8 +71,6 @@ const MailoutDetailsPage = () => {
   const mailoutSizeMin = listingDefaults && listingDefaults.mailoutSizeMin;
   const mailoutSizeMax = listingDefaults && listingDefaults.mailoutSizeMax;
   const min1200Width = windowSize.width > 1200;
-
-  console.log(`min1200Width: ${min1200Width}`)
 
   const peerId = useSelector(store => store.peer.peerId);
 
@@ -291,9 +288,6 @@ const MailoutDetailsPage = () => {
         </PageTitleHeader>
         {pendingState && !error && <Loading />}
       </ContentTopHeaderLayout>
-
-      <ContentSpacerLayout />
-
       <Modal open={showConsentModal} onClose={() => setShowConsentModal(false)} basic size="small">
         <Modal.Header>
           Preview
