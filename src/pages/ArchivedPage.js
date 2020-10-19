@@ -153,7 +153,7 @@ const Archive = () => {
       {error && <Snackbar error>{error}</Snackbar>}
 
       {mailoutList.length > 0 && (
-        <Segment style={{ marginTop: '79px' }}>
+        <Segment style={{ marginTop: '22px' }}>
           <Grid>
             <Grid.Row>
               <Grid.Column width={16}>

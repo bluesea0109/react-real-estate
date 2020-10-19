@@ -7,7 +7,7 @@ import { Table } from 'semantic-ui-react';
 import { format } from 'date-fns';
 
 import PageTitleHeader from '../components/PageTitleHeader';
-import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout } from '../layouts';
+import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
 import { isMobile } from '../components/utils';
 import auth from '../services/auth';
 import api from '../services/api';
@@ -43,7 +43,12 @@ const BillingPage = () => {
         <Table.Cell>{item.recipientCount}</Table.Cell>
         <Table.Cell>${item.creditsAmountApplied || '0.00'}</Table.Cell>
         <Table.Cell>{item.userProfile.first} {item.userProfile.last}</Table.Cell>
-        <Table.Cell>{item.approvedByUser.first} {item.approvedByUser.last}</Table.Cell>
+        {item.approvedByUser && (
+          <Table.Cell>{item.approvedByUser.first} {item.approvedByUser.last}</Table.Cell>
+        )}
+        {!item.approvedByUser && (
+          <Table.Cell></Table.Cell>
+        )}
         <Table.Cell>${(Number(item.amount_in_cents) + Number(item.tax_amount_in_cents)) / 100}</Table.Cell>
       </Table.Row>
     ));
@@ -64,8 +69,7 @@ const BillingPage = () => {
           )}
         </PageTitleHeader>
       </ContentTopHeaderLayout>
-      <ContentSpacerLayout />
-      <div style={isMobile() ? { marginTop: '80px' } : { marginTop: '95px' }}>
+      <div style={isMobile() ? { marginTop: '80px' } : { marginTop: '22px' }}>
         <Segment>
           <ContentBottomHeaderLayout>
             {!billingDetails && <Loading message="Retrieving billing information..." />}

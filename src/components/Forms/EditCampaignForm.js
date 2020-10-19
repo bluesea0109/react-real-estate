@@ -7,7 +7,7 @@ import { Dropdown, Form, Header, Label, Popup, Checkbox } from 'semantic-ui-reac
 
 import auth from '../../services/auth';
 import api from '../../services/api';
-import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
+import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import { changeMailoutDisplayAgentPending, updateMailoutEditPending } from '../../store/modules/mailout/actions';
 import { differenceObjectDeep, isMobile, maxLength, objectIsEmpty, sleep } from '../utils';
 import { Button, Icon, Image, Menu, Message, Page, Segment, Snackbar } from '../Base';
@@ -133,6 +133,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     // do some checking
+    if (!file) return;
     let ok = false
     if (file.type === 'image/png') ok = true
     if (file.type === 'image/jpeg') ok = true
@@ -435,8 +436,6 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
         </PageTitleHeader>
       </ContentTopHeaderLayout>
 
-      <ContentSpacerLayout />
-
       {error && <Snackbar error>{error}</Snackbar>}
 
       <Segment>
@@ -550,7 +549,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
                   <div id="uploadCoverGroup">
                     <a href="#/ignore" onClick={triggerFileDialog} id="postcardUploadText">Upload new cover photo</a>
                     <br/>
-                    (preferred size: 1875x990)
+                    (preferred size: 1375x990)
                   </div>
                 </div>
               )}

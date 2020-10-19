@@ -406,7 +406,7 @@ const Dashboard = () => {
 
 
       {mailoutList && mailoutList.length > 0 && (
-        <Segment style={isMobile() ? { padding: '0', paddingTop: '4.5em', marginLeft: '-1em', marginRight: '-1em' } : { marginTop: '79px' }}>
+        <Segment style={isMobile() ? { padding: '0', paddingTop: '4.5em', marginLeft: '-1em', marginRight: '-1em' } : { marginTop: '22px' }}>
 
           <Modal open={!seenDashboardModel} basic size='small'>
             <Modal.Header>

@@ -1,3 +1,8 @@
+----------------
+## Release 4.3
+
+Menu styling aligns with the CRM. Move the agent switcher to the top bar.
+
 -----------------
 ## Release 4.0
 
