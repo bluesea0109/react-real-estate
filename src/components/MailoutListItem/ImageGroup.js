@@ -4,11 +4,13 @@ import { Link } from 'react-router-dom';
 
 import { ItemBodyPicturesLayout } from '../../layouts';
 import { Image } from '../Base';
-
-const mql = window.matchMedia('(max-width: 599px)');
-const resizePictures = () => (mql.matches ? { width: '100%' } : { width: '48%' });
+import { useIsMobile } from '../Hooks/useIsMobile';
 
 const ImageGroup = ({ img1src, img2src, linkTo, status }) => {
+  
+  const isMobile = useIsMobile();
+  const resizePictures = () => (isMobile ? { width: '100%' } : { width: '48%' });
+
   if (!img1src || !img2src) return;
 
   if (status === 'archived' || status === 'hide') {
