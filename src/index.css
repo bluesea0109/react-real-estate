@@ -314,6 +314,10 @@ h1 {
   font-size: 1em;
 }
 
+.ui.icon.button {
+  border-radius:50px;
+}
+
 /* Navigation End */
 
 /* Dashboard Start */
