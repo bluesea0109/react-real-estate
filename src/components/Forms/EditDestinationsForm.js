@@ -355,7 +355,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
 
       <Segment>
         <ContentBottomHeaderLayout>
-          <ItemHeaderLayout attached="top" block style={isMobile ? { marginTop: '56px' } : {}}>
+          <ItemHeaderLayout attached="top" block >
             <span style={{ gridArea: 'label' }}>
               <Label
                 size="large"
@@ -392,7 +392,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
           basic
           padded
           className={isMobile ? null : 'primary-grid-container'}
-          style={isMobile ? { marginTop: '140px' } : { padding: 10, marginTop: '120px' }}
+          style={isMobile ? {} : { padding: 10 }}
         ></Segment>
         <Form>
           <Header as="h4">How should destinations be selected?</Header>

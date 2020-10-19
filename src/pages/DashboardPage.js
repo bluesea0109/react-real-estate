@@ -230,19 +230,19 @@ const Dashboard = () => {
       </ContentTopHeaderLayout>
 
       {isInitiatingTeam && (
-        <ContentBottomHeaderLayout style={isMobile ? { marginTop: '60px' } : {}}>
+        <ContentBottomHeaderLayout>
           <Progress value={currentTeamUserCompleted} total={currentTeamUserTotal} progress="ratio" inverted success size="tiny" />
         </ContentBottomHeaderLayout>
       )}
 
       {isInitiatingUser && (
-        <ContentBottomHeaderLayout style={isMobile ? { marginTop: '60px' } : {}}>
+        <ContentBottomHeaderLayout>
           <Progress value={currentUserCompleted} total={currentUserTotal} progress="ratio" inverted success size="tiny" />
         </ContentBottomHeaderLayout>
       )}
 
       {!isInitiatingTeam && !isInitiatingUser && !mailoutsPendingState && mailoutList && mailoutList.length === 0 && (
-        <ContentBottomHeaderLayout style={isMobile ? { marginTop: '60px' } : {}}>
+        <ContentBottomHeaderLayout>
           <Segment placeholder style={{ marginRight: '-1em' }}>
             <Header icon>
               <Icon name="file outline" />

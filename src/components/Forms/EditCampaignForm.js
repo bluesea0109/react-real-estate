@@ -444,7 +444,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
       <Segment>
         <ContentBottomHeaderLayout>
-          <ItemHeaderLayout attached="top" block style={isMobile ? { marginTop: '56px' } : {}}>
+          <ItemHeaderLayout attached="top" block >
             <span style={{ gridArea: 'label' }}>
               <Label
                 size="large"
@@ -497,7 +497,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           basic
           padded
           className={isMobile ? null : 'primary-grid-container'}
-          style={isMobile ? { marginTop: '140px' } : { padding: 10, marginTop: '120px' }}
+          style={isMobile ? {} : { padding: 10}}
         >
           <div>
             <Header as="h4">Template Theme</Header>

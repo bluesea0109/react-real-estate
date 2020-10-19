@@ -13,7 +13,7 @@ export default styled.div`
   z-index: 5;
   width: 100vw;
 
-  @media (max-width: 768px) {
+  @media (max-width: 600px) {
     top: 65px;
     min-width: 101%;
     min-height: 148px;

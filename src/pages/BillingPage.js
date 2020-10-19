@@ -10,12 +10,9 @@ import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
 import auth from '../services/auth';
 import api from '../services/api';
-import { useIsMobile } from '../components/Hooks/useIsMobile';
 
 
 const BillingPage = () => {
-
-  const isMobile = useIsMobile();
 
   const isAdmin = useSelector(store => store.onLogin?.permissions?.teamAdmin);
   const [billingDetails, setBillingDetails] = useState(null)
@@ -72,7 +69,7 @@ const BillingPage = () => {
           )}
         </PageTitleHeader>
       </ContentTopHeaderLayout>
-      <div style={isMobile ? { marginTop: '80px' } : { marginTop: '22px' }}>
+      <div style={{ margin: '20px 0' }}>
         <Segment>
           <ContentBottomHeaderLayout>
             {!billingDetails && <Loading message="Retrieving billing information..." />}

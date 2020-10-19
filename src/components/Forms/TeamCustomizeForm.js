@@ -231,7 +231,7 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
         </PageTitleHeader>
       </ContentTopHeaderLayout>
 
-      <Segment style={isMobile ? { marginTop: '155px' } : { marginTop: '22px' }}>
+      <Segment style={{ marginTop: '22px' }}>
         <Menu pointing secondary>
           <Menu.Item
             name="newListing"

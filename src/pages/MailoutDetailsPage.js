@@ -323,13 +323,13 @@ const MailoutDetailsPage = () => {
       </Modal>
 
       {!DestinationCalculation && (
-      <Segment style={isMobile ? { marginTop: '-1rem', marginLeft: '-1rem', marginRight: '-1rem' } : { marginTop: '34px' }}>
+      <Segment style={{ margin: '20px 0' }}>
         <Grid>
           <Grid.Row>
             <Grid.Column width={16}>
               {!pendingState && !error && details && (
                 <ItemLayout fluid key={details._id} className={isMobile ? 'remove-margins' : undefined}>
-                  <ContentBottomHeaderLayout style={isMobile ? { marginTop: '60px' } : {}}>
+                  <ContentBottomHeaderLayout>
                     {
                       <ListHeader
                         data={details}
@@ -343,7 +343,7 @@ const MailoutDetailsPage = () => {
                     }
                   </ContentBottomHeaderLayout>
 
-                  <ItemBodyLayoutV2 attached style={isMobile ? { padding: 0, marginTop: '173px' } : { padding: 0, marginTop: '89px' }}>
+                  <ItemBodyLayoutV2 attached style={{ marginTop: '20px' }}>
                     <ItemBodyIframeLayout horizontal={min1200Width} style={{ border: 'none', boxShadow: 'none' }}>
                       <FrontIframe />
                       <BackIframe />

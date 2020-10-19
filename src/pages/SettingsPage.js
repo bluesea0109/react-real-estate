@@ -7,10 +7,8 @@ import { passwordReset } from '../store/modules/auth0/actions';
 import PageTitleHeader from '../components/PageTitleHeader';
 import { syncPending } from '../store/modules/team/actions';
 import { ContentTopHeaderLayout } from '../layouts';
-import { useIsMobile } from '../components/Hooks/useIsMobile';
 
 const SettingsPage = () => {
-  const isMobile = useIsMobile();
   const dispatch = useDispatch();
   const passwordResetPending = useSelector(store => store.auth0.passwordResetPending);
   const passwordResetStatus = useSelector(store => store.auth0.passwordResetDetails?.ok);
@@ -103,7 +101,7 @@ const SettingsPage = () => {
         </PageTitleHeader>
       </ContentTopHeaderLayout>
 
-      <div style={isMobile ? { marginTop: '80px' } : { marginTop: '22px' }}>
+      <div style={{ margin: '20px 0' }}>
         {renderPasswordChange()}
 
         {multiUser && isAdmin && <InviteTeammatesForm settingsPage={true} />}

@@ -366,7 +366,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
               <Snackbar error>The data on the page has changed and the save has failed. Please reload to get the latest data.</Snackbar>
             )}
 
-            <Segment style={isMobile ? { marginTop: '6em' } : { marginTop: '22px' }}>
+            <Segment style={{ margin: '20px 0' }}>
               <Header as="h2">
                 Personal
                 {selectedPeerId ? (
@@ -478,7 +478,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                       {values.boards &&
                         values.boards.map((board, index) => (
                           <Segment basic key={index} style={{ paddingTop: 0, paddingBottom: 0 }}>
-                            <div style={isMobile ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 45px', gridColumnGap: '2em' }}>
+                            <div style={isMobile ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 75px', gridColumnGap: '1em' }}>
                               <Form.Group widths="2">
                                 <Dropdown label="MLS" name={`boards[${index}].name`} options={boards} tag={tag('Required')} />
                                 <Input label="MLS Agent ID" name={`boards.${index}.mlsId`} tag={tag('Required')} />
