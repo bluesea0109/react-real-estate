@@ -72,8 +72,6 @@ const MailoutDetailsPage = () => {
   const mailoutSizeMax = listingDefaults && listingDefaults.mailoutSizeMax;
   const min1200Width = windowSize.width > 1200;
 
-  console.log(`min1200Width: ${min1200Width}`)
-
   const peerId = useSelector(store => store.peer.peerId);
 
   const frontURL = peerId
