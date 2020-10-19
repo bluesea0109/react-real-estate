@@ -303,9 +303,9 @@ const MailoutDetailsPage = () => {
         <Modal.Content>
           <Modal.Description style={{ textAlign: 'center' }}>
             <p style={{ margin: 0 }}>I agree to be immediately charged</p>
-            <b style={{ fontSize: '32px' }}>{calculateCost(details && details.recipientCount)}</b>
+            <b style={{ fontSize: '32px' }}>{calculateCost(details && details.recipientCount, details && details.postcardSize ? details.postcardSize : '4x6')}</b>
             <br />
-            <p>$0.59 x {currentNumberOfRecipients}</p>
+            <p>{calculateCost(1, details && details.postcardSize ? details.postcardSize : '4x6')} x {currentNumberOfRecipients}</p>
           </Modal.Description>
         </Modal.Content>
         <Modal.Actions>
@@ -366,8 +366,14 @@ const MailoutDetailsPage = () => {
                       </List.Item>
                       <List.Item>
                         <List.Content>
+                          <List.Header>Size</List.Header>
+                          <List.Description>{`${details.postcardSize ? details.postcardSize : "4x6"}" / ${calculateCost(1, details.postcardSize ? details.postcardSize : '4x6')}`}</List.Description>
+                        </List.Content>
+                      </List.Item>
+                      <List.Item>
+                        <List.Content>
                           <List.Header>Cost</List.Header>
-                          <List.Description>{calculateCost(details.recipientCount)}</List.Description>
+                          <List.Description>{calculateCost(details.recipientCount, details.postcardSize ? details.postcardSize : '4x6')}</List.Description>
                         </List.Content>
                       </List.Item>
                       <List.Item>
