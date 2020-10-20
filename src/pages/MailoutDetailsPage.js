@@ -70,7 +70,6 @@ const MailoutDetailsPage = () => {
   const listingDefaults = teamCustomization && teamCustomization[listingType];
   const mailoutSizeMin = listingDefaults && listingDefaults.mailoutSizeMin;
   const mailoutSizeMax = listingDefaults && listingDefaults.mailoutSizeMax;
-  const min1200Width = windowSize.width > 1200;
 
   const peerId = useSelector(store => store.peer.peerId);
 
