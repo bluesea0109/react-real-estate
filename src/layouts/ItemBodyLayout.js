@@ -6,10 +6,10 @@ export default styled(Segment)`
 
   display: grid;
   grid-template-rows: 1fr;
-  grid-template-columns: [pictures] 2fr [data] 1fr;
+  grid-template-columns: [pictures] 675px [data] 1fr;
   grid-template-areas: 'pictures data';
 
-  @media (max-width: 1040px) {
+  @media (max-width: 1080px) {
     grid-template-columns: 1fr;
     grid-template-areas:
       'pictures'
