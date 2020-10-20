@@ -15,12 +15,9 @@ import { resolveLabelStatus } from '../MailoutListItem/helpers';
 import { StyledHeader, colors } from '../helpers';
 import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
-<<<<<<< HEAD
 import { useIsMobile } from '../Hooks/useIsMobile';
-=======
 import { calculateCost } from '../MailoutListItem/helpers';
 import PostcardSizeButton from './Common/PostcardSizeButton';
->>>>>>> master
 
 const blacklistNames = ['brandColor', 'frontImgUrl', 'agentPicture', 'brokerageLogo', 'teamLogo', 'backUrl', 'frontAgentUrl'];
 

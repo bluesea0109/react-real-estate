@@ -17,12 +17,9 @@ import ListHeader from '../components/MailoutListItem/ListHeader';
 import ItemList from '../components/MailoutListItem/ItemList';
 import PageTitleHeader from '../components/PageTitleHeader';
 import Loading from '../components/Loading';
-<<<<<<< HEAD
 import { useIsMobile } from '../components/Hooks/useIsMobile';
-=======
 import PostcardSizeButton from '../components/Forms/Common/PostcardSizeButton';
 import { calculateCost } from '../components/MailoutListItem/helpers';
->>>>>>> master
 
 const useFetching = (getActionCreator, onboarded, dispatch) => {
   useEffect(() => {

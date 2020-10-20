@@ -23,11 +23,8 @@ import TemplatePictureFormField from './Common/TemplatePictureFormField';
 import EnableCustomizationSwitch from './Common/EnableCustomizationSwitch';
 import MailoutSizeSliderFormField from './Common/MailoutSizeSliderFormField';
 import ValidateURLWithoutRerender from './Common/ValidateURLWithoutRerender';
-<<<<<<< HEAD
 import { useIsMobile } from '../Hooks/useIsMobile';
-=======
 import TemplatePostcardSizeField from './Common/TemplatePostcardSizeField';
->>>>>>> master
 
 const formReducer = (state, action) => {
   return _.merge({}, action);
@@ -199,10 +196,6 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
 
               <div>{InputFormField({ fieldName: 'frontHeadline', listingType, initialValues, formValues, setFormValues })}</div>
 
-<<<<<<< HEAD
-              <div style={{ display: !editable ? 'none' : 'block', paddingTop: isMobile ? 'unset' : '3.85em' }}>
-                {KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}
-=======
               <div style={{
                 display: 'grid',
                 gridTemplateColumns: '1fr',
@@ -216,7 +209,6 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
                 <div style={{ display: !editable ? 'none' : 'block', paddingTop: '1.5em' }}>
                   {KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}
                 </div>
->>>>>>> master
               </div>
 
 
