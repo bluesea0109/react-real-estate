@@ -15,7 +15,12 @@ import { resolveLabelStatus } from '../MailoutListItem/helpers';
 import { StyledHeader, colors } from '../helpers';
 import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
+<<<<<<< HEAD
 import { useIsMobile } from '../Hooks/useIsMobile';
+=======
+import { calculateCost } from '../MailoutListItem/helpers';
+import PostcardSizeButton from './Common/PostcardSizeButton';
+>>>>>>> master
 
 const blacklistNames = ['brandColor', 'frontImgUrl', 'agentPicture', 'brokerageLogo', 'teamLogo', 'backUrl', 'frontAgentUrl'];
 
@@ -44,12 +49,14 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   if (mailoutDetails.frontResourceUrl) renderFrontDetails = false
   if (mailoutDetails.backResourceUrl) renderBackDetails = false
 
+  const currentPostcardSize = mailoutDetails?.postcardSize;
   const currentTemplateTheme = mailoutDetails?.templateTheme;
   const currentMailoutDisplayAgentUserID = mailoutDetails.mailoutDisplayAgent ? mailoutDetails.mailoutDisplayAgent?.userId : mailoutDetails.userId;
   const currentMailoutDisplayAgent = mailoutDetails.mailoutDisplayAgent || { userId: mailoutDetails.userId };
 
   const [error, setError] = useState(null)
 
+  const [postcardSize, setPostcardSize] = useState(currentPostcardSize);
   const [templateTheme, setTemplateTheme] = useState(currentTemplateTheme);
   const [selectedBrandColor, setSelectedBrandColor] = useState(mailoutEdit?.mergeVariables?.brandColor);
   const [displayColorPicker, setDisplayColorPicker] = useState(false)
@@ -196,6 +203,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
     const newData = Object.assign(
       {},
+      { postcardSize },
       { templateTheme },
       { mergeVariables: mailoutEdit?.mergeVariables },
       { mergeVariables: newMergeVariables },
@@ -245,6 +253,33 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
         ),
       });
     });
+  }
+
+  const renderPostcardSize = (size = '4x6') => {
+
+
+    return (
+      <div style={{ margin: '0 1rem 1rem 0', width: '118px', height: '84px' }}>
+        <input
+          type="radio"
+          checked={postcardSize === size}
+          value={size}
+          onChange={(e, { value }) => setPostcardSize(value)}
+          style={{ visibility: 'hidden', display: 'none' }}
+        />
+        <div
+          onClick={e => setPostcardSize(size)}
+          style={
+            postcardSize === size
+              ? { border: '2px solid #59C4C4', margin: 0, padding: '0.5em', borderRadius: '5px', height: '100%' }
+              : { border: '1px solid lightgray', margin: 0, padding: '0.5em', borderRadius: '5px', height: '100%' }
+          }
+        >
+          <PostcardSizeButton postcardSize={size} />
+        </div>
+        <div style={{textAlign: 'center', padding: '0.5rem'}}>{`${calculateCost(1, size)}/each`}</div>
+      </div>
+    )
   }
 
   const renderTemplatePicture = templateName => {
@@ -520,6 +555,28 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           padded
           className={isMobile ? null : 'secondary-grid-container'}
         >
+          <div style={{display: 'grid', gridTemplateColumns: '1fr', gridTemplateRows: 'auto 1fr auto'}}>
+            <Header as="h4">Postcard Size</Header>
+            <div style={{display: 'flex', justifyContent: 'flex-start'}}>
+              {renderPostcardSize('4x6')}
+              {renderPostcardSize('6x9')}
+              {renderPostcardSize('6x11')}
+            </div>
+            
+            {multiUser && (
+              <div style={{alignSelf: 'end', margin: '2rem 0 2rem 0'}}>
+                <Header as="h4">Display Agent</Header>
+                <Dropdown
+                  placeholder="Select Display Agent"
+                  fluid
+                  selection
+                  options={profiles}
+                  value={mailoutDisplayAgent?.userId}
+                  onChange={handleAgentChange}
+                />
+              </div>
+            )}
+          </div>
           <div>
             <Header as="h4">Brand Color</Header>
             <BlockPicker triangle="hide" width="200px" color={selectedBrandColor} colors={colors} onChange={setTempColor} onChangeComplete={value => setSelectedBrandColor(value) && setTempColor(value)} />
@@ -542,35 +599,26 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
                 <div>
                   <img src={coverPhoto} alt="postcard cover" />
                   <br/>
-                  <Button.Group icon>
-                    <Button onClick={() => changeCoverPhotoDec()}>
-                      <Icon name='angle left' />
-                    </Button>
-                    <Button onClick={() => changeCoverPhotoInc()}>
-                      <Icon name='angle right' />
-                    </Button>
-                  </Button.Group>
-                  <div id="uploadCoverGroup">
-                    <a href="#/ignore" onClick={triggerFileDialog} id="postcardUploadText">Upload new cover photo</a>
-                    <br/>
-                    (preferred size: 1375x990)
+                  <div style={{display:'flex'}}>
+                    <Button.Group icon>
+                      <Button onClick={() => changeCoverPhotoDec()}>
+                        <Icon name='angle left' />
+                      </Button>
+                      <Button onClick={() => changeCoverPhotoInc()}>
+                        <Icon name='angle right' />
+                      </Button>
+                    </Button.Group>
+                    <div style={{paddingLeft:'0.5rem'}}>
+                      <a href="#/ignore" onClick={triggerFileDialog} id="postcardUploadText">Upload new cover photo</a>
+                      <br/>
+                      <span style={currentPostcardSize !== postcardSize ? {color: '#9F3A38', fontWeight: 'bold'} : {}}>
+                        {postcardSize === '6x11' ? '(preferred size: 3438x1485)' : postcardSize === '6x9' ? '(preferred size: 2060x1485)' : '(preferred size: 1375x990)'}
+                      </span>
+                    </div>
                   </div>
                 </div>
               )}
               <input id="postcardCoverFile" name="postcardcover" type="file" onChange={handleFileChange}></input>
-            </div>
-          )}
-          {multiUser && (
-            <div>
-              <Header as="h4">Display Agent</Header>
-              <Dropdown
-                placeholder="Select Display Agent"
-                fluid
-                selection
-                options={profiles}
-                value={mailoutDisplayAgent?.userId}
-                onChange={handleAgentChange}
-              />
             </div>
           )}
         </Segment>

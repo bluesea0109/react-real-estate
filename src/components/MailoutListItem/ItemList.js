@@ -20,8 +20,14 @@ const ItemList = ({ data }) => {
       </List.Item>
       <List.Item>
         <List.Content>
+          <List.Header style={{ padding: '1em' }}>Size</List.Header>
+          <List.Description style={{ padding: '1em' }}>{data.postcardSize ? `${data.postcardSize}"` : '4x6"'}</List.Description>
+        </List.Content>
+      </List.Item>
+      <List.Item>
+        <List.Content>
           <List.Header style={{ padding: '1em' }}>Cost</List.Header>
-          <List.Description style={{ padding: '1em' }}>{calculateCost(data.recipientCount)}</List.Description>
+          <List.Description style={{ padding: '1em' }}>{calculateCost(data.recipientCount, data.postcardSize ? data.postcardSize : '4x6')}</List.Description>
         </List.Content>
       </List.Item>
       <List.Item>

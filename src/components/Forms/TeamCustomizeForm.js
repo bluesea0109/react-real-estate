@@ -22,7 +22,11 @@ import KWKLYCTAToggleFormField from './Common/KWKLYCTAToggleFormField';
 import TemplatePictureFormField from './Common/TemplatePictureFormField';
 import MailoutSizeSliderFormField from './Common/MailoutSizeSliderFormField';
 import ValidateURLWithoutRerender from './Common/ValidateURLWithoutRerender';
+<<<<<<< HEAD
 import { useIsMobile } from '../Hooks/useIsMobile';
+=======
+import TemplatePostcardSizeField from './Common/TemplatePostcardSizeField';
+>>>>>>> master
 
 const formReducer = (state, action) => {
   return _.merge({}, action);
@@ -169,8 +173,24 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
 
               <div>{InputFormField({ fieldName: 'frontHeadline', listingType, initialValues, formValues, setFormValues })}</div>
 
+<<<<<<< HEAD
               <div style={{ paddingTop: isMobile ? 'unset' : '3.85em' }}>
                 {KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}
+=======
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr',
+                gridTemplateRows: '1fr 50px'
+                }}>
+                <div style={{display: 'flex', justifyContent: 'flex-start', padding: '0.5rem'}}>
+                  <>{TemplatePostcardSizeField({ postcardSize: '4x6', listingType, initialValues, formValues, setFormValues })}</>
+                  <>{TemplatePostcardSizeField({ postcardSize: '6x9', listingType, initialValues, formValues, setFormValues })}</>
+                  <>{TemplatePostcardSizeField({ postcardSize: '6x11', listingType, initialValues, formValues, setFormValues })}</>
+                </div>
+                <div style={{ display: 'block', paddingTop: '1.5em' }}>
+                  {KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}
+                </div>
+>>>>>>> master
               </div>
 
               <div>{MailoutSizeSliderFormField({ formType: 'team', listingType, initialValues, formValues, setFormValues })}</div>
