@@ -71,7 +71,7 @@ const BillingPage = () => {
       </ContentTopHeaderLayout>
       <div style={{ margin: '20px 0' }}>
         <Segment>
-          <ContentBottomHeaderLayout>
+          <ContentBottomHeaderLayout style={{minHeight: 0}}>
             {!billingDetails && <Loading message="Retrieving billing information..." />}
           </ContentBottomHeaderLayout>
           {billingDetails && !!billingDetails.billings.length && (
