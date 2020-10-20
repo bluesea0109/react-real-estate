@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { Header, Popup } from 'semantic-ui-react';
 import React, { createRef, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebookF } from "@fortawesome/free-brands-svg-icons"
 
 import { StepLayout, StepsLayout, MobileDisabledLayout, NavigationLayout } from '../layouts';
 import { Dimmer, Menu, Initials, Icon, Step } from './Base';
@@ -251,13 +252,48 @@ export default () => {
               : {}
           }
         >
-          <div onClick={mobileCollapse}>
-            <Menu.Item as={Link} color="teal" name="dashboard" active={activeItem === '/dashboard'} to="/dashboard" style={menuItemStyles}>
-              <MobileDisabledLayout>
-                <FontAwesomeIcon icon="tachometer-alt" className="iconWithStyle" /> Dashboard
-              </MobileDisabledLayout>
-            </Menu.Item>
-          </div>
+          <Menu.Item 
+            as={Link}
+            color="teal" 
+            name="dashboard" 
+            active={activeItem === '/dashboard'} 
+            to="/dashboard" 
+            style={menuItemStyles}
+            onClick={mobileCollapse}
+          >
+            <MobileDisabledLayout>
+              <FontAwesomeIcon icon="tachometer-alt" className="iconWithStyle" /> Dashboard
+            </MobileDisabledLayout>
+          </Menu.Item>
+          
+          <Menu.Item 
+            as={Link} 
+            color="teal" 
+            name="listings" 
+            active={activeItem === '/listings'} 
+            to="/listings" 
+            style={menuItemStyles}
+            onClick={mobileCollapse}
+            >
+            <MobileDisabledLayout>
+              <FontAwesomeIcon icon="home" className="iconWithStyle" /> Listings
+            </MobileDisabledLayout>
+          </Menu.Item>
+
+          <Menu.Item 
+            as={Link} 
+            color="teal" 
+            name="ads" 
+            active={activeItem === '/ads'} 
+            to="/ads" 
+            style={menuItemStyles}
+            onClick={mobileCollapse}
+            >
+            <MobileDisabledLayout>
+              <FontAwesomeIcon icon={faFacebookF} className="facebookIcon" /> Paid Ads
+            </MobileDisabledLayout>
+          </Menu.Item>
+
 
           <Menu.Item
             as={Link}

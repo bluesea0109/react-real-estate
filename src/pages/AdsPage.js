@@ -6,7 +6,7 @@ import { Header, Menu, Page, Segment, Icon } from '../components/Base';
 import { Table, Loader } from 'semantic-ui-react';
 
 import PageTitleHeader from '../components/PageTitleHeader';
-import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout } from '../layouts';
+import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
 import { isMobile } from '../components/utils';
 import StatusPill from '../components/StatusPill';
 
@@ -110,8 +110,7 @@ const EmptyPage = () => {
           </Menu>
         </PageTitleHeader>
       </ContentTopHeaderLayout>
-      <ContentSpacerLayout />
-      <div style={isMobile() ? { marginTop: '80px' } : { marginTop: '95px' }}>
+      <div style={isMobile() ? { marginTop: '80px' } : { marginTop: '21px' }}>
         <Segment>
           <ContentBottomHeaderLayout>
             {!adDetails && <Loading message="Loading Listings..." />}
