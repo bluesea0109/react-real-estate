@@ -1,0 +1,84 @@
+.profile-form {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 80px) 90px;
+  grid-template-areas:
+    "FirstLast FirstLast Headshot Picture"
+    "PhoneEmail PhoneEmail Headshot Picture"
+    "DreOfficePhone DreOfficePhone Headshot Picture"
+    "NotificationEmailToggle NotificationEmailToggle Website Website";
+  column-gap: 2em;
+  row-gap: 0.5rem;
+}
+
+.business-form {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(6, 75px);
+  grid-template-areas:
+    "TeamName TeamName TeamLogo BrokerageLogo"
+    "BrokerageName BrokerageName TeamLogo BrokerageLogo"
+    "OfficePhone OfficePhone TeamLogo BrokerageLogo"
+    "AddressCity AddressCity AddressCity AddressCity"
+    "StateZipCode StateZipCode StateZipCode StateZipCode"
+    "BusinessNotificationEmail BusinessNotificationEmail BusinessWebsite BusinessWebsite";
+  column-gap: 2em;
+  row-gap: 0.5rem;
+}
+
+@media only screen and (max-width: 1080px) {
+  .business-form {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(8, 75px);
+    grid-template-areas:
+      "TeamName TeamName . ."
+      "TeamLogo TeamLogo BrokerageLogo BrokerageLogo"
+      "TeamLogo TeamLogo BrokerageLogo BrokerageLogo"
+      "TeamLogo TeamLogo BrokerageLogo BrokerageLogo"
+      "BrokerageName BrokerageName OfficePhone OfficePhone"
+      "AddressCity AddressCity AddressCity AddressCity"
+      "StateZipCode StateZipCode StateZipCode StateZipCode"
+      "BusinessNotificationEmail BusinessNotificationEmail BusinessWebsite BusinessWebsite";
+    column-gap: 2em;
+    row-gap: 0.5rem;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .profile-form {
+    grid-template-columns: 200px 1fr 1fr;
+    grid-template-rows: repeat(7, 75px);
+    grid-template-areas:
+      "FirstLast Headshot Picture"
+      "FirstLast Headshot Picture"
+      "PhoneEmail Headshot Picture"
+      "PhoneEmail  Headshot Picture"
+      "DreOfficePhone Headshot Picture"
+      "NotificationEmailToggle Website Website"
+      "NotificationEmailToggle Website Website";
+  }
+  .business-form {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(10, 75px);
+    grid-template-areas:
+      "TeamName TeamName . ."
+      "TeamLogo TeamLogo BrokerageLogo BrokerageLogo"
+      "TeamLogo TeamLogo BrokerageLogo BrokerageLogo"
+      "TeamLogo TeamLogo BrokerageLogo BrokerageLogo"
+      "BrokerageName BrokerageName OfficePhone OfficePhone"
+      "AddressCity AddressCity AddressCity AddressCity"
+      "AddressCity AddressCity AddressCity AddressCity"
+      "StateZipCode StateZipCode StateZipCode StateZipCode"
+      "StateZipCode StateZipCode StateZipCode StateZipCode"
+      "BusinessNotificationEmail BusinessNotificationEmail BusinessWebsite BusinessWebsite";
+    column-gap: 2em;
+    row-gap: 0.5rem;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .profile-form,
+  .business-form {
+    display: initial;
+  }
+}
