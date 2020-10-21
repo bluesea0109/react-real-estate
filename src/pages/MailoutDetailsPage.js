@@ -221,20 +221,19 @@ const MailoutDetailsPage = () => {
     );
   }
 
-
   const iframeDimensions = (size) =>{
     let width = '';
     let height = '';
   
-    if(size === '6x4'){
+    if(size === '6x4' || size === '4x6'){
       width = '600';
       height = '408';
     }
-    if(size === '9x6'){
+    if(size === '9x6' || size === '6x9'){
       width = '888';
       height = '600';
     }
-    if(size === '11x6'){
+    if(size === '11x6' || size === '6x11'){
       width = '1080';
       height = '600';
     }
