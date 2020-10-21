@@ -16,11 +16,10 @@ import IframeGroup from '../components/MailoutListItem/IframeGroup';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ItemList from '../components/MailoutListItem/ItemList';
 import PageTitleHeader from '../components/PageTitleHeader';
-import { isMobile } from '../components/utils';
+import { isMobile, postcardDimensions } from '../components/utils';
 import Loading from '../components/Loading';
 import PostcardSizeButton from '../components/Forms/Common/PostcardSizeButton';
 import { calculateCost } from '../components/MailoutListItem/helpers';
-import postcardDimensions from '../components/postcardDimension';
 
 const useFetching = (getActionCreator, onboarded, dispatch) => {
   useEffect(() => {
