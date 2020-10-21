@@ -59,3 +59,38 @@ export function differenceObjectDeep(source, other) {
     _.omit(other, _.keys(source))
   );
 }
+
+export const postcardDimensions = (size) => {
+  let dimension = '';  
+    switch (size) {
+      case '4x6': dimension = '6x4';
+      break;
+      case '6x9': dimension = '9x6';
+      break;
+      case '6x11': dimension = '11x6';
+      break;
+      default:
+    }
+  return dimension
+  }
+
+  export const postcardDimensionsDisplayed = (size) => {
+    let dimension = '';  
+      switch (size) {
+        case '4x6': dimension = '4x6';
+        break;
+        case '6x9': dimension = '6x9';
+        break;
+        case '6x11': dimension = '6x11';
+        break;
+        case '6x4': dimension = '4x6';
+        break;
+        case '9x6': dimension = '6x9';
+        break;
+        case '11x6': dimension = '6x11';
+        break;
+        default:
+      }
+    return dimension
+    }
+  

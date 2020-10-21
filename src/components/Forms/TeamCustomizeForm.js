@@ -42,6 +42,7 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
   const [formValues, setFormValues] = useReducer(formReducer, teamCustomizationData);
   const [page, setPage] = useState(1);
 
+  console.log('FORM', formValues)
   useEffect(() => {
     if (teamCustomizationData) {
       if (teamCustomizationData?.listed?.cta) {

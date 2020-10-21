@@ -9,7 +9,7 @@ import auth from '../../services/auth';
 import api from '../../services/api';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import { changeMailoutDisplayAgentPending, updateMailoutEditPending } from '../../store/modules/mailout/actions';
-import { differenceObjectDeep, maxLength, objectIsEmpty, sleep } from '../utils';
+import { differenceObjectDeep, maxLength, objectIsEmpty, sleep, postcardDimensions } from '../utils';
 import { Button, Icon, Image, Menu, Message, Page, Segment, Snackbar } from '../Base';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
 import { StyledHeader, colors } from '../helpers';
@@ -261,13 +261,13 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           type="radio"
           checked={postcardSize === size}
           value={size}
-          onChange={(e, { value }) => setPostcardSize(value)}
+          onChange={(e, { value }) => setPostcardSize(postcardDimensions(value))}
           style={{ visibility: 'hidden', display: 'none' }}
         />
         <div
-          onClick={e => setPostcardSize(size)}
+          onClick={e => setPostcardSize(postcardDimensions(size))}
           style={
-            postcardSize === size
+            postcardSize === postcardDimensions(size)
               ? { border: '2px solid #59C4C4', margin: 0, padding: '0.5em', borderRadius: '5px', height: '100%' }
               : { border: '1px solid lightgray', margin: 0, padding: '0.5em', borderRadius: '5px', height: '100%' }
           }

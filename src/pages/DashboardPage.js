@@ -16,6 +16,7 @@ import IframeGroup from '../components/MailoutListItem/IframeGroup';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ItemList from '../components/MailoutListItem/ItemList';
 import PageTitleHeader from '../components/PageTitleHeader';
+import { postcardDimensions } from '../components/utils';
 import Loading from '../components/Loading';
 import { useIsMobile } from '../components/Hooks/useIsMobile';
 import PostcardSizeButton from '../components/Forms/Common/PostcardSizeButton';
@@ -218,9 +219,9 @@ const Dashboard = () => {
   const renderPostcardButton = (size) => (
     <div style={{ margin: '0 1rem 1rem 0', width: '118px', height: '84px' }}>
       <div
-        onClick={e => setCampaignPostcardSize(size)}
+        onClick={e => setCampaignPostcardSize(postcardDimensions(size))}
         style={
-          campaignPostcardSize === size
+          campaignPostcardSize === postcardDimensions(size)
             ? { border: '2px solid #59C4C4', margin: 0, padding: '0.5em', borderRadius: '5px', height: '100%' }
             : { border: '1px solid lightgray', margin: 0, padding: '0.5em', borderRadius: '5px', height: '100%' }
         }
@@ -229,7 +230,8 @@ const Dashboard = () => {
       </div>
       <div style={{ textAlign: 'center', padding: '0.5rem' }}>{`${calculateCost(1, size)}/each`}</div>
     </div>
-  )
+    )
+  
 
   return (
     <Page basic>

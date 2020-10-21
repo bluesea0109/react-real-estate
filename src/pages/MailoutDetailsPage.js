@@ -16,6 +16,7 @@ import { getMailoutPending } from '../store/modules/mailout/actions';
 import PopupMinMax from '../components/MailoutListItem/PopupMinMax';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import PageTitleHeader from '../components/PageTitleHeader';
+import { postcardDimensionsDisplayed } from '../components/utils';
 import GoogleMapItem from '../components/Forms/PolygonGoogleMaps/GoogleMapItem';
 import FlipCard from '../components/FlipCard';
 import Loading from '../components/Loading';
@@ -198,7 +199,6 @@ const MailoutDetailsPage = () => {
         )}
       </Button>
     );
-
   };
 
   const renderDestinations = () => {
@@ -225,14 +225,23 @@ const MailoutDetailsPage = () => {
     );
   }
 
-  const imgStyles = {
-    height: 400,
-    width: 588,
-  }
-
-  const imgStylesMobile = {
-    height: 204,
-    width: 300,
+  const iframeDimensions = (size) =>{
+    let width = '';
+    let height = '';
+  
+    if(size === '6x4' || size === '4x6'){
+      width = '600';
+      height = '408';
+    }
+    if(size === '9x6' || size === '6x9'){
+      width = '888';
+      height = '600';
+    }
+    if(size === '11x6' || size === '6x11'){
+      width = '1080';
+      height = '600';
+    }
+    return {width, height}
   }
 
   const IFrameSegStyle = {
@@ -244,7 +253,7 @@ const MailoutDetailsPage = () => {
   const FrontIframe = () => (
     <div>
     {details.frontResourceUrl && (
-        <Image src={details.frontResourceUrl} style={isMobile ? imgStylesMobile : imgStyles} />
+        <Image src={details.frontResourceUrl} style={{ height: '400px', maxWidth: '588px', minWidth: '580px' }} />
     )}
     {!details.frontResourceUrl && (
       <Segment compact textAlign="center" loading={!details?._id || !frontLoaded} style={IFrameSegStyle}>
@@ -253,8 +262,8 @@ const MailoutDetailsPage = () => {
           title={`bm-iframe-front-${details._id}`}
           name="front"
           src={frontURL}
-          width={isMobile ? '300' : '588'}
-          height={isMobile ? '204' : '400'}
+          width={isMobile() ? '300' : `${iframeDimensions(details.postcardSize).width}`}
+          height={isMobile() ? '204' : `${iframeDimensions(details.postcardSize).height}`}
           frameBorder="0"
           sandbox="allow-same-origin allow-scripts"
           onLoad={handleOnload}
@@ -264,7 +273,8 @@ const MailoutDetailsPage = () => {
       </Segment>
     )}
     </div>
-  );
+  )
+  
 
   const BackIframe = () => (
     <Segment compact textAlign="center" loading={!details?._id || !backLoaded} style={IFrameSegStyle}>
@@ -273,8 +283,8 @@ const MailoutDetailsPage = () => {
         title={`bm-iframe-back-${details._id}`}
         name="back"
         src={backURL}
-        width={isMobile ? '300' : '588'}
-        height={isMobile ? '204' : '400'}
+        width={isMobile() ? '300' : `${iframeDimensions(details.postcardSize).width}`}
+        height={isMobile() ? '204' : `${iframeDimensions(details.postcardSize).height}`}
         frameBorder="0"
         sandbox="allow-same-origin allow-scripts"
         onLoad={handleOnload}
@@ -358,10 +368,12 @@ const MailoutDetailsPage = () => {
                     }
                   </ContentBottomHeaderLayout>
 
-                  <ItemBodyLayoutV2 attached style={{ marginTop: '20px' }}>
-                    <ItemBodyIframeLayout horizontal={windowSize.width > 1300} style={{ border: 'none', boxShadow: 'none', justifyContent: 'space-around' }}>
+                  <ItemBodyLayoutV2 attached style={isMobile() ? { padding: 0, marginTop: '173px' } : { padding: 0, marginTop: '89px' }}>
+                    <ItemBodyIframeLayout horizontal={windowSize.width > 1199} style={{ border: 'none', boxShadow: 'none' }}>
+                     <div style={Object.assign({margin: 'auto',}, !isMobile() && details.postcardSize === "6x4" ?  {display:"flex"} : null)}>
                       <FrontIframe />
                       <BackIframe />
+                      </div>
                     </ItemBodyIframeLayout>
 
                     <ItemBodyDataLayout relaxed>
@@ -386,7 +398,7 @@ const MailoutDetailsPage = () => {
                       <List.Item>
                         <List.Content>
                           <List.Header>Size</List.Header>
-                          <List.Description>{`${details.postcardSize ? details.postcardSize : "4x6"}" / ${calculateCost(1, details.postcardSize ? details.postcardSize : '4x6')}`}</List.Description>
+                          <List.Description>{`${details.postcardSize ? postcardDimensionsDisplayed(details.postcardSize) : "4x6"}" / ${calculateCost(1, details.postcardSize ? details.postcardSize : '4x6')}`}</List.Description>
                         </List.Content>
                       </List.Item>
                       <List.Item>

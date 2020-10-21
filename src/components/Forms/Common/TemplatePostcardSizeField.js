@@ -1,6 +1,7 @@
 import React from 'react';
 import { calculateCost } from '../../MailoutListItem/helpers';
 import PostcardSizeButton from './PostcardSizeButton';
+import { postcardDimensions } from '../../utils';
 
 const NEW_LISTING = 'listed';
 
@@ -11,17 +12,17 @@ const TemplatePostcardSizeField = ({ postcardSize, listingType, initialValues, f
 
   const handlePostcardSizeChange = value => {
     const newValue = Object.assign({}, formValues);
-    newValue[listingType].postcardSize = value;
+    newValue[listingType].postcardSize = postcardDimensions(value);
     setFormValues(newValue);
   };
-
+  
   if (!editable) {
     return (
       <div style={{ width: '118px', height: '84px', opacity: '0.4' }}>
         <input type="radio" defaultChecked={currentValue === postcardSize} value={postcardSize} style={{ visibility: 'hidden', display: 'none' }} />
         <div
           style={
-            currentValue === postcardSize
+            currentValue === postcardDimensions(postcardSize)
               ? { border: '2px solid #59C4C4', margin: 0, padding: '0.5em', borderRadius: '5px' }
               : { border: '1px solid lightgray', margin: 0, padding: '0.5em', borderRadius: '5px' }
           }
@@ -44,7 +45,7 @@ const TemplatePostcardSizeField = ({ postcardSize, listingType, initialValues, f
         <div
           onClick={e => handlePostcardSizeChange(postcardSize)}
           style={
-            currentValue === postcardSize
+            currentValue === postcardDimensions(postcardSize)
               ? { border: '2px solid #59C4C4', margin: 0, padding: '0.5em', borderRadius: '5px', height: '100%' }
               : { border: '1px solid lightgray', margin: 0, padding: '0.5em', borderRadius: '5px', height: '100%' }
           }
