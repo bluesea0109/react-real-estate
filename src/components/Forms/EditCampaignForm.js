@@ -256,7 +256,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
 
     return (
-      <div style={{ margin: '0 1rem 1rem 0', width: '118px', height: '84px' }}>
+      <div style={{ margin: '1em 1em 2em 1rem', width: '118px', height: '84px' }}>
         <input
           type="radio"
           checked={postcardSize === size}
@@ -474,7 +474,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
       {error && <Snackbar error>{error}</Snackbar>}
 
-      <Segment>
+      <Segment style={{paddingBottom: '1rem'}}>
         <ContentBottomHeaderLayout>
           <ItemHeaderLayout attached="top" block >
             <span style={{ gridArea: 'label' }}>
@@ -528,8 +528,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
         <Segment
           basic
           padded
-          className={isMobile ? null : 'primary-grid-container'}
-          style={isMobile ? {} : { padding: 10}}
+          style={{display: 'flex', flexWrap: 'wrap'}}
         >
           <div>
             <Header as="h4">Template Theme</Header>
@@ -550,18 +549,18 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
         <Segment
           basic
           padded
-          className={isMobile ? null : 'secondary-grid-container'}
+          style={{display: 'flex', flexWrap:'wrap'}}
         >
-          <div style={{display: 'grid', gridTemplateColumns: '1fr', gridTemplateRows: 'auto 1fr auto'}}>
+          <div style={{display: 'flex', flexDirection: 'column', padding: '0 1rem'}}>
             <Header as="h4">Postcard Size</Header>
-            <div style={{display: 'flex', justifyContent: 'flex-start'}}>
+            <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
               {renderPostcardSize('4x6')}
               {renderPostcardSize('6x9')}
               {renderPostcardSize('6x11')}
             </div>
             
             {multiUser && (
-              <div style={{alignSelf: 'end', margin: '2rem 0 2rem 0'}}>
+              <div style={{margin: '2rem 0'}}>
                 <Header as="h4">Display Agent</Header>
                 <Dropdown
                   placeholder="Select Display Agent"
