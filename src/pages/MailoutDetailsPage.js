@@ -226,8 +226,8 @@ const MailoutDetailsPage = () => {
   }
 
   const imgStyles = {
-    height: 300,
-    width: 441,
+    height: 400,
+    width: 588,
   }
 
   const imgStylesMobile = {
@@ -235,34 +235,26 @@ const MailoutDetailsPage = () => {
     width: 300,
   }
 
-  const IFrameSegStyleHor = {
+  const IFrameSegStyle = {
     border: 'none',
-    maxHeight: 300,
-    maxWidth: 441,
-    padding: 0
-  }
-  
-  const IFrameSegStyleVert = {
-    border: 'none',
-    margin: 'auto',
-    maxHeight: 300,
-    padding: 8
+    padding: 1, 
+    margin: 'auto'
   }
 
   const FrontIframe = () => (
     <div>
     {details.frontResourceUrl && (
-        <Image src={details.frontResourceUrl} style={windowSize.width < 675 ? imgStylesMobile : imgStyles} />
+        <Image src={details.frontResourceUrl} style={isMobile ? imgStylesMobile : imgStyles} />
     )}
     {!details.frontResourceUrl && (
-      <Segment compact textAlign="center" loading={!details?._id || !frontLoaded} style={windowSize.width < 1200 ? IFrameSegStyleVert : IFrameSegStyleHor}>
+      <Segment compact textAlign="center" loading={!details?._id || !frontLoaded} style={IFrameSegStyle}>
         <iframe
           id="bm-iframe-front"
           title={`bm-iframe-front-${details._id}`}
           name="front"
           src={frontURL}
-          width={windowSize.width < 675 ? '300' : '441'}
-          height={windowSize.width < 675 ? '204' : '300'}
+          width={isMobile ? '300' : '588'}
+          height={isMobile ? '204' : '400'}
           frameBorder="0"
           sandbox="allow-same-origin allow-scripts"
           onLoad={handleOnload}
@@ -275,14 +267,14 @@ const MailoutDetailsPage = () => {
   );
 
   const BackIframe = () => (
-    <Segment compact textAlign="center" loading={!details?._id || !backLoaded} style={windowSize.width < 1200 ? IFrameSegStyleVert : IFrameSegStyleHor}>
+    <Segment compact textAlign="center" loading={!details?._id || !backLoaded} style={IFrameSegStyle}>
       <iframe
         id="bm-iframe-back"
         title={`bm-iframe-back-${details._id}`}
         name="back"
         src={backURL}
-        width={windowSize.width < 675 ? '300' : '441'}
-        height={windowSize.width < 675 ? '204' : '300'}
+        width={isMobile ? '300' : '588'}
+        height={isMobile ? '204' : '400'}
         frameBorder="0"
         sandbox="allow-same-origin allow-scripts"
         onLoad={handleOnload}
@@ -367,7 +359,7 @@ const MailoutDetailsPage = () => {
                   </ContentBottomHeaderLayout>
 
                   <ItemBodyLayoutV2 attached style={{ marginTop: '20px' }}>
-                    <ItemBodyIframeLayout horizontal={windowSize.width > 1199} style={{ border: 'none', boxShadow: 'none', justifyContent: 'space-around' }}>
+                    <ItemBodyIframeLayout horizontal={windowSize.width > 1300} style={{ border: 'none', boxShadow: 'none', justifyContent: 'space-around' }}>
                       <FrontIframe />
                       <BackIframe />
                     </ItemBodyIframeLayout>
