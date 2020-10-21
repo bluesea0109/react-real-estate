@@ -474,7 +474,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
       {error && <Snackbar error>{error}</Snackbar>}
 
-      <Segment style={{paddingBottom: '1rem'}}>
+      <Segment style={{marginBottom: '1rem'}}>
         <ContentBottomHeaderLayout>
           <ItemHeaderLayout attached="top" block >
             <span style={{ gridArea: 'label' }}>
