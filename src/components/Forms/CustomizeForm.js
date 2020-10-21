@@ -169,7 +169,7 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
             <Segment
               padded
               className={isMobile ? null : 'primary-grid-container'}
-              style={isMobile ? {} : { gridTemplateRows: 'unset', gridTemplateAreas: 'unset' }}
+              style={isMobile ? {} : { gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}
             >
               <div>
                 <Header as="h5" style={{ opacity: !editable ? 0.4 : 1 }}>

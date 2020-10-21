@@ -221,9 +221,6 @@ h1 {
 /* Customize & Edit Campaigns Start */
 .primary-grid-container {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 0.25fr;
-  grid-template-areas: '. . . .' '. . . .' '. . . .';
   grid-column-gap: 1em;
 }
 
@@ -236,8 +233,8 @@ h1 {
 
 .tertiary-grid-container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: repeat(auto-fill, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-rows: repeat(auto-fill, minmax(0, 1fr));
   grid-column-gap: 1em;
   grid-row-gap: 1em;
 }
