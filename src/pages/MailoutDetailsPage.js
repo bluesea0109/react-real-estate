@@ -250,7 +250,8 @@ const MailoutDetailsPage = () => {
 
   const IFrameSegStyle = {
     border: 'none',
-    padding: 1, 
+    boxShadow: 'none',
+    padding: '0', 
     margin: 'auto'
   }
 
@@ -266,8 +267,8 @@ const MailoutDetailsPage = () => {
           title={`bm-iframe-front-${details._id}`}
           name="front"
           src={frontURL}
-          width={isMobile ? '300' : `${iframeDimensions(details.postcardSize).width}`}
-          height={isMobile ? '204' : `${iframeDimensions(details.postcardSize).height}`}
+          width={`${iframeDimensions(details.postcardSize).width}`}
+          height={`${iframeDimensions(details.postcardSize).height}`}
           frameBorder="0"
           sandbox="allow-same-origin allow-scripts"
           onLoad={handleOnload}
@@ -287,8 +288,8 @@ const MailoutDetailsPage = () => {
         title={`bm-iframe-back-${details._id}`}
         name="back"
         src={backURL}
-        width={isMobile ? '300' : `${iframeDimensions(details.postcardSize).width}`}
-        height={isMobile ? '204' : `${iframeDimensions(details.postcardSize).height}`}
+        width={`${iframeDimensions(details.postcardSize).width}`}
+        height={`${iframeDimensions(details.postcardSize).height}`}
         frameBorder="0"
         sandbox="allow-same-origin allow-scripts"
         onLoad={handleOnload}
@@ -360,27 +361,19 @@ const MailoutDetailsPage = () => {
                 <ItemLayout fluid key={details._id} className={isMobile ? 'remove-margins' : undefined}>
                   <ContentBottomHeaderLayout>
                     {
-                      <ListHeader
-                        data={details}
-                        mailoutDetailPage={true}
-                        onClickEdit={handleEditMailoutDetailsClick}
-                        onClickApproveAndSend={handleApproveAndSendMailoutDetailsClick}
-                        onClickDelete={handleDeleteMailoutDetailsClick}
-                        lockControls={working}
-                        onClickRevertEdit={handleRevertEditedMailoutClick}
-                      />
+                        <ListHeader
+                          data={details}
+                          mailoutDetailPage={true}
+                          onClickEdit={handleEditMailoutDetailsClick}
+                          onClickApproveAndSend={handleApproveAndSendMailoutDetailsClick}
+                          onClickDelete={handleDeleteMailoutDetailsClick}
+                          lockControls={working}
+                          onClickRevertEdit={handleRevertEditedMailoutClick}
+                        />
                     }
                   </ContentBottomHeaderLayout>
 
-                  <ItemBodyLayoutV2 attached style={isMobile ? { padding: 0, marginTop: '173px' } : { padding: 0, marginTop: '89px' }}>
-                    <ItemBodyIframeLayout horizontal={windowSize.width > 1199} style={{ border: 'none', boxShadow: 'none' }}>
-                     <div style={Object.assign({margin: 'auto',}, details.postcardSize === "6x4" || typeof details.postcardSize == 'undefined' ?  {display:"flex"} : null)}>
-                      <FrontIframe />
-                      <BackIframe />
-                      </div>
-                    </ItemBodyIframeLayout>
-
-                    <ItemBodyDataLayout relaxed>
+                  <ItemBodyDataLayout relaxed>
                       <List.Item>
                         <List.Content>
                           <List.Header>
@@ -434,7 +427,16 @@ const MailoutDetailsPage = () => {
                           <List.Description>{formatDate(details.created)}</List.Description>
                         </List.Content>
                       </List.Item>
-                    </ItemBodyDataLayout>
+                  </ItemBodyDataLayout>
+
+                  <ItemBodyLayoutV2 attached style={{ padding: 8, overflow: 'auto'}}>
+                    <ItemBodyIframeLayout horizontal={windowSize.width > 1199} style={{ border: 'none', boxShadow: 'none' }}>
+                     <div style={{margin: 'auto', display:"flex", flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center'}}>
+                      <FrontIframe />
+                      <div style={{padding: '16px'}}><BackIframe /></div>
+                      </div>
+                    </ItemBodyIframeLayout>
+
                     {details.cta && (<div className="details-customPostcardCTA">
                       Custom CTA: <a href={details.cta} target="blank">{details.cta}</a>
                     </div>)}
