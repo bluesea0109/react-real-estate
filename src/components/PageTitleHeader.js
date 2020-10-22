@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { isMobile } from './utils';
 import { Segment } from './Base';
+import { useIsMobile } from './Hooks/useIsMobile';
 
 const PageTitleHeader = ({ children, ...rest }) => {
+
+  const isMobile = useIsMobile();
+
   const style = {
     border: 'none',
     borderRadius: "4px",
@@ -13,7 +16,7 @@ const PageTitleHeader = ({ children, ...rest }) => {
   };
 
   return (
-    <Segment style={isMobile() ? { marginTop: '58px', ...style } : { ...style }} {...rest}>
+    <Segment style={isMobile ? { marginTop: '58px', ...style } : { ...style }} {...rest}>
       {children}
     </Segment>
   );

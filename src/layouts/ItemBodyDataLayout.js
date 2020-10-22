@@ -9,5 +9,5 @@ export default styled(List)`
   gap: 10px;
   grid-template-rows: 100px;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-
+  justify-items: center;
 `;

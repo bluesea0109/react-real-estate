@@ -9,18 +9,22 @@ import auth from '../../services/auth';
 import api from '../../services/api';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import { changeMailoutDisplayAgentPending, updateMailoutEditPending } from '../../store/modules/mailout/actions';
-import { differenceObjectDeep, isMobile, maxLength, objectIsEmpty, sleep, postcardDimensions } from '../utils';
+import { differenceObjectDeep, maxLength, objectIsEmpty, sleep, postcardDimensions } from '../utils';
 import { Button, Icon, Image, Menu, Message, Page, Segment, Snackbar } from '../Base';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
 import { StyledHeader, colors } from '../helpers';
 import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
+import { useIsMobile } from '../Hooks/useIsMobile';
 import { calculateCost } from '../MailoutListItem/helpers';
 import PostcardSizeButton from './Common/PostcardSizeButton';
 
 const blacklistNames = ['brandColor', 'frontImgUrl', 'agentPicture', 'brokerageLogo', 'teamLogo', 'backUrl', 'frontAgentUrl'];
 
 const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
+
+  const isMobile = useIsMobile();
+
   const peerId = useSelector(store => store.peer.peerId)
   const dispatch = useDispatch();
   const bookmarkTemplate = useSelector(store => store.templates.available?.bookmark);
@@ -252,7 +256,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
 
     return (
-      <div style={{ margin: '0 1rem 1rem 0', width: '118px', height: '84px' }}>
+      <div style={{ margin: '1em 1em 2em 1rem', width: '118px', height: '84px' }}>
         <input
           type="radio"
           checked={postcardSize === size}
@@ -356,7 +360,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
         return (
           <Form color="green">
-            <Segment basic padded className={isMobile() ? null : 'secondary-grid-container'}>
+            <Segment basic padded className={isMobile ? null : 'secondary-grid-container'}>
               {ribbonFields}
             </Segment>
           </Form>
@@ -394,7 +398,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
         return (
           <Form color="green">
-            <Segment basic padded className={isMobile() ? null : 'secondary-grid-container'}>
+            <Segment basic padded className={isMobile ? null : 'secondary-grid-container'}>
               {bookmarkFields}
             </Segment>
           </Form>
@@ -432,7 +436,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
         return (
           <Form color="green">
-            <Segment basic padded className={isMobile() ? null : 'secondary-grid-container'}>
+            <Segment basic padded className={isMobile ? null : 'secondary-grid-container'}>
               {stackFields}
             </Segment>
           </Form>
@@ -470,9 +474,9 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
       {error && <Snackbar error>{error}</Snackbar>}
 
-      <Segment>
+      <Segment style={{marginBottom: '1rem'}}>
         <ContentBottomHeaderLayout>
-          <ItemHeaderLayout attached="top" block style={isMobile() ? { marginTop: '56px' } : {}}>
+          <ItemHeaderLayout attached="top" block >
             <span style={{ gridArea: 'label' }}>
               <Label
                 size="large"
@@ -524,8 +528,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
         <Segment
           basic
           padded
-          className={isMobile() ? null : 'primary-grid-container'}
-          style={isMobile() ? { marginTop: '140px' } : { padding: 10, marginTop: '120px' }}
+          style={{display: 'flex', flexWrap: 'wrap'}}
         >
           <div>
             <Header as="h4">Template Theme</Header>
@@ -546,18 +549,18 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
         <Segment
           basic
           padded
-          className={isMobile() ? null : 'secondary-grid-container'}
+          style={{display: 'flex', flexWrap:'wrap'}}
         >
-          <div style={{display: 'grid', gridTemplateColumns: '1fr', gridTemplateRows: 'auto 1fr auto'}}>
+          <div style={{display: 'flex', flexDirection: 'column', padding: '0 1rem'}}>
             <Header as="h4">Postcard Size</Header>
-            <div style={{display: 'flex', justifyContent: 'flex-start'}}>
+            <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
               {renderPostcardSize('4x6')}
               {renderPostcardSize('6x9')}
               {renderPostcardSize('6x11')}
             </div>
             
             {multiUser && (
-              <div style={{alignSelf: 'end', margin: '2rem 0 2rem 0'}}>
+              <div style={{margin: '2rem 0'}}>
                 <Header as="h4">Display Agent</Header>
                 <Dropdown
                   placeholder="Select Display Agent"
@@ -570,7 +573,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
               </div>
             )}
           </div>
-          <div>
+          <div style={{padding: '0 1em'}}>
             <Header as="h4">Brand Color</Header>
             <BlockPicker triangle="hide" width="200px" color={selectedBrandColor} colors={colors} onChange={setTempColor} onChangeComplete={value => setSelectedBrandColor(value) && setTempColor(value)} />
             <Icon id="brandColourPickerIcon" bordered link color='grey' name="eye dropper" onClick={ handleColorPickerClick } />
@@ -581,7 +584,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           </div>
 
           {!mailoutDetails.frontResourceUrl && (
-            <div>
+            <div style={{maxWidth: 350, padding: '0 1rem'}}>
               <Header as="h4">
                 Cover Photo
               </Header>

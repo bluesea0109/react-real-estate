@@ -8,12 +8,13 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { Checkbox, Dropdown, Form, Header, Label, List, Message, Select } from 'semantic-ui-react';
 
 import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
-import { isMobile, tag } from '../utils';
+import { tag } from '../utils';
 import { Button, Menu, Page, Segment, Snackbar } from '../Base';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
 import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
 import PolygonGoogleMapsCore from './PolygonGoogleMaps/PolygonGoogleMapsCore';
+import { useIsMobile } from '../Hooks/useIsMobile';
 
 const propertyTypeOptions = [
   { text: 'Single-Family', key: 'Single-Family', value: 'Single-Family'},
@@ -58,6 +59,8 @@ const saleDateOptions = [
 
 
 const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleBackClick }) => {
+
+  const isMobile = useIsMobile();
 
   const peerId = useSelector(store => store.peer.peerId);
   const [saving, setSaving] = useState(false);
@@ -352,7 +355,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
 
       <Segment>
         <ContentBottomHeaderLayout>
-          <ItemHeaderLayout attached="top" block style={isMobile() ? { marginTop: '56px' } : {}}>
+          <ItemHeaderLayout attached="top" block >
             <span style={{ gridArea: 'label' }}>
               <Label
                 size="large"
@@ -388,8 +391,8 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
         <Segment
           basic
           padded
-          className={isMobile() ? null : 'primary-grid-container'}
-          style={isMobile() ? { marginTop: '140px' } : { padding: 10, marginTop: '120px' }}
+          className={isMobile ? null : 'primary-grid-container'}
+          style={isMobile ? {} : { padding: 10 }}
         ></Segment>
         <Form>
           <Header as="h4">How should destinations be selected?</Header>

@@ -7,10 +7,11 @@ import React, { useCallback, useState } from 'react';
 import { iframeTransformMobile, iframeLinkStyle } from '../helpers';
 import { ItemBodyIframeLayout } from '../../layouts';
 import ApiService from '../../services/api/index';
-import { isMobile } from '../utils';
 import { Image } from '../Base';
 
 const IframeGroup = ({ index, item, linkTo = null }) => {
+
+
   const peerId = useSelector(store => store.peer.peerId);
 
   const [frontLoaded, setFrontLoaded] = useState(false);
@@ -51,12 +52,23 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
     minWidth: '290px',
     height: '204px',
     overflow: 'hidden',
-    marginLeft: 0,
+  }
+
+  const IFrameBodyStyles = {
+    border: 'none',
+    boxShadow: 'none',
+    flexWrap: 'wrap',
+  }
+
+  const IFrameStyles = {
+    border: 'none',
+    display: 'flex',
+    justifyContent: 'center'
   }
 
   if (linkTo) {
     return (
-      <ItemBodyIframeLayout horizontal={!isMobile()} style={{ border: 'none', boxShadow: 'none' }} id={`mailout-iframe-set-${index}`}>
+      <ItemBodyIframeLayout horizontal style={IFrameBodyStyles} id={`mailout-iframe-set-${index}`}>
       {item.frontResourceUrl && (
         <Segment textAlign="center" style={{ border: 'none' }}>
 
@@ -66,7 +78,7 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
         </Segment>
       )}
       {!item.frontResourceUrl && (
-        <Segment textAlign="center" loading={!item?._id || !frontLoaded} style={{ border: 'none' }}>
+        <Segment textAlign="center" loading={!item?._id || !frontLoaded} style={IFrameStyles}>
           <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className="bm-transform-effect image-frame-border">
             <iframe
               id="bm-iframe-front"
@@ -86,7 +98,7 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
       )}
 
 
-        <Segment textAlign="center" loading={!item?._id || !backLoaded} style={{ border: 'none' }}>
+        <Segment textAlign="center" loading={!item?._id || !backLoaded} style={IFrameStyles}>
           <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className="bm-transform-effect image-frame-border">
             <iframe
               id="bm-iframe-back"
@@ -107,8 +119,8 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
     );
   } else {
     return (
-      <ItemBodyIframeLayout horizontal={!isMobile()} style={{ border: 'none', boxShadow: 'none' }} id={`mailout-iframe-set-${index}`}>
-        <Segment textAlign="center" loading={!item?._id || !frontLoaded} style={{ border: 'none' }}>
+      <ItemBodyIframeLayout horizontal style={IFrameBodyStyles} id={`mailout-iframe-set-${index}`}>
+        <Segment textAlign="center" loading={!item?._id || !frontLoaded} style={IFrameStyles}>
           <div style={{ width: '300px', height: '204px', overflow: 'hidden' }}>
             <iframe
               id="bm-iframe-front"
@@ -124,7 +136,7 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
             />
           </div>
         </Segment>
-        <Segment textAlign="center" loading={!item?._id || !backLoaded} style={{ border: 'none' }}>
+        <Segment textAlign="center" loading={!item?._id || !backLoaded} style={IFrameStyles}>
           <div style={{ width: '300px', height: '204px', overflow: 'hidden' }}>
             <iframe
               id="bm-iframe-back"
