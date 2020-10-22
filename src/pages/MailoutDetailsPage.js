@@ -74,12 +74,12 @@ const MailoutDetailsPage = () => {
   const peerId = useSelector(store => store.peer.peerId);
 
   const frontURL = peerId
-    ? `/api/user/${details?.userId}/peer/${peerId}/mailout/${details?._id}/render/preview/html/front`
-    : `/api/user/${details?.userId}/mailout/${details?._id}/render/preview/html/front`
+    ? `/api/user/${details?.userId}/peer/${peerId}/mailout/${details?._id}/render/preview/html/front?showBleed=true`
+    : `/api/user/${details?.userId}/mailout/${details?._id}/render/preview/html/front?showBleed=true`
 
   const backURL = peerId
-  ? `/api/user/${details?.userId}/peer/${peerId}/mailout/${details?._id}/render/preview/html/back`
-  : `/api/user/${details?.userId}/mailout/${details?._id}/render/preview/html/back`
+  ? `/api/user/${details?.userId}/peer/${peerId}/mailout/${details?._id}/render/preview/html/back?showBleed=true`
+  : `/api/user/${details?.userId}/mailout/${details?._id}/render/preview/html/back?showBleed=true`
 
   const csvURL = peerId
   ? `/api/user/${details?.userId}/peer/${peerId}/mailout/${details?._id}/csv`
