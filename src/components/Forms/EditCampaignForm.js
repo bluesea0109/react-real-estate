@@ -573,7 +573,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
               </div>
             )}
           </div>
-          <div>
+          <div style={{padding: '0 1em'}}>
             <Header as="h4">Brand Color</Header>
             <BlockPicker triangle="hide" width="200px" color={selectedBrandColor} colors={colors} onChange={setTempColor} onChangeComplete={value => setSelectedBrandColor(value) && setTempColor(value)} />
             <Icon id="brandColourPickerIcon" bordered link color='grey' name="eye dropper" onClick={ handleColorPickerClick } />
@@ -584,7 +584,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           </div>
 
           {!mailoutDetails.frontResourceUrl && (
-            <div>
+            <div style={{maxWidth: 350, padding: '0 1rem'}}>
               <Header as="h4">
                 Cover Photo
               </Header>
