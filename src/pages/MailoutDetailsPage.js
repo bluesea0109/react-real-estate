@@ -113,6 +113,7 @@ const MailoutDetailsPage = () => {
   useEffect(() => {
     if (details && details.recipientCount) {
       setCurrentNumberOfRecipients(details.recipientCount);
+      
     }
 
   }, [details, currentNumberOfRecipients]);
@@ -225,15 +226,20 @@ const MailoutDetailsPage = () => {
     let width = '';
     let height = '';
   
-    if(size === '6x4' || size === '4x6'){
+    if(typeof size == 'undefined'){
       width = '600';
       height = '408';
     }
-    if(size === '9x6' || size === '6x9'){
+
+    if(size === '6x4'){
+      width = '600';
+      height = '408';
+    }
+    if(size === '9x6'){
       width = '888';
       height = '600';
     }
-    if(size === '11x6' || size === '6x11'){
+    if(size === '11x6'){
       width = '1080';
       height = '600';
     }
@@ -360,7 +366,7 @@ const MailoutDetailsPage = () => {
 
                   <ItemBodyLayoutV2 attached style={isMobile() ? { padding: 0, marginTop: '173px' } : { padding: 0, marginTop: '89px' }}>
                     <ItemBodyIframeLayout horizontal={min1200Width()} style={{ border: 'none', boxShadow: 'none' }}>
-                     <div style={Object.assign({margin: 'auto',}, !isMobile() && details.postcardSize === "6x4" ?  {display:"flex"} : null)}>
+                     <div style={Object.assign({margin: 'auto',}, details.postcardSize === "6x4" || typeof details.postcardSize == 'undefined' ?  {display:"flex"} : null)}>
                       <FrontIframe />
                       <BackIframe />
                       </div>
