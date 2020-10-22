@@ -268,8 +268,8 @@ const MailoutDetailsPage = () => {
           title={`bm-iframe-front-${details._id}`}
           name="front"
           src={frontURL}
-          width={isMobile() ? '300' : `${iframeDimensions(details.postcardSize).width}`}
-          height={isMobile() ? '204' : `${iframeDimensions(details.postcardSize).height}`}
+          width={isMobile ? '300' : `${iframeDimensions(details.postcardSize).width}`}
+          height={isMobile ? '204' : `${iframeDimensions(details.postcardSize).height}`}
           frameBorder="0"
           sandbox="allow-same-origin allow-scripts"
           onLoad={handleOnload}
@@ -289,8 +289,8 @@ const MailoutDetailsPage = () => {
         title={`bm-iframe-back-${details._id}`}
         name="back"
         src={backURL}
-        width={isMobile() ? '300' : `${iframeDimensions(details.postcardSize).width}`}
-        height={isMobile() ? '204' : `${iframeDimensions(details.postcardSize).height}`}
+        width={isMobile ? '300' : `${iframeDimensions(details.postcardSize).width}`}
+        height={isMobile ? '204' : `${iframeDimensions(details.postcardSize).height}`}
         frameBorder="0"
         sandbox="allow-same-origin allow-scripts"
         onLoad={handleOnload}
@@ -374,7 +374,7 @@ const MailoutDetailsPage = () => {
                     }
                   </ContentBottomHeaderLayout>
 
-                  <ItemBodyLayoutV2 attached style={isMobile() ? { padding: 0, marginTop: '173px' } : { padding: 0, marginTop: '89px' }}>
+                  <ItemBodyLayoutV2 attached style={isMobile ? { padding: 0, marginTop: '173px' } : { padding: 0, marginTop: '89px' }}>
                     <ItemBodyIframeLayout horizontal={windowSize.width > 1199} style={{ border: 'none', boxShadow: 'none' }}>
                      <div style={Object.assign({margin: 'auto',}, details.postcardSize === "6x4" || typeof details.postcardSize == 'undefined' ?  {display:"flex"} : null)}>
                       <FrontIframe />
