@@ -16,8 +16,9 @@ import IframeGroup from '../components/MailoutListItem/IframeGroup';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ItemList from '../components/MailoutListItem/ItemList';
 import PageTitleHeader from '../components/PageTitleHeader';
-import { isMobile, postcardDimensions } from '../components/utils';
+import { postcardDimensions } from '../components/utils';
 import Loading from '../components/Loading';
+import { useIsMobile } from '../components/Hooks/useIsMobile';
 import PostcardSizeButton from '../components/Forms/Common/PostcardSizeButton';
 import { calculateCost } from '../components/MailoutListItem/helpers';
 
@@ -32,6 +33,7 @@ const useFetching = (getActionCreator, onboarded, dispatch) => {
 };
 
 const Dashboard = () => {
+  const isMobile = useIsMobile();
   const history = useHistory();
   const dispatch = useDispatch();
   const peerId = useSelector(store => store.peer.peerId)
@@ -254,19 +256,19 @@ const Dashboard = () => {
       </ContentTopHeaderLayout>
 
       {isInitiatingTeam && (
-        <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
+        <ContentBottomHeaderLayout>
           <Progress value={currentTeamUserCompleted} total={currentTeamUserTotal} progress="ratio" inverted success size="tiny" />
         </ContentBottomHeaderLayout>
       )}
 
       {isInitiatingUser && (
-        <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
+        <ContentBottomHeaderLayout>
           <Progress value={currentUserCompleted} total={currentUserTotal} progress="ratio" inverted success size="tiny" />
         </ContentBottomHeaderLayout>
       )}
 
       {!isInitiatingTeam && !isInitiatingUser && !mailoutsPendingState && mailoutList && mailoutList.length === 0 && (
-        <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
+        <ContentBottomHeaderLayout>
           <Segment placeholder style={{ marginRight: '-1em' }}>
             <Header icon>
               <Icon name="file outline" />
@@ -468,7 +470,7 @@ const Dashboard = () => {
 
 
       {mailoutList && mailoutList.length > 0 && (
-        <Segment style={isMobile() ? { padding: '0', paddingTop: '4.5em', marginLeft: '-1em', marginRight: '-1em' } : { marginTop: '22px' }}>
+        <Segment style={isMobile ? { padding: '0', paddingTop: '4.5em', marginLeft: '-1em', marginRight: '-1em' } : { marginTop: '22px' }}>
 
           <Modal open={!seenDashboardModel} basic size='small'>
             <Modal.Header>

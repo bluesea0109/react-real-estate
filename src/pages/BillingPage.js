@@ -8,12 +8,12 @@ import { format } from 'date-fns';
 
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
-import { isMobile } from '../components/utils';
 import auth from '../services/auth';
 import api from '../services/api';
 
 
 const BillingPage = () => {
+
   const isAdmin = useSelector(store => store.onLogin?.permissions?.teamAdmin);
   const [billingDetails, setBillingDetails] = useState(null)
 
@@ -70,9 +70,9 @@ const BillingPage = () => {
           )}
         </PageTitleHeader>
       </ContentTopHeaderLayout>
-      <div style={isMobile() ? { marginTop: '80px' } : { marginTop: '22px' }}>
+      <div style={{ margin: '20px 0' }}>
         <Segment>
-          <ContentBottomHeaderLayout>
+          <ContentBottomHeaderLayout style={{minHeight: 0}}>
             {!billingDetails && <Loading message="Retrieving billing information..." />}
           </ContentBottomHeaderLayout>
           {billingDetails && !!billingDetails.billings.length && (

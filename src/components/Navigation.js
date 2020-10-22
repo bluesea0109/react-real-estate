@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { StepLayout, StepsLayout, MobileDisabledLayout, NavigationLayout } from '../layouts';
 import { Dimmer, Menu, Initials, Icon, Step } from './Base';
+import { useIsMobile } from './Hooks/useIsMobile.js';
 
 import SideNaveToggle from './SideNaveToggle';
 import './SideNaveToggle/styles.scss';
@@ -60,10 +61,9 @@ const menuP = {
   marginTop:"-2px",
 };
 
-const mql = window.matchMedia('(max-width: 599px)');
-const isMobile = () => mql.matches;
-
 export default () => {
+  const isMobile = useIsMobile();
+
   const location = useLocation();
   const [activeItem, setActiveItem] = useState('');
   const [appIsBusy, setAppIsBusy] = useState(false);
@@ -160,10 +160,10 @@ export default () => {
     if (multiUser && isAdmin) {
       return (
         <SideNaveToggle moblileVisible={moblileVisible} setMobileVisible={setMobileVisible} toggle={toggle} setToggle={setToggle}>
-        <StepsLayout vertical={!mql.matches}>
+        <StepsLayout vertical={!isMobile}>
           <StepLayout active={onProfile} completed={completedProfile}>
             <Icon1/>
-            {mql.matches ? null : (
+            {isMobile ? null : (
               <Step.Content>
                 <Step.Title style={sidebarTextStyle}>Profile</Step.Title>
               </Step.Content>
@@ -172,7 +172,7 @@ export default () => {
 
           <StepLayout active={onTeamCustomization} completed={completedTeamCustomization}>
             <Icon2/>
-            {mql.matches ? null : (
+            {isMobile ? null : (
               <Step.Content>
                 <Step.Title style={sidebarTextStyle}>Customize Team</Step.Title>
               </Step.Content>
@@ -181,7 +181,7 @@ export default () => {
 
           <StepLayout active={onCustomization} completed={completedCustomization}>
             <Icon3/>
-            {mql.matches ? null : (
+            {isMobile ? null : (
               <Step.Content>
                 <Step.Title style={sidebarTextStyle}>Customize</Step.Title>
               </Step.Content>
@@ -190,7 +190,7 @@ export default () => {
 
           <StepLayout active={onInviteTeammates} completed={completedInviteTeammates}>
             <Icon4/>
-            {mql.matches ? null : (
+            {isMobile ? null : (
               <Step.Content>
                 <Step.Title style={sidebarTextStyle}>Invite Teammates</Step.Title>
               </Step.Content>
@@ -202,10 +202,10 @@ export default () => {
     } else {
       return (
         <SideNaveToggle moblileVisible={moblileVisible} setMobileVisible={setMobileVisible} toggle={toggle} setToggle={setToggle}>
-        <StepsLayout vertical={!mql.matches}>
+        <StepsLayout vertical={!isMobile}>
           <StepLayout active={onProfileSingleUser} completed={completedProfile}>
             <Icon name="user" />
-            {mql.matches ? null : (
+            {isMobile ? null : (
               <Step.Content>
                 <Step.Title style={sidebarTextStyle}>Profile</Step.Title>
               </Step.Content>
@@ -214,7 +214,7 @@ export default () => {
 
           <StepLayout active={onCustomizationSingleUser} completed={completedCustomization}>
             <Icon name="paint brush" />
-            {mql.matches ? null : (
+            {isMobile ? null : (
               <Step.Content>
                 <Step.Title style={sidebarTextStyle}>Customize</Step.Title>
               </Step.Content>
@@ -240,7 +240,7 @@ export default () => {
         <NavigationLayout
           text
           style={
-            isMobile()
+            isMobile
               ? {
                   WebkitBoxShadow: '2px 2px 6px 0px rgba(50, 50, 50, 0.14)',
                   MozBoxShadow: '2px 2px 6px 0px rgba(50, 50, 50, 0.14)',
@@ -282,7 +282,7 @@ export default () => {
             </MobileDisabledLayout>
           </Menu.Item>
 
-          <div className={isMobile() ? 'accordionDrop' : `noDropdown ${dropdown}`}>
+          <div className={isMobile ? 'accordionDrop' : `noDropdown ${dropdown}`}>
             <Menu.Menu>
             {multiUser && isAdmin && !selectedPeerId && (
               <Menu.Item

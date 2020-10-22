@@ -12,6 +12,7 @@ import LogoImage from '../LogoImage';
 
 import { Dropdown, Popup, Header } from 'semantic-ui-react';
 import './styles.scss';
+import { useIsMobile } from '../Hooks/useIsMobile';
 
 const StyledUserSelectorDropdown = styled(Dropdown)`
   height: 40px;
@@ -54,23 +55,24 @@ const dropdownPicStyle = {
   borderRadius: '50px',
   width: '32px',
 };
-const mql = window.matchMedia('(max-width: 599px)');
-const menuSpacing = () => (mql.matches ? {} : { marginLeft: '.5em', padding:'0px 14px' });
 
 export default ({ auth0 }) => {
+  const isMobile = useIsMobile();
   const history = useHistory();
   const dispatch = useDispatch();
   const location = useLocation();
   const [activeUser, setActiveUser] = useState('');
-
+  
   const loggedInUser = useSelector(store => store.onLogin.user);
   const selectedPeerId = useSelector(store => store.peer.peerId);
   const teammates = useSelector(store => store.team.profiles);
-
+  
   const onLoginMode = useSelector(store => store.onLogin.mode);
   const multiUser = onLoginMode === 'multiuser';
   const completedInviteTeammates = useSelector(store => store.onboarded.completedInviteTeammates);
 
+  const menuSpacing = () => (isMobile ? {} : { marginLeft: '.5em', padding:'0px 14px' });
+  
   useEffect(() => {
     if (loggedInUser && !activeUser) {
       setActiveUser(loggedInUser._id);

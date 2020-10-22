@@ -9,7 +9,8 @@ export default styled.div`
   z-index: 15;
   border-radius:.28571429rem;
 
-  @media (max-width: 768px) {
+  @media (max-width: 600px) {
     min-width: 101%;
+    margin-top:-76px;
   }
 `;
