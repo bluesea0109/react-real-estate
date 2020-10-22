@@ -638,6 +638,16 @@ h1 {
   width: 100%!important;
   padding: 8px!important;
 } */
+.listingFilterButton{
+  border-radius: 30px!important;
+}
+.filterIcon{
+  transition: color 0.3s ease!important;
+  color: rgba(0,0,0,.4)!important
+}
+.filterIconActive{
+  color: #59c4c4!important
+}
 .listingCardBodyContainer {
   padding: 16px;
 }
