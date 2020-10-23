@@ -475,6 +475,15 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
       {error && <Snackbar error>{error}</Snackbar>}
 
       <Segment style={{marginBottom: '1rem'}}>
+        {currentPostcardSize !== postcardSize &&
+          <Message negative style={{ margin: 0, display: 'flex', flexWrap: 'wrap' }}>
+            <Message.Header style={{flexShrink: 0, paddingRight: '1rem'}}>
+              <Icon name="times circle" color="darkred"></Icon>Warning!</Message.Header>
+            <Message.Content>Changing postcard size may change the aspect ratio of your cover photo. Please upload a
+              cover photo according to the preferred size specified below.
+            </Message.Content>
+          </Message>
+        }
         <ContentBottomHeaderLayout>
           <ItemHeaderLayout attached="top" block >
             <span style={{ gridArea: 'label' }}>
@@ -608,7 +617,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
                       <a href="#/ignore" onClick={triggerFileDialog} id="postcardUploadText">Upload new cover photo</a>
                       <br/>
                       <span style={currentPostcardSize !== postcardSize ? {color: '#9F3A38', fontWeight: 'bold'} : {}}>
-                        {postcardSize === '6x11' ? '(preferred size: 3438x1485)' : postcardSize === '6x9' ? '(preferred size: 2060x1485)' : '(preferred size: 1375x990)'}
+                        {postcardSize === '11x6' ? '(preferred size: 3438x1485)' : postcardSize === '9x6' ? '(preferred size: 2060x1485)' : '(preferred size: 1375x990)'}
                       </span>
                     </div>
                   </div>

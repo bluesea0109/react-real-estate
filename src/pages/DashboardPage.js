@@ -436,8 +436,8 @@ const Dashboard = () => {
                             {CampaignCoverUpload && (<b>{CampaignCoverUpload.name}</b>)}
                             {!CampaignCoverUpload && (<b>Upload Your Own Design</b>)}
                             <br />
-                        {campaignPostcardSize === '6x11' ? '(6.25"x11.25" PNG or JPEG - max 5MB)' 
-                          : campaignPostcardSize === '6x9' ? '(6.25"x9.25" PNG or JPEG - max 5MB)' 
+                        {campaignPostcardSize === '11x6' ? '(6.25"x11.25" PNG or JPEG - max 5MB)' 
+                          : campaignPostcardSize === '9x6' ? '(6.25"x9.25" PNG or JPEG - max 5MB)' 
                           : '(4.25"x6.25" PNG or JPEG - max 5MB)'}
                       </div>
                           <Icon name="upload" size="big" />
