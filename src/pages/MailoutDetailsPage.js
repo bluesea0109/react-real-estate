@@ -227,7 +227,7 @@ const MailoutDetailsPage = () => {
   const iframeDimensions = (size) =>{
     let width = 600;
     let height = 408;
-    
+
     if(size === '9x6'){
       width = 888;
       height = 600;
@@ -431,7 +431,7 @@ const MailoutDetailsPage = () => {
                     <ItemBodyIframeLayout horizontal={windowSize.width > 1199} style={{ border: 'none', boxShadow: 'none' }}>
                      <div style={{margin: 'auto', display:"flex", flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center'}}>
                       <FrontIframe />
-                      <div style={{padding: '0 16px'}}><BackIframe /></div>
+                      <div style={{padding: '16px'}}><BackIframe /></div>
                       </div>
                     </ItemBodyIframeLayout>
 
