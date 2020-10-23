@@ -121,7 +121,7 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
     return (
       <ItemBodyIframeLayout horizontal style={IFrameBodyStyles} id={`mailout-iframe-set-${index}`}>
         <Segment textAlign="center" loading={!item?._id || !frontLoaded} style={IFrameStyles}>
-          <div style={{ width: '300px', height: '204px', overflow: 'hidden' }}>
+          <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className='image-frame-border'>
             <iframe
               id="bm-iframe-front"
               title={frontURL}
@@ -137,7 +137,7 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
           </div>
         </Segment>
         <Segment textAlign="center" loading={!item?._id || !backLoaded} style={IFrameStyles}>
-          <div style={{ width: '300px', height: '204px', overflow: 'hidden' }}>
+          <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className='image-frame-border'>
             <iframe
               id="bm-iframe-back"
               title={backURL}
