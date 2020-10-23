@@ -70,6 +70,7 @@ export default () => {
   const [dropdown, setDropdown] = useState('');
   const [toggle, setToggle] = useState('');
   const [moblileVisible, setMobileVisible] = React.useState(false);
+  const [svgHover, setSvgHover] = useState('');
 
   const isAuthenticated = useSelector(store => store.auth0.authenticated);
   const onLoginPending = useSelector(store => store.onLogin.pending);
@@ -273,10 +274,20 @@ export default () => {
             </MobileDisabledLayout>
           </Menu.Item>
 
-          <Menu.Item as={Link} color="teal" name="settings" active={activeItem === '/settings' || activeItem === '/customization' || activeItem === '/profile' || activeItem === '/billing'} to="/settings" style={menuItemStyles} onClick={mobileCollapse}>
+          <Menu.Item 
+            as={Link} 
+            color="teal" 
+            name="settings" 
+            active={activeItem === '/settings' || activeItem === '/customization' || activeItem === '/profile' || activeItem === '/billing'} 
+            to="/settings" 
+            style={menuItemStyles} 
+            onClick={mobileCollapse}
+            onMouseEnter={() => setSvgHover('svgHover')}
+            onMouseLeave={() => setSvgHover('')}
+          >
             <MobileDisabledLayout>
               <span style={{display:"flex"}}>
-                <Cog className="cogIconStyle"/>
+                <Cog className={`cogIconStyle ${svgHover}`}/>
                 <span style={menuP}>Settings</span> 
               </span>
             </MobileDisabledLayout>
