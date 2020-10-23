@@ -561,15 +561,18 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           style={{display: 'flex', flexWrap:'wrap'}}
         >
           <div style={{display: 'flex', flexDirection: 'column', padding: '0 1rem'}}>
-            <Header as="h4">Postcard Size</Header>
-            <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
-              {renderPostcardSize('4x6')}
-              {renderPostcardSize('6x9')}
-              {renderPostcardSize('6x11')}
-            </div>
-            
+            {currentListingStatus !== 'custom' && (
+              <>
+                <Header as="h4">Postcard Size</Header>
+                <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
+                  {renderPostcardSize('4x6')}
+                  {renderPostcardSize('6x9')}
+                  {renderPostcardSize('6x11')}
+                </div>
+              </>
+            )}
             {multiUser && (
-              <div style={{margin: '2rem 0'}}>
+              <div style={currentListingStatus === 'custom' ? {width:'260px', marginBottom:'40px'} : {margin: '2rem 0'}}>
                 <Header as="h4">Display Agent</Header>
                 <Dropdown
                   placeholder="Select Display Agent"
