@@ -86,6 +86,7 @@ const Dashboard = () => {
 
     const formData = new FormData();
     formData.append('front', file);
+    formData.append('postcardSize', campaignPostcardSize);
     try {
       let path = `/api/user/mailout/create/front`
       if (peerId) path = `/api/user/peer/${peerId}/mailout/create/front`
