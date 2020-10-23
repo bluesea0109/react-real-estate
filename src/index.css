@@ -178,6 +178,12 @@ h1 {
 }
 
 /* LABELS */
+.ui.grey.label{
+  background-color:#8d8d8d !important;
+}
+.ui.grey.ribbon.label{
+  border-color:#3c3c3c !important;
+}
 .ui.orange.ribbon.label {
   border-color: #bc340e !important;
 }
