@@ -121,11 +121,11 @@ const Dashboard = () => {
 
   const finsihAddCampaign = async e => {
     if (useMLSNumberToAddCampaign) {
-      let value = document.getElementById('addCampaignInput').value
-      if (!value) return
-      if (!value.length) return
+      let mlsNum = document.getElementById('addCampaignInput').value
+      if (!mlsNum || !campaignPostcardSize) return
+      if (!mlsNum.length) return
       setShowAddCampaign(false)
-      dispatch(addCampaignStart(value))
+      dispatch(addCampaignStart({mlsNum: mlsNum, postcardSize: campaignPostcardSize}))
     } else {
       let path = `/api/user/mailout/withCover`
       if (peerId) path = `/api/user/peer/${peerId}/mailout/withCover`
