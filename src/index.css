@@ -496,6 +496,12 @@ h1 {
   background-color: rgba(0, 0, 0, 0.95) !important;
 }
 
+@media only screen and (min-width: 1200px) {
+  .ui.small.modal {
+    width: 100%;
+  }
+}
+
 /* Mobile Only */
 .ui.container.remove-margins {
   margin-left: 0 !important;

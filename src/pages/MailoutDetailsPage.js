@@ -232,8 +232,7 @@ const MailoutDetailsPage = () => {
       width = '600';
       height = '408';
     }
-
-    if(size === '6x4'){
+    if(size === '6x4' ){
       width = '600';
       height = '408';
     }
@@ -246,6 +245,12 @@ const MailoutDetailsPage = () => {
       height = '600';
     }
     return {width, height}
+  }
+
+  const modalPreviewText = {
+    position:'absolute', 
+    top:'45px', 
+    fontSize:'20px'
   }
 
   const IFrameSegStyle = {
@@ -319,14 +324,20 @@ const MailoutDetailsPage = () => {
         {pendingState && !error && <Loading />}
       </ContentTopHeaderLayout>
       <Modal open={showConsentModal} onClose={() => setShowConsentModal(false)} basic size="small">
-        <Modal.Header>
-          Preview
-          <Button primary inverted floated="right" onClick={() => setIsFlipped(true)} disabled={isFlipped}>
-            Flip Back
-          </Button>
-          <Button primary inverted floated="right" onClick={() => setIsFlipped(false)} disabled={!isFlipped}>
-            Flip Forward
-          </Button>
+        {/* Where else can i find size of postcard */}
+        {details && <div style={{ margin:"auto", width:`${iframeDimensions(details.postcardSize).width}px`, height:`calc(${iframeDimensions(details.postcardSize).height}px + 300px)`}}>
+        <Modal.Header style={{padding:'40px 0px', display:'flex'}}>
+          <div style={modalPreviewText}>
+            Preview
+          </div>
+          <div style={{margin:'auto'}}>
+            <Button primary inverted floated="right" onClick={() => setIsFlipped(true)} disabled={isFlipped}>
+              Flip Back
+            </Button>
+            <Button primary inverted floated="right" onClick={() => setIsFlipped(false)} disabled={!isFlipped}>
+              Flip Forward
+            </Button>
+          </div>
         </Modal.Header>
         <Modal.Content>
           <FlipCard isFlipped={isFlipped}>
@@ -335,14 +346,14 @@ const MailoutDetailsPage = () => {
           </FlipCard>
         </Modal.Content>
         <Modal.Content>
-          <Modal.Description style={{ textAlign: 'center' }}>
+          <Modal.Description style={{ textAlign: 'center', marginTop:'20px' }}>
             <p style={{ margin: 0 }}>I agree to be immediately charged</p>
-            <b style={{ fontSize: '32px' }}>{calculateCost(details && details.recipientCount, details && details.postcardSize ? details.postcardSize : '4x6')}</b>
+            <b style={{ fontSize: '32px', lineHeight: '50px' }}>{calculateCost(details && details.recipientCount, details && details.postcardSize ? details.postcardSize : '4x6')}</b>
             <br />
             <p>{calculateCost(1, details && details.postcardSize ? details.postcardSize : '4x6')} x {currentNumberOfRecipients}</p>
           </Modal.Description>
         </Modal.Content>
-        <Modal.Actions>
+        <Modal.Actions style={{textAlign:'center', marginTop:'30px'}}>
           <Button secondary inverted onClick={() => setShowConsentModal(false)}>
             <Icon name="remove" /> Cancel
           </Button>
@@ -350,6 +361,8 @@ const MailoutDetailsPage = () => {
             <Icon name="checkmark" /> Agree
           </Button>
         </Modal.Actions>
+        </div>
+      }
       </Modal>
 
       {!DestinationCalculation && (
