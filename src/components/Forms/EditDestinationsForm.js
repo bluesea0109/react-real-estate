@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import React, { useState, useEffect, Fragment } from 'react';
 import { Checkbox, Dropdown, Form, Header, Label, List, Message, Select } from 'semantic-ui-react';
 
-import { ContentBottomHeaderLayout, ContentSpacerLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
+import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import { tag } from '../utils';
 import { Button, Menu, Page, Segment, Snackbar } from '../Base';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
@@ -348,8 +348,6 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
           </Menu>
         </PageTitleHeader>
       </ContentTopHeaderLayout>
-
-      <ContentSpacerLayout />
 
       {error && <Snackbar error>{error}</Snackbar>}
 
