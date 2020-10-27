@@ -159,7 +159,7 @@ const ListingsPage = () => {
       let filteredListingDetails = listingDetails && listingDetails.listings.filter(el => activeFilters.includes(el.standardStatus));
       setListings(filteredListingDetails);
     }
-  }, [activeFilters])
+  }, [listingDetails, activeFilters])
 
   const handleFilterSelected = (val) => {
     if(val === 'All'){
