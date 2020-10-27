@@ -28,7 +28,6 @@ const ListingCard = ({listingDetails, listingItem}) => {
       params.mls = item.blueroofMlsId
       return Object.keys(params).map(param => `${param}=${params[param]}`).join('&');
     }
-    {/* <Grid.Column mobile={16} tablet={8} computer={8} largeScreen={5} widescreen={4} > */}
     return(
       <Grid.Column>
         <Segment className="cardSegment">
