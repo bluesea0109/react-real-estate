@@ -796,6 +796,10 @@ h1 {
   right: 0;
   padding: 16px;
 }
+.adPreviewWrapper{
+  padding: 24px;
+  font-family: 'Open Sans', sans-serif !important;
+}
 .adPreviewContainer {
   padding: 0px!important
 }

@@ -23,7 +23,7 @@ const AdPreview = ({ ad, viewMore, adTextLength, toggleAdTextLength }) => {
   let text = 'Wonderful opportunity to own this beautiful custom home, overlooking Oak Harbor. Master and 2nd bedroom upstairs, with 1 & 3/4 baths, living, dining, kitchen and laundry boasting beautiful Acacia flooring. Downstairs has its own entrance, 2 bedrooms, 3/4 bath, laundry hookups, large living room, with space for a future kitchen(ette)?? and storage. 2 car garage w/ workshop, RV parking, views of downtown, the bay and Baker. The updates & love poured into this home will have you planning your move!';
   
   return(
-    <div>
+    <div className='adPreviewWrapper'>
       <Grid>
         <Grid.Column width={2}>
           <div className="adPreviewPageProfilePicContainer">
@@ -37,7 +37,8 @@ const AdPreview = ({ ad, viewMore, adTextLength, toggleAdTextLength }) => {
             <Icon name="world" size="small" className="adPreviewAdIcon" />
           </span>
         </Grid.Column>
-        <span className="adPreviewText">{trimText(text, adTextLength, viewMore)} <span className="adPreviewTextExpand" onClick={() => toggleAdTextLength(text)}>Read {viewMore ? 'less' : 'more'}</span></span>
+        {/* <span className="adPreviewText">{trimText(text, adTextLength, viewMore)} <span className="adPreviewTextExpand" onClick={() => toggleAdTextLength(text)}>Read {viewMore ? 'less' : 'more'}</span></span> */}
+        <span className="adPreviewText">{trimText(text, 510, false)}</span>
       </Grid>
       <Segment className='adPreviewContainer'>
         <div className='adPreviewImageContainer'>
@@ -118,7 +119,7 @@ const EmptyPage = () => {
   }
 
   const tableBody = (viewMore, adTextLength, toggleAdTextLength) => {
-    return adDetails.map((item, index) => (
+      return adDetails.map((item, index) => (
       item.pending ?
         <Table.Row key={index}>
         <Table.Cell className="marketerGrey adTableItemCampaignCell"><b>{item.details.campaignName}</b></Table.Cell>
@@ -145,7 +146,7 @@ const EmptyPage = () => {
             trigger={<div className="adTableItemPreviewContainer">
             <div className="adTableItemPreview" style={{backgroundImage: `url(${item.details.previewUrl ? item.details.previewUrl : 'https://reactnativecode.com/wp-content/uploads/2018/02/Default_Image_Thumbnail.png'})`}} />
           </div>}
-            on='click'
+            on='hover'
             position="right center"
           />
         </Table.Cell>
@@ -160,7 +161,7 @@ const EmptyPage = () => {
         <Table.Cell>{item.details.cpp ? `$${Math.floor(item.details.cpp)}` : '-'}</Table.Cell>
         <Table.Cell>{item.details.ctr ? `${Math.floor(item.details.ctr)}%` : '-'}</Table.Cell>
         <Table.Cell>{item.details.clicks ? Math.floor(item.details.clicks) : '-'}</Table.Cell>
-        <Table.Cell>{item.details.cpc ? `$${item.details.cpc.toFixed(2)}` : '-'}</Table.Cell>
+        <Table.Cell>{item.details.cpc ? `$${Number(item.details.cpc).toFixed(2)}` : '-'}</Table.Cell>
         <Table.Cell className="marketerGrey">Leads</Table.Cell>
         <Table.Cell>
           {
@@ -234,7 +235,7 @@ const EmptyPage = () => {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {tableBody(viewMore, adTextLength, toggleAdTextLength)}
+                {adDetails && tableBody(viewMore, adTextLength, toggleAdTextLength)}
               </Table.Body>
             </Table>
           )}
