@@ -225,24 +225,16 @@ const MailoutDetailsPage = () => {
   }
 
   const iframeDimensions = (size) =>{
-    let width = '';
-    let height = '';
-  
-    if(typeof size == 'undefined'){
-      width = '600';
-      height = '408';
-    }
-    if(size === '6x4' ){
-      width = '600';
-      height = '408';
-    }
+    let width = 600;
+    let height = 408;
+
     if(size === '9x6'){
-      width = '888';
-      height = '600';
+      width = 888;
+      height = 600;
     }
     if(size === '11x6'){
-      width = '1080';
-      height = '600';
+      width = 1080;
+      height = 600;
     }
     return {width, height}
   }
@@ -263,7 +255,14 @@ const MailoutDetailsPage = () => {
   const FrontIframe = () => (
     <div>
     {details.frontResourceUrl && (
-        <Image src={details.frontResourceUrl} style={{ height: '400px', maxWidth: '588px', minWidth: '580px' }} />
+        <Image
+          src={details.frontResourceUrl}
+          className="image-frame-border"
+          style={{
+            height: iframeDimensions(details.postcardSize).height,
+            width: iframeDimensions(details.postcardSize).width,
+            boxSizing: 'border-box',
+          }} />
     )}
     {!details.frontResourceUrl && (
       <Segment compact textAlign="center" loading={!details?._id || !frontLoaded} style={IFrameSegStyle}>
