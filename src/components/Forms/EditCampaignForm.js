@@ -534,26 +534,28 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           )}
         </ContentBottomHeaderLayout>
 
-        <Segment
-          basic
-          padded
-          style={{display: 'flex', flexWrap: 'wrap'}}
-        >
-          <div>
-            <Header as="h4">Template Theme</Header>
-            {renderTemplatePicture('bookmark')}
-          </div>
+        {currentListingStatus !== 'custom' &&
+          <Segment
+            basic
+            padded
+            style={{ display: 'flex', flexWrap: 'wrap' }}
+          >
+            <div>
+              <Header as="h4">Template Theme</Header>
+              {renderTemplatePicture('bookmark')}
+            </div>
 
-          <div>
-            <p>&nbsp;</p>
-            {renderTemplatePicture('ribbon')}
-          </div>
+            <div>
+              <p>&nbsp;</p>
+              {renderTemplatePicture('ribbon')}
+            </div>
 
-          <div>
-            <p>&nbsp;</p>
-            {renderTemplatePicture('stack')}
-          </div>
-        </Segment>
+            <div>
+              <p>&nbsp;</p>
+              {renderTemplatePicture('stack')}
+            </div>
+          </Segment>
+        }
 
         <Segment
           basic
