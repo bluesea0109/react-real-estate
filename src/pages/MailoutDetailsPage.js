@@ -252,6 +252,10 @@ const MailoutDetailsPage = () => {
     margin: 'auto'
   }
 
+  const modalWidthStyle = {
+    width: '100%'
+  }
+
   const FrontIframe = () => (
     <div>
     {details.frontResourceUrl && (
@@ -322,9 +326,9 @@ const MailoutDetailsPage = () => {
         </PageTitleHeader>
         {pendingState && !error && <Loading />}
       </ContentTopHeaderLayout>
-      <Modal open={showConsentModal} onClose={() => setShowConsentModal(false)} basic size="small">
-        {/* Where else can i find size of postcard */}
-        {details && <div style={{ margin:"auto", width:`${iframeDimensions(details.postcardSize).width}px`, height:`calc(${iframeDimensions(details.postcardSize).height}px + 300px)`}}>
+      <Modal open={showConsentModal} onClose={() => setShowConsentModal(false)} basic size="small" style={modalWidthStyle}>
+       
+      {details && <div style={{ margin:"auto", width:`${iframeDimensions(details.postcardSize).width}px`, height:`calc(${iframeDimensions(details.postcardSize).height}px + 300px)`}}>
         <Modal.Header style={{padding:'40px 0px', display:'flex'}}>
           <div style={modalPreviewText}>
             Preview
