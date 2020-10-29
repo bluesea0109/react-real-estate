@@ -10,6 +10,7 @@ import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
 import auth from '../services/auth';
 import api from '../services/api';
+import { postcardDimensionsDisplayed } from '../components/utils';
 
 
 const BillingPage = () => {
@@ -40,7 +41,7 @@ const BillingPage = () => {
         <Table.Cell>
           <Link to={`dashboard/${item.id}`}>{item.name}</Link>
         </Table.Cell>
-        <Table.Cell>{item.postcardSize ? `${item.postcardSize}" Postcard` : `4x6" Postcard`}</Table.Cell>
+        <Table.Cell>{item.postcardSize ? `${postcardDimensionsDisplayed(item.postcardSize)}" Postcard` : `4x6" Postcard`}</Table.Cell>
         <Table.Cell>{item.recipientCount}</Table.Cell>
         <Table.Cell>${item.creditsAmountApplied || '0.00'}</Table.Cell>
         <Table.Cell>{item.userProfile.first} {item.userProfile.last}</Table.Cell>
