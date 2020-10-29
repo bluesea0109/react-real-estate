@@ -9,16 +9,22 @@ import auth from '../../services/auth';
 import api from '../../services/api';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import { changeMailoutDisplayAgentPending, updateMailoutEditPending } from '../../store/modules/mailout/actions';
-import { differenceObjectDeep, isMobile, maxLength, objectIsEmpty, sleep } from '../utils';
+import { differenceObjectDeep, maxLength, objectIsEmpty, sleep, postcardDimensions } from '../utils';
 import { Button, Icon, Image, Menu, Message, Page, Segment, Snackbar } from '../Base';
 import { resolveLabelStatus } from '../MailoutListItem/helpers';
 import { StyledHeader, colors } from '../helpers';
 import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
+import { useIsMobile } from '../Hooks/useIsMobile';
+import { calculateCost } from '../MailoutListItem/helpers';
+import PostcardSizeButton from './Common/PostcardSizeButton';
 
 const blacklistNames = ['brandColor', 'frontImgUrl', 'agentPicture', 'brokerageLogo', 'teamLogo', 'backUrl', 'frontAgentUrl'];
 
 const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
+
+  const isMobile = useIsMobile();
+
   const peerId = useSelector(store => store.peer.peerId)
   const dispatch = useDispatch();
   const bookmarkTemplate = useSelector(store => store.templates.available?.bookmark);
@@ -40,12 +46,14 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   if (mailoutDetails.frontResourceUrl) renderFrontDetails = false
   if (mailoutDetails.backResourceUrl) renderBackDetails = false
 
+  const currentPostcardSize = mailoutDetails?.postcardSize;
   const currentTemplateTheme = mailoutDetails?.templateTheme;
   const currentMailoutDisplayAgentUserID = mailoutDetails.mailoutDisplayAgent ? mailoutDetails.mailoutDisplayAgent?.userId : mailoutDetails.userId;
   const currentMailoutDisplayAgent = mailoutDetails.mailoutDisplayAgent || { userId: mailoutDetails.userId };
 
   const [error, setError] = useState(null)
 
+  const [postcardSize, setPostcardSize] = useState(currentPostcardSize);
   const [templateTheme, setTemplateTheme] = useState(currentTemplateTheme);
   const [selectedBrandColor, setSelectedBrandColor] = useState(mailoutEdit?.mergeVariables?.brandColor);
   const [displayColorPicker, setDisplayColorPicker] = useState(false)
@@ -192,6 +200,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
     const newData = Object.assign(
       {},
+      { postcardSize },
       { templateTheme },
       { mergeVariables: mailoutEdit?.mergeVariables },
       { mergeVariables: newMergeVariables },
@@ -241,6 +250,33 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
         ),
       });
     });
+  }
+
+  const renderPostcardSize = (size = '4x6') => {
+
+
+    return (
+      <div style={{ margin: '1em 1em 2em 1rem', width: '118px', height: '84px' }}>
+        <input
+          type="radio"
+          checked={postcardSize === size}
+          value={size}
+          onChange={(e, { value }) => setPostcardSize(postcardDimensions(value))}
+          style={{ visibility: 'hidden', display: 'none' }}
+        />
+        <div
+          onClick={e => setPostcardSize(postcardDimensions(size))}
+          style={
+            postcardSize === postcardDimensions(size)
+              ? { border: '2px solid #59C4C4', margin: 0, padding: '0.5em', borderRadius: '5px', height: '100%' }
+              : { border: '1px solid lightgray', margin: 0, padding: '0.5em', borderRadius: '5px', height: '100%' }
+          }
+        >
+          <PostcardSizeButton postcardSize={size} />
+        </div>
+        <div style={{textAlign: 'center', padding: '0.5rem'}}>{`${calculateCost(1, size)}/each`}</div>
+      </div>
+    )
   }
 
   const renderTemplatePicture = templateName => {
@@ -324,7 +360,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
         return (
           <Form color="green">
-            <Segment basic padded className={isMobile() ? null : 'secondary-grid-container'}>
+            <Segment basic padded className={isMobile ? null : 'secondary-grid-container'}>
               {ribbonFields}
             </Segment>
           </Form>
@@ -362,7 +398,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
         return (
           <Form color="green">
-            <Segment basic padded className={isMobile() ? null : 'secondary-grid-container'}>
+            <Segment basic padded className={isMobile ? null : 'secondary-grid-container'}>
               {bookmarkFields}
             </Segment>
           </Form>
@@ -400,7 +436,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
         return (
           <Form color="green">
-            <Segment basic padded className={isMobile() ? null : 'secondary-grid-container'}>
+            <Segment basic padded className={isMobile ? null : 'secondary-grid-container'}>
               {stackFields}
             </Segment>
           </Form>
@@ -438,9 +474,18 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
       {error && <Snackbar error>{error}</Snackbar>}
 
-      <Segment>
+      <Segment style={{marginBottom: '1rem'}}>
+        {currentPostcardSize !== postcardSize &&
+          <Message negative style={{ margin: 0, display: 'flex', flexWrap: 'wrap' }}>
+            <Message.Header style={{flexShrink: 0, paddingRight: '1rem'}}>
+              <Icon name="times circle" color="darkred"></Icon>Warning!</Message.Header>
+            <Message.Content>Changing postcard size may change the aspect ratio of your cover photo. Please upload a
+              cover photo according to the preferred size specified below.
+            </Message.Content>
+          </Message>
+        }
         <ContentBottomHeaderLayout>
-          <ItemHeaderLayout attached="top" block style={isMobile() ? { marginTop: '56px' } : {}}>
+          <ItemHeaderLayout attached="top" block >
             <span style={{ gridArea: 'label' }}>
               <Label
                 size="large"
@@ -489,34 +534,60 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           )}
         </ContentBottomHeaderLayout>
 
+        {currentListingStatus !== 'custom' &&
+          <Segment
+            basic
+            padded
+            style={{ display: 'flex', flexWrap: 'wrap' }}
+          >
+            <div>
+              <Header as="h4">Template Theme</Header>
+              {renderTemplatePicture('bookmark')}
+            </div>
+
+            <div>
+              <p>&nbsp;</p>
+              {renderTemplatePicture('ribbon')}
+            </div>
+
+            <div>
+              <p>&nbsp;</p>
+              {renderTemplatePicture('stack')}
+            </div>
+          </Segment>
+        }
+
         <Segment
           basic
           padded
-          className={isMobile() ? null : 'primary-grid-container'}
-          style={isMobile() ? { marginTop: '140px' } : { padding: 10, marginTop: '120px' }}
+          style={{display: 'flex', flexWrap:'wrap'}}
         >
-          <div>
-            <Header as="h4">Template Theme</Header>
-            {renderTemplatePicture('bookmark')}
+          <div style={{display: 'flex', flexDirection: 'column', padding: '0 1rem'}}>
+            {currentListingStatus !== 'custom' && (
+              <>
+                <Header as="h4">Postcard Size</Header>
+                <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
+                  {renderPostcardSize('4x6')}
+                  {renderPostcardSize('6x9')}
+                  {renderPostcardSize('6x11')}
+                </div>
+              </>
+            )}
+            {multiUser && (
+              <div style={currentListingStatus === 'custom' ? {width:'260px', marginBottom:'40px'} : {margin: '2rem 0'}}>
+                <Header as="h4">Display Agent</Header>
+                <Dropdown
+                  placeholder="Select Display Agent"
+                  fluid
+                  selection
+                  options={profiles}
+                  value={mailoutDisplayAgent?.userId}
+                  onChange={handleAgentChange}
+                />
+              </div>
+            )}
           </div>
-
-          <div>
-            <p>&nbsp;</p>
-            {renderTemplatePicture('ribbon')}
-          </div>
-
-          <div>
-            <p>&nbsp;</p>
-            {renderTemplatePicture('stack')}
-          </div>
-        </Segment>
-
-        <Segment
-          basic
-          padded
-          className={isMobile() ? null : 'secondary-grid-container'}
-        >
-          <div>
+          <div style={{padding: '0 1em'}}>
             <Header as="h4">Brand Color</Header>
             <BlockPicker triangle="hide" width="200px" color={selectedBrandColor} colors={colors} onChange={setTempColor} onChangeComplete={value => setSelectedBrandColor(value) && setTempColor(value)} />
             <Icon id="brandColourPickerIcon" bordered link color='grey' name="eye dropper" onClick={ handleColorPickerClick } />
@@ -527,7 +598,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           </div>
 
           {!mailoutDetails.frontResourceUrl && (
-            <div>
+            <div style={{maxWidth: 350, padding: '0 1rem'}}>
               <Header as="h4">
                 Cover Photo
               </Header>
@@ -538,35 +609,26 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
                 <div>
                   <img src={coverPhoto} alt="postcard cover" />
                   <br/>
-                  <Button.Group icon>
-                    <Button onClick={() => changeCoverPhotoDec()}>
-                      <Icon name='angle left' />
-                    </Button>
-                    <Button onClick={() => changeCoverPhotoInc()}>
-                      <Icon name='angle right' />
-                    </Button>
-                  </Button.Group>
-                  <div id="uploadCoverGroup">
-                    <a href="#/ignore" onClick={triggerFileDialog} id="postcardUploadText">Upload new cover photo</a>
-                    <br/>
-                    (preferred size: 1375x990)
+                  <div style={{display:'flex'}}>
+                    <Button.Group icon>
+                      <Button onClick={() => changeCoverPhotoDec()}>
+                        <Icon name='angle left' />
+                      </Button>
+                      <Button onClick={() => changeCoverPhotoInc()}>
+                        <Icon name='angle right' />
+                      </Button>
+                    </Button.Group>
+                    <div style={{paddingLeft:'0.5rem'}}>
+                      <a href="#/ignore" onClick={triggerFileDialog} id="postcardUploadText">Upload new cover photo</a>
+                      <br/>
+                      <span style={currentPostcardSize !== postcardSize ? {color: '#9F3A38', fontWeight: 'bold'} : {}}>
+                        {postcardSize === '11x6' ? '(preferred size: 3438x1485)' : postcardSize === '9x6' ? '(preferred size: 2060x1485)' : '(preferred size: 1375x990)'}
+                      </span>
+                    </div>
                   </div>
                 </div>
               )}
               <input id="postcardCoverFile" name="postcardcover" type="file" onChange={handleFileChange}></input>
-            </div>
-          )}
-          {multiUser && (
-            <div>
-              <Header as="h4">Display Agent</Header>
-              <Dropdown
-                placeholder="Select Display Agent"
-                fluid
-                selection
-                options={profiles}
-                value={mailoutDisplayAgent?.userId}
-                onChange={handleAgentChange}
-              />
             </div>
           )}
         </Segment>

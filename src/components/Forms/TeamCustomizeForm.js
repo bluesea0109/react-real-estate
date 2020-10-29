@@ -7,7 +7,7 @@ import { saveTeamListedShortcodePending, saveTeamSoldShortcodePending } from '..
 import { saveTeamCustomizationPending } from '../../store/modules/teamCustomization/actions';
 import { ContentTopHeaderLayout } from '../../layouts';
 import { Button, Menu, Page, Segment } from '../Base';
-import { isMobile, objectIsEmpty } from '../utils';
+import { objectIsEmpty } from '../utils';
 import { Form } from './Base';
 
 import PageTitleHeader from '../PageTitleHeader';
@@ -22,12 +22,16 @@ import KWKLYCTAToggleFormField from './Common/KWKLYCTAToggleFormField';
 import TemplatePictureFormField from './Common/TemplatePictureFormField';
 import MailoutSizeSliderFormField from './Common/MailoutSizeSliderFormField';
 import ValidateURLWithoutRerender from './Common/ValidateURLWithoutRerender';
+import { useIsMobile } from '../Hooks/useIsMobile';
+import TemplatePostcardSizeField from './Common/TemplatePostcardSizeField';
 
 const formReducer = (state, action) => {
   return _.merge({}, action);
 };
 
 const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
+
+  const isMobile = useIsMobile();
   const dispatch = useDispatch();
   const formRef = useRef();
 
@@ -140,8 +144,8 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
           <Fragment>
             <Segment
               padded
-              className={isMobile() ? null : 'primary-grid-container'}
-              style={isMobile() ? {} : { gridTemplateRows: 'unset', gridTemplateAreas: 'unset' }}
+              className={isMobile ? null : 'primary-grid-container'}
+              style={isMobile ? {} : { gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}
             >
               <div>
                 <Header as="h5">Template Theme</Header>
@@ -161,13 +165,24 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
               <div>{ColorPickerFormField({ listingType, initialValues, formValues, setFormValues })}</div>
             </Segment>
 
-            <Segment padded className={isMobile() ? null : 'tertiary-grid-container'}>
+            <Segment padded className={isMobile ? null : 'tertiary-grid-container'}>
               <div>{AgentDropdownFormField({ listingType, initialValues, formValues, setFormValues })}</div>
 
               <div>{InputFormField({ fieldName: 'frontHeadline', listingType, initialValues, formValues, setFormValues })}</div>
 
-              <div style={{ paddingTop: isMobile() ? 'unset' : '3.85em' }}>
-                {KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr',
+                gridTemplateRows: '1fr 50px'
+                }}>
+                <div style={{display: 'flex', justifyContent: 'flex-start', padding: '0.5rem'}}>
+                  <>{TemplatePostcardSizeField({ postcardSize: '4x6', listingType, initialValues, formValues, setFormValues })}</>
+                  <>{TemplatePostcardSizeField({ postcardSize: '6x9', listingType, initialValues, formValues, setFormValues })}</>
+                  <>{TemplatePostcardSizeField({ postcardSize: '6x11', listingType, initialValues, formValues, setFormValues })}</>
+                </div>
+                <div style={{ display: 'block', paddingTop: '1.5em' }}>
+                  {KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}
+                </div>
               </div>
 
               <div>{MailoutSizeSliderFormField({ formType: 'team', listingType, initialValues, formValues, setFormValues })}</div>
@@ -207,7 +222,7 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
               Team Customization
               <Header.Subheader>
                 Set the default template customization options for your team.&nbsp;
-                {isMobile() && <br />}
+                {isMobile && <br />}
                 Changes made here will not overwrite existing user-specific customization.
               </Header.Subheader>
             </Header>
@@ -228,7 +243,7 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
         </PageTitleHeader>
       </ContentTopHeaderLayout>
 
-      <Segment style={isMobile() ? { marginTop: '155px' } : { marginTop: '22px' }}>
+      <Segment style={{ marginTop: '22px' }}>
         <Menu pointing secondary>
           <Menu.Item
             name="newListing"

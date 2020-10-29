@@ -10,13 +10,12 @@ import { format } from 'date-fns'
 import { resetMailout, revertMailoutEditPending, stopMailoutPending, submitMailoutPending } from '../store/modules/mailout/actions';
 import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from '../components/MailoutListItem/helpers';
 import { Button, Grid, Header, Icon, Input, Image, List, Menu, Message, Modal, Page, Popup, Segment, Table } from '../components/Base';
-import { iframeTransformMobile, iframeTransformDesktop } from '../components/helpers';
 import PopupContent from '../components/MailoutListItem/PopupContent';
 import { getMailoutPending } from '../store/modules/mailout/actions';
 import PopupMinMax from '../components/MailoutListItem/PopupMinMax';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import PageTitleHeader from '../components/PageTitleHeader';
-import { isMobile, min1200Width } from '../components/utils';
+import { postcardDimensionsDisplayed } from '../components/utils';
 import GoogleMapItem from '../components/Forms/PolygonGoogleMaps/GoogleMapItem';
 import FlipCard from '../components/FlipCard';
 import Loading from '../components/Loading';
@@ -28,6 +27,8 @@ import {
   ItemBodyLayoutV2,
   ItemLayout,
 } from '../layouts';
+import { useIsMobile } from '../components/Hooks/useIsMobile';
+import { useWindowSize } from '../components/Hooks/useWindowSize';
 
 const useFetching = (getActionCreator, dispatch, mailoutId) => {
   useEffect(() => {
@@ -36,6 +37,8 @@ const useFetching = (getActionCreator, dispatch, mailoutId) => {
 };
 
 const MailoutDetailsPage = () => {
+  const isMobile = useIsMobile();
+  const windowSize = useWindowSize();
   const history = useHistory();
   const dispatch = useDispatch();
   const { mailoutId } = useParams();
@@ -71,12 +74,12 @@ const MailoutDetailsPage = () => {
   const peerId = useSelector(store => store.peer.peerId);
 
   const frontURL = peerId
-    ? `/api/user/${details?.userId}/peer/${peerId}/mailout/${details?._id}/render/preview/html/front`
-    : `/api/user/${details?.userId}/mailout/${details?._id}/render/preview/html/front`
+    ? `/api/user/${details?.userId}/peer/${peerId}/mailout/${details?._id}/render/preview/html/front?showBleed=true`
+    : `/api/user/${details?.userId}/mailout/${details?._id}/render/preview/html/front?showBleed=true`
 
   const backURL = peerId
-  ? `/api/user/${details?.userId}/peer/${peerId}/mailout/${details?._id}/render/preview/html/back`
-  : `/api/user/${details?.userId}/mailout/${details?._id}/render/preview/html/back`
+  ? `/api/user/${details?.userId}/peer/${peerId}/mailout/${details?._id}/render/preview/html/back?showBleed=true`
+  : `/api/user/${details?.userId}/mailout/${details?._id}/render/preview/html/back?showBleed=true`
 
   const csvURL = peerId
   ? `/api/user/${details?.userId}/peer/${peerId}/mailout/${details?._id}/csv`
@@ -91,7 +94,6 @@ const MailoutDetailsPage = () => {
 
       body.style.overflow = 'hidden';
       body.style['pointer-events'] = 'none';
-      body.style.transform = isMobile() ? iframeTransformMobile : iframeTransformDesktop;
 
       if (name === 'front') {
         setFrontLoaded(true);
@@ -113,6 +115,7 @@ const MailoutDetailsPage = () => {
   useEffect(() => {
     if (details && details.recipientCount) {
       setCurrentNumberOfRecipients(details.recipientCount);
+      
     }
 
   }, [details, currentNumberOfRecipients]);
@@ -195,7 +198,6 @@ const MailoutDetailsPage = () => {
         )}
       </Button>
     );
-
   };
 
   const renderDestinations = () => {
@@ -222,20 +224,59 @@ const MailoutDetailsPage = () => {
     );
   }
 
+  const iframeDimensions = (size) =>{
+    let width = 600;
+    let height = 408;
+
+    if(size === '9x6'){
+      width = 888;
+      height = 600;
+    }
+    if(size === '11x6'){
+      width = 1080;
+      height = 600;
+    }
+    return {width, height}
+  }
+
+  const modalPreviewText = {
+    position:'absolute', 
+    top:'45px', 
+    fontSize:'20px'
+  }
+
+  const IFrameSegStyle = {
+    border: 'none',
+    boxShadow: 'none',
+    padding: '0', 
+    margin: 'auto'
+  }
+
+  const modalWidthStyle = {
+    width: '100%'
+  }
+
   const FrontIframe = () => (
     <div>
     {details.frontResourceUrl && (
-        <Image src={details.frontResourceUrl} style={{ height: '400px', maxWidth: '588px', minWidth: '580px'   }} />
+        <Image
+          src={details.frontResourceUrl}
+          className="image-frame-border"
+          style={{
+            height: iframeDimensions(details.postcardSize).height,
+            width: iframeDimensions(details.postcardSize).width,
+            boxSizing: 'border-box',
+          }} />
     )}
     {!details.frontResourceUrl && (
-      <Segment compact textAlign="center" loading={!details?._id || !frontLoaded} style={{ border: 'none', padding: '1px', margin: 'auto' }}>
+      <Segment compact textAlign="center" loading={!details?._id || !frontLoaded} style={IFrameSegStyle}>
         <iframe
           id="bm-iframe-front"
           title={`bm-iframe-front-${details._id}`}
           name="front"
           src={frontURL}
-          width={isMobile() ? '300' : '588'}
-          height={isMobile() ? '204' : '400'}
+          width={`${iframeDimensions(details.postcardSize).width}`}
+          height={`${iframeDimensions(details.postcardSize).height}`}
           frameBorder="0"
           sandbox="allow-same-origin allow-scripts"
           onLoad={handleOnload}
@@ -245,17 +286,18 @@ const MailoutDetailsPage = () => {
       </Segment>
     )}
     </div>
-  );
+  )
+  
 
   const BackIframe = () => (
-    <Segment compact textAlign="center" loading={!details?._id || !backLoaded} style={{ border: 'none', padding: '1px', margin: 'auto' }}>
+    <Segment compact textAlign="center" loading={!details?._id || !backLoaded} style={IFrameSegStyle}>
       <iframe
         id="bm-iframe-back"
         title={`bm-iframe-back-${details._id}`}
         name="back"
         src={backURL}
-        width={isMobile() ? '300' : '588'}
-        height={isMobile() ? '204' : '400'}
+        width={`${iframeDimensions(details.postcardSize).width}`}
+        height={`${iframeDimensions(details.postcardSize).height}`}
         frameBorder="0"
         sandbox="allow-same-origin allow-scripts"
         onLoad={handleOnload}
@@ -284,15 +326,21 @@ const MailoutDetailsPage = () => {
         </PageTitleHeader>
         {pendingState && !error && <Loading />}
       </ContentTopHeaderLayout>
-      <Modal open={showConsentModal} onClose={() => setShowConsentModal(false)} basic size="small">
-        <Modal.Header>
-          Preview
-          <Button primary inverted floated="right" onClick={() => setIsFlipped(true)} disabled={isFlipped}>
-            Flip Back
-          </Button>
-          <Button primary inverted floated="right" onClick={() => setIsFlipped(false)} disabled={!isFlipped}>
-            Flip Forward
-          </Button>
+      <Modal open={showConsentModal} onClose={() => setShowConsentModal(false)} basic size="small" style={modalWidthStyle}>
+       
+      {details && <div style={{ margin:"auto", width:`${iframeDimensions(details.postcardSize).width}px`, height:`calc(${iframeDimensions(details.postcardSize).height}px + 300px)`}}>
+        <Modal.Header style={{padding:'40px 0px', display:'flex'}}>
+          <div style={modalPreviewText}>
+            Preview
+          </div>
+          <div style={{margin:'auto'}}>
+            <Button primary inverted floated="right" onClick={() => setIsFlipped(true)} disabled={isFlipped}>
+              Flip Back
+            </Button>
+            <Button primary inverted floated="right" onClick={() => setIsFlipped(false)} disabled={!isFlipped}>
+              Flip Forward
+            </Button>
+          </div>
         </Modal.Header>
         <Modal.Content>
           <FlipCard isFlipped={isFlipped}>
@@ -301,14 +349,14 @@ const MailoutDetailsPage = () => {
           </FlipCard>
         </Modal.Content>
         <Modal.Content>
-          <Modal.Description style={{ textAlign: 'center' }}>
+          <Modal.Description style={{ textAlign: 'center', marginTop:'20px' }}>
             <p style={{ margin: 0 }}>I agree to be immediately charged</p>
-            <b style={{ fontSize: '32px' }}>{calculateCost(details && details.recipientCount)}</b>
+            <b style={{ fontSize: '32px', lineHeight: '50px' }}>{calculateCost(details && details.recipientCount, details && details.postcardSize ? details.postcardSize : '4x6')}</b>
             <br />
-            <p>$0.59 x {currentNumberOfRecipients}</p>
+            <p>{calculateCost(1, details && details.postcardSize ? details.postcardSize : '4x6')} x {currentNumberOfRecipients}</p>
           </Modal.Description>
         </Modal.Content>
-        <Modal.Actions>
+        <Modal.Actions style={{textAlign:'center', marginTop:'30px'}}>
           <Button secondary inverted onClick={() => setShowConsentModal(false)}>
             <Icon name="remove" /> Cancel
           </Button>
@@ -316,36 +364,32 @@ const MailoutDetailsPage = () => {
             <Icon name="checkmark" /> Agree
           </Button>
         </Modal.Actions>
+        </div>
+      }
       </Modal>
 
       {!DestinationCalculation && (
-      <Segment style={isMobile() ? { marginTop: '-1rem', marginLeft: '-1rem', marginRight: '-1rem' } : { marginTop: '34px' }}>
+      <Segment style={{ margin: '20px 0' }}>
         <Grid>
           <Grid.Row>
             <Grid.Column width={16}>
               {!pendingState && !error && details && (
-                <ItemLayout fluid key={details._id} className={isMobile() ? 'remove-margins' : undefined}>
-                  <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
+                <ItemLayout fluid key={details._id} className={isMobile ? 'remove-margins' : undefined}>
+                  <ContentBottomHeaderLayout>
                     {
-                      <ListHeader
-                        data={details}
-                        mailoutDetailPage={true}
-                        onClickEdit={handleEditMailoutDetailsClick}
-                        onClickApproveAndSend={handleApproveAndSendMailoutDetailsClick}
-                        onClickDelete={handleDeleteMailoutDetailsClick}
-                        lockControls={working}
-                        onClickRevertEdit={handleRevertEditedMailoutClick}
-                      />
+                        <ListHeader
+                          data={details}
+                          mailoutDetailPage={true}
+                          onClickEdit={handleEditMailoutDetailsClick}
+                          onClickApproveAndSend={handleApproveAndSendMailoutDetailsClick}
+                          onClickDelete={handleDeleteMailoutDetailsClick}
+                          lockControls={working}
+                          onClickRevertEdit={handleRevertEditedMailoutClick}
+                        />
                     }
                   </ContentBottomHeaderLayout>
 
-                  <ItemBodyLayoutV2 attached style={isMobile() ? { padding: 0, marginTop: '173px' } : { padding: 0, marginTop: '89px' }}>
-                    <ItemBodyIframeLayout horizontal={min1200Width()} style={{ border: 'none', boxShadow: 'none' }}>
-                      <FrontIframe />
-                      <BackIframe />
-                    </ItemBodyIframeLayout>
-
-                    <ItemBodyDataLayout relaxed>
+                  <ItemBodyDataLayout relaxed>
                       <List.Item>
                         <List.Content>
                           <List.Header>
@@ -366,8 +410,14 @@ const MailoutDetailsPage = () => {
                       </List.Item>
                       <List.Item>
                         <List.Content>
+                          <List.Header>Size</List.Header>
+                          <List.Description>{`${details.postcardSize ? postcardDimensionsDisplayed(details.postcardSize) : "4x6"}" / ${calculateCost(1, details.postcardSize ? details.postcardSize : '4x6')}`}</List.Description>
+                        </List.Content>
+                      </List.Item>
+                      <List.Item>
+                        <List.Content>
                           <List.Header>Cost</List.Header>
-                          <List.Description>{calculateCost(details.recipientCount)}</List.Description>
+                          <List.Description>{calculateCost(details.recipientCount, details.postcardSize ? details.postcardSize : '4x6')}</List.Description>
                         </List.Content>
                       </List.Item>
                       <List.Item>
@@ -393,7 +443,16 @@ const MailoutDetailsPage = () => {
                           <List.Description>{formatDate(details.created)}</List.Description>
                         </List.Content>
                       </List.Item>
-                    </ItemBodyDataLayout>
+                  </ItemBodyDataLayout>
+
+                  <ItemBodyLayoutV2 attached style={{ padding: 8, overflow: 'auto'}}>
+                    <ItemBodyIframeLayout horizontal={windowSize.width > 1199} style={{ border: 'none', boxShadow: 'none' }}>
+                     <div style={{margin: 'auto', display:"flex", flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center'}}>
+                      <FrontIframe />
+                      <div style={{padding: '16px'}}><BackIframe /></div>
+                      </div>
+                    </ItemBodyIframeLayout>
+
                     {details.cta && (<div className="details-customPostcardCTA">
                       Custom CTA: <a href={details.cta} target="blank">{details.cta}</a>
                     </div>)}

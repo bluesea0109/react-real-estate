@@ -8,12 +8,13 @@ import { format } from 'date-fns';
 
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
-import { isMobile } from '../components/utils';
 import auth from '../services/auth';
 import api from '../services/api';
+import { postcardDimensionsDisplayed } from '../components/utils';
 
 
 const BillingPage = () => {
+
   const isAdmin = useSelector(store => store.onLogin?.permissions?.teamAdmin);
   const [billingDetails, setBillingDetails] = useState(null)
 
@@ -35,11 +36,12 @@ const BillingPage = () => {
   const tableBody = () => {
 
     return billingDetails.billings.map((item, index) => (
-      <Table.Row key="{item.id}">
+      <Table.Row key={item.id}>
         <Table.Cell>{format(new Date(item.billingDate), 'MM/dd/yyyy')}</Table.Cell>
         <Table.Cell>
           <Link to={`dashboard/${item.id}`}>{item.name}</Link>
         </Table.Cell>
+        <Table.Cell>{item.postcardSize ? `${postcardDimensionsDisplayed(item.postcardSize)}" Postcard` : `4x6" Postcard`}</Table.Cell>
         <Table.Cell>{item.recipientCount}</Table.Cell>
         <Table.Cell>${item.creditsAmountApplied || '0.00'}</Table.Cell>
         <Table.Cell>{item.userProfile.first} {item.userProfile.last}</Table.Cell>
@@ -69,9 +71,9 @@ const BillingPage = () => {
           )}
         </PageTitleHeader>
       </ContentTopHeaderLayout>
-      <div style={isMobile() ? { marginTop: '80px' } : { marginTop: '22px' }}>
+      <div style={{ margin: '20px 0' }}>
         <Segment>
-          <ContentBottomHeaderLayout>
+          <ContentBottomHeaderLayout style={{minHeight: 0}}>
             {!billingDetails && <Loading message="Retrieving billing information..." />}
           </ContentBottomHeaderLayout>
           {billingDetails && !!billingDetails.billings.length && (
@@ -80,6 +82,7 @@ const BillingPage = () => {
                  <Table.Row>
                    <Table.HeaderCell>Date</Table.HeaderCell>
                    <Table.HeaderCell>Campaign Title</Table.HeaderCell>
+                   <Table.HeaderCell>Campaign Type</Table.HeaderCell>
                    <Table.HeaderCell>Recipients</Table.HeaderCell>
                    <Table.HeaderCell>Credits Applied</Table.HeaderCell>
                    <Table.HeaderCell>Profile</Table.HeaderCell>

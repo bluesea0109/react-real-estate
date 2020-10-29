@@ -142,16 +142,12 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
         <List.Item
           style={{
             width: '100%',
-            display: 'grid',
-            gridTemplateColumns: '1em 16em 22em auto',
-            gridTemplateRows: '1fr',
-            gridTemplateAreas: `"InviteCheckbox InviteUserInfo InviteStatus InviteSpace"`,
-            gridColumnGap: '1em',
-
+            display: 'flex',
+            flexWrap: 'wrap',
             alignItems: 'center',
           }}
         >
-          <div style={{ gridArea: 'InviteCheckbox' }}>
+          <div style={{ padding: 8 }}>
             {emailClicked ? (
               <Checkbox disabled={emailClicked} label={userId} isSelected={emailClicked} onCheckboxChange={handleCheckboxChange} key={userEmail} />
             ) : isAdmin ? (
@@ -161,16 +157,14 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
             )}
           </div>
 
-          <List.Content style={{ gridArea: 'InviteUserInfo' }}>
+          <List.Content style={{ flex: '1 0 16em' }}>
             <List.Header>{userFullName}</List.Header>
             <List.Description>{profile.doc.email}</List.Description>
           </List.Content>
 
-          <Item style={{ gridArea: 'InviteStatus' }}>
+          <Item style={{ flex: '1 0 22em', padding: 8 }}>
             <Item.Content verticalAlign="middle">{inviationStatus}</Item.Content>
           </Item>
-
-          <div style={{ gridArea: 'InviteSpace' }} />
         </List.Item>
         <Divider style={{ margin: '1em -1em -2px -1em' }} />
       </Fragment>

@@ -8,6 +8,11 @@
   position: absolute;
   z-index: 99999999999999;
   margin-top: 2px;
+  .svgHover {
+    path {
+      fill: #59c4c4;
+    }
+  }
   .teal.active.item {
     color: #59c4c4;
     border-left: 5px solid #59c4c4 !important;
