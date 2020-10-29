@@ -1,6 +1,6 @@
 {
   "name": "beta-brivitymarketer-com",
-  "homepage": "/",
+  "homepage": "/v2/",
   "version": "4.3.1",
   "private": true,
   "scripts": {
