@@ -28,6 +28,17 @@ const ListingCard = ({listingDetails, listingItem}) => {
       params.mls = item.blueroofMlsId
       return Object.keys(params).map(param => `${param}=${params[param]}`).join('&');
     }
+
+    const renderPill = (status) => {
+      if(status === 'Active'){
+        return (<StatusPill type="solid" color='yellow'>{status}</StatusPill>)
+      } else if(status === 'Pending'){
+        return (<StatusPill type="solid" color='red'>{status}</StatusPill>)
+      } else {
+        return (<StatusPill type="solid" color='astral'>{status}</StatusPill>)
+      }
+    };
+
     return(
       <Grid.Column>
         <Segment className="cardSegment">
@@ -45,7 +56,7 @@ const ListingCard = ({listingDetails, listingItem}) => {
                 <Header as="h3" className="cardFont">{title}</Header>
               </Grid.Column>
               <Grid.Column width={6} className='noPaddingTop noPaddingRight noPaddingBottom'>
-                <StatusPill type="opaque" color={listingItem.standardStatus === 'Pending' && 'red'}>{listingItem.standardStatus}</StatusPill>
+                {renderPill(listingItem.standardStatus)}
               </Grid.Column>
             </Grid>
             <Header as="h4" className="normalFontWeight noMargin cardFont cardTopMarginXS">{subtitle}</Header>
@@ -76,7 +87,7 @@ const ListingCard = ({listingDetails, listingItem}) => {
                 >
                   <Dropdown.Menu>
                     <Dropdown.Item onClick={() => window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`}>
-                      Create Facebook Ad
+                      View Facebook Ad
                     </Dropdown.Item>
                     <Dropdown.Item onClick={() => window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`}>
                       View Postcard Campaign
@@ -181,6 +192,7 @@ const ListingsPage = () => {
     }
   }
  
+  console.log(listings);
   return (
     <Page basic>
       <ContentTopHeaderLayout>
@@ -212,7 +224,7 @@ const ListingsPage = () => {
               listings.length > 0 ? listings.map((item, i) => {
               return <ListingCard key={i} listingDetails={listingDetails} listingItem={item} />
               }) 
-              : <Header as="h4" className="normalFontWeight noMargin cardFont">No Listings meet the current filtering criteria.</Header>
+              : <Header as="h3" className='normalFontWeight noMargin cardFont noFilteredListingsText'>No Listings meet the current filtering criteria.</Header>
             : undefined}
           </Grid>
         </div>

@@ -672,6 +672,11 @@ h1 {
 .cardFont {
   font-family: 'Open Sans'!important;
 }
+.noFilteredListingsText {
+  padding-top: 48px!important;
+  padding-left: 38%!important;
+  font-weight: 700!important;
+}
 .agentProfileImgContainer {
   height: 50px;
   width: 50px;
@@ -771,10 +776,12 @@ h1 {
   background-color: #00C853
 }
 .yellowPillSolid {
-  background-color: #FFC82C;
+  /* background-color: #FFC82C; */
+  background-color: #F5B350;
 }
 .redPillSolid {
-  background-color: #FF5216
+  /* background-color: #FF5216 */
+  background-color: #F2714D;
 }
 .greyPillSolid {
   background-color: #B2B2B2;
@@ -784,6 +791,9 @@ h1 {
 }
 .bluePillSolid {
   background-color: #009EEB;
+}
+.astralPillSolid {
+  background-color: #336E7B;
 }
 
 .listingCardImgContainer{

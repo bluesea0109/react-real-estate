@@ -21,6 +21,9 @@ const StatusPill = ({children, type, color}) => {
       case 'blue': {
         return(<div className="statusPill solidPill bluePillSolid">{children}</div>);
       }
+      case 'astral': {
+        return (<div className="statusPill solidPill astralPillSolid">{children}</div>)
+      }
 
       default: {
         return(<div className="statusPill solidPill greyPillSolid">{children}</div>);
