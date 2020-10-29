@@ -7,7 +7,7 @@ import { Table, Loader, Popup, Grid } from 'semantic-ui-react';
 
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
-import { isMobile } from '../components/utils';
+import { useIsMobile } from '../components/Hooks/useIsMobile'
 import StatusPill from '../components/StatusPill';
 
 import auth from '../services/auth';
@@ -64,6 +64,7 @@ const EmptyPage = () => {
   const [adTextLength, setAdTextLength] = useState(280);
 
   const peerId = useSelector(store => store.peer.peerId);
+  const isMobile = useIsMobile();
 
   const fetchData =  useCallback(async() => {
     let path = `/api/user/ads/list`
@@ -189,7 +190,7 @@ const EmptyPage = () => {
           </Menu>
         </PageTitleHeader>
       </ContentTopHeaderLayout>
-      <div style={isMobile() ? { marginTop: '80px' } : { marginTop: '21px' }}>
+      <div style={isMobile ? { marginTop: '80px' } : { marginTop: '21px' }}>
         <Segment>
           {!adDetails && <ContentBottomHeaderLayout><Loading message="Loading Listings..." /></ContentBottomHeaderLayout>}
           {adDetails && (

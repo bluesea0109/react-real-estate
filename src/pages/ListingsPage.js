@@ -6,7 +6,7 @@ import { Grid, Segment, Dropdown, Button, Popup, List, Icon } from 'semantic-ui-
 
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
-import { isMobile } from '../components/utils';
+import { useIsMobile } from '../components/Hooks/useIsMobile'
 import StatusPill from '../components/StatusPill';
 
 import auth from '../services/auth';
@@ -146,6 +146,7 @@ const ListingsPage = () => {
   const [activeFilters, setActiveFilters] = useState(['All']);
 
   const peerId = useSelector(store => store.peer.peerId)
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     async function fetchData () {
@@ -213,7 +214,7 @@ const ListingsPage = () => {
           </Menu>
         </PageTitleHeader>
       </ContentTopHeaderLayout>
-      <div style={isMobile() ? { marginTop: '80px' } : { marginTop: '-46px' }}>
+      <div style={isMobile ? { marginTop: '80px' } : { marginTop: '-46px' }}>
         <div>
           <ContentBottomHeaderLayout>
             {!listingDetails && <Loading message="Loading Listings..." />}
