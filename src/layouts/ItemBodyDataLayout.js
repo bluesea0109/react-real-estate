@@ -8,6 +8,6 @@ export default styled(List)`
   display: grid;
   gap: 10px;
   grid-template-rows: 100px;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(141px, 1fr));
   justify-items: center;
 `;

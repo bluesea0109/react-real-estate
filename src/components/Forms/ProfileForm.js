@@ -466,7 +466,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                       <div>
                         {values.boards &&
                           values.boards.map((board, index) => (
-                            <Segment basic key={index} style={{ paddingTop: 0, paddingBottom: 0 }}>
+                            <Segment basic key={index} style={{ padding:'0px 25px 0px 0px' }}>
                               <div style={isMobile ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 75px', gridColumnGap: '1em' }}>
                                 <Form.Group widths="2">
                                   <Dropdown label="MLS" name={`boards[${index}].name`} options={boards} tag={tag('Required')} />
