@@ -30,6 +30,12 @@ import {
 import { useIsMobile } from '../components/Hooks/useIsMobile';
 import { useWindowSize } from '../components/Hooks/useWindowSize';
 
+const changeButtonStyles = { 
+  marginLeft: '10px', 
+  minWidth: '5em',
+  textTransform:'none' 
+}
+
 const useFetching = (getActionCreator, dispatch, mailoutId) => {
   useEffect(() => {
     dispatch(getActionCreator(mailoutId));
@@ -189,7 +195,7 @@ const MailoutDetailsPage = () => {
             icon
             primary
             onClick={handleEditDestinationsClick}
-            style={{ marginLeft: '10px', minWidth: '5em' }}
+            style={changeButtonStyles}
             disabled={updateMailoutSizePendingState}
             loading={updateMailoutSizePendingState}
           >
@@ -397,7 +403,7 @@ const MailoutDetailsPage = () => {
                             {multiUser && (
                               <Popup
                                 flowing
-                                trigger={<FontAwesomeIcon icon="info-circle" style={{ marginLeft: '.5em', color: '#2DB5AD' }} />}
+                                trigger={<FontAwesomeIcon icon="info-circle" style={{ marginLeft: '.5em', color: '#59C4C4' }} />}
                                 content={PopupMinMax({ mailoutSizeMin, mailoutSizeMax })}
                                 position="top right"
                               />
