@@ -358,12 +358,13 @@ const Dashboard = () => {
                 {!useMLSNumberToAddCampaign && (
                   <div id="newCampaignType">
                     <h5>Campaign Type</h5>
-                    <Grid>
+                    <Grid stackable>
                       <Grid.Row columns={3}>
                         <Grid.Column>
                           <Button inverted primary size='big' toggle
                             active={AddCampaignType === 'Market Listing'}
                             onClick={() => setAddCampaignType('Market Listing')}
+                            style={{width:'226px'}}
                           >
                             <Icon name='home' />
                           Market Listing

@@ -18,7 +18,7 @@ const TemplatePostcardSizeField = ({ postcardSize, listingType, initialValues, f
   
   if (!editable) {
     return (
-      <div style={{ width: '118px', height: '84px', opacity: '0.4' }}>
+      <div style={{ width: '118px', height: '84px', opacity: '0.4', margin: '1rem 1rem 1rem 0px' }}>
         <input type="radio" defaultChecked={currentValue === postcardSize} value={postcardSize} style={{ visibility: 'hidden', display: 'none' }} />
         <div
           style={
