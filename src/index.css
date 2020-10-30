@@ -491,11 +491,6 @@ h1 {
   opacity: 1 !important;
 }
 
-/* MODAL */
-.ui.page.modals.dimmer.transition.visible.active {
-  background-color: rgba(0, 0, 0, 0.95) !important;
-}
-
 /* Mobile Only */
 .ui.container.remove-margins {
   margin-left: 0 !important;

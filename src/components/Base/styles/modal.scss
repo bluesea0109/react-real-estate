@@ -4,6 +4,9 @@
     }
 }
   #newCampaignType{
+    .ui.page.modals.dimmer.transition.visible.active {
+        background-color:none !important;
+    }
     button{
       width:227px;
     }
@@ -21,4 +24,5 @@
         text-align:center;
     }
 }
+
   
