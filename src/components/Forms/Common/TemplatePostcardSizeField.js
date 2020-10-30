@@ -7,7 +7,7 @@ const NEW_LISTING = 'listed';
 
 const TemplatePostcardSizeField = ({ postcardSize, listingType, initialValues, formValues, setFormValues }) => {
 
-  const currentValue = (formValues && formValues[listingType]?.postcardSize) || initialValues[listingType].postcardSize;
+  const currentValue = (formValues && formValues[listingType]?.postcardSize) || initialValues[listingType].postcardSize || '6x4';
   const editable = listingType === NEW_LISTING ? !!formValues?.listed : !!formValues?.sold;
 
   const handlePostcardSizeChange = value => {
