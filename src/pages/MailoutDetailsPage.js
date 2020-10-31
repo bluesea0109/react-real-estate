@@ -9,7 +9,7 @@ import { format } from 'date-fns'
 
 import { resetMailout, revertMailoutEditPending, stopMailoutPending, submitMailoutPending } from '../store/modules/mailout/actions';
 import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from '../components/MailoutListItem/helpers';
-import { Button, Grid, Header, Icon, Input, Image, List, Menu, Message, Modal, Page, Popup, Segment, Table } from '../components/Base';
+import { Button, Grid, Header, Input, Image, List, Menu, Message, Modal, Page, Popup, Segment, Table } from '../components/Base';
 import PopupContent from '../components/MailoutListItem/PopupContent';
 import { getMailoutPending } from '../store/modules/mailout/actions';
 import PopupMinMax from '../components/MailoutListItem/PopupMinMax';
@@ -29,6 +29,57 @@ import {
 } from '../layouts';
 import { useIsMobile } from '../components/Hooks/useIsMobile';
 import { useWindowSize } from '../components/Hooks/useWindowSize';
+
+import './styles/mailoutDetailsPage.scss'
+
+const modalHeaderStyles = {
+  padding: '4px 0px 0px 0px',
+  display: 'flex',
+  fontSize: '29px',
+  color: '#59c4c4',
+  justifyContent:'space-between',
+}
+
+const cancelButton = {
+  borderRadius: '50px',
+  textTransform: 'uppercase',
+  color: '#666666',
+  fontWeight: 'bold'
+}
+
+const flipButtonContainer = {
+  height:'30px', 
+  display:'flex', 
+  justifyContent:'center', 
+  paddingTop:'8px'
+}
+
+const flipButtonStyles = {
+  background: 'none',
+  color: '#59c4c4',
+  textTransform: 'uppercase',
+  fontSize: '15px',
+  borderRadius:'0px',
+  padding:'7px 0px 18px 0px',
+}
+
+const rightMargin = {
+  marginRight:'60px'
+}
+
+const highlightButton = {
+  borderBottom:'3px solid #59c4c4',
+}
+
+const cancelX = {
+  backgroundColor:'#EDEDED',
+  borderRadius:'50px',
+  height: '30px',
+  width:'30px',
+  padding:'0px',
+  marginTop:'9px',
+  marginRight:'0px',
+}
 
 const useFetching = (getActionCreator, dispatch, mailoutId) => {
   useEffect(() => {
@@ -239,21 +290,11 @@ const MailoutDetailsPage = () => {
     return {width, height}
   }
 
-  const modalPreviewText = {
-    position:'absolute', 
-    top:'45px', 
-    fontSize:'20px'
-  }
-
   const IFrameSegStyle = {
     border: 'none',
     boxShadow: 'none',
     padding: '0', 
     margin: 'auto'
-  }
-
-  const modalWidthStyle = {
-    width: '100%'
   }
 
   const FrontIframe = () => (
@@ -326,21 +367,14 @@ const MailoutDetailsPage = () => {
         </PageTitleHeader>
         {pendingState && !error && <Loading />}
       </ContentTopHeaderLayout>
-      <Modal open={showConsentModal} onClose={() => setShowConsentModal(false)} basic size="small" style={modalWidthStyle}>
+      <Modal open={showConsentModal} onClose={() => setShowConsentModal(false)} basic size="small">
        
-      {details && <div style={{ margin:"auto", width:`${iframeDimensions(details.postcardSize).width}px`, height:`calc(${iframeDimensions(details.postcardSize).height}px + 300px)`}}>
-        <Modal.Header style={{padding:'40px 0px', display:'flex'}}>
-          <div style={modalPreviewText}>
-            Preview
-          </div>
-          <div style={{margin:'auto'}}>
-            <Button primary inverted floated="right" onClick={() => setIsFlipped(true)} disabled={isFlipped}>
-              Flip Back
-            </Button>
-            <Button primary inverted floated="right" onClick={() => setIsFlipped(false)} disabled={!isFlipped}>
-              Flip Forward
-            </Button>
-          </div>
+      {details && <div style={{ margin:"auto", width:`calc(${iframeDimensions(details.postcardSize).width}px + 70px)`, height:`calc(${iframeDimensions(details.postcardSize).height}px + 300px)`}}>
+        <Modal.Header style={modalHeaderStyles}>
+         <p>Send Campaign</p>
+         <Button style={cancelX} onClick={() => setShowConsentModal(false)}>
+            <FontAwesomeIcon icon="times" style={{ color: '#B1B1B1', fontSize:'16px' }} />
+          </Button>
         </Modal.Header>
         <Modal.Content>
           <FlipCard isFlipped={isFlipped}>
@@ -349,19 +383,27 @@ const MailoutDetailsPage = () => {
           </FlipCard>
         </Modal.Content>
         <Modal.Content>
-          <Modal.Description style={{ textAlign: 'center', marginTop:'20px' }}>
+        <div style={flipButtonContainer}>
+            <Button className="buttonCustom" style={{...flipButtonStyles, ...rightMargin, ...(isFlipped ? highlightButton : {})}} floated="right" onClick={() => setIsFlipped(true)}>
+              Back
+            </Button>
+            <Button className="buttonCustom" style={{...flipButtonStyles, ...(!isFlipped ? highlightButton : {})}} floated="right" onClick={() => setIsFlipped(false)}>
+              Front
+            </Button>
+          </div>
+          <Modal.Description style={{ textAlign: 'center', marginTop:'40px' }}>
             <p style={{ margin: 0 }}>I agree to be immediately charged</p>
             <b style={{ fontSize: '32px', lineHeight: '50px' }}>{calculateCost(details && details.recipientCount, details && details.postcardSize ? details.postcardSize : '4x6')}</b>
             <br />
             <p>{calculateCost(1, details && details.postcardSize ? details.postcardSize : '4x6')} x {currentNumberOfRecipients}</p>
           </Modal.Description>
         </Modal.Content>
-        <Modal.Actions style={{textAlign:'center', marginTop:'30px'}}>
-          <Button secondary inverted onClick={() => setShowConsentModal(false)}>
-            <Icon name="remove" /> Cancel
+        <Modal.Actions style={{display:'flex', justifyContent:'space-between', marginTop:'30px'}}>
+          <Button className="buttonCustom" style={cancelButton} onClick={() => setShowConsentModal(false)}>
+            Cancel
           </Button>
-          <Button primary onClick={() => [dispatch(submitMailoutPending(mailoutId)), setShowConsentModal(false)]}>
-            <Icon name="checkmark" /> Agree
+          <Button className="buttonCustom" primary onClick={() => [dispatch(submitMailoutPending(mailoutId)), setShowConsentModal(false)]}>
+            Agree
           </Button>
         </Modal.Actions>
         </div>
