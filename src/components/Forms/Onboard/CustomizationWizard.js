@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 
 import { Button, Menu, Segment } from '../../Base';
-import { useIsMobile } from '../../Hooks/useIsMobile';
 import { Form } from '../Base';
 
 const Wizard = ({ children, initialValues = {}, onSubmit, page, setPage, controls, onLastPage, onIsDisabled }) => {
-
-  const isMobile = useIsMobile();
 
   const [values, setValues] = useState(initialValues);
 
