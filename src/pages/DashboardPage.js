@@ -282,7 +282,7 @@ const Dashboard = () => {
       {error && <Snackbar error>{error}</Snackbar>}
 
 
-      <Modal open={showAddCampaign} dimmer="blurring" centered={false}>
+      <Modal open={showAddCampaign} centered={false}>
         {showChooseSize ?
           <>
             <Modal.Header style={{textAlign: 'center'}}>
