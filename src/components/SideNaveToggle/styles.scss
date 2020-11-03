@@ -13,6 +13,7 @@
       fill: #59c4c4;
     }
   }
+  
   .teal.active.item {
     color: #59c4c4;
     border-left: 5px solid #59c4c4 !important;
@@ -99,7 +100,10 @@
       }  
       .title{
         font-weight:600;
-        color:#59c4c4
+        color:#59c4c4;
+      }
+      .content{
+        margin-left:-5px;
       }
     }
   }

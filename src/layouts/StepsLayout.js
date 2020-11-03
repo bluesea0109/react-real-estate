@@ -8,11 +8,11 @@ export default styled(Step.Group)`
 
   height: 160px;
 
-  @media (max-width: 768px) {
-    grid-template-rows: 1fr;
-    grid-template-columns: repeat(3, 1fr);
+  // @media (max-width: 768px) {
+  //   grid-template-rows: 1fr;
+  //   grid-template-columns: repeat(3, 1fr);
 
-    height: 60px;
-    margin: 0 !important;
-  }
+  //   height: 60px;
+  //   margin: 0 !important;
+  // }
 `;
