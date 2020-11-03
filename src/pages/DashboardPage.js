@@ -233,6 +233,15 @@ const Dashboard = () => {
     </div>
     )
   
+  const modalHeaderStyles = {
+    padding: '4px 0px 0px 0px',
+    display: 'flex',
+    fontSize: '29px',
+    color: '#59c4c4',
+    fontWeight:'400',
+    justifyContent:'space-between',
+    borderBottom:'none'
+  }
 
   return (
     <Page basic>
@@ -475,12 +484,12 @@ const Dashboard = () => {
         <Segment style={isMobile ? { padding: '0', paddingTop: '4.5em', marginLeft: '-1em', marginRight: '-1em' } : { marginTop: '22px' }}>
 
           <Modal open={!seenDashboardModel} basic size='small'>
-            <Modal.Header>
+            <Modal.Header style={modalHeaderStyles}>
               Welcome to your dashboard!
             </Modal.Header>
-            <Modal.Content>
+            <Modal.Content style={{color:'#686868', fontSize:'16px', padding:'30px 0px'}}>
               <p>We have generated some initial campaigns for you! Please note, when you initially sign up, you may not see all listings due to:</p>
-              <ul>
+              <ul style={{lineHeight:'30px'}}>
                 <li>Listings older than 6 months are not included</li>
                 <li>We only show a maximum of 15 previous listings from the past</li>
                 <li>For some boards, sold listings wont show up yet. But upcoming sold listings will create new campaigns</li>
@@ -488,8 +497,8 @@ const Dashboard = () => {
                 <li>We find your listings based on the MLS board/agent id in the Profile section of each user. Modifying agent ids will adjust this list</li>
               </ul>
             </Modal.Content>
-            <Modal.Actions>
-              <Button onClick={dismissDashboardExplanation} color='green' inverted>
+            <Modal.Actions style={{borderTop:'none', padding:'0px'}}>
+              <Button primary onClick={dismissDashboardExplanation} color='green'>
                 <Icon name='checkmark' /> Ok
               </Button>
             </Modal.Actions>
