@@ -137,7 +137,6 @@ const BusinessForm = styled.div`
 `;
 
 const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
-
   const isMobile = useIsMobile();
 
   const dispatch = useDispatch();
@@ -428,10 +427,10 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                             Save
                           </Button.Submit>
                         ) : (
-                            <Button.Submit primary disabled={isSubmitting || profileChangePending}>
-                              Submit
-                            </Button.Submit>
-                          )}
+                          <Button.Submit primary disabled={isSubmitting || profileChangePending}>
+                            Submit
+                          </Button.Submit>
+                        )}
                       </span>
                     </Menu.Item>
                   </Menu.Menu>
@@ -455,8 +454,8 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                 {selectedPeerId ? (
                   <Header.Subheader>Peers information will be shown on their postcards and will enable recipients to reach them.</Header.Subheader>
                 ) : (
-                    <Header.Subheader>Your information will be shown on your postcards and will enable recipients to reach you.</Header.Subheader>
-                  )}
+                  <Header.Subheader>Your information will be shown on your postcards and will enable recipients to reach you.</Header.Subheader>
+                )}
               </Header>
 
               <Divider style={{ margin: '2em -1em' }} />
@@ -509,17 +508,17 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                       Same as business notification email
                     </span>
                   ) : (
-                      <span style={{ color: '#969696' }}>
-                        <FontAwesomeIcon
-                          icon="toggle-on"
-                          size="2x"
-                          className="fa-flip-horizontal"
-                          style={{ marginTop: '1em', verticalAlign: '-0.3em' }}
-                          onClick={() => setPersonalNotificationEmailDisabled(!personalNotificationEmailDisabled)}
-                        />{' '}
+                    <span style={{ color: '#969696' }}>
+                      <FontAwesomeIcon
+                        icon="toggle-on"
+                        size="2x"
+                        className="fa-flip-horizontal"
+                        style={{ marginTop: '1em', verticalAlign: '-0.3em' }}
+                        onClick={() => setPersonalNotificationEmailDisabled(!personalNotificationEmailDisabled)}
+                      />{' '}
                       Same as business notification email
-                      </span>
-                    )}
+                    </span>
+                  )}
                 </Form.Group>
               </PersonalForm>
             </Segment>
@@ -530,8 +529,8 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                 {selectedPeerId ? (
                   <Header.Subheader>Enter peers MLS information so we can generate postcards for their listings.</Header.Subheader>
                 ) : (
-                    <Header.Subheader>Enter your MLS information so we can generate postcards for your listings.</Header.Subheader>
-                  )}
+                  <Header.Subheader>Enter your MLS information so we can generate postcards for your listings.</Header.Subheader>
+                )}
               </Header>
 
               <Divider style={{ margin: '2em -1em' }} />
@@ -539,41 +538,41 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
               {isInitiatingTeam || isInitiatingUser ? (
                 <Loading message="Updating MLS settings, please wait..." />
               ) : (
-                  <FieldArray
-                    name="boards"
-                    render={arrayHelpers => (
-                      <div>
-                        {values.boards &&
-                          values.boards.map((board, index) => (
-                            <Segment basic key={index} style={{ padding:'0px 25px 0px 0px' }}>
-                              <div style={isMobile ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 75px', gridColumnGap: '1em' }}>
-                                <Form.Group widths="2">
-                                  <Dropdown label="MLS" name={`boards[${index}].name`} options={boards} tag={tag('Required')} />
-                                  <Input label="MLS Agent ID" name={`boards.${index}.mlsId`} tag={tag('Required')} />
-                                </Form.Group>
-                                <Button
-                                  type="button"
-                                  primary
-                                  inverted
-                                  icon
-                                  onClick={() => arrayHelpers.remove(index)}
-                                  style={isMobile ? { cursor: 'pointer' } : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }}
-                                  aria-label="remove mls"
-                                >
-                                  <Icon name="trash" />
-                                </Button>
-                              </div>
-                            </Segment>
-                          ))}
-                        <div className="buttons">
-                          <Button primary inverted type="button" onClick={() => arrayHelpers.push({ name: '', mlsId: '' })}>
-                            Add MLS
+                <FieldArray
+                  name="boards"
+                  render={arrayHelpers => (
+                    <div>
+                      {values.boards &&
+                        values.boards.map((board, index) => (
+                          <Segment basic key={index} style={{ padding: '0px 25px 0px 0px' }}>
+                            <div style={isMobile ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 75px', gridColumnGap: '1em' }}>
+                              <Form.Group widths="2">
+                                <Dropdown label="MLS" name={`boards[${index}].name`} options={boards} tag={tag('Required')} />
+                                <Input label="MLS Agent ID" name={`boards.${index}.mlsId`} tag={tag('Required')} />
+                              </Form.Group>
+                              <Button
+                                type="button"
+                                primary
+                                inverted
+                                icon
+                                onClick={() => arrayHelpers.remove(index)}
+                                style={isMobile ? { cursor: 'pointer' } : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }}
+                                aria-label="remove mls"
+                              >
+                                <Icon name="trash" />
+                              </Button>
+                            </div>
+                          </Segment>
+                        ))}
+                      <div className="buttons">
+                        <Button primary inverted type="button" onClick={() => arrayHelpers.push({ name: '', mlsId: '' })}>
+                          Add MLS
                         </Button>
-                        </div>
                       </div>
-                    )}
-                  />
-                )}
+                    </div>
+                  )}
+                />
+              )}
             </Segment>
 
             {(isAdmin || !multiUser) && !profileChangePending && (
@@ -598,18 +597,12 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                     <Input label="Office Phone Number" name="businessPhone" disabled={multiUser} tag={multiUser ? popup(changeMsg) : tag('Optional')} />
                   </div>
 
-                  <div style={{gridArea: 'TeamLogo'}}>
+                  <div style={{ gridArea: 'TeamLogo' }}>
                     <FileUpload label="Team Logo" name="teamLogo" dispatch={dispatch} pending={picturesPending} />
                   </div>
 
-                  <div style={{gridArea: 'BrokerageLogo'}}>
-                    <FileUpload
-                      label="Brokerage Logo"
-                      name="brokerageLogo"
-                      dispatch={dispatch}
-                      pending={picturesPending}
-                      tag={tag('Required')}
-                    />
+                  <div style={{ gridArea: 'BrokerageLogo' }}>
+                    <FileUpload label="Brokerage Logo" name="brokerageLogo" dispatch={dispatch} pending={picturesPending} tag={tag('Required')} />
                   </div>
 
                   <Form.Group widths="2" style={{ gridArea: 'AddressCity' }}>
