@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import "./styles/flipCard.scss";
 
 const FlipCard = props => {
   const {
