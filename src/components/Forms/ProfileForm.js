@@ -15,7 +15,7 @@ import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
 import { useIsMobile } from '../Hooks/useIsMobile';
 
-import styles from './ProfileForm.module.scss';
+import styled from 'styled-components';
 
 const changeMsg = 'This information comes from Brivity CRM. If you want to modify this information, you need to do it there.';
 
@@ -54,6 +54,87 @@ const initialValues = {
     website: '',
   },
 };
+
+const PersonalForm = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 80px) 90px;
+  grid-template-areas:
+    'FirstLast FirstLast Headshot Picture'
+    'PhoneEmail PhoneEmail Headshot Picture'
+    'DreOfficePhone DreOfficePhone Headshot Picture'
+    'NotificationEmailToggle NotificationEmailToggle Website Website';
+  column-gap: 2em;
+  row-gap: 0.5rem;
+  @media only screen and (max-width: 768px) {
+    grid-template-columns: 200px 1fr 1fr;
+    grid-template-rows: repeat(7, 75px);
+    grid-template-areas:
+      'FirstLast Headshot Picture'
+      'FirstLast Headshot Picture'
+      'PhoneEmail Headshot Picture'
+      'PhoneEmail  Headshot Picture'
+      'DreOfficePhone Headshot Picture'
+      'NotificationEmailToggle Website Website'
+      'NotificationEmailToggle Website Website';
+  }
+  @media only screen and (max-width: 600px) {
+    display: initial;
+  }
+`;
+
+const BusinessForm = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(6, 75px);
+  grid-template-areas:
+    'TeamName TeamName TeamLogo BrokerageLogo'
+    'BrokerageName BrokerageName TeamLogo BrokerageLogo'
+    'OfficePhone OfficePhone TeamLogo BrokerageLogo'
+    'AddressCity AddressCity AddressCity AddressCity'
+    'StateZipCode StateZipCode StateZipCode StateZipCode'
+    'BusinessNotificationEmail BusinessNotificationEmail BusinessWebsite BusinessWebsite';
+  column-gap: 2em;
+  row-gap: 0.5rem;
+
+  @media only screen and (max-width: 1080px) {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(8, 75px);
+    grid-template-areas:
+      'TeamName TeamName . .'
+      'TeamLogo TeamLogo BrokerageLogo BrokerageLogo'
+      'TeamLogo TeamLogo BrokerageLogo BrokerageLogo'
+      'TeamLogo TeamLogo BrokerageLogo BrokerageLogo'
+      'BrokerageName BrokerageName OfficePhone OfficePhone'
+      'AddressCity AddressCity AddressCity AddressCity'
+      'StateZipCode StateZipCode StateZipCode StateZipCode'
+      'BusinessNotificationEmail BusinessNotificationEmail BusinessWebsite BusinessWebsite';
+    column-gap: 2em;
+    row-gap: 0.5rem;
+  }
+
+  @media only screen and (max-width: 768px) {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(10, 75px);
+    grid-template-areas:
+      'TeamName TeamName . .'
+      'TeamLogo TeamLogo BrokerageLogo BrokerageLogo'
+      'TeamLogo TeamLogo BrokerageLogo BrokerageLogo'
+      'TeamLogo TeamLogo BrokerageLogo BrokerageLogo'
+      'BrokerageName BrokerageName OfficePhone OfficePhone'
+      'AddressCity AddressCity AddressCity AddressCity'
+      'AddressCity AddressCity AddressCity AddressCity'
+      'StateZipCode StateZipCode StateZipCode StateZipCode'
+      'StateZipCode StateZipCode StateZipCode StateZipCode'
+      'BusinessNotificationEmail BusinessNotificationEmail BusinessWebsite BusinessWebsite';
+    column-gap: 2em;
+    row-gap: 0.5rem;
+  }
+
+  @media only screen and (max-width: 600px) {
+    display: initial;
+  }
+`;
 
 const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
 
@@ -380,9 +461,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
 
               <Divider style={{ margin: '2em -1em' }} />
 
-              <div
-                className={styles['profile-form']}
-              >
+              <PersonalForm>
                 <FileUpload
                   style={{ gridArea: 'Headshot' }}
                   label="Headshot"
@@ -442,7 +521,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                       </span>
                     )}
                 </Form.Group>
-              </div>
+              </PersonalForm>
             </Segment>
 
             <Segment>
@@ -506,9 +585,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
 
                 <Divider style={{ margin: '2em -1em' }} />
 
-                <div
-                  className={styles['business-form']}
-                >
+                <BusinessForm>
                   <div style={{ gridArea: 'TeamName' }}>
                     <Input label="Team Name" name="teamName" disabled={multiUser} tag={multiUser ? popup(changeMsg) : tag('Required')} />
                   </div>
@@ -548,7 +625,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                   <div style={{ gridArea: 'BusinessNotificationEmail' }}>
                     <Input label="Business Notification Email" name="businessNotificationEmail" tag={tag('Required')} />
                   </div>
-                </div>
+                </BusinessForm>
               </Segment>
             )}
             <UpdateWithoutRerender />
