@@ -20,6 +20,7 @@ import TemplatePictureFormField from '../Common/TemplatePictureFormField';
 import ValidateURLWithoutRerender from '../Common/ValidateURLWithoutRerender';
 import MailoutSizeSliderFormField from '../Common/MailoutSizeSliderFormField';
 import { useIsMobile } from '../../Hooks/useIsMobile';
+import TemplatePostcardSizeField from '../Common/TemplatePostcardSizeField';
 
 const formReducer = (state, action) => {
   return _.merge({}, action);
@@ -160,13 +161,20 @@ const TeamCustomizeForm = ({ teamCustomizationData, initialValues }) => {
 
           <div>{MailoutSizeSliderFormField({ formType: 'team', listingType, initialValues, formValues, setFormValues })}</div>
 
-          <div>{KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}</div>
-
-          <div> </div>
-
           <div>{CTAInputFormField({ formType: 'team', listingType, initialValues, formValues, setFormValues })}</div>
 
-          <div>{KWKLYInputFormField({ listingType, initialValues, formValues, setFormValues })}</div>
+          <div>
+            <div>{KWKLYInputFormField({ listingType, initialValues, formValues, setFormValues })}</div>
+            <div style={{ display: 'block', paddingTop: '1.5em' }}>
+              <div>{KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}</div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', padding: '0.5rem' }}>
+            <>{TemplatePostcardSizeField({ postcardSize: '4x6', listingType, initialValues, formValues, setFormValues })}</>
+            <>{TemplatePostcardSizeField({ postcardSize: '6x9', listingType, initialValues, formValues, setFormValues })}</>
+            <>{TemplatePostcardSizeField({ postcardSize: '6x11', listingType, initialValues, formValues, setFormValues })}</>
+          </div>
         </Segment>
 
         <UpdateWithoutRerender formValues={formValues} />

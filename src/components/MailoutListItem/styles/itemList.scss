@@ -1,0 +1,11 @@
+#listingsItems{
+    .ui.list>.item:first-child{
+        padding-top: 6px;
+    }
+    .header, .description{
+        padding: 1em 1em 1em 0em;
+    }
+    .list{
+        justify-items: left !important;
+    }
+}

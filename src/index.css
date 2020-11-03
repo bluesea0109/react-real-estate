@@ -104,6 +104,10 @@ h1 {
   background-image: none;
 }
 
+.buttonCustom{
+  font-family: 'Open Sans', sans-serif !important;
+}
+
 .ui.primary.button.active,
 .ui.primary.button:active,
 .ui.primary.button:focus,
@@ -489,11 +493,6 @@ h1 {
 .ui.dropdown .menu > .disabled.item {
   pointer-events: none;
   opacity: 1 !important;
-}
-
-/* MODAL */
-.ui.page.modals.dimmer.transition.visible.active {
-  background-color: rgba(0, 0, 0, 0.95) !important;
 }
 
 /* Mobile Only */

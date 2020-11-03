@@ -550,9 +550,9 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                     <Form.Field
                       control={Select}
                       clearable={true}
-                      label='Min Last Sale Date'
+                      label='Sale Date Is Newer Than'
                       options={saleDateOptions}
-                      placeholder='Earliest Sale Date'
+                      placeholder='Choose when...'
                       onChange={(e, input) => {
                         setSearchSaleDateMin(input.value)
                       }}
@@ -560,9 +560,9 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                     <Form.Field
                       control={Select}
                       clearable={true}
-                      label='Max Last Sale Date'
+                      label='Sale Date Is Older Than'
                       options={saleDateOptions}
-                      placeholder='Oldest Sale Date'
+                      placeholder='Choose when...'
                       onChange={(e, input) => {
                         setSearchSaleDateMax(input.value)
                       }}
