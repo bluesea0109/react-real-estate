@@ -498,7 +498,7 @@ const Dashboard = () => {
               </ul>
             </Modal.Content>
             <Modal.Actions style={{borderTop:'none', padding:'0px'}}>
-              <Button primary onClick={dismissDashboardExplanation} color='green'>
+              <Button primary onClick={dismissDashboardExplanation}>
                 <Icon name='checkmark' /> Ok
               </Button>
             </Modal.Actions>
