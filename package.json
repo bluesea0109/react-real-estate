@@ -63,7 +63,6 @@
     "request-promise": "4.2.5"
   },
   "optionalDependencies": {
-    "alf-commons": "git+ssh://git@gitlab.rmcloud.com/gabby/alf-common.git",
     "joi-to-json-schema": "5.1.0",
     "json-schema-faker": "0.5.0-rc23"
   },

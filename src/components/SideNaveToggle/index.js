@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import 'semantic-ui-css/semantic.min.css';
 import './styles.scss';
 
 import { Grid, Menu, Segment, Sidebar } from 'semantic-ui-react';
