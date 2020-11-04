@@ -83,18 +83,6 @@
   }
 }
 
-
-@media only screen and (max-width: 767px){
-.ui.steps:not(.unstackable) .step {
-    width: 100%!important;
-    flex-direction: column;
-    grid-template-rows: 1fr;
-    grid-template-columns: 30px 1fr;
-    padding-right: 0px !important;
-    padding-left: 10px !important;
-}
-}
-
 .ui.dropdown .menu{
   min-width:max-content !important;
 }
