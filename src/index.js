@@ -5,8 +5,8 @@ import * as Sentry from '@sentry/browser';
 import { BrowserRouter } from 'react-router-dom';
 import { LastLocationProvider } from 'react-router-last-location';
 
-import './reset.css';
 import 'semantic-ui-css/semantic.min.css';
+import './reset.css';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import 'nouislider/distribute/nouislider.css';
 import './index.css';
