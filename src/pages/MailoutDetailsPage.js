@@ -410,9 +410,9 @@ const MailoutDetailsPage = () => {
         </PageTitleHeader>
         {pendingState && !error && <Loading />}
       </ContentTopHeaderLayout>
-      <Modal open={showConsentModal} onClose={() => setShowConsentModal(false)} basic size="small">
-       
-      {details && <div style={{ margin:"auto", width:`calc(${iframeDimensions(details.postcardSize).width}px + 70px)`, height:`calc(${iframeDimensions(details.postcardSize).height}px + 300px)`}}>
+      
+      <Modal open={showConsentModal} onClose={() => setShowConsentModal(false)} basic size="small"> 
+      {details && <div style={{ maxWidth:'90%', margin:"auto", width:`calc(${iframeDimensions(details.postcardSize).width}px + 70px)`, height:`calc(${iframeDimensions(details.postcardSize).height}px + 300px)`}}>
         <Modal.Header style={modalHeaderStyles}>
          <p>Send Campaign</p>
          <Button style={cancelX} onClick={() => setShowConsentModal(false)}>
