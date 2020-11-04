@@ -11,40 +11,40 @@ import { useIsMobile } from './Hooks/useIsMobile.js';
 
 import SideNaveToggle from './SideNaveToggle';
 import './SideNaveToggle/styles.scss';
-import {ReactComponent as Cog} from "../assets/cog.svg";
-import {ReactComponent as Icon1} from "../assets/1-icon.svg";
-import {ReactComponent as Icon2} from "../assets/2-icon.svg";
-import {ReactComponent as Icon3} from "../assets/3-icon.svg";
-import {ReactComponent as Icon4} from "../assets/4-icon.svg";
+import { ReactComponent as Cog } from '../assets/cog.svg';
+import { ReactComponent as Icon1 } from '../assets/1-icon.svg';
+import { ReactComponent as Icon2 } from '../assets/2-icon.svg';
+import { ReactComponent as Icon3 } from '../assets/3-icon.svg';
+import { ReactComponent as Icon4 } from '../assets/4-icon.svg';
 
 const sidebarTextStyle = {
   fontSize: '16px',
   width: '100%',
   marginLeft: '16px',
-  marginTop:'-3px',
+  marginTop: '-3px',
 };
 
 const menuItemStyles = {
   lineHeight: 2.6,
   fontSize: '16px',
   height: '56px',
-  borderBottom:"1px solid #eaedf0 !important",
+  borderBottom: '1px solid #eaedf0 !important',
   padding: '0.5em',
 };
 
 const subMenuItemStyles = {
   lineHeight: 1,
   fontSize: '14px',
-  paddingLeft:"40px",
-  paddingTop:"4px",
-  paddingBottom:"10px",
+  paddingLeft: '40px',
+  paddingTop: '4px',
+  paddingBottom: '10px',
 };
 
 const subMenuItemBillingStyle = {
   lineHeight: 1,
   fontSize: '14px',
-  paddingLeft:"40px",
-  paddingBottom:"18px",
+  paddingLeft: '40px',
+  paddingBottom: '18px',
 };
 
 const StyledHeader = styled(Header)`
@@ -53,13 +53,20 @@ const StyledHeader = styled(Header)`
 `;
 
 const menuP = {
-  lineHeight: "2.6",
-  fontSize: "40px !important",
-  height: "56px",
-  padding: "0.5em",
-  marginLeft: "16px",
-  marginTop:"-2px",
+  lineHeight: '2.6',
+  fontSize: '40px !important',
+  height: '56px',
+  padding: '0.5em',
+  marginLeft: '16px',
+  marginTop: '-2px',
 };
+
+const StyledCog = styled(Cog)`
+  width: 15px;
+  height: 20px;
+  margin-left: 12px;
+  margin-top: 17px;
+`
 
 export default () => {
   const isMobile = useIsMobile();
@@ -161,67 +168,67 @@ export default () => {
     if (multiUser && isAdmin) {
       return (
         <SideNaveToggle moblileVisible={moblileVisible} setMobileVisible={setMobileVisible} toggle={toggle} setToggle={setToggle}>
-        <StepsLayout vertical={!isMobile}>
-          <StepLayout active={onProfile} completed={completedProfile}>
-            <Icon1/>
-            {isMobile ? null : (
-              <Step.Content>
-                <Step.Title style={sidebarTextStyle}>Profile</Step.Title>
-              </Step.Content>
-            )}
-          </StepLayout>
+          <StepsLayout vertical={!isMobile}>
+            <StepLayout active={onProfile} completed={completedProfile}>
+              <Icon1 />
+              {isMobile ? null : (
+                <Step.Content>
+                  <Step.Title style={sidebarTextStyle}>Profile</Step.Title>
+                </Step.Content>
+              )}
+            </StepLayout>
 
-          <StepLayout active={onTeamCustomization} completed={completedTeamCustomization}>
-            <Icon2/>
-            {isMobile ? null : (
-              <Step.Content>
-                <Step.Title style={sidebarTextStyle}>Customize Team</Step.Title>
-              </Step.Content>
-            )}
-          </StepLayout>
+            <StepLayout active={onTeamCustomization} completed={completedTeamCustomization}>
+              <Icon2 />
+              {isMobile ? null : (
+                <Step.Content>
+                  <Step.Title style={sidebarTextStyle}>Customize Team</Step.Title>
+                </Step.Content>
+              )}
+            </StepLayout>
 
-          <StepLayout active={onCustomization} completed={completedCustomization}>
-            <Icon3/>
-            {isMobile ? null : (
-              <Step.Content>
-                <Step.Title style={sidebarTextStyle}>Customize</Step.Title>
-              </Step.Content>
-            )}
-          </StepLayout>
+            <StepLayout active={onCustomization} completed={completedCustomization}>
+              <Icon3 />
+              {isMobile ? null : (
+                <Step.Content>
+                  <Step.Title style={sidebarTextStyle}>Customize</Step.Title>
+                </Step.Content>
+              )}
+            </StepLayout>
 
-          <StepLayout active={onInviteTeammates} completed={completedInviteTeammates}>
-            <Icon4/>
-            {isMobile ? null : (
-              <Step.Content>
-                <Step.Title style={sidebarTextStyle}>Invite Teammates</Step.Title>
-              </Step.Content>
-            )}
-          </StepLayout>
-        </StepsLayout>
+            <StepLayout active={onInviteTeammates} completed={completedInviteTeammates}>
+              <Icon4 />
+              {isMobile ? null : (
+                <Step.Content>
+                  <Step.Title style={sidebarTextStyle}>Invite Teammates</Step.Title>
+                </Step.Content>
+              )}
+            </StepLayout>
+          </StepsLayout>
         </SideNaveToggle>
       );
     } else {
       return (
         <SideNaveToggle moblileVisible={moblileVisible} setMobileVisible={setMobileVisible} toggle={toggle} setToggle={setToggle}>
-        <StepsLayout vertical={!isMobile}>
-          <StepLayout active={onProfileSingleUser} completed={completedProfile}>
-            <Icon name="user" />
-            {isMobile ? null : (
-              <Step.Content>
-                <Step.Title style={sidebarTextStyle}>Profile</Step.Title>
-              </Step.Content>
-            )}
-          </StepLayout>
+          <StepsLayout vertical={!isMobile}>
+            <StepLayout active={onProfileSingleUser} completed={completedProfile}>
+              <Icon name="user" />
+              {isMobile ? null : (
+                <Step.Content>
+                  <Step.Title style={sidebarTextStyle}>Profile</Step.Title>
+                </Step.Content>
+              )}
+            </StepLayout>
 
-          <StepLayout active={onCustomizationSingleUser} completed={completedCustomization}>
-            <Icon name="paint brush" />
-            {isMobile ? null : (
-              <Step.Content>
-                <Step.Title style={sidebarTextStyle}>Customize</Step.Title>
-              </Step.Content>
-            )}
-          </StepLayout>
-        </StepsLayout>
+            <StepLayout active={onCustomizationSingleUser} completed={completedCustomization}>
+              <Icon name="paint brush" />
+              {isMobile ? null : (
+                <Step.Content>
+                  <Step.Title style={sidebarTextStyle}>Customize</Step.Title>
+                </Step.Content>
+              )}
+            </StepLayout>
+          </StepsLayout>
         </SideNaveToggle>
       );
     }
@@ -274,40 +281,40 @@ export default () => {
             </MobileDisabledLayout>
           </Menu.Item>
 
-          <Menu.Item 
-            as={Link} 
-            color="teal" 
-            name="settings" 
-            active={activeItem === '/settings' || activeItem === '/customization' || activeItem === '/profile' || activeItem === '/billing'} 
-            to="/settings" 
-            style={menuItemStyles} 
+          <Menu.Item
+            as={Link}
+            color="teal"
+            name="settings"
+            active={activeItem === '/settings' || activeItem === '/customization' || activeItem === '/profile' || activeItem === '/billing'}
+            to="/settings"
+            style={menuItemStyles}
             onClick={mobileCollapse}
             onMouseEnter={() => setSvgHover('svgHover')}
             onMouseLeave={() => setSvgHover('')}
           >
             <MobileDisabledLayout>
-              <span style={{display:"flex"}}>
-                <Cog className={`cogIconStyle ${svgHover}`}/>
-                <span style={menuP}>Settings</span> 
+              <span style={{ display: 'flex' }}>
+                <StyledCog className={`cogIconStyle ${svgHover}`} />
+                <span style={menuP}>Settings</span>
               </span>
             </MobileDisabledLayout>
           </Menu.Item>
 
           <div className={isMobile ? 'accordionDrop' : `noDropdown ${dropdown}`}>
             <Menu.Menu>
-            {multiUser && isAdmin && !selectedPeerId && (
-              <Menu.Item
-                as={Link}
-                color="teal"
-                name="customization/team"
-                active={activeItem === '/customization/team'}
-                to="/customization/team"
-                style={subMenuItemStyles}
-                onClick={mobileCollapse}
-              >
-                <MobileDisabledLayout>Team Customization</MobileDisabledLayout>
-              </Menu.Item>
-            )}
+              {multiUser && isAdmin && !selectedPeerId && (
+                <Menu.Item
+                  as={Link}
+                  color="teal"
+                  name="customization/team"
+                  active={activeItem === '/customization/team'}
+                  to="/customization/team"
+                  style={subMenuItemStyles}
+                  onClick={mobileCollapse}
+                >
+                  <MobileDisabledLayout>Team Customization</MobileDisabledLayout>
+                </Menu.Item>
+              )}
               <Menu.Item
                 as={Link}
                 color="teal"
@@ -339,7 +346,7 @@ export default () => {
                   name="billing"
                   active={activeItem === '/billing'}
                   to="/billing"
-                  style={subMenuItemBillingStyle }
+                  style={subMenuItemBillingStyle}
                   onClick={() => {
                     if (moblileVisible) {
                       setMobileVisible(false);
