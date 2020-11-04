@@ -22,7 +22,7 @@ import Loading from '../components/Loading';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemBodyDataLayout, ItemBodyIframeLayout, ItemBodyLayoutV2, ItemLayout } from '../layouts';
 import { useIsMobile } from '../components/Hooks/useIsMobile';
 import { useWindowSize } from '../components/Hooks/useWindowSize';
-import './styles/mailoutDetailsPage.scss'
+import Styled from 'styled-components';
 
 const changeButtonStyles = { 
   marginLeft: '10px', 
@@ -85,6 +85,13 @@ const postcardContainer = {
   marginLeft:'-1px', 
 }
 
+const ModalPreview = Styled(Modal)`
+@media (max-width: 1230px) {
+   &&&{
+      width: 90%;
+  }
+}
+`;
 const useFetching = (getActionCreator, dispatch, mailoutId) => {
   useEffect(() => {
     dispatch(getActionCreator(mailoutId));
@@ -397,21 +404,21 @@ const MailoutDetailsPage = () => {
         {pendingState && !error && <Loading />}
       </ContentTopHeaderLayout>
       
-      <Modal open={showConsentModal} onClose={() => setShowConsentModal(false)} basic size="small"> 
-      {details && <div style={{ maxWidth:'90%', margin:"auto", width:`calc(${iframeDimensions(details.postcardSize).width}px + 70px)`, height:`calc(${iframeDimensions(details.postcardSize).height}px + 300px)`}}>
-        <Modal.Header style={modalHeaderStyles}>
+      <ModalPreview open={showConsentModal} onClose={() => setShowConsentModal(false)} basic size="small"> 
+      {details && <div style={{ maxWidth:"100%" ,margin:"auto", width:`calc(${iframeDimensions(details.postcardSize).width}px + 70px)`, height:`calc(${iframeDimensions(details.postcardSize).height}px + 300px)`}}>
+        <ModalPreview.Header style={modalHeaderStyles}>
          <p>Send Campaign</p>
          <Button style={cancelX} onClick={() => setShowConsentModal(false)}>
             <FontAwesomeIcon icon="times" style={{ color: '#B1B1B1', fontSize:'16px' }} />
           </Button>
-        </Modal.Header>
-        <Modal.Content style={postcardContainer}>
+        </ModalPreview.Header>
+        <ModalPreview.Content style={postcardContainer}>
           <FlipCard isFlipped={isFlipped}>
             <FrontIframe />
             <BackIframe />
           </FlipCard>
-        </Modal.Content>
-        <Modal.Content>
+        </ModalPreview.Content>
+        <ModalPreview.Content>
           <div style={flipButtonContainer}>
             <Button className="buttonCustom" style={{...flipButtonStyles, ...rightMargin, ...(isFlipped ? highlightButton : {})}} floated="right" onClick={() => setIsFlipped(true)}>
               Back
@@ -420,24 +427,24 @@ const MailoutDetailsPage = () => {
               Front
             </Button>
           </div>
-          <Modal.Description style={{ textAlign: 'center', marginTop:'40px' }}>
+          <ModalPreview.Description style={{ textAlign: 'center', marginTop:'40px' }}>
             <p style={{ margin: 0 }}>I agree to be immediately charged</p>
             <b style={{ fontSize: '32px', lineHeight: '50px' }}>{calculateCost(details && details.recipientCount, details && details.postcardSize ? details.postcardSize : '4x6')}</b>
             <br />
             <p>{calculateCost(1, details && details.postcardSize ? details.postcardSize : '4x6')} x {currentNumberOfRecipients}</p>
-          </Modal.Description>
-        </Modal.Content>
-        <Modal.Actions style={{display:'flex', justifyContent:'space-between', marginTop:'30px'}}>
+          </ModalPreview.Description>
+        </ModalPreview.Content>
+        <ModalPreview.Actions style={{display:'flex', justifyContent:'space-between', marginTop:'30px'}}>
           <Button className="buttonCustom" style={cancelButton} onClick={() => setShowConsentModal(false)}>
             Cancel
           </Button>
           <Button className="buttonCustom" primary onClick={() => [dispatch(submitMailoutPending(mailoutId)), setShowConsentModal(false)]}>
             Agree
           </Button>
-        </Modal.Actions>
+        </ModalPreview.Actions>
         </div>
       }
-      </Modal>
+      </ModalPreview>
 
       {!DestinationCalculation && (
         <Segment style={{ margin: '20px 0' }}>
