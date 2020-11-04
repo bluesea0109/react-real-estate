@@ -7,13 +7,27 @@ import { ItemBodyDataLayout } from '../../layouts';
 import PopupContent from './PopupContent';
 import { List, Popup } from '../Base';
 import { postcardDimensionsDisplayed } from '../utils';
-import './styles/itemList.scss'
+import styled from 'styled-components';
+
+const ListItems = styled.div`
+  padding: 18px 30px 0px 18px;
+  .ui.list > .item:first-child {
+    padding-top: 6px;
+  }
+  .header,
+  .description {
+    padding: 1em 1em 1em 0em;
+  }
+  .list {
+    justify-items: left !important;
+  }
+`;
 
 const ItemList = ({ data }) => {
   if (!data) return;
 
   return (
-    <div id="listingsItems" style={{padding: '18px 30px 0px 18px'}}>
+    <ListItems>
       <ItemBodyDataLayout relaxed>
         <List.Item>
           <List.Content>
@@ -57,7 +71,7 @@ const ItemList = ({ data }) => {
           </List.Content>
         </List.Item>
       </ItemBodyDataLayout>
-    </div>
+    </ListItems>
   );
 };
 
