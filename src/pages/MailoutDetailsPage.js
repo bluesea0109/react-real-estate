@@ -15,7 +15,7 @@ import { getMailoutPending } from '../store/modules/mailout/actions';
 import PopupMinMax from '../components/MailoutListItem/PopupMinMax';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import PageTitleHeader from '../components/PageTitleHeader';
-import { postcardDimensionsDisplayed } from '../components/utils';
+import { postcardDimensionsDisplayed, iframeDimensions } from '../components/utils';
 import GoogleMapItem from '../components/Forms/PolygonGoogleMaps/GoogleMapItem';
 import FlipCard from '../components/FlipCard';
 import Loading from '../components/Loading';
@@ -23,6 +23,7 @@ import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemBodyDataLayout, 
 import { useIsMobile } from '../components/Hooks/useIsMobile';
 import { useWindowSize } from '../components/Hooks/useWindowSize';
 import './styles/mailoutDetailsPage.scss'
+
 const changeButtonStyles = { 
   marginLeft: '10px', 
   minWidth: '5em',
@@ -271,21 +272,6 @@ const MailoutDetailsPage = () => {
     );
   };
 
-  const iframeDimensions = size => {
-    let width = 600;
-    let height = 408;
-
-    if (size === '9x6') {
-      width = 888;
-      height = 600;
-    }
-    if (size === '11x6') {
-      width = 1080;
-      height = 600;
-    }
-    return { width, height };
-  };
-
   const IFrameSegStyle = {
     border: 'none',
     boxShadow: 'none',
@@ -410,8 +396,8 @@ const MailoutDetailsPage = () => {
         </PageTitleHeader>
         {pendingState && !error && <Loading />}
       </ContentTopHeaderLayout>
-      <Modal open={showConsentModal} onClose={() => setShowConsentModal(false)} basic size="small">
-       
+
+      <Modal open={showConsentModal} onClose={() => setShowConsentModal(false)} basic size="small">   
       {details && <div style={{ margin:"auto", width:`calc(${iframeDimensions(details.postcardSize).width}px + 70px)`, height:`calc(${iframeDimensions(details.postcardSize).height}px + 300px)`}}>
         <Modal.Header style={modalHeaderStyles}>
          <p>Send Campaign</p>
@@ -426,7 +412,7 @@ const MailoutDetailsPage = () => {
           </FlipCard>
         </Modal.Content>
         <Modal.Content>
-        <div style={flipButtonContainer}>
+          <div style={flipButtonContainer}>
             <Button className="buttonCustom" style={{...flipButtonStyles, ...rightMargin, ...(isFlipped ? highlightButton : {})}} floated="right" onClick={() => setIsFlipped(true)}>
               Back
             </Button>
