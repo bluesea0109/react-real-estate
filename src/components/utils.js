@@ -93,4 +93,19 @@ export const postcardDimensions = (size) => {
       }
     return dimension
     }
+
+    export const iframeDimensions = size => {
+      let width = 600;
+      let height = 408;
+  
+      if (size === '9x6') {
+        width = 888;
+        height = 600;
+      }
+      if (size === '11x6') {
+        width = 1080;
+        height = 600;
+      }
+      return { width, height };
+    };
   

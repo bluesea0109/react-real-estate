@@ -10,6 +10,78 @@ import ApiService from '../../../services/api';
 import FlipCard from '../../FlipCard';
 import Loading from '../../Loading';
 import { useIsMobile } from '../../Hooks/useIsMobile';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+const modalHeaderStyles = {
+  padding: '4px 0px 0px 0px',
+  display: 'flex',
+  fontSize: '29px',
+  color: '#59c4c4',
+  justifyContent:'space-between',
+  borderBottom:'none'
+}
+
+const cancelButton = {
+  borderRadius: '50px',
+  textTransform: 'uppercase',
+  color: '#666666',
+  fontWeight: 'bold'
+}
+
+const flipButtonContainer = {
+  height:'30px', 
+  display:'flex', 
+  justifyContent:'center', 
+  paddingTop:'8px'
+}
+
+const flipButtonStyles = {
+  background: 'none',
+  color: '#59c4c4',
+  textTransform: 'uppercase',
+  fontSize: '15px',
+  borderRadius:'0px',
+  padding:'7px 0px 18px 0px',
+}
+
+const rightMargin = {
+  marginRight:'60px'
+}
+
+const highlightButton = {
+  borderBottom:'3px solid #59c4c4',
+}
+
+const cancelX = {
+  backgroundColor:'#EDEDED',
+  borderRadius:'50px',
+  height: '30px',
+  width:'30px',
+  padding:'0px',
+  marginTop:'0px',
+  marginRight:'0px',
+}
+
+const modalActionStyles = {
+  borderTop:'none',
+  display:'flex', 
+  justifyContent:'space-between', 
+  marginTop:'0px',
+  padding:'0px'
+}
+
+const modalHeaderP = {
+  marginBottom: '9px',
+  fontSize: '26px',
+  fontWeight: '400'
+}
+
+const segmentStyle = {
+  border: 'none', 
+  padding: '2px', 
+  margin: 'auto', 
+  boxShadow:'none' 
+}
 
 const RenderPreviewModal = ({ formType, formValues }) => {
   const isMobile = useIsMobile();
@@ -23,7 +95,6 @@ const RenderPreviewModal = ({ formType, formValues }) => {
   const [soldBackLoaded, setSoldBackLoaded] = useState(false);
 
   let customizationPending;
-  let customizationPreview;
   let customizationError;
 
   const peerId = useSelector(store => store.peer.peerId);
@@ -39,6 +110,11 @@ const RenderPreviewModal = ({ formType, formValues }) => {
   const agentCustomizationPreview = useSelector(store => store.customization && store.customization.preview);
   const agentCustomizationError = useSelector(store => store.customization && store.customization.error && store.customization.error.message);
 
+  const [customizationPreview, setCustomizationPreview] = useState(() => {
+    if (formType === 'team') return teamCustomizationPreview;
+    if (formType === 'agent') return agentCustomizationPreview;
+  });
+
   let listedPostcardFrontURL;
   let listedPostcardBackURL;
   let soldPostcardFrontURL;
@@ -46,7 +122,6 @@ const RenderPreviewModal = ({ formType, formValues }) => {
 
   if (formType === 'team') {
     customizationPending = teamCustomizationPending;
-    customizationPreview = teamCustomizationPreview;
     customizationError = teamCustomizationError;
     listedPostcardFrontURL = ApiService.directory.team.postcard.render.listed.front({ userId }).path;
     listedPostcardBackURL = ApiService.directory.team.postcard.render.listed.back({ userId }).path;
@@ -56,7 +131,6 @@ const RenderPreviewModal = ({ formType, formValues }) => {
 
   if (formType === 'agent') {
     customizationPending = agentCustomizationPending;
-    customizationPreview = agentCustomizationPreview;
     customizationError = agentCustomizationError;
     listedPostcardFrontURL = peerId
       ? ApiService.directory.peer.postcard.render.listed.front({ userId, peerId }).path
@@ -160,7 +234,7 @@ const RenderPreviewModal = ({ formType, formValues }) => {
     if (customizationError) {
       return (
         <Modal open={customizationPreview} basic size="tiny">
-          <Modal.Header>Error</Modal.Header>
+          <Modal.Header style={modalHeaderStyles}>Error</Modal.Header>
           <Modal.Content style={{ padding: '0 45px 10px' }}>{customizationError}</Modal.Content>
           <Modal.Actions>
             <Button secondary onClick={handlePreviewComplete}>
@@ -171,20 +245,17 @@ const RenderPreviewModal = ({ formType, formValues }) => {
       );
     } else {
       return (
-        <Modal open={customizationPreview} basic size="tiny">
-          <Modal.Header>
-            Preview
-            <Button primary inverted floated="right" onClick={() => setIsFlipped(true)} disabled={isFlipped}>
-              Flip Back
-            </Button>
-            <Button primary inverted floated="right" onClick={() => setIsFlipped(false)} disabled={!isFlipped}>
-              Flip Forward
-            </Button>
+        <Modal open={customizationPreview} basic size="small">
+          <Modal.Header style={modalHeaderStyles}>
+            <p style={modalHeaderP}>Preview</p>
+            <Button style={cancelX} onClick={() => setCustomizationPreview(false)}>
+            <FontAwesomeIcon icon="times" style={{ color: '#B1B1B1', fontSize:'16px' }} />
+          </Button>
           </Modal.Header>
 
           <Modal.Content image style={{ padding: '0 45px 10px' }}>
             <FlipCard isFlipped={isFlipped}>
-              <Segment textAlign="center" loading={!listedFrontLoaded} style={{ border: 'none', padding: '2px', margin: 'auto' }}>
+              <Segment textAlign="center" loading={!listedFrontLoaded} style={segmentStyle}>
                 <iframe
                   id="bm-iframe-listed-front"
                   title={`bm-iframe-listed-front-${formType}`}
@@ -199,7 +270,7 @@ const RenderPreviewModal = ({ formType, formValues }) => {
                 />
               </Segment>
 
-              <Segment textAlign="center" loading={!listedBackLoaded} style={{ border: 'none', padding: '2px', margin: 'auto' }}>
+              <Segment textAlign="center" loading={!listedBackLoaded} style={segmentStyle}>
                 <iframe
                   id="bm-iframe-listed-back"
                   title={`bm-iframe-listed-back-${formType}`}
@@ -218,7 +289,7 @@ const RenderPreviewModal = ({ formType, formValues }) => {
 
           <Modal.Content image style={{ padding: '10px 45px 0' }}>
             <FlipCard isFlipped={isFlipped}>
-              <Segment textAlign="center" loading={!soldFrontLoaded} style={{ border: 'none', padding: '2px', margin: 'auto' }}>
+              <Segment textAlign="center" loading={!soldFrontLoaded} style={segmentStyle}>
                 <iframe
                   id="bm-iframe-sold-front"
                   title={`bm-iframe-sold-front-${formType}`}
@@ -233,7 +304,7 @@ const RenderPreviewModal = ({ formType, formValues }) => {
                 />
               </Segment>
 
-              <Segment textAlign="center" loading={!soldBackLoaded} style={{ border: 'none', padding: '2px', margin: 'auto' }}>
+              <Segment textAlign="center" loading={!soldBackLoaded} style={segmentStyle}>
                 <iframe
                   id="bm-iframe-sold-back"
                   title={`bm-iframe-sold-back-${formType}`}
@@ -249,14 +320,23 @@ const RenderPreviewModal = ({ formType, formValues }) => {
               </Segment>
             </FlipCard>
           </Modal.Content>
-
-          <Modal.Actions>
+          <Modal.Content>
+            <div style={flipButtonContainer}>
+              <Button className="buttonCustom" style={{...flipButtonStyles, ...rightMargin, ...(isFlipped ? highlightButton : {})}} floated="right" onClick={() => setIsFlipped(true)}>
+                Back
+              </Button>
+              <Button className="buttonCustom" style={{...flipButtonStyles, ...(!isFlipped ? highlightButton : {})}} floated="right" onClick={() => setIsFlipped(false)}>
+                Front
+              </Button>
+            </div>
+          </Modal.Content>
+          <Modal.Actions style={modalActionStyles}>
             {inOnboardingMode && (
-              <Button secondary inverted onClick={handlePreviewComplete}>
+              <Button className="buttonCustom" style={cancelButton} onClick={() => setCustomizationPreview(false)}>
                 <Icon name="remove" /> Edit
               </Button>
             )}
-            <Button primary onClick={handleReviewComplete}>
+            <Button  className="buttonCustom" primary onClick={handleReviewComplete}>
               <Icon name="checkmark" /> {inOnboardingMode ? 'Continue' : 'OK'}
             </Button>
           </Modal.Actions>
