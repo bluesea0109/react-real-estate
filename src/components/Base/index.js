@@ -24,7 +24,7 @@ import Snackbar from './Snackbar';
 import Segment from './Segment';
 import Select from './Select';
 import Step from './Step';
-import Table from './Table'
+import Table from './Table';
 
 export {
   Button,
@@ -53,5 +53,5 @@ export {
   Segment,
   Select,
   Step,
-  Table
+  Table,
 };

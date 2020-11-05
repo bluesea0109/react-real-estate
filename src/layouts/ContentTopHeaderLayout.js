@@ -7,10 +7,10 @@ export default styled.div`
   min-width: calc(100% - 172px);
   top: 86px;
   z-index: 15;
-  border-radius:.28571429rem;
+  border-radius: 0.28571429rem;
 
   @media (max-width: 600px) {
     min-width: 101%;
-    margin-top:-76px;
+    margin-top: -76px;
   }
 `;

@@ -204,5 +204,5 @@ export default function*() {
   yield takeLatest(REVIEW_CUSTOMIZATION_COMPLETED, customizationOnboardingSaga);
   yield takeLatest(INVITE_USERS_SUCCESS, invitationOnboardingSaga);
   yield takeLatest(SKIP_INVITE_USERS, invitationOnboardingSaga);
-  yield takeLatest(SET_COMPLETED_DASHBOARD_MODAL, recordSeenDashboardModelSaga)
+  yield takeLatest(SET_COMPLETED_DASHBOARD_MODAL, recordSeenDashboardModelSaga);
 }

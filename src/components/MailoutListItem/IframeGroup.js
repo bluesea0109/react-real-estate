@@ -10,8 +10,6 @@ import ApiService from '../../services/api/index';
 import { Image } from '../Base';
 
 const IframeGroup = ({ index, item, linkTo = null }) => {
-
-
   const peerId = useSelector(store => store.peer.peerId);
 
   const [frontLoaded, setFrontLoaded] = useState(false);
@@ -52,51 +50,49 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
     minWidth: '290px',
     height: '204px',
     overflow: 'hidden',
-  }
+  };
 
   const IFrameBodyStyles = {
     border: 'none',
     boxShadow: 'none',
     flexWrap: 'wrap',
-  }
+  };
 
   const IFrameStyles = {
     border: 'none',
     display: 'flex',
-    justifyContent: 'center'
-  }
+    justifyContent: 'center',
+  };
 
   if (linkTo) {
     return (
       <ItemBodyIframeLayout horizontal style={IFrameBodyStyles} id={`mailout-iframe-set-${index}`}>
-      {item.frontResourceUrl && (
-        <Segment textAlign="center" style={{ border: 'none' }}>
-
-          <Link to={linkTo}>
-            <Image src={item.frontResourceUrl} style={imgStyles} className="bm-transform-effect image-frame-border" />
-          </Link>
-        </Segment>
-      )}
-      {!item.frontResourceUrl && (
-        <Segment textAlign="center" loading={!item?._id || !frontLoaded} style={IFrameStyles}>
-          <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className="bm-transform-effect image-frame-border">
-            <iframe
-              id="bm-iframe-front"
-              title={frontURL + '?dashboard=true'}
-              name="front"
-              src={null}
-              width="300"
-              height="204"
-              frameBorder="none"
-              sandbox="allow-same-origin allow-scripts"
-              onLoad={handleOnload}
-              style={{ visibility: !item?._id || !frontLoaded ? 'hidden' : 'visible' }}
-            />
-            <Link to={linkTo} style={iframeLinkStyle} />
-          </div>
-        </Segment>
-      )}
-
+        {item.frontResourceUrl && (
+          <Segment textAlign="center" style={{ border: 'none' }}>
+            <Link to={linkTo}>
+              <Image src={item.frontResourceUrl} style={imgStyles} className="bm-transform-effect image-frame-border" />
+            </Link>
+          </Segment>
+        )}
+        {!item.frontResourceUrl && (
+          <Segment textAlign="center" loading={!item?._id || !frontLoaded} style={IFrameStyles}>
+            <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className="bm-transform-effect image-frame-border">
+              <iframe
+                id="bm-iframe-front"
+                title={frontURL + '?dashboard=true'}
+                name="front"
+                src={null}
+                width="300"
+                height="204"
+                frameBorder="none"
+                sandbox="allow-same-origin allow-scripts"
+                onLoad={handleOnload}
+                style={{ visibility: !item?._id || !frontLoaded ? 'hidden' : 'visible' }}
+              />
+              <Link to={linkTo} style={iframeLinkStyle} />
+            </div>
+          </Segment>
+        )}
 
         <Segment textAlign="center" loading={!item?._id || !backLoaded} style={IFrameStyles}>
           <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className="bm-transform-effect image-frame-border">
@@ -121,7 +117,7 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
     return (
       <ItemBodyIframeLayout horizontal style={IFrameBodyStyles} id={`mailout-iframe-set-${index}`}>
         <Segment textAlign="center" loading={!item?._id || !frontLoaded} style={IFrameStyles}>
-          <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className='image-frame-border'>
+          <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className="image-frame-border">
             <iframe
               id="bm-iframe-front"
               title={frontURL}
@@ -137,7 +133,7 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
           </div>
         </Segment>
         <Segment textAlign="center" loading={!item?._id || !backLoaded} style={IFrameStyles}>
-          <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className='image-frame-border'>
+          <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className="image-frame-border">
             <iframe
               id="bm-iframe-back"
               title={backURL}

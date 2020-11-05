@@ -30,7 +30,6 @@ const formReducer = (state, action) => {
 };
 
 const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
-
   const isMobile = useIsMobile();
   const dispatch = useDispatch();
   const formRef = useRef();
@@ -170,12 +169,14 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
 
               <div>{InputFormField({ fieldName: 'frontHeadline', listingType, initialValues, formValues, setFormValues })}</div>
 
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr',
-                gridTemplateRows: '1fr 50px'
-                }}>
-                <div style={{display: 'flex', justifyContent: 'flex-start', padding: '0.5rem'}}>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr',
+                  gridTemplateRows: '1fr 50px',
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'flex-start', padding: '0.5rem' }}>
                   <>{TemplatePostcardSizeField({ postcardSize: '4x6', listingType, initialValues, formValues, setFormValues })}</>
                   <>{TemplatePostcardSizeField({ postcardSize: '6x9', listingType, initialValues, formValues, setFormValues })}</>
                   <>{TemplatePostcardSizeField({ postcardSize: '6x11', listingType, initialValues, formValues, setFormValues })}</>
@@ -217,7 +218,7 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
     <Page basic>
       <ContentTopHeaderLayout>
         <PageTitleHeader padded>
-          <Menu borderless fluid secondary style={{padding:"12px 6px 9px 15px"}}>
+          <Menu borderless fluid secondary style={{ padding: '12px 6px 9px 15px' }}>
             <Header as="h1">
               Team Customization
               <Header.Subheader>

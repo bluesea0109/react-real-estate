@@ -11,5 +11,5 @@ export default styled.div`
     'content-spacer'
     'content-bottom-header'
     'content-body';
-  padding:14px 7px 7px 7px;
+  padding: 14px 7px 7px 7px;
 `;

@@ -176,8 +176,8 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
     teammates
       .sort(function(a, b) {
         if (!a.first && !b.first) return 0;
-        if (!a.first) return 1
-        if (!b.first) return -1
+        if (!a.first) return 1;
+        if (!b.first) return -1;
         const nameA = a.first.toUpperCase();
         const nameB = b.first.toUpperCase();
         if (nameA < nameB) return -1;

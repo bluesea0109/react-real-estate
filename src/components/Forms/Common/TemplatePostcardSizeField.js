@@ -6,7 +6,6 @@ import { postcardDimensions } from '../../utils';
 const NEW_LISTING = 'listed';
 
 const TemplatePostcardSizeField = ({ postcardSize, listingType, initialValues, formValues, setFormValues }) => {
-
   const currentValue = (formValues && formValues[listingType]?.postcardSize) || initialValues[listingType].postcardSize || '6x4';
   const editable = listingType === NEW_LISTING ? !!formValues?.listed : !!formValues?.sold;
 
@@ -15,7 +14,7 @@ const TemplatePostcardSizeField = ({ postcardSize, listingType, initialValues, f
     newValue[listingType].postcardSize = postcardDimensions(value);
     setFormValues(newValue);
   };
-  
+
   if (!editable) {
     return (
       <div style={{ width: '118px', height: '84px', opacity: '0.4', margin: '1rem 1rem 1rem 0px' }}>
@@ -52,7 +51,7 @@ const TemplatePostcardSizeField = ({ postcardSize, listingType, initialValues, f
         >
           <PostcardSizeButton postcardSize={postcardSize} />
         </div>
-        <div style={{textAlign: 'center', padding: '0.5rem'}}>{`${calculateCost(1, postcardSize)}/each`}</div>
+        <div style={{ textAlign: 'center', padding: '0.5rem' }}>{`${calculateCost(1, postcardSize)}/each`}</div>
       </div>
     );
   }

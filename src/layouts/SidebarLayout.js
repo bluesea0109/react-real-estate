@@ -14,6 +14,6 @@ export default styled.div`
 
   @media (max-width: 769px) {
     min-width: 100%;
-    background:#ffffff;
+    background: #ffffff;
   }
 `;

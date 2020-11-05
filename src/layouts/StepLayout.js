@@ -10,6 +10,6 @@ export default styled(Step)`
 
     grid-template-rows: 1fr;
     grid-template-columns: 30px 1fr;
-    justify-items:left;
+    justify-items: left;
   }
 `;
