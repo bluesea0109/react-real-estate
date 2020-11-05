@@ -53,6 +53,17 @@ width:60%;
 }
 `;
 
+const ModalWelcome = Styled(Modal)`
+&&&{
+  width:70%
+}
+@media only screen and (max-width: 800px) {
+  &&&{
+    width:90%;
+  }
+}
+`;
+
 const useFetching = (getActionCreator, onboarded, dispatch) => {
   useEffect(() => {
     // In order to prevent unnecessary call to the api when we are expecting an redirect,
@@ -505,9 +516,9 @@ const Dashboard = () => {
 
       {mailoutList && mailoutList.length > 0 && (
         <Segment style={isMobile ? { padding: '0', paddingTop: '4.5em', marginLeft: '-1em', marginRight: '-1em' } : { marginTop: '22px' }}>
-          <Modal open={!seenDashboardModel} basic size="small">
-            <Modal.Header style={modalHeaderStyles}>Welcome to your dashboard!</Modal.Header>
-            <Modal.Content style={{ color: '#686868', fontSize: '16px', padding: '30px 0px' }}>
+          <ModalWelcome open={!seenDashboardModel} size="small">
+            <ModalWelcome.Header style={modalHeaderStyles}>Welcome to your dashboard!</ModalWelcome.Header>
+            <ModalWelcome.Content style={{ color: '#686868', fontSize: '16px', padding: '30px 0px' }}>
               <p>We have generated some initial campaigns for you! Please note, when you initially sign up, you may not see all listings due to:</p>
               <ul style={{ lineHeight: '30px' }}>
                 <li>Listings older than 6 months are not included</li>
@@ -516,13 +527,13 @@ const Dashboard = () => {
                 <li>We exclude listing types (e.g. commercial/land) and locations (e.g. rural locations) that are difficult for our system to target</li>
                 <li>We find your listings based on the MLS board/agent id in the Profile section of each user. Modifying agent ids will adjust this list</li>
               </ul>
-            </Modal.Content>
-            <Modal.Actions style={{ borderTop: 'none', padding: '0px' }}>
+            </ModalWelcome.Content>
+            <ModalWelcome.Actions style={{ borderTop: 'none', padding: '0px' }}>
               <Button primary onClick={dismissDashboardExplanation}>
                 <Icon name="checkmark" /> Ok
               </Button>
-            </Modal.Actions>
-          </Modal>
+            </ModalWelcome.Actions>
+          </ModalWelcome>
 
           <Grid>
             <Grid.Row>
