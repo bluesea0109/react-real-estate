@@ -64,6 +64,16 @@ const ModalWelcome = Styled(Modal)`
 }
 `;
 
+const modalHeaderStyles = {
+  padding: '4px 0px 0px 0px',
+  display: 'flex',
+  fontSize: '29px',
+  color: '#59c4c4',
+  fontWeight: '400',
+  justifyContent: 'space-between',
+  borderBottom: 'none',
+};
+
 const useFetching = (getActionCreator, onboarded, dispatch) => {
   useEffect(() => {
     // In order to prevent unnecessary call to the api when we are expecting an redirect,
@@ -277,16 +287,6 @@ const Dashboard = () => {
       <div style={{ textAlign: 'center', padding: '0.5rem' }}>{`${calculateCost(1, size)}/each`}</div>
     </div>
   );
-
-  const modalHeaderStyles = {
-    padding: '4px 0px 0px 0px',
-    display: 'flex',
-    fontSize: '29px',
-    color: '#59c4c4',
-    fontWeight: '400',
-    justifyContent: 'space-between',
-    borderBottom: 'none',
-  };
 
   return (
     <Page basic>

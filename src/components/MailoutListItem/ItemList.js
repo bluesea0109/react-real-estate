@@ -11,14 +11,13 @@ import styled from 'styled-components';
 
 const ListItems = styled.div`
   padding: 18px 30px 0px 18px;
-  .header {
-    font-family: 'Open Sans', sans-serif !important;
-  }
+
   .ui.list > .item:first-child {
     padding-top: 6px;
   }
   .header,
   .description {
+    font-family: 'Open Sans', sans-serif !important;
     padding: 1em 1em 1em 0em;
   }
   .list {
