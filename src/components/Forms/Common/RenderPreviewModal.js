@@ -17,71 +17,71 @@ const modalHeaderStyles = {
   display: 'flex',
   fontSize: '29px',
   color: '#59c4c4',
-  justifyContent:'space-between',
-  borderBottom:'none'
-}
+  justifyContent: 'space-between',
+  borderBottom: 'none',
+};
 
 const cancelButton = {
   borderRadius: '50px',
   textTransform: 'uppercase',
   color: '#666666',
-  fontWeight: 'bold'
-}
+  fontWeight: 'bold',
+};
 
 const flipButtonContainer = {
-  height:'30px', 
-  display:'flex', 
-  justifyContent:'center', 
-  paddingTop:'8px'
-}
+  height: '30px',
+  display: 'flex',
+  justifyContent: 'center',
+  paddingTop: '8px',
+};
 
 const flipButtonStyles = {
   background: 'none',
   color: '#59c4c4',
   textTransform: 'uppercase',
   fontSize: '15px',
-  borderRadius:'0px',
-  padding:'7px 0px 18px 0px',
-}
+  borderRadius: '0px',
+  padding: '7px 0px 18px 0px',
+};
 
 const rightMargin = {
-  marginRight:'60px'
-}
+  marginRight: '60px',
+};
 
 const highlightButton = {
-  borderBottom:'3px solid #59c4c4',
-}
+  borderBottom: '3px solid #59c4c4',
+};
 
 const cancelX = {
-  backgroundColor:'#EDEDED',
-  borderRadius:'50px',
+  backgroundColor: '#EDEDED',
+  borderRadius: '50px',
   height: '30px',
-  width:'30px',
-  padding:'0px',
-  marginTop:'0px',
-  marginRight:'0px',
-}
+  width: '30px',
+  padding: '0px',
+  marginTop: '0px',
+  marginRight: '0px',
+};
 
 const modalActionStyles = {
-  borderTop:'none',
-  display:'flex', 
-  justifyContent:'space-between', 
-  marginTop:'0px',
-  padding:'0px'
-}
+  borderTop: 'none',
+  display: 'flex',
+  justifyContent: 'space-between',
+  marginTop: '0px',
+  padding: '0px',
+};
 
 const modalHeaderP = {
   marginBottom: '9px',
   fontSize: '26px',
-  fontWeight: '400'
-}
+  fontWeight: '400',
+};
 
 const segmentStyle = {
-  border: 'none', 
-  padding: '2px', 
-  margin: 'auto', 
-  boxShadow:'none' 
-}
+  border: 'none',
+  padding: '2px',
+  margin: 'auto',
+  boxShadow: 'none',
+};
 
 const RenderPreviewModal = ({ formType, formValues }) => {
   const isMobile = useIsMobile();
@@ -249,8 +249,8 @@ const RenderPreviewModal = ({ formType, formValues }) => {
           <Modal.Header style={modalHeaderStyles}>
             <p style={modalHeaderP}>Preview</p>
             <Button style={cancelX} onClick={() => setCustomizationPreview(false)}>
-            <FontAwesomeIcon icon="times" style={{ color: '#B1B1B1', fontSize:'16px' }} />
-          </Button>
+              <FontAwesomeIcon icon="times" style={{ color: '#B1B1B1', fontSize: '16px' }} />
+            </Button>
           </Modal.Header>
 
           <Modal.Content image style={{ padding: '0 45px 10px' }}>
@@ -322,10 +322,20 @@ const RenderPreviewModal = ({ formType, formValues }) => {
           </Modal.Content>
           <Modal.Content>
             <div style={flipButtonContainer}>
-              <Button className="buttonCustom" style={{...flipButtonStyles, ...rightMargin, ...(isFlipped ? highlightButton : {})}} floated="right" onClick={() => setIsFlipped(true)}>
+              <Button
+                className="buttonCustom"
+                style={{ ...flipButtonStyles, ...rightMargin, ...(isFlipped ? highlightButton : {}) }}
+                floated="right"
+                onClick={() => setIsFlipped(true)}
+              >
                 Back
               </Button>
-              <Button className="buttonCustom" style={{...flipButtonStyles, ...(!isFlipped ? highlightButton : {})}} floated="right" onClick={() => setIsFlipped(false)}>
+              <Button
+                className="buttonCustom"
+                style={{ ...flipButtonStyles, ...(!isFlipped ? highlightButton : {}) }}
+                floated="right"
+                onClick={() => setIsFlipped(false)}
+              >
                 Front
               </Button>
             </div>
@@ -336,7 +346,7 @@ const RenderPreviewModal = ({ formType, formValues }) => {
                 <Icon name="remove" /> Edit
               </Button>
             )}
-            <Button  className="buttonCustom" primary onClick={handleReviewComplete}>
+            <Button className="buttonCustom" primary onClick={handleReviewComplete}>
               <Icon name="checkmark" /> {inOnboardingMode ? 'Continue' : 'OK'}
             </Button>
           </Modal.Actions>

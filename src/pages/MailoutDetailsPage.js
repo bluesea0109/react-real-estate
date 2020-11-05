@@ -22,69 +22,81 @@ import Loading from '../components/Loading';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemBodyDataLayout, ItemBodyIframeLayout, ItemBodyLayoutV2, ItemLayout } from '../layouts';
 import { useIsMobile } from '../components/Hooks/useIsMobile';
 import { useWindowSize } from '../components/Hooks/useWindowSize';
-import './styles/mailoutDetailsPage.scss'
+import Styled, { css } from 'styled-components';
 
-const changeButtonStyles = { 
-  marginLeft: '10px', 
+const changeButtonStyles = {
+  marginLeft: '10px',
   minWidth: '5em',
-  textTransform:'none' 
-}
+  textTransform: 'none',
+};
 
 const modalHeaderStyles = {
   padding: '4px 0px 0px 0px',
   display: 'flex',
   fontSize: '29px',
   color: '#59c4c4',
-  justifyContent:'space-between',
-}
+  justifyContent: 'space-between',
+};
 
 const cancelButton = {
   borderRadius: '50px',
   textTransform: 'uppercase',
   color: '#666666',
-  fontWeight: 'bold'
-}
+  fontWeight: 'bold',
+};
 
 const flipButtonContainer = {
-  height:'30px', 
-  display:'flex', 
-  justifyContent:'center', 
-  paddingTop:'8px'
-}
+  height: '30px',
+  display: 'flex',
+  justifyContent: 'center',
+  paddingTop: '8px',
+};
 
 const flipButtonStyles = {
   background: 'none',
   color: '#59c4c4',
   textTransform: 'uppercase',
   fontSize: '15px',
-  borderRadius:'0px',
-  padding:'7px 0px 18px 0px',
-}
+  borderRadius: '0px',
+  padding: '7px 0px 18px 0px',
+};
 
 const rightMargin = {
-  marginRight:'60px'
-}
+  marginRight: '60px',
+};
 
 const highlightButton = {
-  borderBottom:'3px solid #59c4c4',
-}
+  borderBottom: '3px solid #59c4c4',
+};
 
 const cancelX = {
-  backgroundColor:'#EDEDED',
-  borderRadius:'50px',
+  backgroundColor: '#EDEDED',
+  borderRadius: '50px',
   height: '30px',
-  width:'30px',
-  padding:'0px',
-  marginTop:'9px',
-  marginRight:'0px',
-}
+  width: '30px',
+  padding: '0px',
+  marginTop: '9px',
+  marginRight: '0px',
+};
 
 const postcardContainer = {
-  justifyContent: 'center', 
-  display: 'flex', 
-  marginLeft:'-1px', 
-}
+  display: 'flex',
+};
 
+const ModalPreview = Styled(Modal)`
+  width:${props => css`calc(${props.widthSize + 70}px)`};
+  .content{
+    justify-content:center;
+  }
+  @media (max-width: ${props => props.widthSize + 100}px) {
+    &&&{
+      width:90%;
+    }
+    .content{
+      ustify-content:flex-start;
+    }
+  }
+`;
 const useFetching = (getActionCreator, dispatch, mailoutId) => {
   useEffect(() => {
     dispatch(getActionCreator(mailoutId));
@@ -377,6 +389,14 @@ const MailoutDetailsPage = () => {
     </Segment>
   );
 
+  // width: details && `calc(${iframeDimensions(details.postcardSize).width}px + 70px)`,
+  // height: details && `calc(${iframeDimensions(details.postcardSize).height}px + 300px)`,
+
+  const postCardSize = {
+    width: details && iframeDimensions(details.postcardSize).width,
+    height: details && iframeDimensions(details.postcardSize).height,
+  };
+
   return (
     <Page basic>
       <ContentTopHeaderLayout>
@@ -396,48 +416,70 @@ const MailoutDetailsPage = () => {
         </PageTitleHeader>
         {pendingState && !error && <Loading />}
       </ContentTopHeaderLayout>
-      
-      <Modal open={showConsentModal} onClose={() => setShowConsentModal(false)} basic size="small"> 
-      {details && <div style={{ maxWidth:'90%', margin:"auto", width:`calc(${iframeDimensions(details.postcardSize).width}px + 70px)`, height:`calc(${iframeDimensions(details.postcardSize).height}px + 300px)`}}>
-        <Modal.Header style={modalHeaderStyles}>
-         <p>Send Campaign</p>
-         <Button style={cancelX} onClick={() => setShowConsentModal(false)}>
-            <FontAwesomeIcon icon="times" style={{ color: '#B1B1B1', fontSize:'16px' }} />
-          </Button>
-        </Modal.Header>
-        <Modal.Content style={postcardContainer}>
-          <FlipCard isFlipped={isFlipped}>
-            <FrontIframe />
-            <BackIframe />
-          </FlipCard>
-        </Modal.Content>
-        <Modal.Content>
-          <div style={flipButtonContainer}>
-            <Button className="buttonCustom" style={{...flipButtonStyles, ...rightMargin, ...(isFlipped ? highlightButton : {})}} floated="right" onClick={() => setIsFlipped(true)}>
-              Back
-            </Button>
-            <Button className="buttonCustom" style={{...flipButtonStyles, ...(!isFlipped ? highlightButton : {})}} floated="right" onClick={() => setIsFlipped(false)}>
-              Front
-            </Button>
+
+      <ModalPreview widthSize={postCardSize.width} open={showConsentModal} onClose={() => setShowConsentModal(false)} basic size="small">
+        {details && (
+          <div
+            style={{
+              maxWidth: '100%',
+              margin: 'auto',
+              width: `calc(${postCardSize.width}px + 70px)`,
+              height: `calc(${postCardSize.height}px + 300px)`,
+            }}
+          >
+            <ModalPreview.Header style={modalHeaderStyles}>
+              <p>Send Campaign</p>
+              <Button style={cancelX} onClick={() => setShowConsentModal(false)}>
+                <FontAwesomeIcon icon="times" style={{ color: '#B1B1B1', fontSize: '16px' }} />
+              </Button>
+            </ModalPreview.Header>
+            <ModalPreview.Content style={postcardContainer}>
+              <FlipCard isFlipped={isFlipped}>
+                <FrontIframe />
+                <BackIframe />
+              </FlipCard>
+            </ModalPreview.Content>
+            <ModalPreview.Content>
+              <div style={flipButtonContainer}>
+                <Button
+                  className="buttonCustom"
+                  style={{ ...flipButtonStyles, ...rightMargin, ...(isFlipped ? highlightButton : {}) }}
+                  floated="right"
+                  onClick={() => setIsFlipped(true)}
+                >
+                  Back
+                </Button>
+                <Button
+                  className="buttonCustom"
+                  style={{ ...flipButtonStyles, ...(!isFlipped ? highlightButton : {}) }}
+                  floated="right"
+                  onClick={() => setIsFlipped(false)}
+                >
+                  Front
+                </Button>
+              </div>
+              <ModalPreview.Description style={{ textAlign: 'center', marginTop: '40px' }}>
+                <p style={{ margin: 0 }}>I agree to be immediately charged</p>
+                <b style={{ fontSize: '32px', lineHeight: '50px' }}>
+                  {calculateCost(details && details.recipientCount, details && details.postcardSize ? details.postcardSize : '4x6')}
+                </b>
+                <br />
+                <p>
+                  {calculateCost(1, details && details.postcardSize ? details.postcardSize : '4x6')} x {currentNumberOfRecipients}
+                </p>
+              </ModalPreview.Description>
+            </ModalPreview.Content>
+            <ModalPreview.Actions style={{ display: 'flex', justifyContent: 'space-between', marginTop: '30px' }}>
+              <Button className="buttonCustom" style={cancelButton} onClick={() => setShowConsentModal(false)}>
+                Cancel
+              </Button>
+              <Button className="buttonCustom" primary onClick={() => [dispatch(submitMailoutPending(mailoutId)), setShowConsentModal(false)]}>
+                Agree
+              </Button>
+            </ModalPreview.Actions>
           </div>
-          <Modal.Description style={{ textAlign: 'center', marginTop:'40px' }}>
-            <p style={{ margin: 0 }}>I agree to be immediately charged</p>
-            <b style={{ fontSize: '32px', lineHeight: '50px' }}>{calculateCost(details && details.recipientCount, details && details.postcardSize ? details.postcardSize : '4x6')}</b>
-            <br />
-            <p>{calculateCost(1, details && details.postcardSize ? details.postcardSize : '4x6')} x {currentNumberOfRecipients}</p>
-          </Modal.Description>
-        </Modal.Content>
-        <Modal.Actions style={{display:'flex', justifyContent:'space-between', marginTop:'30px'}}>
-          <Button className="buttonCustom" style={cancelButton} onClick={() => setShowConsentModal(false)}>
-            Cancel
-          </Button>
-          <Button className="buttonCustom" primary onClick={() => [dispatch(submitMailoutPending(mailoutId)), setShowConsentModal(false)]}>
-            Agree
-          </Button>
-        </Modal.Actions>
-        </div>
-      }
-      </Modal>
+        )}
+      </ModalPreview>
 
       {!DestinationCalculation && (
         <Segment style={{ margin: '20px 0' }}>
