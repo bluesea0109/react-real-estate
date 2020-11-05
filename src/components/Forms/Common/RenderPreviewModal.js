@@ -229,7 +229,7 @@ const RenderPreviewModal = ({ formType, formValues }) => {
 
   if (customizationPending) {
     return (
-      <Modal open={customizationPreview} basic size="tiny">
+      <Modal open={customizationPreview} size="tiny">
         <Modal.Content style={{ padding: '0 45px 10px' }}>
           <Loading message="Please wait, loading an example preview..." />
         </Modal.Content>
@@ -243,7 +243,7 @@ const RenderPreviewModal = ({ formType, formValues }) => {
   } else {
     if (customizationError) {
       return (
-        <Modal open={customizationPreview} basic size="tiny">
+        <Modal open={customizationPreview} size="tiny">
           <Modal.Header style={modalHeaderStyles}>Error</Modal.Header>
           <Modal.Content style={{ padding: '0 45px 10px' }}>{customizationError}</Modal.Content>
           <Modal.Actions>
@@ -255,7 +255,7 @@ const RenderPreviewModal = ({ formType, formValues }) => {
       );
     } else {
       return (
-        <ModalPreview open={customizationPreview} basic size="small">
+        <ModalPreview open={customizationPreview} size="small">
           <ModalPreview.Header style={modalHeaderStyles}>
             <p style={modalHeaderP}>Preview</p>
             <Button style={cancelX} onClick={() => setCustomizationPreview(false)}>
@@ -332,31 +332,21 @@ const RenderPreviewModal = ({ formType, formValues }) => {
           </ModalPreview.Content>
           <ModalPreview.Content>
             <div style={flipButtonContainer}>
-              <Button
-                className="buttonCustom"
-                style={{ ...flipButtonStyles, ...rightMargin, ...(isFlipped ? highlightButton : {}) }}
-                floated="right"
-                onClick={() => setIsFlipped(true)}
-              >
+              <Button style={{ ...flipButtonStyles, ...rightMargin, ...(isFlipped ? highlightButton : {}) }} floated="right" onClick={() => setIsFlipped(true)}>
                 Back
               </Button>
-              <Button
-                className="buttonCustom"
-                style={{ ...flipButtonStyles, ...(!isFlipped ? highlightButton : {}) }}
-                floated="right"
-                onClick={() => setIsFlipped(false)}
-              >
+              <Button style={{ ...flipButtonStyles, ...(!isFlipped ? highlightButton : {}) }} floated="right" onClick={() => setIsFlipped(false)}>
                 Front
               </Button>
             </div>
           </ModalPreview.Content>
           <ModalPreview.Actions style={modalActionStyles}>
             {inOnboardingMode && (
-              <Button className="buttonCustom" style={cancelButton} onClick={() => setCustomizationPreview(false)}>
+              <Button style={cancelButton} onClick={() => setCustomizationPreview(false)}>
                 <Icon name="remove" /> Edit
               </Button>
             )}
-            <Button className="buttonCustom" primary onClick={handleReviewComplete}>
+            <Button primary onClick={handleReviewComplete}>
               <Icon name="checkmark" /> {inOnboardingMode ? 'Continue' : 'OK'}
             </Button>
           </ModalPreview.Actions>

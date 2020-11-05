@@ -418,7 +418,7 @@ const MailoutDetailsPage = () => {
         {pendingState && !error && <Loading />}
       </ContentTopHeaderLayout>
 
-      <ModalPreview widthSize={postCardSize.width} open={showConsentModal} onClose={() => setShowConsentModal(false)} basic size="small">
+      <ModalPreview widthSize={postCardSize.width} open={showConsentModal} onClose={() => setShowConsentModal(false)} size="small">
         {details && (
           <div
             style={{
@@ -443,19 +443,13 @@ const MailoutDetailsPage = () => {
             <ModalPreview.Content>
               <div style={flipButtonContainer}>
                 <Button
-                  className="buttonCustom"
                   style={{ ...flipButtonStyles, ...rightMargin, ...(isFlipped ? highlightButton : {}) }}
                   floated="right"
                   onClick={() => setIsFlipped(true)}
                 >
                   Back
                 </Button>
-                <Button
-                  className="buttonCustom"
-                  style={{ ...flipButtonStyles, ...(!isFlipped ? highlightButton : {}) }}
-                  floated="right"
-                  onClick={() => setIsFlipped(false)}
-                >
+                <Button style={{ ...flipButtonStyles, ...(!isFlipped ? highlightButton : {}) }} floated="right" onClick={() => setIsFlipped(false)}>
                   Front
                 </Button>
               </div>
@@ -471,10 +465,10 @@ const MailoutDetailsPage = () => {
               </ModalPreview.Description>
             </ModalPreview.Content>
             <ModalPreview.Actions style={{ display: 'flex', justifyContent: 'space-between', marginTop: '30px' }}>
-              <Button className="buttonCustom" style={cancelButton} onClick={() => setShowConsentModal(false)}>
+              <Button style={cancelButton} onClick={() => setShowConsentModal(false)}>
                 Cancel
               </Button>
-              <Button className="buttonCustom" primary onClick={() => [dispatch(submitMailoutPending(mailoutId)), setShowConsentModal(false)]}>
+              <Button primary onClick={() => [dispatch(submitMailoutPending(mailoutId)), setShowConsentModal(false)]}>
                 Agree
               </Button>
             </ModalPreview.Actions>

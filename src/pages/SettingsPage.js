@@ -35,7 +35,7 @@ const SettingsPage = () => {
           {passwordResetStatus ? `Reset Initiated` : `Password Change`}
         </Button>
 
-        <Modal open={modalOpen} onClose={() => setModalOpen(false)} basic size="small">
+        <Modal open={modalOpen} onClose={() => setModalOpen(false)} size="small">
           <Header icon="exclamation" content="Password Change" />
           <Modal.Content image>
             <Modal.Description style={{ margin: 'auto' }}>

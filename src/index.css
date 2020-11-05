@@ -104,10 +104,6 @@ h1 {
   background-image: none;
 }
 
-.buttonCustom {
-  font-family: 'Open Sans', sans-serif !important;
-}
-
 .ui.primary.button.active,
 .ui.primary.button:active,
 .ui.primary.button:focus,
