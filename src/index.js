@@ -18,7 +18,6 @@ import registerIcons from './registerIcons';
 import AuthService from './services/auth';
 import PolygonGoogleMapsHOC from './components/Forms/PolygonGoogleMaps/PolygonGoogleMapsHOC';
 
-
 if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_SENTRY_RELEASE) {
   try {
     Sentry.init({

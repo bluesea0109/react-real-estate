@@ -35,17 +35,17 @@ export class GoogleMapItem extends Component {
   render() {
     const { data } = this.props;
 
-    let center = { lat: 44.5049368, lng: -105.7491507 }
-    let zoom = 4
+    let center = { lat: 44.5049368, lng: -105.7491507 };
+    let zoom = 4;
     if (data.details) {
-      if (data.details.latitude) center.lat = data.details.latitude
-      if (data.details.longitude) center.lng = data.details.longitude
-      zoom = 12
+      if (data.details.latitude) center.lat = data.details.latitude;
+      if (data.details.longitude) center.lng = data.details.longitude;
+      zoom = 12;
     } else if (data.destinations && data.destinations.length) {
-      let first = data.destinations[0]
-      center.lng = first.lon
-      center.lat = first.lat
-      zoom = 12
+      let first = data.destinations[0];
+      center.lng = first.lon;
+      center.lat = first.lat;
+      zoom = 12;
     }
 
     const displayMarkers = () => {
@@ -88,31 +88,27 @@ export class GoogleMapItem extends Component {
     return (
       <Fragment>
         <Segment attached style={{ height: '50vh', top: '-1px' }}>
-
           <GoogleMap
             id="destinations-map-display"
             mapContainerStyle={containerStyle}
             zoom={zoom}
             options={{
-              streetViewControl: false
+              streetViewControl: false,
             }}
             center={center}
             onClick={this.onMapClicked}
           >
-
             {displayMarkers()}
             {data.details && data.details.latitude && mainMarker()}
-
           </GoogleMap>
-
         </Segment>
       </Fragment>
-    )
+    );
   }
-};
+}
 
 GoogleMapItem.propTypes = {
   props: PropTypes.object,
 };
 
-export default GoogleMapItem
+export default GoogleMapItem;

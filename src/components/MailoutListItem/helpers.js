@@ -1,7 +1,7 @@
 import Dinero from 'dinero.js/build/esm/dinero.js';
 import { format } from 'date-fns';
 
-export const calculateCost = (recipientCount, size='4x6') => {
+export const calculateCost = (recipientCount, size = '4x6') => {
   if (!recipientCount || typeof recipientCount !== 'number') return '-';
   let unitCost = 59;
   if (size === '6x9' || size === '9x6') unitCost = 89;
@@ -18,7 +18,7 @@ export const canSend = mailoutStatus => {
 
 export const canPickDestinations = mailoutStatus => {
   return mailoutStatus === 'created' || mailoutStatus === 'calculation-deferred';
-}
+};
 
 export const formatDate = created => {
   if (!created || typeof created !== 'number') return '-';
@@ -71,8 +71,7 @@ export const resolveMailoutStatusColor = mailoutStatus => {
 export const resolveLabelStatus = (listingStatus, mailoutStatus) => {
   if (mailoutStatus === 'hide') return 'grey';
   if (mailoutStatus === 'archived') return 'grey';
-  if (listingStatus === 'custom') return 'grey'
+  if (listingStatus === 'custom') return 'grey';
   if (listingStatus === 'sold') return 'orange';
   if (listingStatus === 'listed') return 'teal';
-
 };

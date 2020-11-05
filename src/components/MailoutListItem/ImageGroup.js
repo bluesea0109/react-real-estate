@@ -7,7 +7,6 @@ import { Image } from '../Base';
 import { useIsMobile } from '../Hooks/useIsMobile';
 
 const ImageGroup = ({ img1src, img2src, linkTo, status }) => {
-  
   const isMobile = useIsMobile();
   const resizePictures = () => (isMobile ? { width: '100%' } : { width: '48%' });
 

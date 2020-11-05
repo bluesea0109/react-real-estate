@@ -248,7 +248,7 @@ export default function mailout(state = initialState, action) {
       return {
         ...state,
         mailoutPolygonCoordinates: action.payload,
-      }
+      };
 
     case REVERT_MAILOUT_EDIT_PENDING:
       return {

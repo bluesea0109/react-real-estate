@@ -4,7 +4,6 @@ import { Button, Menu, Segment } from '../../Base';
 import { Form } from '../Base';
 
 const Wizard = ({ children, initialValues = {}, onSubmit, page, setPage, controls, onLastPage, onIsDisabled }) => {
-
   const [values, setValues] = useState(initialValues);
 
   const next = values => {
@@ -46,7 +45,7 @@ const Wizard = ({ children, initialValues = {}, onSubmit, page, setPage, control
           <Form.Children>
             {controls}
 
-            <Segment style={{marginTop: '22px'}}>
+            <Segment style={{ marginTop: '22px' }}>
               <Menu pointing secondary>
                 <Menu.Item name="newListing" active={page === 0} disabled={page === 0} onClick={previous} />
                 <Menu.Item as={Button} type="submit" name="soldListing" active={page === 1} disabled={!!props.status || props.isSubmitting || page === 1} />

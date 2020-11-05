@@ -33,7 +33,6 @@ const formReducer = (state, action) => {
 const NEW_LISTING = 'listed';
 
 const CustomizeForm = ({ customizationData, initialValues }) => {
-
   const isMobile = useIsMobile();
 
   const dispatch = useDispatch();
@@ -196,12 +195,14 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
 
               <div>{InputFormField({ fieldName: 'frontHeadline', listingType, initialValues, formValues, setFormValues })}</div>
 
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr',
-                gridTemplateRows: '1fr 50px'
-                }}>
-                <div style={{display: 'flex', justifyContent: 'flex-start', padding: '0.5rem'}}>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr',
+                  gridTemplateRows: '1fr 50px',
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'flex-start', padding: '0.5rem' }}>
                   <>{TemplatePostcardSizeField({ postcardSize: '4x6', listingType, initialValues, formValues, setFormValues })}</>
                   <>{TemplatePostcardSizeField({ postcardSize: '6x9', listingType, initialValues, formValues, setFormValues })}</>
                   <>{TemplatePostcardSizeField({ postcardSize: '6x11', listingType, initialValues, formValues, setFormValues })}</>
@@ -210,7 +211,6 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
                   {KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}
                 </div>
               </div>
-
 
               <div>{MailoutSizeSliderFormField({ formType: 'agent', listingType, initialValues, formValues, setFormValues })}</div>
 
@@ -248,7 +248,7 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
     <Page basic>
       <ContentTopHeaderLayout>
         <PageTitleHeader padded>
-          <Menu borderless fluid secondary style={{padding:"12px 6px 9px 15px"}}>
+          <Menu borderless fluid secondary style={{ padding: '12px 6px 9px 15px' }}>
             {peerId ? (
               <Header as="h1">
                 {peersName}'s Customization
