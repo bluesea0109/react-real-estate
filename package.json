@@ -4,13 +4,14 @@
   "version": "5.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env PORT=8082 react-scripts start",
-    "build": "(export REACT_APP_SENTRY_RELEASE=$(node -pe \"require('./package.json').version\"); react-scripts build && node utils/sentry.js)",
-    "build-local": "react-scripts build",
+    "start": "npm run formatCheck && cross-env PORT=8082 react-scripts start",
+    "build": "npm run formatCheck && (export REACT_APP_SENTRY_RELEASE=$(node -pe \"require('./package.json').version\"); react-scripts build && node utils/sentry.js)",
+    "build-local": "npm run formatCheck && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "./node_modules/.bin/eslint --ext .js,.jsx --ignore-pattern public tmp artifacts .",
     "format": "prettier --write 'src/**/*.{js,jsx,json}'",
+    "formatCheck": "prettier --check 'src/**/*.{js,jsx,json}'",
     "generate-artifacts": "node utils/generate-testing-artifacts",
     "create": "node utils/create-campaigns",
     "reset": "node utils/resetDevDb",
@@ -56,8 +57,10 @@
   "devDependencies": {
     "@sentry/cli": "1.49.0",
     "cross-env": "^7.0.2",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
     "http-proxy-middleware": "0.20.0",
-    "prettier": "1.19.1",
+    "prettier": "^1.19.1",
     "react-test-renderer": "16.12.0",
     "request": "2.88.0",
     "request-promise": "4.2.5"
@@ -67,7 +70,7 @@
     "json-schema-faker": "0.5.0-rc23"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": ["react-app", "plugin:prettier/recommended"]
   },
   "browserslist": {
     "production": [
