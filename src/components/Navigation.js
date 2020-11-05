@@ -9,8 +9,7 @@ import { StepLayout, StepsLayout, MobileDisabledLayout, NavigationLayout } from 
 import { Dimmer, Menu, Initials, Icon, Step } from './Base';
 import { useIsMobile } from './Hooks/useIsMobile.js';
 
-import SideNaveToggle from './SideNaveToggle';
-import './SideNaveToggle/styles.scss';
+import SideNavToggle from './SideNavToggle';
 import { ReactComponent as Cog } from '../assets/cog.svg';
 import { ReactComponent as Icon1 } from '../assets/1-icon.svg';
 import { ReactComponent as Icon2 } from '../assets/2-icon.svg';
@@ -66,7 +65,11 @@ const StyledCog = styled(Cog)`
   height: 20px;
   margin-left: 12px;
   margin-top: 17px;
-`
+`;
+
+const StyledIcon = styled(FontAwesomeIcon)`
+  margin: 0em 1em 0em 0.65em;
+`;
 
 export default () => {
   const isMobile = useIsMobile();
@@ -167,7 +170,7 @@ export default () => {
   if (loadingCompleted && !onboarded) {
     if (multiUser && isAdmin) {
       return (
-        <SideNaveToggle moblileVisible={moblileVisible} setMobileVisible={setMobileVisible} toggle={toggle} setToggle={setToggle}>
+        <SideNavToggle moblileVisible={moblileVisible} setMobileVisible={setMobileVisible} toggle={toggle} setToggle={setToggle}>
           <StepsLayout vertical={!isMobile}>
             <StepLayout active={onProfile} completed={completedProfile}>
               <Icon1 />
@@ -205,11 +208,11 @@ export default () => {
               )}
             </StepLayout>
           </StepsLayout>
-        </SideNaveToggle>
+        </SideNavToggle>
       );
     } else {
       return (
-        <SideNaveToggle moblileVisible={moblileVisible} setMobileVisible={setMobileVisible} toggle={toggle} setToggle={setToggle}>
+        <SideNavToggle moblileVisible={moblileVisible} setMobileVisible={setMobileVisible} toggle={toggle} setToggle={setToggle}>
           <StepsLayout vertical={!isMobile}>
             <StepLayout active={onProfileSingleUser} completed={completedProfile}>
               <Icon name="user" />
@@ -229,7 +232,7 @@ export default () => {
               )}
             </StepLayout>
           </StepsLayout>
-        </SideNaveToggle>
+        </SideNavToggle>
       );
     }
   }
@@ -241,7 +244,7 @@ export default () => {
   };
 
   return (
-    <SideNaveToggle moblileVisible={moblileVisible} setMobileVisible={setMobileVisible} toggle={toggle} setToggle={setToggle}>
+    <SideNavToggle moblileVisible={moblileVisible} setMobileVisible={setMobileVisible} toggle={toggle} setToggle={setToggle}>
       <Dimmer.Dimmable blurring dimmed={appIsBusy}>
         <Dimmer active={appIsBusy} inverted />
 
@@ -260,16 +263,15 @@ export default () => {
           }
         >
           <div onClick={mobileCollapse}>
-            <Menu.Item as={Link} color="teal" name="dashboard" active={activeItem === '/dashboard'} to="/dashboard" style={menuItemStyles}>
+            <Menu.Item as={Link} name="dashboard" active={activeItem === '/dashboard'} to="/dashboard" style={menuItemStyles}>
               <MobileDisabledLayout>
-                <FontAwesomeIcon icon="tachometer-alt" className="iconWithStyle" /> Dashboard
+                <StyledIcon icon="tachometer-alt" className="iconWithStyle" /> Dashboard
               </MobileDisabledLayout>
             </Menu.Item>
           </div>
 
           <Menu.Item
             as={Link}
-            color="teal"
             name="archived"
             active={activeItem === '/dashboard/archived'}
             to="/dashboard/archived"
@@ -277,15 +279,20 @@ export default () => {
             onClick={mobileCollapse}
           >
             <MobileDisabledLayout>
-              <FontAwesomeIcon icon="archive" className="iconWithStyle" /> Archive
+              <StyledIcon icon="archive" className="iconWithStyle" /> Archive
             </MobileDisabledLayout>
           </Menu.Item>
 
           <Menu.Item
             as={Link}
-            color="teal"
             name="settings"
-            active={activeItem === '/settings' || activeItem === '/customization' || activeItem === '/profile' || activeItem === '/billing'}
+            active={
+              activeItem === '/settings' ||
+              activeItem === '/customization/team' ||
+              activeItem === '/customization' ||
+              activeItem === '/profile' ||
+              activeItem === '/billing'
+            }
             to="/settings"
             style={menuItemStyles}
             onClick={mobileCollapse}
@@ -305,7 +312,6 @@ export default () => {
               {multiUser && isAdmin && !selectedPeerId && (
                 <Menu.Item
                   as={Link}
-                  color="teal"
                   name="customization/team"
                   active={activeItem === '/customization/team'}
                   to="/customization/team"
@@ -317,7 +323,6 @@ export default () => {
               )}
               <Menu.Item
                 as={Link}
-                color="teal"
                 name="customization"
                 active={activeItem === '/customization'}
                 to="/customization"
@@ -327,22 +332,13 @@ export default () => {
                 <MobileDisabledLayout>Personal Customization</MobileDisabledLayout>
               </Menu.Item>
 
-              <Menu.Item
-                as={Link}
-                color="teal"
-                name="profile"
-                active={activeItem === '/profile'}
-                to="/profile"
-                style={subMenuItemStyles}
-                onClick={mobileCollapse}
-              >
+              <Menu.Item as={Link} name="profile" active={activeItem === '/profile'} to="/profile" style={subMenuItemStyles} onClick={mobileCollapse}>
                 <MobileDisabledLayout>Profile</MobileDisabledLayout>
               </Menu.Item>
 
               {!selectedPeerId && (
                 <Menu.Item
                   as={Link}
-                  color="teal"
                   name="billing"
                   active={activeItem === '/billing'}
                   to="/billing"
@@ -360,6 +356,6 @@ export default () => {
           </div>
         </NavigationLayout>
       </Dimmer.Dimmable>
-    </SideNaveToggle>
+    </SideNavToggle>
   );
 };
