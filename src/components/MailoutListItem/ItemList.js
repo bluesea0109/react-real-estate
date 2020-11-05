@@ -11,6 +11,9 @@ import styled from 'styled-components';
 
 const ListItems = styled.div`
   padding: 18px 30px 0px 18px;
+  .header {
+    font-family: 'Open Sans', sans-serif !important;
+  }
   .ui.list > .item:first-child {
     padding-top: 6px;
   }

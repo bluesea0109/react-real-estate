@@ -14,6 +14,7 @@ import { Dropdown, Popup } from 'semantic-ui-react';
 import { useIsMobile } from './Hooks/useIsMobile';
 
 const StyledUserSelectorDropdown = styled(Dropdown)`
+  font-family: 'Open Sans', sans-serif !important;
   &&&&& {
     height: 40px;
     border-radius: 20px;
