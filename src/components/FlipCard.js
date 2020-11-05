@@ -1,14 +1,5 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import Styled from "styled-components";
-
-const FlipCardContainer = Styled.div`
-@media (max-width: 1050px) {
-  &&&{
-      width:95%;
-  }
-}
-`;
 
 const FlipCard = props => {
   const {
@@ -61,7 +52,6 @@ const FlipCard = props => {
     container: {
       perspective: '1000px',
       zIndex: `${cardZIndex}`,
-      marginLeft:"-5px",
     },
     flipper: {
       height: '100%',
@@ -86,7 +76,7 @@ const FlipCard = props => {
   };
 
   return (
-    <FlipCardContainer style={{ ...styles.container, ...containerStyle }}>
+    <div style={{ ...styles.container, ...containerStyle }}>
       <div className="card-flipper" style={styles.flipper}>
         <div className="card-front" style={styles.front}>
           {getComponent(0)}
@@ -96,7 +86,7 @@ const FlipCard = props => {
           {getComponent(1)}
         </div>
       </div>
-    </FlipCardContainer>
+    </div>
   );
 };
 
