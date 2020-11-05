@@ -28,10 +28,19 @@ const MailoutDetailsPage = () => {
   }, [mailoutDetails, mailoutEdit, dispatch, mailoutId]);
 
   const handleBackClick = () => {
-    if (lastLocation.pathname === `/dashboard/edit/${mailoutId}`) {
-      history.push(`/dashboard/${mailoutId}`);
+    const editMailoutPath = `/dashboard/edit/${mailoutId}`;
+    const mailOutPath = `/dashboard/${mailoutId}`;
+    const lastPathName = lastLocation.pathname;
+
+    if (lastPathName === editMailoutPath) {
+      history.push(mailOutPath);
     }
-    if (lastLocation.pathname === `/dashboard/${mailoutId}`) {
+
+    if (lastPathName === mailOutPath) {
+      history.goBack();
+    }
+
+    if (lastPathName !== editMailoutPath && lastPathName !== mailOutPath && lastPathName === '/dashboard'){
       history.goBack();
     }
   };

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router';
 import React, { Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -61,9 +62,11 @@ const ApproveAndSendButton = ({ data, mailoutDetailPage, onClickApproveAndSend, 
 };
 
 const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickApproveAndSend, onClickDelete, lockControls = false, onClickRevertEdit }) => {
-  let dispatch = useDispatch();
-  let archivePending = useSelector(state => state.mailout.archivePending);
-  let archiveId = useSelector(state => state.mailout.archiveId);
+  const dispatch = useDispatch();
+  const archivePending = useSelector(state => state.mailout.archivePending);
+  const archiveId = useSelector(state => state.mailout.archiveId);
+
+  const history = useHistory();
 
   const runArchive = () => {
     if (data.mailoutStatus === 'archived') {
@@ -79,6 +82,11 @@ const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickAppro
   const activeWhen = new Date(Date.now()).toISOString().split('T')[0] < data.send_date;
   const enableRevertEdit = data.edited;
   const isArchived = data.mailoutStatus === 'hide' || data.mailoutStatus === 'archived';
+
+  // Redirect the user to the edit page from the dashboard
+  const handleEditClickFromDropdown = (id) => {
+    history.push(`/dashboard/edit/${id}`);
+  }
 
   return (
     <ItemHeaderLayout attached="top" block>
@@ -135,6 +143,9 @@ const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickAppro
             <Dropdown.Menu>
               <Dropdown.Item onClick={runArchive}>
                 <Icon name="archive" /> Archive
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleEditClickFromDropdown(data._id)}>
+                <Icon name="edit" /> Edit
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
