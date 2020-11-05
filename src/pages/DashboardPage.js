@@ -32,13 +32,24 @@ const AddCampaignContainer = Styled.div`
 `;
 
 const NewCampaignContainer = Styled.div`
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 1115px) {
   .ui.stackable.grid {
     text-align: center;
   }
 }
 button {
   width: 227px;
+}
+`;
+
+const ModalAddCampaign = Styled(Modal)`
+&&&{
+width:60%;
+}
+@media only screen and (max-width: 1250px) {
+  &&&{
+    width:90%;
+  }
 }
 `;
 
@@ -317,11 +328,11 @@ const Dashboard = () => {
 
       {error && <Snackbar error>{error}</Snackbar>}
 
-      <Modal open={showAddCampaign} centered={false}>
+      <ModalAddCampaign open={showAddCampaign} centered={false}>
         {showChooseSize ? (
           <>
-            <Modal.Header style={{ textAlign: 'center' }}>Add Campaign: Choose Size</Modal.Header>
-            <Modal.Content
+            <ModalAddCampaign.Header style={{ textAlign: 'center' }}>Add Campaign: Choose Size</ModalAddCampaign.Header>
+            <ModalAddCampaign.Content
               style={{
                 display: 'grid',
                 gridTemplateColumns: '1fr',
@@ -339,20 +350,20 @@ const Dashboard = () => {
                 {renderPostcardButton('6x9')}
                 {renderPostcardButton('6x11')}
               </div>
-            </Modal.Content>
-            <Modal.Actions>
+            </ModalAddCampaign.Content>
+            <ModalAddCampaign.Actions>
               <Button inverted primary onClick={cancelAddCampaign}>
                 Cancel
               </Button>
               <Button primary onClick={_ => setShowChooseSize(false)}>
                 Next
               </Button>
-            </Modal.Actions>
+            </ModalAddCampaign.Actions>
           </>
         ) : (
           <>
-            <Modal.Header style={{ textAlign: 'center' }}>Add Campaign</Modal.Header>
-            <Modal.Content>
+            <ModalAddCampaign.Header style={{ textAlign: 'center' }}>Add Campaign</ModalAddCampaign.Header>
+            <ModalAddCampaign.Content>
               <AddCampaignContainer>
                 <p>Enter a property MLS number to import a listing, or you can create a custom campaign and upload your own design.</p>
 
@@ -479,18 +490,18 @@ const Dashboard = () => {
                   </NewCampaignContainer>
                 )}
               </AddCampaignContainer>
-            </Modal.Content>
-            <Modal.Actions>
+            </ModalAddCampaign.Content>
+            <ModalAddCampaign.Actions>
               <Button inverted primary onClick={_ => setShowChooseSize(true)}>
                 Back
               </Button>
               <Button primary onClick={finsihAddCampaign} disabled={!useMLSNumberToAddCampaign && (!CampaignCoverUpload || !AddCampaignType)}>
                 Add Campaign
               </Button>
-            </Modal.Actions>
+            </ModalAddCampaign.Actions>
           </>
         )}
-      </Modal>
+      </ModalAddCampaign>
 
       {mailoutList && mailoutList.length > 0 && (
         <Segment style={isMobile ? { padding: '0', paddingTop: '4.5em', marginLeft: '-1em', marginRight: '-1em' } : { marginTop: '22px' }}>

@@ -11,6 +11,7 @@ import FlipCard from '../../FlipCard';
 import Loading from '../../Loading';
 import { useIsMobile } from '../../Hooks/useIsMobile';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Styled from 'styled-components';
 
 const modalHeaderStyles = {
   padding: '4px 0px 0px 0px',
@@ -82,6 +83,15 @@ const segmentStyle = {
   margin: 'auto',
   boxShadow: 'none',
 };
+
+const ModalPreview = Styled(Modal)`
+
+@media only screen and (max-width: 700px) {
+  &&&{
+    width:90%;
+  }
+}
+`;
 
 const RenderPreviewModal = ({ formType, formValues }) => {
   const isMobile = useIsMobile();
@@ -245,15 +255,15 @@ const RenderPreviewModal = ({ formType, formValues }) => {
       );
     } else {
       return (
-        <Modal open={customizationPreview} basic size="small">
-          <Modal.Header style={modalHeaderStyles}>
+        <ModalPreview open={customizationPreview} basic size="small">
+          <ModalPreview.Header style={modalHeaderStyles}>
             <p style={modalHeaderP}>Preview</p>
             <Button style={cancelX} onClick={() => setCustomizationPreview(false)}>
               <FontAwesomeIcon icon="times" style={{ color: '#B1B1B1', fontSize: '16px' }} />
             </Button>
-          </Modal.Header>
+          </ModalPreview.Header>
 
-          <Modal.Content image style={{ padding: '0 45px 10px' }}>
+          <ModalPreview.Content image style={{ padding: '0 45px 10px' }}>
             <FlipCard isFlipped={isFlipped}>
               <Segment textAlign="center" loading={!listedFrontLoaded} style={segmentStyle}>
                 <iframe
@@ -261,8 +271,8 @@ const RenderPreviewModal = ({ formType, formValues }) => {
                   title={`bm-iframe-listed-front-${formType}`}
                   name="listed-front"
                   src={listedPostcardFrontURL}
-                  width={isMobile ? '300' : '600'}
-                  height={isMobile ? '204' : '408'}
+                  width="600"
+                  height="408"
                   frameBorder="0"
                   sandbox="allow-same-origin allow-scripts"
                   onLoad={handleOnload}
@@ -276,8 +286,8 @@ const RenderPreviewModal = ({ formType, formValues }) => {
                   title={`bm-iframe-listed-back-${formType}`}
                   name="listed-back"
                   src={listedPostcardBackURL}
-                  width={isMobile ? '300' : '600'}
-                  height={isMobile ? '204' : '408'}
+                  width="600"
+                  height="408"
                   frameBorder="0"
                   sandbox="allow-same-origin allow-scripts"
                   onLoad={handleOnload}
@@ -285,9 +295,9 @@ const RenderPreviewModal = ({ formType, formValues }) => {
                 />
               </Segment>
             </FlipCard>
-          </Modal.Content>
+          </ModalPreview.Content>
 
-          <Modal.Content image style={{ padding: '10px 45px 0' }}>
+          <ModalPreview.Content image style={{ padding: '10px 45px 0' }}>
             <FlipCard isFlipped={isFlipped}>
               <Segment textAlign="center" loading={!soldFrontLoaded} style={segmentStyle}>
                 <iframe
@@ -295,8 +305,8 @@ const RenderPreviewModal = ({ formType, formValues }) => {
                   title={`bm-iframe-sold-front-${formType}`}
                   name="sold-front"
                   src={soldPostcardFrontURL}
-                  width={isMobile ? '300' : '600'}
-                  height={isMobile ? '204' : '408'}
+                  width="600"
+                  height="408"
                   frameBorder="0"
                   sandbox="allow-same-origin allow-scripts"
                   onLoad={handleOnload}
@@ -310,8 +320,8 @@ const RenderPreviewModal = ({ formType, formValues }) => {
                   title={`bm-iframe-sold-back-${formType}`}
                   name="sold-back"
                   src={soldPostcardBackURL}
-                  width={isMobile ? '300' : '600'}
-                  height={isMobile ? '204' : '408'}
+                  width="600"
+                  height="408"
                   frameBorder="0"
                   sandbox="allow-same-origin allow-scripts"
                   onLoad={handleOnload}
@@ -319,8 +329,8 @@ const RenderPreviewModal = ({ formType, formValues }) => {
                 />
               </Segment>
             </FlipCard>
-          </Modal.Content>
-          <Modal.Content>
+          </ModalPreview.Content>
+          <ModalPreview.Content>
             <div style={flipButtonContainer}>
               <Button
                 className="buttonCustom"
@@ -339,8 +349,8 @@ const RenderPreviewModal = ({ formType, formValues }) => {
                 Front
               </Button>
             </div>
-          </Modal.Content>
-          <Modal.Actions style={modalActionStyles}>
+          </ModalPreview.Content>
+          <ModalPreview.Actions style={modalActionStyles}>
             {inOnboardingMode && (
               <Button className="buttonCustom" style={cancelButton} onClick={() => setCustomizationPreview(false)}>
                 <Icon name="remove" /> Edit
@@ -349,8 +359,8 @@ const RenderPreviewModal = ({ formType, formValues }) => {
             <Button className="buttonCustom" primary onClick={handleReviewComplete}>
               <Icon name="checkmark" /> {inOnboardingMode ? 'Continue' : 'OK'}
             </Button>
-          </Modal.Actions>
-        </Modal>
+          </ModalPreview.Actions>
+        </ModalPreview>
       );
     }
   }

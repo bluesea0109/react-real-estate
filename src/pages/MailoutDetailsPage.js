@@ -31,7 +31,7 @@ const changeButtonStyles = {
 };
 
 const modalHeaderStyles = {
-  padding: '4px 0px 0px 0px',
+  padding: '4px 0px 16px 0px',
   display: 'flex',
   fontSize: '29px',
   color: '#59c4c4',
@@ -93,10 +93,11 @@ const ModalPreview = Styled(Modal)`
       width:90%;
     }
     .content{
-      ustify-content:flex-start;
+      justify-content:flex-start;
     }
   }
 `;
+
 const useFetching = (getActionCreator, dispatch, mailoutId) => {
   useEffect(() => {
     dispatch(getActionCreator(mailoutId));
