@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import TopBar from '../components/TopBar';
+import TopBar from '../components/TopBar.js';
 
 const mapStateToProps = state => {
   return {

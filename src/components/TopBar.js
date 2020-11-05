@@ -3,22 +3,65 @@ import { useHistory } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectPeerId, deselectPeerId } from '../../store/modules/peer/actions';
+import { selectPeerId, deselectPeerId } from '../store/modules/peer/actions';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Initials, Icon, Button, Menu } from '../Base';
-import AuthService from '../../services/auth';
-import LogoImage from '../LogoImage';
+import { Initials, Icon, Button, Menu, Header } from './Base';
+import AuthService from '../services/auth';
+import LogoImage from './LogoImage';
 
-import { Dropdown, Popup, Header } from 'semantic-ui-react';
-import './styles.scss';
-import { useIsMobile } from '../Hooks/useIsMobile';
+import { Dropdown, Popup } from 'semantic-ui-react';
+import { useIsMobile } from './Hooks/useIsMobile';
 
 const StyledUserSelectorDropdown = styled(Dropdown)`
-  height: 40px;
-  border-radius: 20px;
-  max-width:400px;
+  &&&&& {
+    height: 40px;
+    border-radius: 20px;
+    border-color: #e6e6e6;
+    max-width: 400px;
+    min-width: 100px;
+    padding: 0.2em 2.1em 0.78571429em 0.2em;
+    border-bottom-left-radius: 20px !important;
+    border-bottom-right-radius: 20px !important;
+    box-shadow: none;
+    .menu.visible {
+      margin-top: 1.15em !important;
+      overflow-y: scroll;
+      max-height: calc(90vh - 40px);
+      min-width: max-content !important;
+      border: none;
+      -ms-overflow-style: none; /* Internet Explorer 10+ */
+      scrollbar-width: none; /* Firefox */
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      h4,
+      p {
+        font-weight: 400 !important;
+        font-size: 14px !important;
+      }
+      .button:hover {
+        p {
+          color: #59c4c4 !important;
+        }
+      }
+    }
+    .item .image {
+      object-fit: cover;
+      margin-top: 0px;
+      margin-bottom: 0px;
+      margin-right: 0px;
+      max-height: none;
+      width: 32px;
+      height: 32px;
+    }
+    .menu > .item {
+      padding: 9px 12px 9px !important;
+      display: flex;
+    }
+  }
 `;
+
 const StyledHeader = styled(Header)`
   min-width: max-content !important;
   display: inline-block;
@@ -49,11 +92,11 @@ const logoutText = {
 };
 
 const dropdownPicStyle = {
+  width: '32px',
   height: '32px',
   display: 'block',
   overflow: 'hidden',
-  borderRadius: '50px',
-  width: '32px',
+  borderRadius: '50%',
 };
 
 export default ({ auth0 }) => {
@@ -62,17 +105,17 @@ export default ({ auth0 }) => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [activeUser, setActiveUser] = useState('');
-  
+
   const loggedInUser = useSelector(store => store.onLogin.user);
   const selectedPeerId = useSelector(store => store.peer.peerId);
   const teammates = useSelector(store => store.team.profiles);
-  
+
   const onLoginMode = useSelector(store => store.onLogin.mode);
   const multiUser = onLoginMode === 'multiuser';
   const completedInviteTeammates = useSelector(store => store.onboarded.completedInviteTeammates);
 
-  const menuSpacing = () => (isMobile ? {} : { marginLeft: '.5em', padding:'0px 14px' });
-  
+  const menuSpacing = () => (isMobile ? {} : { marginLeft: '.5em', padding: '0px 14px' });
+
   useEffect(() => {
     if (loggedInUser && !activeUser) {
       setActiveUser(loggedInUser._id);
@@ -138,21 +181,21 @@ export default ({ auth0 }) => {
       return profiles.push({
         key: index + 1,
         text: (
-          <span style={{ display: 'flex' }}>
+          <div style={{ display: 'flex' }}>
             {realtorPhoto && realtorPhoto.length ? (
               <>
-                <span style={dropdownPicStyle}>
+                <div style={dropdownPicStyle}>
                   <img src={realtorPhoto} alt="Brivity Marketer" />
-                </span>
+                </div>
                 <p style={{ marginTop: '6px', marginLeft: '11px' }}> {profile.first}</p>
               </>
             ) : (
               <>
-              <Initials firstName={profile.first} lastName={profile.last} />
-              <p style={{marginTop: '6px', marginLeft: '11px'}}>{profile.first}</p>
+                <Initials firstName={profile.first} lastName={profile.last} />
+                <p style={{ marginTop: '6px', marginLeft: '11px' }}>{profile.first}</p>
               </>
             )}
-          </span>
+          </div>
         ),
         value: profile.userId,
         image: imageProp,
@@ -163,12 +206,8 @@ export default ({ auth0 }) => {
             {profile.first}&nbsp;
             {profile.last}&nbsp;
             {profile.permissions && profile.permissions.teamAdmin ? '(Admin)' : '(Agent)'}&nbsp;
-            <span>
-            {currentUser ? currentUserIconWithPopup : null}
-            </span>
-            <span>
-            {setupComplete ? setupCompletedIconWithPopup : null}
-            </span>
+            <span>{currentUser ? currentUserIconWithPopup : null}</span>
+            <span>{setupComplete ? setupCompletedIconWithPopup : null}</span>
           </StyledHeader>
         ),
       });
@@ -183,7 +222,7 @@ export default ({ auth0 }) => {
       <Menu.Menu position="right">
         {auth0.authenticated && (
           <Fragment>
-            {(multiUser && completedInviteTeammates) && (
+            {multiUser && completedInviteTeammates && (
               <Menu.Item style={menuSpacing()}>
                 <StyledUserSelectorDropdown
                   className="activeDropdown"
