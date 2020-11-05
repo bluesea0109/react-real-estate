@@ -9,7 +9,6 @@ import IframeGroup from '../components/MailoutListItem/IframeGroup';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ItemList from '../components/MailoutListItem/ItemList';
 import PageTitleHeader from '../components/PageTitleHeader';
-import { isMobile } from '../components/utils';
 import Loading from '../components/Loading';
 
 const useFetching = (getActionCreator, onboarded, dispatch) => {
@@ -128,19 +127,19 @@ const Archive = () => {
       </ContentTopHeaderLayout>
 
       {isInitiatingTeam && (
-        <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
+        <ContentBottomHeaderLayout>
           <Progress value={currentTeamUserCompleted} total={currentTeamUserTotal} progress="ratio" inverted success size="tiny" />
         </ContentBottomHeaderLayout>
       )}
 
       {isInitiatingUser && (
-        <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
+        <ContentBottomHeaderLayout>
           <Progress value={currentUserCompleted} total={currentUserTotal} progress="ratio" inverted success size="tiny" />
         </ContentBottomHeaderLayout>
       )}
 
       {!isInitiatingTeam && !isInitiatingUser && !mailoutsPendingState && mailoutList.length === 0 && (
-        <ContentBottomHeaderLayout style={isMobile() ? { marginTop: '60px' } : {}}>
+        <ContentBottomHeaderLayout>
           <Segment placeholder style={{ marginRight: '-1em' }}>
             <Header icon>
               <Icon name="file outline" />
@@ -153,7 +152,7 @@ const Archive = () => {
       {error && <Snackbar error>{error}</Snackbar>}
 
       {mailoutList.length > 0 && (
-        <Segment style={{ marginTop: '79px' }}>
+        <Segment style={{ marginTop: '22px' }}>
           <Grid>
             <Grid.Row>
               <Grid.Column width={16}>

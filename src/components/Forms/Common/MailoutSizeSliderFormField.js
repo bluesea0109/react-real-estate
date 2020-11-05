@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react';
 import Nouislider from 'nouislider-react';
 
-import { isMobile, TrimStrAndConvertToInt } from '../../utils';
+import { TrimStrAndConvertToInt } from '../../utils';
 import { Header } from 'semantic-ui-react';
+import { useIsMobile } from '../../Hooks/useIsMobile';
 
 const MIN = 100;
 const MAX = 2000;
@@ -12,6 +13,9 @@ const MARGIN = 10;
 const NEW_LISTING = 'listed';
 
 const MailoutSizeSliderFormField = ({ formType, listingType, initialValues, formValues, setFormValues }) => {
+
+  const isMobile = useIsMobile();
+
   const editable = listingType === NEW_LISTING ? !!formValues?.listed : !!formValues?.sold;
 
   let currentMailoutSize;
@@ -66,7 +70,7 @@ const MailoutSizeSliderFormField = ({ formType, listingType, initialValues, form
       <div style={{ opacity: 0.4 }}>
         <Header as="h5">Number of postcards to send per listing</Header>
         <div className="slider" style={{ marginTop: '2em', marginBottom: '2em' }}>
-          {isMobile() && (
+          {isMobile && (
             <Fragment>
               <br />
               <br />
@@ -117,7 +121,7 @@ const MailoutSizeSliderFormField = ({ formType, listingType, initialValues, form
               },
             }}
           />
-          {isMobile() && (
+          {isMobile && (
             <Fragment>
               <br />
               <br />
@@ -131,7 +135,7 @@ const MailoutSizeSliderFormField = ({ formType, listingType, initialValues, form
       <div>
         <Header as="h5">Number of postcards to send per listing</Header>
         <div className="slider" style={{ marginTop: '2em', marginBottom: '2em' }}>
-          {isMobile() && (
+          {isMobile && (
             <Fragment>
               <br />
               <br />
@@ -188,7 +192,7 @@ const MailoutSizeSliderFormField = ({ formType, listingType, initialValues, form
             }}
             onChange={handleMailoutSizeChange}
           />
-          {isMobile() && (
+          {isMobile && (
             <Fragment>
               <br />
               <br />

@@ -1,3 +1,20 @@
+## Release 5.0
+Changes:
+- Added ability to choose from different postcard sizes when creating campaigns
+- Added ability to set a default postcard size for individuals and teams
+- Added ability to change a postcard size when editing a campaign
+- Display the postcard size for each campaign in the dashboard, billing, and campaign pages
+- Update billing and refunds to accommodate new postcard sizes
+- New postcard template rendering
+- Show printing "bleed" and "safe area" on previews for a clearer picture of what a final print will look like
+- Give suggested photo sizes when uploading custom images
+- Site layout improvements
+
+----------------
+## Release 4.3
+
+Menu styling aligns with the CRM. Move the agent switcher to the top bar.
+
 -----------------
 ## Release 4.0
 

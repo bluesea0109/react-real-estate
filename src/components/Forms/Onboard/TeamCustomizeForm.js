@@ -8,7 +8,6 @@ import { Button, Icon, Image, Menu, Page, Segment } from '../../Base';
 import { ContentTopHeaderLayout } from '../../../layouts';
 import { StyledHeader } from '../../helpers';
 import Wizard from './CustomizationWizard';
-import { isMobile } from '../../utils';
 
 import InputFormField from '../Common/InputFormField';
 import CTAInputFormField from '../Common/CTAInputFormField';
@@ -20,6 +19,8 @@ import KWKLYCTAToggleFormField from '../Common/KWKLYCTAToggleFormField';
 import TemplatePictureFormField from '../Common/TemplatePictureFormField';
 import ValidateURLWithoutRerender from '../Common/ValidateURLWithoutRerender';
 import MailoutSizeSliderFormField from '../Common/MailoutSizeSliderFormField';
+import { useIsMobile } from '../../Hooks/useIsMobile';
+import TemplatePostcardSizeField from '../Common/TemplatePostcardSizeField';
 
 const formReducer = (state, action) => {
   return _.merge({}, action);
@@ -28,6 +29,7 @@ const formReducer = (state, action) => {
 const NEW_LISTING = 'listed';
 
 const TeamCustomizeForm = ({ teamCustomizationData, initialValues }) => {
+  const isMobile = useIsMobile();
   const dispatch = useDispatch();
 
   const teammates = useSelector(store => store.team.profiles);
@@ -131,8 +133,8 @@ const TeamCustomizeForm = ({ teamCustomizationData, initialValues }) => {
       <Fragment>
         <Segment
           padded
-          className={isMobile() ? null : 'primary-grid-container'}
-          style={isMobile() ? {} : { gridTemplateRows: 'unset', gridTemplateAreas: 'unset' }}
+          className={isMobile ? null : 'primary-grid-container'}
+          style={isMobile ? {} : { gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}
         >
           <div>
             <Header as="h5" style={{ opacity: !editable ? 0.4 : 1 }}>
@@ -154,18 +156,25 @@ const TeamCustomizeForm = ({ teamCustomizationData, initialValues }) => {
           <div>{ColorPickerFormField({ listingType, initialValues, formValues, setFormValues })}</div>
         </Segment>
 
-        <Segment padded className={isMobile() ? null : 'tertiary-grid-container'}>
+        <Segment padded className={isMobile ? null : 'tertiary-grid-container'}>
           {InputFormField({ fieldName: 'frontHeadline', listingType, initialValues, formValues, setFormValues })}
 
           <div>{MailoutSizeSliderFormField({ formType: 'team', listingType, initialValues, formValues, setFormValues })}</div>
 
-          <div>{KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}</div>
-
-          <div> </div>
-
           <div>{CTAInputFormField({ formType: 'team', listingType, initialValues, formValues, setFormValues })}</div>
 
-          <div>{KWKLYInputFormField({ listingType, initialValues, formValues, setFormValues })}</div>
+          <div>
+            <div>{KWKLYInputFormField({ listingType, initialValues, formValues, setFormValues })}</div>
+            <div style={{ display: 'block', paddingTop: '1.5em' }}>
+              <div>{KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}</div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', padding: '0.5rem' }}>
+            <>{TemplatePostcardSizeField({ postcardSize: '4x6', listingType, initialValues, formValues, setFormValues })}</>
+            <>{TemplatePostcardSizeField({ postcardSize: '6x9', listingType, initialValues, formValues, setFormValues })}</>
+            <>{TemplatePostcardSizeField({ postcardSize: '6x11', listingType, initialValues, formValues, setFormValues })}</>
+          </div>
         </Segment>
 
         <UpdateWithoutRerender formValues={formValues} />
@@ -179,13 +188,13 @@ const TeamCustomizeForm = ({ teamCustomizationData, initialValues }) => {
       <Wizard
         controls={
           <ContentTopHeaderLayout>
-            <Segment padded style={isMobile() ? { marginTop: '58px' } : {}}>
+            <Segment padded style={isMobile ? { marginTop: '58px' } : {}}>
               <Menu borderless fluid secondary>
                 <Header as="h1">
                   Team Customization
                   <Header.Subheader>
                     Set the default template customization options for your team.&nbsp;
-                    {isMobile() && <br />}
+                    {isMobile && <br />}
                     Changes made here will not overwrite existing user-specific customization.
                   </Header.Subheader>
                 </Header>

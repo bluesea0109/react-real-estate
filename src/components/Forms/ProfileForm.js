@@ -9,10 +9,13 @@ import { Divider, Header, Icon, Image, Menu, Page, Segment, Snackbar } from '../
 import { saveTeamProfilePending } from '../../store/modules/teamProfile/actions';
 import { saveProfilePending } from '../../store/modules/profile/actions';
 import { Button, Dropdown, FileUpload, Form, Input } from './Base';
-import { isMobile, phoneRegExp, popup, tag } from '../utils';
+import { phoneRegExp, popup, tag } from '../utils';
 import { ContentTopHeaderLayout } from '../../layouts';
 import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
+import { useIsMobile } from '../Hooks/useIsMobile';
+
+import styles from './ProfileForm.module.scss';
 
 const changeMsg = 'This information comes from Brivity CRM. If you want to modify this information, you need to do it there.';
 
@@ -53,6 +56,9 @@ const initialValues = {
 };
 
 const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
+
+  const isMobile = useIsMobile();
+
   const dispatch = useDispatch();
   const boards = useSelector(store => store.boards.available);
   const states = useSelector(store => store.states.available);
@@ -341,10 +347,10 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                             Save
                           </Button.Submit>
                         ) : (
-                          <Button.Submit primary disabled={isSubmitting || profileChangePending}>
-                            Submit
-                          </Button.Submit>
-                        )}
+                            <Button.Submit primary disabled={isSubmitting || profileChangePending}>
+                              Submit
+                            </Button.Submit>
+                          )}
                       </span>
                     </Menu.Item>
                   </Menu.Menu>
@@ -362,33 +368,20 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
               <Snackbar error>The data on the page has changed and the save has failed. Please reload to get the latest data.</Snackbar>
             )}
 
-            <Segment style={isMobile() ? { marginTop: '6em' } : { marginTop: '6.5em' }}>
+            <Segment style={{ margin: '20px 0' }}>
               <Header as="h2">
                 Personal
                 {selectedPeerId ? (
                   <Header.Subheader>Peers information will be shown on their postcards and will enable recipients to reach them.</Header.Subheader>
                 ) : (
-                  <Header.Subheader>Your information will be shown on your postcards and will enable recipients to reach you.</Header.Subheader>
-                )}
+                    <Header.Subheader>Your information will be shown on your postcards and will enable recipients to reach you.</Header.Subheader>
+                  )}
               </Header>
 
               <Divider style={{ margin: '2em -1em' }} />
 
               <div
-                style={
-                  isMobile()
-                    ? {}
-                    : {
-                        display: 'grid',
-                        gridTemplateColumns: '1fr 1fr 1fr 1fr',
-                        gridTemplateRows: 'minmax(90px, 90px) minmax(90px, 90px) minmax(90px, 90px) minmax(90px, 90px)',
-                        gridTemplateAreas: `"FirstLast FirstLast Headshot Picture"
-                                          "PhoneEmail PhoneEmail Headshot Picture"
-                                          "DreOfficePhone DreOfficePhone Headshot Picture"
-                                          "NotificationEmailToggle NotificationEmailToggle Website Website"`,
-                        gridColumnGap: '2em',
-                      }
-                }
+                className={styles['profile-form']}
               >
                 <FileUpload
                   style={{ gridArea: 'Headshot' }}
@@ -399,7 +392,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                   tag={tag('Required')}
                 />
 
-                {isMobile() ? null : (
+                {isMobile ? null : (
                   <div style={{ gridArea: 'Picture' }}>
                     <Image size="large" src={require('../../assets/onboard-profile.png')} alt="Brivity Marketer Mailout" />
                   </div>
@@ -437,17 +430,17 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                       Same as business notification email
                     </span>
                   ) : (
-                    <span style={{ color: '#969696' }}>
-                      <FontAwesomeIcon
-                        icon="toggle-on"
-                        size="2x"
-                        className="fa-flip-horizontal"
-                        style={{ marginTop: '1em', verticalAlign: '-0.3em' }}
-                        onClick={() => setPersonalNotificationEmailDisabled(!personalNotificationEmailDisabled)}
-                      />{' '}
+                      <span style={{ color: '#969696' }}>
+                        <FontAwesomeIcon
+                          icon="toggle-on"
+                          size="2x"
+                          className="fa-flip-horizontal"
+                          style={{ marginTop: '1em', verticalAlign: '-0.3em' }}
+                          onClick={() => setPersonalNotificationEmailDisabled(!personalNotificationEmailDisabled)}
+                        />{' '}
                       Same as business notification email
-                    </span>
-                  )}
+                      </span>
+                    )}
                 </Form.Group>
               </div>
             </Segment>
@@ -458,8 +451,8 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                 {selectedPeerId ? (
                   <Header.Subheader>Enter peers MLS information so we can generate postcards for their listings.</Header.Subheader>
                 ) : (
-                  <Header.Subheader>Enter your MLS information so we can generate postcards for your listings.</Header.Subheader>
-                )}
+                    <Header.Subheader>Enter your MLS information so we can generate postcards for your listings.</Header.Subheader>
+                  )}
               </Header>
 
               <Divider style={{ margin: '2em -1em' }} />
@@ -467,41 +460,41 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
               {isInitiatingTeam || isInitiatingUser ? (
                 <Loading message="Updating MLS settings, please wait..." />
               ) : (
-                <FieldArray
-                  name="boards"
-                  render={arrayHelpers => (
-                    <div>
-                      {values.boards &&
-                        values.boards.map((board, index) => (
-                          <Segment basic key={index} style={{ paddingTop: 0, paddingBottom: 0 }}>
-                            <div style={isMobile() ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 45px', gridColumnGap: '2em' }}>
-                              <Form.Group widths="2">
-                                <Dropdown label="MLS" name={`boards[${index}].name`} options={boards} tag={tag('Required')} />
-                                <Input label="MLS Agent ID" name={`boards.${index}.mlsId`} tag={tag('Required')} />
-                              </Form.Group>
-                              <Button
-                                type="button"
-                                primary
-                                inverted
-                                icon
-                                onClick={() => arrayHelpers.remove(index)}
-                                style={isMobile() ? { cursor: 'pointer' } : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }}
-                                aria-label="remove mls"
-                              >
-                                <Icon name="trash" />
-                              </Button>
-                            </div>
-                          </Segment>
-                        ))}
-                      <div className="buttons">
-                        <Button primary inverted type="button" onClick={() => arrayHelpers.push({ name: '', mlsId: '' })}>
-                          Add MLS
+                  <FieldArray
+                    name="boards"
+                    render={arrayHelpers => (
+                      <div>
+                        {values.boards &&
+                          values.boards.map((board, index) => (
+                            <Segment basic key={index} style={{ padding:'0px 25px 0px 0px' }}>
+                              <div style={isMobile ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 75px', gridColumnGap: '1em' }}>
+                                <Form.Group widths="2">
+                                  <Dropdown label="MLS" name={`boards[${index}].name`} options={boards} tag={tag('Required')} />
+                                  <Input label="MLS Agent ID" name={`boards.${index}.mlsId`} tag={tag('Required')} />
+                                </Form.Group>
+                                <Button
+                                  type="button"
+                                  primary
+                                  inverted
+                                  icon
+                                  onClick={() => arrayHelpers.remove(index)}
+                                  style={isMobile ? { cursor: 'pointer' } : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }}
+                                  aria-label="remove mls"
+                                >
+                                  <Icon name="trash" />
+                                </Button>
+                              </div>
+                            </Segment>
+                          ))}
+                        <div className="buttons">
+                          <Button primary inverted type="button" onClick={() => arrayHelpers.push({ name: '', mlsId: '' })}>
+                            Add MLS
                         </Button>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                />
-              )}
+                    )}
+                  />
+                )}
             </Segment>
 
             {(isAdmin || !multiUser) && !profileChangePending && (
@@ -514,23 +507,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                 <Divider style={{ margin: '2em -1em' }} />
 
                 <div
-                  style={
-                    isMobile()
-                      ? {}
-                      : {
-                          display: 'grid',
-                          gridTemplateColumns: '1fr 1fr 1fr 1fr',
-                          gridTemplateRows: 'minmax(75px, 75px) minmax(75px, 75px) minmax(75px, 75px) minmax(75px, 75px) minmax(75px, 75px) minmax(75px, 75px)',
-                          gridTemplateAreas: `"TeamName TeamName TeamLogo BrokerageLogo"
-                                            "BrokerageName BrokerageName TeamLogo BrokerageLogo"
-                                            "OfficePhone OfficePhone TeamLogo BrokerageLogo"
-                                            "AddressCity AddressCity AddressCity AddressCity"
-                                            "StateZipCode StateZipCode StateZipCode StateZipCode"
-                                            "BusinessNotificationEmail BusinessNotificationEmail BusinessWebsite BusinessWebsite"`,
-                          gridRowGap: '1em',
-                          gridColumnGap: '2em',
-                        }
-                  }
+                  className={styles['business-form']}
                 >
                   <div style={{ gridArea: 'TeamName' }}>
                     <Input label="Team Name" name="teamName" disabled={multiUser} tag={multiUser ? popup(changeMsg) : tag('Required')} />
@@ -544,16 +521,19 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                     <Input label="Office Phone Number" name="businessPhone" disabled={multiUser} tag={multiUser ? popup(changeMsg) : tag('Optional')} />
                   </div>
 
-                  <FileUpload style={{ gridArea: 'TeamLogo' }} label="Team Logo" name="teamLogo" dispatch={dispatch} pending={picturesPending} />
+                  <div style={{gridArea: 'TeamLogo'}}>
+                    <FileUpload label="Team Logo" name="teamLogo" dispatch={dispatch} pending={picturesPending} />
+                  </div>
 
-                  <FileUpload
-                    style={{ gridArea: 'BrokerageLogo' }}
-                    label="Brokerage Logo"
-                    name="brokerageLogo"
-                    dispatch={dispatch}
-                    pending={picturesPending}
-                    tag={tag('Required')}
-                  />
+                  <div style={{gridArea: 'BrokerageLogo'}}>
+                    <FileUpload
+                      label="Brokerage Logo"
+                      name="brokerageLogo"
+                      dispatch={dispatch}
+                      pending={picturesPending}
+                      tag={tag('Required')}
+                    />
+                  </div>
 
                   <Form.Group widths="2" style={{ gridArea: 'AddressCity' }}>
                     <Input label="Address" name="address" disabled={multiUser} tag={multiUser ? popup(changeMsg) : tag('Required')} />

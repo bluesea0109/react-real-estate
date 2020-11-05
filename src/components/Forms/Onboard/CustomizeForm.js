@@ -8,7 +8,6 @@ import { Button, Icon, Image, Menu, Page, Segment } from '../../Base';
 import { ContentTopHeaderLayout } from '../../../layouts';
 import { StyledHeader } from '../../helpers';
 import Wizard from './CustomizationWizard';
-import { isMobile } from '../../utils';
 
 import InputFormField from '../Common/InputFormField';
 import CTAInputFormField from '../Common/CTAInputFormField';
@@ -21,6 +20,8 @@ import TemplatePictureFormField from '../Common/TemplatePictureFormField';
 import EnableCustomizationSwitch from '../Common/EnableCustomizationSwitch';
 import MailoutSizeSliderFormField from '../Common/MailoutSizeSliderFormField';
 import ValidateURLWithoutRerender from '../Common/ValidateURLWithoutRerender';
+import { useIsMobile } from '../../Hooks/useIsMobile';
+import TemplatePostcardSizeField from '../Common/TemplatePostcardSizeField';
 
 const formReducer = (state, action) => {
   return _.merge({}, action);
@@ -29,6 +30,7 @@ const formReducer = (state, action) => {
 const NEW_LISTING = 'listed';
 
 const CustomizeForm = ({ customizationData, initialValues }) => {
+  const isMobile = useIsMobile();
   const dispatch = useDispatch();
 
   const teammates = useSelector(store => store.team.profiles);
@@ -121,8 +123,8 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
 
         <Segment
           padded
-          className={isMobile() ? null : 'primary-grid-container'}
-          style={isMobile() ? {} : { gridTemplateRows: 'unset', gridTemplateAreas: 'unset' }}
+          className={isMobile ? null : 'primary-grid-container'}
+          style={isMobile ? {} : { gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}
         >
           <div>
             <Header as="h5" style={{ opacity: !editable ? 0.4 : 1 }}>
@@ -144,14 +146,10 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
           <div>{ColorPickerFormField({ listingType, initialValues, formValues, setFormValues })}</div>
         </Segment>
 
-        <Segment padded className={isMobile() ? null : 'tertiary-grid-container'}>
+        <Segment padded className={isMobile ? null : 'tertiary-grid-container'}>
           <div>{InputFormField({ fieldName: 'frontHeadline', listingType, initialValues, formValues, setFormValues })}</div>
 
           <div>{MailoutSizeSliderFormField({ formType: 'agent', listingType, initialValues, formValues, setFormValues })}</div>
-
-          <div style={{ display: !editable ? 'none' : 'block' }}>{KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}</div>
-
-          <div style={{ display: !editable ? 'none' : 'block' }}> </div>
 
           <div style={{ display: !editable && !initialCTA ? 'none' : 'block' }}>
             {CTAInputFormField({ formType: 'agent', listingType, initialValues, formValues, setFormValues })}
@@ -159,6 +157,16 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
 
           <div style={{ display: !editable && !initialKWKLY ? 'none' : 'block' }}>
             {KWKLYInputFormField({ listingType, initialValues, formValues, setFormValues })}
+            <div style={{ display: 'block', paddingTop: '1.5em' }}>
+              <div>{KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}</div>
+            </div>
+          </div>
+          <div style={{ display: !editable ? 'none' : 'block' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', padding: '0.5rem' }}>
+              <>{TemplatePostcardSizeField({ postcardSize: '4x6', listingType, initialValues, formValues, setFormValues })}</>
+              <>{TemplatePostcardSizeField({ postcardSize: '6x9', listingType, initialValues, formValues, setFormValues })}</>
+              <>{TemplatePostcardSizeField({ postcardSize: '6x11', listingType, initialValues, formValues, setFormValues })}</>
+            </div>
           </div>
         </Segment>
 
@@ -173,7 +181,7 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
       <Wizard
         controls={
           <ContentTopHeaderLayout>
-            <Segment padded style={isMobile() ? { marginTop: '58px' } : {}}>
+            <Segment padded style={isMobile ? { marginTop: '58px' } : {}}>
               <Menu borderless fluid secondary>
                 <Header as="h1">
                   Personal Customization

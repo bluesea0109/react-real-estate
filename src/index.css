@@ -96,9 +96,16 @@ h1 {
 .ui.primary.button,
 .ui.primary.buttons .button {
   background-color: #59c4c4;
+  border-radius:50px; 
+  text-transform:uppercase;
+  min-width:100px;
   color: #fff;
   text-shadow: none;
   background-image: none;
+}
+
+.buttonCustom{
+  font-family: 'Open Sans', sans-serif !important;
 }
 
 .ui.primary.button.active,
@@ -159,6 +166,8 @@ h1 {
   background-color: transparent;
   box-shadow: 0 0 0 2px #f2714d inset !important;
   color: #f2714d;
+  border-radius:50px;
+  text-transform:uppercase;
 }
 
 .ui.inverted.secondary.button.active,
@@ -173,6 +182,12 @@ h1 {
 }
 
 /* LABELS */
+.ui.grey.label{
+  background-color:#8d8d8d !important;
+}
+.ui.grey.ribbon.label{
+  border-color:#3c3c3c !important;
+}
 .ui.orange.ribbon.label {
   border-color: #bc340e !important;
 }
@@ -198,6 +213,7 @@ h1 {
 .image-frame-border {
   border: 1px solid #ccc;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  box-sizing:initial;
 }
 
 .bm-transform-effect {
@@ -216,9 +232,6 @@ h1 {
 /* Customize & Edit Campaigns Start */
 .primary-grid-container {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 0.25fr;
-  grid-template-areas: '. . . .' '. . . .' '. . . .';
   grid-column-gap: 1em;
 }
 
@@ -231,8 +244,8 @@ h1 {
 
 .tertiary-grid-container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: repeat(auto-fill, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-rows: repeat(auto-fill, minmax(0, 1fr));
   grid-column-gap: 1em;
   grid-row-gap: 1em;
 }
@@ -242,8 +255,8 @@ h1 {
   z-index: 10;
   top: -144px;
   left: 86px;
-  color: white!important;
-  box-shadow: 0 0 0 0.1em rgba(255,255,255) inset;
+  color: white !important;
+  box-shadow: 0 0 0 0.1em rgba(255, 255, 255) inset;
 }
 
 .block-picker {
@@ -307,6 +320,10 @@ h1 {
 
 .ui.steps .step > .icon {
   font-size: 1em;
+}
+
+.ui.icon.button {
+  border-radius:50px;
 }
 
 /* Navigation End */
@@ -478,11 +495,6 @@ h1 {
   opacity: 1 !important;
 }
 
-/* MODAL */
-.ui.page.modals.dimmer.transition.visible.active {
-  background-color: rgba(0, 0, 0, 0.95) !important;
-}
-
 /* Mobile Only */
 .ui.container.remove-margins {
   margin-left: 0 !important;
@@ -494,21 +506,20 @@ h1 {
 }
 
 .details-customPostcardCTA a {
-  color: #59C4C4;
+  color: #59c4c4;
 }
 
 .details-customPostcardCTA a:visited {
-  color: #59C4C4;
+  color: #59c4c4;
 }
 
 .customPostcardCTA a {
-  color: #59C4C4;
+  color: #59c4c4;
 }
 
 .customPostcardCTA a:visited {
-  color: #59C4C4;
+  color: #59c4c4;
 }
-
 
 #chooseDestinationsMethod {
   padding-bottom: 10px;
@@ -549,11 +560,6 @@ h1 {
   padding-left: 100px;
 }
 
-#uploadCoverGroup {
-  position: relative;
-  float: right;
-}
-
 #postcardCoverFile {
   visibility: hidden;
 }
@@ -565,11 +571,11 @@ h1 {
 #postcardUploadText {
   cursor: pointer;
   position: relative;
-  color: #59C4C4;
+  color: #59c4c4;
 }
 
 #postcardUploadText:visited {
-  color: #59C4C4;
+  color: #59c4c4;
 }
 
 #addCampaignHolder {
@@ -589,13 +595,13 @@ h1 {
 }
 
 #newCampaignType button.active {
-  background-color: #59C4C4 !important;
+  background-color: #59c4c4 !important;
 }
 
 #uploadCardFront {
   border: 1px dashed #666;
   border-radius: 2px;
-  background-color: #EFEFEF;
+  background-color: #efefef;
   width: 350px;
   min-height: 70px;
   max-height: 90px;
@@ -615,12 +621,12 @@ h1 {
 }
 
 .BillingTable a {
-  color: #59C4C4;
+  color: #59c4c4;
   font-weight: 600;
 }
 
 .BillingTable a:visited {
-  color: #59C4C4;
+  color: #59c4c4;
   font-weight: 600;
 }
 
@@ -630,6 +636,6 @@ h1 {
 }
 
 #billingSubHeader a {
-  color: #59C4C4;
+  color: #59c4c4;
   font-weight: 600;
 }

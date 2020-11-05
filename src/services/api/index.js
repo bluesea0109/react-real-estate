@@ -168,7 +168,7 @@ const directory = {
     mailout: {
       list: () => ({ path: `/api/user/mailout`, method: 'get' }),
       get: mailoutId => ({ path: `/api/user/mailout/${mailoutId}?include_destinations=true`, method: 'get' }),
-      csv: ({userId, mailoutId}) => ({ path: `/api/user/${userId}/mailout/${mailoutId}/csv` }),
+      csv: ({ userId, mailoutId }) => ({ path: `/api/user/${userId}/mailout/${mailoutId}/csv` }),
       byMls: mlsNum => ({ path: `/api/user/mailout/byMls`, method: 'post' }),
       edit: {
         get: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'get' }),
@@ -368,5 +368,5 @@ export default {
   put,
   del,
   directory,
-  handleResponse
+  handleResponse,
 };

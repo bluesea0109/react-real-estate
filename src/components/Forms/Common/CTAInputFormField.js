@@ -4,9 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { saveTeamListedShortcodePending, saveTeamSoldShortcodePending } from '../../../store/modules/teamShortcode/actions';
 import { saveListedShortcodePending, saveSoldShortcodePending } from '../../../store/modules/shortcode/actions';
-import { composeValidators, isMobile, popup, required, urlRegExp } from '../../utils';
+import { composeValidators, popup, required, urlRegExp } from '../../utils';
 import { Icon, Menu } from '../../Base';
 import { Form, Input } from '../Base';
+import { useIsMobile } from '../../Hooks/useIsMobile';
 
 const NEW_LISTING = 'listed';
 const SOLD_LISTING = 'sold';
@@ -15,6 +16,7 @@ const validURL = str => !urlRegExp.test(str) && 'URL is not valid';
 const isValidURL = str => !!urlRegExp.test(str);
 
 const CTAInputFormField = ({ formType, listingType, initialValues, formValues, setFormValues }) => {
+  const isMobile = useIsMobile();
   const dispatch = useDispatch();
   const editable = listingType === NEW_LISTING ? !!formValues?.listed : !!formValues?.sold;
   const ctaEnabled = editable ? formValues?.[listingType]?.shortenCTA : initialValues?.[listingType]?.shortenCTA;
@@ -108,7 +110,7 @@ const CTAInputFormField = ({ formType, listingType, initialValues, formValues, s
       return (
         <Form.Group widths="2">
           <Input label="Call to action URL" name={listingType + '_cta'} value={currentValue} disabled={true} />
-          <Label style={{ marginTop: !isMobile() && '2.5em', backgroundColor: 'transparent' }}>
+          <Label style={{ marginTop: !isMobile && '2.5em', backgroundColor: 'transparent' }}>
             <Icon name="linkify" />
             Shortened URL:
             <Label.Detail>
@@ -137,7 +139,7 @@ const CTAInputFormField = ({ formType, listingType, initialValues, formValues, s
             validate={ctaEnabled && composeValidators(required, validURL)}
             disabled={!ctaEnabled}
           />
-          <Label style={{ marginTop: !isMobile() && '2.5em', backgroundColor: 'transparent' }}>
+          <Label style={{ marginTop: !isMobile && '2.5em', backgroundColor: 'transparent' }}>
             <Icon name="linkify" />
             Shortened URL:
             <Label.Detail>

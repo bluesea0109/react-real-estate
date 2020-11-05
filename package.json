@@ -1,10 +1,10 @@
 {
   "name": "beta-brivitymarketer-com",
   "homepage": "/v2/",
-  "version": "4.2.2",
+  "version": "5.0.0",
   "private": true,
   "scripts": {
-    "start": "PORT=8082 react-scripts start",
+    "start": "cross-env PORT=8082 react-scripts start",
     "build": "(export REACT_APP_SENTRY_RELEASE=$(node -pe \"require('./package.json').version\"); react-scripts build && node utils/sentry.js)",
     "build-local": "react-scripts build",
     "test": "react-scripts test",
@@ -30,7 +30,8 @@
     "formik": "^2.1.3",
     "google-maps-react": "2.0.2",
     "js-cookie": "2.2.1",
-    "lodash": "4.17.15",
+    "lodash": "^4.17.20",
+    "node-sass": "^4.14.1",
     "nouislider": "14.1.1",
     "nouislider-react": "3.3.5",
     "prop-types": "15.7.2",
@@ -43,7 +44,7 @@
     "react-router": "5.1.2",
     "react-router-dom": "5.1.2",
     "react-router-last-location": "2.0.1",
-    "react-scripts": "3.3.0",
+    "react-scripts": "^3.4.3",
     "redux": "4.0.5",
     "redux-logger": "3.0.6",
     "redux-saga": "1.1.3",
@@ -54,32 +55,19 @@
   },
   "devDependencies": {
     "@sentry/cli": "1.49.0",
+    "cross-env": "^7.0.2",
     "http-proxy-middleware": "0.20.0",
-    "husky": "4.2.1",
-    "lint-staged": "10.0.3",
     "prettier": "1.19.1",
     "react-test-renderer": "16.12.0",
     "request": "2.88.0",
     "request-promise": "4.2.5"
   },
   "optionalDependencies": {
-    "alf-commons": "git+ssh://git@gitlab.rmcloud.com/gabby/alf-common.git",
     "joi-to-json-schema": "5.1.0",
     "json-schema-faker": "0.5.0-rc23"
   },
   "eslintConfig": {
     "extends": "react-app"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
-      "npm run format",
-      "git add"
-    ]
   },
   "browserslist": {
     "production": [

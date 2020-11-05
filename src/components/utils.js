@@ -5,12 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-const mql = window.matchMedia('(max-width: 599px)');
-export const isMobile = () => mql.matches;
-
-const mql2 = window.matchMedia('(min-width: 1200px)');
-export const min1200Width = () => mql2.matches;
-
 export const popup = msg => <Popup flowing trigger={<FontAwesomeIcon icon="info-circle" style={{ color: '#2DB5AD' }} />} content={msg} position="top right" />;
 
 export const tag = type => {
@@ -65,3 +59,53 @@ export function differenceObjectDeep(source, other) {
     _.omit(other, _.keys(source))
   );
 }
+
+export const postcardDimensions = (size) => {
+  let dimension = '';  
+    switch (size) {
+      case '4x6': dimension = '6x4';
+      break;
+      case '6x9': dimension = '9x6';
+      break;
+      case '6x11': dimension = '11x6';
+      break;
+      default:
+    }
+  return dimension
+  }
+
+  export const postcardDimensionsDisplayed = (size) => {
+    let dimension = '';  
+      switch (size) {
+        case '4x6': dimension = '4x6';
+        break;
+        case '6x9': dimension = '6x9';
+        break;
+        case '6x11': dimension = '6x11';
+        break;
+        case '6x4': dimension = '4x6';
+        break;
+        case '9x6': dimension = '6x9';
+        break;
+        case '11x6': dimension = '6x11';
+        break;
+        default:
+      }
+    return dimension
+    }
+
+    export const iframeDimensions = size => {
+      let width = 600;
+      let height = 408;
+  
+      if (size === '9x6') {
+        width = 888;
+        height = 600;
+      }
+      if (size === '11x6') {
+        width = 1080;
+        height = 600;
+      }
+      return { width, height };
+    };
+  
