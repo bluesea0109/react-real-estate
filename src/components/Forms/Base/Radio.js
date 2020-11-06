@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Radio } from 'semantic-ui-react';
 import { FastField, Field, getIn } from 'formik';
 
-import { getFieldError, setFieldValue, useFocusOnError } from './helpers';
+import { getFieldError, setFieldValue, useFocusOnError } from './utils/helpers';
 import ErrorMessage from './ErrorMessage';
 import { InputRef } from './InputRef';
 

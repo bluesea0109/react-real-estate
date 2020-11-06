@@ -4,7 +4,7 @@ import { Segment } from 'semantic-ui-react';
 
 import { previewTeamCustomizationCompleted, reviewTeamCustomizationCompleted } from '../../../store/modules/teamCustomization/actions';
 import { previewCustomizationCompleted, reviewCustomizationCompleted } from '../../../store/modules/customization/actions';
-import { iframeTransformDesktop, iframeTransformMobile } from '../../helpers';
+import { iframeTransformDesktop, iframeTransformMobile } from '../../utils/helpers';
 import { Button, Icon, Modal } from '../../Base';
 import ApiService from '../../../services/api';
 import FlipCard from '../../FlipCard';

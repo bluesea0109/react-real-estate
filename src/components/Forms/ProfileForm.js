@@ -9,7 +9,7 @@ import { Divider, Header, Icon, Image, Menu, Page, Segment, Snackbar } from '../
 import { saveTeamProfilePending } from '../../store/modules/teamProfile/actions';
 import { saveProfilePending } from '../../store/modules/profile/actions';
 import { Button, Dropdown, FileUpload, Form, Input } from './Base';
-import { phoneRegExp, popup, tag } from '../utils';
+import { phoneRegExp, popup, tag } from '../utils/utils';
 import { ContentTopHeaderLayout } from '../../layouts';
 import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';

@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from './helpers';
+import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from './utils/helpers';
 import { ItemBodyDataLayout } from '../../layouts';
 import PopupContent from './PopupContent';
 import { List, Popup } from '../Base';
-import { postcardDimensionsDisplayed } from '../utils';
+import { postcardDimensionsDisplayed } from '../utils/utils';
 import styled from 'styled-components';
 
 const ListItems = styled.div`

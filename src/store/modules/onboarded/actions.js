@@ -1,4 +1,4 @@
-import { createAction } from '../../helpers';
+import { createAction } from '../../utils/helpers';
 
 export const FINALIZE_ONBOARDING = 'FINALIZE_ONBOARDING';
 export const SET_COMPLETED_PROFILE = 'SET_COMPLETED_PROFILE';

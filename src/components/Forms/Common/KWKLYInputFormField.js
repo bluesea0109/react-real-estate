@@ -1,7 +1,7 @@
 import React from 'react';
 import { Label } from 'semantic-ui-react';
 
-import { composeValidators, keywordRegExp, maxLength, minLength, popup, required } from '../../utils';
+import { composeValidators, keywordRegExp, maxLength, minLength, popup, required } from '../../utils/utils';
 import { Input } from '../Base';
 
 const validKeyword = str => !keywordRegExp.test(str) && 'KEYWORD is not valid';

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { saveTeamListedShortcodePending, saveTeamSoldShortcodePending } from '../../../store/modules/teamShortcode/actions';
 import { saveListedShortcodePending, saveSoldShortcodePending } from '../../../store/modules/shortcode/actions';
-import { composeValidators, popup, required, urlRegExp } from '../../utils';
+import { composeValidators, popup, required, urlRegExp } from '../../utils/utils';
 import { Icon, Menu } from '../../Base';
 import { Form, Input } from '../Base';
 import { useIsMobile } from '../../Hooks/useIsMobile';

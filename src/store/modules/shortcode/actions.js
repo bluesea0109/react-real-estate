@@ -1,4 +1,4 @@
-import { createAction, createErrorAction } from '../../helpers';
+import { createAction, createErrorAction } from '../../utils/helpers';
 
 export const SAVE_SOLD_SHORTCODE_PENDING = 'SAVE_SOLD_SHORTCODE_PENDING';
 export const SAVE_SOLD_SHORTCODE_SUCCESS = 'SAVE_SOLD_SHORTCODE_SUCCESS';

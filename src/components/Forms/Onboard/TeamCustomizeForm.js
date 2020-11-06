@@ -6,7 +6,7 @@ import React, { createRef, Fragment, useEffect, useState, useReducer } from 'rea
 import { saveTeamCustomizationPending } from '../../../store/modules/teamCustomization/actions';
 import { Button, Icon, Image, Menu, Page, Segment } from '../../Base';
 import { ContentTopHeaderLayout } from '../../../layouts';
-import { StyledHeader } from '../../helpers';
+import { StyledHeader } from '../../utils/helpers';
 import Wizard from './CustomizationWizard';
 
 import InputFormField from '../Common/InputFormField';

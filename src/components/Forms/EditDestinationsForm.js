@@ -8,9 +8,9 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { Checkbox, Dropdown, Form, Header, Label, List, Message, Select } from 'semantic-ui-react';
 
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
-import { tag } from '../utils';
+import { tag } from '../utils/utils';
 import { Button, Menu, Page, Segment, Snackbar } from '../Base';
-import { resolveLabelStatus } from '../MailoutListItem/helpers';
+import { resolveLabelStatus } from '../MailoutListItem/utils/helpers';
 import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
 import PolygonGoogleMapsCore from './PolygonGoogleMaps/PolygonGoogleMapsCore';

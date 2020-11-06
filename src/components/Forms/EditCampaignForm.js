@@ -9,14 +9,13 @@ import auth from '../../services/auth';
 import api from '../../services/api';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import { changeMailoutDisplayAgentPending, updateMailoutEditPending } from '../../store/modules/mailout/actions';
-import { differenceObjectDeep, maxLength, objectIsEmpty, sleep, postcardDimensions } from '../utils';
+import { differenceObjectDeep, maxLength, objectIsEmpty, sleep, postcardDimensions } from '../utils/utils';
 import { Button, Icon, Image, Menu, Message, Page, Segment, Snackbar } from '../Base';
-import { resolveLabelStatus } from '../MailoutListItem/helpers';
-import { StyledHeader, colors } from '../helpers';
+import { StyledHeader, colors } from '../utils/helpers';
 import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
 import { useIsMobile } from '../Hooks/useIsMobile';
-import { calculateCost } from '../MailoutListItem/helpers';
+import { calculateCost, resolveLabelStatus } from '../MailoutListItem/utils/helpers';
 import PostcardSizeButton from './Common/PostcardSizeButton';
 
 const blacklistNames = ['brandColor', 'frontImgUrl', 'agentPicture', 'brokerageLogo', 'teamLogo', 'backUrl', 'frontAgentUrl'];

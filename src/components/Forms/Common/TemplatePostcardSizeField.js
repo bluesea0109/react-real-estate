@@ -1,7 +1,7 @@
 import React from 'react';
-import { calculateCost } from '../../MailoutListItem/helpers';
+import { calculateCost } from '../../MailoutListItem/utils/helpers';
 import PostcardSizeButton from './PostcardSizeButton';
-import { postcardDimensions } from '../../utils';
+import { postcardDimensions } from '../../utils/utils';
 
 const NEW_LISTING = 'listed';
 

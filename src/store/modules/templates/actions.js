@@ -1,4 +1,4 @@
-import { createAction, createErrorAction } from '../../helpers';
+import { createAction, createErrorAction } from '../../utils/helpers';
 
 export const GET_TEMPLATES_PENDING = 'GET_TEMPLATES_PENDING';
 export const GET_TEMPLATES_SUCCESS = 'GET_TEMPLATES_SUCCESS';

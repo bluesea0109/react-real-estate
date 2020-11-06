@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { getTeamCustomizationPending } from '../store/modules/teamCustomization/actions';
 import TeamCustomizeForm from '../components/Forms/TeamCustomizeForm';
-import { initialValues } from '../components/helpers';
+import { initialValues } from '../components/utils/helpers';
 import { ContentTopHeaderLayout } from '../layouts';
 import { Message, Page } from '../components/Base';
 import Loading from '../components/Loading';

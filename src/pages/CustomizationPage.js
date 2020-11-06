@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { getCustomizationPending } from '../store/modules/customization/actions';
 import CustomizeForm from '../components/Forms/CustomizeForm';
-import { initialValues } from '../components/helpers';
+import { initialValues } from '../components/utils/helpers';
 import { ContentTopHeaderLayout } from '../layouts';
 import { Message, Page } from '../components/Base';
 import Loading from '../components/Loading';

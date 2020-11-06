@@ -3,7 +3,7 @@ import { put, call, takeLatest } from 'redux-saga/effects';
 import { getStatesPending, getStatesSuccess, getStatesError } from './actions';
 import { AUTHENTICATION_SUCCESS, COOKIE_AUTHENTICATION } from '../auth0/actions';
 import ApiService from '../../../services/api/index';
-import { normalizeStates } from '../../helpers';
+import { normalizeStates } from '../../utils/helpers';
 
 export function* onLoginSaga() {
   try {

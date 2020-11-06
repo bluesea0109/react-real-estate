@@ -1,4 +1,4 @@
-import { createAction, createErrorAction } from '../../helpers';
+import { createAction, createErrorAction } from '../../utils/helpers';
 
 export const INITIALIZE_USER_PENDING = 'INITIALIZE_USER_PENDING';
 export const INITIALIZE_USER_SUCCESS = 'INITIALIZE_USER_SUCCESS';

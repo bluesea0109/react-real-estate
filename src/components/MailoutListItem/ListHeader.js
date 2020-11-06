@@ -5,7 +5,7 @@ import React, { Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { MobileDisabledLayout, MobileEnabledLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
-import { canSend, canPickDestinations, resolveLabelStatus, resolveMailoutStatus } from './helpers';
+import { canSend, canPickDestinations, resolveLabelStatus, resolveMailoutStatus } from './utils/helpers';
 import { Button, Header } from '../Base';
 import { Label, Icon, Dropdown } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -84,9 +84,9 @@ const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickAppro
   const isArchived = data.mailoutStatus === 'hide' || data.mailoutStatus === 'archived';
 
   // Redirect the user to the edit page from the dashboard
-  const handleEditClickFromDropdown = (id) => {
+  const handleEditClickFromDropdown = id => {
     history.push(`/dashboard/edit/${id}`);
-  }
+  };
 
   return (
     <ItemHeaderLayout attached="top" block>

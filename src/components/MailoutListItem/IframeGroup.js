@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { Segment } from 'semantic-ui-react';
 import React, { useCallback, useState } from 'react';
 
-import { iframeTransformMobile, iframeLinkStyle } from '../helpers';
+import { iframeTransformMobile, iframeLinkStyle } from '../utils/helpers';
 import { ItemBodyIframeLayout } from '../../layouts';
 import ApiService from '../../services/api/index';
 import { Image } from '../Base';

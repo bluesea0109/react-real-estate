@@ -1,4 +1,4 @@
-import { createAction } from '../../helpers';
+import { createAction } from '../../utils/helpers';
 
 export const SELECT_PEER_ID = 'SELECT_PEER_ID';
 export const DESELECT_PEER_ID = 'DESELECT_PEER_ID';

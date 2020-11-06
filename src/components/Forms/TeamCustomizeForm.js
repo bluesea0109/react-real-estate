@@ -7,7 +7,7 @@ import { saveTeamListedShortcodePending, saveTeamSoldShortcodePending } from '..
 import { saveTeamCustomizationPending } from '../../store/modules/teamCustomization/actions';
 import { ContentTopHeaderLayout } from '../../layouts';
 import { Button, Menu, Page, Segment } from '../Base';
-import { objectIsEmpty } from '../utils';
+import { objectIsEmpty } from '../utils/utils';
 import { Form } from './Base';
 
 import PageTitleHeader from '../PageTitleHeader';

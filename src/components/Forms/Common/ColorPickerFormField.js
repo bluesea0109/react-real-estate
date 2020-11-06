@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BlockPicker, ChromePicker } from 'react-color';
 
-import { colors } from '../../helpers';
+import { colors } from '../../utils/helpers';
 import { Header, Icon } from 'semantic-ui-react';
 
 const NEW_LISTING = 'listed';

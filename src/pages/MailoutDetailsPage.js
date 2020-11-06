@@ -8,14 +8,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format } from 'date-fns';
 
 import { resetMailout, revertMailoutEditPending, stopMailoutPending, submitMailoutPending } from '../store/modules/mailout/actions';
-import { calculateCost, formatDate, resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from '../components/MailoutListItem/helpers';
+import {
+  calculateCost,
+  formatDate,
+  resolveMailoutStatus,
+  resolveMailoutStatusColor,
+  resolveMailoutStatusIcon,
+} from '../components/MailoutListItem/utils/helpers';
 import { Button, Grid, Header, Input, Image, List, Menu, Message, Modal, Page, Popup, Segment, Table } from '../components/Base';
 import PopupContent from '../components/MailoutListItem/PopupContent';
 import { getMailoutPending } from '../store/modules/mailout/actions';
 import PopupMinMax from '../components/MailoutListItem/PopupMinMax';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import PageTitleHeader from '../components/PageTitleHeader';
-import { postcardDimensionsDisplayed, iframeDimensions } from '../components/utils';
+import { postcardDimensionsDisplayed, iframeDimensions } from '../components/utils/utils';
 import GoogleMapItem from '../components/Forms/PolygonGoogleMaps/GoogleMapItem';
 import FlipCard from '../components/FlipCard';
 import Loading from '../components/Loading';

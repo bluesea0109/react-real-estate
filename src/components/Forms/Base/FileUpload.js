@@ -4,7 +4,7 @@ import { useDropzone } from 'react-dropzone';
 import { Form, Header, Icon, Label, Card, Image, Item } from 'semantic-ui-react';
 
 import { deletePhotoPending, uploadPhotoPending } from '../../../store/modules/pictures/actions';
-import { useFocusOnError } from './helpers';
+import { useFocusOnError } from './utils/helpers';
 import ErrorMessage from './ErrorMessage';
 
 function FileUpload({ name, label, pending, dispatch, errorComponent = ErrorMessage, tag = undefined, ...props }) {

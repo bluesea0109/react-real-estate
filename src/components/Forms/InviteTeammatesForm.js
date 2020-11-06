@@ -4,7 +4,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 
 import { inviteUsersPending, skipInviteUsers } from '../../store/modules/inviteUsers/actions';
 import { Divider, List, Segment, Item, Icon, Button, Message, Image } from '../Base';
-import { objectIsEmpty } from '../utils';
+import { objectIsEmpty } from '../utils/utils';
 
 const Checkbox = ({ disabled, label, isSelected, onCheckboxChange }) => (
   <input disabled={disabled} type="checkbox" name={label} checked={isSelected} onChange={onCheckboxChange} />

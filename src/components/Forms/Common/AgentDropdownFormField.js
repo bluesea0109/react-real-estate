@@ -2,7 +2,7 @@ import React, { createRef } from 'react';
 import { useSelector } from 'react-redux';
 import { Popup } from 'semantic-ui-react';
 
-import { StyledHeader } from '../../helpers';
+import { StyledHeader } from '../../utils/helpers';
 import { Icon, Image } from '../../Base';
 import { Dropdown } from '../Base';
 

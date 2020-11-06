@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import Nouislider from 'nouislider-react';
 
-import { TrimStrAndConvertToInt } from '../../utils';
+import { TrimStrAndConvertToInt } from '../../utils/utils';
 import { Header } from 'semantic-ui-react';
 import { useIsMobile } from '../../Hooks/useIsMobile';
 

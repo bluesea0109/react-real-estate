@@ -16,11 +16,11 @@ import IframeGroup from '../components/MailoutListItem/IframeGroup';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ItemList from '../components/MailoutListItem/ItemList';
 import PageTitleHeader from '../components/PageTitleHeader';
-import { postcardDimensions } from '../components/utils';
+import { postcardDimensions } from '../components/utils/utils';
 import Loading from '../components/Loading';
 import { useIsMobile } from '../components/Hooks/useIsMobile';
 import PostcardSizeButton from '../components/Forms/Common/PostcardSizeButton';
-import { calculateCost } from '../components/MailoutListItem/helpers';
+import { calculateCost } from '../components/MailoutListItem/utils/helpers';
 import Styled from 'styled-components';
 
 const AddCampaignContainer = Styled.div`

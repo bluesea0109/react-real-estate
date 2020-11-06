@@ -1,4 +1,4 @@
-import { createAction, createErrorAction } from '../../helpers';
+import { createAction, createErrorAction } from '../../utils/helpers';
 
 export const GET_PHOTO_PENDING = 'GET_PHOTO_PENDING';
 export const GET_PHOTO_SUCCESS = 'GET_PHOTO_SUCCESS';

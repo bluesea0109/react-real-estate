@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FastField, Field, getIn } from 'formik';
 import { Form, Dropdown } from 'semantic-ui-react';
 
-import { getFieldError, setFieldValue, useFocusOnError } from './helpers';
+import { getFieldError, setFieldValue, useFocusOnError } from './utils/helpers';
 import ErrorMessage from './ErrorMessage';
 
 const FormikDropdown = ({

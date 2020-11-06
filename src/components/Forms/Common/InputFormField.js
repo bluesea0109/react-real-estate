@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { composeValidators, maxLength, minLength, required } from '../../utils';
+import { composeValidators, maxLength, minLength, required } from '../../utils/utils';
 import { Input } from '../Base';
 
 const NEW_LISTING = 'listed';

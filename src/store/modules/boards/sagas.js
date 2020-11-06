@@ -3,7 +3,7 @@ import { put, call, takeLatest } from 'redux-saga/effects';
 import { getBoardsPending, getBoardsSuccess, getBoardsError } from './actions';
 import { AUTHENTICATION_SUCCESS, COOKIE_AUTHENTICATION } from '../auth0/actions';
 import ApiService from '../../../services/api/index';
-import { normalizeBoards } from '../../helpers';
+import { normalizeBoards } from '../../utils/helpers';
 
 export function* onLoginSaga() {
   try {

@@ -10,7 +10,7 @@ import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
 import auth from '../services/auth';
 import api from '../services/api';
-import { postcardDimensionsDisplayed } from '../components/utils';
+import { postcardDimensionsDisplayed } from '../components/utils/utils';
 
 const BillingPage = () => {
   const isAdmin = useSelector(store => store.onLogin?.permissions?.teamAdmin);

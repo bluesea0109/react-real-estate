@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Item } from 'semantic-ui-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from './helpers';
+import { resolveMailoutStatus, resolveMailoutStatusColor, resolveMailoutStatusIcon } from './utils/helpers';
 
 const formatPopupContentItem = (type, msg) => {
   return (

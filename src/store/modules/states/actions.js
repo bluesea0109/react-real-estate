@@ -1,4 +1,4 @@
-import { createAction, createErrorAction } from '../../helpers';
+import { createAction, createErrorAction } from '../../utils/helpers';
 
 export const GET_STATES_PENDING = 'GET_STATES_PENDING';
 export const GET_STATES_SUCCESS = 'GET_STATES_SUCCESS';

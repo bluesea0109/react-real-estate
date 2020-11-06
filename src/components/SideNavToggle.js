@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import * as brandColors from './brandColors';
+import * as brandColors from './utils/brandColors';
 import { Grid, Menu, Segment, Sidebar } from 'semantic-ui-react';
 import styled from 'styled-components';
 
