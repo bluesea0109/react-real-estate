@@ -40,7 +40,7 @@ const MailoutDetailsPage = () => {
       history.goBack();
     }
 
-    if (lastPathName !== editMailoutPath && lastPathName !== mailOutPath && lastPathName === '/dashboard'){
+    if (lastPathName !== editMailoutPath && lastPathName !== mailOutPath && lastPathName === '/dashboard') {
       history.goBack();
     }
   };
