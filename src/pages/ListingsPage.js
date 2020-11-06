@@ -7,15 +7,24 @@ import { Grid, Segment, Dropdown, Button, Popup, List, Icon } from 'semantic-ui-
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
 import { useIsMobile } from '../components/Hooks/useIsMobile'
+import { useWindowSize } from '../components/Hooks/useWindowSize';
 import StatusPill from '../components/StatusPill';
 
 import auth from '../services/auth';
 import api from '../services/api';
 
+export const trimText = (string, length, noDots) => {
+  if(string.length <= length) return string;
+  if(noDots) return string.substring(0, length);
+  if(string.length + 3 < length) return string;
+  return string.substring(0, length) + "...";
+};
+
 const ListingCard = ({listingDetails, listingItem}) => {
+  const windowSize = useWindowSize();
   if(!listingItem) return (<Grid.Column><Segment className="cardSegment">Loading...</Segment></Grid.Column>)
   else{
-    const title = listingItem.streetAddress;
+    const title = trimText(listingItem.streetAddress, windowSize.width <= 1366 ? 15 : 27, false);
     const subtitle = `${listingItem.city}, ${listingItem.state} ${listingItem.postalCode}`;
     const price = `$${listingItem.price.toLocaleString('en', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
     const bed = '4 bed';
@@ -23,9 +32,12 @@ const ListingCard = ({listingDetails, listingItem}) => {
     const sqft = '2,392 sqft';
 
     let createQS = (item) => {
-      let params = {...listingDetails.adProduct.qs}
-      params.listing = item.mlsNum
-      params.mls = item.blueroofMlsId
+      console.log({item});
+      console.log(listingDetails.adProduct.qs);
+      let params = {...listingDetails.adProduct.qs};
+      params.listing = item.mlsNum;
+      params.mls = item.blueroofMlsId;
+      console.log(Object.keys(params).map(param => `${param}=${params[param]}`).join('&'));
       return Object.keys(params).map(param => `${param}=${params[param]}`).join('&');
     }
 
@@ -38,12 +50,12 @@ const ListingCard = ({listingDetails, listingItem}) => {
         return (<StatusPill type="solid" color='astral'>{status}</StatusPill>)
       }
     };
-
+{/* <div className="listingCardImgContainer" onClick={() => window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`}> */}
     return(
-      <Grid.Column>
+      <Grid.Column className="listingCard">
         <Segment className="cardSegment">
           <div className="cardImgWrapper">
-            <div className="listingCardImgContainer">
+            <div className={ windowSize.width <= 1366 ? 'listingCardImgContainerSmall' : 'listingCardImgContainerLarge' } onClick={() => createQS(listingItem)}>
               <div className="listingCardImg" style={{ backgroundImage:`url(${listingItem.photos.length > 0 ? listingItem.photos[0].url : 'https://i0.wp.com/reviveyouthandfamily.org/wp-content/uploads/2016/11/house-placeholder.jpg?ssl=1'})`}} />
             </div>
             {/* <div className="imgPillContainer">
@@ -52,10 +64,10 @@ const ListingCard = ({listingDetails, listingItem}) => {
           </div>
           <div className="listingCardBodyContainer">
             <Grid className="centeredRowGrid noMargin cardTopMarginXS">
-              <Grid.Column width={10} className='noPaddingTop noPaddingLeft noPaddingBottom'>
-                <Header as="h3" className="cardFont">{title}</Header>
+              <Grid.Column width={12} className='noPaddingTop noPaddingLeft noPaddingBottom'>
+                <Header as="h3" className="cardFont listingCardTitle" onClick={() => window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`}>{title}</Header>
               </Grid.Column>
-              <Grid.Column width={6} className='noPaddingTop noPaddingRight noPaddingBottom'>
+              <Grid.Column width={4} className='noPaddingTop noPaddingRight noPaddingBottom listingStatusPillAlignment'>
                 {renderPill(listingItem.standardStatus)}
               </Grid.Column>
             </Grid>
@@ -78,7 +90,7 @@ const ListingCard = ({listingDetails, listingItem}) => {
                   </Grid.Column>
                 </Grid.Row>
               </Grid.Column>
-              <Grid.Column mobile={4} tablet={4} computer={4} largeScreen={4} widescreen={4}  className="alignEnd">
+              <Grid.Column mobile={4} tablet={4} computer={4} largeScreen={4} widescreen={4}  className="alignEnd cardIconButtonColumn">
                 <Dropdown
                   icon="ellipsis horizontal"
                   direction="left"
@@ -200,7 +212,7 @@ const ListingsPage = () => {
         <PageTitleHeader>
           <Menu borderless fluid secondary>
             <Menu.Item>
-              <Header as="h1">Listings</Header>
+              <Header as="h1" className="adAppPageTitle">Listings</Header>
             </Menu.Item>
             <Menu.Menu position='right'>
             <Popup
@@ -220,7 +232,7 @@ const ListingsPage = () => {
             {!listingDetails && <Loading message="Loading Listings..." />}
           </ContentBottomHeaderLayout>
 
-          <Grid stackable columns={4} >
+          <Grid stackable padded='vertically' columns={4} >
             {listings ? 
               listings.length > 0 ? listings.map((item, i) => {
               return <ListingCard key={i} listingDetails={listingDetails} listingItem={item} />

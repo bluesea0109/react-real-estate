@@ -647,6 +647,8 @@ h1 {
 } */
 .listingFilterButton{
   border-radius: 30px!important;
+  height: 36px!important;
+  margin-top: 8px!important;
 }
 .filterIcon{
   transition: color 0.3s ease!important;
@@ -661,8 +663,16 @@ h1 {
 .mainGridContainer {
   margin-right: -92px!important;
 }
-.listingCardImgContainer {
-  height: 280px;
+.listingCardTitle {
+  cursor: pointer;
+}
+.listingCardImgContainerSmall {
+  height: 190px;
+  cursor: pointer;
+}
+.listingCardImgContainerLarge {
+  height: 225px;
+  cursor: pointer;
 }
 .listingCardImg {
   height: 100%;
@@ -670,6 +680,12 @@ h1 {
   background-position: center;
   background-size: cover;
   border-radius: 6px 6px 0px 0px;
+}
+.adAppPageTitle {
+  color: #666!important;
+}
+.listingCard {
+  padding: 10px!important;
 }
 .cardSegment {
   padding: 0px!important;
@@ -713,6 +729,15 @@ h1 {
 }
 .cardIconButton {
   border-radius: 25px!important;
+  max-width: 34px!important;
+  max-height: 36px!important;
+  display: flex!important;
+  padding-left: 10px!important;
+  margin: 0px!important;
+}
+.cardIconButtonColumn {
+  display: flex!important;
+  justify-content: flex-end!important;
 }
 .alignCenter {
   text-align: center!important;
@@ -778,6 +803,7 @@ h1 {
 /* solid pills */
 .solidPill {
   color: #fff;
+  max-width: 80px;
 }
 .greenPillSolid { 
   background-color: #00C853
@@ -802,7 +828,10 @@ h1 {
 .astralPillSolid {
   background-color: #336E7B;
 }
-
+.listingStatusPillAlignment {
+  text-align: right!important;
+  text-align: -webkit-right!important;
+}
 .listingCardImgContainer{
   position: relative;
 }

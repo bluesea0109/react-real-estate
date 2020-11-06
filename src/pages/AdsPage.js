@@ -76,6 +76,7 @@ const EmptyPage = () => {
     const response = await fetch(path, { headers, method: 'get', credentials: 'include' });
     const results = await api.handleResponse(response);
     let orderedResults = results.reverse();
+    console.log(orderedResults)
     if(orderedResults !== adDetails) setAdDetails(orderedResults);
   }, [adDetails, peerId]);
 
@@ -185,7 +186,7 @@ const EmptyPage = () => {
         <PageTitleHeader>
           <Menu borderless fluid secondary>
             <Menu.Item>
-              <Header as="h1">Paid Ads</Header>
+              <Header as="h1" className="adAppPageTitle">Paid Ads</Header>
             </Menu.Item>
           </Menu>
         </PageTitleHeader>
