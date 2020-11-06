@@ -11,8 +11,10 @@ html {
 }
 
 ::-webkit-scrollbar {
-  width: 0; /* Remove scrollbar space */
-  background: transparent; /* Optional: just make scrollbar invisible */
+  width: 0;
+  /* Remove scrollbar space */
+  background: transparent;
+  /* Optional: just make scrollbar invisible */
 }
 
 code {
@@ -34,6 +36,7 @@ code {
     margin: 1em -1.25em;
   }
 }
+
 h1 {
   font-size: 28px !important;
   line-height: 1em !important;
@@ -56,6 +59,7 @@ h1 {
 }
 
 /* CUSTOMIZATION TABS */
+
 .ui.secondary.pointing.menu {
   border-bottom: 1px solid rgba(34, 36, 38, 0.15);
   margin-left: -1em;
@@ -72,30 +76,28 @@ h1 {
   color: #59c4c4 !important;
 }
 
-.ui.secondary.pointing.menu .active.item,
-.ui.secondary.pointing.menu .active.item :hover {
+.ui.secondary.pointing.menu .active.item, .ui.secondary.pointing.menu .active.item :hover {
   border-bottom: 3px solid #59c4c4 !important;
   color: #59c4c4 !important;
 }
 
 /* NAVIGATION LINKS */
-.ui.text.menu .item:hover,
-.ui.dropdown .menu:hover,
-.ui.menu .ui.dropdown .menu > .item:hover {
+
+.ui.text.menu .item:hover, .ui.dropdown .menu:hover, .ui.menu .ui.dropdown .menu>.item:hover {
   color: #59c4c4;
 }
 
 /* LOGOUT BUTTON */
-.ui.basic.button:hover,
-.ui.basic.buttons .button:hover {
+
+.ui.basic.button:hover, .ui.basic.buttons .button:hover {
   color: #59c4c4 !important;
   box-shadow: 0 0 0 1px #46bdbd inset, 0 0 0 0 #46bdbd inset;
 }
 
 /* PRIMARY BUTTON */
-.ui.primary.button,
-.ui.primary.buttons .button {
-  background-color: #59c4c4;
+
+.ui.primary.button, .ui.primary.buttons .button {
+  /* background-color: #59c4c4; */
   border-radius: 50px;
   text-transform: uppercase;
   min-width: 100px;
@@ -104,61 +106,38 @@ h1 {
   background-image: none;
 }
 
-.ui.primary.button.active,
-.ui.primary.button:active,
-.ui.primary.button:focus,
-.ui.primary.button:hover,
-.ui.primary.buttons .button.active,
-.ui.primary.buttons .button:active,
-.ui.primary.buttons .button:focus,
-.ui.primary.buttons .button:hover {
+.ui.primary.button.active, .ui.primary.button:active, .ui.primary.button:focus, .ui.primary.button:hover, .ui.primary.buttons .button.active, .ui.primary.buttons .button:active, .ui.primary.buttons .button:focus, .ui.primary.buttons .button:hover {
   background-color: transparent;
   box-shadow: 0 0 0 2px #59c4c4 inset !important;
   color: #59c4c4;
 }
 
-.ui.inverted.primary.button,
-.ui.inverted.primary.buttons .button {
+.ui.inverted.primary.button, .ui.inverted.primary.buttons .button {
   background-color: transparent;
   box-shadow: 0 0 0 2px #59c4c4 inset !important;
   color: #59c4c4;
 }
 
-.ui.inverted.primary.button.active,
-.ui.inverted.primary.button:active,
-.ui.inverted.primary.button:focus,
-.ui.inverted.primary.button:hover,
-.ui.inverted.primary.buttons .button.active,
-.ui.inverted.primary.buttons .button:active,
-.ui.inverted.primary.buttons .button:focus,
-.ui.inverted.primary.buttons .button:hover {
+.ui.inverted.primary.button.active, .ui.inverted.primary.button:active, .ui.inverted.primary.button:focus, .ui.inverted.primary.button:hover, .ui.inverted.primary.buttons .button.active, .ui.inverted.primary.buttons .button:active, .ui.inverted.primary.buttons .button:focus, .ui.inverted.primary.buttons .button:hover {
   background-color: #59c4c4;
 }
 
 /* SECONDARY BUTTON */
-.ui.secondary.button,
-.ui.secondary.buttons .button {
+
+.ui.secondary.button, .ui.secondary.buttons .button {
   background-color: #f2714d;
   color: #fff;
   text-shadow: none;
   background-image: none;
 }
 
-.ui.secondary.button.active,
-.ui.secondary.button:active,
-.ui.secondary.button:focus,
-.ui.secondary.button:hover,
-.ui.secondary.buttons .button.active,
-.ui.secondary.buttons .button:active,
-.ui.secondary.buttons .button:focus,
-.ui.secondary.buttons .button:hover {
+.ui.secondary.button.active, .ui.secondary.button:active, .ui.secondary.button:focus, .ui.secondary.button:hover, .ui.secondary.buttons .button.active, .ui.secondary.buttons .button:active, .ui.secondary.buttons .button:focus, .ui.secondary.buttons .button:hover {
   background-color: transparent;
   box-shadow: 0 0 0 2px #f2714d inset !important;
   color: #f2714d;
 }
 
-.ui.inverted.secondary.button,
-.ui.inverted.secondary.buttons .button {
+.ui.inverted.secondary.button, .ui.inverted.secondary.buttons .button {
   background-color: transparent;
   box-shadow: 0 0 0 2px #f2714d inset !important;
   color: #f2714d;
@@ -166,29 +145,25 @@ h1 {
   text-transform: uppercase;
 }
 
-.ui.inverted.secondary.button.active,
-.ui.inverted.secondary.button:active,
-.ui.inverted.secondary.button:focus,
-.ui.inverted.secondary.button:hover,
-.ui.inverted.secondary.buttons .button.active,
-.ui.inverted.secondary.buttons .button:active,
-.ui.inverted.secondary.buttons .button:focus,
-.ui.inverted.secondary.buttons .button:hover {
+.ui.inverted.secondary.button.active, .ui.inverted.secondary.button:active, .ui.inverted.secondary.button:focus, .ui.inverted.secondary.button:hover, .ui.inverted.secondary.buttons .button.active, .ui.inverted.secondary.buttons .button:active, .ui.inverted.secondary.buttons .button:focus, .ui.inverted.secondary.buttons .button:hover {
   background-color: #f2714d;
 }
 
 /* LABELS */
+
 .ui.grey.label {
   background-color: #8d8d8d !important;
 }
+
 .ui.grey.ribbon.label {
   border-color: #3c3c3c !important;
 }
+
 .ui.orange.ribbon.label {
   border-color: #bc340e !important;
 }
-.ui.orange.label,
-.ui.orange.labels .label {
+
+.ui.orange.label, .ui.orange.labels .label {
   background-color: #f2714d !important;
   border-color: #f2714d !important;
   color: #fff !important;
@@ -197,15 +172,17 @@ h1 {
 .ui.teal.ribbon.label {
   border-color: #336e7b !important;
 }
-.ui.teal.label,
-.ui.orange.labels .label {
+
+.ui.teal.label, .ui.orange.labels .label {
   background-color: #59c4c4 !important;
   border-color: #59c4c4 !important;
   color: #fff !important;
 }
+
 /* Overrides End */
 
 /* Images Start */
+
 .image-frame-border {
   border: 1px solid #ccc;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
@@ -226,6 +203,7 @@ h1 {
 /* Images End */
 
 /* Customize & Edit Campaigns Start */
+
 .primary-grid-container {
   display: grid;
   grid-column-gap: 1em;
@@ -269,52 +247,55 @@ h1 {
   }
 }
 
-.block-picker > div:nth-child(2) > div {
+.block-picker>div:nth-child(2)>div {
   display: none;
 }
 
-.block-picker > div:nth-child(3) {
+.block-picker>div:nth-child(3) {
   padding: 5px !important;
   margin-bottom: -0.75em;
 }
 
-.block-picker > div:nth-child(3) > div:nth-child(1) {
+.block-picker>div:nth-child(3)>div:nth-child(1) {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
 
-.block-picker > div:nth-child(3) > div:nth-child(1) > span {
+.block-picker>div:nth-child(3)>div:nth-child(1)>span {
   flex-basis: 0;
   flex-grow: 1;
 }
 
-.block-picker > div:nth-child(3) > div:nth-child(2) {
+.block-picker>div:nth-child(3)>div:nth-child(2) {
   display: none;
 }
+
 /* Customize & Edit Campaigns End */
 
 /* Navigation Start */
+
 .ui.selection.active.dropdown .menu {
   min-width: 22em !important;
 }
 
-.ui.menu .ui.dropdown .menu > .active.item {
+.ui.menu .ui.dropdown .menu>.active.item {
   background: #59c4c4 !important;
   color: white !important;
 }
 
-.ui.menu .ui.dropdown .menu > .item:hover {
+.ui.menu .ui.dropdown .menu>.item:hover {
   background: white !important;
   color: #59c4c4 !important;
 }
 
 /* STEPS */
+
 .ui.steps {
   line-height: 2.5;
 }
 
-.ui.steps .step > .icon {
+.ui.steps .step>.icon {
   font-size: 1em;
 }
 
@@ -325,43 +306,49 @@ h1 {
 /* Navigation End */
 
 /* Dashboard Start */
-.bar > .progress {
+
+.bar>.progress {
   display: none;
   visibility: hidden;
 }
+
 /* Dashboard End */
 
 /* Campaign Details Start */
-.display-only > input {
+
+.display-only>input {
   border: 1px solid transparent !important;
   border-radius: 0.28571429rem;
   cursor: text;
 }
 
-.display-only > input {
+.display-only>input {
   color: transparent !important;
   text-shadow: 0 0 0 #000000;
 }
 
-.display-only > input :focus {
+.display-only>input :focus {
   outline: none;
 }
+
 /* Campaign Details End */
 
 /* Form Field Start */
-.disabled-form-field > div,
-.disabled-form-field > div > input {
+
+.disabled-form-field>div, .disabled-form-field>div>input {
   color: #969696 !important;
   background-color: #f0f0f0 !important;
 }
+
 /* Form Field End */
 
 /* other */
+
 .ui.form input[type='checkbox'] {
   vertical-align: middle;
 }
 
-.blurring.dimmable > .dimmer {
+.blurring.dimmable>.dimmer {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
@@ -382,6 +369,7 @@ h1 {
 }
 
 /* noUI Slider */
+
 .noUi-horizontal .noUi-handle {
   width: 16px;
   height: 16px;
@@ -399,8 +387,7 @@ h1 {
   visibility: hidden;
 }
 
-.noUi-handle:before,
-.noUi-handle:after {
+.noUi-handle:before, .noUi-handle:after {
   display: none !important;
   visibility: hidden;
 }
@@ -421,6 +408,7 @@ h1 {
 }
 
 /* Image Overlay */
+
 .image-container {
   position: relative;
   width: 50%;
@@ -478,24 +466,24 @@ h1 {
 }
 
 /*!* Errors *!*/
+
 /*.ui.form .field .prompt.label {*/
+
 /*  top: -5px!important;*/
+
 /*  !*position: sticky;*!*/
+
 /*  !*margin-left: 65%;*!*/
+
 /*}*/
 
-.ui.form .disabled.field,
-.ui.form .disabled.fields .field,
-.ui.form .field :disabled,
-.ui.disabled.input,
-.ui.input:not(.disabled) input[disabled],
-.ui.disabled.dropdown,
-.ui.dropdown .menu > .disabled.item {
+.ui.form .disabled.field, .ui.form .disabled.fields .field, .ui.form .field :disabled, .ui.disabled.input, .ui.input:not(.disabled) input[disabled], .ui.disabled.dropdown, .ui.dropdown .menu>.disabled.item {
   pointer-events: none;
   opacity: 1 !important;
 }
 
 /* Mobile Only */
+
 .ui.container.remove-margins {
   margin-left: 0 !important;
   margin-right: 0 !important;
