@@ -2,7 +2,15 @@ image: docker:latest
 
 stages:
   - build
+  - test
   - deploy
+
+test:
+  stage: test
+  image: node:12.9.1
+  script:
+    - npm install --silent
+    - npm run test
 
 build_dev:
   stage: build
