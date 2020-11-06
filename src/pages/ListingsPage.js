@@ -50,7 +50,7 @@ const ListingCard = ({listingDetails, listingItem}) => {
         return (<StatusPill type="solid" color='astral'>{status}</StatusPill>)
       }
     };
-{/* <div className="listingCardImgContainer" onClick={() => window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`}> */}
+
     return(
       <Grid.Column className="listingCard">
         <Segment className="cardSegment">
