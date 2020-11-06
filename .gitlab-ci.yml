@@ -5,6 +5,11 @@ stages:
   - test
   - deploy
 
+test:
+  stage: test
+  script:
+    - npm test
+
 build_dev:
   stage: build
   image: node:12.9.1
