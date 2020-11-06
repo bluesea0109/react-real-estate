@@ -7,8 +7,10 @@ stages:
 
 test:
   stage: test
+  image: node:12.9.1
   script:
-    - npm test
+    - npm install --silent
+    - npm run test
 
 build_dev:
   stage: build
