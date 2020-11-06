@@ -2,6 +2,7 @@ image: docker:latest
 
 stages:
   - build
+  - test
   - deploy
 
 build_dev:
