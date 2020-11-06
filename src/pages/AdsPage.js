@@ -129,7 +129,7 @@ const EmptyPage = () => {
         <Table.Cell />
         <Table.Cell />
         <Table.Cell textAlign='center'>
-          <Loader active inline size='tiny'>Pending</Loader>
+          <Loader active inline size='tiny' className="adTableInlineLoader">Pending</Loader>
         </Table.Cell>
         <Table.Cell />
         <Table.Cell />

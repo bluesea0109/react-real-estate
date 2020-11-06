@@ -936,6 +936,9 @@ h1 {
   background-size: cover;
   border-radius: 6px;
 }
+.adTableInlineLoader {
+  z-index: 0!important;
+}
 .adTableItemCampaignCell {
   font-size: 1.20em!important;
 }
