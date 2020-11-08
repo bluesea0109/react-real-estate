@@ -90,10 +90,18 @@ export default () => {
   const templatesAvailable = useSelector(store => store.templates.available);
   const statesAvailable = useSelector(store => store.states.available);
   const boardsAvailable = useSelector(store => store.boards.available);
-  const loadingCompleted = !!isAuthenticated && !!templatesAvailable && !!statesAvailable && !!boardsAvailable && !onLoginError && !onLoginPending;
+  const loadingCompleted =
+    !!isAuthenticated &&
+    !!templatesAvailable &&
+    !!statesAvailable &&
+    !!boardsAvailable &&
+    !onLoginError &&
+    !onLoginPending;
 
   const completedProfile = useSelector(store => store.onboarded.completedProfile);
-  const completedTeamCustomization = useSelector(store => store.onboarded.completedTeamCustomization);
+  const completedTeamCustomization = useSelector(
+    store => store.onboarded.completedTeamCustomization
+  );
   const completedCustomization = useSelector(store => store.onboarded.completedCustomization);
   const completedInviteTeammates = useSelector(store => store.onboarded.completedInviteTeammates);
 
@@ -101,16 +109,22 @@ export default () => {
   const multiUser = onLoginMode === 'multiuser';
   // const singleUser = onLoginMode === 'singleuser';
 
-  const isAdmin = useSelector(store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin);
+  const isAdmin = useSelector(
+    store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin
+  );
   const loggedInUser = useSelector(store => store.onLogin.user);
   const selectedPeerId = useSelector(store => store.peer.peerId);
   const teammates = useSelector(store => store.team.profiles);
 
   const mailoutPendingState = useSelector(store => store.mailout.pending);
-  const updateMailoutEditPendingState = useSelector(store => store.mailout.updateMailoutEditPending);
+  const updateMailoutEditPendingState = useSelector(
+    store => store.mailout.updateMailoutEditPending
+  );
   const mailoutSubmitPendingState = useSelector(store => store.mailout.submitPending);
   const mailoutStopPendingState = useSelector(store => store.mailout.stopPending);
-  const mailoutUpdateMailoutSizePendingState = useSelector(store => store.mailout.updateMailoutSizePending);
+  const mailoutUpdateMailoutSizePendingState = useSelector(
+    store => store.mailout.updateMailoutSizePending
+  );
 
   const profiles = [];
 
@@ -127,8 +141,20 @@ export default () => {
       // const userEmail = profile.doc.email;
 
       const contextRef = createRef();
-      const currentUserIconWithPopup = <Popup context={contextRef} content="Currently logged in user" trigger={<Icon name="user" />} />;
-      const setupCompletedIconWithPopup = <Popup context={contextRef} content="Setup Completed" trigger={<Icon name="check circle" color="teal" />} />;
+      const currentUserIconWithPopup = (
+        <Popup
+          context={contextRef}
+          content="Currently logged in user"
+          trigger={<Icon name="user" />}
+        />
+      );
+      const setupCompletedIconWithPopup = (
+        <Popup
+          context={contextRef}
+          content="Setup Completed"
+          trigger={<Icon name="check circle" color="teal" />}
+        />
+      );
 
       return profiles.push({
         key: index,
@@ -140,7 +166,8 @@ export default () => {
             &nbsp; &nbsp;
             {profile.first}&nbsp;
             {profile.last}&nbsp;
-            {profile.permissions && profile.permissions.teamAdmin ? '(Admin)' : '(Agent)'}&nbsp;
+            {profile.permissions && profile.permissions.teamAdmin ? '(Admin)' : '(Agent)'}
+            &nbsp;
             {currentUser ? currentUserIconWithPopup : null}
             {setupComplete ? setupCompletedIconWithPopup : null}
           </StyledHeader>
@@ -153,14 +180,29 @@ export default () => {
     toggle ? setDropdown('accordionDrop') : setDropdown('');
 
     const busyState =
-      mailoutPendingState || updateMailoutEditPendingState || mailoutSubmitPendingState || mailoutStopPendingState || mailoutUpdateMailoutSizePendingState;
+      mailoutPendingState ||
+      updateMailoutEditPendingState ||
+      mailoutSubmitPendingState ||
+      mailoutStopPendingState ||
+      mailoutUpdateMailoutSizePendingState;
     setAppIsBusy(busyState);
-  }, [mailoutPendingState, updateMailoutEditPendingState, mailoutSubmitPendingState, mailoutStopPendingState, mailoutUpdateMailoutSizePendingState, toggle]);
+  }, [
+    mailoutPendingState,
+    updateMailoutEditPendingState,
+    mailoutSubmitPendingState,
+    mailoutStopPendingState,
+    mailoutUpdateMailoutSizePendingState,
+    toggle,
+  ]);
 
   const onProfile = !completedProfile;
   const onTeamCustomization = !completedTeamCustomization && completedProfile;
   const onCustomization = !completedCustomization && completedTeamCustomization && completedProfile;
-  const onInviteTeammates = !completedInviteTeammates && completedCustomization && completedTeamCustomization && completedProfile;
+  const onInviteTeammates =
+    !completedInviteTeammates &&
+    completedCustomization &&
+    completedTeamCustomization &&
+    completedProfile;
 
   const onProfileSingleUser = !completedProfile;
   const onCustomizationSingleUser = !completedCustomization && completedProfile;
@@ -170,7 +212,12 @@ export default () => {
   if (loadingCompleted && !onboarded) {
     if (multiUser && isAdmin) {
       return (
-        <SideNavToggle moblileVisible={moblileVisible} setMobileVisible={setMobileVisible} toggle={toggle} setToggle={setToggle}>
+        <SideNavToggle
+          moblileVisible={moblileVisible}
+          setMobileVisible={setMobileVisible}
+          toggle={toggle}
+          setToggle={setToggle}
+        >
           <StepsLayout vertical={!isMobile}>
             <StepLayout active={onProfile} completed={completedProfile}>
               <Icon1 />
@@ -212,7 +259,12 @@ export default () => {
       );
     } else {
       return (
-        <SideNavToggle moblileVisible={moblileVisible} setMobileVisible={setMobileVisible} toggle={toggle} setToggle={setToggle}>
+        <SideNavToggle
+          moblileVisible={moblileVisible}
+          setMobileVisible={setMobileVisible}
+          toggle={toggle}
+          setToggle={setToggle}
+        >
           <StepsLayout vertical={!isMobile}>
             <StepLayout active={onProfileSingleUser} completed={completedProfile}>
               <Icon name="user" />
@@ -244,7 +296,12 @@ export default () => {
   };
 
   return (
-    <SideNavToggle moblileVisible={moblileVisible} setMobileVisible={setMobileVisible} toggle={toggle} setToggle={setToggle}>
+    <SideNavToggle
+      moblileVisible={moblileVisible}
+      setMobileVisible={setMobileVisible}
+      toggle={toggle}
+      setToggle={setToggle}
+    >
       <Dimmer.Dimmable blurring dimmed={appIsBusy}>
         <Dimmer active={appIsBusy} inverted />
 
@@ -262,13 +319,18 @@ export default () => {
               : {}
           }
         >
-          <div onClick={mobileCollapse}>
-            <Menu.Item as={Link} name="dashboard" active={activeItem === '/dashboard'} to="/dashboard" style={menuItemStyles}>
-              <MobileDisabledLayout>
-                <StyledIcon icon="tachometer-alt" className="iconWithStyle" /> Dashboard
-              </MobileDisabledLayout>
-            </Menu.Item>
-          </div>
+          <Menu.Item
+            as={Link}
+            name="dashboard"
+            active={activeItem === '/dashboard'}
+            to="/dashboard"
+            style={menuItemStyles}
+            onClick={mobileCollapse}
+          >
+            <MobileDisabledLayout>
+              <StyledIcon icon="tachometer-alt" className="iconWithStyle" /> Dashboard
+            </MobileDisabledLayout>
+          </Menu.Item>
 
           <Menu.Item
             as={Link}
@@ -332,7 +394,14 @@ export default () => {
                 <MobileDisabledLayout>Personal Customization</MobileDisabledLayout>
               </Menu.Item>
 
-              <Menu.Item as={Link} name="profile" active={activeItem === '/profile'} to="/profile" style={subMenuItemStyles} onClick={mobileCollapse}>
+              <Menu.Item
+                as={Link}
+                name="profile"
+                active={activeItem === '/profile'}
+                to="/profile"
+                style={subMenuItemStyles}
+                onClick={mobileCollapse}
+              >
                 <MobileDisabledLayout>Profile</MobileDisabledLayout>
               </Menu.Item>
 
