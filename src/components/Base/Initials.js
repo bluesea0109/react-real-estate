@@ -62,7 +62,7 @@ export default class Initials extends Component {
     width: 100,
     fontSize: 60,
     fontWeight: 400,
-    fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
+    fontFamily: 'Open Sans, HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
     radius: 0,
   };
 

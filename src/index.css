@@ -1,6 +1,5 @@
 body {
   margin: 0;
-  font-family: 'Open Sans', sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -31,12 +30,6 @@ code {
 
 /* Overrides Start */
 
-@media (min-width: 769px) {
-  .ui.text.menu {
-    margin: 1em -1.25em;
-  }
-}
-
 h1 {
   font-size: 28px !important;
   line-height: 1em !important;
@@ -50,54 +43,15 @@ h1 {
   line-height: 18px;
 }
 
-.ui.header {
-  font-family: 'Open Sans', sans-serif !important;
-}
-
-.ui.menu .item:before {
-  background: none !important;
-}
-
-/* CUSTOMIZATION TABS */
-
-.ui.secondary.pointing.menu {
-  border-bottom: 1px solid rgba(34, 36, 38, 0.15);
-  margin-left: -1em;
-  margin-right: -1em;
-}
-
-.ui.secondary.pointing.menu .item {
-  margin-left: 1em;
-  margin-right: 1em;
-}
-
-.ui.secondary.pointing.menu a.item:hover {
-  background-color: transparent;
-  color: #59c4c4 !important;
-}
-
-.ui.secondary.pointing.menu .active.item, .ui.secondary.pointing.menu .active.item :hover {
-  border-bottom: 3px solid #59c4c4 !important;
-  color: #59c4c4 !important;
-}
-
 /* NAVIGATION LINKS */
 
-.ui.text.menu .item:hover, .ui.dropdown .menu:hover, .ui.menu .ui.dropdown .menu>.item:hover {
-  color: #59c4c4;
-}
-
-/* LOGOUT BUTTON */
-
-.ui.basic.button:hover, .ui.basic.buttons .button:hover {
+.ui.text.menu .item:hover, .ui.menu .ui.dropdown .menu>.item:hover {
   color: #59c4c4 !important;
-  box-shadow: 0 0 0 1px #46bdbd inset, 0 0 0 0 #46bdbd inset;
 }
 
 /* PRIMARY BUTTON */
 
 .ui.primary.button, .ui.primary.buttons .button {
-  /* background-color: #59c4c4; */
   border-radius: 50px;
   text-transform: uppercase;
   min-width: 100px;
@@ -464,18 +418,6 @@ h1 {
   color: rgb(159, 58, 56);
   font-size: 0.92857143em;
 }
-
-/*!* Errors *!*/
-
-/*.ui.form .field .prompt.label {*/
-
-/*  top: -5px!important;*/
-
-/*  !*position: sticky;*!*/
-
-/*  !*margin-left: 65%;*!*/
-
-/*}*/
 
 .ui.form .disabled.field, .ui.form .disabled.fields .field, .ui.form .field :disabled, .ui.disabled.input, .ui.input:not(.disabled) input[disabled], .ui.disabled.dropdown, .ui.dropdown .menu>.disabled.item {
   pointer-events: none;

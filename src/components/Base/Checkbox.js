@@ -6,7 +6,7 @@ const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
   // Source: https://polished.js.org/docs/#hidevisually
   border: 0;
   clip: rect(0 0 0 0);
-  clippath: inset(50%);
+  clip-path: inset(50%);
   height: 1px;
   margin: -1px;
   overflow: hidden;
@@ -36,15 +36,6 @@ const StyledCheckbox = styled.div`
   transition: all 150ms;
   border: 1px solid black;
 `;
-
-/*
-${HiddenCheckbox}:focus + & {
-    box-shadow: 0 0 0 3px pink;
-  }
-  ${Icon} {
-    visibility: ${props => props.checked ? 'visible' : 'hidden'}
-  }
- */
 
 const Checkbox = ({ className, checked, onChange, ...props }) => {
   // console.log('checked', checked);

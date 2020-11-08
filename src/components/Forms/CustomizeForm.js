@@ -120,6 +120,7 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
   };
 
   const nextPage = () => {
+    if (page === 2) return;
     if (formRef.current) {
       formRef.current.validateForm().then(errors => {
         if ((objectIsEmpty(errors) && !formRef.current.status) || (page === 1 && !!formRef.current.status?.sold_cta)) {
@@ -132,6 +133,7 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
   };
 
   const prevPage = () => {
+    if (page === 1) return;
     if (formRef.current) {
       formRef.current.validateForm().then(errors => {
         if ((objectIsEmpty(errors) && !formRef.current.status) || (page === 2 && !!formRef.current.status?.listed_cta)) {
@@ -279,18 +281,8 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
 
       <Segment style={{ margin: '20px 0' }}>
         <Menu pointing secondary>
-          <Menu.Item
-            name="newListing"
-            active={page === 1}
-            disabled={page === 1 || customizationPending || soldListingAgentShortenedURLPending}
-            onClick={prevPage}
-          />
-          <Menu.Item
-            name="soldListing"
-            active={page === 2}
-            disabled={page === 2 || customizationPending || newListingAgentShortenedURLPending}
-            onClick={nextPage}
-          />
+          <Menu.Item name="newListing" active={page === 1} disabled={customizationPending || soldListingAgentShortenedURLPending} onClick={prevPage} />
+          <Menu.Item name="soldListing" active={page === 2} disabled={customizationPending || newListingAgentShortenedURLPending} onClick={nextPage} />
         </Menu>
 
         {renderSteps()}

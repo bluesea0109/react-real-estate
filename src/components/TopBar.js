@@ -12,9 +12,9 @@ import LogoImage from './LogoImage';
 
 import { Dropdown, Popup } from 'semantic-ui-react';
 import { useIsMobile } from './Hooks/useIsMobile';
+import * as brandColors from './utils/brandColors';
 
 const StyledUserSelectorDropdown = styled(Dropdown)`
-  font-family: 'Open Sans', sans-serif !important;
   &&&&& {
     height: 40px;
     border-radius: 20px;
@@ -78,11 +78,17 @@ const logoutIcon = {
   borderRadius: '40px',
 };
 
-const logoutButton = {
-  padding: '6px 0px 5px 0px',
-  boxShadow: 'none',
-  width: '100%',
-};
+const LogoutButton = styled(Button)`
+  &&&,
+  &&&:hover {
+    padding: 6px 0 5px 0 !important;
+    box-shadow: none;
+    width: 100%;
+  }
+  &&&:hover {
+    color: ${brandColors.primary} !important;
+  }
+`;
 
 const logoutText = {
   marginTop: '7px',
@@ -157,12 +163,12 @@ export default ({ auth0 }) => {
       text: 'Logout',
       value: 0,
       content: (
-        <Button basic onClick={AuthService.signOut} style={logoutButton}>
+        <LogoutButton basic onClick={AuthService.signOut}>
           <div style={{ display: 'flex' }}>
             <FontAwesomeIcon icon="sign-out-alt" style={logoutIcon} />
             <p style={logoutText}>Log Out</p>
           </div>
-        </Button>
+        </LogoutButton>
       ),
     },
   ];
