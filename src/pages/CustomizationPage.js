@@ -47,13 +47,21 @@ const CustomizationPage = () => {
         </Page>
       );
     } else {
-      if (!customizationError) return <CustomizeForm customizationData={customizationAvailable} initialValues={initialValues} />;
+      if (!customizationError)
+        return (
+          <CustomizeForm customizationData={customizationAvailable} initialValues={initialValues} />
+        );
       if (customizationError) return <Message error>Oh snap! {customizationError}.</Message>;
     }
   }
 
   if (multiUser) {
-    if (customizationPending && !customizationError && teamCustomizationPending && !teamCustomizationError) {
+    if (
+      customizationPending &&
+      !customizationError &&
+      teamCustomizationPending &&
+      !teamCustomizationError
+    ) {
       return (
         <Page basic>
           <ContentTopHeaderLayout>
@@ -63,8 +71,14 @@ const CustomizationPage = () => {
       );
     } else {
       if (!teamCustomizationError)
-        return <CustomizeForm customizationData={customizationAvailable} initialValues={teamCustomizationAvailable || initialValues} />;
-      if (teamCustomizationError) return <Message error>Oh snap! {teamCustomizationError}.</Message>;
+        return (
+          <CustomizeForm
+            customizationData={customizationAvailable}
+            initialValues={teamCustomizationAvailable || initialValues}
+          />
+        );
+      if (teamCustomizationError)
+        return <Message error>Oh snap! {teamCustomizationError}.</Message>;
     }
   }
 };

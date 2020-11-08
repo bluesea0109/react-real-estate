@@ -13,7 +13,11 @@ const MailoutListItem = data => {
     <ItemLayout fluid key={`${data.userId}-${data._id}-${data.mlsNum}`}>
       {ListHeader({ data: data })}
       <ItemBodyLayout attached style={{ padding: 10 }}>
-        {ImageGroup({ img1src: data.sampleBackLargeUrl, img2src: data.sampleFrontLargeUrl, linkTo: `dashboard/${data._id}` })}
+        {ImageGroup({
+          img1src: data.sampleBackLargeUrl,
+          img2src: data.sampleFrontLargeUrl,
+          linkTo: `dashboard/${data._id}`,
+        })}
 
         {ItemList({ data: data })}
       </ItemBodyLayout>

@@ -25,7 +25,9 @@ export function* parseHash() {
 
 export function* passwordResetSaga({ peerId = null }) {
   try {
-    const { path, method } = peerId ? ApiService.directory.peer.password.reset(peerId) : ApiService.directory.user.password.reset();
+    const { path, method } = peerId
+      ? ApiService.directory.peer.password.reset(peerId)
+      : ApiService.directory.user.password.reset();
     const response = yield call(ApiService[method], path);
 
     yield put(passwordResetSuccess(response));

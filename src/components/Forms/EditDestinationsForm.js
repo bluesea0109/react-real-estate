@@ -7,7 +7,12 @@ import { useSelector } from 'react-redux';
 import React, { useState, useEffect, Fragment } from 'react';
 import { Checkbox, Dropdown, Form, Header, Label, List, Message, Select } from 'semantic-ui-react';
 
-import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
+import {
+  ContentBottomHeaderLayout,
+  ContentTopHeaderLayout,
+  ItemHeaderLayout,
+  ItemHeaderMenuLayout,
+} from '../../layouts';
 import { tag } from '../utils/utils';
 import { Button, Menu, Page, Segment, Snackbar } from '../Base';
 import { resolveLabelStatus } from '../MailoutListItem/utils/helpers';
@@ -66,9 +71,12 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const isCampaign = mailoutDetails?.subtype === 'campaign';
   const isCalculationDeferred = mailoutDetails?.mailoutStatus === 'calculation-deferred';
 
-  const [destinationsOptionsMode, setDestinationsOptionsMode] = useState(mailoutDetails.destinationsOptions?.mode || isCampaign ? 'manual' : 'ai');
+  const [destinationsOptionsMode, setDestinationsOptionsMode] = useState(
+    mailoutDetails.destinationsOptions?.mode || isCampaign ? 'manual' : 'ai'
+  );
   const [saveDetails, setSaveDetails] = useState({
-    destinationsOptionsMode: mailoutDetails.destinationsOptions?.mode || isCampaign ? 'manual' : 'ai',
+    destinationsOptionsMode:
+      mailoutDetails.destinationsOptions?.mode || isCampaign ? 'manual' : 'ai',
     ready: false,
   });
 
@@ -172,7 +180,8 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     };
 
     let criteria = {};
-    if (searchPropertyTypes && searchPropertyTypes.length) criteria.propertyTypes = searchPropertyTypes;
+    if (searchPropertyTypes && searchPropertyTypes.length)
+      criteria.propertyTypes = searchPropertyTypes;
     if (searchBedsMin !== '') criteria.bedsMin = Number(searchBedsMin);
     if (searchBedsMax !== '') criteria.bedsMax = Number(searchBedsMax);
     if (searchBathsMin !== '') criteria.bathsMin = Number(searchBathsMin);
@@ -191,7 +200,8 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     }
 
     let path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/search/byPolygon`;
-    if (peerId) path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/destinationOptions/search/byPolygon`;
+    if (peerId)
+      path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/destinationOptions/search/byPolygon`;
     let body = JSON.stringify({ polygon, criteria });
     const headers = {};
     const accessToken = await auth.getAccessToken();
@@ -200,7 +210,10 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     const results = await api.handleResponse(response);
     setRunningSearch(false);
 
-    if (results.resultCount >= results.userMailoutSize.mailoutSizeMin && results.resultCount <= results.userMailoutSize.mailoutSizeMax) {
+    if (
+      results.resultCount >= results.userMailoutSize.mailoutSizeMin &&
+      results.resultCount <= results.userMailoutSize.mailoutSizeMax
+    ) {
       results.withinBounds = true;
     }
     if (results.resultCount < results.userMailoutSize.mailoutSizeMin) {
@@ -225,19 +238,26 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     try {
       if (saveDetails.destinationsOptionsMode === 'ai') {
         let path = `/api/user/mailout/${mailoutDetails._id}/edit/mailoutSize`;
-        if (peerId) path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/mailoutSize`;
+        if (peerId)
+          path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/mailoutSize`;
         const body = JSON.stringify({ mailoutSize: numberOfDestinations });
         const headers = {};
         const accessToken = await auth.getAccessToken();
         headers['authorization'] = `Bearer ${accessToken}`;
-        const response = await fetch(path, { headers, method: 'put', body, credentials: 'include' });
+        const response = await fetch(path, {
+          headers,
+          method: 'put',
+          body,
+          credentials: 'include',
+        });
         await api.handleResponse(response);
       }
       if (saveDetails.destinationsOptionsMode === 'manual') {
         let searchTimestampId = searchResults.searchTimestampId;
         if (!searchTimestampId) return;
         let path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/search/${searchTimestampId}/use`;
-        if (peerId) path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/destinationOptions/search/${searchTimestampId}/use`;
+        if (peerId)
+          path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/destinationOptions/search/${searchTimestampId}/use`;
         const headers = {};
         const accessToken = await auth.getAccessToken();
         headers['authorization'] = `Bearer ${accessToken}`;
@@ -247,12 +267,15 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
       if (saveDetails.destinationsOptionsMode === 'userUploaded') {
         if (!csvFile) return handleBackClick();
         let path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/csv`;
-        if (peerId) path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/destinationOptions/csv`;
+        if (peerId)
+          path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/destinationOptions/csv`;
         const formData = new FormData();
         formData.append('destinations', csvFile);
         if (!isCsvBrivityFormat) {
-          if (firstNameColumn && firstNameColumn !== null) formData.append('firstNameColumn', firstNameColumn);
-          if (lastNameColumn && lastNameColumn !== null) formData.append('lastNameColumn', lastNameColumn);
+          if (firstNameColumn && firstNameColumn !== null)
+            formData.append('firstNameColumn', firstNameColumn);
+          if (lastNameColumn && lastNameColumn !== null)
+            formData.append('lastNameColumn', lastNameColumn);
           formData.append('deliveryLineColumn', deliveryLineColumn);
           formData.append('cityColumn', cityColumn);
           formData.append('stateColumn', stateColumn);
@@ -264,7 +287,12 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
         const headers = {};
         const accessToken = await auth.getAccessToken();
         headers['authorization'] = `Bearer ${accessToken}`;
-        const response = await fetch(path, { headers, method: 'post', body: formData, credentials: 'include' });
+        const response = await fetch(path, {
+          headers,
+          method: 'post',
+          body: formData,
+          credentials: 'include',
+        });
         await api.handleResponse(response);
       }
       handleBackClick();
@@ -309,7 +337,8 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
         if (h === 'Mailing State/Province') found.stateColumn = true;
         if (h === 'Mailing Postal Code') found.zipColumn = true;
       });
-      if (found.deliveryLineColumn && found.cityColumn && found.stateColumn && found.zipColumn) brivityFormat = true;
+      if (found.deliveryLineColumn && found.cityColumn && found.stateColumn && found.zipColumn)
+        brivityFormat = true;
 
       if (brivityFormat) {
         setIsCsvBrivityFormat(1);
@@ -341,7 +370,13 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
             </Menu.Item>
             <Menu.Menu position="right">
               <Menu.Item>
-                <Button primary inverted onClick={() => handleBackClick()} loading={saving} disabled={saving}>
+                <Button
+                  primary
+                  inverted
+                  onClick={() => handleBackClick()}
+                  loading={saving}
+                  disabled={saving}
+                >
                   Back
                 </Button>
               </Menu.Item>
@@ -366,7 +401,9 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
               </Label>
             </span>
             <span style={{ gridArea: 'address', alignSelf: 'center' }}>
-              <Header as="h3">{mailoutDetails.name || mailoutDetails?.details?.displayAddress}</Header>
+              <Header as="h3">
+                {mailoutDetails.name || mailoutDetails?.details?.displayAddress}
+              </Header>
             </span>
 
             <ItemHeaderMenuLayout>
@@ -376,7 +413,13 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                   type="submit"
                   onClick={handleSubmitClick}
                   loading={saving}
-                  disabled={!isCalculationDeferred && !(saveDetails.ready && saveDetails.destinationsOptionsMode === destinationsOptionsMode)}
+                  disabled={
+                    !isCalculationDeferred &&
+                    !(
+                      saveDetails.ready &&
+                      saveDetails.destinationsOptionsMode === destinationsOptionsMode
+                    )
+                  }
                 >
                   Save
                 </Button>
@@ -387,7 +430,12 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
           {saving && <Loading message="Saving ..." />}
         </ContentBottomHeaderLayout>
 
-        <Segment basic padded className={isMobile ? null : 'primary-grid-container'} style={isMobile ? {} : { padding: 10 }}></Segment>
+        <Segment
+          basic
+          padded
+          className={isMobile ? null : 'primary-grid-container'}
+          style={isMobile ? {} : { padding: 10 }}
+        ></Segment>
         <Form>
           <Header as="h4">How should destinations be selected?</Header>
           <List horizontal id="chooseDestinationsMethod">
@@ -446,7 +494,11 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
           {destinationsOptionsMode === 'manual' && (
             <div className="ui fluid">
               <div>Click "Draw" to draw a custom destination area on the map.</div>
-              <PolygonGoogleMapsCore polygonCoordinates={polygonCoordinates} setPolygonCoordinates={setPolygonCoordinates} data={mailoutDetails} />
+              <PolygonGoogleMapsCore
+                polygonCoordinates={polygonCoordinates}
+                setPolygonCoordinates={setPolygonCoordinates}
+                data={mailoutDetails}
+              />
               {!!polygonCoordinates.length && (
                 <div id="mapSearchFields">
                   <Form.Field>
@@ -567,14 +619,20 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
 
                   <div id="searchBoxGrid">
                     <div id="seachButtonHolder">
-                      <Button primary onClick={() => handleDestinationSearch()} loading={runningSearch}>
+                      <Button
+                        primary
+                        onClick={() => handleDestinationSearch()}
+                        loading={runningSearch}
+                      >
                         Search
                       </Button>
                     </div>
 
                     {searchResults && (
                       <div id="searchResultMessages">
-                        <h3 id="searchResultsCount">{searchResults.resultCount} Destinations Found</h3>
+                        <h3 id="searchResultsCount">
+                          {searchResults.resultCount} Destinations Found
+                        </h3>
                         {searchResults.withinBounds && (
                           <Message success visible={true}>
                             <Message.Header>Ready to Save</Message.Header>
@@ -585,12 +643,16 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                           <Message warning visible={true}>
                             <Message.Header>Under campaign budget</Message.Header>
                             <p>
-                              You are {searchResults.underfilledBy} short of your minimum budget of {searchResults.userMailoutSize.mailoutSizeMin}. Choose an
-                              action:
+                              You are {searchResults.underfilledBy} short of your minimum budget of{' '}
+                              {searchResults.userMailoutSize.mailoutSizeMin}. Choose an action:
                             </p>
                             <Message.List>
-                              <Message.Item>Widen your search parameters to find more,</Message.Item>
-                              <Message.Item>Click 'Save' to accept this limited amount</Message.Item>
+                              <Message.Item>
+                                Widen your search parameters to find more,
+                              </Message.Item>
+                              <Message.Item>
+                                Click 'Save' to accept this limited amount
+                              </Message.Item>
                             </Message.List>
                           </Message>
                         )}
@@ -598,12 +660,14 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                           <Message warning visible={true}>
                             <Message.Header>Over your campaign budget</Message.Header>
                             <p>
-                              You are {searchResults.overfilledBy} over of your maxiumn budget of {searchResults.userMailoutSize.mailoutSizeMax}. Choose an
-                              action:
+                              You are {searchResults.overfilledBy} over of your maxiumn budget of{' '}
+                              {searchResults.userMailoutSize.mailoutSizeMax}. Choose an action:
                             </p>
                             <Message.List>
                               <Message.Item>Limit your search parameters to find less</Message.Item>
-                              <Message.Item>Click 'Save' to accept this larger amount.</Message.Item>
+                              <Message.Item>
+                                Click 'Save' to accept this larger amount.
+                              </Message.Item>
                             </Message.List>
                           </Message>
                         )}
@@ -619,26 +683,41 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
               {mailoutDetails.destinationsOptions?.userUploaded?.filename && (
                 <div>
                   <div>
-                    <b>Existing File</b>: {mailoutDetails.destinationsOptions?.userUploaded?.filename}
+                    <b>Existing File</b>:{' '}
+                    {mailoutDetails.destinationsOptions?.userUploaded?.filename}
                   </div>
                   <div>
-                    <b>Uploaded</b>: {new Date(mailoutDetails.destinationsOptions?.userUploaded?.created).toString()}
+                    <b>Uploaded</b>:{' '}
+                    {new Date(mailoutDetails.destinationsOptions?.userUploaded?.created).toString()}
                   </div>
                 </div>
               )}
 
-              <input id="destinationCSVFile" name="destinations" type="file" onChange={handleFileChange}></input>
+              <input
+                id="destinationCSVFile"
+                name="destinations"
+                type="file"
+                onChange={handleFileChange}
+              ></input>
               <div id="csvUnrecognized">
-                Upload your own CSV to use for targeting (max. 50 MB). NOTE: Choosing a file and clicking save will clear all existing destinations.
+                Upload your own CSV to use for targeting (max. 50 MB). NOTE: Choosing a file and
+                clicking save will clear all existing destinations.
               </div>
               {!isCsvBrivityFormat && (
                 <div>
                   <Message negative visible={true}>
-                    <Message.Header>The CSV file is not in a recognized Brivity format</Message.Header>
-                    <p>Please match the CSV columns to the destination fields, using the selections below.</p>
+                    <Message.Header>
+                      The CSV file is not in a recognized Brivity format
+                    </Message.Header>
+                    <p>
+                      Please match the CSV columns to the destination fields, using the selections
+                      below.
+                    </p>
                     {currentResident && (
                       <Fragment>
-                        <Message.Header>* Please Note - "Current Resident" will be used on Name Line</Message.Header>
+                        <Message.Header>
+                          * Please Note - "Current Resident" will be used on Name Line
+                        </Message.Header>
                         <p>First and Last name choices will be used if available and selected.</p>
                       </Fragment>
                     )}

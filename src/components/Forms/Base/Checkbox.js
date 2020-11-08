@@ -28,7 +28,11 @@ const FormikCheckbox = ({
       {({ field, form }) => {
         const error = getFieldError(field, form);
         return (
-          <Form.Field error={!!error} {...fieldProps} className={disabled ? 'disabled-form-field' : null}>
+          <Form.Field
+            error={!!error}
+            {...fieldProps}
+            className={disabled ? 'disabled-form-field' : null}
+          >
             <InputRef inputRef={inputRef}>
               <Checkbox
                 {...safeInputProps}

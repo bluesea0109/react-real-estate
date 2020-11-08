@@ -39,7 +39,13 @@ const CustomizationTeamPage = () => {
       </Page>
     );
   } else {
-    if (!teamCustomizationError) return <TeamCustomizeForm teamCustomizationData={teamCustomizationAvailable} initialValues={initialValues} />;
+    if (!teamCustomizationError)
+      return (
+        <TeamCustomizeForm
+          teamCustomizationData={teamCustomizationAvailable}
+          initialValues={initialValues}
+        />
+      );
     if (teamCustomizationError) return <Message error>Oh snap! {teamCustomizationError}.</Message>;
   }
 };

@@ -28,7 +28,12 @@ const TeamCustomizationPage = () => {
       </Page>
     );
   } else {
-    return <TeamCustomizeForm teamCustomizationData={teamCustomizationAvailable} initialValues={initialValues} />;
+    return (
+      <TeamCustomizeForm
+        teamCustomizationData={teamCustomizationAvailable}
+        initialValues={initialValues}
+      />
+    );
   }
 };
 

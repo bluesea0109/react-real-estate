@@ -80,7 +80,10 @@ export class GoogleMapItem extends Component {
             google={google}
             zoom={12}
             containerStyle={containerStyle}
-            initialCenter={{ lat: data.details && data.details.latitude, lng: data.details && data.details.longitude }}
+            initialCenter={{
+              lat: data.details && data.details.latitude,
+              lng: data.details && data.details.longitude,
+            }}
             onClick={this.onMapClicked}
           >
             {displayMarkers()}

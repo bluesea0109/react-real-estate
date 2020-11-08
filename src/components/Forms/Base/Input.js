@@ -33,7 +33,11 @@ const FormikInput = ({
         const error = getFieldError(field, form);
 
         return (
-          <Form.Field error={!!error} {...fieldProps} className={disabled ? 'disabled-form-field' : null}>
+          <Form.Field
+            error={!!error}
+            {...fieldProps}
+            className={disabled ? 'disabled-form-field' : null}
+          >
             {!!label && (
               <label htmlFor={id} style={{ opacity: disabled ? '0.4' : 1 }}>
                 {label} {tag}

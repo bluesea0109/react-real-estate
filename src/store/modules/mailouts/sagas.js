@@ -33,7 +33,9 @@ const hideArchived = { hideExcluded: true, hideArchived: true };
 
 export function* getMailoutSaga({ peerId = null }) {
   try {
-    const { path, method } = peerId ? ApiService.directory.peer.mailout.list(peerId) : ApiService.directory.user.mailout.list();
+    const { path, method } = peerId
+      ? ApiService.directory.peer.mailout.list(peerId)
+      : ApiService.directory.user.mailout.list();
     const response = yield call(ApiService[method], path, { page: 1, limit, ...hideArchived });
 
     if (response.length === 0 || response.length < limit) {
@@ -50,7 +52,9 @@ export function* getMailoutSaga({ peerId = null }) {
 
 export function* getMoreMailoutSaga({ peerId = null }) {
   try {
-    const { path, method } = peerId ? ApiService.directory.peer.mailout.list(peerId) : ApiService.directory.user.mailout.list();
+    const { path, method } = peerId
+      ? ApiService.directory.peer.mailout.list(peerId)
+      : ApiService.directory.user.mailout.list();
     const page = yield select(getMailoutsPage);
     const response = yield call(ApiService[method], path, { page, limit, ...hideArchived });
 
@@ -100,7 +104,9 @@ export function* checkIfPeerSelectedGetMoreMailout() {
 
 export function* getArchivedMailoutSaga({ peerId = null }) {
   try {
-    const { path, method } = peerId ? ApiService.directory.peer.mailout.ignored(peerId) : ApiService.directory.user.mailout.ignored();
+    const { path, method } = peerId
+      ? ApiService.directory.peer.mailout.ignored(peerId)
+      : ApiService.directory.user.mailout.ignored();
     const response = yield call(ApiService[method], path, { page: 1, limit });
 
     if (response.length === 0 || response.length < limit) {
@@ -117,7 +123,9 @@ export function* getArchivedMailoutSaga({ peerId = null }) {
 
 export function* getMoreArchivedMailoutSaga({ peerId = null }) {
   try {
-    const { path, method } = peerId ? ApiService.directory.peer.mailout.ignored(peerId) : ApiService.directory.user.mailout.ignored();
+    const { path, method } = peerId
+      ? ApiService.directory.peer.mailout.ignored(peerId)
+      : ApiService.directory.user.mailout.ignored();
     const page = yield select(getArchivedMailoutsPage);
     const response = yield call(ApiService[method], path, { page, limit });
 
@@ -159,7 +167,9 @@ export function* addCampaignStartSaga() {
   const mlsNum = payload.mlsNum;
   const postcardSize = payload.postcardSize;
   try {
-    const { path, method } = peerId ? ApiService.directory.peer.mailout.byMls(mlsNum, peerId) : ApiService.directory.user.mailout.byMls(mlsNum);
+    const { path, method } = peerId
+      ? ApiService.directory.peer.mailout.byMls(mlsNum, peerId)
+      : ApiService.directory.user.mailout.byMls(mlsNum);
 
     const data = { mlsNum, postcardSize, skipEmailNotification: true };
     const response = yield call(ApiService[method], path, data);

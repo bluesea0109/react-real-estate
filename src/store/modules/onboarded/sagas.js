@@ -1,6 +1,12 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 
-import { setCompletedProfile, setCompletedTeamCustomization, setCompletedCustomization, setCompletedInviteTeammates, finalizeOnboarding } from './actions';
+import {
+  setCompletedProfile,
+  setCompletedTeamCustomization,
+  setCompletedCustomization,
+  setCompletedInviteTeammates,
+  finalizeOnboarding,
+} from './actions';
 
 import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
 import { SAVE_PROFILE_SUCCESS } from '../profile/actions';
@@ -10,18 +16,25 @@ import { REVIEW_CUSTOMIZATION_COMPLETED } from '../customization/actions';
 import { INVITE_USERS_SUCCESS, SKIP_INVITE_USERS } from '../inviteUsers/actions';
 import { REVIEW_TEAM_CUSTOMIZATION_COMPLETED } from '../teamCustomization/actions';
 import { initializeTeamPollingStart } from '../teamInitialize/actions';
-import { generateMailoutsPending, generateMailoutsSuccess, generateMailoutsError } from '../mailouts/actions';
+import {
+  generateMailoutsPending,
+  generateMailoutsSuccess,
+  generateMailoutsError,
+} from '../mailouts/actions';
 
 import ApiService from '../../../services/api';
 
 export const onLoginMode = state => state.onLogin && state.onLogin.mode;
-export const onLoginPermissionsTeamAdmin = state => state.onLogin && state.onLogin.permissions && state.onLogin.permissions.teamAdmin;
+export const onLoginPermissionsTeamAdmin = state =>
+  state.onLogin && state.onLogin.permissions && state.onLogin.permissions.teamAdmin;
 
 export const onLoginUserBranding = state => state.onLogin && state.onLogin.userBranding;
 export const onLoginTeamBranding = state => state.onLogin && state.onLogin.teamBranding;
 
-export const onboardingProfileSetupComplete = state => state.onLogin && state.onLogin.userProfile && state.onLogin.userProfile.setupComplete;
-export const onboardingComplete = state => state.onLogin && state.onLogin.userBranding && state.onLogin.userBranding.onboardingComplete;
+export const onboardingProfileSetupComplete = state =>
+  state.onLogin && state.onLogin.userProfile && state.onLogin.userProfile.setupComplete;
+export const onboardingComplete = state =>
+  state.onLogin && state.onLogin.userBranding && state.onLogin.userBranding.onboardingComplete;
 
 let userProfileCompleted = false;
 let teamProfileCompleted = false;
@@ -38,7 +51,11 @@ export function* profileSetupOnboardingSaga() {
 
       userProfileCompleted = true;
 
-      if ((!multiUser && !userIsAdmin) || (multiUser && teamProfileCompleted) || (singleuser && teamProfileCompleted)) {
+      if (
+        (!multiUser && !userIsAdmin) ||
+        (multiUser && teamProfileCompleted) ||
+        (singleuser && teamProfileCompleted)
+      ) {
         yield put(setCompletedProfile());
       }
     }
@@ -58,7 +75,8 @@ export function* teamProfileSetupOnboardingSaga() {
 
       teamProfileCompleted = true;
 
-      if ((multiUser && userProfileCompleted) || (singleuser && userProfileCompleted)) yield put(setCompletedProfile());
+      if ((multiUser && userProfileCompleted) || (singleuser && userProfileCompleted))
+        yield put(setCompletedProfile());
     }
   } catch (err) {
     yield console.log('profileSetupOnboardingSaga err', err);

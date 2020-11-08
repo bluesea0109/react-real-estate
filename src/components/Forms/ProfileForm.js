@@ -17,7 +17,8 @@ import { useIsMobile } from '../Hooks/useIsMobile';
 
 import styled from 'styled-components';
 
-const changeMsg = 'This information comes from Brivity CRM. If you want to modify this information, you need to do it there.';
+const changeMsg =
+  'This information comes from Brivity CRM. If you want to modify this information, you need to do it there.';
 
 const formReducer = (state, action) => {
   return _.merge({}, state, action);
@@ -167,7 +168,9 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
   const profileSaveErrorStatusCode = useSelector(store => store.profile.saveError?.statusCode);
   const teamProfileSavePending = useSelector(store => store.teamProfile.savePending);
   const teamProfileSaveErrorMessage = useSelector(store => store.teamProfile.saveError?.message);
-  const teamProfileSaveErrorStatusCode = useSelector(store => store.teamProfile.saveError?.statusCode);
+  const teamProfileSaveErrorStatusCode = useSelector(
+    store => store.teamProfile.saveError?.statusCode
+  );
   const mailoutsGeneratePending = useSelector(store => store.mailouts.generatePending);
 
   const isInitiatingTeam = useSelector(store => store.teamInitialize.polling);
@@ -182,7 +185,12 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
         delete formValues.userProfile.boards;
       }
 
-      const updatedFormValues = _.merge({}, formValues, { userProfile: profileAvailable }, { businessProfile: teamProfileAvailable });
+      const updatedFormValues = _.merge(
+        {},
+        formValues,
+        { userProfile: profileAvailable },
+        { businessProfile: teamProfileAvailable }
+      );
       if (profileAvailable.notificationEmail === teamProfileAvailable.notificationEmail) {
         setPersonalNotificationEmailDisabled(true);
       }
@@ -201,7 +209,9 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
 
   const _handleSubmit = values => {
     const profile = {
-      notificationEmail: personalNotificationEmailDisabled ? values.businessNotificationEmail : values.personalNotificationEmail,
+      notificationEmail: personalNotificationEmailDisabled
+        ? values.businessNotificationEmail
+        : values.personalNotificationEmail,
       first: values.first,
       last: values.last,
       email: values.email,
@@ -265,13 +275,23 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
   const UpdateWithoutRerender = () => {
     const { setFieldValue } = useFormikContext();
     React.useEffect(() => {
-      setFieldValue('realtorPhoto', pictureCheck(picturesRealtorPhoto) || (!selectedPeerId && pictureCheck(realtorPhoto)), true);
+      setFieldValue(
+        'realtorPhoto',
+        pictureCheck(picturesRealtorPhoto) || (!selectedPeerId && pictureCheck(realtorPhoto)),
+        true
+      );
       setFieldValue('teamLogo', pictureCheck(picturesTeamLogo) || pictureCheck(teamLogo), true);
-      setFieldValue('brokerageLogo', pictureCheck(picturesBrokerageLogo) || pictureCheck(brokerageLogo), true);
+      setFieldValue(
+        'brokerageLogo',
+        pictureCheck(picturesBrokerageLogo) || pictureCheck(brokerageLogo),
+        true
+      );
 
       setFieldValue(
         'personalNotificationEmail',
-        personalNotificationEmailDisabled ? formValues.businessProfile.notificationEmail : formValues.userProfile.notificationEmail,
+        personalNotificationEmailDisabled
+          ? formValues.businessProfile.notificationEmail
+          : formValues.userProfile.notificationEmail,
         true
       );
     }, [setFieldValue]);
@@ -440,21 +460,35 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
 
             {picturesError && <Snackbar error>{JSON.stringify(picturesError, 0, 2)}</Snackbar>}
 
-            {profileSaveErrorMessage && profileSaveErrorStatusCode !== 412 && <Snackbar error>{profileSaveErrorMessage}</Snackbar>}
+            {profileSaveErrorMessage && profileSaveErrorStatusCode !== 412 && (
+              <Snackbar error>{profileSaveErrorMessage}</Snackbar>
+            )}
 
-            {teamProfileSaveErrorMessage && teamProfileSaveErrorStatusCode !== 412 && <Snackbar error>{teamProfileSaveErrorMessage}</Snackbar>}
+            {teamProfileSaveErrorMessage && teamProfileSaveErrorStatusCode !== 412 && (
+              <Snackbar error>{teamProfileSaveErrorMessage}</Snackbar>
+            )}
 
-            {((teamProfileSaveErrorMessage && teamProfileSaveErrorStatusCode === 412) || (profileSaveErrorMessage && profileSaveErrorStatusCode === 412)) && (
-              <Snackbar error>The data on the page has changed and the save has failed. Please reload to get the latest data.</Snackbar>
+            {((teamProfileSaveErrorMessage && teamProfileSaveErrorStatusCode === 412) ||
+              (profileSaveErrorMessage && profileSaveErrorStatusCode === 412)) && (
+              <Snackbar error>
+                The data on the page has changed and the save has failed. Please reload to get the
+                latest data.
+              </Snackbar>
             )}
 
             <Segment style={{ margin: '20px 0' }}>
               <Header as="h2">
                 Personal
                 {selectedPeerId ? (
-                  <Header.Subheader>Peers information will be shown on their postcards and will enable recipients to reach them.</Header.Subheader>
+                  <Header.Subheader>
+                    Peers information will be shown on their postcards and will enable recipients to
+                    reach them.
+                  </Header.Subheader>
                 ) : (
-                  <Header.Subheader>Your information will be shown on your postcards and will enable recipients to reach you.</Header.Subheader>
+                  <Header.Subheader>
+                    Your information will be shown on your postcards and will enable recipients to
+                    reach you.
+                  </Header.Subheader>
                 )}
               </Header>
 
@@ -472,18 +506,42 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
 
                 {isMobile ? null : (
                   <div style={{ gridArea: 'Picture' }}>
-                    <Image size="large" src={require('../../assets/onboard-profile.png')} alt="Brivity Marketer Mailout" />
+                    <Image
+                      size="large"
+                      src={require('../../assets/onboard-profile.png')}
+                      alt="Brivity Marketer Mailout"
+                    />
                   </div>
                 )}
 
                 <Form.Group widths="2" style={{ gridArea: 'FirstLast' }}>
-                  <Input label="First Name" name="first" disabled={multiUser} tag={multiUser ? popup(changeMsg) : tag('Required')} />
-                  <Input label="Last Name" name="last" disabled={multiUser} tag={multiUser ? popup(changeMsg) : tag('Required')} />
+                  <Input
+                    label="First Name"
+                    name="first"
+                    disabled={multiUser}
+                    tag={multiUser ? popup(changeMsg) : tag('Required')}
+                  />
+                  <Input
+                    label="Last Name"
+                    name="last"
+                    disabled={multiUser}
+                    tag={multiUser ? popup(changeMsg) : tag('Required')}
+                  />
                 </Form.Group>
 
                 <Form.Group widths="2" style={{ gridArea: 'PhoneEmail' }}>
-                  <Input label="Phone Number" name="personalPhone" disabled={multiUser} tag={multiUser ? popup(changeMsg) : tag('Required')} />
-                  <Input label="Email" name="email" disabled={multiUser} tag={multiUser ? popup(changeMsg) : tag('Required')} />
+                  <Input
+                    label="Phone Number"
+                    name="personalPhone"
+                    disabled={multiUser}
+                    tag={multiUser ? popup(changeMsg) : tag('Required')}
+                  />
+                  <Input
+                    label="Email"
+                    name="email"
+                    disabled={multiUser}
+                    tag={multiUser ? popup(changeMsg) : tag('Required')}
+                  />
                 </Form.Group>
 
                 <div style={{ gridArea: 'DreOfficePhone' }}>
@@ -503,7 +561,9 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                         icon="toggle-on"
                         size="2x"
                         style={{ marginTop: '1em', verticalAlign: '-0.3em', color: '#59C4C4' }}
-                        onClick={() => setPersonalNotificationEmailDisabled(!personalNotificationEmailDisabled)}
+                        onClick={() =>
+                          setPersonalNotificationEmailDisabled(!personalNotificationEmailDisabled)
+                        }
                       />{' '}
                       Same as business notification email
                     </span>
@@ -514,7 +574,9 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                         size="2x"
                         className="fa-flip-horizontal"
                         style={{ marginTop: '1em', verticalAlign: '-0.3em' }}
-                        onClick={() => setPersonalNotificationEmailDisabled(!personalNotificationEmailDisabled)}
+                        onClick={() =>
+                          setPersonalNotificationEmailDisabled(!personalNotificationEmailDisabled)
+                        }
                       />{' '}
                       Same as business notification email
                     </span>
@@ -527,9 +589,13 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
               <Header as="h2">
                 MLS
                 {selectedPeerId ? (
-                  <Header.Subheader>Enter peers MLS information so we can generate postcards for their listings.</Header.Subheader>
+                  <Header.Subheader>
+                    Enter peers MLS information so we can generate postcards for their listings.
+                  </Header.Subheader>
                 ) : (
-                  <Header.Subheader>Enter your MLS information so we can generate postcards for your listings.</Header.Subheader>
+                  <Header.Subheader>
+                    Enter your MLS information so we can generate postcards for your listings.
+                  </Header.Subheader>
                 )}
               </Header>
 
@@ -545,10 +611,29 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                       {values.boards &&
                         values.boards.map((board, index) => (
                           <Segment basic key={index} style={{ padding: '0px 25px 0px 0px' }}>
-                            <div style={isMobile ? { display: 'grid' } : { display: 'grid', gridTemplateColumns: '1fr 75px', gridColumnGap: '1em' }}>
+                            <div
+                              style={
+                                isMobile
+                                  ? { display: 'grid' }
+                                  : {
+                                      display: 'grid',
+                                      gridTemplateColumns: '1fr 75px',
+                                      gridColumnGap: '1em',
+                                    }
+                              }
+                            >
                               <Form.Group widths="2">
-                                <Dropdown label="MLS" name={`boards[${index}].name`} options={boards} tag={tag('Required')} />
-                                <Input label="MLS Agent ID" name={`boards.${index}.mlsId`} tag={tag('Required')} />
+                                <Dropdown
+                                  label="MLS"
+                                  name={`boards[${index}].name`}
+                                  options={boards}
+                                  tag={tag('Required')}
+                                />
+                                <Input
+                                  label="MLS Agent ID"
+                                  name={`boards.${index}.mlsId`}
+                                  tag={tag('Required')}
+                                />
                               </Form.Group>
                               <Button
                                 type="button"
@@ -556,7 +641,11 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                                 inverted
                                 icon
                                 onClick={() => arrayHelpers.remove(index)}
-                                style={isMobile ? { cursor: 'pointer' } : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }}
+                                style={
+                                  isMobile
+                                    ? { cursor: 'pointer' }
+                                    : { maxHeight: '45px', margin: '1.7em 0', cursor: 'pointer' }
+                                }
                                 aria-label="remove mls"
                               >
                                 <Icon name="trash" />
@@ -565,7 +654,12 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                           </Segment>
                         ))}
                       <div className="buttons">
-                        <Button primary inverted type="button" onClick={() => arrayHelpers.push({ name: '', mlsId: '' })}>
+                        <Button
+                          primary
+                          inverted
+                          type="button"
+                          onClick={() => arrayHelpers.push({ name: '', mlsId: '' })}
+                        >
                           Add MLS
                         </Button>
                       </div>
@@ -579,44 +673,98 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
               <Segment>
                 <Header as="h2">
                   Business
-                  <Header.Subheader>Enter your company details for branding purposes and for the return addresss of your mailers.</Header.Subheader>
+                  <Header.Subheader>
+                    Enter your company details for branding purposes and for the return addresss of
+                    your mailers.
+                  </Header.Subheader>
                 </Header>
 
                 <Divider style={{ margin: '2em -1em' }} />
 
                 <BusinessForm>
                   <div style={{ gridArea: 'TeamName' }}>
-                    <Input label="Team Name" name="teamName" disabled={multiUser} tag={multiUser ? popup(changeMsg) : tag('Required')} />
+                    <Input
+                      label="Team Name"
+                      name="teamName"
+                      disabled={multiUser}
+                      tag={multiUser ? popup(changeMsg) : tag('Required')}
+                    />
                   </div>
 
                   <div style={{ gridArea: 'BrokerageName' }}>
-                    <Input label="Brokerage Name" name="brokerageName" disabled={multiUser} tag={multiUser ? popup(changeMsg) : tag('Required')} />
+                    <Input
+                      label="Brokerage Name"
+                      name="brokerageName"
+                      disabled={multiUser}
+                      tag={multiUser ? popup(changeMsg) : tag('Required')}
+                    />
                   </div>
 
                   <div style={{ gridArea: 'OfficePhone' }}>
-                    <Input label="Office Phone Number" name="businessPhone" disabled={multiUser} tag={multiUser ? popup(changeMsg) : tag('Optional')} />
+                    <Input
+                      label="Office Phone Number"
+                      name="businessPhone"
+                      disabled={multiUser}
+                      tag={multiUser ? popup(changeMsg) : tag('Optional')}
+                    />
                   </div>
 
                   <div style={{ gridArea: 'TeamLogo' }}>
-                    <FileUpload label="Team Logo" name="teamLogo" dispatch={dispatch} pending={picturesPending} />
+                    <FileUpload
+                      label="Team Logo"
+                      name="teamLogo"
+                      dispatch={dispatch}
+                      pending={picturesPending}
+                    />
                   </div>
 
                   <div style={{ gridArea: 'BrokerageLogo' }}>
-                    <FileUpload label="Brokerage Logo" name="brokerageLogo" dispatch={dispatch} pending={picturesPending} tag={tag('Required')} />
+                    <FileUpload
+                      label="Brokerage Logo"
+                      name="brokerageLogo"
+                      dispatch={dispatch}
+                      pending={picturesPending}
+                      tag={tag('Required')}
+                    />
                   </div>
 
                   <Form.Group widths="2" style={{ gridArea: 'AddressCity' }}>
-                    <Input label="Address" name="address" disabled={multiUser} tag={multiUser ? popup(changeMsg) : tag('Required')} />
-                    <Input label="City" name="city" disabled={multiUser} tag={multiUser ? popup(changeMsg) : tag('Required')} />
+                    <Input
+                      label="Address"
+                      name="address"
+                      disabled={multiUser}
+                      tag={multiUser ? popup(changeMsg) : tag('Required')}
+                    />
+                    <Input
+                      label="City"
+                      name="city"
+                      disabled={multiUser}
+                      tag={multiUser ? popup(changeMsg) : tag('Required')}
+                    />
                   </Form.Group>
 
                   <Form.Group widths="2" style={{ gridArea: 'StateZipCode' }}>
-                    <Dropdown label="State" name="state" options={states} disabled={multiUser} tag={multiUser ? popup(changeMsg) : tag('Required')} />
-                    <Input label="Zip Code" name="zip" disabled={multiUser} tag={multiUser ? popup(changeMsg) : tag('Required')} />
+                    <Dropdown
+                      label="State"
+                      name="state"
+                      options={states}
+                      disabled={multiUser}
+                      tag={multiUser ? popup(changeMsg) : tag('Required')}
+                    />
+                    <Input
+                      label="Zip Code"
+                      name="zip"
+                      disabled={multiUser}
+                      tag={multiUser ? popup(changeMsg) : tag('Required')}
+                    />
                   </Form.Group>
 
                   <div style={{ gridArea: 'BusinessNotificationEmail' }}>
-                    <Input label="Business Notification Email" name="businessNotificationEmail" tag={tag('Required')} />
+                    <Input
+                      label="Business Notification Email"
+                      name="businessNotificationEmail"
+                      tag={tag('Required')}
+                    />
                   </div>
                 </BusinessForm>
               </Segment>

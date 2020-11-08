@@ -6,11 +6,19 @@ const ValidateURLWithoutRerender = ({ formType }) => {
   const { setStatus, status, values } = useFormikContext();
 
   let newListingShortenedURLError;
-  const newListingTeamShortenedURLError = useSelector(store => store.teamShortcode.listedURLToShortenError);
-  const soldListingTeamShortenedURLError = useSelector(store => store.teamShortcode.soldURLToShortenError);
+  const newListingTeamShortenedURLError = useSelector(
+    store => store.teamShortcode.listedURLToShortenError
+  );
+  const soldListingTeamShortenedURLError = useSelector(
+    store => store.teamShortcode.soldURLToShortenError
+  );
   let soldListingShortenedURLError;
-  const newListingAgentShortenedURLError = useSelector(store => store.shortcode.listedURLToShortenError);
-  const soldListingAgentShortenedURLError = useSelector(store => store.shortcode.soldURLToShortenError);
+  const newListingAgentShortenedURLError = useSelector(
+    store => store.shortcode.listedURLToShortenError
+  );
+  const soldListingAgentShortenedURLError = useSelector(
+    store => store.shortcode.soldURLToShortenError
+  );
 
   if (formType === 'team') {
     newListingShortenedURLError = newListingTeamShortenedURLError;

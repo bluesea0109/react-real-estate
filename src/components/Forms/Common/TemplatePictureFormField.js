@@ -2,8 +2,16 @@ import React from 'react';
 
 const NEW_LISTING = 'listed';
 
-const TemplatePictureFormField = ({ templateName, listingType, initialValues, formValues, setFormValues }) => {
-  const currentValue = (formValues && formValues[listingType]?.templateTheme) || initialValues[listingType].templateTheme;
+const TemplatePictureFormField = ({
+  templateName,
+  listingType,
+  initialValues,
+  formValues,
+  setFormValues,
+}) => {
+  const currentValue =
+    (formValues && formValues[listingType]?.templateTheme) ||
+    initialValues[listingType].templateTheme;
   const editable = listingType === NEW_LISTING ? !!formValues?.listed : !!formValues?.sold;
 
   const resolveSource = type => {
@@ -25,7 +33,12 @@ const TemplatePictureFormField = ({ templateName, listingType, initialValues, fo
   if (!editable) {
     return (
       <div style={{ margin: '1em', minWidth: '128px', maxWidth: '270px', opacity: '0.4' }}>
-        <input type="radio" defaultChecked={currentValue === templateName} value={templateName} style={{ visibility: 'hidden', display: 'none' }} />
+        <input
+          type="radio"
+          defaultChecked={currentValue === templateName}
+          value={templateName}
+          style={{ visibility: 'hidden', display: 'none' }}
+        />
         <div
           style={
             currentValue === templateName
@@ -54,7 +67,11 @@ const TemplatePictureFormField = ({ templateName, listingType, initialValues, fo
               : { border: '1px solid lightgray', margin: 0, padding: '0.5em', borderRadius: '5px' }
           }
         >
-          <img onClick={e => handleTemplateChange(templateName)} src={resolveSource(templateName)} alt={templateName} />
+          <img
+            onClick={e => handleTemplateChange(templateName)}
+            src={resolveSource(templateName)}
+            alt={templateName}
+          />
         </div>
       </div>
     );

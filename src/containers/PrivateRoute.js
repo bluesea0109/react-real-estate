@@ -7,12 +7,25 @@ import Loading from '../components/Loading';
 import { ContentTopHeaderLayout } from '../layouts';
 import { Message, Page, Segment } from '../components/Base';
 
-const PrivateRoute = ({ component: Component, path, auth0, onLogin, templates, states, boards, ...rest }) => {
+const PrivateRoute = ({
+  component: Component,
+  path,
+  auth0,
+  onLogin,
+  templates,
+  states,
+  boards,
+  ...rest
+}) => {
   let history = useHistory();
 
   useEffect(() => {
     const fn = async () => {
-      if (history.location.pathname !== '/callback' && history.location.pathname !== '/dashboard' && history.location.pathname !== '/') {
+      if (
+        history.location.pathname !== '/callback' &&
+        history.location.pathname !== '/dashboard' &&
+        history.location.pathname !== '/'
+      ) {
         await localStorage.setItem('routerDestination', history.location.pathname);
       }
 
@@ -60,7 +73,10 @@ const PrivateRoute = ({ component: Component, path, auth0, onLogin, templates, s
       <Segment basic>
         <Message>
           <Message.Header>{onLogin.error.message}</Message.Header>
-          <p>The login process has failed, please contact the Brivity Marketer Technical Support to resolve this issue!</p>
+          <p>
+            The login process has failed, please contact the Brivity Marketer Technical Support to
+            resolve this issue!
+          </p>
         </Message>
       </Segment>
     ) : (

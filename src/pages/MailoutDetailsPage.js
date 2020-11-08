@@ -7,7 +7,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format } from 'date-fns';
 
-import { resetMailout, revertMailoutEditPending, stopMailoutPending, submitMailoutPending } from '../store/modules/mailout/actions';
+import {
+  resetMailout,
+  revertMailoutEditPending,
+  stopMailoutPending,
+  submitMailoutPending,
+} from '../store/modules/mailout/actions';
 import {
   calculateCost,
   formatDate,
@@ -15,7 +20,21 @@ import {
   resolveMailoutStatusColor,
   resolveMailoutStatusIcon,
 } from '../components/MailoutListItem/utils/helpers';
-import { Button, Grid, Header, Input, Image, List, Menu, Message, Modal, Page, Popup, Segment, Table } from '../components/Base';
+import {
+  Button,
+  Grid,
+  Header,
+  Input,
+  Image,
+  List,
+  Menu,
+  Message,
+  Modal,
+  Page,
+  Popup,
+  Segment,
+  Table,
+} from '../components/Base';
 import PopupContent from '../components/MailoutListItem/PopupContent';
 import { getMailoutPending } from '../store/modules/mailout/actions';
 import PopupMinMax from '../components/MailoutListItem/PopupMinMax';
@@ -25,7 +44,14 @@ import { postcardDimensionsDisplayed, iframeDimensions } from '../components/uti
 import GoogleMapItem from '../components/Forms/PolygonGoogleMaps/GoogleMapItem';
 import FlipCard from '../components/FlipCard';
 import Loading from '../components/Loading';
-import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemBodyDataLayout, ItemBodyIframeLayout, ItemBodyLayoutV2, ItemLayout } from '../layouts';
+import {
+  ContentBottomHeaderLayout,
+  ContentTopHeaderLayout,
+  ItemBodyDataLayout,
+  ItemBodyIframeLayout,
+  ItemBodyLayoutV2,
+  ItemLayout,
+} from '../layouts';
 import { useIsMobile } from '../components/Hooks/useIsMobile';
 import { useWindowSize } from '../components/Hooks/useWindowSize';
 import Styled, { css } from 'styled-components';
@@ -128,10 +154,14 @@ const MailoutDetailsPage = () => {
   const [DestinationCalculation, setDestinationCalculation] = useState(false);
 
   const pendingState = useSelector(store => store.mailout.pending);
-  const updateMailoutEditPendingState = useSelector(store => store.mailout.updateMailoutEditPending);
+  const updateMailoutEditPendingState = useSelector(
+    store => store.mailout.updateMailoutEditPending
+  );
   const submitPendingState = useSelector(store => store.mailout.submitPending);
   const stopPendingState = useSelector(store => store.mailout.stopPending);
-  const updateMailoutSizePendingState = useSelector(store => store.mailout.updateMailoutSizePending);
+  const updateMailoutSizePendingState = useSelector(
+    store => store.mailout.updateMailoutSizePending
+  );
 
   const details = useSelector(store => store.mailout.details);
   const error = useSelector(store => store.mailout.error?.message);
@@ -213,13 +243,27 @@ const MailoutDetailsPage = () => {
   }, [details, peerId, dispatch, mailoutId]);
 
   useEffect(() => {
-    const busyState = pendingState || updateMailoutEditPendingState || submitPendingState || stopPendingState || updateMailoutSizePendingState;
+    const busyState =
+      pendingState ||
+      updateMailoutEditPendingState ||
+      submitPendingState ||
+      stopPendingState ||
+      updateMailoutSizePendingState;
     setWorking(busyState);
-  }, [pendingState, updateMailoutEditPendingState, submitPendingState, stopPendingState, updateMailoutSizePendingState]);
+  }, [
+    pendingState,
+    updateMailoutEditPendingState,
+    submitPendingState,
+    stopPendingState,
+    updateMailoutSizePendingState,
+  ]);
 
   const handleBackClick = () => {
     dispatch(resetMailout());
-    if (lastLocation.pathname === `/dashboard/edit/${mailoutId}` || lastLocation.pathname === `/dashboard/${mailoutId}`) {
+    if (
+      lastLocation.pathname === `/dashboard/edit/${mailoutId}` ||
+      lastLocation.pathname === `/dashboard/${mailoutId}`
+    ) {
       history.push(`/dashboard`);
     }
     if (lastLocation.pathname === `/dashboard` || `/dashboard/archived`) {
@@ -248,10 +292,16 @@ const MailoutDetailsPage = () => {
   };
 
   const RenderRecipients = () => {
-    const enableEditRecipients = resolveMailoutStatus(details.mailoutStatus) !== 'Sent' && resolveMailoutStatus(details.mailoutStatus) !== 'Processing';
+    const enableEditRecipients =
+      resolveMailoutStatus(details.mailoutStatus) !== 'Sent' &&
+      resolveMailoutStatus(details.mailoutStatus) !== 'Processing';
     return (
       <Button as="div" labelPosition="left">
-        <Input className="display-only" style={{ maxWidth: '4.5em', maxHeight: '2em' }} value={currentNumberOfRecipients} />
+        <Input
+          className="display-only"
+          style={{ maxWidth: '4.5em', maxHeight: '2em' }}
+          value={currentNumberOfRecipients}
+        />
         {enableEditRecipients && (
           <Button
             icon
@@ -359,7 +409,12 @@ const MailoutDetailsPage = () => {
         </>
       )}
       {!details.frontResourceUrl && (
-        <Segment compact textAlign="center" loading={!details?._id || !frontLoaded} style={IFrameSegStyle}>
+        <Segment
+          compact
+          textAlign="center"
+          loading={!details?._id || !frontLoaded}
+          style={IFrameSegStyle}
+        >
           <iframe
             id="bm-iframe-front"
             title={`bm-iframe-front-${details._id}`}
@@ -379,7 +434,12 @@ const MailoutDetailsPage = () => {
   );
 
   const BackIframe = () => (
-    <Segment compact textAlign="center" loading={!details?._id || !backLoaded} style={IFrameSegStyle}>
+    <Segment
+      compact
+      textAlign="center"
+      loading={!details?._id || !backLoaded}
+      style={IFrameSegStyle}
+    >
       <iframe
         id="bm-iframe-back"
         title={`bm-iframe-back-${details._id}`}
@@ -414,7 +474,13 @@ const MailoutDetailsPage = () => {
             </Menu.Item>
             <Menu.Menu position="right">
               <Menu.Item>
-                <Button primary inverted onClick={() => handleBackClick()} disabled={working} loading={working}>
+                <Button
+                  primary
+                  inverted
+                  onClick={() => handleBackClick()}
+                  disabled={working}
+                  loading={working}
+                >
                   Back
                 </Button>
               </Menu.Item>
@@ -424,7 +490,12 @@ const MailoutDetailsPage = () => {
         {pendingState && !error && <Loading />}
       </ContentTopHeaderLayout>
 
-      <ModalPreview widthSize={postCardSize.width} open={showConsentModal} onClose={() => setShowConsentModal(false)} size="small">
+      <ModalPreview
+        widthSize={postCardSize.width}
+        open={showConsentModal}
+        onClose={() => setShowConsentModal(false)}
+        size="small"
+      >
         {details && (
           <div
             style={{
@@ -449,32 +520,52 @@ const MailoutDetailsPage = () => {
             <ModalPreview.Content>
               <div style={flipButtonContainer}>
                 <Button
-                  style={{ ...flipButtonStyles, ...rightMargin, ...(isFlipped ? highlightButton : {}) }}
+                  style={{
+                    ...flipButtonStyles,
+                    ...rightMargin,
+                    ...(isFlipped ? highlightButton : {}),
+                  }}
                   floated="right"
                   onClick={() => setIsFlipped(true)}
                 >
                   Back
                 </Button>
-                <Button style={{ ...flipButtonStyles, ...(!isFlipped ? highlightButton : {}) }} floated="right" onClick={() => setIsFlipped(false)}>
+                <Button
+                  style={{ ...flipButtonStyles, ...(!isFlipped ? highlightButton : {}) }}
+                  floated="right"
+                  onClick={() => setIsFlipped(false)}
+                >
                   Front
                 </Button>
               </div>
               <ModalPreview.Description style={{ textAlign: 'center', marginTop: '40px' }}>
                 <p style={{ margin: 0 }}>I agree to be immediately charged</p>
                 <b style={{ fontSize: '32px', lineHeight: '50px' }}>
-                  {calculateCost(details && details.recipientCount, details && details.postcardSize ? details.postcardSize : '4x6')}
+                  {calculateCost(
+                    details && details.recipientCount,
+                    details && details.postcardSize ? details.postcardSize : '4x6'
+                  )}
                 </b>
                 <br />
                 <p>
-                  {calculateCost(1, details && details.postcardSize ? details.postcardSize : '4x6')} x {currentNumberOfRecipients}
+                  {calculateCost(1, details && details.postcardSize ? details.postcardSize : '4x6')}{' '}
+                  x {currentNumberOfRecipients}
                 </p>
               </ModalPreview.Description>
             </ModalPreview.Content>
-            <ModalPreview.Actions style={{ display: 'flex', justifyContent: 'space-between', marginTop: '30px' }}>
+            <ModalPreview.Actions
+              style={{ display: 'flex', justifyContent: 'space-between', marginTop: '30px' }}
+            >
               <Button style={cancelButton} onClick={() => setShowConsentModal(false)}>
                 Cancel
               </Button>
-              <Button primary onClick={() => [dispatch(submitMailoutPending(mailoutId)), setShowConsentModal(false)]}>
+              <Button
+                primary
+                onClick={() => [
+                  dispatch(submitMailoutPending(mailoutId)),
+                  setShowConsentModal(false),
+                ]}
+              >
                 Agree
               </Button>
             </ModalPreview.Actions>
@@ -488,7 +579,11 @@ const MailoutDetailsPage = () => {
             <Grid.Row>
               <Grid.Column width={16}>
                 {!pendingState && !error && details && (
-                  <ItemLayout fluid key={details._id} className={isMobile ? 'remove-margins' : undefined}>
+                  <ItemLayout
+                    fluid
+                    key={details._id}
+                    className={isMobile ? 'remove-margins' : undefined}
+                  >
                     <ContentBottomHeaderLayout>
                       {
                         <ListHeader
@@ -511,7 +606,12 @@ const MailoutDetailsPage = () => {
                             {multiUser && (
                               <Popup
                                 flowing
-                                trigger={<FontAwesomeIcon icon="info-circle" style={{ marginLeft: '.5em', color: '#59C4C4' }} />}
+                                trigger={
+                                  <FontAwesomeIcon
+                                    icon="info-circle"
+                                    style={{ marginLeft: '.5em', color: '#59C4C4' }}
+                                  />
+                                }
                                 content={PopupMinMax({ mailoutSizeMin, mailoutSizeMax })}
                                 position="top right"
                               />
@@ -525,7 +625,11 @@ const MailoutDetailsPage = () => {
                       <List.Item>
                         <List.Content>
                           <List.Header>Size</List.Header>
-                          <List.Description>{`${details.postcardSize ? postcardDimensionsDisplayed(details.postcardSize) : '4x6'}" / ${calculateCost(
+                          <List.Description>{`${
+                            details.postcardSize
+                              ? postcardDimensionsDisplayed(details.postcardSize)
+                              : '4x6'
+                          }" / ${calculateCost(
                             1,
                             details.postcardSize ? details.postcardSize : '4x6'
                           )}`}</List.Description>
@@ -534,7 +638,12 @@ const MailoutDetailsPage = () => {
                       <List.Item>
                         <List.Content>
                           <List.Header>Cost</List.Header>
-                          <List.Description>{calculateCost(details.recipientCount, details.postcardSize ? details.postcardSize : '4x6')}</List.Description>
+                          <List.Description>
+                            {calculateCost(
+                              details.recipientCount,
+                              details.postcardSize ? details.postcardSize : '4x6'
+                            )}
+                          </List.Description>
                         </List.Content>
                       </List.Item>
                       <List.Item>
@@ -543,13 +652,23 @@ const MailoutDetailsPage = () => {
                             Status
                             <Popup
                               flowing
-                              trigger={<FontAwesomeIcon icon="info-circle" style={{ marginLeft: '.5em', color: '#2DB5AD' }} />}
+                              trigger={
+                                <FontAwesomeIcon
+                                  icon="info-circle"
+                                  style={{ marginLeft: '.5em', color: '#2DB5AD' }}
+                                />
+                              }
                               content={PopupContent()}
                               position="top right"
                             />
                           </List.Header>
-                          <List.Description style={{ color: resolveMailoutStatusColor(details.mailoutStatus) }}>
-                            <FontAwesomeIcon icon={resolveMailoutStatusIcon(details.mailoutStatus)} style={{ marginRight: '.5em' }} />
+                          <List.Description
+                            style={{ color: resolveMailoutStatusColor(details.mailoutStatus) }}
+                          >
+                            <FontAwesomeIcon
+                              icon={resolveMailoutStatusIcon(details.mailoutStatus)}
+                              style={{ marginRight: '.5em' }}
+                            />
                             {resolveMailoutStatus(details.mailoutStatus)}
                           </List.Description>
                         </List.Content>
@@ -563,8 +682,19 @@ const MailoutDetailsPage = () => {
                     </ItemBodyDataLayout>
 
                     <ItemBodyLayoutV2 attached style={{ padding: 8, overflow: 'auto' }}>
-                      <ItemBodyIframeLayout horizontal={windowSize.width > 1199} style={{ border: 'none', boxShadow: 'none' }}>
-                        <div style={{ margin: 'auto', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
+                      <ItemBodyIframeLayout
+                        horizontal={windowSize.width > 1199}
+                        style={{ border: 'none', boxShadow: 'none' }}
+                      >
+                        <div
+                          style={{
+                            margin: 'auto',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        >
                           <FrontIframe />
                           <div style={{ padding: '16px' }}>
                             <BackIframe />
@@ -583,40 +713,54 @@ const MailoutDetailsPage = () => {
                     </ItemBodyLayoutV2>
                   </ItemLayout>
                 )}
-                {!pendingState && !error && details && details.mailoutStatus !== 'created' && destinationsOptionsMode !== 'userUploaded' && (
-                  <GoogleMapItem data={details} />
-                )}
+                {!pendingState &&
+                  !error &&
+                  details &&
+                  details.mailoutStatus !== 'created' &&
+                  destinationsOptionsMode !== 'userUploaded' && <GoogleMapItem data={details} />}
 
-                {!pendingState && destinationsOptionsMode === 'userUploaded' && <div>Upload: {details.destinationsOptions?.userUploaded?.filename}</div>}
-                {!pendingState && !error && details && resolveMailoutStatus(details.mailoutStatus) === 'Sent' && (
-                  <div id="top-download" style={{ margin: '5px', fontSize: '17px' }}>
-                    <a className="ui secondary button" href={csvURL}>
-                      Download All Recipients as CSV
-                    </a>
-                  </div>
+                {!pendingState && destinationsOptionsMode === 'userUploaded' && (
+                  <div>Upload: {details.destinationsOptions?.userUploaded?.filename}</div>
                 )}
-                {!pendingState && !error && details && (destinationsOptionsMode === 'userUploaded' || resolveMailoutStatus(details.mailoutStatus) === 'Sent') && (
-                  <Table singleLine>
-                    <Table.Header>
-                      <Table.Row>
-                        <Table.HeaderCell>Address</Table.HeaderCell>
-                        <Table.HeaderCell>Delivery Date</Table.HeaderCell>
-                        <Table.HeaderCell>Status</Table.HeaderCell>
-                        <Table.HeaderCell>CTA count</Table.HeaderCell>
-                        <Table.HeaderCell>CTA date</Table.HeaderCell>
-                      </Table.Row>
-                    </Table.Header>
+                {!pendingState &&
+                  !error &&
+                  details &&
+                  resolveMailoutStatus(details.mailoutStatus) === 'Sent' && (
+                    <div id="top-download" style={{ margin: '5px', fontSize: '17px' }}>
+                      <a className="ui secondary button" href={csvURL}>
+                        Download All Recipients as CSV
+                      </a>
+                    </div>
+                  )}
+                {!pendingState &&
+                  !error &&
+                  details &&
+                  (destinationsOptionsMode === 'userUploaded' ||
+                    resolveMailoutStatus(details.mailoutStatus) === 'Sent') && (
+                    <Table singleLine>
+                      <Table.Header>
+                        <Table.Row>
+                          <Table.HeaderCell>Address</Table.HeaderCell>
+                          <Table.HeaderCell>Delivery Date</Table.HeaderCell>
+                          <Table.HeaderCell>Status</Table.HeaderCell>
+                          <Table.HeaderCell>CTA count</Table.HeaderCell>
+                          <Table.HeaderCell>CTA date</Table.HeaderCell>
+                        </Table.Row>
+                      </Table.Header>
 
-                    <Table.Body>{renderDestinations()}</Table.Body>
-                  </Table>
-                )}
-                {!pendingState && !error && details && resolveMailoutStatus(details.mailoutStatus) === 'Sent' && (
-                  <div id="bottom-download" style={{ margin: '5px', fontSize: '17px' }}>
-                    <a className="ui secondary button" href={csvURL}>
-                      Download All Recipients as CSV
-                    </a>
-                  </div>
-                )}
+                      <Table.Body>{renderDestinations()}</Table.Body>
+                    </Table>
+                  )}
+                {!pendingState &&
+                  !error &&
+                  details &&
+                  resolveMailoutStatus(details.mailoutStatus) === 'Sent' && (
+                    <div id="bottom-download" style={{ margin: '5px', fontSize: '17px' }}>
+                      <a className="ui secondary button" href={csvURL}>
+                        Download All Recipients as CSV
+                      </a>
+                    </div>
+                  )}
               </Grid.Column>
             </Grid.Row>
           </Grid>

@@ -36,12 +36,17 @@ const CustomizationPage = () => {
         </Page>
       );
     } else {
-      return <CustomizeForm customizationData={customizationAvailable} initialValues={initialValues} />;
+      return (
+        <CustomizeForm customizationData={customizationAvailable} initialValues={initialValues} />
+      );
     }
   }
 
   if (multiUser) {
-    if ((customizationPending && !customizationError) || (teamCustomizationPending && !teamCustomizationError)) {
+    if (
+      (customizationPending && !customizationError) ||
+      (teamCustomizationPending && !teamCustomizationError)
+    ) {
       return (
         <Page basic>
           <ContentTopHeaderLayout>
@@ -50,7 +55,12 @@ const CustomizationPage = () => {
         </Page>
       );
     } else {
-      return <CustomizeForm customizationData={customizationAvailable} initialValues={teamCustomizationAvailable || initialValues} />;
+      return (
+        <CustomizeForm
+          customizationData={customizationAvailable}
+          initialValues={teamCustomizationAvailable || initialValues}
+        />
+      );
     }
   }
 };

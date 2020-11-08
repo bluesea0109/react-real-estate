@@ -29,7 +29,10 @@ export const useFocusOnError = ({ fieldRef, name }) => {
   const firstErrorKey = Object.keys(formik.errors)[0];
   React.useEffect(() => {
     if (prevSubmitCountRef.current !== formik.submitCount && !formik.isValid) {
-      if ((fieldRef.current && firstErrorKey === name) || (fieldRef.current && name.includes(firstErrorKey))) {
+      if (
+        (fieldRef.current && firstErrorKey === name) ||
+        (fieldRef.current && name.includes(firstErrorKey))
+      ) {
         if (fieldRef.current.scrollIntoView) fieldRef.current.scrollIntoView();
         if (fieldRef.current.focus) fieldRef.current.focus();
       }

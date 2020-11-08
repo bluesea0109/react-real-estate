@@ -2,8 +2,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Segment } from 'semantic-ui-react';
 
-import { previewTeamCustomizationCompleted, reviewTeamCustomizationCompleted } from '../../../store/modules/teamCustomization/actions';
-import { previewCustomizationCompleted, reviewCustomizationCompleted } from '../../../store/modules/customization/actions';
+import {
+  previewTeamCustomizationCompleted,
+  reviewTeamCustomizationCompleted,
+} from '../../../store/modules/teamCustomization/actions';
+import {
+  previewCustomizationCompleted,
+  reviewCustomizationCompleted,
+} from '../../../store/modules/customization/actions';
 import { iframeTransformDesktop, iframeTransformMobile } from '../../utils/helpers';
 import { Button, Icon, Modal } from '../../Base';
 import ApiService from '../../../services/api';
@@ -112,13 +118,28 @@ const RenderPreviewModal = ({ formType, formValues }) => {
   const onboardedStatus = useSelector(store => store.onboarded.status);
   const inOnboardingMode = onboardedStatus === false;
 
-  const teamCustomizationPending = useSelector(store => store.teamCustomization && store.teamCustomization.pending);
-  const teamCustomizationPreview = useSelector(store => store.teamCustomization && store.teamCustomization.preview);
-  const teamCustomizationError = useSelector(store => store.teamCustomization && store.teamCustomization.error && store.teamCustomization.error.message);
+  const teamCustomizationPending = useSelector(
+    store => store.teamCustomization && store.teamCustomization.pending
+  );
+  const teamCustomizationPreview = useSelector(
+    store => store.teamCustomization && store.teamCustomization.preview
+  );
+  const teamCustomizationError = useSelector(
+    store =>
+      store.teamCustomization &&
+      store.teamCustomization.error &&
+      store.teamCustomization.error.message
+  );
 
-  const agentCustomizationPending = useSelector(store => store.customization && store.customization.pending);
-  const agentCustomizationPreview = useSelector(store => store.customization && store.customization.preview);
-  const agentCustomizationError = useSelector(store => store.customization && store.customization.error && store.customization.error.message);
+  const agentCustomizationPending = useSelector(
+    store => store.customization && store.customization.pending
+  );
+  const agentCustomizationPreview = useSelector(
+    store => store.customization && store.customization.preview
+  );
+  const agentCustomizationError = useSelector(
+    store => store.customization && store.customization.error && store.customization.error.message
+  );
 
   const [customizationPreview, setCustomizationPreview] = useState(() => {
     if (formType === 'team') return teamCustomizationPreview;
@@ -133,7 +154,8 @@ const RenderPreviewModal = ({ formType, formValues }) => {
   if (formType === 'team') {
     customizationPending = teamCustomizationPending;
     customizationError = teamCustomizationError;
-    listedPostcardFrontURL = ApiService.directory.team.postcard.render.listed.front({ userId }).path;
+    listedPostcardFrontURL = ApiService.directory.team.postcard.render.listed.front({ userId })
+      .path;
     listedPostcardBackURL = ApiService.directory.team.postcard.render.listed.back({ userId }).path;
     soldPostcardFrontURL = ApiService.directory.team.postcard.render.sold.front({ userId }).path;
     soldPostcardBackURL = ApiService.directory.team.postcard.render.sold.back({ userId }).path;
@@ -332,10 +354,22 @@ const RenderPreviewModal = ({ formType, formValues }) => {
           </ModalPreview.Content>
           <ModalPreview.Content>
             <div style={flipButtonContainer}>
-              <Button style={{ ...flipButtonStyles, ...rightMargin, ...(isFlipped ? highlightButton : {}) }} floated="right" onClick={() => setIsFlipped(true)}>
+              <Button
+                style={{
+                  ...flipButtonStyles,
+                  ...rightMargin,
+                  ...(isFlipped ? highlightButton : {}),
+                }}
+                floated="right"
+                onClick={() => setIsFlipped(true)}
+              >
                 Back
               </Button>
-              <Button style={{ ...flipButtonStyles, ...(!isFlipped ? highlightButton : {}) }} floated="right" onClick={() => setIsFlipped(false)}>
+              <Button
+                style={{ ...flipButtonStyles, ...(!isFlipped ? highlightButton : {}) }}
+                floated="right"
+                onClick={() => setIsFlipped(false)}
+              >
                 Front
               </Button>
             </div>

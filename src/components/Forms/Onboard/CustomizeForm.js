@@ -89,8 +89,20 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
       const fullName = `${profile.first} ${profile.last}`;
 
       const contextRef = createRef();
-      const currentUserIconWithPopup = <Popup context={contextRef} content="Currently selected agent" trigger={<Icon name="user" />} />;
-      const setupCompletedIconWithPopup = <Popup context={contextRef} content="Setup Completed" trigger={<Icon name="check circle" color="teal" />} />;
+      const currentUserIconWithPopup = (
+        <Popup
+          context={contextRef}
+          content="Currently selected agent"
+          trigger={<Icon name="user" />}
+        />
+      );
+      const setupCompletedIconWithPopup = (
+        <Popup
+          context={contextRef}
+          content="Setup Completed"
+          trigger={<Icon name="check circle" color="teal" />}
+        />
+      );
 
       return profiles.push({
         key: index,
@@ -100,7 +112,12 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
         value: profile.userId,
         content: (
           <StyledHeader as="h4" ref={contextRef}>
-            <Image size="mini" inline circular src="https://react.semantic-ui.com/images/avatar/large/patrick.png" />
+            <Image
+              size="mini"
+              inline
+              circular
+              src="https://react.semantic-ui.com/images/avatar/large/patrick.png"
+            />
             &nbsp;
             {profile.first}&nbsp;
             {profile.last}&nbsp;
@@ -113,13 +130,16 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
   }
 
   const Listings = ({ listingType }) => {
-    const editable = listingType === NEW_LISTING ? formValues && formValues.listed : formValues && formValues.sold;
+    const editable =
+      listingType === NEW_LISTING ? formValues && formValues.listed : formValues && formValues.sold;
     const initialCTA = initialValues?.[listingType]?.cta;
     const initialKWKLY = initialValues?.[listingType]?.kwkly;
 
     return (
       <Fragment>
-        <Segment>{EnableCustomizationSwitch({ listingType, initialValues, formValues, setFormValues })}</Segment>
+        <Segment>
+          {EnableCustomizationSwitch({ listingType, initialValues, formValues, setFormValues })}
+        </Segment>
 
         <Segment
           padded
@@ -130,42 +150,117 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
             <Header as="h5" style={{ opacity: !editable ? 0.4 : 1 }}>
               Template Theme
             </Header>
-            {TemplatePictureFormField({ templateName: 'ribbon', listingType, initialValues, formValues, setFormValues })}
+            {TemplatePictureFormField({
+              templateName: 'ribbon',
+              listingType,
+              initialValues,
+              formValues,
+              setFormValues,
+            })}
           </div>
 
           <div>
             <p>&nbsp;</p>
-            {TemplatePictureFormField({ templateName: 'bookmark', listingType, initialValues, formValues, setFormValues })}
+            {TemplatePictureFormField({
+              templateName: 'bookmark',
+              listingType,
+              initialValues,
+              formValues,
+              setFormValues,
+            })}
           </div>
 
           <div>
             <p>&nbsp;</p>
-            {TemplatePictureFormField({ templateName: 'stack', listingType, initialValues, formValues, setFormValues })}
+            {TemplatePictureFormField({
+              templateName: 'stack',
+              listingType,
+              initialValues,
+              formValues,
+              setFormValues,
+            })}
           </div>
 
-          <div>{ColorPickerFormField({ listingType, initialValues, formValues, setFormValues })}</div>
+          <div>
+            {ColorPickerFormField({ listingType, initialValues, formValues, setFormValues })}
+          </div>
         </Segment>
 
         <Segment padded className={isMobile ? null : 'tertiary-grid-container'}>
-          <div>{InputFormField({ fieldName: 'frontHeadline', listingType, initialValues, formValues, setFormValues })}</div>
+          <div>
+            {InputFormField({
+              fieldName: 'frontHeadline',
+              listingType,
+              initialValues,
+              formValues,
+              setFormValues,
+            })}
+          </div>
 
-          <div>{MailoutSizeSliderFormField({ formType: 'agent', listingType, initialValues, formValues, setFormValues })}</div>
+          <div>
+            {MailoutSizeSliderFormField({
+              formType: 'agent',
+              listingType,
+              initialValues,
+              formValues,
+              setFormValues,
+            })}
+          </div>
 
           <div style={{ display: !editable && !initialCTA ? 'none' : 'block' }}>
-            {CTAInputFormField({ formType: 'agent', listingType, initialValues, formValues, setFormValues })}
+            {CTAInputFormField({
+              formType: 'agent',
+              listingType,
+              initialValues,
+              formValues,
+              setFormValues,
+            })}
           </div>
 
           <div style={{ display: !editable && !initialKWKLY ? 'none' : 'block' }}>
             {KWKLYInputFormField({ listingType, initialValues, formValues, setFormValues })}
             <div style={{ display: 'block', paddingTop: '1.5em' }}>
-              <div>{KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}</div>
+              <div>
+                {KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}
+              </div>
             </div>
           </div>
           <div style={{ display: !editable ? 'none' : 'block' }}>
-            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', padding: '0.5rem' }}>
-              <>{TemplatePostcardSizeField({ postcardSize: '4x6', listingType, initialValues, formValues, setFormValues })}</>
-              <>{TemplatePostcardSizeField({ postcardSize: '6x9', listingType, initialValues, formValues, setFormValues })}</>
-              <>{TemplatePostcardSizeField({ postcardSize: '6x11', listingType, initialValues, formValues, setFormValues })}</>
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'flex-start',
+                padding: '0.5rem',
+              }}
+            >
+              <>
+                {TemplatePostcardSizeField({
+                  postcardSize: '4x6',
+                  listingType,
+                  initialValues,
+                  formValues,
+                  setFormValues,
+                })}
+              </>
+              <>
+                {TemplatePostcardSizeField({
+                  postcardSize: '6x9',
+                  listingType,
+                  initialValues,
+                  formValues,
+                  setFormValues,
+                })}
+              </>
+              <>
+                {TemplatePostcardSizeField({
+                  postcardSize: '6x11',
+                  listingType,
+                  initialValues,
+                  formValues,
+                  setFormValues,
+                })}
+              </>
             </div>
           </div>
         </Segment>
@@ -185,7 +280,9 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
               <Menu borderless fluid secondary>
                 <Header as="h1">
                   Personal Customization
-                  <Header.Subheader>Set the default template customization options for your campaigns.</Header.Subheader>
+                  <Header.Subheader>
+                    Set the default template customization options for your campaigns.
+                  </Header.Subheader>
                 </Header>
                 <Menu.Menu position="right">
                   <span>

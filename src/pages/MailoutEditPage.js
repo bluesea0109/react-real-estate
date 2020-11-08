@@ -40,16 +40,29 @@ const MailoutDetailsPage = () => {
       history.goBack();
     }
 
-    if (lastPathName !== editMailoutPath && lastPathName !== mailOutPath && lastPathName === '/dashboard') {
+    if (
+      lastPathName !== editMailoutPath &&
+      lastPathName !== mailOutPath &&
+      lastPathName === '/dashboard'
+    ) {
       history.goBack();
     }
   };
 
   return (
     <Fragment>
-      {mailoutDetails && mailoutEdit && <EditCampaignForm mailoutDetails={mailoutDetails} mailoutEdit={mailoutEdit} handleBackClick={handleBackClick} />}
-      {((mailoutDetailsPending && !mailoutDetailsError) || (mailoutEditPending && !mailoutEditError)) && <Loading />}
-      {(mailoutDetailsError || mailoutEditError) && <Message error>Oh snap! {mailoutDetailsError || mailoutEditError}.</Message>}
+      {mailoutDetails && mailoutEdit && (
+        <EditCampaignForm
+          mailoutDetails={mailoutDetails}
+          mailoutEdit={mailoutEdit}
+          handleBackClick={handleBackClick}
+        />
+      )}
+      {((mailoutDetailsPending && !mailoutDetailsError) ||
+        (mailoutEditPending && !mailoutEditError)) && <Loading />}
+      {(mailoutDetailsError || mailoutEditError) && (
+        <Message error>Oh snap! {mailoutDetailsError || mailoutEditError}.</Message>
+      )}
     </Fragment>
   );
 };

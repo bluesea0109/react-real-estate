@@ -9,7 +9,9 @@ import { Dropdown } from '../Base';
 const NEW_LISTING = 'listed';
 
 const AgentDropdownFormField = ({ listingType, initialValues, formValues, setFormValues }) => {
-  const currentValue = (formValues && formValues[listingType]?.defaultDisplayAgent?.userId) || initialValues[listingType]?.defaultDisplayAgent?.userId;
+  const currentValue =
+    (formValues && formValues[listingType]?.defaultDisplayAgent?.userId) ||
+    initialValues[listingType]?.defaultDisplayAgent?.userId;
   const editable = listingType === NEW_LISTING ? !!formValues?.listed : !!formValues?.sold;
 
   const onLoginUserId = useSelector(store => store.onLogin.user._id);
@@ -32,8 +34,20 @@ const AgentDropdownFormField = ({ listingType, initialValues, formValues, setFor
       const fullName = `${profile.first} ${profile.last}`;
 
       const contextRef = createRef();
-      const currentUserIconWithPopup = <Popup context={contextRef} content="Currently selected agent" trigger={<Icon name="user" />} />;
-      const setupCompletedIconWithPopup = <Popup context={contextRef} content="Setup Completed" trigger={<Icon name="check circle" color="teal" />} />;
+      const currentUserIconWithPopup = (
+        <Popup
+          context={contextRef}
+          content="Currently selected agent"
+          trigger={<Icon name="user" />}
+        />
+      );
+      const setupCompletedIconWithPopup = (
+        <Popup
+          context={contextRef}
+          content="Setup Completed"
+          trigger={<Icon name="check circle" color="teal" />}
+        />
+      );
 
       return profiles.push({
         key: index,
@@ -43,7 +57,12 @@ const AgentDropdownFormField = ({ listingType, initialValues, formValues, setFor
         value: profile.userId,
         content: (
           <StyledHeader as="h4" ref={contextRef}>
-            <Image size="mini" inline circular src="https://react.semantic-ui.com/images/avatar/large/patrick.png" />
+            <Image
+              size="mini"
+              inline
+              circular
+              src="https://react.semantic-ui.com/images/avatar/large/patrick.png"
+            />
             &nbsp;
             {profile.first}&nbsp;
             {profile.last}&nbsp;

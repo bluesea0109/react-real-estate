@@ -54,7 +54,8 @@ export function* initializeTeamPollSagaWorker() {
       yield put(initializeTeamSuccess(response));
       // if (currentUserTotal !== currentUserCompleted) yield put(getMailoutsPending());
       yield put(getMailoutsPending());
-      if (campaignsTotalForAllUsers === campaignsCompletedForAllUsers) yield put(initializeTeamPollingStop());
+      if (campaignsTotalForAllUsers === campaignsCompletedForAllUsers)
+        yield put(initializeTeamPollingStop());
       yield delay(5000);
     } catch (err) {
       yield put(initializeTeamError(err));

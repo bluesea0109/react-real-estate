@@ -7,11 +7,32 @@ import { useDispatch, useSelector } from 'react-redux';
 import auth from '../services/auth';
 import api from '../services/api';
 
-import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemBodyLayout, ItemLayout } from '../layouts';
-import { getMailoutsPending, getMoreMailoutsPending, addCampaignStart } from '../store/modules/mailouts/actions';
+import {
+  ContentBottomHeaderLayout,
+  ContentTopHeaderLayout,
+  ItemBodyLayout,
+  ItemLayout,
+} from '../layouts';
+import {
+  getMailoutsPending,
+  getMoreMailoutsPending,
+  addCampaignStart,
+} from '../store/modules/mailouts/actions';
 import { setCompletedDashboardModal } from '../store/modules/onboarded/actions';
 import { Checkbox, List } from 'semantic-ui-react';
-import { Button, Grid, Header, Icon, Input, Menu, Modal, Message, Page, Segment, Snackbar } from '../components/Base';
+import {
+  Button,
+  Grid,
+  Header,
+  Icon,
+  Input,
+  Menu,
+  Modal,
+  Message,
+  Page,
+  Segment,
+  Snackbar,
+} from '../components/Base';
 import IframeGroup from '../components/MailoutListItem/IframeGroup';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ItemList from '../components/MailoutListItem/ItemList';
@@ -100,9 +121,13 @@ const Dashboard = () => {
   const currentUserCompleted = initiatingUserState && initiatingUserState.campaignsCompleted;
 
   const onboarded = useSelector(store => store.onboarded.status);
-  const seenDashboardModel = useSelector(store => store.onboarded.seenDashboardModel) || localStorage.getItem('seenDashboardModel');
+  const seenDashboardModel =
+    useSelector(store => store.onboarded.seenDashboardModel) ||
+    localStorage.getItem('seenDashboardModel');
   const mailoutsPendingState = useSelector(store => store.mailouts.pending);
-  const addCampaignMlsNumPendingState = useSelector(store => store.mailouts.addCampaignMlsNumPending);
+  const addCampaignMlsNumPendingState = useSelector(
+    store => store.mailouts.addCampaignMlsNumPending
+  );
   const canLoadMore = useSelector(store => store.mailouts.canLoadMore);
   const page = useSelector(store => store.mailouts.page);
   const mailoutList = useSelector(store => store.mailouts.list);
@@ -146,7 +171,12 @@ const Dashboard = () => {
       const headers = {};
       const accessToken = await auth.getAccessToken();
       headers['authorization'] = `Bearer ${accessToken}`;
-      const response = await fetch(path, { headers, method: 'post', body: formData, credentials: 'include' });
+      const response = await fetch(path, {
+        headers,
+        method: 'post',
+        body: formData,
+        credentials: 'include',
+      });
       let { url, contentType } = await api.handleResponse(response);
       setTimeout(() => {
         console.log(url, contentType);
@@ -191,7 +221,12 @@ const Dashboard = () => {
       formData.append('name', AddCampaignType);
       formData.append('postcardSize', campaignPostcardSize);
 
-      const response = await fetch(path, { headers, method: 'post', body: formData, credentials: 'include' });
+      const response = await fetch(path, {
+        headers,
+        method: 'post',
+        body: formData,
+        credentials: 'include',
+      });
       let doc = await api.handleResponse(response);
       return history.push(`/dashboard/edit/${doc._id}/destinations`);
     }
@@ -278,13 +313,28 @@ const Dashboard = () => {
         onClick={e => setCampaignPostcardSize(postcardDimensions(size))}
         style={
           campaignPostcardSize === postcardDimensions(size)
-            ? { border: '2px solid #59C4C4', margin: 0, padding: '0.5em', borderRadius: '5px', height: '100%' }
-            : { border: '1px solid lightgray', margin: 0, padding: '0.5em', borderRadius: '5px', height: '100%' }
+            ? {
+                border: '2px solid #59C4C4',
+                margin: 0,
+                padding: '0.5em',
+                borderRadius: '5px',
+                height: '100%',
+              }
+            : {
+                border: '1px solid lightgray',
+                margin: 0,
+                padding: '0.5em',
+                borderRadius: '5px',
+                height: '100%',
+              }
         }
       >
         <PostcardSizeButton postcardSize={size} />
       </div>
-      <div style={{ textAlign: 'center', padding: '0.5rem' }}>{`${calculateCost(1, size)}/each`}</div>
+      <div style={{ textAlign: 'center', padding: '0.5rem' }}>{`${calculateCost(
+        1,
+        size
+      )}/each`}</div>
     </div>
   );
 
@@ -316,33 +366,53 @@ const Dashboard = () => {
 
       {isInitiatingTeam && (
         <ContentBottomHeaderLayout>
-          <Progress value={currentTeamUserCompleted} total={currentTeamUserTotal} progress="ratio" inverted success size="tiny" />
+          <Progress
+            value={currentTeamUserCompleted}
+            total={currentTeamUserTotal}
+            progress="ratio"
+            inverted
+            success
+            size="tiny"
+          />
         </ContentBottomHeaderLayout>
       )}
 
       {isInitiatingUser && (
         <ContentBottomHeaderLayout>
-          <Progress value={currentUserCompleted} total={currentUserTotal} progress="ratio" inverted success size="tiny" />
+          <Progress
+            value={currentUserCompleted}
+            total={currentUserTotal}
+            progress="ratio"
+            inverted
+            success
+            size="tiny"
+          />
         </ContentBottomHeaderLayout>
       )}
 
-      {!isInitiatingTeam && !isInitiatingUser && !mailoutsPendingState && mailoutList && mailoutList.length === 0 && (
-        <ContentBottomHeaderLayout>
-          <Segment placeholder style={{ marginRight: '-1em' }}>
-            <Header icon>
-              <Icon name="file outline" />
-              No Campaigns found.
-            </Header>
-          </Segment>
-        </ContentBottomHeaderLayout>
-      )}
+      {!isInitiatingTeam &&
+        !isInitiatingUser &&
+        !mailoutsPendingState &&
+        mailoutList &&
+        mailoutList.length === 0 && (
+          <ContentBottomHeaderLayout>
+            <Segment placeholder style={{ marginRight: '-1em' }}>
+              <Header icon>
+                <Icon name="file outline" />
+                No Campaigns found.
+              </Header>
+            </Segment>
+          </ContentBottomHeaderLayout>
+        )}
 
       {error && <Snackbar error>{error}</Snackbar>}
 
       <ModalAddCampaign open={showAddCampaign} centered={false}>
         {showChooseSize ? (
           <>
-            <ModalAddCampaign.Header style={{ textAlign: 'center' }}>Add Campaign: Choose Size</ModalAddCampaign.Header>
+            <ModalAddCampaign.Header style={{ textAlign: 'center' }}>
+              Add Campaign: Choose Size
+            </ModalAddCampaign.Header>
             <ModalAddCampaign.Content
               style={{
                 display: 'grid',
@@ -352,8 +422,9 @@ const Dashboard = () => {
               }}
             >
               <p style={{ padding: '1rem 0 1rem 0', maxWidth: '400px' }}>
-                Select your postcard size, from standard 4x6 inch up to 6x11 inch jumbo postcards. Our all inclusive pricing covers the design, targeting,
-                printing, postage, and handling.
+                Select your postcard size, from standard 4x6 inch up to 6x11 inch jumbo postcards.
+                Our all inclusive pricing covers the design, targeting, printing, postage, and
+                handling.
               </p>
               <h5 style={{ marginTop: '0' }}>Postcard Size</h5>
               <div style={{ display: 'flex', paddingBottom: '2rem' }}>
@@ -373,10 +444,15 @@ const Dashboard = () => {
           </>
         ) : (
           <>
-            <ModalAddCampaign.Header style={{ textAlign: 'center' }}>Add Campaign</ModalAddCampaign.Header>
+            <ModalAddCampaign.Header style={{ textAlign: 'center' }}>
+              Add Campaign
+            </ModalAddCampaign.Header>
             <ModalAddCampaign.Content>
               <AddCampaignContainer>
-                <p>Enter a property MLS number to import a listing, or you can create a custom campaign and upload your own design.</p>
+                <p>
+                  Enter a property MLS number to import a listing, or you can create a custom
+                  campaign and upload your own design.
+                </p>
 
                 <List horizontal id="selectAddCampaignType">
                   <List.Item>
@@ -407,7 +483,12 @@ const Dashboard = () => {
 
                 {useMLSNumberToAddCampaign && (
                   <div>
-                    <Input type="text" fluid placeholder="Property MLS Number" id="addCampaignInput" />
+                    <Input
+                      type="text"
+                      fluid
+                      placeholder="Property MLS Number"
+                      id="addCampaignInput"
+                    />
                   </div>
                 )}
                 {!useMLSNumberToAddCampaign && (
@@ -430,13 +511,27 @@ const Dashboard = () => {
                           </Button>
                         </Grid.Column>
                         <Grid.Column>
-                          <Button inverted primary size="big" toggle active={AddCampaignType === 'Home Value'} onClick={() => setAddCampaignType('Home Value')}>
+                          <Button
+                            inverted
+                            primary
+                            size="big"
+                            toggle
+                            active={AddCampaignType === 'Home Value'}
+                            onClick={() => setAddCampaignType('Home Value')}
+                          >
                             <Icon name="dollar sign" />
                             Home Value
                           </Button>
                         </Grid.Column>
                         <Grid.Column>
-                          <Button inverted primary size="big" toggle active={AddCampaignType === 'Event'} onClick={() => setAddCampaignType('Event')}>
+                          <Button
+                            inverted
+                            primary
+                            size="big"
+                            toggle
+                            active={AddCampaignType === 'Event'}
+                            onClick={() => setAddCampaignType('Event')}
+                          >
                             <Icon name="calendar check outline" />
                             Event
                           </Button>
@@ -444,19 +539,40 @@ const Dashboard = () => {
                       </Grid.Row>
                       <Grid.Row columns={3}>
                         <Grid.Column>
-                          <Button inverted primary size="big" toggle active={AddCampaignType === 'Sphere'} onClick={() => setAddCampaignType('Sphere')}>
+                          <Button
+                            inverted
+                            primary
+                            size="big"
+                            toggle
+                            active={AddCampaignType === 'Sphere'}
+                            onClick={() => setAddCampaignType('Sphere')}
+                          >
                             <Icon name="address book outline" />
                             Sphere
                           </Button>
                         </Grid.Column>
                         <Grid.Column>
-                          <Button inverted primary size="big" toggle active={AddCampaignType === 'Farm Area'} onClick={() => setAddCampaignType('Farm Area')}>
+                          <Button
+                            inverted
+                            primary
+                            size="big"
+                            toggle
+                            active={AddCampaignType === 'Farm Area'}
+                            onClick={() => setAddCampaignType('Farm Area')}
+                          >
                             <Icon name="map outline" />
                             Farm Area
                           </Button>
                         </Grid.Column>
                         <Grid.Column>
-                          <Button inverted primary size="big" toggle active={AddCampaignType === 'Recruiting'} onClick={() => setAddCampaignType('Recruiting')}>
+                          <Button
+                            inverted
+                            primary
+                            size="big"
+                            toggle
+                            active={AddCampaignType === 'Recruiting'}
+                            onClick={() => setAddCampaignType('Recruiting')}
+                          >
                             <Icon name="user plus" />
                             Recruiting
                           </Button>
@@ -464,7 +580,14 @@ const Dashboard = () => {
                       </Grid.Row>
                       <Grid.Row columns={1}>
                         <Grid.Column>
-                          <Button inverted primary size="big" toggle active={AddCampaignType === 'Other'} onClick={() => setAddCampaignType('Other')}>
+                          <Button
+                            inverted
+                            primary
+                            size="big"
+                            toggle
+                            active={AddCampaignType === 'Other'}
+                            onClick={() => setAddCampaignType('Other')}
+                          >
                             <Icon name="crosshairs" />
                             Other
                           </Button>
@@ -486,12 +609,18 @@ const Dashboard = () => {
                               : '(4.25"x6.25" PNG or JPEG - max 5MB)'}
                           </div>
                           <Icon name="upload" size="big" />
-                          <input id="cardFrontCoverFile" name="postcardcover" type="file" onChange={handleFileChange}></input>
+                          <input
+                            id="cardFrontCoverFile"
+                            name="postcardcover"
+                            type="file"
+                            onChange={handleFileChange}
+                          ></input>
                         </div>
                         <Message warning>
                           <Message.Header>Include a safe zone of 1/2&quot; inch!</Message.Header>
                           <p>
-                            Make sure no critical elements are within 1/2&quot; from the edge of the image. <br />
+                            Make sure no critical elements are within 1/2&quot; from the edge of the
+                            image. <br />
                             It risks being cropped during the postcard production.
                           </p>
                         </Message>
@@ -506,7 +635,11 @@ const Dashboard = () => {
               <Button inverted primary onClick={_ => setShowChooseSize(true)}>
                 Back
               </Button>
-              <Button primary onClick={finsihAddCampaign} disabled={!useMLSNumberToAddCampaign && (!CampaignCoverUpload || !AddCampaignType)}>
+              <Button
+                primary
+                onClick={finsihAddCampaign}
+                disabled={!useMLSNumberToAddCampaign && (!CampaignCoverUpload || !AddCampaignType)}
+              >
                 Add Campaign
               </Button>
             </ModalAddCampaign.Actions>
@@ -515,17 +648,39 @@ const Dashboard = () => {
       </ModalAddCampaign>
 
       {mailoutList && mailoutList.length > 0 && (
-        <Segment style={isMobile ? { padding: '0', paddingTop: '4.5em', marginLeft: '-1em', marginRight: '-1em' } : { marginTop: '22px' }}>
+        <Segment
+          style={
+            isMobile
+              ? { padding: '0', paddingTop: '4.5em', marginLeft: '-1em', marginRight: '-1em' }
+              : { marginTop: '22px' }
+          }
+        >
           <ModalWelcome open={!seenDashboardModel} size="small">
-            <ModalWelcome.Header style={modalHeaderStyles}>Welcome to your dashboard!</ModalWelcome.Header>
-            <ModalWelcome.Content style={{ color: '#686868', fontSize: '16px', padding: '30px 0px' }}>
-              <p>We have generated some initial campaigns for you! Please note, when you initially sign up, you may not see all listings due to:</p>
+            <ModalWelcome.Header style={modalHeaderStyles}>
+              Welcome to your dashboard!
+            </ModalWelcome.Header>
+            <ModalWelcome.Content
+              style={{ color: '#686868', fontSize: '16px', padding: '30px 0px' }}
+            >
+              <p>
+                We have generated some initial campaigns for you! Please note, when you initially
+                sign up, you may not see all listings due to:
+              </p>
               <ul style={{ lineHeight: '30px' }}>
                 <li>Listings older than 6 months are not included</li>
                 <li>We only show a maximum of 15 previous listings from the past</li>
-                <li>For some boards, sold listings wont show up yet. But upcoming sold listings will create new campaigns</li>
-                <li>We exclude listing types (e.g. commercial/land) and locations (e.g. rural locations) that are difficult for our system to target</li>
-                <li>We find your listings based on the MLS board/agent id in the Profile section of each user. Modifying agent ids will adjust this list</li>
+                <li>
+                  For some boards, sold listings wont show up yet. But upcoming sold listings will
+                  create new campaigns
+                </li>
+                <li>
+                  We exclude listing types (e.g. commercial/land) and locations (e.g. rural
+                  locations) that are difficult for our system to target
+                </li>
+                <li>
+                  We find your listings based on the MLS board/agent id in the Profile section of
+                  each user. Modifying agent ids will adjust this list
+                </li>
               </ul>
             </ModalWelcome.Content>
             <ModalWelcome.Actions style={{ borderTop: 'none', padding: '0px' }}>
@@ -537,7 +692,9 @@ const Dashboard = () => {
 
           <Grid>
             <Grid.Row>
-              <Grid.Column width={16}>{!showAddCampaign && <MailoutsList list={mailoutList} />}</Grid.Column>
+              <Grid.Column width={16}>
+                {!showAddCampaign && <MailoutsList list={mailoutList} />}
+              </Grid.Column>
             </Grid.Row>
 
             {(isInitiatingTeam || isInitiatingUser || mailoutsPendingState) && (
@@ -553,7 +710,13 @@ const Dashboard = () => {
                 <Grid.Column width={16}>
                   <Grid centered columns={2}>
                     <Grid.Column>
-                      <Button id="loadMoreButton" attached="bottom" content="Load More" onClick={handleClick} onKeyPress={handleKeyPress} />
+                      <Button
+                        id="loadMoreButton"
+                        attached="bottom"
+                        content="Load More"
+                        onClick={handleClick}
+                        onKeyPress={handleKeyPress}
+                      />
                     </Grid.Column>
                   </Grid>
                 </Grid.Column>

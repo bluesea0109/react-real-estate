@@ -4,14 +4,32 @@ import { useHistory } from 'react-router';
 import React, { Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { MobileDisabledLayout, MobileEnabledLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
-import { canSend, canPickDestinations, resolveLabelStatus, resolveMailoutStatus } from './utils/helpers';
+import {
+  MobileDisabledLayout,
+  MobileEnabledLayout,
+  ItemHeaderLayout,
+  ItemHeaderMenuLayout,
+} from '../../layouts';
+import {
+  canSend,
+  canPickDestinations,
+  resolveLabelStatus,
+  resolveMailoutStatus,
+} from './utils/helpers';
 import { Button, Header } from '../Base';
 import { Label, Icon, Dropdown } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { archiveMailoutPending, undoArchiveMailoutPending } from '../../store/modules/mailout/actions';
+import {
+  archiveMailoutPending,
+  undoArchiveMailoutPending,
+} from '../../store/modules/mailout/actions';
 
-const ApproveAndSendButton = ({ data, mailoutDetailPage, onClickApproveAndSend, lockControls = false }) => {
+const ApproveAndSendButton = ({
+  data,
+  mailoutDetailPage,
+  onClickApproveAndSend,
+  lockControls = false,
+}) => {
   if (!data) return;
 
   if (!mailoutDetailPage) {
@@ -48,7 +66,12 @@ const ApproveAndSendButton = ({ data, mailoutDetailPage, onClickApproveAndSend, 
   return (
     <Fragment>
       {canSend(data.mailoutStatus) && (
-        <Button primary onClick={onClickApproveAndSend} disabled={lockControls} loading={lockControls}>
+        <Button
+          primary
+          onClick={onClickApproveAndSend}
+          disabled={lockControls}
+          loading={lockControls}
+        >
           <MobileDisabledLayout>
             <Fragment>Approve & Send</Fragment>
           </MobileDisabledLayout>
@@ -61,7 +84,15 @@ const ApproveAndSendButton = ({ data, mailoutDetailPage, onClickApproveAndSend, 
   );
 };
 
-const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickApproveAndSend, onClickDelete, lockControls = false, onClickRevertEdit }) => {
+const ListHeader = ({
+  data,
+  mailoutDetailPage = false,
+  onClickEdit,
+  onClickApproveAndSend,
+  onClickDelete,
+  lockControls = false,
+  onClickRevertEdit,
+}) => {
   const dispatch = useDispatch();
   const archivePending = useSelector(state => state.mailout.archivePending);
   const archiveId = useSelector(state => state.mailout.archiveId);
@@ -77,7 +108,9 @@ const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickAppro
   };
 
   if (!data) return;
-  const enableEdit = resolveMailoutStatus(data.mailoutStatus) !== 'Sent' && resolveMailoutStatus(data.mailoutStatus) !== 'Processing';
+  const enableEdit =
+    resolveMailoutStatus(data.mailoutStatus) !== 'Sent' &&
+    resolveMailoutStatus(data.mailoutStatus) !== 'Processing';
   const enableDelete = resolveMailoutStatus(data.mailoutStatus) === 'Sent';
   const activeWhen = new Date(Date.now()).toISOString().split('T')[0] < data.send_date;
   const enableRevertEdit = data.edited;
@@ -108,26 +141,45 @@ const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickAppro
             </Header>
           </Link>
         )}
-        {!mailoutDetailPage && isArchived && <Header as="h3">{data.name || data.details?.displayAddress}</Header>}
+        {!mailoutDetailPage && isArchived && (
+          <Header as="h3">{data.name || data.details?.displayAddress}</Header>
+        )}
         {mailoutDetailPage && <Header as="h3">{data.name || data.details?.displayAddress}</Header>}
       </span>
       <ItemHeaderMenuLayout>
         {canSend(data.mailoutStatus) && mailoutDetailPage && enableRevertEdit && (
           <span>
-            <Button secondary inverted onClick={onClickRevertEdit} disabled={lockControls} loading={lockControls}>
+            <Button
+              secondary
+              inverted
+              onClick={onClickRevertEdit}
+              disabled={lockControls}
+              loading={lockControls}
+            >
               Revert & Unlock
             </Button>
           </span>
         )}
         {mailoutDetailPage && enableEdit && (
           <span>
-            <Button primary inverted onClick={onClickEdit} disabled={lockControls} loading={lockControls}>
+            <Button
+              primary
+              inverted
+              onClick={onClickEdit}
+              disabled={lockControls}
+              loading={lockControls}
+            >
               Edit
             </Button>
           </span>
         )}
         {data.mailoutStatus === 'archived' && (
-          <Button onClick={runArchive} icon loading={data._id === archiveId && archivePending} disabled={data._id === archiveId && archivePending}>
+          <Button
+            onClick={runArchive}
+            icon
+            loading={data._id === archiveId && archivePending}
+            disabled={data._id === archiveId && archivePending}
+          >
             <Icon name="archive" /> Unarchive
           </Button>
         )}
@@ -151,11 +203,22 @@ const ListHeader = ({ data, mailoutDetailPage = false, onClickEdit, onClickAppro
           </Dropdown>
         )}
         <span>
-          <ApproveAndSendButton data={data} mailoutDetailPage={mailoutDetailPage} onClickApproveAndSend={onClickApproveAndSend} lockControls={lockControls} />
+          <ApproveAndSendButton
+            data={data}
+            mailoutDetailPage={mailoutDetailPage}
+            onClickApproveAndSend={onClickApproveAndSend}
+            lockControls={lockControls}
+          />
         </span>
         <span>
           {mailoutDetailPage && enableDelete && activeWhen && (
-            <Button primary inverted onClick={onClickDelete} disabled={lockControls} loading={lockControls}>
+            <Button
+              primary
+              inverted
+              onClick={onClickDelete}
+              disabled={lockControls}
+              loading={lockControls}
+            >
               Stop Sending
             </Button>
           )}

@@ -199,7 +199,15 @@ const SidebarSlider = ({ children, moblileVisible, setMobileVisible, toggle, set
             ></FontAwesomeIcon>
           </Grid.Column>
           <Sidebar.Pushable as={Segment}>
-            <Sidebar as={Menu} animation="overlay" icon="labeled" onHide={() => setMobileVisible(false)} vertical visible={moblileVisible} width="thin">
+            <Sidebar
+              as={Menu}
+              animation="overlay"
+              icon="labeled"
+              onHide={() => setMobileVisible(false)}
+              vertical
+              visible={moblileVisible}
+              width="thin"
+            >
               {children}
             </Sidebar>
           </Sidebar.Pushable>

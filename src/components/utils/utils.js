@@ -5,7 +5,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-export const popup = msg => <Popup flowing trigger={<FontAwesomeIcon icon="info-circle" style={{ color: '#2DB5AD' }} />} content={msg} position="top right" />;
+export const popup = msg => (
+  <Popup
+    flowing
+    trigger={<FontAwesomeIcon icon="info-circle" style={{ color: '#2DB5AD' }} />}
+    content={msg}
+    position="top right"
+  />
+);
 
 export const tag = type => {
   const types = {
@@ -35,9 +42,12 @@ export const keywordRegExp = /^[a-zA-Z0-9_]+$/;
 
 export const required = value => (value ? undefined : 'Required');
 export const isEmpty = value => value === undefined || value === null || value === '';
-export const minLength = min => value => !isEmpty(value) && value.length < min && `Must be at least ${min} characters`;
-export const maxLength = max => value => !isEmpty(value) && value.length > max && `Must be no more than ${max} characters`;
-export const composeValidators = (...validators) => value => validators.reduce((error, validator) => error || validator(value), undefined);
+export const minLength = min => value =>
+  !isEmpty(value) && value.length < min && `Must be at least ${min} characters`;
+export const maxLength = max => value =>
+  !isEmpty(value) && value.length > max && `Must be no more than ${max} characters`;
+export const composeValidators = (...validators) => value =>
+  validators.reduce((error, validator) => error || validator(value), undefined);
 
 export const TrimStrAndConvertToInt = value => Math.round(parseInt(value.trim(), 10) / 10) * 10;
 

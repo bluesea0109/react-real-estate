@@ -47,7 +47,8 @@ const onPolygonComplete = (polygon, setPolygonCoordinates) => {
 
 const PolygonGoogleMapsCore = ({ polygonCoordinates, setPolygonCoordinates, data }) => {
   let path = [];
-  if (polygonCoordinates && polygonCoordinates.length) path = polygonCoordinates.map(c => ({ lng: c[0], lat: c[1] }));
+  if (polygonCoordinates && polygonCoordinates.length)
+    path = polygonCoordinates.map(c => ({ lng: c[0], lat: c[1] }));
 
   let center = { lat: 44.5049368, lng: -105.7491507 };
   let zoom = 4;

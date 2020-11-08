@@ -3,7 +3,10 @@ import { Header } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { Fragment, useEffect, useState, useReducer, useRef } from 'react';
 
-import { saveTeamListedShortcodePending, saveTeamSoldShortcodePending } from '../../store/modules/teamShortcode/actions';
+import {
+  saveTeamListedShortcodePending,
+  saveTeamSoldShortcodePending,
+} from '../../store/modules/teamShortcode/actions';
 import { saveTeamCustomizationPending } from '../../store/modules/teamCustomization/actions';
 import { ContentTopHeaderLayout } from '../../layouts';
 import { Button, Menu, Page, Segment } from '../Base';
@@ -34,9 +37,15 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
   const dispatch = useDispatch();
   const formRef = useRef();
 
-  const customizationPending = useSelector(store => store.customization && store.customization.pending);
-  const soldListingAgentShortenedURLPending = useSelector(store => store.shortcode.soldURLToShortenPending);
-  const newListingAgentShortenedURLPending = useSelector(store => store.shortcode.listedURLToShortenPending);
+  const customizationPending = useSelector(
+    store => store.customization && store.customization.pending
+  );
+  const soldListingAgentShortenedURLPending = useSelector(
+    store => store.shortcode.soldURLToShortenPending
+  );
+  const newListingAgentShortenedURLPending = useSelector(
+    store => store.shortcode.listedURLToShortenPending
+  );
 
   const [formValues, setFormValues] = useReducer(formReducer, teamCustomizationData);
   const [page, setPage] = useState(1);
@@ -116,7 +125,10 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
     if (page === 2) return;
     if (formRef.current) {
       formRef.current.validateForm().then(errors => {
-        if ((objectIsEmpty(errors) && !formRef.current.status) || (page === 1 && !!formRef.current.status?.sold_cta)) {
+        if (
+          (objectIsEmpty(errors) && !formRef.current.status) ||
+          (page === 1 && !!formRef.current.status?.sold_cta)
+        ) {
           setPage(page + 1);
         } else if (!formRef.current.status) {
           formRef.current.handleSubmit();
@@ -129,7 +141,10 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
     if (page === 1) return;
     if (formRef.current) {
       formRef.current.validateForm().then(errors => {
-        if ((objectIsEmpty(errors) && !formRef.current.status) || (page === 2 && !!formRef.current.status?.listed_cta)) {
+        if (
+          (objectIsEmpty(errors) && !formRef.current.status) ||
+          (page === 2 && !!formRef.current.status?.listed_cta)
+        ) {
           setPage(page - 1);
         } else if (!formRef.current.status) {
           formRef.current.handleSubmit();
@@ -140,36 +155,75 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
 
   const Listings = ({ listingType }) => {
     return (
-      <Form key={listingType} innerRef={formRef} onSubmit={handleSubmit} validateOnMount={true} validateOnChange={true} enableReinitialize={true}>
+      <Form
+        key={listingType}
+        innerRef={formRef}
+        onSubmit={handleSubmit}
+        validateOnMount={true}
+        validateOnChange={true}
+        enableReinitialize={true}
+      >
         {() => (
           <Fragment>
             <Segment
               padded
               className={isMobile ? null : 'primary-grid-container'}
-              style={isMobile ? {} : { gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}
+              style={
+                isMobile ? {} : { gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }
+              }
             >
               <div>
                 <Header as="h5">Template Theme</Header>
-                {TemplatePictureFormField({ templateName: 'ribbon', listingType, initialValues, formValues, setFormValues })}
+                {TemplatePictureFormField({
+                  templateName: 'ribbon',
+                  listingType,
+                  initialValues,
+                  formValues,
+                  setFormValues,
+                })}
               </div>
 
               <div>
                 <p>&nbsp;</p>
-                {TemplatePictureFormField({ templateName: 'bookmark', listingType, initialValues, formValues, setFormValues })}
+                {TemplatePictureFormField({
+                  templateName: 'bookmark',
+                  listingType,
+                  initialValues,
+                  formValues,
+                  setFormValues,
+                })}
               </div>
 
               <div>
                 <p>&nbsp;</p>
-                {TemplatePictureFormField({ templateName: 'stack', listingType, initialValues, formValues, setFormValues })}
+                {TemplatePictureFormField({
+                  templateName: 'stack',
+                  listingType,
+                  initialValues,
+                  formValues,
+                  setFormValues,
+                })}
               </div>
 
-              <div>{ColorPickerFormField({ listingType, initialValues, formValues, setFormValues })}</div>
+              <div>
+                {ColorPickerFormField({ listingType, initialValues, formValues, setFormValues })}
+              </div>
             </Segment>
 
             <Segment padded className={isMobile ? null : 'tertiary-grid-container'}>
-              <div>{AgentDropdownFormField({ listingType, initialValues, formValues, setFormValues })}</div>
+              <div>
+                {AgentDropdownFormField({ listingType, initialValues, formValues, setFormValues })}
+              </div>
 
-              <div>{InputFormField({ fieldName: 'frontHeadline', listingType, initialValues, formValues, setFormValues })}</div>
+              <div>
+                {InputFormField({
+                  fieldName: 'frontHeadline',
+                  listingType,
+                  initialValues,
+                  formValues,
+                  setFormValues,
+                })}
+              </div>
 
               <div
                 style={{
@@ -179,20 +233,67 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'flex-start', padding: '0.5rem' }}>
-                  <>{TemplatePostcardSizeField({ postcardSize: '4x6', listingType, initialValues, formValues, setFormValues })}</>
-                  <>{TemplatePostcardSizeField({ postcardSize: '6x9', listingType, initialValues, formValues, setFormValues })}</>
-                  <>{TemplatePostcardSizeField({ postcardSize: '6x11', listingType, initialValues, formValues, setFormValues })}</>
+                  <>
+                    {TemplatePostcardSizeField({
+                      postcardSize: '4x6',
+                      listingType,
+                      initialValues,
+                      formValues,
+                      setFormValues,
+                    })}
+                  </>
+                  <>
+                    {TemplatePostcardSizeField({
+                      postcardSize: '6x9',
+                      listingType,
+                      initialValues,
+                      formValues,
+                      setFormValues,
+                    })}
+                  </>
+                  <>
+                    {TemplatePostcardSizeField({
+                      postcardSize: '6x11',
+                      listingType,
+                      initialValues,
+                      formValues,
+                      setFormValues,
+                    })}
+                  </>
                 </div>
                 <div style={{ display: 'block', paddingTop: '1.5em' }}>
-                  {KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}
+                  {KWKLYCTAToggleFormField({
+                    listingType,
+                    initialValues,
+                    formValues,
+                    setFormValues,
+                  })}
                 </div>
               </div>
 
-              <div>{MailoutSizeSliderFormField({ formType: 'team', listingType, initialValues, formValues, setFormValues })}</div>
+              <div>
+                {MailoutSizeSliderFormField({
+                  formType: 'team',
+                  listingType,
+                  initialValues,
+                  formValues,
+                  setFormValues,
+                })}
+              </div>
 
-              <div>{CTAInputFormField({ formType: 'team', listingType, initialValues, formValues, setFormValues })}</div>
+              <div>
+                {CTAInputFormField({
+                  formType: 'team',
+                  listingType,
+                  initialValues,
+                  formValues,
+                  setFormValues,
+                })}
+              </div>
 
-              <div>{KWKLYInputFormField({ listingType, initialValues, formValues, setFormValues })}</div>
+              <div>
+                {KWKLYInputFormField({ listingType, initialValues, formValues, setFormValues })}
+              </div>
             </Segment>
 
             <UpdateWithoutRerender formValues={formValues} />
@@ -234,8 +335,16 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
                 <Button
                   primary
                   type="submit"
-                  disabled={customizationPending || soldListingAgentShortenedURLPending || newListingAgentShortenedURLPending}
-                  loading={customizationPending || soldListingAgentShortenedURLPending || newListingAgentShortenedURLPending}
+                  disabled={
+                    customizationPending ||
+                    soldListingAgentShortenedURLPending ||
+                    newListingAgentShortenedURLPending
+                  }
+                  loading={
+                    customizationPending ||
+                    soldListingAgentShortenedURLPending ||
+                    newListingAgentShortenedURLPending
+                  }
                   onClick={triggerSubmit}
                 >
                   Save
@@ -248,8 +357,18 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
 
       <Segment style={{ marginTop: '22px' }}>
         <Menu pointing secondary>
-          <Menu.Item name="newListing" active={page === 1} disabled={customizationPending || soldListingAgentShortenedURLPending} onClick={prevPage} />
-          <Menu.Item name="soldListing" active={page === 2} disabled={customizationPending || newListingAgentShortenedURLPending} onClick={nextPage} />
+          <Menu.Item
+            name="newListing"
+            active={page === 1}
+            disabled={customizationPending || soldListingAgentShortenedURLPending}
+            onClick={prevPage}
+          />
+          <Menu.Item
+            name="soldListing"
+            active={page === 2}
+            disabled={customizationPending || newListingAgentShortenedURLPending}
+            onClick={nextPage}
+          />
         </Menu>
 
         {renderSteps()}

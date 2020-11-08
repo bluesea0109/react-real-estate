@@ -1,4 +1,11 @@
-import { GET_TEAM_PENDING, GET_TEAM_SUCCESS, GET_TEAM_ERROR, SYNC_PENDING, SYNC_SUCCESS, SYNC_ERROR } from './actions';
+import {
+  GET_TEAM_PENDING,
+  GET_TEAM_SUCCESS,
+  GET_TEAM_ERROR,
+  SYNC_PENDING,
+  SYNC_SUCCESS,
+  SYNC_ERROR,
+} from './actions';
 
 const initialState = {
   pending: false,

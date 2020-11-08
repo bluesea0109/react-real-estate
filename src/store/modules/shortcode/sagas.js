@@ -19,7 +19,9 @@ export function* saveSoldShortcodeSaga({ peerId = null }) {
   try {
     const soldShortcode = yield select(shortcodeSoldToSave);
 
-    const { path, method } = peerId ? ApiService.directory.peer.shortcode.sold.save(peerId) : ApiService.directory.user.shortcode.sold.save();
+    const { path, method } = peerId
+      ? ApiService.directory.peer.shortcode.sold.save(peerId)
+      : ApiService.directory.user.shortcode.sold.save();
     const response = yield call(ApiService[method], path, { cta: soldShortcode });
 
     yield put(saveSoldShortcodeSuccess(response.shortUrl));
@@ -32,7 +34,9 @@ export function* saveListedShortcodeSaga({ peerId = null }) {
   try {
     const listedShortcode = yield select(shortcodeListedToSave);
 
-    const { path, method } = peerId ? ApiService.directory.peer.shortcode.listed.save(peerId) : ApiService.directory.user.shortcode.listed.save();
+    const { path, method } = peerId
+      ? ApiService.directory.peer.shortcode.listed.save(peerId)
+      : ApiService.directory.user.shortcode.listed.save();
     const response = yield call(ApiService[method], path, { cta: listedShortcode });
 
     yield put(saveListedShortcodeSuccess(response.shortUrl));

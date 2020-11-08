@@ -16,12 +16,22 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
   const [backLoaded, setBackLoaded] = useState(false);
 
   const frontURL = peerId
-    ? ApiService.directory.peer.mailout.render.front({ userId: item?.userId, peerId, mailoutId: item?._id }).path
-    : ApiService.directory.user.mailout.render.front({ userId: item?.userId, mailoutId: item?._id }).path;
+    ? ApiService.directory.peer.mailout.render.front({
+        userId: item?.userId,
+        peerId,
+        mailoutId: item?._id,
+      }).path
+    : ApiService.directory.user.mailout.render.front({ userId: item?.userId, mailoutId: item?._id })
+        .path;
 
   const backURL = peerId
-    ? ApiService.directory.peer.mailout.render.back({ userId: item?.userId, peerId, mailoutId: item?._id }).path
-    : ApiService.directory.user.mailout.render.back({ userId: item?.userId, mailoutId: item?._id }).path;
+    ? ApiService.directory.peer.mailout.render.back({
+        userId: item?.userId,
+        peerId,
+        mailoutId: item?._id,
+      }).path
+    : ApiService.directory.user.mailout.render.back({ userId: item?.userId, mailoutId: item?._id })
+        .path;
 
   const handleOnload = useCallback(
     event => {
@@ -70,13 +80,20 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
         {item.frontResourceUrl && (
           <Segment textAlign="center" style={{ border: 'none' }}>
             <Link to={linkTo}>
-              <Image src={item.frontResourceUrl} style={imgStyles} className="bm-transform-effect image-frame-border" />
+              <Image
+                src={item.frontResourceUrl}
+                style={imgStyles}
+                className="bm-transform-effect image-frame-border"
+              />
             </Link>
           </Segment>
         )}
         {!item.frontResourceUrl && (
           <Segment textAlign="center" loading={!item?._id || !frontLoaded} style={IFrameStyles}>
-            <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className="bm-transform-effect image-frame-border">
+            <div
+              style={{ width: '300px', height: '204px', overflow: 'hidden' }}
+              className="bm-transform-effect image-frame-border"
+            >
               <iframe
                 id="bm-iframe-front"
                 title={frontURL + '?dashboard=true'}
@@ -95,7 +112,10 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
         )}
 
         <Segment textAlign="center" loading={!item?._id || !backLoaded} style={IFrameStyles}>
-          <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className="bm-transform-effect image-frame-border">
+          <div
+            style={{ width: '300px', height: '204px', overflow: 'hidden' }}
+            className="bm-transform-effect image-frame-border"
+          >
             <iframe
               id="bm-iframe-back"
               title={backURL + '?dashboard=true'}
@@ -117,7 +137,10 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
     return (
       <ItemBodyIframeLayout horizontal style={IFrameBodyStyles} id={`mailout-iframe-set-${index}`}>
         <Segment textAlign="center" loading={!item?._id || !frontLoaded} style={IFrameStyles}>
-          <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className="image-frame-border">
+          <div
+            style={{ width: '300px', height: '204px', overflow: 'hidden' }}
+            className="image-frame-border"
+          >
             <iframe
               id="bm-iframe-front"
               title={frontURL}
@@ -133,7 +156,10 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
           </div>
         </Segment>
         <Segment textAlign="center" loading={!item?._id || !backLoaded} style={IFrameStyles}>
-          <div style={{ width: '300px', height: '204px', overflow: 'hidden' }} className="image-frame-border">
+          <div
+            style={{ width: '300px', height: '204px', overflow: 'hidden' }}
+            className="image-frame-border"
+          >
             <iframe
               id="bm-iframe-back"
               title={backURL}

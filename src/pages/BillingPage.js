@@ -38,7 +38,11 @@ const BillingPage = () => {
         <Table.Cell>
           <Link to={`dashboard/${item.id}`}>{item.name}</Link>
         </Table.Cell>
-        <Table.Cell>{item.postcardSize ? `${postcardDimensionsDisplayed(item.postcardSize)}" Postcard` : `4x6" Postcard`}</Table.Cell>
+        <Table.Cell>
+          {item.postcardSize
+            ? `${postcardDimensionsDisplayed(item.postcardSize)}" Postcard`
+            : `4x6" Postcard`}
+        </Table.Cell>
         <Table.Cell>{item.recipientCount}</Table.Cell>
         <Table.Cell>${item.creditsAmountApplied || '0.00'}</Table.Cell>
         <Table.Cell>
@@ -50,7 +54,9 @@ const BillingPage = () => {
           </Table.Cell>
         )}
         {!item.approvedByUser && <Table.Cell></Table.Cell>}
-        <Table.Cell>${(Number(item.amount_in_cents) + Number(item.tax_amount_in_cents)) / 100}</Table.Cell>
+        <Table.Cell>
+          ${(Number(item.amount_in_cents) + Number(item.tax_amount_in_cents)) / 100}
+        </Table.Cell>
       </Table.Row>
     ));
   };
@@ -66,7 +72,8 @@ const BillingPage = () => {
           </Menu>
           {!isAdmin && billingDetails && !billingDetails.billings.length && (
             <p id="billingSubHeader">
-              Billing is connected to your team&apos;s administrator by default. If a user would like to be billed directly, please contact{' '}
+              Billing is connected to your team&apos;s administrator by default. If a user would
+              like to be billed directly, please contact{' '}
               <a href="mailto:support@brivity.com">support@brivity.com</a>
             </p>
           )}
@@ -97,10 +104,17 @@ const BillingPage = () => {
           )}
           {billingDetails && !billingDetails.billings.length && (
             <Card centered style={{ minWidth: '380px', boxShadow: 'none' }}>
-              <Image centered size="large" src={require('../assets/Billing_empty_state.png')} style={{ background: 'unset', marginTop: '1em' }} />
+              <Image
+                centered
+                size="large"
+                src={require('../assets/Billing_empty_state.png')}
+                style={{ background: 'unset', marginTop: '1em' }}
+              />
               <Card.Content style={{ borderTop: 'none' }}>
                 <Header as="h5" textAlign="center">
-                  <Header.Content style={{ width: '380px', textAlign: 'center' }}>Your billing invoices will appear here</Header.Content>
+                  <Header.Content style={{ width: '380px', textAlign: 'center' }}>
+                    Your billing invoices will appear here
+                  </Header.Content>
                 </Header>
               </Card.Content>
             </Card>

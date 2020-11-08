@@ -7,7 +7,8 @@ import { Header, Icon } from 'semantic-ui-react';
 const NEW_LISTING = 'listed';
 
 const ColorPickerFormField = ({ listingType, initialValues, formValues, setFormValues }) => {
-  const currentValue = (formValues && formValues[listingType]?.brandColor) || initialValues[listingType].brandColor;
+  const currentValue =
+    (formValues && formValues[listingType]?.brandColor) || initialValues[listingType].brandColor;
   const editable = listingType === NEW_LISTING ? !!formValues?.listed : !!formValues?.sold;
 
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
@@ -52,8 +53,21 @@ const ColorPickerFormField = ({ listingType, initialValues, formValues, setFormV
     return (
       <div>
         <Header as="h5">Brand Color</Header>
-        <BlockPicker triangle="hide" width="200px" color={currentValue} colors={colors} onChangeComplete={handleColorChange} />
-        <Icon id="brandColourPickerIcon" bordered link color="grey" name="eye dropper" onClick={handleClick} />
+        <BlockPicker
+          triangle="hide"
+          width="200px"
+          color={currentValue}
+          colors={colors}
+          onChangeComplete={handleColorChange}
+        />
+        <Icon
+          id="brandColourPickerIcon"
+          bordered
+          link
+          color="grey"
+          name="eye dropper"
+          onClick={handleClick}
+        />
         {displayColorPicker ? (
           <div style={popover}>
             <div style={cover} onClick={handleClose} />

@@ -22,7 +22,9 @@ export function* initializeUserPollSagaWorker() {
 
       yield put(initializeUserPending());
 
-      const { path, method } = peerId ? ApiService.directory.peer.listing.poll(peerId) : ApiService.directory.user.listing.poll();
+      const { path, method } = peerId
+        ? ApiService.directory.peer.listing.poll(peerId)
+        : ApiService.directory.user.listing.poll();
       const response = yield call(ApiService[method], path);
 
       const { campaignsTotal, campaignsCompleted } = response;

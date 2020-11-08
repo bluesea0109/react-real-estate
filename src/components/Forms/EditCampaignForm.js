@@ -7,9 +7,23 @@ import { Dropdown, Form, Header, Label, Popup, Checkbox } from 'semantic-ui-reac
 
 import auth from '../../services/auth';
 import api from '../../services/api';
-import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
-import { changeMailoutDisplayAgentPending, updateMailoutEditPending } from '../../store/modules/mailout/actions';
-import { differenceObjectDeep, maxLength, objectIsEmpty, sleep, postcardDimensions } from '../utils/utils';
+import {
+  ContentBottomHeaderLayout,
+  ContentTopHeaderLayout,
+  ItemHeaderLayout,
+  ItemHeaderMenuLayout,
+} from '../../layouts';
+import {
+  changeMailoutDisplayAgentPending,
+  updateMailoutEditPending,
+} from '../../store/modules/mailout/actions';
+import {
+  differenceObjectDeep,
+  maxLength,
+  objectIsEmpty,
+  sleep,
+  postcardDimensions,
+} from '../utils/utils';
 import { Button, Icon, Image, Menu, Message, Page, Segment, Snackbar } from '../Base';
 import { StyledHeader, colors } from '../utils/helpers';
 import PageTitleHeader from '../PageTitleHeader';
@@ -18,7 +32,15 @@ import { useIsMobile } from '../Hooks/useIsMobile';
 import { calculateCost, resolveLabelStatus } from '../MailoutListItem/utils/helpers';
 import PostcardSizeButton from './Common/PostcardSizeButton';
 
-const blacklistNames = ['brandColor', 'frontImgUrl', 'agentPicture', 'brokerageLogo', 'teamLogo', 'backUrl', 'frontAgentUrl'];
+const blacklistNames = [
+  'brandColor',
+  'frontImgUrl',
+  'agentPicture',
+  'brokerageLogo',
+  'teamLogo',
+  'backUrl',
+  'frontAgentUrl',
+];
 
 const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const isMobile = useIsMobile();
@@ -32,9 +54,13 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const multiUser = onLoginMode === 'multiuser';
 
   const updateMailoutEditIsPending = useSelector(store => store.mailout.updateMailoutEditPending);
-  const updateMailoutEditError = useSelector(store => store.mailout.updateMailoutEditError?.message);
+  const updateMailoutEditError = useSelector(
+    store => store.mailout.updateMailoutEditError?.message
+  );
   const changeDisplayAgentPending = useSelector(store => store.mailout.changeDisplayAgentPending);
-  const changeDisplayAgentError = useSelector(store => store.mailout.changeDisplayAgentError?.message);
+  const changeDisplayAgentError = useSelector(
+    store => store.mailout.changeDisplayAgentError?.message
+  );
 
   const teammates = useSelector(store => store.team.profiles);
 
@@ -46,20 +72,28 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
   const currentPostcardSize = mailoutDetails?.postcardSize;
   const currentTemplateTheme = mailoutDetails?.templateTheme;
-  const currentMailoutDisplayAgentUserID = mailoutDetails.mailoutDisplayAgent ? mailoutDetails.mailoutDisplayAgent?.userId : mailoutDetails.userId;
-  const currentMailoutDisplayAgent = mailoutDetails.mailoutDisplayAgent || { userId: mailoutDetails.userId };
+  const currentMailoutDisplayAgentUserID = mailoutDetails.mailoutDisplayAgent
+    ? mailoutDetails.mailoutDisplayAgent?.userId
+    : mailoutDetails.userId;
+  const currentMailoutDisplayAgent = mailoutDetails.mailoutDisplayAgent || {
+    userId: mailoutDetails.userId,
+  };
 
   const [error, setError] = useState(null);
 
   const [postcardSize, setPostcardSize] = useState(currentPostcardSize);
   const [templateTheme, setTemplateTheme] = useState(currentTemplateTheme);
-  const [selectedBrandColor, setSelectedBrandColor] = useState(mailoutEdit?.mergeVariables?.brandColor);
+  const [selectedBrandColor, setSelectedBrandColor] = useState(
+    mailoutEdit?.mergeVariables?.brandColor
+  );
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
   const [tempColor, setTempColor] = useState(mailoutEdit?.mergeVariables?.brandColor);
   const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(currentMailoutDisplayAgent);
   const [formValues, setFormValues] = useState(mailoutEdit?.mergeVariables);
 
-  let _coverPhotoMv = _.get(mailoutDetails, 'mergeVariables', []).find(mv => mv.name === 'frontImgUrl');
+  let _coverPhotoMv = _.get(mailoutDetails, 'mergeVariables', []).find(
+    mv => mv.name === 'frontImgUrl'
+  );
   let _coverPhoto = _.get(_coverPhotoMv, 'value', _.get(mailoutDetails, 'details.coverPhoto'));
 
   const [coverPhoto, setCoverPhoto] = useState(_coverPhoto);
@@ -149,12 +183,18 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     try {
       setPhotoUpdating(true);
       let path = `/api/user/mailout/${mailoutDetails._id}/edit/listingPhoto/resize`;
-      if (peerId) path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/listingPhoto/resize`;
+      if (peerId)
+        path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/listingPhoto/resize`;
 
       const headers = {};
       const accessToken = await auth.getAccessToken();
       headers['authorization'] = `Bearer ${accessToken}`;
-      const response = await fetch(path, { headers, method: 'post', body: formData, credentials: 'include' });
+      const response = await fetch(path, {
+        headers,
+        method: 'post',
+        body: formData,
+        credentials: 'include',
+      });
       let { imageUrl } = await api.handleResponse(response);
       setTimeout(() => {
         setCoverPhoto(imageUrl);
@@ -188,7 +228,10 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
   const handleEditSubmitClick = async () => {
     const newMergeVariables = [];
-    newMergeVariables.push({ name: 'brandColor', value: selectedBrandColor.hex || selectedBrandColor });
+    newMergeVariables.push({
+      name: 'brandColor',
+      value: selectedBrandColor.hex || selectedBrandColor,
+    });
     newMergeVariables.push({ name: 'frontImgUrl', value: coverPhoto });
 
     Object.keys(formValues)
@@ -226,8 +269,20 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
       const fullName = `${profile.first} ${profile.last}`;
 
       const contextRef = createRef();
-      const currentUserIconWithPopup = <Popup context={contextRef} content="Currently selected agent" trigger={<Icon name="user" />} />;
-      const setupCompletedIconWithPopup = <Popup context={contextRef} content="Setup Completed" trigger={<Icon name="check circle" color="teal" />} />;
+      const currentUserIconWithPopup = (
+        <Popup
+          context={contextRef}
+          content="Currently selected agent"
+          trigger={<Icon name="user" />}
+        />
+      );
+      const setupCompletedIconWithPopup = (
+        <Popup
+          context={contextRef}
+          content="Setup Completed"
+          trigger={<Icon name="check circle" color="teal" />}
+        />
+      );
 
       return profiles.push({
         key: index,
@@ -237,7 +292,12 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
         value: profile.userId,
         content: (
           <StyledHeader as="h4" ref={contextRef}>
-            <Image size="mini" inline circular src="https://react.semantic-ui.com/images/avatar/large/patrick.png" />
+            <Image
+              size="mini"
+              inline
+              circular
+              src="https://react.semantic-ui.com/images/avatar/large/patrick.png"
+            />
             &nbsp;
             {profile.first}&nbsp;
             {profile.last}&nbsp;
@@ -263,13 +323,28 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           onClick={e => setPostcardSize(postcardDimensions(size))}
           style={
             postcardSize === postcardDimensions(size)
-              ? { border: '2px solid #59C4C4', margin: 0, padding: '0.5em', borderRadius: '5px', height: '100%' }
-              : { border: '1px solid lightgray', margin: 0, padding: '0.5em', borderRadius: '5px', height: '100%' }
+              ? {
+                  border: '2px solid #59C4C4',
+                  margin: 0,
+                  padding: '0.5em',
+                  borderRadius: '5px',
+                  height: '100%',
+                }
+              : {
+                  border: '1px solid lightgray',
+                  margin: 0,
+                  padding: '0.5em',
+                  borderRadius: '5px',
+                  height: '100%',
+                }
           }
         >
           <PostcardSizeButton postcardSize={size} />
         </div>
-        <div style={{ textAlign: 'center', padding: '0.5rem' }}>{`${calculateCost(1, size)}/each`}</div>
+        <div style={{ textAlign: 'center', padding: '0.5rem' }}>{`${calculateCost(
+          1,
+          size
+        )}/each`}</div>
       </div>
     );
   };
@@ -297,11 +372,27 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
         <div
           style={
             templateTheme === templateName
-              ? { border: '2px solid teal', margin: 0, padding: '0.5em', borderRadius: '5px', maxWidth: '260px' }
-              : { border: '1px solid lightgray', margin: 0, padding: '0.5em', borderRadius: '5px', maxWidth: '260px' }
+              ? {
+                  border: '2px solid teal',
+                  margin: 0,
+                  padding: '0.5em',
+                  borderRadius: '5px',
+                  maxWidth: '260px',
+                }
+              : {
+                  border: '1px solid lightgray',
+                  margin: 0,
+                  padding: '0.5em',
+                  borderRadius: '5px',
+                  maxWidth: '260px',
+                }
           }
         >
-          <img onClick={e => setTemplateTheme(templateName)} src={resolveSource(templateName)} alt={templateName} />
+          <img
+            onClick={e => setTemplateTheme(templateName)}
+            src={resolveSource(templateName)}
+            alt={templateName}
+          />
         </div>
       </div>
     );
@@ -339,7 +430,9 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
             if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
 
             return (
-              <Form.Field key={formValuesHaveChanged ? formValues[field.name] || fieldName : fieldName}>
+              <Form.Field
+                key={formValuesHaveChanged ? formValues[field.name] || fieldName : fieldName}
+              >
                 <Form.Input
                   fluid
                   error={error && { content: error }}
@@ -377,7 +470,9 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
             if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
 
             return (
-              <Form.Field key={formValuesHaveChanged ? formValues[field.name] || fieldName : fieldName}>
+              <Form.Field
+                key={formValuesHaveChanged ? formValues[field.name] || fieldName : fieldName}
+              >
                 <Form.Input
                   fluid
                   error={error && { content: error }}
@@ -415,7 +510,9 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
             if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
 
             return (
-              <Form.Field key={formValuesHaveChanged ? formValues[field.name] || fieldName : fieldName}>
+              <Form.Field
+                key={formValuesHaveChanged ? formValues[field.name] || fieldName : fieldName}
+              >
                 <Form.Input
                   fluid
                   error={error && { content: error }}
@@ -476,8 +573,8 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
               <Icon name="times circle" color="darkred"></Icon>Warning!
             </Message.Header>
             <Message.Content>
-              Changing postcard size may change the aspect ratio of your cover photo. Please upload a cover photo according to the preferred size specified
-              below.
+              Changing postcard size may change the aspect ratio of your cover photo. Please upload
+              a cover photo according to the preferred size specified below.
             </Message.Content>
           </Message>
         )}
@@ -494,7 +591,9 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
               </Label>
             </span>
             <span style={{ gridArea: 'address', alignSelf: 'center' }}>
-              <Header as="h3">{mailoutDetails.name || mailoutDetails?.details?.displayAddress}</Header>
+              <Header as="h3">
+                {mailoutDetails.name || mailoutDetails?.details?.displayAddress}
+              </Header>
             </span>
 
             <ItemHeaderMenuLayout>
@@ -563,7 +662,13 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
               </>
             )}
             {multiUser && (
-              <div style={currentListingStatus === 'custom' ? { width: '260px', marginBottom: '40px' } : { margin: '2rem 0' }}>
+              <div
+                style={
+                  currentListingStatus === 'custom'
+                    ? { width: '260px', marginBottom: '40px' }
+                    : { margin: '2rem 0' }
+                }
+              >
                 <Header as="h4">Display Agent</Header>
                 <Dropdown
                   placeholder="Select Display Agent"
@@ -586,7 +691,14 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
               onChange={setTempColor}
               onChangeComplete={value => setSelectedBrandColor(value) && setTempColor(value)}
             />
-            <Icon id="brandColourPickerIcon" bordered link color="grey" name="eye dropper" onClick={handleColorPickerClick} />
+            <Icon
+              id="brandColourPickerIcon"
+              bordered
+              link
+              color="grey"
+              name="eye dropper"
+              onClick={handleColorPickerClick}
+            />
             {displayColorPicker ? (
               <div style={popover}>
                 <div style={cover} onClick={handleColorPickerClose} />
@@ -617,7 +729,13 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
                         Upload new cover photo
                       </a>
                       <br />
-                      <span style={currentPostcardSize !== postcardSize ? { color: '#9F3A38', fontWeight: 'bold' } : {}}>
+                      <span
+                        style={
+                          currentPostcardSize !== postcardSize
+                            ? { color: '#9F3A38', fontWeight: 'bold' }
+                            : {}
+                        }
+                      >
                         {postcardSize === '11x6'
                           ? '(preferred size: 3438x1485)'
                           : postcardSize === '9x6'
@@ -628,7 +746,12 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
                   </div>
                 </div>
               )}
-              <input id="postcardCoverFile" name="postcardcover" type="file" onChange={handleFileChange}></input>
+              <input
+                id="postcardCoverFile"
+                name="postcardcover"
+                type="file"
+                onChange={handleFileChange}
+              ></input>
             </div>
           )}
         </Segment>
@@ -677,7 +800,12 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           </Form.Field>
           {ctaUrl && (
             <div className="ui fluid input">
-              <input type="text" placeholder="URL" value={ctaUrl} onChange={e => setCtaUrl(e.target.value)} />
+              <input
+                type="text"
+                placeholder="URL"
+                value={ctaUrl}
+                onChange={e => setCtaUrl(e.target.value)}
+              />
             </div>
           )}
         </div>

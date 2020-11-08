@@ -9,7 +9,9 @@ const EnableCustomizationSwitch = ({ listingType, initialValues, formValues, set
 
   const handleChange = () => {
     if (currentValue) {
-      const newValues = Object.assign({}, formValues, { [listingType]: initialValues[listingType] });
+      const newValues = Object.assign({}, formValues, {
+        [listingType]: initialValues[listingType],
+      });
       setFormValues(newValues);
     } else {
       const newValues = Object.assign({}, formValues);

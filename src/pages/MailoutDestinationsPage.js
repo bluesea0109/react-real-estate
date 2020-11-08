@@ -49,10 +49,17 @@ const MailoutDestinationsPage = () => {
   return (
     <Fragment>
       {mailoutDetails && mailoutEdit && (
-        <EditDestinationsForm mailoutDetails={mailoutDetails} mailoutDestinationsEdit={mailoutDestinationsEdit} handleBackClick={handleBackClick} />
+        <EditDestinationsForm
+          mailoutDetails={mailoutDetails}
+          mailoutDestinationsEdit={mailoutDestinationsEdit}
+          handleBackClick={handleBackClick}
+        />
       )}
-      {((mailoutDetailsPending && !mailoutDetailsError) || (mailoutEditPending && !mailoutEditError)) && <Loading />}
-      {(mailoutDetailsError || mailoutEditError) && <Message error>Oh snap! {mailoutDetailsError || mailoutEditError}.</Message>}
+      {((mailoutDetailsPending && !mailoutDetailsError) ||
+        (mailoutEditPending && !mailoutEditError)) && <Loading />}
+      {(mailoutDetailsError || mailoutEditError) && (
+        <Message error>Oh snap! {mailoutDetailsError || mailoutEditError}.</Message>
+      )}
     </Fragment>
   );
 };

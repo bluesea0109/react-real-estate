@@ -23,7 +23,9 @@ const s3BucketURL = 'https://alf-gabbi-uploads.s3.amazonaws.com/';
 export function* getPhotoSaga({ peerId = null }) {
   try {
     yield put(getPhotoPending());
-    const { path, method } = peerId ? ApiService.directory.peer.photos.realtorPhoto.get(peerId) : ApiService.directory.user.photos.realtorPhoto.get();
+    const { path, method } = peerId
+      ? ApiService.directory.peer.photos.realtorPhoto.get(peerId)
+      : ApiService.directory.user.photos.realtorPhoto.get();
 
     const response = yield call(ApiService[method], path);
 
@@ -54,7 +56,10 @@ export function* uploadPhotoSaga({ peerId = null }) {
     data.append(targetKey, targetFile);
 
     const response = yield call(ApiService[method], path, data);
-    const normalizedResponse = Object.assign({}, response, { resized: `${s3BucketURL}${response.resized}`, original: `${s3BucketURL}${response.original}` });
+    const normalizedResponse = Object.assign({}, response, {
+      resized: `${s3BucketURL}${response.resized}`,
+      original: `${s3BucketURL}${response.original}`,
+    });
 
     yield put(uploadPhotoSuccess({ target: targetKey, data: normalizedResponse }));
   } catch (err) {
@@ -66,7 +71,9 @@ export function* deletePhotoSaga() {
   try {
     const target = yield select(getPhotoToDelete);
 
-    const { path, method } = yield target === 'teamLogo' ? ApiService.directory.onboard.fillInYourProfile.photos.teamLogo.delete() : {};
+    const { path, method } = yield target === 'teamLogo'
+      ? ApiService.directory.onboard.fillInYourProfile.photos.teamLogo.delete()
+      : {};
 
     yield call(ApiService[method], path);
 

@@ -95,7 +95,17 @@ class FormikForm extends React.Component {
   };
 
   render() {
-    const { className, inverted, size, ignoreLoading, children, render, component, initialValues = {}, ...formikProps } = this.props;
+    const {
+      className,
+      inverted,
+      size,
+      ignoreLoading,
+      children,
+      render,
+      component,
+      initialValues = {},
+      ...formikProps
+    } = this.props;
 
     const testid = formikProps['data-testid'];
     const { serverValidation } = formikProps;
@@ -123,7 +133,8 @@ class FormikForm extends React.Component {
 
     const mappedValues = Object.keys(schema || initialValues || {}).reduce((acc, key) => {
       const property = schema[key] || {};
-      acc[key] = property.value || initialValues[key] || (property.type === 'checkbox' ? false : '');
+      acc[key] =
+        property.value || initialValues[key] || (property.type === 'checkbox' ? false : '');
       return acc;
     }, initialValues);
 
@@ -144,7 +155,15 @@ class FormikForm extends React.Component {
         }}
       >
         {renderProps => {
-          const { handleSubmit, isSubmitting, errors, touched, setFieldError, setStatus, setErrors } = renderProps;
+          const {
+            handleSubmit,
+            isSubmitting,
+            errors,
+            touched,
+            setFieldError,
+            setStatus,
+            setErrors,
+          } = renderProps;
           this._errors = errors;
           this._touched = touched;
           this._setFieldError = setFieldError;
@@ -166,7 +185,9 @@ class FormikForm extends React.Component {
               loading={isSubmitting && !ignoreLoading}
             >
               {this.state.schemaComponents}
-              {typeof children === 'function' || typeof render === 'function' ? (render || children)(renderProps) : children}
+              {typeof children === 'function' || typeof render === 'function'
+                ? (render || children)(renderProps)
+                : children}
             </SemanticForm>
           );
         }}

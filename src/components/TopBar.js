@@ -180,10 +180,23 @@ export default ({ auth0 }) => {
       // const userEmail = profile.doc.email;
 
       const contextRef = createRef();
-      const currentUserIconWithPopup = <Popup context={contextRef} content="Currently logged in user" trigger={<Icon name="user" />} />;
-      const setupCompletedIconWithPopup = <Popup context={contextRef} content="Setup Completed" trigger={<Icon name="check circle" color="teal" />} />;
+      const currentUserIconWithPopup = (
+        <Popup
+          context={contextRef}
+          content="Currently logged in user"
+          trigger={<Icon name="user" />}
+        />
+      );
+      const setupCompletedIconWithPopup = (
+        <Popup
+          context={contextRef}
+          content="Setup Completed"
+          trigger={<Icon name="check circle" color="teal" />}
+        />
+      );
       const realtorPhoto = profile.realtorPhoto;
-      let imageProp = realtorPhoto && realtorPhoto.length ? { avatar: true, src: realtorPhoto } : null;
+      let imageProp =
+        realtorPhoto && realtorPhoto.length ? { avatar: true, src: realtorPhoto } : null;
 
       return profiles.push({
         key: index + 1,
@@ -208,7 +221,9 @@ export default ({ auth0 }) => {
         image: imageProp,
         content: (
           <StyledHeader as="h4" ref={contextRef}>
-            {imageProp === null ? <Initials firstName={profile.first} lastName={profile.last} /> : null}
+            {imageProp === null ? (
+              <Initials firstName={profile.first} lastName={profile.last} />
+            ) : null}
             &nbsp; &nbsp;
             {profile.first}&nbsp;
             {profile.last}&nbsp;

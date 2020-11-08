@@ -2,8 +2,16 @@ import React, { useCallback, useEffect } from 'react';
 import { Progress } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ContentBottomHeaderLayout, ContentTopHeaderLayout, ItemBodyLayout, ItemLayout } from '../layouts';
-import { getArchivedMailoutsPending, getMoreArchivedMailoutsPending } from '../store/modules/mailouts/actions';
+import {
+  ContentBottomHeaderLayout,
+  ContentTopHeaderLayout,
+  ItemBodyLayout,
+  ItemLayout,
+} from '../layouts';
+import {
+  getArchivedMailoutsPending,
+  getMoreArchivedMailoutsPending,
+} from '../store/modules/mailouts/actions';
 import { Button, Grid, Header, Icon, Menu, Page, Segment, Snackbar } from '../components/Base';
 import IframeGroup from '../components/MailoutListItem/IframeGroup';
 import ListHeader from '../components/MailoutListItem/ListHeader';
@@ -128,13 +136,27 @@ const Archive = () => {
 
       {isInitiatingTeam && (
         <ContentBottomHeaderLayout>
-          <Progress value={currentTeamUserCompleted} total={currentTeamUserTotal} progress="ratio" inverted success size="tiny" />
+          <Progress
+            value={currentTeamUserCompleted}
+            total={currentTeamUserTotal}
+            progress="ratio"
+            inverted
+            success
+            size="tiny"
+          />
         </ContentBottomHeaderLayout>
       )}
 
       {isInitiatingUser && (
         <ContentBottomHeaderLayout>
-          <Progress value={currentUserCompleted} total={currentUserTotal} progress="ratio" inverted success size="tiny" />
+          <Progress
+            value={currentUserCompleted}
+            total={currentUserTotal}
+            progress="ratio"
+            inverted
+            success
+            size="tiny"
+          />
         </ContentBottomHeaderLayout>
       )}
 
@@ -173,7 +195,13 @@ const Archive = () => {
                 <Grid.Column width={16}>
                   <Grid centered columns={2}>
                     <Grid.Column>
-                      <Button id="loadMoreButton" attached="bottom" content="Load More" onClick={handleClick} onKeyPress={handleKeyPress} />
+                      <Button
+                        id="loadMoreButton"
+                        attached="bottom"
+                        content="Load More"
+                        onClick={handleClick}
+                        onKeyPress={handleKeyPress}
+                      />
                     </Grid.Column>
                   </Grid>
                 </Grid.Column>

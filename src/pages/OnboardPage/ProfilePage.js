@@ -21,7 +21,10 @@ const OnboardPage = () => {
   }, [isAdmin, dispatch]);
 
   return (
-    <ProfileForm profileAvailable={profileAvailable || onLoginProfileAvailable} teamProfileAvailable={teamProfileAvailable || onLoginTeamProfileAvailable} />
+    <ProfileForm
+      profileAvailable={profileAvailable || onLoginProfileAvailable}
+      teamProfileAvailable={teamProfileAvailable || onLoginTeamProfileAvailable}
+    />
   );
 };
 

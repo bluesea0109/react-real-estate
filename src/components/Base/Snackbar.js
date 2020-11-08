@@ -35,10 +35,16 @@ const Snackbar = ({ error = false, info = false, success = false, children }) =>
 
   return visible ? (
     <SnackbarMessage info={info} error={error} success={success}>
-      <Icon name={success ? 'check circle' : error ? 'times circle' : info ? 'info circle' : null} />
+      <Icon
+        name={success ? 'check circle' : error ? 'times circle' : info ? 'info circle' : null}
+      />
       <b>{success ? 'Hurray! ' : error ? 'Oops! ' : info ? 'Heads Up! ' : null}</b>
       <span>{children}</span>
-      <Icon name="times" style={{ float: 'right', cursor: 'pointer' }} onClick={() => setVisible(false)} />
+      <Icon
+        name="times"
+        style={{ float: 'right', cursor: 'pointer' }}
+        onClick={() => setVisible(false)}
+      />
     </SnackbarMessage>
   ) : null;
 };
