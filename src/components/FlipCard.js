@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import "./styles/flipCard.scss";
 
 const FlipCard = props => {
   const {
@@ -77,7 +76,7 @@ const FlipCard = props => {
   };
 
   return (
-    <div className="card-flip" style={{ ...styles.container, ...containerStyle }}>
+    <div style={{ ...styles.container, ...containerStyle }}>
       <div className="card-flipper" style={styles.flipper}>
         <div className="card-front" style={styles.front}>
           {getComponent(0)}

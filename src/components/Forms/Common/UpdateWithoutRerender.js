@@ -5,7 +5,11 @@ const UpdateWithoutRerender = ({ formValues }) => {
   const { setFieldValue, setFieldTouched, touched, errors } = useFormikContext();
 
   useEffect(() => {
-    setFieldValue('listed_defaultDisplayAgent', formValues?.listed?.defaultDisplayAgent?.userId, true);
+    setFieldValue(
+      'listed_defaultDisplayAgent',
+      formValues?.listed?.defaultDisplayAgent?.userId,
+      true
+    );
     setFieldValue('listed_frontHeadline', formValues?.listed?.frontHeadline, true);
     setFieldValue('listed_cta', formValues?.listed?.cta, true);
     setFieldValue('listed_shortenCTA', formValues?.listed?.shortenCTA, true);

@@ -31,11 +31,17 @@ const SettingsPage = () => {
 
         <br />
 
-        <Button primary inverted onClick={() => setModalOpen(true)} loading={passwordResetPending} disabled={passwordResetStatus}>
+        <Button
+          primary
+          inverted
+          onClick={() => setModalOpen(true)}
+          loading={passwordResetPending}
+          disabled={passwordResetStatus}
+        >
           {passwordResetStatus ? `Reset Initiated` : `Password Change`}
         </Button>
 
-        <Modal open={modalOpen} onClose={() => setModalOpen(false)} basic size="small">
+        <Modal open={modalOpen} onClose={() => setModalOpen(false)} size="small">
           <Header icon="exclamation" content="Password Change" />
           <Modal.Content image>
             <Modal.Description style={{ margin: 'auto' }}>
@@ -47,7 +53,12 @@ const SettingsPage = () => {
             <Button basic color="red" type="button" inverted onClick={() => setModalOpen(false)}>
               <Icon name="remove" /> Cancel
             </Button>
-            <Button color="green" type="button" inverted onClick={() => [dispatch(passwordReset()), setModalOpen(false)]}>
+            <Button
+              color="green"
+              type="button"
+              inverted
+              onClick={() => [dispatch(passwordReset()), setModalOpen(false)]}
+            >
               <Icon name="checkmark" /> Continue
             </Button>
           </Modal.Actions>
@@ -66,7 +77,14 @@ const SettingsPage = () => {
 
         <br />
 
-        <Button primary type="button" inverted onClick={() => dispatch(syncPending())} loading={isSyncing} disabled={isSyncing}>
+        <Button
+          primary
+          type="button"
+          inverted
+          onClick={() => dispatch(syncPending())}
+          loading={isSyncing}
+          disabled={isSyncing}
+        >
           <Icon name="sync" /> Sync Now
         </Button>
 
@@ -74,7 +92,8 @@ const SettingsPage = () => {
           <Message info>
             <Message.Header>Last Successful Sync</Message.Header>
             <p>
-              On {syncResponse.lastSuccessfulSync.split(' ')[0]} at {syncResponse.lastSuccessfulSync.split(' ')[1]}
+              On {syncResponse.lastSuccessfulSync.split(' ')[0]} at{' '}
+              {syncResponse.lastSuccessfulSync.split(' ')[1]}
             </p>
           </Message>
         )}

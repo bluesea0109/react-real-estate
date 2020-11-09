@@ -1,4 +1,4 @@
-import { createAction, createErrorAction } from '../../helpers';
+import { createAction, createErrorAction } from '../../utils/helpers';
 
 export const INITIALIZE_TEAM_PENDING = 'INITIALIZE_TEAM_PENDING';
 export const INITIALIZE_TEAM_SUCCESS = 'INITIALIZE_TEAM_SUCCESS';

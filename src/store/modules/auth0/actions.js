@@ -1,4 +1,4 @@
-import { createAction, createErrorAction } from '../../helpers';
+import { createAction, createErrorAction } from '../../utils/helpers';
 
 export const AUTHENTICATION_PENDING = 'AUTHENTICATION_PENDING';
 export const AUTHENTICATION_SUCCESS = 'AUTHENTICATION_SUCCESS';

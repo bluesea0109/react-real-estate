@@ -1,6 +1,13 @@
 import { put, call, select, takeLatest } from 'redux-saga/effects';
 
-import { getTeamPending, getTeamSuccess, getTeamError, SYNC_PENDING, syncSuccess, syncError } from './actions';
+import {
+  getTeamPending,
+  getTeamSuccess,
+  getTeamError,
+  SYNC_PENDING,
+  syncSuccess,
+  syncError,
+} from './actions';
 import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
 
 import ApiService from '../../../services/api/index';
@@ -12,7 +19,10 @@ export function* getTeamSaga() {
     yield put(getTeamPending());
 
     const { path, method } = ApiService.directory.team.list();
-    const response = yield call(ApiService[method], path, { include_realtorPhoto: true, include_docs: true });
+    const response = yield call(ApiService[method], path, {
+      include_realtorPhoto: true,
+      include_docs: true,
+    });
 
     yield put(getTeamSuccess(response));
   } catch (err) {

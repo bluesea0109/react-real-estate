@@ -1,4 +1,4 @@
-import { createAction, createErrorAction } from '../../helpers';
+import { createAction, createErrorAction } from '../../utils/helpers';
 
 export const GET_TEAM_CUSTOMIZATION_PENDING = 'GET_TEAM_CUSTOMIZATION_PENDING';
 export const GET_TEAM_CUSTOMIZATION_SUCCESS = 'GET_TEAM_CUSTOMIZATION_SUCCESS';

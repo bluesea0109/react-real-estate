@@ -1,8 +1,7 @@
 import React from 'react';
 import { LoadScript } from '@react-google-maps/api';
 
-
-const loaderId = "poly-map-1";
+const loaderId = 'poly-map-1';
 
 const Loading = <div>Loading...</div>;
 
@@ -12,7 +11,7 @@ const onLoad = () => console.log('script loaded');
 
 const onError = err => console.log('onError: ', err);
 
-const PolygonGoogleMapsHOC = ({children}) => {
+const PolygonGoogleMapsHOC = ({ children }) => {
   return (
     <LoadScript
       id={loaderId}

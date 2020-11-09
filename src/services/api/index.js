@@ -149,12 +149,24 @@ const directory = {
     postcard: {
       render: {
         listed: {
-          front: ({ userId }) => ({ path: `/api/user/${userId}/team/postcard/render/listed/html/front`, method: 'get' }),
-          back: ({ userId }) => ({ path: `/api/user/${userId}/team/postcard/render/listed/html/back`, method: 'get' }),
+          front: ({ userId }) => ({
+            path: `/api/user/${userId}/team/postcard/render/listed/html/front`,
+            method: 'get',
+          }),
+          back: ({ userId }) => ({
+            path: `/api/user/${userId}/team/postcard/render/listed/html/back`,
+            method: 'get',
+          }),
         },
         sold: {
-          front: ({ userId }) => ({ path: `/api/user/${userId}/team/postcard/render/sold/html/front`, method: 'get' }),
-          back: ({ userId }) => ({ path: `/api/user/${userId}/team/postcard/render/sold/html/back`, method: 'get' }),
+          front: ({ userId }) => ({
+            path: `/api/user/${userId}/team/postcard/render/sold/html/front`,
+            method: 'get',
+          }),
+          back: ({ userId }) => ({
+            path: `/api/user/${userId}/team/postcard/render/sold/html/back`,
+            method: 'get',
+          }),
         },
       },
     },
@@ -162,12 +174,18 @@ const directory = {
 
   user: {
     listing: {
-      initial: () => ({ path: `/api/user/listing/mailout/initial?removeUnsent=true&skipEmailNotification=true`, method: 'post' }),
+      initial: () => ({
+        path: `/api/user/listing/mailout/initial?removeUnsent=true&skipEmailNotification=true`,
+        method: 'post',
+      }),
       poll: () => ({ path: `/api/user/listing/mailout/initial/poll`, method: 'get' }),
     },
     mailout: {
       list: () => ({ path: `/api/user/mailout`, method: 'get' }),
-      get: mailoutId => ({ path: `/api/user/mailout/${mailoutId}?include_destinations=true`, method: 'get' }),
+      get: mailoutId => ({
+        path: `/api/user/mailout/${mailoutId}?include_destinations=true`,
+        method: 'get',
+      }),
       csv: ({ userId, mailoutId }) => ({ path: `/api/user/${userId}/mailout/${mailoutId}/csv` }),
       byMls: mlsNum => ({ path: `/api/user/mailout/byMls`, method: 'post' }),
       edit: {
@@ -175,7 +193,10 @@ const directory = {
         update: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'put' }),
         revert: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'del' }),
       },
-      mailoutSize: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit/mailoutSize`, method: 'put' }),
+      mailoutSize: mailoutId => ({
+        path: `/api/user/mailout/${mailoutId}/edit/mailoutSize`,
+        method: 'put',
+      }),
       stop: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/stop`, method: 'post' }),
       submit: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/submit`, method: 'post' }),
       changeAgent: (mailoutId, displayAgentUserId) => ({
@@ -183,8 +204,14 @@ const directory = {
         method: 'get',
       }),
       render: {
-        front: ({ userId, mailoutId }) => ({ path: `/api/user/${userId}/mailout/${mailoutId}/render/preview/html/front`, method: 'get' }),
-        back: ({ userId, mailoutId }) => ({ path: `/api/user/${userId}/mailout/${mailoutId}/render/preview/html/back`, method: 'get' }),
+        front: ({ userId, mailoutId }) => ({
+          path: `/api/user/${userId}/mailout/${mailoutId}/render/preview/html/front`,
+          method: 'get',
+        }),
+        back: ({ userId, mailoutId }) => ({
+          path: `/api/user/${userId}/mailout/${mailoutId}/render/preview/html/back`,
+          method: 'get',
+        }),
       },
       ignored: () => ({ path: `/api/user/mailout/ignored`, method: 'get' }),
       archive: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/archive`, method: 'post' }),
@@ -221,12 +248,24 @@ const directory = {
     postcard: {
       render: {
         listed: {
-          front: ({ userId }) => ({ path: `/api/user/${userId}/postcard/render/listed/html/front`, method: 'get' }),
-          back: ({ userId }) => ({ path: `/api/user/${userId}/postcard/render/listed/html/back`, method: 'get' }),
+          front: ({ userId }) => ({
+            path: `/api/user/${userId}/postcard/render/listed/html/front`,
+            method: 'get',
+          }),
+          back: ({ userId }) => ({
+            path: `/api/user/${userId}/postcard/render/listed/html/back`,
+            method: 'get',
+          }),
         },
         sold: {
-          front: ({ userId }) => ({ path: `/api/user/${userId}/postcard/render/sold/html/front`, method: 'get' }),
-          back: ({ userId }) => ({ path: `/api/user/${userId}/postcard/render/sold/html/back`, method: 'get' }),
+          front: ({ userId }) => ({
+            path: `/api/user/${userId}/postcard/render/sold/html/front`,
+            method: 'get',
+          }),
+          back: ({ userId }) => ({
+            path: `/api/user/${userId}/postcard/render/sold/html/back`,
+            method: 'get',
+          }),
         },
       },
     },
@@ -234,22 +273,54 @@ const directory = {
 
   peer: {
     listing: {
-      initial: peerId => ({ path: `/api/user/peer/${peerId}/listing/mailout/initial?removeUnsent=true&skipEmailNotification=true`, method: 'post' }),
-      poll: peerId => ({ path: `/api/user/peer/${peerId}/listing/mailout/initial/poll`, method: 'get' }),
+      initial: peerId => ({
+        path: `/api/user/peer/${peerId}/listing/mailout/initial?removeUnsent=true&skipEmailNotification=true`,
+        method: 'post',
+      }),
+      poll: peerId => ({
+        path: `/api/user/peer/${peerId}/listing/mailout/initial/poll`,
+        method: 'get',
+      }),
     },
     mailout: {
       list: peerId => ({ path: `/api/user/peer/${peerId}/mailout`, method: 'get' }),
-      get: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}?include_destinations=true`, method: 'get' }),
-      csv: (userId, mailoutId, peerId) => ({ path: `/api/user/${userId}/peer/${peerId}/mailout/${mailoutId}/csv` }),
-      byMls: (mlsNum, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/byMls`, method: 'post' }),
+      get: (mailoutId, peerId) => ({
+        path: `/api/user/peer/${peerId}/mailout/${mailoutId}?include_destinations=true`,
+        method: 'get',
+      }),
+      csv: (userId, mailoutId, peerId) => ({
+        path: `/api/user/${userId}/peer/${peerId}/mailout/${mailoutId}/csv`,
+      }),
+      byMls: (mlsNum, peerId) => ({
+        path: `/api/user/peer/${peerId}/mailout/byMls`,
+        method: 'post',
+      }),
       edit: {
-        get: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit`, method: 'get' }),
-        update: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit`, method: 'put' }),
-        revert: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit`, method: 'del' }),
+        get: (mailoutId, peerId) => ({
+          path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit`,
+          method: 'get',
+        }),
+        update: (mailoutId, peerId) => ({
+          path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit`,
+          method: 'put',
+        }),
+        revert: (mailoutId, peerId) => ({
+          path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit`,
+          method: 'del',
+        }),
       },
-      mailoutSize: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit/mailoutSize`, method: 'put' }),
-      stop: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/stop`, method: 'post' }),
-      submit: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/submit`, method: 'post' }),
+      mailoutSize: (mailoutId, peerId) => ({
+        path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit/mailoutSize`,
+        method: 'put',
+      }),
+      stop: (mailoutId, peerId) => ({
+        path: `/api/user/peer/${peerId}/mailout/${mailoutId}/stop`,
+        method: 'post',
+      }),
+      submit: (mailoutId, peerId) => ({
+        path: `/api/user/peer/${peerId}/mailout/${mailoutId}/submit`,
+        method: 'post',
+      }),
       changeAgent: (mailoutId, peerId, displayAgentUserId) => ({
         path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit/mailoutDisplayAgent?peerId=${displayAgentUserId}`,
         method: 'get',
@@ -259,16 +330,28 @@ const directory = {
           path: `/api/user/${userId}/peer/${peerId}/mailout/${mailoutId}/render/preview/html/front`,
           method: 'get',
         }),
-        back: ({ userId, peerId, mailoutId }) => ({ path: `/api/user/${userId}/peer/${peerId}/mailout/${mailoutId}/render/preview/html/back`, method: 'get' }),
+        back: ({ userId, peerId, mailoutId }) => ({
+          path: `/api/user/${userId}/peer/${peerId}/mailout/${mailoutId}/render/preview/html/back`,
+          method: 'get',
+        }),
       },
       ignored: peerId => ({ path: `/api/user/peer/${peerId}/mailout/ignored`, method: 'get' }),
-      archive: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/archive`, method: 'post' }),
-      unarchive: (mailoutId, peerId) => ({ path: `/api/user/peer/${peerId}/mailout/${mailoutId}/archive`, method: 'del' }),
+      archive: (mailoutId, peerId) => ({
+        path: `/api/user/peer/${peerId}/mailout/${mailoutId}/archive`,
+        method: 'post',
+      }),
+      unarchive: (mailoutId, peerId) => ({
+        path: `/api/user/peer/${peerId}/mailout/${mailoutId}/archive`,
+        method: 'del',
+      }),
     },
     customization: {
       get: peerId => ({ path: `/api/user/peer/${peerId}/settings/branding`, method: 'get' }),
       save: peerId => ({ path: `/api/user/peer/${peerId}/settings/branding`, method: 'put' }),
-      generatePostcardPreview: peerId => ({ path: `/api/user/peer/${peerId}/postcard/preview`, method: 'post' }),
+      generatePostcardPreview: peerId => ({
+        path: `/api/user/peer/${peerId}/postcard/preview`,
+        method: 'post',
+      }),
     },
     profile: {
       get: peerId => ({ path: `/api/user/peer/${peerId}/settings/profile`, method: 'get' }),
@@ -276,32 +359,65 @@ const directory = {
     },
     photos: {
       realtorPhoto: {
-        get: peerId => ({ path: `/api/user/peer/${peerId}/settings/photos/realtorPhoto`, method: 'get' }),
-        set: peerId => ({ path: `/api/user/peer/${peerId}/settings/photos/realtorPhoto`, method: 'postBlob' }),
+        get: peerId => ({
+          path: `/api/user/peer/${peerId}/settings/photos/realtorPhoto`,
+          method: 'get',
+        }),
+        set: peerId => ({
+          path: `/api/user/peer/${peerId}/settings/photos/realtorPhoto`,
+          method: 'postBlob',
+        }),
       },
     },
     shortcode: {
       listed: {
-        get: peerId => ({ path: `/api/user/peer/${peerId}/settings/shortcode/listed/example`, method: 'get' }),
-        save: peerId => ({ path: `/api/user/peer/${peerId}/settings/shortcode/listed/example`, method: 'put' }),
+        get: peerId => ({
+          path: `/api/user/peer/${peerId}/settings/shortcode/listed/example`,
+          method: 'get',
+        }),
+        save: peerId => ({
+          path: `/api/user/peer/${peerId}/settings/shortcode/listed/example`,
+          method: 'put',
+        }),
       },
       sold: {
-        get: peerId => ({ path: `/api/user/peer/${peerId}/settings/shortcode/sold/example`, method: 'get' }),
-        save: peerId => ({ path: `/api/user/peer/${peerId}/settings/shortcode/sold/example`, method: 'put' }),
+        get: peerId => ({
+          path: `/api/user/peer/${peerId}/settings/shortcode/sold/example`,
+          method: 'get',
+        }),
+        save: peerId => ({
+          path: `/api/user/peer/${peerId}/settings/shortcode/sold/example`,
+          method: 'put',
+        }),
       },
     },
     password: {
-      reset: peerId => ({ path: `/api/user/peer/${peerId}/settings/password/reset`, method: 'post' }),
+      reset: peerId => ({
+        path: `/api/user/peer/${peerId}/settings/password/reset`,
+        method: 'post',
+      }),
     },
     postcard: {
       render: {
         listed: {
-          front: ({ userId, peerId }) => ({ path: `/api/user/${userId}/peer/${peerId}/postcard/render/listed/html/front`, method: 'get' }),
-          back: ({ userId, peerId }) => ({ path: `/api/user/${userId}/peer/${peerId}/postcard/render/listed/html/back`, method: 'get' }),
+          front: ({ userId, peerId }) => ({
+            path: `/api/user/${userId}/peer/${peerId}/postcard/render/listed/html/front`,
+            method: 'get',
+          }),
+          back: ({ userId, peerId }) => ({
+            path: `/api/user/${userId}/peer/${peerId}/postcard/render/listed/html/back`,
+            method: 'get',
+          }),
         },
         sold: {
-          front: ({ userId, peerId }) => ({ path: `/api/user/${userId}/peer/${peerId}/postcard/render/sold/html/front`, method: 'get' }),
-          back: ({ userId, peerId }) => ({ path: `/api/user/${userId}/peer/${peerId}/postcard/render/sold/html/back`, method: 'get' }),
+          front: ({ userId, peerId }) => ({
+            path: `/api/user/${userId}/peer/${peerId}/postcard/render/sold/html/front`,
+            method: 'get',
+          }),
+          back: ({ userId, peerId }) => ({
+            path: `/api/user/${userId}/peer/${peerId}/postcard/render/sold/html/back`,
+            method: 'get',
+          }),
         },
       },
     },

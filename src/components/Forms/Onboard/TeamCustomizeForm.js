@@ -6,7 +6,7 @@ import React, { createRef, Fragment, useEffect, useState, useReducer } from 'rea
 import { saveTeamCustomizationPending } from '../../../store/modules/teamCustomization/actions';
 import { Button, Icon, Image, Menu, Page, Segment } from '../../Base';
 import { ContentTopHeaderLayout } from '../../../layouts';
-import { StyledHeader } from '../../helpers';
+import { StyledHeader } from '../../utils/helpers';
 import Wizard from './CustomizationWizard';
 
 import InputFormField from '../Common/InputFormField';
@@ -34,7 +34,9 @@ const TeamCustomizeForm = ({ teamCustomizationData, initialValues }) => {
 
   const teammates = useSelector(store => store.team.profiles);
   const onLoginUserId = useSelector(store => store.onLogin.user._id);
-  const firstTeamAdmin = useSelector(store => store.team?.profiles.filter(profile => profile.userId === store.onLogin.user._id)[0]);
+  const firstTeamAdmin = useSelector(
+    store => store.team?.profiles.filter(profile => profile.userId === store.onLogin.user._id)[0]
+  );
 
   const profiles = [];
 
@@ -103,8 +105,20 @@ const TeamCustomizeForm = ({ teamCustomizationData, initialValues }) => {
       const fullName = `${profile.first} ${profile.last}`;
 
       const contextRef = createRef();
-      const currentUserIconWithPopup = <Popup context={contextRef} content="Currently selected agent" trigger={<Icon name="user" />} />;
-      const setupCompletedIconWithPopup = <Popup context={contextRef} content="Setup Completed" trigger={<Icon name="check circle" color="teal" />} />;
+      const currentUserIconWithPopup = (
+        <Popup
+          context={contextRef}
+          content="Currently selected agent"
+          trigger={<Icon name="user" />}
+        />
+      );
+      const setupCompletedIconWithPopup = (
+        <Popup
+          context={contextRef}
+          content="Setup Completed"
+          trigger={<Icon name="check circle" color="teal" />}
+        />
+      );
 
       return profiles.push({
         key: index,
@@ -114,7 +128,12 @@ const TeamCustomizeForm = ({ teamCustomizationData, initialValues }) => {
         value: profile.userId,
         content: (
           <StyledHeader as="h4" ref={contextRef}>
-            <Image size="mini" inline circular src="https://react.semantic-ui.com/images/avatar/large/patrick.png" />
+            <Image
+              size="mini"
+              inline
+              circular
+              src="https://react.semantic-ui.com/images/avatar/large/patrick.png"
+            />
             &nbsp;
             {profile.first}&nbsp;
             {profile.last}&nbsp;
@@ -127,7 +146,8 @@ const TeamCustomizeForm = ({ teamCustomizationData, initialValues }) => {
   }
 
   const Listings = ({ listingType }) => {
-    const editable = listingType === NEW_LISTING ? formValues && formValues.listed : formValues && formValues.sold;
+    const editable =
+      listingType === NEW_LISTING ? formValues && formValues.listed : formValues && formValues.sold;
 
     return (
       <Fragment>
@@ -140,40 +160,117 @@ const TeamCustomizeForm = ({ teamCustomizationData, initialValues }) => {
             <Header as="h5" style={{ opacity: !editable ? 0.4 : 1 }}>
               Template Theme
             </Header>
-            {TemplatePictureFormField({ templateName: 'ribbon', listingType, initialValues, formValues, setFormValues })}
+            {TemplatePictureFormField({
+              templateName: 'ribbon',
+              listingType,
+              initialValues,
+              formValues,
+              setFormValues,
+            })}
           </div>
 
           <div>
             <p>&nbsp;</p>
-            {TemplatePictureFormField({ templateName: 'bookmark', listingType, initialValues, formValues, setFormValues })}
+            {TemplatePictureFormField({
+              templateName: 'bookmark',
+              listingType,
+              initialValues,
+              formValues,
+              setFormValues,
+            })}
           </div>
 
           <div>
             <p>&nbsp;</p>
-            {TemplatePictureFormField({ templateName: 'stack', listingType, initialValues, formValues, setFormValues })}
+            {TemplatePictureFormField({
+              templateName: 'stack',
+              listingType,
+              initialValues,
+              formValues,
+              setFormValues,
+            })}
           </div>
 
-          <div>{ColorPickerFormField({ listingType, initialValues, formValues, setFormValues })}</div>
+          <div>
+            {ColorPickerFormField({ listingType, initialValues, formValues, setFormValues })}
+          </div>
         </Segment>
 
         <Segment padded className={isMobile ? null : 'tertiary-grid-container'}>
-          {InputFormField({ fieldName: 'frontHeadline', listingType, initialValues, formValues, setFormValues })}
-
-          <div>{MailoutSizeSliderFormField({ formType: 'team', listingType, initialValues, formValues, setFormValues })}</div>
-
-          <div>{CTAInputFormField({ formType: 'team', listingType, initialValues, formValues, setFormValues })}</div>
+          {InputFormField({
+            fieldName: 'frontHeadline',
+            listingType,
+            initialValues,
+            formValues,
+            setFormValues,
+          })}
 
           <div>
-            <div>{KWKLYInputFormField({ listingType, initialValues, formValues, setFormValues })}</div>
+            {MailoutSizeSliderFormField({
+              formType: 'team',
+              listingType,
+              initialValues,
+              formValues,
+              setFormValues,
+            })}
+          </div>
+
+          <div>
+            {CTAInputFormField({
+              formType: 'team',
+              listingType,
+              initialValues,
+              formValues,
+              setFormValues,
+            })}
+          </div>
+
+          <div>
+            <div>
+              {KWKLYInputFormField({ listingType, initialValues, formValues, setFormValues })}
+            </div>
             <div style={{ display: 'block', paddingTop: '1.5em' }}>
-              <div>{KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}</div>
+              <div>
+                {KWKLYCTAToggleFormField({ listingType, initialValues, formValues, setFormValues })}
+              </div>
             </div>
           </div>
 
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', padding: '0.5rem' }}>
-            <>{TemplatePostcardSizeField({ postcardSize: '4x6', listingType, initialValues, formValues, setFormValues })}</>
-            <>{TemplatePostcardSizeField({ postcardSize: '6x9', listingType, initialValues, formValues, setFormValues })}</>
-            <>{TemplatePostcardSizeField({ postcardSize: '6x11', listingType, initialValues, formValues, setFormValues })}</>
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'flex-start',
+              padding: '0.5rem',
+            }}
+          >
+            <>
+              {TemplatePostcardSizeField({
+                postcardSize: '4x6',
+                listingType,
+                initialValues,
+                formValues,
+                setFormValues,
+              })}
+            </>
+            <>
+              {TemplatePostcardSizeField({
+                postcardSize: '6x9',
+                listingType,
+                initialValues,
+                formValues,
+                setFormValues,
+              })}
+            </>
+            <>
+              {TemplatePostcardSizeField({
+                postcardSize: '6x11',
+                listingType,
+                initialValues,
+                formValues,
+                setFormValues,
+              })}
+            </>
           </div>
         </Segment>
 

@@ -1,4 +1,4 @@
-import { createAction, createErrorAction } from '../../helpers';
+import { createAction, createErrorAction } from '../../utils/helpers';
 
 export const GET_MAILOUTS_PENDING = 'GET_MAILOUTS_PENDING';
 export const GET_MAILOUTS_SUCCESS = 'GET_MAILOUTS_SUCCESS';

@@ -2,7 +2,7 @@ import React from 'react';
 import { FastField, Field, getIn } from 'formik';
 import { Form, Ref, TextArea } from 'semantic-ui-react';
 
-import { getFieldError, setFieldValue, useFocusOnError } from './helpers';
+import { getFieldError, setFieldValue, useFocusOnError } from './utils/helpers';
 import ErrorMessage from './ErrorMessage';
 import { NullRef } from './InputRef';
 
@@ -31,7 +31,11 @@ const FormikTextArea = ({
       {({ field, form }) => {
         const error = getFieldError(field, form);
         return (
-          <Form.Field error={!!error} {...fieldProps} className={disabled ? 'disabled-form-field' : null}>
+          <Form.Field
+            error={!!error}
+            {...fieldProps}
+            className={disabled ? 'disabled-form-field' : null}
+          >
             {!!label && (
               <label htmlFor={id} style={{ opacity: disabled ? '0.4' : 1 }}>
                 {label} {tag}

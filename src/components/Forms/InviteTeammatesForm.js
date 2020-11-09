@@ -4,10 +4,16 @@ import React, { Fragment, useEffect, useState } from 'react';
 
 import { inviteUsersPending, skipInviteUsers } from '../../store/modules/inviteUsers/actions';
 import { Divider, List, Segment, Item, Icon, Button, Message, Image } from '../Base';
-import { objectIsEmpty } from '../utils';
+import { objectIsEmpty } from '../utils/utils';
 
 const Checkbox = ({ disabled, label, isSelected, onCheckboxChange }) => (
-  <input disabled={disabled} type="checkbox" name={label} checked={isSelected} onChange={onCheckboxChange} />
+  <input
+    disabled={disabled}
+    type="checkbox"
+    name={label}
+    checked={isSelected}
+    onChange={onCheckboxChange}
+  />
 );
 
 const ProfileCompleted = (
@@ -149,11 +155,28 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
         >
           <div style={{ padding: 8 }}>
             {emailClicked ? (
-              <Checkbox disabled={emailClicked} label={userId} isSelected={emailClicked} onCheckboxChange={handleCheckboxChange} key={userEmail} />
+              <Checkbox
+                disabled={emailClicked}
+                label={userId}
+                isSelected={emailClicked}
+                onCheckboxChange={handleCheckboxChange}
+                key={userEmail}
+              />
             ) : isAdmin ? (
-              <Checkbox disabled={isAdmin} label={userId} isSelected={isAdmin} onCheckboxChange={handleCheckboxChange} key={userEmail} />
+              <Checkbox
+                disabled={isAdmin}
+                label={userId}
+                isSelected={isAdmin}
+                onCheckboxChange={handleCheckboxChange}
+                key={userEmail}
+              />
             ) : (
-              <Checkbox label={userId} isSelected={checkboxes[userId]} onCheckboxChange={handleCheckboxChange} key={userEmail} />
+              <Checkbox
+                label={userId}
+                isSelected={checkboxes[userId]}
+                onCheckboxChange={handleCheckboxChange}
+                key={userEmail}
+              />
             )}
           </div>
 
@@ -176,8 +199,8 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
     teammates
       .sort(function(a, b) {
         if (!a.first && !b.first) return 0;
-        if (!a.first) return 1
-        if (!b.first) return -1
+        if (!a.first) return 1;
+        if (!b.first) return -1;
         const nameA = a.first.toUpperCase();
         const nameB = b.first.toUpperCase();
         if (nameA < nameB) return -1;
@@ -190,7 +213,10 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
     <Segment>
       <Header as="h2">
         Invite Users
-        <Header.Subheader>Send invitations to team members to start using Brivity Marketer (for Brivity Platform users only).</Header.Subheader>
+        <Header.Subheader>
+          Send invitations to team members to start using Brivity Marketer (for Brivity Platform
+          users only).
+        </Header.Subheader>
       </Header>
 
       <br />
@@ -200,8 +226,14 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
           <Message size="large" style={{ textAlign: 'center' }}>
             <Message.Header>You currently have no team members.</Message.Header>
             <br />
-            <Image src={require('../../assets/undraw_selecting_team_8uux.png')} style={{ margin: 'auto', maxWidth: '500px' }} />
-            <p>When you get others on your team, check the Settings section in the app to invite them.</p>
+            <Image
+              src={require('../../assets/undraw_selecting_team_8uux.png')}
+              style={{ margin: 'auto', maxWidth: '500px' }}
+            />
+            <p>
+              When you get others on your team, check the Settings section in the app to invite
+              them.
+            </p>
           </Message>
           <div style={{ display: 'grid', justifyContent: 'end' }}>
             <div>
@@ -230,11 +262,22 @@ const InviteTeammatesForm = ({ settingsPage = null }) => {
 
           <div style={{ display: 'grid', justifyContent: 'end' }}>
             <div>
-              <Button primary type="submit" loading={isInviteUsersPending} disabled={sendDisabled || isInviteUsersPending}>
+              <Button
+                primary
+                type="submit"
+                loading={isInviteUsersPending}
+                disabled={sendDisabled || isInviteUsersPending}
+              >
                 Send
               </Button>
               {!settingsPage && (
-                <Button primary type="button" loading={isInviteUsersPending} onClick={handleContinue} disabled={isInviteUsersPending}>
+                <Button
+                  primary
+                  type="button"
+                  loading={isInviteUsersPending}
+                  onClick={handleContinue}
+                  disabled={isInviteUsersPending}
+                >
                   Skip
                 </Button>
               )}

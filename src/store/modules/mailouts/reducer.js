@@ -19,7 +19,7 @@ import {
   ADD_CAMPAIGN_START,
   // ADD_CAMPAIGN_PENDING,
   ADD_CAMPAIGN_SUCCESS,
-  ADD_CAMPAIGN_ERROR
+  ADD_CAMPAIGN_ERROR,
 } from './actions';
 import { ARCHIVE_MAILOUT_SUCCESS, UNDO_ARCHIVE_MAILOUT_SUCCESS } from '../mailout/actions';
 
@@ -35,7 +35,7 @@ const initialState = {
   error: null,
   generateError: false,
   addCampaignMlsNum: null,
-  addCampaignMlsNumPending: false
+  addCampaignMlsNumPending: false,
 };
 
 export default function mailouts(state = initialState, action) {
@@ -177,21 +177,21 @@ export default function mailouts(state = initialState, action) {
         ...state,
         addCampaignMlsNum: action.payload,
         addCampaignMlsNumPending: true,
-        error: null
+        error: null,
       };
     case ADD_CAMPAIGN_SUCCESS:
       return {
         ...state,
         addCampaignMlsNum: null,
         addCampaignMlsNumPending: false,
-        error: null
-      }
+        error: null,
+      };
     case ADD_CAMPAIGN_ERROR:
       return {
         ...state,
         addCampaignMlsNumPending: false,
-        error: action.error
-      }
+        error: action.error,
+      };
     default:
       return state;
   }

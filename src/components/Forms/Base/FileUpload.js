@@ -4,10 +4,18 @@ import { useDropzone } from 'react-dropzone';
 import { Form, Header, Icon, Label, Card, Image, Item } from 'semantic-ui-react';
 
 import { deletePhotoPending, uploadPhotoPending } from '../../../store/modules/pictures/actions';
-import { useFocusOnError } from './helpers';
+import { useFocusOnError } from './utils/helpers';
 import ErrorMessage from './ErrorMessage';
 
-function FileUpload({ name, label, pending, dispatch, errorComponent = ErrorMessage, tag = undefined, ...props }) {
+function FileUpload({
+  name,
+  label,
+  pending,
+  dispatch,
+  errorComponent = ErrorMessage,
+  tag = undefined,
+  ...props
+}) {
   const fieldRef = React.useRef();
 
   const onDrop = useCallback(
@@ -59,7 +67,11 @@ function FileUpload({ name, label, pending, dispatch, errorComponent = ErrorMess
             {name === 'teamLogo' && field.value && !field.value.includes('image-placeholder') && (
               <div style={{ gridArea: 'Func', justifySelf: 'end' }}>
                 <Item as="label" style={{ cursor: 'pointer' }}>
-                  <Header as="h4" style={error ? { color: '#9f3a38' } : { color: '#59C4C4' }} onClick={() => onClickDelete(name)}>
+                  <Header
+                    as="h4"
+                    style={error ? { color: '#9f3a38' } : { color: '#59C4C4' }}
+                    onClick={() => onClickDelete(name)}
+                  >
                     Delete
                   </Header>
                 </Item>
@@ -67,13 +79,36 @@ function FileUpload({ name, label, pending, dispatch, errorComponent = ErrorMess
             )}
 
             <div style={{ gridArea: 'Image' }}>
-              <div style={{ maxWidth: '15em' }} {...getRootProps({ className: 'dropzone' })} ref={fieldRef}>
-                <Item className="image-container" htmlFor={name} as="label" style={{ cursor: isDragReject ? 'not-allowed' : 'pointer' }} onClick={open}>
+              <div
+                style={{ maxWidth: '15em' }}
+                {...getRootProps({ className: 'dropzone' })}
+                ref={fieldRef}
+              >
+                <Item
+                  className="image-container"
+                  htmlFor={name}
+                  as="label"
+                  style={{ cursor: isDragReject ? 'not-allowed' : 'pointer' }}
+                  onClick={open}
+                >
                   <Card
                     style={
                       error
-                        ? { minHeight: '15em', maxHeight: '15em', minWidth: '15em', maxWidth: '15em', overflow: 'hidden', border: '3px solid #e0b4b4' }
-                        : { minHeight: '15em', maxHeight: '15em', minWidth: '15em', maxWidth: '15em', overflow: 'hidden' }
+                        ? {
+                            minHeight: '15em',
+                            maxHeight: '15em',
+                            minWidth: '15em',
+                            maxWidth: '15em',
+                            overflow: 'hidden',
+                            border: '3px solid #e0b4b4',
+                          }
+                        : {
+                            minHeight: '15em',
+                            maxHeight: '15em',
+                            minWidth: '15em',
+                            maxWidth: '15em',
+                            overflow: 'hidden',
+                          }
                     }
                   >
                     <Label corner="right" className="image-upload-label">
@@ -82,9 +117,19 @@ function FileUpload({ name, label, pending, dispatch, errorComponent = ErrorMess
                     {field.value && !isDragReject ? (
                       <Image size="tiny" src={field.value} wrapped ui={false} />
                     ) : name === 'realtorPhoto' ? (
-                      <Image size="tiny" src={require('../../../assets/photo-placeholder.svg')} wrapped ui={false} />
+                      <Image
+                        size="tiny"
+                        src={require('../../../assets/photo-placeholder.svg')}
+                        wrapped
+                        ui={false}
+                      />
                     ) : (
-                      <Image size="tiny" src={require('../../../assets/image-placeholder.svg')} wrapped ui={false} />
+                      <Image
+                        size="tiny"
+                        src={require('../../../assets/image-placeholder.svg')}
+                        wrapped
+                        ui={false}
+                      />
                     )}
                     {pending ? null : <input {...getInputProps()} />}
                     <div className="image-middle">

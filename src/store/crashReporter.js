@@ -17,7 +17,11 @@ const sentryHandler = (store, action, err) => {
     if (err) {
       Sentry.captureException(new Error(err.message));
     } else {
-      if (action.error?.statusCode !== 412 && action.error?.statusCode !== 410 && action.error?.statusCode !== 404) {
+      if (
+        action.error?.statusCode !== 412 &&
+        action.error?.statusCode !== 410 &&
+        action.error?.statusCode !== 404
+      ) {
         Sentry.captureException(new Error(action.error?.message));
       }
     }

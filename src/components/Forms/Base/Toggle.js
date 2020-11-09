@@ -2,7 +2,7 @@ import React from 'react';
 import { FastField, Field, getIn } from 'formik';
 import { Form } from 'semantic-ui-react';
 
-import { getFieldError, setFieldValue, useFocusOnError } from './helpers';
+import { getFieldError, setFieldValue, useFocusOnError } from './utils/helpers';
 import ErrorMessage from './ErrorMessage';
 import { InputRef } from './InputRef';
 
@@ -74,7 +74,8 @@ const FormikToggle = ({
                   onChange={e => {
                     setFieldValue(form, name, invertInput ? field.value : !field.value, true);
                     Promise.resolve().then(() => {
-                      onChange && onChange(e, { name, value: invertInput ? field.value : !field.value });
+                      onChange &&
+                        onChange(e, { name, value: invertInput ? field.value : !field.value });
                     });
                   }}
                   style={{ opacity: disabled ? 0.4 : 1 }}

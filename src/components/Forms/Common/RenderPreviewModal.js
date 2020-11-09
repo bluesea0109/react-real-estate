@@ -2,86 +2,102 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Segment } from 'semantic-ui-react';
 
-import { previewTeamCustomizationCompleted, reviewTeamCustomizationCompleted } from '../../../store/modules/teamCustomization/actions';
-import { previewCustomizationCompleted, reviewCustomizationCompleted } from '../../../store/modules/customization/actions';
-import { iframeTransformDesktop, iframeTransformMobile } from '../../helpers';
+import {
+  previewTeamCustomizationCompleted,
+  reviewTeamCustomizationCompleted,
+} from '../../../store/modules/teamCustomization/actions';
+import {
+  previewCustomizationCompleted,
+  reviewCustomizationCompleted,
+} from '../../../store/modules/customization/actions';
+import { iframeTransformDesktop, iframeTransformMobile } from '../../utils/helpers';
 import { Button, Icon, Modal } from '../../Base';
 import ApiService from '../../../services/api';
 import FlipCard from '../../FlipCard';
 import Loading from '../../Loading';
 import { useIsMobile } from '../../Hooks/useIsMobile';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Styled from 'styled-components';
 
 const modalHeaderStyles = {
   padding: '4px 0px 0px 0px',
   display: 'flex',
   fontSize: '29px',
   color: '#59c4c4',
-  justifyContent:'space-between',
-  borderBottom:'none'
-}
+  justifyContent: 'space-between',
+  borderBottom: 'none',
+};
 
 const cancelButton = {
-  borderRadius: '50px',
-  textTransform: 'uppercase',
+  backgroundColor: '#EDEDED',
   color: '#666666',
-  fontWeight: 'bold'
-}
+  fontWeight: 'bold',
+};
 
 const flipButtonContainer = {
-  height:'30px', 
-  display:'flex', 
-  justifyContent:'center', 
-  paddingTop:'8px'
-}
+  height: '30px',
+  display: 'flex',
+  justifyContent: 'center',
+  paddingTop: '8px',
+};
 
 const flipButtonStyles = {
   background: 'none',
   color: '#59c4c4',
   textTransform: 'uppercase',
   fontSize: '15px',
-  borderRadius:'0px',
-  padding:'7px 0px 18px 0px',
-}
+  borderRadius: '0px',
+  padding: '7px 0px 18px 0px',
+};
 
 const rightMargin = {
-  marginRight:'60px'
-}
+  marginRight: '60px',
+};
 
 const highlightButton = {
-  borderBottom:'3px solid #59c4c4',
-}
+  borderBottom: '3px solid #59c4c4',
+};
 
 const cancelX = {
-  backgroundColor:'#EDEDED',
-  borderRadius:'50px',
+  backgroundColor: '#EDEDED',
+  borderRadius: '50px',
   height: '30px',
-  width:'30px',
-  padding:'0px',
-  marginTop:'0px',
-  marginRight:'0px',
-}
+  minWidth: 0,
+  width: '30px',
+  padding: '0px',
+  marginTop: '0px',
+  marginRight: '0px',
+};
 
 const modalActionStyles = {
-  borderTop:'none',
-  display:'flex', 
-  justifyContent:'space-between', 
-  marginTop:'0px',
-  padding:'0px'
-}
+  borderTop: 'none',
+  display: 'flex',
+  justifyContent: 'space-between',
+  marginTop: '0px',
+  padding: '0px',
+};
 
 const modalHeaderP = {
   marginBottom: '9px',
   fontSize: '26px',
-  fontWeight: '400'
-}
+  fontWeight: '400',
+};
 
 const segmentStyle = {
-  border: 'none', 
-  padding: '2px', 
-  margin: 'auto', 
-  boxShadow:'none' 
+  border: 'none',
+  padding: '2px',
+  margin: 'auto',
+  boxShadow: 'none',
+};
+
+const ModalPreview = Styled(Modal)`
+
+@media only screen and (max-width: 700px) {
+  &&&{
+    width:90%;
+  }
 }
+`;
 
 const RenderPreviewModal = ({ formType, formValues }) => {
   const isMobile = useIsMobile();
@@ -102,13 +118,28 @@ const RenderPreviewModal = ({ formType, formValues }) => {
   const onboardedStatus = useSelector(store => store.onboarded.status);
   const inOnboardingMode = onboardedStatus === false;
 
-  const teamCustomizationPending = useSelector(store => store.teamCustomization && store.teamCustomization.pending);
-  const teamCustomizationPreview = useSelector(store => store.teamCustomization && store.teamCustomization.preview);
-  const teamCustomizationError = useSelector(store => store.teamCustomization && store.teamCustomization.error && store.teamCustomization.error.message);
+  const teamCustomizationPending = useSelector(
+    store => store.teamCustomization && store.teamCustomization.pending
+  );
+  const teamCustomizationPreview = useSelector(
+    store => store.teamCustomization && store.teamCustomization.preview
+  );
+  const teamCustomizationError = useSelector(
+    store =>
+      store.teamCustomization &&
+      store.teamCustomization.error &&
+      store.teamCustomization.error.message
+  );
 
-  const agentCustomizationPending = useSelector(store => store.customization && store.customization.pending);
-  const agentCustomizationPreview = useSelector(store => store.customization && store.customization.preview);
-  const agentCustomizationError = useSelector(store => store.customization && store.customization.error && store.customization.error.message);
+  const agentCustomizationPending = useSelector(
+    store => store.customization && store.customization.pending
+  );
+  const agentCustomizationPreview = useSelector(
+    store => store.customization && store.customization.preview
+  );
+  const agentCustomizationError = useSelector(
+    store => store.customization && store.customization.error && store.customization.error.message
+  );
 
   const [customizationPreview, setCustomizationPreview] = useState(() => {
     if (formType === 'team') return teamCustomizationPreview;
@@ -123,7 +154,8 @@ const RenderPreviewModal = ({ formType, formValues }) => {
   if (formType === 'team') {
     customizationPending = teamCustomizationPending;
     customizationError = teamCustomizationError;
-    listedPostcardFrontURL = ApiService.directory.team.postcard.render.listed.front({ userId }).path;
+    listedPostcardFrontURL = ApiService.directory.team.postcard.render.listed.front({ userId })
+      .path;
     listedPostcardBackURL = ApiService.directory.team.postcard.render.listed.back({ userId }).path;
     soldPostcardFrontURL = ApiService.directory.team.postcard.render.sold.front({ userId }).path;
     soldPostcardBackURL = ApiService.directory.team.postcard.render.sold.back({ userId }).path;
@@ -219,7 +251,7 @@ const RenderPreviewModal = ({ formType, formValues }) => {
 
   if (customizationPending) {
     return (
-      <Modal open={customizationPreview} basic size="tiny">
+      <Modal open={customizationPreview} size="tiny">
         <Modal.Content style={{ padding: '0 45px 10px' }}>
           <Loading message="Please wait, loading an example preview..." />
         </Modal.Content>
@@ -233,7 +265,7 @@ const RenderPreviewModal = ({ formType, formValues }) => {
   } else {
     if (customizationError) {
       return (
-        <Modal open={customizationPreview} basic size="tiny">
+        <Modal open={customizationPreview} size="tiny">
           <Modal.Header style={modalHeaderStyles}>Error</Modal.Header>
           <Modal.Content style={{ padding: '0 45px 10px' }}>{customizationError}</Modal.Content>
           <Modal.Actions>
@@ -245,15 +277,15 @@ const RenderPreviewModal = ({ formType, formValues }) => {
       );
     } else {
       return (
-        <Modal open={customizationPreview} basic size="small">
-          <Modal.Header style={modalHeaderStyles}>
+        <ModalPreview open={customizationPreview} size="small">
+          <ModalPreview.Header style={modalHeaderStyles}>
             <p style={modalHeaderP}>Preview</p>
             <Button style={cancelX} onClick={() => setCustomizationPreview(false)}>
-            <FontAwesomeIcon icon="times" style={{ color: '#B1B1B1', fontSize:'16px' }} />
-          </Button>
-          </Modal.Header>
+              <FontAwesomeIcon icon="times" style={{ color: '#B1B1B1', fontSize: '16px' }} />
+            </Button>
+          </ModalPreview.Header>
 
-          <Modal.Content image style={{ padding: '0 45px 10px' }}>
+          <ModalPreview.Content image style={{ padding: '0 45px 10px' }}>
             <FlipCard isFlipped={isFlipped}>
               <Segment textAlign="center" loading={!listedFrontLoaded} style={segmentStyle}>
                 <iframe
@@ -261,8 +293,8 @@ const RenderPreviewModal = ({ formType, formValues }) => {
                   title={`bm-iframe-listed-front-${formType}`}
                   name="listed-front"
                   src={listedPostcardFrontURL}
-                  width={isMobile ? '300' : '600'}
-                  height={isMobile ? '204' : '408'}
+                  width="600"
+                  height="408"
                   frameBorder="0"
                   sandbox="allow-same-origin allow-scripts"
                   onLoad={handleOnload}
@@ -276,8 +308,8 @@ const RenderPreviewModal = ({ formType, formValues }) => {
                   title={`bm-iframe-listed-back-${formType}`}
                   name="listed-back"
                   src={listedPostcardBackURL}
-                  width={isMobile ? '300' : '600'}
-                  height={isMobile ? '204' : '408'}
+                  width="600"
+                  height="408"
                   frameBorder="0"
                   sandbox="allow-same-origin allow-scripts"
                   onLoad={handleOnload}
@@ -285,9 +317,9 @@ const RenderPreviewModal = ({ formType, formValues }) => {
                 />
               </Segment>
             </FlipCard>
-          </Modal.Content>
+          </ModalPreview.Content>
 
-          <Modal.Content image style={{ padding: '10px 45px 0' }}>
+          <ModalPreview.Content image style={{ padding: '10px 45px 0' }}>
             <FlipCard isFlipped={isFlipped}>
               <Segment textAlign="center" loading={!soldFrontLoaded} style={segmentStyle}>
                 <iframe
@@ -295,8 +327,8 @@ const RenderPreviewModal = ({ formType, formValues }) => {
                   title={`bm-iframe-sold-front-${formType}`}
                   name="sold-front"
                   src={soldPostcardFrontURL}
-                  width={isMobile ? '300' : '600'}
-                  height={isMobile ? '204' : '408'}
+                  width="600"
+                  height="408"
                   frameBorder="0"
                   sandbox="allow-same-origin allow-scripts"
                   onLoad={handleOnload}
@@ -310,8 +342,8 @@ const RenderPreviewModal = ({ formType, formValues }) => {
                   title={`bm-iframe-sold-back-${formType}`}
                   name="sold-back"
                   src={soldPostcardBackURL}
-                  width={isMobile ? '300' : '600'}
-                  height={isMobile ? '204' : '408'}
+                  width="600"
+                  height="408"
                   frameBorder="0"
                   sandbox="allow-same-origin allow-scripts"
                   onLoad={handleOnload}
@@ -319,28 +351,40 @@ const RenderPreviewModal = ({ formType, formValues }) => {
                 />
               </Segment>
             </FlipCard>
-          </Modal.Content>
-          <Modal.Content>
+          </ModalPreview.Content>
+          <ModalPreview.Content>
             <div style={flipButtonContainer}>
-              <Button className="buttonCustom" style={{...flipButtonStyles, ...rightMargin, ...(isFlipped ? highlightButton : {})}} floated="right" onClick={() => setIsFlipped(true)}>
+              <Button
+                style={{
+                  ...flipButtonStyles,
+                  ...rightMargin,
+                  ...(isFlipped ? highlightButton : {}),
+                }}
+                floated="right"
+                onClick={() => setIsFlipped(true)}
+              >
                 Back
               </Button>
-              <Button className="buttonCustom" style={{...flipButtonStyles, ...(!isFlipped ? highlightButton : {})}} floated="right" onClick={() => setIsFlipped(false)}>
+              <Button
+                style={{ ...flipButtonStyles, ...(!isFlipped ? highlightButton : {}) }}
+                floated="right"
+                onClick={() => setIsFlipped(false)}
+              >
                 Front
               </Button>
             </div>
-          </Modal.Content>
-          <Modal.Actions style={modalActionStyles}>
+          </ModalPreview.Content>
+          <ModalPreview.Actions style={modalActionStyles}>
             {inOnboardingMode && (
-              <Button className="buttonCustom" style={cancelButton} onClick={() => setCustomizationPreview(false)}>
+              <Button style={cancelButton} onClick={() => setCustomizationPreview(false)}>
                 <Icon name="remove" /> Edit
               </Button>
             )}
-            <Button  className="buttonCustom" primary onClick={handleReviewComplete}>
+            <Button primary onClick={handleReviewComplete}>
               <Icon name="checkmark" /> {inOnboardingMode ? 'Continue' : 'OK'}
             </Button>
-          </Modal.Actions>
-        </Modal>
+          </ModalPreview.Actions>
+        </ModalPreview>
       );
     }
   }

@@ -2,7 +2,7 @@ import React from 'react';
 import { FastField, Field, getIn } from 'formik';
 import { Form, Checkbox } from 'semantic-ui-react';
 
-import { getFieldError, setFieldValue, useFocusOnError } from './helpers';
+import { getFieldError, setFieldValue, useFocusOnError } from './utils/helpers';
 import ErrorMessage from './ErrorMessage';
 import { InputRef } from './InputRef';
 
@@ -28,7 +28,11 @@ const FormikCheckbox = ({
       {({ field, form }) => {
         const error = getFieldError(field, form);
         return (
-          <Form.Field error={!!error} {...fieldProps} className={disabled ? 'disabled-form-field' : null}>
+          <Form.Field
+            error={!!error}
+            {...fieldProps}
+            className={disabled ? 'disabled-form-field' : null}
+          >
             <InputRef inputRef={inputRef}>
               <Checkbox
                 {...safeInputProps}

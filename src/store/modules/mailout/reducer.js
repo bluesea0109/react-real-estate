@@ -180,7 +180,13 @@ export default function mailout(state = initialState, action) {
         mailoutDisplayAgent: null,
         mailoutEdit: {
           ...state.mailoutEdit,
-          mergeVariables: { ...state.mailoutEdit.mergeVariables, ...Object.assign({}, ...action.payload.map(object => ({ [object.name]: object.value }))) },
+          mergeVariables: {
+            ...state.mailoutEdit.mergeVariables,
+            ...Object.assign(
+              {},
+              ...action.payload.map(object => ({ [object.name]: object.value }))
+            ),
+          },
         },
         changeDisplayAgentError: null,
       };
@@ -208,7 +214,10 @@ export default function mailout(state = initialState, action) {
           ...state.mailoutEdit,
           mergeVariables: {
             ...state.mailoutEdit?.mergeVariables,
-            ...Object.assign({}, ...action.payload.mergeVariables.map(object => ({ [object.name]: object.value }))),
+            ...Object.assign(
+              {},
+              ...action.payload.mergeVariables.map(object => ({ [object.name]: object.value }))
+            ),
           },
         },
         getMailoutEditError: null,
@@ -248,7 +257,7 @@ export default function mailout(state = initialState, action) {
       return {
         ...state,
         mailoutPolygonCoordinates: action.payload,
-      }
+      };
 
     case REVERT_MAILOUT_EDIT_PENDING:
       return {

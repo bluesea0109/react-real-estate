@@ -60,7 +60,11 @@
       "hasWaterfront": false,
       "poolFeatures": [],
       "parkingFeatures": [],
-      "interiorFeatures": ["Utilities Main Floor", "Basement: Under addition", "Basement: Crawl Space"],
+      "interiorFeatures": [
+        "Utilities Main Floor",
+        "Basement: Under addition",
+        "Basement: Crawl Space"
+      ],
       "exteriorFeatures": ["Porch", "Moved to Site", "Wood"],
       "communityFeatures": [],
       "propertyFeatures": ["1500 - 1750", "Moved to Site", "Wood"],

@@ -19,7 +19,10 @@ const CallbackPage = () => {
       <Segment basic>
         <Message>
           <Message.Header>Error: {auth0.error.message || auth0.error.error}</Message.Header>
-          <p>The authentication process has failed, please contact the Brivity Marketer Technical Support to resolve this issue!</p>
+          <p>
+            The authentication process has failed, please contact the Brivity Marketer Technical
+            Support to resolve this issue!
+          </p>
           <pre>{JSON.stringify(auth0.error)}</pre>
         </Message>
       </Segment>

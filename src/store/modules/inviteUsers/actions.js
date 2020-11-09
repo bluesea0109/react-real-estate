@@ -1,4 +1,4 @@
-import { createAction, createErrorAction } from '../../helpers';
+import { createAction, createErrorAction } from '../../utils/helpers';
 
 export const INVITE_USERS_PENDING = 'INVITE_USERS_PENDING';
 export const INVITE_USERS_SUCCESS = 'INVITE_USERS_SUCCESS';

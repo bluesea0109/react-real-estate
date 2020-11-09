@@ -1,0 +1,8 @@
+/*******************************
+    User Variable Overrides
+*******************************/
+
+@secondaryPointingBorderWidth: 1px;
+@secondaryPointingHoverTextColor: @primaryColor;
+@secondaryPointingActiveTextColor: @primaryColor;
+@secondaryPointingActiveBorderColor: @primaryColor;

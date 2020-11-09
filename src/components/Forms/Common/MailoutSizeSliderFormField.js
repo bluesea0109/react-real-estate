@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import Nouislider from 'nouislider-react';
 
-import { TrimStrAndConvertToInt } from '../../utils';
+import { TrimStrAndConvertToInt } from '../../utils/utils';
 import { Header } from 'semantic-ui-react';
 import { useIsMobile } from '../../Hooks/useIsMobile';
 
@@ -12,8 +12,13 @@ const STEPS = INCREMENT;
 const MARGIN = 10;
 const NEW_LISTING = 'listed';
 
-const MailoutSizeSliderFormField = ({ formType, listingType, initialValues, formValues, setFormValues }) => {
-
+const MailoutSizeSliderFormField = ({
+  formType,
+  listingType,
+  initialValues,
+  formValues,
+  setFormValues,
+}) => {
   const isMobile = useIsMobile();
 
   const editable = listingType === NEW_LISTING ? !!formValues?.listed : !!formValues?.sold;
@@ -26,7 +31,9 @@ const MailoutSizeSliderFormField = ({ formType, listingType, initialValues, form
   const SLIDER_INITIAL_VALUES = [];
 
   if (formType === 'team') {
-    currentMailoutSize = (formValues && formValues[listingType]?.mailoutSize) || initialValues[listingType].mailoutSize;
+    currentMailoutSize =
+      (formValues && formValues[listingType]?.mailoutSize) ||
+      initialValues[listingType].mailoutSize;
     currentMailoutSizeMin = (formValues && formValues[listingType]?.mailoutSizeMin) || MIN;
     currentMailoutSizeMax = (formValues && formValues[listingType]?.mailoutSizeMax) || MAX;
 
@@ -36,11 +43,18 @@ const MailoutSizeSliderFormField = ({ formType, listingType, initialValues, form
   }
 
   if (formType === 'agent') {
-    currentMailoutSize = (formValues && formValues[listingType]?.mailoutSize) || initialValues[listingType].mailoutSize;
-    currentMailoutSizeMin = (formValues && formValues[listingType]?.mailoutSizeMin) || initialValues[listingType].mailoutSizeMin;
-    currentMailoutSizeMax = (formValues && formValues[listingType]?.mailoutSizeMax) || initialValues[listingType].mailoutSizeMax;
+    currentMailoutSize =
+      (formValues && formValues[listingType]?.mailoutSize) ||
+      initialValues[listingType].mailoutSize;
+    currentMailoutSizeMin =
+      (formValues && formValues[listingType]?.mailoutSizeMin) ||
+      initialValues[listingType].mailoutSizeMin;
+    currentMailoutSizeMax =
+      (formValues && formValues[listingType]?.mailoutSizeMax) ||
+      initialValues[listingType].mailoutSizeMax;
 
-    adjustedMailoutSizeMax = currentMailoutSizeMin === currentMailoutSizeMax ? currentMailoutSizeMax + 20 : undefined;
+    adjustedMailoutSizeMax =
+      currentMailoutSizeMin === currentMailoutSizeMax ? currentMailoutSizeMax + 20 : undefined;
 
     SLIDER_INITIAL_VALUES.push(currentMailoutSize);
   }
@@ -51,9 +65,12 @@ const MailoutSizeSliderFormField = ({ formType, listingType, initialValues, form
     if (formType === 'team') {
       value.map(item => {
         const itemArr = item.split(':');
-        if (itemArr[0] === 'Min') return (newValue[listingType].mailoutSizeMin = TrimStrAndConvertToInt(itemArr[1]));
-        if (itemArr[0] === 'Default') return (newValue[listingType].mailoutSize = TrimStrAndConvertToInt(itemArr[1]));
-        if (itemArr[0] === 'Max') return (newValue[listingType].mailoutSizeMax = TrimStrAndConvertToInt(itemArr[1]));
+        if (itemArr[0] === 'Min')
+          return (newValue[listingType].mailoutSizeMin = TrimStrAndConvertToInt(itemArr[1]));
+        if (itemArr[0] === 'Default')
+          return (newValue[listingType].mailoutSize = TrimStrAndConvertToInt(itemArr[1]));
+        if (itemArr[0] === 'Max')
+          return (newValue[listingType].mailoutSizeMax = TrimStrAndConvertToInt(itemArr[1]));
         return null;
       });
     }
@@ -89,7 +106,9 @@ const MailoutSizeSliderFormField = ({ formType, listingType, initialValues, form
             tooltips={true}
             pips={{
               mode: 'values',
-              values: adjustedMailoutSizeMax ? [currentMailoutSizeMin, adjustedMailoutSizeMax] : [currentMailoutSizeMin, currentMailoutSizeMax],
+              values: adjustedMailoutSizeMax
+                ? [currentMailoutSizeMin, adjustedMailoutSizeMax]
+                : [currentMailoutSizeMin, currentMailoutSizeMax],
               stepped: true,
               density: 3,
             }}

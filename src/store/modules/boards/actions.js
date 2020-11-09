@@ -1,4 +1,4 @@
-import { createAction, createErrorAction } from '../../helpers';
+import { createAction, createErrorAction } from '../../utils/helpers';
 
 export const GET_BOARDS_PENDING = 'GET_BOARDS_PENDING';
 export const GET_BOARDS_SUCCESS = 'GET_BOARDS_SUCCESS';

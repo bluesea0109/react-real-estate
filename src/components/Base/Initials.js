@@ -62,7 +62,8 @@ export default class Initials extends Component {
     width: 100,
     fontSize: 60,
     fontWeight: 400,
-    fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
+    fontFamily:
+      'Open Sans, HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
     radius: 0,
   };
 
@@ -103,11 +104,30 @@ export default class Initials extends Component {
   }
 
   render() {
-    const { width, height, textColor, fontFamily, fontSize, fontWeight, radius: borderRadius } = this.props;
-    const firstInitial = this.unicodeSlice(this.props.firstName || 'John', 0, this.props.charCount || 1).toUpperCase();
-    const lastInitial = this.unicodeSlice(this.props.lastName || 'Doe', 0, this.props.charCount || 1).toUpperCase();
+    const {
+      width,
+      height,
+      textColor,
+      fontFamily,
+      fontSize,
+      fontWeight,
+      radius: borderRadius,
+    } = this.props;
+    const firstInitial = this.unicodeSlice(
+      this.props.firstName || 'John',
+      0,
+      this.props.charCount || 1
+    ).toUpperCase();
+    const lastInitial = this.unicodeSlice(
+      this.props.lastName || 'Doe',
+      0,
+      this.props.charCount || 1
+    ).toUpperCase();
 
-    const backgroundColor = this.props.color !== null ? this.props.color : colors[Math.floor((firstInitial.charCodeAt(0) + this.props.seed) % colors.length)];
+    const backgroundColor =
+      this.props.color !== null
+        ? this.props.color
+        : colors[Math.floor((firstInitial.charCodeAt(0) + this.props.seed) % colors.length)];
 
     const initials = firstInitial + lastInitial;
 
@@ -140,7 +160,9 @@ export default class Initials extends Component {
       </svg>
     );
 
-    const svgHtml = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(ReactDOMServer.renderToStaticMarkup(<InitialSvg />))));
+    const svgHtml =
+      'data:image/svg+xml;base64,' +
+      btoa(unescape(encodeURIComponent(ReactDOMServer.renderToStaticMarkup(<InitialSvg />))));
 
     return <Image size="mini" inline circular src={svgHtml} alt="" />;
   }

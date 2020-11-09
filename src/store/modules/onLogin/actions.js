@@ -1,4 +1,4 @@
-import { createAction, createErrorAction } from '../../helpers';
+import { createAction, createErrorAction } from '../../utils/helpers';
 
 export const GET_ON_LOGIN_PENDING = 'GET_ON_LOGIN_PENDING';
 export const GET_ON_LOGIN_SUCCESS = 'GET_ON_LOGIN_SUCCESS';

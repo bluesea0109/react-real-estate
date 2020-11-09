@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { getCustomizationPending } from '../store/modules/customization/actions';
 import CustomizeForm from '../components/Forms/CustomizeForm';
-import { initialValues } from '../components/helpers';
+import { initialValues } from '../components/utils/helpers';
 import { ContentTopHeaderLayout } from '../layouts';
 import { Message, Page } from '../components/Base';
 import Loading from '../components/Loading';
@@ -47,13 +47,21 @@ const CustomizationPage = () => {
         </Page>
       );
     } else {
-      if (!customizationError) return <CustomizeForm customizationData={customizationAvailable} initialValues={initialValues} />;
+      if (!customizationError)
+        return (
+          <CustomizeForm customizationData={customizationAvailable} initialValues={initialValues} />
+        );
       if (customizationError) return <Message error>Oh snap! {customizationError}.</Message>;
     }
   }
 
   if (multiUser) {
-    if (customizationPending && !customizationError && teamCustomizationPending && !teamCustomizationError) {
+    if (
+      customizationPending &&
+      !customizationError &&
+      teamCustomizationPending &&
+      !teamCustomizationError
+    ) {
       return (
         <Page basic>
           <ContentTopHeaderLayout>
@@ -63,8 +71,14 @@ const CustomizationPage = () => {
       );
     } else {
       if (!teamCustomizationError)
-        return <CustomizeForm customizationData={customizationAvailable} initialValues={teamCustomizationAvailable || initialValues} />;
-      if (teamCustomizationError) return <Message error>Oh snap! {teamCustomizationError}.</Message>;
+        return (
+          <CustomizeForm
+            customizationData={customizationAvailable}
+            initialValues={teamCustomizationAvailable || initialValues}
+          />
+        );
+      if (teamCustomizationError)
+        return <Message error>Oh snap! {teamCustomizationError}.</Message>;
     }
   }
 };

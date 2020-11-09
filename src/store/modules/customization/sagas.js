@@ -30,7 +30,9 @@ export function* peerListingInitialSaga(peerId) {
 
 export function* getCustomizationSaga({ peerId = null }) {
   try {
-    const { path, method } = peerId ? ApiService.directory.peer.customization.get(peerId) : ApiService.directory.user.customization.get();
+    const { path, method } = peerId
+      ? ApiService.directory.peer.customization.get(peerId)
+      : ApiService.directory.user.customization.get();
     const response = yield call(ApiService[method], path);
 
     yield put(getCustomizationSuccess(response));
@@ -46,7 +48,9 @@ export function* saveCustomizationSaga({ peerId = null }) {
 
     if (emptyCustomization) customization = { _id: undefined, _rev: undefined };
 
-    const { path, method } = peerId ? ApiService.directory.peer.customization.save(peerId) : ApiService.directory.user.customization.save();
+    const { path, method } = peerId
+      ? ApiService.directory.peer.customization.save(peerId)
+      : ApiService.directory.user.customization.save();
     const response = yield call(ApiService[method], path, customization);
 
     yield put(saveCustomizationSuccess(response));

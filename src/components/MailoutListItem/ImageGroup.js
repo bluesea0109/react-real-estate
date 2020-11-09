@@ -7,7 +7,6 @@ import { Image } from '../Base';
 import { useIsMobile } from '../Hooks/useIsMobile';
 
 const ImageGroup = ({ img1src, img2src, linkTo, status }) => {
-  
   const isMobile = useIsMobile();
   const resizePictures = () => (isMobile ? { width: '100%' } : { width: '48%' });
 
@@ -16,8 +15,16 @@ const ImageGroup = ({ img1src, img2src, linkTo, status }) => {
   if (status === 'archived' || status === 'hide') {
     return (
       <ItemBodyPicturesLayout>
-        <Image src={img1src} style={resizePictures()} className="bm-transform-effect image-frame-border" />
-        <Image src={img2src} style={resizePictures()} className="bm-transform-effect image-frame-border" />
+        <Image
+          src={img1src}
+          style={resizePictures()}
+          className="bm-transform-effect image-frame-border"
+        />
+        <Image
+          src={img2src}
+          style={resizePictures()}
+          className="bm-transform-effect image-frame-border"
+        />
       </ItemBodyPicturesLayout>
     );
   }
@@ -26,10 +33,18 @@ const ImageGroup = ({ img1src, img2src, linkTo, status }) => {
     return (
       <ItemBodyPicturesLayout>
         <Link to={linkTo}>
-          <Image src={img1src} style={resizePictures()} className="bm-transform-effect image-frame-border" />
+          <Image
+            src={img1src}
+            style={resizePictures()}
+            className="bm-transform-effect image-frame-border"
+          />
         </Link>
         <Link to={linkTo}>
-          <Image src={img2src} style={resizePictures()} className="bm-transform-effect image-frame-border" />
+          <Image
+            src={img2src}
+            style={resizePictures()}
+            className="bm-transform-effect image-frame-border"
+          />
         </Link>
       </ItemBodyPicturesLayout>
     );

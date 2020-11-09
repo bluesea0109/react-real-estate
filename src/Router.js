@@ -38,7 +38,11 @@ export default () => {
       <PrivateRoute exact path="/dashboard/archived" component={ArchivedPage} />
       <PrivateRoute exact path="/dashboard/:mailoutId" component={MailoutDetailsPage} />
       <PrivateRoute exact path="/dashboard/edit/:mailoutId" component={MailoutEditPage} />
-      <PrivateRoute exact path="/dashboard/edit/:mailoutId/destinations" component={MailoutDestinationsPage} />
+      <PrivateRoute
+        exact
+        path="/dashboard/edit/:mailoutId/destinations"
+        component={MailoutDestinationsPage}
+      />
 
       <PrivateRoute exact path="/customization" component={CustomizationPage} />
       <PrivateRoute path="/customization/team" component={CustomizationTeamPage} />

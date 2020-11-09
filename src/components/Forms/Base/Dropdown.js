@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FastField, Field, getIn } from 'formik';
 import { Form, Dropdown } from 'semantic-ui-react';
 
-import { getFieldError, setFieldValue, useFocusOnError } from './helpers';
+import { getFieldError, setFieldValue, useFocusOnError } from './utils/helpers';
 import ErrorMessage from './ErrorMessage';
 
 const FormikDropdown = ({
@@ -36,9 +36,17 @@ const FormikDropdown = ({
         const error = getFieldError(field, form);
 
         return (
-          <Form.Field error={!!error} {...fieldProps} className={disabled ? 'disabled-form-field' : null}>
+          <Form.Field
+            error={!!error}
+            {...fieldProps}
+            className={disabled ? 'disabled-form-field' : null}
+          >
             {!!label && (
-              <label htmlFor={id} onClick={() => fieldRef.current.open()} style={{ opacity: disabled ? '0.4' : 1 }}>
+              <label
+                htmlFor={id}
+                onClick={() => fieldRef.current.open()}
+                style={{ opacity: disabled ? '0.4' : 1 }}
+              >
                 {label} {tag}
               </label>
             )}

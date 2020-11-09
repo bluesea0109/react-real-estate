@@ -19,7 +19,9 @@ const OnboardPage = () => {
   const isOnboarded = useSelector(store => store.onboarded.status);
   const isMultimode = useSelector(store => store.onLogin?.mode === 'multiuser');
   const completedProfile = useSelector(store => store.onboarded.completedProfile);
-  const completedTeamCustomization = useSelector(store => store.onboarded.completedTeamCustomization);
+  const completedTeamCustomization = useSelector(
+    store => store.onboarded.completedTeamCustomization
+  );
   const completedCustomization = useSelector(store => store.onboarded.completedCustomization);
   const completedInviteTeammates = useSelector(store => store.onboarded.completedInviteTeammates);
 
@@ -32,10 +34,23 @@ const OnboardPage = () => {
   const onBoardInvitePath = '/onboard/invite';
 
   const onProfile = !completedProfile;
-  const onTeamCustomization = !reviewTeamCustomizationCompleted && !completedTeamCustomization && completedProfile;
-  const onCustomization = !reviewCustomizationCompleted && !completedCustomization && completedTeamCustomization && completedProfile;
-  const onInviteTeammates = !completedInviteTeammates && completedCustomization && completedTeamCustomization && completedProfile;
-  const onboardingCompleted = completedInviteTeammates && completedCustomization && completedTeamCustomization && completedProfile;
+  const onTeamCustomization =
+    !reviewTeamCustomizationCompleted && !completedTeamCustomization && completedProfile;
+  const onCustomization =
+    !reviewCustomizationCompleted &&
+    !completedCustomization &&
+    completedTeamCustomization &&
+    completedProfile;
+  const onInviteTeammates =
+    !completedInviteTeammates &&
+    completedCustomization &&
+    completedTeamCustomization &&
+    completedProfile;
+  const onboardingCompleted =
+    completedInviteTeammates &&
+    completedCustomization &&
+    completedTeamCustomization &&
+    completedProfile;
 
   const onProfileSingleUser = !completedProfile;
   const onCustomizationSingleUser = !completedCustomization && completedProfile;

@@ -1,0 +1,22 @@
+/*******************************
+         Site Overrides
+*******************************/
+
+.ui.menu .item:before {
+  background: none;
+}
+
+.ui.secondary.pointing.menu {
+  margin-left: -1em;
+  margin-right: -1em;
+}
+
+.ui.secondary.pointing.menu .item {
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.ui.secondary.pointing.menu .active.item,
+.ui.secondary.pointing.menu .active.item :hover {
+  border-bottom-width: 3px;
+}

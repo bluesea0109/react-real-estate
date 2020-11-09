@@ -14,7 +14,6 @@ const useFetching = (getActionCreator, dispatch, mailoutId) => {
   }, [getActionCreator, dispatch, mailoutId]);
 };
 
-
 const MailoutDestinationsPage = () => {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -49,10 +48,18 @@ const MailoutDestinationsPage = () => {
 
   return (
     <Fragment>
-      {mailoutDetails && mailoutEdit && <EditDestinationsForm mailoutDetails={mailoutDetails} mailoutDestinationsEdit={mailoutDestinationsEdit} handleBackClick={handleBackClick} />}
-      {((mailoutDetailsPending && !mailoutDetailsError) || (mailoutEditPending && !mailoutEditError)) && <Loading />}
-      {(mailoutDetailsError || mailoutEditError) && <Message error>Oh snap! {mailoutDetailsError || mailoutEditError}.</Message>}
-
+      {mailoutDetails && mailoutEdit && (
+        <EditDestinationsForm
+          mailoutDetails={mailoutDetails}
+          mailoutDestinationsEdit={mailoutDestinationsEdit}
+          handleBackClick={handleBackClick}
+        />
+      )}
+      {((mailoutDetailsPending && !mailoutDetailsError) ||
+        (mailoutEditPending && !mailoutEditError)) && <Loading />}
+      {(mailoutDetailsError || mailoutEditError) && (
+        <Message error>Oh snap! {mailoutDetailsError || mailoutEditError}.</Message>
+      )}
     </Fragment>
   );
 };

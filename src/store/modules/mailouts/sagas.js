@@ -17,7 +17,7 @@ import {
   getArchivedMailoutsPending,
   ADD_CAMPAIGN_START,
   addCampaignError,
-  addCampaignSuccess
+  addCampaignSuccess,
 } from './actions';
 import ApiService from '../../../services/api/index';
 import { SELECT_PEER_ID, DESELECT_PEER_ID } from '../peer/actions';
@@ -26,14 +26,16 @@ import { call, put, select, takeLatest } from '@redux-saga/core/effects';
 export const getSelectedPeerId = state => state.peer.peerId;
 export const getMailoutsPage = state => state.mailouts.page;
 export const getArchivedMailoutsPage = state => state.mailouts.archivedPage;
-export const getAddCampaignMlsNum = state => state.mailouts.addCampaignMlsNum
+export const getAddCampaignMlsNum = state => state.mailouts.addCampaignMlsNum;
 
 const limit = 25;
 const hideArchived = { hideExcluded: true, hideArchived: true };
 
 export function* getMailoutSaga({ peerId = null }) {
   try {
-    const { path, method } = peerId ? ApiService.directory.peer.mailout.list(peerId) : ApiService.directory.user.mailout.list();
+    const { path, method } = peerId
+      ? ApiService.directory.peer.mailout.list(peerId)
+      : ApiService.directory.user.mailout.list();
     const response = yield call(ApiService[method], path, { page: 1, limit, ...hideArchived });
 
     if (response.length === 0 || response.length < limit) {
@@ -50,7 +52,9 @@ export function* getMailoutSaga({ peerId = null }) {
 
 export function* getMoreMailoutSaga({ peerId = null }) {
   try {
-    const { path, method } = peerId ? ApiService.directory.peer.mailout.list(peerId) : ApiService.directory.user.mailout.list();
+    const { path, method } = peerId
+      ? ApiService.directory.peer.mailout.list(peerId)
+      : ApiService.directory.user.mailout.list();
     const page = yield select(getMailoutsPage);
     const response = yield call(ApiService[method], path, { page, limit, ...hideArchived });
 
@@ -100,7 +104,9 @@ export function* checkIfPeerSelectedGetMoreMailout() {
 
 export function* getArchivedMailoutSaga({ peerId = null }) {
   try {
-    const { path, method } = peerId ? ApiService.directory.peer.mailout.ignored(peerId) : ApiService.directory.user.mailout.ignored();
+    const { path, method } = peerId
+      ? ApiService.directory.peer.mailout.ignored(peerId)
+      : ApiService.directory.user.mailout.ignored();
     const response = yield call(ApiService[method], path, { page: 1, limit });
 
     if (response.length === 0 || response.length < limit) {
@@ -117,7 +123,9 @@ export function* getArchivedMailoutSaga({ peerId = null }) {
 
 export function* getMoreArchivedMailoutSaga({ peerId = null }) {
   try {
-    const { path, method } = peerId ? ApiService.directory.peer.mailout.ignored(peerId) : ApiService.directory.user.mailout.ignored();
+    const { path, method } = peerId
+      ? ApiService.directory.peer.mailout.ignored(peerId)
+      : ApiService.directory.user.mailout.ignored();
     const page = yield select(getArchivedMailoutsPage);
     const response = yield call(ApiService[method], path, { page, limit });
 
@@ -169,12 +177,10 @@ export function* addCampaignStartSaga() {
     yield put(resetMailouts());
     yield put(addCampaignSuccess(response));
     yield put(getMailoutsPending());
-
   } catch (err) {
     yield put(addCampaignError(err));
   }
 }
-
 
 export default function*() {
   yield takeLatest(GET_MAILOUTS_PENDING, checkIfPeerSelectedGetMailout);

@@ -1,7 +1,6 @@
-import { useLayoutEffect, useState } from 'react'
+import { useLayoutEffect, useState } from 'react';
 
 export function useIsMobile() {
-
   const [mobile, setMobile] = useState(false);
 
   useLayoutEffect(() => {
@@ -10,7 +9,7 @@ export function useIsMobile() {
     }
     window.addEventListener('resize', updateWidth);
     updateWidth();
-    return () => window.removeEventListener('resize', updateWidth)
+    return () => window.removeEventListener('resize', updateWidth);
   }, []);
 
   return mobile;

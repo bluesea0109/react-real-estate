@@ -4,13 +4,14 @@
   "version": "5.0.1",
   "private": true,
   "scripts": {
-    "start": "cross-env PORT=8082 react-scripts start",
-    "build": "(export REACT_APP_SENTRY_RELEASE=$(node -pe \"require('./package.json').version\"); react-scripts build && node utils/sentry.js)",
-    "build-local": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "cross-env PORT=8082 craco start",
+    "build": "(export REACT_APP_SENTRY_RELEASE=$(node -pe \"require('./package.json').version\"); craco build && node utils/sentry.js)",
+    "build-local": "craco build",
+    "test": "npm run formatCheck",
+    "eject": "craco eject",
     "lint": "./node_modules/.bin/eslint --ext .js,.jsx --ignore-pattern public tmp artifacts .",
     "format": "prettier --write 'src/**/*.{js,jsx,json}'",
+    "formatCheck": "prettier --check 'src/**/*.{js,jsx,json}'",
     "generate-artifacts": "node utils/generate-testing-artifacts",
     "create": "node utils/create-campaigns",
     "reset": "node utils/resetDevDb",
@@ -48,26 +49,33 @@
     "redux": "4.0.5",
     "redux-logger": "3.0.6",
     "redux-saga": "1.1.3",
-    "semantic-ui-css": "2.4.1",
     "semantic-ui-react": "0.88.2",
     "styled-components": "4.4.1",
     "yup": "0.28.1"
   },
   "devDependencies": {
+    "@craco/craco": "^5.8.0",
+    "@semantic-ui-react/craco-less": "^1.2.1",
     "@sentry/cli": "1.49.0",
     "cross-env": "^7.0.2",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
     "http-proxy-middleware": "0.20.0",
-    "prettier": "1.19.1",
+    "prettier": "^1.19.1",
     "react-test-renderer": "16.12.0",
     "request": "2.88.0",
-    "request-promise": "4.2.5"
+    "request-promise": "4.2.5",
+    "semantic-ui-less": "^2.4.1"
   },
   "optionalDependencies": {
     "joi-to-json-schema": "5.1.0",
     "json-schema-faker": "0.5.0-rc23"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "plugin:prettier/recommended"
+    ]
   },
   "browserslist": {
     "production": [

@@ -27,7 +27,9 @@ const ProfilePage = () => {
     if (isAdmin) dispatch(getTeamProfilePending());
   }, [isAdmin, dispatch]);
 
-  return <ProfileForm profileAvailable={profileAvailable} teamProfileAvailable={teamProfileAvailable} />;
+  return (
+    <ProfileForm profileAvailable={profileAvailable} teamProfileAvailable={teamProfileAvailable} />
+  );
 };
 
 export default ProfilePage;

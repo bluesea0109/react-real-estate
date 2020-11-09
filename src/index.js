@@ -5,7 +5,7 @@ import * as Sentry from '@sentry/browser';
 import { BrowserRouter } from 'react-router-dom';
 import { LastLocationProvider } from 'react-router-last-location';
 
-import 'semantic-ui-css/semantic.min.css';
+import 'semantic-ui-less/semantic.less';
 import './reset.css';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import 'nouislider/distribute/nouislider.css';
@@ -17,7 +17,6 @@ import configureStore from './store/configure';
 import registerIcons from './registerIcons';
 import AuthService from './services/auth';
 import PolygonGoogleMapsHOC from './components/Forms/PolygonGoogleMaps/PolygonGoogleMapsHOC';
-
 
 if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_SENTRY_RELEASE) {
   try {
