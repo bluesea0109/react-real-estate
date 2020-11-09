@@ -31,6 +31,7 @@ import Loading from '../Loading';
 import { useIsMobile } from '../Hooks/useIsMobile';
 import { calculateCost, resolveLabelStatus } from '../MailoutListItem/utils/helpers';
 import PostcardSizeButton from './Common/PostcardSizeButton';
+import styled from 'styled-components';
 
 const blacklistNames = [
   'brandColor',
@@ -41,6 +42,20 @@ const blacklistNames = [
   'backUrl',
   'frontAgentUrl',
 ];
+
+const CoverButtonGroup = styled(Button.Group)`
+  height: 40px;
+  &&& .button {
+    min-width: 0px;
+    width: 50px;
+    flex-grow: 0;
+    &:hover,
+    &:active,
+    &:focus {
+      background-color: #cacbcd;
+    }
+  }
+`;
 
 const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const isMobile = useIsMobile();
@@ -716,14 +731,14 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
                   <img src={coverPhoto} alt="postcard cover" />
                   <br />
                   <div style={{ display: 'flex' }}>
-                    <Button.Group icon>
+                    <CoverButtonGroup icon>
                       <Button onClick={() => changeCoverPhotoDec()}>
                         <Icon name="angle left" />
                       </Button>
                       <Button onClick={() => changeCoverPhotoInc()}>
                         <Icon name="angle right" />
                       </Button>
-                    </Button.Group>
+                    </CoverButtonGroup>
                     <div style={{ paddingLeft: '0.5rem' }}>
                       <a href="#/ignore" onClick={triggerFileDialog} id="postcardUploadText">
                         Upload new cover photo

@@ -29,8 +29,7 @@ const modalHeaderStyles = {
 };
 
 const cancelButton = {
-  borderRadius: '50px',
-  textTransform: 'uppercase',
+  backgroundColor: '#EDEDED',
   color: '#666666',
   fontWeight: 'bold',
 };
@@ -63,6 +62,7 @@ const cancelX = {
   backgroundColor: '#EDEDED',
   borderRadius: '50px',
   height: '30px',
+  minWidth: 0,
   width: '30px',
   padding: '0px',
   marginTop: '0px',

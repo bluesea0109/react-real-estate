@@ -23,6 +23,16 @@ import {
   archiveMailoutPending,
   undoArchiveMailoutPending,
 } from '../../store/modules/mailout/actions';
+import styled from 'styled-components';
+
+const StyledDropdown = styled(Dropdown)`
+  &.dropdown.icon.button {
+    color: rgba(0, 0, 0, 0.6);
+    &:hover {
+      background-color: #cacbcd;
+    }
+  }
+`;
 
 const ApproveAndSendButton = ({
   data,
@@ -184,7 +194,7 @@ const ListHeader = ({
           </Button>
         )}
         {!isArchived && !mailoutDetailPage && canSend(data.mailoutStatus) && (
-          <Dropdown
+          <StyledDropdown
             loading={data._id === archiveId && archivePending}
             disabled={data._id === archiveId && archivePending}
             icon="ellipsis horizontal"
@@ -200,7 +210,7 @@ const ListHeader = ({
                 <Icon name="edit" /> Edit
               </Dropdown.Item>
             </Dropdown.Menu>
-          </Dropdown>
+          </StyledDropdown>
         )}
         <span>
           <ApproveAndSendButton

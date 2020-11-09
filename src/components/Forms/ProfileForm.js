@@ -636,7 +636,6 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                                 />
                               </Form.Group>
                               <Button
-                                type="button"
                                 primary
                                 inverted
                                 icon
