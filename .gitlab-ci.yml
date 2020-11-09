@@ -7,14 +7,14 @@ stages:
 
 test:
   stage: test
-  image: node:12.9.1
+  image: node:14.15.0
   script:
     - npm install --silent
     - npm run test
 
 build_dev:
   stage: build
-  image: node:12.9.1
+  image: node:14.15.0
   script:
       - export REACT_APP_VERSION=$(node -p "require('./package.json').version")
       - export REACT_APP_GOOGLE_MAP_APP_KEY=$REACT_APP_GOOGLE_MAP_APP_KEY
@@ -35,7 +35,7 @@ build_dev:
 
 build_ads:
   stage: build
-  image: node:12.9.1
+  image: node:14.15.0
   script:
       - export REACT_APP_VERSION=$(node -p "require('./package.json').version")
       - export REACT_APP_GOOGLE_MAP_APP_KEY=$REACT_APP_GOOGLE_MAP_APP_KEY
@@ -56,7 +56,7 @@ build_ads:
 
 build_prod:
   stage: build
-  image: node:12.9.1
+  image: node:14.15.0
   script:
     - export REACT_APP_VERSION=$(node -p "require('./package.json').version")
     - export REACT_APP_GOOGLE_MAP_APP_KEY=$REACT_APP_GOOGLE_MAP_APP_KEY
