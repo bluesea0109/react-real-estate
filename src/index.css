@@ -43,12 +43,6 @@ h1 {
   line-height: 18px;
 }
 
-/* NAVIGATION LINKS */
-
-.ui.text.menu .item:hover, .ui.menu .ui.dropdown .menu>.item:hover {
-  color: #59c4c4 !important;
-}
-
 /* PRIMARY BUTTON */
 
 .ui.primary.button, .ui.primary.buttons .button {

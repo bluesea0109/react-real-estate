@@ -81,8 +81,7 @@ const ToggleContainer = styled.div`
       }
     }
   }
-  * > a {
-    font-family: 'Open Sans', sans-serif;
+  & a {
     border-bottom: 1px solid #eaedf0 !important;
     svg {
       font-size: 17px;
@@ -172,6 +171,9 @@ const ToggleContainer = styled.div`
     margin: 0em -1.25em;
     display: block !important;
     margin-left: 0px;
+    .item:hover {
+      color: ${brandColors.primary} !important;
+    }
   }
 `;
 
