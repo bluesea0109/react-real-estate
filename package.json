@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "cross-env PORT=8082 craco start",
-    "build": "(export REACT_APP_SENTRY_RELEASE=$(node -pe \"require('./package.json').version\"); craco build && node utils/sentry.js)",
+    "build": "craco build",
     "build-local": "craco build",
     "test": "npm run formatCheck",
     "eject": "craco eject",
