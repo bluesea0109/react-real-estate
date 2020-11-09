@@ -1,3 +1,9 @@
 /*******************************
     User Variable Overrides
 *******************************/
+
+@borderRadius: 50px;
+@verticalMargin: 0.25em;
+@textTransform: uppercase;
+@textColor: white;
+@hoverBackgroundColor: transparent;
