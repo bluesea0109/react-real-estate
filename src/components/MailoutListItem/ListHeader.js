@@ -144,7 +144,8 @@ const ListHeader = ({
   };
 
   const saveName = async () => {
-    if (newCampaignName !== campaignName) dispatch(updateMailoutNamePending(newCampaignName));
+    if (newCampaignName !== campaignName)
+      dispatch(updateMailoutNamePending({ name: newCampaignName }));
     setEditingName(false);
   };
 
@@ -204,7 +205,7 @@ const ListHeader = ({
             ) : (
               <>
                 <Header as="h3">{newCampaignName || data.details?.displayAddress}</Header>
-                <EditButton onClick={_ => setEditingName(true)}>Edit</EditButton>
+                {data?.name && <EditButton onClick={_ => setEditingName(true)}>Edit</EditButton>}
               </>
             )}
           </CampaignNameDiv>

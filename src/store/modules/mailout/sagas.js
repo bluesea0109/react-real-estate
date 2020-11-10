@@ -40,7 +40,7 @@ import ApiService from '../../../services/api/index';
 export const getSelectedPeerId = state => state.peer.peerId;
 export const getMailoutId = state => state.mailout.mailoutId;
 export const getMailoutSize = state => state.mailout.mailoutSize;
-export const getMailoutName = state => state.mailout.mailoutName;
+export const getMailoutName = state => state.mailout.details.name;
 export const getMailoutEdit = state => state.mailout.mailoutEdit;
 export const getMailoutDisplayAgent = state => state.mailout.mailoutDisplayAgent;
 
