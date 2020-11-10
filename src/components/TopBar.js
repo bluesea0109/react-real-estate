@@ -25,6 +25,15 @@ const StyledUserSelectorDropdown = styled(Dropdown)`
     border-bottom-left-radius: 20px !important;
     border-bottom-right-radius: 20px !important;
     box-shadow: none;
+    & img {
+      object-fit: cover;
+      margin-top: 0px;
+      margin-bottom: 0px;
+      margin-right: 0px;
+      max-height: none;
+      width: 32px;
+      height: 32px;
+    }
     .menu.visible {
       margin-top: 1.15em !important;
       overflow-y: scroll;
@@ -38,7 +47,6 @@ const StyledUserSelectorDropdown = styled(Dropdown)`
       }
       h4,
       p {
-        font-weight: 400 !important;
         font-size: 14px !important;
       }
       .button:hover {
@@ -47,18 +55,26 @@ const StyledUserSelectorDropdown = styled(Dropdown)`
         }
       }
     }
-    .item .image {
-      object-fit: cover;
-      margin-top: 0px;
-      margin-bottom: 0px;
-      margin-right: 0px;
-      max-height: none;
-      width: 32px;
-      height: 32px;
-    }
     .menu > .item {
       padding: 9px 12px 9px !important;
       display: flex;
+      & h4 {
+        font-weight: normal !important;
+      }
+      &:hover {
+        background-color: ${brandColors.lightGreyHover} !important;
+      }
+      &.active {
+        background-color: transparent !important;
+        color: ${brandColors.primary} !important;
+        font-weight: bold !important;
+        & h4 {
+          font-weight: bold !important;
+        }
+      }
+      & button {
+        background-color: transparent !important;
+      }
     }
   }
 `;
@@ -114,8 +130,13 @@ export default ({ auth0 }) => {
   const [activeUser, setActiveUser] = useState('');
 
   const loggedInUser = useSelector(store => store.onLogin.user);
+  let loggedInAdmin = null;
   const selectedPeerId = useSelector(store => store.peer.peerId);
   const teammates = useSelector(store => store.team.profiles);
+
+  if (loggedInUser && teammates.length) {
+    loggedInAdmin = teammates.find(user => user.userId === loggedInUser._id).permissions.teamAdmin;
+  }
 
   const onLoginMode = useSelector(store => store.onLogin.mode);
   const multiUser = onLoginMode === 'multiuser';
@@ -157,7 +178,7 @@ export default ({ auth0 }) => {
     color: 'blue',
     content: `${label.text2}`,
   });
-  const profiles = [
+  let profiles = [
     {
       key: 0,
       text: 'Logout',
@@ -174,11 +195,10 @@ export default ({ auth0 }) => {
   ];
 
   if (teammates && teammates.length > 0) {
-    teammates.map((profile, index) => {
+    teammates.forEach(profile => {
       const setupComplete = profile.doc.setupComplete;
       const currentUser = profile.userId === loggedInUser._id;
       // const userEmail = profile.doc.email;
-
       const contextRef = createRef();
       const currentUserIconWithPopup = (
         <Popup
@@ -198,8 +218,8 @@ export default ({ auth0 }) => {
       let imageProp =
         realtorPhoto && realtorPhoto.length ? { avatar: true, src: realtorPhoto } : null;
 
-      return profiles.push({
-        key: index + 1,
+      const currentProfile = {
+        key: profile.doc._id,
         text: (
           <div style={{ display: 'flex' }}>
             {realtorPhoto && realtorPhoto.length ? (
@@ -219,6 +239,7 @@ export default ({ auth0 }) => {
         ),
         value: profile.userId,
         image: imageProp,
+        first: profile.first,
         content: (
           <StyledHeader as="h4" ref={contextRef}>
             {imageProp === null ? (
@@ -232,8 +253,19 @@ export default ({ auth0 }) => {
             <span>{setupComplete ? setupCompletedIconWithPopup : null}</span>
           </StyledHeader>
         ),
-      });
+      };
+
+      if (loggedInAdmin) {
+        if (currentUser) return profiles.splice(1, 0, { ...currentProfile });
+        else return profiles.push({ ...currentProfile });
+      } else {
+        if (loggedInUser._id === profile.userId) return profiles.push({ ...currentProfile });
+      }
     });
+    // sort profiles A-Z (not including logout or admin)
+    let notSorted = profiles.splice(0, 2);
+    profiles.sort((a, b) => a.first.localeCompare(b.first));
+    profiles = [...notSorted, ...profiles];
   }
 
   return (
