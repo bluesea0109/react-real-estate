@@ -195,7 +195,7 @@ export default ({ auth0 }) => {
   ];
 
   if (teammates && teammates.length > 0) {
-    teammates.map((profile, index) => {
+    teammates.forEach(profile => {
       const setupComplete = profile.doc.setupComplete;
       const currentUser = profile.userId === loggedInUser._id;
       // const userEmail = profile.doc.email;
