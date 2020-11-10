@@ -197,6 +197,10 @@ const directory = {
         path: `/api/user/mailout/${mailoutId}/edit/mailoutSize`,
         method: 'put',
       }),
+      mailoutName: mailoutId => ({
+        path: `/api/user/mailout/${mailoutId}/edit/name`,
+        method: 'put',
+      }),
       stop: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/stop`, method: 'post' }),
       submit: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/submit`, method: 'post' }),
       changeAgent: (mailoutId, displayAgentUserId) => ({
@@ -311,6 +315,10 @@ const directory = {
       },
       mailoutSize: (mailoutId, peerId) => ({
         path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit/mailoutSize`,
+        method: 'put',
+      }),
+      mailoutName: (mailoutId, peerId) => ({
+        path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit/name`,
         method: 'put',
       }),
       stop: (mailoutId, peerId) => ({

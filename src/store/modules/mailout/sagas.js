@@ -13,6 +13,9 @@ import {
   UPDATE_MAILOUT_SIZE_PENDING,
   updateMailoutSizeSuccess,
   updateMailoutSizeError,
+  UPDATE_MAILOUT_NAME_PENDING,
+  updateMailoutNameSuccess,
+  updateMailoutNameError,
   CHANGE_MAILOUT_DISPLAY_AGENT_PENDING,
   changeMailoutDisplayAgentSuccess,
   changeMailoutDisplayAgentError,
@@ -37,6 +40,7 @@ import ApiService from '../../../services/api/index';
 export const getSelectedPeerId = state => state.peer.peerId;
 export const getMailoutId = state => state.mailout.mailoutId;
 export const getMailoutSize = state => state.mailout.mailoutSize;
+export const getMailoutName = state => state.mailout.mailoutName;
 export const getMailoutEdit = state => state.mailout.mailoutEdit;
 export const getMailoutDisplayAgent = state => state.mailout.mailoutDisplayAgent;
 
@@ -114,6 +118,23 @@ export function* updatetMailoutSizeSaga({ peerId = null }) {
     }
   } catch (err) {
     yield put(updateMailoutSizeError(err));
+  }
+}
+
+export function* updateMailoutNameSaga({ peerId = null }) {
+  try {
+    const mailoutId = yield select(getMailoutId);
+    const mailoutName = yield select(getMailoutName);
+    const { path, method } = peerId
+      ? ApiService.directory.peer.mailout.mailoutName(mailoutId, peerId)
+      : ApiService.directory.user.mailout.mailoutName(mailoutId);
+
+    const data = { name: mailoutName };
+    const response = yield call(ApiService[method], path, data);
+
+    yield put(updateMailoutNameSuccess(response));
+  } catch (err) {
+    yield put(updateMailoutNameError(err));
   }
 }
 
@@ -246,6 +267,16 @@ export function* checkIfPeerSelectedUpdatetMailoutSizeSaga() {
   }
 }
 
+export function* checkIfPeerSelectedUpdatetMailoutNameSaga() {
+  const peerId = yield select(getSelectedPeerId);
+
+  if (peerId) {
+    yield updateMailoutNameSaga({ peerId });
+  } else {
+    yield updateMailoutNameSaga({});
+  }
+}
+
 export function* checkIfPeerSelectedChangeMailoutDisplayAgentSaga() {
   const peerId = yield select(getSelectedPeerId);
 
@@ -311,6 +342,7 @@ export default function*() {
   yield takeLatest(SUBMIT_MAILOUT_PENDING, checkIfPeerSelectedSubmitMailoutSaga);
   yield takeLatest(STOP_MAILOUT_PENDING, checkIfPeerSelectedStopMailoutSaga);
   yield takeLatest(UPDATE_MAILOUT_SIZE_PENDING, checkIfPeerSelectedUpdatetMailoutSizeSaga);
+  yield takeLatest(UPDATE_MAILOUT_NAME_PENDING, checkIfPeerSelectedUpdatetMailoutNameSaga);
   yield takeLatest(
     CHANGE_MAILOUT_DISPLAY_AGENT_PENDING,
     checkIfPeerSelectedChangeMailoutDisplayAgentSaga
