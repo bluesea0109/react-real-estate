@@ -177,11 +177,30 @@ const ListHeader = ({
       </span>
       <span style={{ gridArea: 'address', alignSelf: 'center' }}>
         {!mailoutDetailPage && !isArchived && (
-          <Link to={`/dashboard/${data._id}`} className="ui header">
-            <Header as="h3" className="bm-color-effect">
-              {data.name || data.details?.displayAddress}
-            </Header>
-          </Link>
+          <CampaignNameDiv>
+            {EditingName ? (
+              <>
+                <Input
+                  value={newCampaignName}
+                  onChange={e => setNewCampaignName(e.target.value)}
+                  onKeyUp={e => {
+                    if (e.key === 'Enter') saveName();
+                  }}
+                  fluid
+                ></Input>
+                <SmallButton id="save-name-btn" primary onClick={saveName}>
+                  Save
+                </SmallButton>
+              </>
+            ) : (
+              <>
+                <Link to={`/dashboard/${data._id}`} className="ui header" style={{ margin: 0 }}>
+                  <Header as="h3">{newCampaignName || data.details?.displayAddress}</Header>
+                </Link>
+                {data?.name && <EditButton onClick={_ => setEditingName(true)}>Edit</EditButton>}
+              </>
+            )}
+          </CampaignNameDiv>
         )}
         {!mailoutDetailPage && isArchived && (
           <Header as="h3">{data.name || data.details?.displayAddress}</Header>
