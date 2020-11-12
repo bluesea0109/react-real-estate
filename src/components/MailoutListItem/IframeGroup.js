@@ -8,7 +8,6 @@ import { iframeTransformMobile, iframeLinkStyle } from '../utils/helpers';
 import { ItemBodyIframeLayout } from '../../layouts';
 import ApiService from '../../services/api/index';
 import { Image } from '../Base';
-import Styled from 'styled-components';
 
 const IframeGroup = ({ index, item, linkTo = null }) => {
   const peerId = useSelector(store => store.peer.peerId);
