@@ -121,6 +121,19 @@ const BillingPage = () => {
           )}
         </Segment>
       </div>
+
+      {billingDetails && billingDetails.credits && (
+        <div style={{ margin: '20px 0' }}>
+          <Segment>
+            <ContentBottomHeaderLayout style={{ minHeight: 0 }}>
+              <p>
+                <span style={{ fontWeight: 'bold' }}>Credit Balance: </span> $
+                {billingDetails.credits}
+              </p>
+            </ContentBottomHeaderLayout>
+          </Segment>
+        </div>
+      )}
     </Page>
   );
 };
