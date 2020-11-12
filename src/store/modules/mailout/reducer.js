@@ -12,6 +12,9 @@ import {
   UPDATE_MAILOUT_SIZE_PENDING,
   UPDATE_MAILOUT_SIZE_SUCCESS,
   UPDATE_MAILOUT_SIZE_ERROR,
+  UPDATE_MAILOUT_NAME_PENDING,
+  UPDATE_MAILOUT_NAME_SUCCESS,
+  UPDATE_MAILOUT_NAME_ERROR,
   CHANGE_MAILOUT_DISPLAY_AGENT_PENDING,
   CHANGE_MAILOUT_DISPLAY_AGENT_SUCCESS,
   CHANGE_MAILOUT_DISPLAY_AGENT_ERROR,
@@ -38,6 +41,7 @@ const initialState = {
   submitPending: false,
   stopPending: false,
   updateMailoutSizePending: false,
+  updateMailoutNamePending: false,
   changeDisplayAgentPending: false,
   getMailoutEditPending: false,
   updateMailoutEditPending: false,
@@ -48,6 +52,7 @@ const initialState = {
   mailoutId: null,
   mailoutEdit: null,
   mailoutSize: null,
+  mailoutName: null,
   mailoutDisplayAgent: null,
   details: null,
   archiveId: null,
@@ -56,6 +61,7 @@ const initialState = {
   submitError: null,
   stopError: null,
   updateMailoutSizeError: null,
+  updateMailoutNameError: null,
   changeDisplayAgentError: null,
   getMailoutEditError: null,
   updateMailoutEditError: null,
@@ -163,6 +169,32 @@ export default function mailout(state = initialState, action) {
         ...state,
         updateMailoutSizePending: false,
         updateMailoutSizeError: action.error,
+      };
+
+    case UPDATE_MAILOUT_NAME_PENDING:
+      let newDetails = { ...state.details };
+      newDetails.name = action.payload.name;
+      return {
+        ...state,
+        updateMailoutNamePending: true,
+        mailoutName: action.payload.name,
+        details: newDetails,
+        updateMailoutNameError: null,
+      };
+
+    case UPDATE_MAILOUT_NAME_SUCCESS:
+      return {
+        ...state,
+        updateMailoutNamePending: false,
+        mailoutName: null,
+        updateMailoutNameError: null,
+      };
+
+    case UPDATE_MAILOUT_NAME_ERROR:
+      return {
+        ...state,
+        updateMailoutNamePending: false,
+        updateMailoutNameError: action.error,
       };
 
     case CHANGE_MAILOUT_DISPLAY_AGENT_PENDING:

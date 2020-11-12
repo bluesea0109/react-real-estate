@@ -18,6 +18,10 @@ export const UPDATE_MAILOUT_SIZE_PENDING = 'UPDATE_MAILOUT_SIZE_PENDING';
 export const UPDATE_MAILOUT_SIZE_SUCCESS = 'UPDATE_MAILOUT_SIZE_SUCCESS';
 export const UPDATE_MAILOUT_SIZE_ERROR = 'UPDATE_MAILOUT_SIZE_ERROR';
 
+export const UPDATE_MAILOUT_NAME_PENDING = 'UPDATE_MAILOUT_NAME_PENDING';
+export const UPDATE_MAILOUT_NAME_SUCCESS = 'UPDATE_MAILOUT_NAME_SUCCESS';
+export const UPDATE_MAILOUT_NAME_ERROR = 'UPDATE_MAILOUT_NAME_ERROR';
+
 export const CHANGE_MAILOUT_DISPLAY_AGENT_PENDING = 'CHANGE_MAILOUT_DISPLAY_AGENT_PENDING';
 export const CHANGE_MAILOUT_DISPLAY_AGENT_SUCCESS = 'CHANGE_MAILOUT_DISPLAY_AGENT_SUCCESS';
 export const CHANGE_MAILOUT_DISPLAY_AGENT_ERROR = 'CHANGE_MAILOUT_DISPLAY_AGENT_ERROR';
@@ -94,6 +98,18 @@ export function updateMailoutSizeSuccess(payload) {
 
 export function updateMailoutSizeError(error) {
   return createErrorAction(UPDATE_MAILOUT_SIZE_ERROR, error);
+}
+
+export function updateMailoutNamePending(payload) {
+  return createAction(UPDATE_MAILOUT_NAME_PENDING, payload);
+}
+
+export function updateMailoutNameSuccess(payload) {
+  return createAction(UPDATE_MAILOUT_NAME_SUCCESS, payload);
+}
+
+export function updateMailoutNameError(error) {
+  return createErrorAction(UPDATE_MAILOUT_NAME_ERROR, error);
 }
 
 export function changeMailoutDisplayAgentPending(payload) {

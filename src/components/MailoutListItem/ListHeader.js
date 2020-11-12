@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import {
@@ -16,14 +16,16 @@ import {
   resolveLabelStatus,
   resolveMailoutStatus,
 } from './utils/helpers';
-import { Button, Header } from '../Base';
+import { Button, Header, Input } from '../Base';
 import { Label, Icon, Dropdown } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   archiveMailoutPending,
   undoArchiveMailoutPending,
+  updateMailoutNamePending,
 } from '../../store/modules/mailout/actions';
 import styled from 'styled-components';
+import * as brandColors from '../utils/brandColors';
 
 const StyledDropdown = styled(Dropdown)`
   &.dropdown.icon.button {
@@ -31,6 +33,27 @@ const StyledDropdown = styled(Dropdown)`
     &:hover {
       background-color: #cacbcd;
     }
+  }
+`;
+
+const SmallButton = styled(Button)`
+  &&& {
+    min-width: 0px;
+  }
+`;
+
+const EditButton = styled.span`
+  color: ${brandColors.primary};
+  font-weight: bold;
+  padding-left: 3em;
+  cursor: pointer;
+`;
+
+const CampaignNameDiv = styled.div`
+  display: flex;
+  align-items: baseline;
+  & .input {
+    flex: 1 0 0px;
   }
 `;
 
@@ -106,6 +129,9 @@ const ListHeader = ({
   const dispatch = useDispatch();
   const archivePending = useSelector(state => state.mailout.archivePending);
   const archiveId = useSelector(state => state.mailout.archiveId);
+  const campaignName = useSelector(state => state.mailout.details?.name || '');
+  const [EditingName, setEditingName] = useState(false);
+  const [newCampaignName, setNewCampaignName] = useState(data.name);
 
   const history = useHistory();
 
@@ -115,6 +141,12 @@ const ListHeader = ({
     } else {
       dispatch(archiveMailoutPending(data._id));
     }
+  };
+
+  const saveName = async () => {
+    if (newCampaignName !== campaignName)
+      dispatch(updateMailoutNamePending({ name: newCampaignName }));
+    setEditingName(false);
   };
 
   if (!data) return;
@@ -145,16 +177,58 @@ const ListHeader = ({
       </span>
       <span style={{ gridArea: 'address', alignSelf: 'center' }}>
         {!mailoutDetailPage && !isArchived && (
-          <Link to={`/dashboard/${data._id}`} className="ui header">
-            <Header as="h3" className="bm-color-effect">
-              {data.name || data.details?.displayAddress}
-            </Header>
-          </Link>
+          <CampaignNameDiv>
+            {EditingName ? (
+              <>
+                <Input
+                  value={newCampaignName}
+                  onChange={e => setNewCampaignName(e.target.value)}
+                  onKeyUp={e => {
+                    if (e.key === 'Enter') saveName();
+                  }}
+                  fluid
+                ></Input>
+                <SmallButton id="save-name-btn" primary onClick={saveName}>
+                  Save
+                </SmallButton>
+              </>
+            ) : (
+              <>
+                <Link to={`/dashboard/${data._id}`} className="ui header" style={{ margin: 0 }}>
+                  <Header as="h3">{newCampaignName || data.details?.displayAddress}</Header>
+                </Link>
+                {data?.name && <EditButton onClick={_ => setEditingName(true)}>Edit</EditButton>}
+              </>
+            )}
+          </CampaignNameDiv>
         )}
         {!mailoutDetailPage && isArchived && (
           <Header as="h3">{data.name || data.details?.displayAddress}</Header>
         )}
-        {mailoutDetailPage && <Header as="h3">{data.name || data.details?.displayAddress}</Header>}
+        {mailoutDetailPage && (
+          <CampaignNameDiv>
+            {EditingName ? (
+              <>
+                <Input
+                  value={newCampaignName}
+                  onChange={e => setNewCampaignName(e.target.value)}
+                  onKeyUp={e => {
+                    if (e.key === 'Enter') saveName();
+                  }}
+                  fluid
+                ></Input>
+                <SmallButton id="save-name-btn" primary onClick={saveName}>
+                  Save
+                </SmallButton>
+              </>
+            ) : (
+              <>
+                <Header as="h3">{newCampaignName || data.details?.displayAddress}</Header>
+                {data?.name && <EditButton onClick={_ => setEditingName(true)}>Edit</EditButton>}
+              </>
+            )}
+          </CampaignNameDiv>
+        )}
       </span>
       <ItemHeaderMenuLayout>
         {canSend(data.mailoutStatus) && mailoutDetailPage && enableRevertEdit && (

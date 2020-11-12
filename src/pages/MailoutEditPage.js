@@ -3,7 +3,11 @@ import { useHistory, useParams } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLastLocation } from 'react-router-last-location';
 
-import { getMailoutPending, getMailoutEditPending } from '../store/modules/mailout/actions';
+import {
+  getMailoutPending,
+  getMailoutEditPending,
+  resetMailout,
+} from '../store/modules/mailout/actions';
 import EditCampaignForm from '../components/Forms/EditCampaignForm';
 import { Message } from '../components/Base';
 import Loading from '../components/Loading';
@@ -25,13 +29,13 @@ const MailoutDetailsPage = () => {
   useEffect(() => {
     if (!mailoutDetails) dispatch(getMailoutPending(mailoutId));
     if (!mailoutEdit) dispatch(getMailoutEditPending(mailoutId));
-  }, [mailoutDetails, mailoutEdit, dispatch, mailoutId]);
+    // eslint-disable-next-line
+  }, []);
 
   const handleBackClick = () => {
     const editMailoutPath = `/dashboard/edit/${mailoutId}`;
     const mailOutPath = `/dashboard/${mailoutId}`;
     const lastPathName = lastLocation.pathname;
-
     if (lastPathName === editMailoutPath) {
       history.push(mailOutPath);
     }
@@ -47,6 +51,7 @@ const MailoutDetailsPage = () => {
     ) {
       history.goBack();
     }
+    dispatch(resetMailout());
   };
 
   return (
