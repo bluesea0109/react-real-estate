@@ -2,7 +2,7 @@ import _ from 'lodash';
 import startCase from 'lodash/startCase';
 import { BlockPicker, ChromePicker } from 'react-color';
 import { useDispatch, useSelector } from 'react-redux';
-import React, { createRef, useEffect, useState } from 'react';
+import React, { createRef, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Dropdown, Form, Header, Label, Popup, Checkbox } from 'semantic-ui-react';
 
 import auth from '../../services/auth';
@@ -29,9 +29,13 @@ import { StyledHeader, colors } from '../utils/helpers';
 import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
 import { useIsMobile } from '../Hooks/useIsMobile';
+import { useWindowSize } from '../Hooks/useWindowSize';
 import { calculateCost, resolveLabelStatus } from '../MailoutListItem/utils/helpers';
 import PostcardSizeButton from './Common/PostcardSizeButton';
 import styled from 'styled-components';
+import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
+import 'pure-react-carousel/dist/react-carousel.es.css';
+import * as brandColors from '../utils/brandColors';
 
 const blacklistNames = [
   'brandColor',
@@ -57,14 +61,86 @@ const CoverButtonGroup = styled(Button.Group)`
   }
 `;
 
+const CustomSlide = styled(Slide)`
+  && {
+    padding-bottom: 200px !important;
+  }
+`;
+
+const SliderButtons = styled.div`
+  position: relative;
+  & .back-button,
+  & .next-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  & .back-button {
+    left: -0.5em;
+  }
+  & .next-button {
+    right: -0.5em;
+  }
+`;
+
+const sliderButtonStyles = {
+  color: 'grey',
+  border: 'none',
+  padding: 0,
+  font: 'inherit',
+  cursor: 'pointer',
+  outline: 'inherit',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+};
+
+const StyledButtonBack = styled(ButtonBack)`
+  width: 3em;
+  height: 3em;
+  border-radius: 3em;
+  background-color: transparent;
+  & i {
+    margin: 0;
+    transform: translateX(-1px);
+  }
+  &:hover {
+    background-color: ${brandColors.lightGreyHover};
+  }
+`;
+
+const StyledButtonNext = styled(ButtonNext)`
+  width: 3em;
+  height: 3em;
+  border-radius: 3em;
+  background-color: transparent;
+  & i {
+    margin: 0;
+    transform: translateX(1px);
+  }
+  &:hover {
+    background-color: ${brandColors.lightGreyHover};
+  }
+`;
+
 const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const isMobile = useIsMobile();
-
+  const windowSize = useWindowSize();
+  const [sliderWidth, setsliderWidth] = useState(0);
+  const sliderRef = useRef(null);
+  useLayoutEffect(
+    _ => {
+      setsliderWidth(sliderRef.current ? sliderRef.current.offsetWidth : 0);
+    },
+    // eslint-disable-next-line
+    [windowSize]
+  );
   const peerId = useSelector(store => store.peer.peerId);
   const dispatch = useDispatch();
   const bookmarkTemplate = useSelector(store => store.templates.available?.bookmark);
   const ribbonTemplate = useSelector(store => store.templates.available?.ribbon);
   const stackTemplate = useSelector(store => store.templates.available?.stack);
+  const stencilsAvailable = useSelector(store => store.templates.available?.stencils);
   const onLoginMode = useSelector(store => store.onLogin?.mode);
   const multiUser = onLoginMode === 'multiuser';
 
@@ -364,7 +440,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     );
   };
 
-  const renderTemplatePicture = templateName => {
+  const renderTemplatePicture = (templateName, src) => {
     const resolveSource = type => {
       const types = {
         ribbon: require('../../assets/ribbon-preview.png'),
@@ -388,15 +464,15 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           style={
             templateTheme === templateName
               ? {
-                  border: '2px solid teal',
-                  margin: 0,
+                  border: `2px solid ${brandColors.primary}`,
+                  margin: 'auto',
                   padding: '0.5em',
                   borderRadius: '5px',
                   maxWidth: '260px',
                 }
               : {
                   border: '1px solid lightgray',
-                  margin: 0,
+                  margin: 'auto',
                   padding: '0.5em',
                   borderRadius: '5px',
                   maxWidth: '260px',
@@ -405,7 +481,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
         >
           <img
             onClick={e => setTemplateTheme(templateName)}
-            src={resolveSource(templateName)}
+            src={src ? src : resolveSource(templateName)}
             alt={templateName}
           />
         </div>
@@ -439,7 +515,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           .map(field => {
             let fieldName = startCase(field.name);
             const error = maxLength(field.max)(formValues[field.name]);
-            console.log(field);
+            // console.log(field);
 
             if (fieldName.includes('Url')) fieldName = fieldName.replace(/Url/g, 'URL');
             if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
@@ -550,7 +626,45 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
         );
 
       default:
-        return <span> Nothing here </span>;
+        const defaultFields = ribbonTemplate[currentListingStatus].fields
+          .filter(field => {
+            let passes = true;
+            if (blacklistNames.includes(field.name)) passes = false;
+            if (side && field.sides && !_.includes(field.sides, side)) passes = false;
+            return passes;
+          })
+          .map(field => {
+            let fieldName = startCase(field.name);
+            const error = maxLength(field.max)(formValues[field.name]);
+            // console.log(field);
+
+            if (fieldName.includes('Url')) fieldName = fieldName.replace(/Url/g, 'URL');
+            if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
+
+            return (
+              <Form.Field
+                key={formValuesHaveChanged ? formValues[field.name] || fieldName : fieldName}
+              >
+                <Form.Input
+                  fluid
+                  error={error && { content: error }}
+                  label={fieldName}
+                  placeholder={field.default}
+                  type={field.type}
+                  onChange={(e, input) => handleInputChange(input.value, field.name)}
+                  defaultValue={formValues[field.name]}
+                />
+              </Form.Field>
+            );
+          });
+
+        return (
+          <Form color="green">
+            <Segment basic padded className={isMobile ? null : 'secondary-grid-container'}>
+              {defaultFields}
+            </Segment>
+          </Form>
+        );
     }
   };
 
@@ -646,21 +760,42 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
         </ContentBottomHeaderLayout>
 
         {currentListingStatus !== 'custom' && (
-          <Segment basic padded style={{ display: 'flex', flexWrap: 'wrap' }}>
-            <div>
-              <Header as="h4">Template Theme</Header>
-              {renderTemplatePicture('bookmark')}
-            </div>
-
-            <div>
-              <p>&nbsp;</p>
-              {renderTemplatePicture('ribbon')}
-            </div>
-
-            <div>
-              <p>&nbsp;</p>
-              {renderTemplatePicture('stack')}
-            </div>
+          <Segment basic padded style={{}}>
+            <Header as="h4">Template Theme</Header>
+            <CarouselProvider
+              naturalSlideWidth={130}
+              naturalSlideHeight={100}
+              totalSlides={stencilsAvailable?.length + 3 || 3}
+              visibleSlides={sliderWidth > 320 ? Math.floor(sliderWidth / 320) : 1}
+              step={1}
+              infinite={true}
+            >
+              <SliderButtons ref={sliderRef}>
+                <Slider>
+                  <CustomSlide index={0}>
+                    <div>{renderTemplatePicture('bookmark')}</div>
+                  </CustomSlide>
+                  <CustomSlide index={1}>
+                    <div>{renderTemplatePicture('ribbon')}</div>
+                  </CustomSlide>
+                  <CustomSlide index={2}>
+                    <div>{renderTemplatePicture('stack')}</div>
+                  </CustomSlide>
+                  {stencilsAvailable &&
+                    stencilsAvailable.map((stencil, ind) => (
+                      <CustomSlide key={stencil.templateTheme} index={ind + 3}>
+                        <div>{renderTemplatePicture(stencil.templateTheme, stencil.thumbnail)}</div>
+                      </CustomSlide>
+                    ))}
+                </Slider>
+                <StyledButtonBack style={sliderButtonStyles} className="back-button">
+                  <Icon name="chevron left" size="large"></Icon>
+                </StyledButtonBack>
+                <StyledButtonNext style={sliderButtonStyles} className="next-button">
+                  <Icon name="chevron right" size="large"></Icon>
+                </StyledButtonNext>
+              </SliderButtons>
+            </CarouselProvider>
           </Segment>
         )}
 
