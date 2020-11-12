@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Button, Container, Divider, Header, Icon, Modal, Message, Segment } from './Base';
 
 import CustomizeCampaignForm from './Forms/CustomizeCampaignForm';
@@ -33,6 +32,8 @@ const MailoutEditModal = props => {
     </Modal>
   );
 };
+
+export default MailoutEditModal;
 
 // const mapStateToProps = state => {
 //   return state.form.customizeCampaign
