@@ -8,6 +8,7 @@ import { iframeTransformMobile, iframeLinkStyle } from '../utils/helpers';
 import { ItemBodyIframeLayout } from '../../layouts';
 import ApiService from '../../services/api/index';
 import { Image } from '../Base';
+import Styled from 'styled-components';
 
 const IframeGroup = ({ index, item, linkTo = null }) => {
   const peerId = useSelector(store => store.peer.peerId);
@@ -136,25 +137,36 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
   } else {
     return (
       <ItemBodyIframeLayout horizontal style={IFrameBodyStyles} id={`mailout-iframe-set-${index}`}>
-        <Segment textAlign="center" loading={!item?._id || !frontLoaded} style={IFrameStyles}>
-          <div
-            style={{ width: '300px', height: '204px', overflow: 'hidden' }}
-            className="image-frame-border"
-          >
-            <iframe
-              id="bm-iframe-front"
-              title={frontURL}
-              name="front"
-              src={null}
-              width="300"
-              height="204"
-              frameBorder="none"
-              sandbox="allow-same-origin allow-scripts"
-              onLoad={handleOnload}
-              style={{ visibility: !item?._id || !frontLoaded ? 'hidden' : 'visible' }}
+        {item.frontResourceUrl && (
+          <Segment textAlign="center" style={{ border: 'none' }}>
+            <Image
+              src={item.frontResourceUrl}
+              style={imgStyles}
+              className="bm-transform-effect image-frame-border"
             />
-          </div>
-        </Segment>
+          </Segment>
+        )}
+        {!item.frontResourceUrl && (
+          <Segment textAlign="center" loading={!item?._id || !frontLoaded} style={IFrameStyles}>
+            <div
+              style={{ width: '300px', height: '204px', overflow: 'hidden' }}
+              className="image-frame-border"
+            >
+              <iframe
+                id="bm-iframe-front"
+                title={frontURL + '?dashboard=true'}
+                name="front"
+                src={null}
+                width="300"
+                height="204"
+                frameBorder="none"
+                sandbox="allow-same-origin allow-scripts"
+                onLoad={handleOnload}
+                style={{ visibility: !item?._id || !frontLoaded ? 'hidden' : 'visible' }}
+              />
+            </div>
+          </Segment>
+        )}
         <Segment textAlign="center" loading={!item?._id || !backLoaded} style={IFrameStyles}>
           <div
             style={{ width: '300px', height: '204px', overflow: 'hidden' }}
@@ -162,7 +174,7 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
           >
             <iframe
               id="bm-iframe-back"
-              title={backURL}
+              title={backURL + '?dashboard=true'}
               name="back"
               src={null}
               width="300"
