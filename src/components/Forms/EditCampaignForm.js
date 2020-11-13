@@ -4,6 +4,14 @@ import { BlockPicker, ChromePicker } from 'react-color';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { createRef, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Dropdown, Form, Header, Label, Popup, Checkbox } from 'semantic-ui-react';
+import {
+  NewLabel,
+  StyledButtonBack,
+  StyledButtonNext,
+  SliderButtons,
+  CustomSlide,
+  sliderButtonStyles,
+} from './Base/Carousel';
 
 import auth from '../../services/auth';
 import api from '../../services/api';
@@ -33,7 +41,7 @@ import { useWindowSize } from '../Hooks/useWindowSize';
 import { calculateCost, resolveLabelStatus } from '../MailoutListItem/utils/helpers';
 import PostcardSizeButton from './Common/PostcardSizeButton';
 import styled from 'styled-components';
-import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
+import { CarouselProvider, Slider } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import * as brandColors from '../utils/brandColors';
 
@@ -58,82 +66,6 @@ const CoverButtonGroup = styled(Button.Group)`
     &:focus {
       background-color: #cacbcd;
     }
-  }
-`;
-
-const CustomSlide = styled(Slide)`
-  && {
-    padding-bottom: 225px !important;
-  }
-`;
-
-const SliderButtons = styled.div`
-  position: relative;
-  & .back-button,
-  & .next-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-  & .back-button {
-    left: -0.5em;
-  }
-  & .next-button {
-    right: -0.5em;
-  }
-`;
-
-const sliderButtonStyles = {
-  color: 'grey',
-  border: 'none',
-  padding: 0,
-  font: 'inherit',
-  cursor: 'pointer',
-  outline: 'inherit',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-};
-
-const StyledButtonBack = styled(ButtonBack)`
-  width: 3em;
-  height: 3em;
-  border-radius: 3em;
-  background-color: transparent;
-  & i {
-    margin: 0;
-    transform: translateX(-1px);
-  }
-  &:hover {
-    background-color: ${brandColors.lightGreyHover};
-  }
-`;
-
-const StyledButtonNext = styled(ButtonNext)`
-  width: 3em;
-  height: 3em;
-  border-radius: 3em;
-  background-color: transparent;
-  & i {
-    margin: 0;
-    transform: translateX(1px);
-  }
-  &:hover {
-    background-color: ${brandColors.lightGreyHover};
-  }
-`;
-
-const NewLabel = styled.div`
-  max-width: 260px;
-  margin: auto;
-  padding-top: 0.5em;
-  & .label {
-    background-color: ${brandColors.secondary};
-    border-radius: 500px;
-    padding: 2px 12px;
-    color: white;
-    font-weight: bold;
-    text-transform: uppercase;
   }
 `;
 
