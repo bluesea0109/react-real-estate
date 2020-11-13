@@ -159,7 +159,6 @@ const mobilePostcardContainer = {
   marginTop: '0px',
 };
 
-
 const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const isMobile = useIsMobile();
   const windowSize = useWindowSize();
