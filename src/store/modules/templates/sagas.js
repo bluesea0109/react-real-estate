@@ -9,7 +9,12 @@ export function* getTemplatesSaga() {
     yield put(getTemplatesPending());
 
     const { path, method } = ApiService.directory.templates();
-    const response = yield call(ApiService[method], path);
+    const TemplateResponse = yield call(ApiService[method], path);
+
+    const { stencilPath, stencilMethod } = ApiService.directory.stencils('singleListing');
+    const StencilResponse = yield call(ApiService[stencilMethod], stencilPath);
+
+    const response = Object.assign(TemplateResponse, StencilResponse);
 
     yield put(getTemplatesSuccess(response));
   } catch (err) {

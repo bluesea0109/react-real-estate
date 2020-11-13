@@ -130,6 +130,7 @@ const directory = {
   states: () => ({ path: `/api/states`, method: 'get' }),
   onLogin: () => ({ path: `/api/user/onLogin`, method: 'get' }),
   templates: () => ({ path: `/api/templates`, method: 'get' }),
+  stencils: mapper => ({ stencilPath: `/api/user/stencils/list/${mapper}`, stencilMethod: 'get' }),
 
   team: {
     list: () => ({ path: `/api/user/team/list`, method: 'get' }),
