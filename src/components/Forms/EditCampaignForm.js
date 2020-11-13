@@ -63,7 +63,7 @@ const CoverButtonGroup = styled(Button.Group)`
 
 const CustomSlide = styled(Slide)`
   && {
-    padding-bottom: 200px !important;
+    padding-bottom: 225px !important;
   }
 `;
 
@@ -120,6 +120,20 @@ const StyledButtonNext = styled(ButtonNext)`
   }
   &:hover {
     background-color: ${brandColors.lightGreyHover};
+  }
+`;
+
+const NewLabel = styled.div`
+  max-width: 260px;
+  margin: auto;
+  padding-top: 0.5em;
+  & .label {
+    background-color: ${brandColors.secondary};
+    border-radius: 500px;
+    padding: 2px 12px;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
   }
 `;
 
@@ -440,7 +454,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     );
   };
 
-  const renderTemplatePicture = (templateName, src) => {
+  const renderTemplatePicture = (templateName, src, isNew = false) => {
     const resolveSource = type => {
       const types = {
         ribbon: require('../../assets/ribbon-preview.png'),
@@ -452,7 +466,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     };
 
     return (
-      <div style={{ margin: '1em' }}>
+      <div style={{ margin: '1em', position: 'relative' }}>
         <input
           type="radio"
           checked={templateTheme === templateName}
@@ -485,6 +499,11 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
             alt={templateName}
           />
         </div>
+        {isNew && (
+          <NewLabel>
+            <span className="label">New</span>
+          </NewLabel>
+        )}
       </div>
     );
   };
@@ -784,7 +803,13 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
                   {stencilsAvailable &&
                     stencilsAvailable.map((stencil, ind) => (
                       <CustomSlide key={stencil.templateTheme} index={ind + 3}>
-                        <div>{renderTemplatePicture(stencil.templateTheme, stencil.thumbnail)}</div>
+                        <div>
+                          {renderTemplatePicture(
+                            stencil.templateTheme,
+                            stencil.thumbnail,
+                            stencil.new
+                          )}
+                        </div>
                       </CustomSlide>
                     ))}
                 </Slider>
