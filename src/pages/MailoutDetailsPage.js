@@ -116,11 +116,11 @@ const postcardContainer = {
 };
 
 const ModalPreview = Styled(Modal)`
-  width:${props => css`calc(${props.widthSize + 70}px)`};
+  width:${props => css`calc(${props.widthsize + 70}px)`};
   .content{
     justify-content:center;
   }
-  @media (max-width: ${props => props.widthSize + 100}px) {
+  @media (max-width: ${props => props.widthsize + 100}px) {
     &&&{
       width:90%;
     }
@@ -491,7 +491,7 @@ const MailoutDetailsPage = () => {
       </ContentTopHeaderLayout>
 
       <ModalPreview
-        widthSize={postCardSize.width}
+        widthsize={postCardSize.width}
         open={showConsentModal}
         onClose={() => setShowConsentModal(false)}
         size="small"

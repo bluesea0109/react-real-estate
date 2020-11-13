@@ -137,6 +137,29 @@ const NewLabel = styled.div`
   }
 `;
 
+const optionsContainerStyles = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'space-between',
+};
+
+const customCampaignContainer = {
+  display: 'flex',
+  flexWrap: 'wrap',
+};
+
+const postcardContainer = {
+  display: 'flex',
+  flexDirection: 'column',
+  padding: '0 1rem',
+};
+
+const mobilePostcardContainer = {
+  margin: 'auto',
+  marginTop: '0px',
+};
+
+
 const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const isMobile = useIsMobile();
   const windowSize = useWindowSize();
@@ -414,9 +437,25 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     });
   }
 
-  const renderPostcardSize = (size = '4x6') => {
+  const renderPostcardSize = (size = '4x6', place) => {
+    let margins = '';
+    switch (place) {
+      case 'left':
+        margins = '1em 1em 1em 0em';
+        break;
+      case 'right':
+        margins = '1em 0em 1em 1em';
+        break;
+      default:
+        margins = '1em 1em 1em 1em';
+    }
+
+    if (windowSize.width < 620) {
+      margins = '1em';
+    }
+
     return (
-      <div style={{ margin: '1em 1em 2em 1rem', width: '118px', height: '84px' }}>
+      <div style={{ margin: margins, width: '118px', height: '84px' }}>
         <input
           type="radio"
           checked={postcardSize === size}
@@ -824,15 +863,21 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           </Segment>
         )}
 
-        <Segment basic padded style={{ display: 'flex', flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', padding: '0 1rem' }}>
+        <Segment
+          basic
+          padded
+          style={
+            currentListingStatus !== 'custom' ? optionsContainerStyles : customCampaignContainer
+          }
+        >
+          <div style={windowSize.width > 620 ? postcardContainer : mobilePostcardContainer}>
             {currentListingStatus !== 'custom' && (
               <>
                 <Header as="h4">Postcard Size</Header>
                 <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
-                  {renderPostcardSize('4x6')}
+                  {renderPostcardSize('4x6', 'left')}
                   {renderPostcardSize('6x9')}
-                  {renderPostcardSize('6x11')}
+                  {renderPostcardSize('6x11', 'right')}
                 </div>
               </>
             )}
@@ -856,7 +901,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
               </div>
             )}
           </div>
-          <div style={{ padding: '0 1em' }}>
+          <div style={{ padding: '0 1em', margin: 'auto', marginTop: '0px' }}>
             <Header as="h4">Brand Color</Header>
             <BlockPicker
               triangle="hide"
@@ -883,7 +928,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           </div>
 
           {!mailoutDetails.frontResourceUrl && (
-            <div style={{ maxWidth: 350, padding: '0 1rem' }}>
+            <div style={{ maxWidth: 350, padding: '0 1rem', margin: 'auto' }}>
               <Header as="h4">Cover Photo</Header>
               {photoUpdating && <span>Please wait...</span>}
               {!photoUpdating && (
