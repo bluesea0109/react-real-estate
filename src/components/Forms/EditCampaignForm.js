@@ -4,14 +4,7 @@ import { BlockPicker, ChromePicker } from 'react-color';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { createRef, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Dropdown, Form, Header, Label, Popup, Checkbox } from 'semantic-ui-react';
-import {
-  NewLabel,
-  StyledButtonBack,
-  StyledButtonNext,
-  SliderButtons,
-  CustomSlide,
-  sliderButtonStyles,
-} from './Base/Carousel';
+import { NewLabel, StyledButtonBack, StyledButtonNext } from './Base/Carousel';
 
 import auth from '../../services/auth';
 import api from '../../services/api';
@@ -41,8 +34,8 @@ import { useWindowSize } from '../Hooks/useWindowSize';
 import { calculateCost, resolveLabelStatus } from '../MailoutListItem/utils/helpers';
 import PostcardSizeButton from './Common/PostcardSizeButton';
 import styled from 'styled-components';
-import { CarouselProvider, Slider } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
+import Slider from 'react-slick';
 import * as brandColors from '../utils/brandColors';
 
 const blacklistNames = [
@@ -99,6 +92,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   useLayoutEffect(
     _ => {
       setsliderWidth(sliderRef.current ? sliderRef.current.offsetWidth : 0);
+      console.log(sliderWidth);
     },
     // eslint-disable-next-line
     [windowSize]
@@ -170,6 +164,15 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     if (!bestCta) return 'https://www.google.com';
     return bestCta;
   });
+
+  const sliderSettings = {
+    className: 'slider variable-width',
+    infinite: true,
+    slidesToShow: sliderWidth > 320 ? Math.floor(sliderWidth / 320) : 1,
+    focusOnSelect: true,
+    nextArrow: <StyledButtonNext />,
+    prevArrow: <StyledButtonBack />,
+  };
 
   const popover = {
     position: 'absolute',
@@ -436,7 +439,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     };
 
     return (
-      <div style={{ margin: '1em', position: 'relative' }}>
+      <div>
         <input
           type="radio"
           checked={templateTheme === templateName}
@@ -449,17 +452,17 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
             templateTheme === templateName
               ? {
                   border: `2px solid ${brandColors.primary}`,
-                  margin: 'auto',
                   padding: '0.5em',
+                  margin: '0 auto',
                   borderRadius: '5px',
-                  maxWidth: '260px',
+                  maxWidth: 260,
                 }
               : {
                   border: '1px solid lightgray',
-                  margin: 'auto',
                   padding: '0.5em',
+                  margin: '0 auto',
                   borderRadius: '5px',
-                  maxWidth: '260px',
+                  maxWidth: 260,
                 }
           }
         >
@@ -750,8 +753,19 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
         {currentListingStatus !== 'custom' && (
           <Segment basic padded style={{}}>
-            <Header as="h4">Template Theme</Header>
-            <CarouselProvider
+            <div ref={sliderRef}>
+              <Header as="h4">Template Theme</Header>
+              <Slider {...sliderSettings}>
+                {renderTemplatePicture('bookmark')}
+                {renderTemplatePicture('ribbon')}
+                {renderTemplatePicture('stack')}
+                {stencilsAvailable &&
+                  stencilsAvailable.map((stencil, ind) =>
+                    renderTemplatePicture(stencil.templateTheme, stencil.thumbnail, stencil.new)
+                  )}
+              </Slider>
+            </div>
+            {/* <CarouselProvider
               naturalSlideWidth={130}
               naturalSlideHeight={100}
               totalSlides={stencilsAvailable?.length + 3 || 3}
@@ -790,7 +804,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
                   <Icon name="chevron right" size="large"></Icon>
                 </StyledButtonNext>
               </SliderButtons>
-            </CarouselProvider>
+            </CarouselProvider> */}
           </Segment>
         )}
 
