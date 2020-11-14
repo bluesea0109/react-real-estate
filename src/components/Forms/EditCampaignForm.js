@@ -25,13 +25,7 @@ import {
   changeMailoutDisplayAgentPending,
   updateMailoutEditPending,
 } from '../../store/modules/mailout/actions';
-import {
-  differenceObjectDeep,
-  maxLength,
-  objectIsEmpty,
-  sleep,
-  postcardDimensions,
-} from '../utils/utils';
+import { differenceObjectDeep, objectIsEmpty, sleep, postcardDimensions } from '../utils/utils';
 import { Button, Icon, Image, Menu, Message, Page, Segment, Snackbar } from '../Base';
 import { StyledHeader, colors } from '../utils/helpers';
 import PageTitleHeader from '../PageTitleHeader';
@@ -105,9 +99,6 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   );
   const peerId = useSelector(store => store.peer.peerId);
   const dispatch = useDispatch();
-  const bookmarkTemplate = useSelector(store => store.templates.available?.bookmark);
-  const ribbonTemplate = useSelector(store => store.templates.available?.ribbon);
-  const stackTemplate = useSelector(store => store.templates.available?.stack);
   const stencilsAvailable = useSelector(store => store.templates.available?.stencils);
   const onLoginMode = useSelector(store => store.onLogin?.mode);
   const multiUser = onLoginMode === 'multiuser';
@@ -143,12 +134,16 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const [postcardSize, setPostcardSize] = useState(currentPostcardSize);
   const [templateTheme, setTemplateTheme] = useState(currentTemplateTheme);
   const [selectedBrandColor, setSelectedBrandColor] = useState(
-    mailoutEdit?.mergeVariables?.brandColor
+    mailoutDetails.mergeVariables
+      ? Object.values(mailoutDetails.mergeVariables).find(
+          variable => variable.name === 'brandColor'
+        ).value
+      : ''
   );
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
   const [tempColor, setTempColor] = useState(mailoutEdit?.mergeVariables?.brandColor);
   const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(currentMailoutDisplayAgent);
-  const [formValues, setFormValues] = useState(mailoutEdit?.mergeVariables);
+  const [formValues, setFormValues] = useState(Object.values(mailoutEdit?.mergeVariables));
 
   let _coverPhotoMv = _.get(mailoutDetails, 'mergeVariables', []).find(
     mv => mv.name === 'frontImgUrl'
@@ -295,7 +290,9 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
     Object.keys(formValues)
       .filter(key => key !== 'brandColor' && key !== 'frontImgUrl')
-      .forEach(key => newMergeVariables.push({ name: key, value: formValues[key] }));
+      .forEach(key =>
+        newMergeVariables.push({ name: formValues[key].name, value: formValues[key].value })
+      );
 
     const newData = Object.assign(
       {},
@@ -313,7 +310,6 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     } else {
       newData.ctas = { dontOverride: true };
     }
-
     dispatch(updateMailoutEditPending(newData));
     await sleep(500);
     handleBackClick();
@@ -487,174 +483,52 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   };
 
   const handleInputChange = (value, name) => {
-    const newValues = Object.assign({}, formValues, { [name]: value });
+    let changeIndex = formValues.findIndex(field => field.name === name);
+    let newValues = [...formValues];
+    formValues[changeIndex].value = value;
     setFormValues(newValues);
   };
 
-  const renderThemeSpecificData = side => {
-    switch (templateTheme) {
-      case 'ribbon':
-        const ribbonFields = ribbonTemplate[currentListingStatus].fields
-          .filter(field => {
-            let passes = true;
-            if (blacklistNames.includes(field.name)) passes = false;
-            if (side && field.sides && !_.includes(field.sides, side)) passes = false;
-            return passes;
-          })
-          .map(field => {
-            let fieldName = startCase(field.name);
-            const error = maxLength(field.max)(formValues[field.name]);
-            // console.log(field);
+  const renderMergeVariables = side => {
+    let defaultFields = [];
+    if (formValues) {
+      defaultFields = formValues
+        .filter(field => {
+          let passes = true;
+          if (blacklistNames.includes(field.name)) passes = false;
+          if (side && field.sides && !_.includes(field.sides, side)) passes = false;
+          return passes;
+        })
+        .map(field => {
+          let fieldName = startCase(field.name);
 
-            if (fieldName.includes('Url')) fieldName = fieldName.replace(/Url/g, 'URL');
-            if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
+          if (fieldName.includes('Url')) fieldName = fieldName.replace(/Url/g, 'URL');
+          if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
 
-            return (
-              <Form.Field
-                key={formValuesHaveChanged ? formValues[field.name] || fieldName : fieldName}
-              >
-                <Form.Input
-                  fluid
-                  error={error && { content: error }}
-                  label={fieldName}
-                  placeholder={field.default}
-                  type={field.type}
-                  onChange={(e, input) => handleInputChange(input.value, field.name)}
-                  defaultValue={formValues[field.name]}
-                />
-              </Form.Field>
-            );
-          });
-
-        return (
-          <Form color="green">
-            <Segment basic padded className={isMobile ? null : 'secondary-grid-container'}>
-              {ribbonFields}
-            </Segment>
-          </Form>
-        );
-
-      case 'bookmark':
-        const bookmarkFields = bookmarkTemplate[currentListingStatus].fields
-          .filter(field => {
-            let passes = true;
-            if (blacklistNames.includes(field.name)) passes = false;
-            if (side && field.sides && !_.includes(field.sides, side)) passes = false;
-            return passes;
-          })
-          .map(field => {
-            let fieldName = startCase(field.name);
-            const error = maxLength(field.max)(formValues[field.name]);
-
-            if (fieldName.includes('Url')) fieldName = fieldName.replace(/Url/g, 'URL');
-            if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
-
-            return (
-              <Form.Field
-                key={formValuesHaveChanged ? formValues[field.name] || fieldName : fieldName}
-              >
-                <Form.Input
-                  fluid
-                  error={error && { content: error }}
-                  label={fieldName}
-                  placeholder={field.default}
-                  type={field.type}
-                  onChange={(e, input) => handleInputChange(input.value, field.name)}
-                  defaultValue={formValues[field.name]}
-                />
-              </Form.Field>
-            );
-          });
-
-        return (
-          <Form color="green">
-            <Segment basic padded className={isMobile ? null : 'secondary-grid-container'}>
-              {bookmarkFields}
-            </Segment>
-          </Form>
-        );
-
-      case 'stack':
-        const stackFields = stackTemplate[currentListingStatus].fields
-          .filter(field => {
-            let passes = true;
-            if (blacklistNames.includes(field.name)) passes = false;
-            if (side && field.sides && !_.includes(field.sides, side)) passes = false;
-            return passes;
-          })
-          .map(field => {
-            let fieldName = startCase(field.name);
-            const error = maxLength(field.max)(formValues[field.name]);
-
-            if (fieldName.includes('Url')) fieldName = fieldName.replace(/Url/g, 'URL');
-            if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
-
-            return (
-              <Form.Field
-                key={formValuesHaveChanged ? formValues[field.name] || fieldName : fieldName}
-              >
-                <Form.Input
-                  fluid
-                  error={error && { content: error }}
-                  label={fieldName}
-                  placeholder={field.default}
-                  type={field.type}
-                  onChange={(e, input) => handleInputChange(input.value, field.name)}
-                  defaultValue={formValues[field.name]}
-                />
-              </Form.Field>
-            );
-          });
-
-        return (
-          <Form color="green">
-            <Segment basic padded className={isMobile ? null : 'secondary-grid-container'}>
-              {stackFields}
-            </Segment>
-          </Form>
-        );
-
-      default:
-        const defaultFields = ribbonTemplate[currentListingStatus].fields
-          .filter(field => {
-            let passes = true;
-            if (blacklistNames.includes(field.name)) passes = false;
-            if (side && field.sides && !_.includes(field.sides, side)) passes = false;
-            return passes;
-          })
-          .map(field => {
-            let fieldName = startCase(field.name);
-            const error = maxLength(field.max)(formValues[field.name]);
-            // console.log(field);
-
-            if (fieldName.includes('Url')) fieldName = fieldName.replace(/Url/g, 'URL');
-            if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
-
-            return (
-              <Form.Field
-                key={formValuesHaveChanged ? formValues[field.name] || fieldName : fieldName}
-              >
-                <Form.Input
-                  fluid
-                  error={error && { content: error }}
-                  label={fieldName}
-                  placeholder={field.default}
-                  type={field.type}
-                  onChange={(e, input) => handleInputChange(input.value, field.name)}
-                  defaultValue={formValues[field.name]}
-                />
-              </Form.Field>
-            );
-          });
-
-        return (
-          <Form color="green">
-            <Segment basic padded className={isMobile ? null : 'secondary-grid-container'}>
-              {defaultFields}
-            </Segment>
-          </Form>
-        );
+          return (
+            <Form.Field
+              key={formValuesHaveChanged ? formValues[field.name] || fieldName : fieldName}
+            >
+              <Form.Input
+                fluid
+                error={error && { content: error }}
+                label={fieldName}
+                placeholder={fieldName}
+                onChange={(e, input) => handleInputChange(input.value, field.name)}
+                value={field.value}
+              />
+            </Form.Field>
+          );
+        });
     }
+
+    return (
+      <Form color="green">
+        <Segment basic padded className={isMobile ? null : 'secondary-grid-container'}>
+          {defaultFields}
+        </Segment>
+      </Form>
+    );
   };
 
   return (
@@ -912,14 +786,14 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
             Front Postcard details
           </Header>
         )}
-        {renderFrontDetails && renderThemeSpecificData('front')}
+        {renderFrontDetails && renderMergeVariables('front')}
 
         {renderBackDetails && (
           <Header as="h4" style={{ marginLeft: '1.5em', marginBottom: '-0.5em' }}>
             Back Postcard details
           </Header>
         )}
-        {renderBackDetails && renderThemeSpecificData('back')}
+        {renderBackDetails && renderMergeVariables('back')}
 
         <div>
           <Header as="h4">Customize call to action URL</Header>

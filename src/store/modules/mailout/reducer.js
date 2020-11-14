@@ -246,10 +246,7 @@ export default function mailout(state = initialState, action) {
           ...state.mailoutEdit,
           mergeVariables: {
             ...state.mailoutEdit?.mergeVariables,
-            ...Object.assign(
-              {},
-              ...action.payload.mergeVariables.map(object => ({ [object.name]: object.value }))
-            ),
+            ...action.payload.mergeVariables,
           },
         },
         getMailoutEditError: null,
