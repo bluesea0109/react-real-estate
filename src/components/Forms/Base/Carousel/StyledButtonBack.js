@@ -1,18 +1,17 @@
 import styled from 'styled-components';
-import { ButtonBack } from 'pure-react-carousel';
-import * as brandColors from '../../../utils/brandColors';
 
-const StyledButtonBack = styled(ButtonBack)`
-  width: 3em;
-  height: 3em;
-  border-radius: 3em;
-  background-color: transparent;
-  & i {
-    margin: 0;
-    transform: translateX(-1px);
+const StyledButtonBack = styled.div`
+  z-index: 100;
+  transform: translate(1.5rem, -2rem);
+  &::before {
+    opacity: 1;
+    color: rgb(224, 225, 226);
+    font-size: 2.75rem;
   }
   &:hover {
-    background-color: ${brandColors.lightGreyHover};
+    &::before {
+      color: lightgrey;
+    }
   }
 `;
 

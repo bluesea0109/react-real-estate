@@ -155,7 +155,7 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
               formValues={formValues}
               setFormValues={setFormValues}
             ></TemplateCarousel>
-            <div style={{ padding: '0 1rem' }}>
+            <div style={{ padding: '0 2rem' }}>
               {ColorPickerFormField({ listingType, initialValues, formValues, setFormValues })}
             </div>
           </StyledTemplateDiv>

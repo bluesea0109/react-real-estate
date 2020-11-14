@@ -1,5 +1,6 @@
 import React from 'react';
 import { NewLabel } from '../Base/Carousel';
+import * as brandColors from '../../utils/brandColors';
 
 const NEW_LISTING = 'listed';
 
@@ -35,7 +36,7 @@ const TemplatePictureFormField = ({
 
   if (!editable) {
     return (
-      <div style={{ margin: '1em auto', minWidth: '128px', maxWidth: '270px', opacity: '0.4' }}>
+      <div key={templateName} style={{ width: 260 }}>
         <input
           type="radio"
           defaultChecked={currentValue === templateName}
@@ -45,8 +46,20 @@ const TemplatePictureFormField = ({
         <div
           style={
             currentValue === templateName
-              ? { border: '2px solid #59C4C4', margin: 0, padding: '0.5em', borderRadius: '5px' }
-              : { border: '1px solid lightgray', margin: 0, padding: '0.5em', borderRadius: '5px' }
+              ? {
+                  border: `2px solid ${brandColors.primary}`,
+                  margin: '0 auto',
+                  padding: '0.5em',
+                  borderRadius: '5px',
+                  width: 260,
+                }
+              : {
+                  border: '1px solid lightgray',
+                  margin: '0 auto',
+                  padding: '0.5em',
+                  borderRadius: '5px',
+                  width: 260,
+                }
           }
         >
           <img src={src ? src : resolveSource(templateName)} alt={templateName} />
@@ -60,7 +73,7 @@ const TemplatePictureFormField = ({
     );
   } else {
     return (
-      <div style={{ margin: '1em auto', minWidth: '128px', maxWidth: '270px' }}>
+      <div key={templateName}>
         <input
           type="radio"
           checked={currentValue === templateName}
@@ -71,8 +84,20 @@ const TemplatePictureFormField = ({
         <div
           style={
             currentValue === templateName
-              ? { border: '2px solid #59C4C4', margin: 0, padding: '0.5em', borderRadius: '5px' }
-              : { border: '1px solid lightgray', margin: 0, padding: '0.5em', borderRadius: '5px' }
+              ? {
+                  border: '2px solid #59C4C4',
+                  margin: '0 auto',
+                  padding: '0.5em',
+                  borderRadius: '5px',
+                  width: 260,
+                }
+              : {
+                  border: '1px solid lightgray',
+                  margin: '0 auto',
+                  padding: '0.5em',
+                  borderRadius: '5px',
+                  width: 260,
+                }
           }
         >
           <img
