@@ -92,7 +92,6 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   useLayoutEffect(
     _ => {
       setsliderWidth(sliderRef.current ? sliderRef.current.offsetWidth : 0);
-      console.log(sliderWidth);
     },
     // eslint-disable-next-line
     [windowSize]
@@ -439,7 +438,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     };
 
     return (
-      <div>
+      <div key={templateName}>
         <input
           type="radio"
           checked={templateTheme === templateName}
@@ -765,46 +764,6 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
                   )}
               </Slider>
             </div>
-            {/* <CarouselProvider
-              naturalSlideWidth={130}
-              naturalSlideHeight={100}
-              totalSlides={stencilsAvailable?.length + 3 || 3}
-              visibleSlides={sliderWidth > 320 ? Math.floor(sliderWidth / 320) : 1}
-              step={1}
-              infinite={true}
-            >
-              <SliderButtons ref={sliderRef}>
-                <Slider>
-                  <CustomSlide index={0}>
-                    <div>{renderTemplatePicture('bookmark')}</div>
-                  </CustomSlide>
-                  <CustomSlide index={1}>
-                    <div>{renderTemplatePicture('ribbon')}</div>
-                  </CustomSlide>
-                  <CustomSlide index={2}>
-                    <div>{renderTemplatePicture('stack')}</div>
-                  </CustomSlide>
-                  {stencilsAvailable &&
-                    stencilsAvailable.map((stencil, ind) => (
-                      <CustomSlide key={stencil.templateTheme} index={ind + 3}>
-                        <div>
-                          {renderTemplatePicture(
-                            stencil.templateTheme,
-                            stencil.thumbnail,
-                            stencil.new
-                          )}
-                        </div>
-                      </CustomSlide>
-                    ))}
-                </Slider>
-                <StyledButtonBack style={sliderButtonStyles} className="back-button">
-                  <Icon name="chevron left" size="large"></Icon>
-                </StyledButtonBack>
-                <StyledButtonNext style={sliderButtonStyles} className="next-button">
-                  <Icon name="chevron right" size="large"></Icon>
-                </StyledButtonNext>
-              </SliderButtons>
-            </CarouselProvider> */}
           </Segment>
         )}
 

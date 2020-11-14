@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 
 const StyledTemplateDiv = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) 1fr;
   @media screen and (max-width: 740px) {
-    flex-direction: column;
+    grid-template-columns: minmax(0, 1fr);
   }
 `;
 
