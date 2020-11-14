@@ -20,7 +20,6 @@ export default function TemplateCarousel({
   useLayoutEffect(
     _ => {
       setsliderWidth(sliderRef.current ? sliderRef.current.offsetWidth : 0);
-      console.log(sliderWidth);
     },
     // eslint-disable-next-line
     [windowSize]

@@ -9,7 +9,6 @@ import 'semantic-ui-less/semantic.less';
 import './reset.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import 'pure-react-carousel/dist/react-carousel.es.css';
 import 'nouislider/distribute/nouislider.css';
 import './index.css';
 

@@ -34,7 +34,6 @@ import { useWindowSize } from '../Hooks/useWindowSize';
 import { calculateCost, resolveLabelStatus } from '../MailoutListItem/utils/helpers';
 import PostcardSizeButton from './Common/PostcardSizeButton';
 import styled from 'styled-components';
-import 'pure-react-carousel/dist/react-carousel.es.css';
 import Slider from 'react-slick';
 import * as brandColors from '../utils/brandColors';
 
