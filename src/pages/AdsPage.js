@@ -20,42 +20,47 @@ const trimText = (string, length, noDots) => {
 };
 
 const AdPreview = ({ ad, viewMore, adTextLength, toggleAdTextLength }) => {
-  let text = 'Wonderful opportunity to own this beautiful custom home, overlooking Oak Harbor. Master and 2nd bedroom upstairs, with 1 & 3/4 baths, living, dining, kitchen and laundry boasting beautiful Acacia flooring. Downstairs has its own entrance, 2 bedrooms, 3/4 bath, laundry hookups, large living room, with space for a future kitchen(ette)?? and storage. 2 car garage w/ workshop, RV parking, views of downtown, the bay and Baker. The updates & love poured into this home will have you planning your move!';
-  
-  return(
-    <div className='adPreviewWrapper'>
-      <Grid>
-        <Grid.Column width={2}>
-          <div className="adPreviewPageProfilePicContainer">
-            <div className="adPreviewPageProfilePic" style={{backgroundImage: 'url(https://scontent-sea1-1.xx.fbcdn.net/v/t1.0-1/cp0/c12.12.156.156a/s50x50/969250_10151662021063923_1389367264_n.jpg?_nc_cat=107&_nc_sid=dbb9e7&_nc_ohc=G8UFzFaVqogAX_IUH2g&_nc_ht=scontent-sea1-1.xx&_nc_tp=28&oh=aa6d020aa897ebc3e86fb372d486a742&oe=5FAC7858)'}} />
-          </div>
-        </Grid.Column>
-        <Grid.Column width={14} className="adPreviewPageInfoContainer">
-          <Header as='h4' className="adPreviewPage">Blueroof360 / Real Estate Provider</Header>
-          <span className="adPreviewSubtitleContainer">
-            <Header as='h5' className="adPreviewPageSubtitle">Sponsored •</Header>
-            <Icon name="world" size="small" className="adPreviewAdIcon" />
-          </span>
-        </Grid.Column>
-        {/* <span className="adPreviewText">{trimText(text, adTextLength, viewMore)} <span className="adPreviewTextExpand" onClick={() => toggleAdTextLength(text)}>Read {viewMore ? 'less' : 'more'}</span></span> */}
-        <span className="adPreviewText">{trimText(text, 510, false)}</span>
-      </Grid>
-      <Segment className='adPreviewContainer'>
-        <div className='adPreviewImageContainer'>
-          <div className="adPreviewImage" style={{backgroundImage: `url(${ad && ad.details.previewUrl ? ad.details.previewUrl : 'https://reactnativecode.com/wp-content/uploads/2018/02/Default_Image_Thumbnail.png'})`}} />
-        </div>
+  if(!ad) return ('Loading...') 
+  else{
+    let beds = ad && ad.listing ? ad.listing.bedrooms ? ad.listing.bedrooms : '-' : '-';
+    let baths = ad && ad.listing ? (ad.listing.fullBaths !== undefined && ad.listing.halfBaths !== undefined) ? ad.listing.fullBaths + ad.listing.halfBaths : '-' : '-';
+    let sqft = ad && ad.listing ? ad.listing.squareFeet ? ad.listing.squareFeet : '-' : '-';
+    return(
+      <div className='adPreviewWrapper'>
         <Grid>
-          <Grid.Column width={10}>
-            <Header as="h3" className='adPreviewTitle'>{ad.details.campaignName}</Header>
-            <Header as="h5" className='adPreviewSubtitle'>4 beds | 2.5 baths | 3,144 sqft</Header>
+          <Grid.Column width={2}>
+            <div className="adPreviewPageProfilePicContainer">
+              <div className="adPreviewPageProfilePic" style={{backgroundImage: ad.details.adFacebookPageImage ? `url(${ad.details.adFacebookPageImage})` : 'url(https://i.stack.imgur.com/l60Hf.png)'}} />
+            </div>
           </Grid.Column>
-          <Grid.Column width={6}>
-            <div className="adPreviewCTA">Learn More</div>
+          <Grid.Column width={14} className="adPreviewPageInfoContainer">
+            <Header as='h4' className="adPreviewPage">{ad.details.adFacebookPageName ? ad.details.adFacebookPageName : 'Your Realty Company'}</Header>
+            <span className="adPreviewSubtitleContainer">
+              <Header as='h5' className="adPreviewPageSubtitle">Sponsored •</Header>
+              <Icon name="world" size="small" className="adPreviewAdIcon" />
+            </span>
           </Grid.Column>
+          {/* <span className="adPreviewText">{trimText(text, adTextLength, viewMore)} <span className="adPreviewTextExpand" onClick={() => toggleAdTextLength(text)}>Read {viewMore ? 'less' : 'more'}</span></span> */}
+          <span className="adPreviewText">{trimText(ad.details.adText ? ad.details.adText : '', 510, false)}</span>
         </Grid>
-      </Segment>
-    </div>
-  );
+        <Segment className='adPreviewContainer'>
+          <div className='adPreviewImageContainer'>
+            <div className="adPreviewImage" style={{backgroundImage: `url(${ad && ad.details.previewUrl ? ad.details.previewUrl : 'https://reactnativecode.com/wp-content/uploads/2018/02/Default_Image_Thumbnail.png'})`}} />
+          </div>
+          <Grid>
+            <Grid.Column width={10}>
+              <Header as="h3" className='adPreviewTitle'>{ad.details.campaignName}</Header>
+              {/* <Header as="h5" className='adPreviewSubtitle'>4 beds | 2.5 baths | 3,144 sqft</Header> */}
+              <Header as="h5" className='adPreviewSubtitle'>{`${beds} beds | ${baths} baths | ${sqft} sqft`}</Header>
+            </Grid.Column>
+            <Grid.Column width={6}>
+              <div className="adPreviewCTA">Learn More</div>
+            </Grid.Column>
+          </Grid>
+        </Segment>
+      </div>
+    );
+  }
 };
 
 const EmptyPage = () => {
