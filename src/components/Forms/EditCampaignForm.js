@@ -31,16 +31,6 @@ import styled from 'styled-components';
 import Slider from 'react-slick';
 import * as brandColors from '../utils/brandColors';
 
-const blacklistNames = [
-  'brandColor',
-  'frontImgUrl',
-  'agentPicture',
-  'brokerageLogo',
-  'teamLogo',
-  'backUrl',
-  'frontAgentUrl',
-];
-
 const CoverButtonGroup = styled(Button.Group)`
   height: 40px;
   &&& .button {
@@ -495,9 +485,10 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     if (formValues) {
       defaultFields = formValues
         .filter(field => {
-          let passes = true;
-          if (blacklistNames.includes(field.name)) passes = false;
-          if (side && field.sides && !_.includes(field.sides, side)) passes = false;
+          let passes = false;
+          // TODO filter the field base on front/back
+          let currentField = mailoutEdit.fields.find(el => el.name === field.name);
+          if (currentField && currentField.sides?.includes(side)) passes = true;
           return passes;
         })
         .map(field => {

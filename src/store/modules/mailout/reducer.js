@@ -243,11 +243,7 @@ export default function mailout(state = initialState, action) {
         ...state,
         getMailoutEditPending: false,
         mailoutEdit: {
-          ...state.mailoutEdit,
-          mergeVariables: {
-            ...state.mailoutEdit?.mergeVariables,
-            ...action.payload.mergeVariables,
-          },
+          ...action.payload,
         },
         getMailoutEditError: null,
       };
