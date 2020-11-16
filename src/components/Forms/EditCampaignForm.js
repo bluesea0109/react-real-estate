@@ -4,6 +4,7 @@ import { BlockPicker, ChromePicker } from 'react-color';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { createRef, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Dropdown, Form, Header, Label, Popup, Checkbox } from 'semantic-ui-react';
+import { NewLabel, StyledButtonBack, StyledButtonNext } from './Base/Carousel';
 
 import auth from '../../services/auth';
 import api from '../../services/api';
@@ -33,8 +34,7 @@ import { useWindowSize } from '../Hooks/useWindowSize';
 import { calculateCost, resolveLabelStatus } from '../MailoutListItem/utils/helpers';
 import PostcardSizeButton from './Common/PostcardSizeButton';
 import styled from 'styled-components';
-import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
-import 'pure-react-carousel/dist/react-carousel.es.css';
+import Slider from 'react-slick';
 import * as brandColors from '../utils/brandColors';
 
 const blacklistNames = [
@@ -58,82 +58,6 @@ const CoverButtonGroup = styled(Button.Group)`
     &:focus {
       background-color: #cacbcd;
     }
-  }
-`;
-
-const CustomSlide = styled(Slide)`
-  && {
-    padding-bottom: 225px !important;
-  }
-`;
-
-const SliderButtons = styled.div`
-  position: relative;
-  & .back-button,
-  & .next-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-  & .back-button {
-    left: -0.5em;
-  }
-  & .next-button {
-    right: -0.5em;
-  }
-`;
-
-const sliderButtonStyles = {
-  color: 'grey',
-  border: 'none',
-  padding: 0,
-  font: 'inherit',
-  cursor: 'pointer',
-  outline: 'inherit',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-};
-
-const StyledButtonBack = styled(ButtonBack)`
-  width: 3em;
-  height: 3em;
-  border-radius: 3em;
-  background-color: transparent;
-  & i {
-    margin: 0;
-    transform: translateX(-1px);
-  }
-  &:hover {
-    background-color: ${brandColors.lightGreyHover};
-  }
-`;
-
-const StyledButtonNext = styled(ButtonNext)`
-  width: 3em;
-  height: 3em;
-  border-radius: 3em;
-  background-color: transparent;
-  & i {
-    margin: 0;
-    transform: translateX(1px);
-  }
-  &:hover {
-    background-color: ${brandColors.lightGreyHover};
-  }
-`;
-
-const NewLabel = styled.div`
-  max-width: 260px;
-  margin: auto;
-  padding-top: 0.5em;
-  & .label {
-    background-color: ${brandColors.secondary};
-    border-radius: 500px;
-    padding: 2px 12px;
-    color: white;
-    font-weight: bold;
-    text-transform: uppercase;
   }
 `;
 
@@ -238,6 +162,15 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     if (!bestCta) return 'https://www.google.com';
     return bestCta;
   });
+
+  const sliderSettings = {
+    className: 'slider variable-width',
+    infinite: true,
+    slidesToShow: sliderWidth > 320 ? Math.floor(sliderWidth / 320) : 1,
+    focusOnSelect: true,
+    nextArrow: <StyledButtonNext />,
+    prevArrow: <StyledButtonBack />,
+  };
 
   const popover = {
     position: 'absolute',
@@ -504,7 +437,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     };
 
     return (
-      <div style={{ margin: '1em', position: 'relative' }}>
+      <div key={templateName}>
         <input
           type="radio"
           checked={templateTheme === templateName}
@@ -517,17 +450,17 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
             templateTheme === templateName
               ? {
                   border: `2px solid ${brandColors.primary}`,
-                  margin: 'auto',
                   padding: '0.5em',
+                  margin: '0 auto',
                   borderRadius: '5px',
-                  maxWidth: '260px',
+                  maxWidth: 260,
                 }
               : {
                   border: '1px solid lightgray',
-                  margin: 'auto',
                   padding: '0.5em',
+                  margin: '0 auto',
                   borderRadius: '5px',
-                  maxWidth: '260px',
+                  maxWidth: 260,
                 }
           }
         >
@@ -818,47 +751,18 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
         {currentListingStatus !== 'custom' && (
           <Segment basic padded style={{}}>
-            <Header as="h4">Template Theme</Header>
-            <CarouselProvider
-              naturalSlideWidth={130}
-              naturalSlideHeight={100}
-              totalSlides={stencilsAvailable?.length + 3 || 3}
-              visibleSlides={sliderWidth > 320 ? Math.floor(sliderWidth / 320) : 1}
-              step={1}
-              infinite={true}
-            >
-              <SliderButtons ref={sliderRef}>
-                <Slider>
-                  <CustomSlide index={0}>
-                    <div>{renderTemplatePicture('bookmark')}</div>
-                  </CustomSlide>
-                  <CustomSlide index={1}>
-                    <div>{renderTemplatePicture('ribbon')}</div>
-                  </CustomSlide>
-                  <CustomSlide index={2}>
-                    <div>{renderTemplatePicture('stack')}</div>
-                  </CustomSlide>
-                  {stencilsAvailable &&
-                    stencilsAvailable.map((stencil, ind) => (
-                      <CustomSlide key={stencil.templateTheme} index={ind + 3}>
-                        <div>
-                          {renderTemplatePicture(
-                            stencil.templateTheme,
-                            stencil.thumbnail,
-                            stencil.new
-                          )}
-                        </div>
-                      </CustomSlide>
-                    ))}
-                </Slider>
-                <StyledButtonBack style={sliderButtonStyles} className="back-button">
-                  <Icon name="chevron left" size="large"></Icon>
-                </StyledButtonBack>
-                <StyledButtonNext style={sliderButtonStyles} className="next-button">
-                  <Icon name="chevron right" size="large"></Icon>
-                </StyledButtonNext>
-              </SliderButtons>
-            </CarouselProvider>
+            <div ref={sliderRef}>
+              <Header as="h4">Template Theme</Header>
+              <Slider {...sliderSettings}>
+                {renderTemplatePicture('bookmark')}
+                {renderTemplatePicture('ribbon')}
+                {renderTemplatePicture('stack')}
+                {stencilsAvailable &&
+                  stencilsAvailable.map((stencil, ind) =>
+                    renderTemplatePicture(stencil.templateTheme, stencil.thumbnail, stencil.new)
+                  )}
+              </Slider>
+            </div>
           </Segment>
         )}
 

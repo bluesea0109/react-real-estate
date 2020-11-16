@@ -16,11 +16,12 @@ import KWKLYInputFormField from '../Common/KWKLYInputFormField';
 import ColorPickerFormField from '../Common/ColorPickerFormField';
 import UpdateWithoutRerender from '../Common/UpdateWithoutRerender';
 import KWKLYCTAToggleFormField from '../Common/KWKLYCTAToggleFormField';
-import TemplatePictureFormField from '../Common/TemplatePictureFormField';
 import ValidateURLWithoutRerender from '../Common/ValidateURLWithoutRerender';
 import MailoutSizeSliderFormField from '../Common/MailoutSizeSliderFormField';
 import { useIsMobile } from '../../Hooks/useIsMobile';
 import TemplatePostcardSizeField from '../Common/TemplatePostcardSizeField';
+import { StyledTemplateDiv } from '../Base/Carousel';
+import TemplateCarousel from '../Common/TemplateCarousel';
 
 const formReducer = (state, action) => {
   return _.merge({}, action);
@@ -156,44 +157,18 @@ const TeamCustomizeForm = ({ teamCustomizationData, initialValues }) => {
           className={isMobile ? null : 'primary-grid-container'}
           style={isMobile ? {} : { gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}
         >
-          <div>
-            <Header as="h5" style={{ opacity: !editable ? 0.4 : 1 }}>
-              Template Theme
-            </Header>
-            {TemplatePictureFormField({
-              templateName: 'ribbon',
-              listingType,
-              initialValues,
-              formValues,
-              setFormValues,
-            })}
-          </div>
-
-          <div>
-            <p>&nbsp;</p>
-            {TemplatePictureFormField({
-              templateName: 'bookmark',
-              listingType,
-              initialValues,
-              formValues,
-              setFormValues,
-            })}
-          </div>
-
-          <div>
-            <p>&nbsp;</p>
-            {TemplatePictureFormField({
-              templateName: 'stack',
-              listingType,
-              initialValues,
-              formValues,
-              setFormValues,
-            })}
-          </div>
-
-          <div>
-            {ColorPickerFormField({ listingType, initialValues, formValues, setFormValues })}
-          </div>
+          <StyledTemplateDiv>
+            <TemplateCarousel
+              editable={editable}
+              listingType={listingType}
+              initialValues={initialValues}
+              formValues={formValues}
+              setFormValues={setFormValues}
+            ></TemplateCarousel>
+            <div style={{ padding: '0 2rem' }}>
+              {ColorPickerFormField({ listingType, initialValues, formValues, setFormValues })}
+            </div>
+          </StyledTemplateDiv>
         </Segment>
 
         <Segment padded className={isMobile ? null : 'tertiary-grid-container'}>

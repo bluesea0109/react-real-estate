@@ -51,30 +51,32 @@ const ColorPickerFormField = ({ listingType, initialValues, formValues, setFormV
     );
   } else {
     return (
-      <div>
+      <>
         <Header as="h5">Brand Color</Header>
-        <BlockPicker
-          triangle="hide"
-          width="200px"
-          color={currentValue}
-          colors={colors}
-          onChangeComplete={handleColorChange}
-        />
-        <Icon
-          id="brandColourPickerIcon"
-          bordered
-          link
-          color="grey"
-          name="eye dropper"
-          onClick={handleClick}
-        />
-        {displayColorPicker ? (
-          <div style={popover}>
-            <div style={cover} onClick={handleClose} />
-            <ChromePicker color={tempColor} onChange={value => setTempColor(value)} />
-          </div>
-        ) : null}
-      </div>
+        <div style={{ paddingTop: '1rem' }}>
+          <BlockPicker
+            triangle="hide"
+            width="200px"
+            color={currentValue}
+            colors={colors}
+            onChangeComplete={handleColorChange}
+          />
+          <Icon
+            id="brandColourPickerIcon"
+            bordered
+            link
+            color="grey"
+            name="eye dropper"
+            onClick={handleClick}
+          />
+          {displayColorPicker ? (
+            <div style={popover}>
+              <div style={cover} onClick={handleClose} />
+              <ChromePicker color={tempColor} onChange={value => setTempColor(value)} />
+            </div>
+          ) : null}
+        </div>
+      </>
     );
   }
 };
