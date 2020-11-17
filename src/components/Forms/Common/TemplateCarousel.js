@@ -32,7 +32,6 @@ export default function TemplateCarousel({
     });
   }
   let startSlide = 0;
-  debugger;
   if (formValues && formValues[listingType])
     startSlide = slides.findIndex(slide => slide === formValues[listingType].templateTheme);
 
