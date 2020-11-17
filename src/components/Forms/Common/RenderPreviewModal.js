@@ -107,7 +107,7 @@ const ModalPreview = Styled(Modal)`
 }
 `;
 
-const RenderPreviewModal = ({ formType, formValues }) => {
+const RenderPreviewModal = ({ formType, formValues, showModal }) => {
   const isMobile = useIsMobile();
   const dispatch = useDispatch();
 
@@ -152,6 +152,8 @@ const RenderPreviewModal = ({ formType, formValues }) => {
   const [customizationPreview, setCustomizationPreview] = useState(() => {
     if (formType === 'team') return teamCustomizationPreview;
     if (formType === 'agent') return agentCustomizationPreview;
+    if (formType === 'editTeamCampaign') return showModal;
+    if (formType === 'editAgentCampaign') return showModal;
   });
 
   let listedPostcardFrontURL;
@@ -257,6 +259,7 @@ const RenderPreviewModal = ({ formType, formValues }) => {
     }
   };
 
+  console.log('cusomizationPreviewInside', customizationPreview);
   if (customizationPending) {
     return (
       <Modal open={customizationPreview} size="tiny">

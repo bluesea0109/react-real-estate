@@ -47,6 +47,7 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
   const newListingAgentShortenedURLPending = useSelector(
     store => store.shortcode.listedURLToShortenPending
   );
+  const showModal = useSelector(state => state.teamCustomization.preview);
 
   const [formValues, setFormValues] = useReducer(formReducer, teamCustomizationData);
   const [page, setPage] = useState(1);
@@ -153,7 +154,7 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
       });
     }
   };
-
+  console.log('showModal', showModal);
   const Listings = ({ listingType }) => {
     return (
       <Form
@@ -345,7 +346,7 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
         {renderSteps()}
       </Segment>
 
-      {RenderPreviewModal({ formType: 'team', formValues })}
+      {RenderPreviewModal({ formType: 'editTeamCampaign', formValues, showModal })}
     </Page>
   );
 };
