@@ -492,7 +492,6 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
       renderedFields = formValues
         .filter(field => {
           let passes = false;
-          // TODO filter the field base on front/back
           let currentField = mailoutEdit?.fields?.find(el => el.name === field.name);
           if (currentField?.sides?.includes(side)) passes = true;
           return passes;
