@@ -77,6 +77,14 @@ const modalActionStyles = {
   padding: '0px',
 };
 
+const singleButtonCenter = {
+  borderTop: 'none',
+  display: 'flex',
+  justifyContent: 'center',
+  marginTop: '0px',
+  padding: '0px',
+};
+
 const modalHeaderP = {
   marginBottom: '9px',
   fontSize: '26px',
@@ -374,13 +382,18 @@ const RenderPreviewModal = ({ formType, formValues }) => {
               </Button>
             </div>
           </ModalPreview.Content>
-          <ModalPreview.Actions style={modalActionStyles}>
+          <ModalPreview.Actions style={inOnboardingMode ? modalActionStyles : singleButtonCenter}>
             {inOnboardingMode && (
               <Button style={cancelButton} onClick={() => setCustomizationPreview(false)}>
                 <Icon name="remove" /> Edit
               </Button>
             )}
-            <Button primary onClick={handleReviewComplete}>
+            <Button
+              primary
+              onClick={
+                inOnboardingMode ? handleReviewComplete : () => setCustomizationPreview(false)
+              }
+            >
               <Icon name="checkmark" /> {inOnboardingMode ? 'Continue' : 'OK'}
             </Button>
           </ModalPreview.Actions>
