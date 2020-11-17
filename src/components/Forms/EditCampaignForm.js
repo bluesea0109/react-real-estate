@@ -125,7 +125,9 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
   const [tempColor, setTempColor] = useState(mailoutEdit?.mergeVariables?.brandColor);
   const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(currentMailoutDisplayAgent);
-  const [formValues, setFormValues] = useState(Object.values(mailoutEdit?.mergeVariables));
+  const [formValues, setFormValues] = useState(
+    mailoutEdit?.fields ? Object.values(mailoutEdit?.fields) : null
+  );
 
   let _coverPhotoMv = _.get(mailoutDetails, 'mergeVariables', []).find(
     mv => mv.name === 'frontImgUrl'
@@ -286,7 +288,6 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   };
 
   const handleEditSubmitClick = async () => {
-    debugger;
     const newMergeVariables = [];
     newMergeVariables.push({
       name: 'brandColor',
@@ -483,9 +484,9 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   };
 
   const renderMergeVariables = side => {
-    let defaultFields = [];
+    let renderedFields = [];
     if (formValues) {
-      defaultFields = formValues
+      renderedFields = formValues
         .filter(field => {
           let passes = false;
           // TODO filter the field base on front/back
@@ -509,7 +510,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
                 label={fieldName}
                 placeholder={fieldName}
                 onChange={(e, input) => handleInputChange(input.value, field.name)}
-                value={field.value}
+                value={field.value || field.defaultValue}
               />
             </Form.Field>
           );
@@ -519,7 +520,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     return (
       <Form color="green">
         <Segment basic padded className={isMobile ? null : 'secondary-grid-container'}>
-          {defaultFields}
+          {renderedFields}
         </Segment>
       </Form>
     );
