@@ -6,8 +6,9 @@ import { StyledButtonBack, StyledButtonNext } from '../Base/Carousel';
 import TemplatePictureFormField from './TemplatePictureFormField';
 import Slider from 'react-slick';
 
+const NEW_LISTING = 'listed';
+
 export default function TemplateCarousel({
-  editable,
   listingType,
   initialValues,
   formValues,
@@ -24,6 +25,7 @@ export default function TemplateCarousel({
     // eslint-disable-next-line
     [windowSize]
   );
+  const editable = listingType === NEW_LISTING ? !!formValues?.listed : !!formValues?.sold;
 
   let slides = [];
   if (stencilsAvailable) {
@@ -39,6 +41,7 @@ export default function TemplateCarousel({
   if (numSlides % 2 === 0) numSlides -= 1;
 
   const handleTemplateChange = slideIndex => {
+    if (!editable) return;
     let newVal = { ...formValues };
     newVal[listingType].templateTheme = stencilsAvailable[slideIndex].templateTheme;
     setFormValues(newVal);
@@ -49,11 +52,13 @@ export default function TemplateCarousel({
     infinite: true,
     centerMode: true,
     slidesToShow: numSlides < stencilsAvailable?.length ? numSlides : stencilsAvailable.length,
-    focusOnSelect: true,
-    nextArrow: <StyledButtonNext />,
-    prevArrow: <StyledButtonBack />,
+    focusOnSelect: editable,
+    nextArrow: editable && <StyledButtonNext />,
+    prevArrow: editable && <StyledButtonBack />,
     initialSlide: startSlide,
-    swipeToSlide: true,
+    swipeToSlide: editable,
+    draggable: editable,
+    style: editable ? {} : { opacity: 0.4 },
     afterChange: current => handleTemplateChange(current),
   };
 
