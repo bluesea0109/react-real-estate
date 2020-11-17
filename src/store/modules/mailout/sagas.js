@@ -25,6 +25,9 @@ import {
   UPDATE_MAILOUT_EDIT_PENDING,
   updateMailoutEditSuccess,
   updateMailoutEditError,
+  UPDATE_MAILOUT_TEMPLATE_THEME_PENDING,
+  updateMailoutTemplateThemeSuccess,
+  updateMailoutTemplateThemeError,
   REVERT_MAILOUT_EDIT_PENDING,
   revertMailoutEditSuccess,
   revertMailoutEditError,
@@ -184,6 +187,23 @@ export function* updateMailoutEditSaga({ peerId = null }) {
   }
 }
 
+export function* updateMailoutTemplateThemeSaga() {
+  try {
+    const mailoutId = yield select(getMailoutId);
+    const mailoutEdit = yield select(getMailoutEdit);
+    const { path, method } = ApiService.directory.user.mailout.getStencilFields(
+      mailoutId,
+      mailoutEdit.templateTheme
+    );
+
+    const response = yield call(ApiService[method], path);
+
+    yield put(updateMailoutTemplateThemeSuccess(response));
+  } catch (err) {
+    yield put(updateMailoutTemplateThemeError(err));
+  }
+}
+
 export function* revertMailoutEditSaga({ peerId = null }) {
   try {
     const mailoutId = yield select(getMailoutId);
@@ -307,6 +327,16 @@ export function* checkIfPeerSelectedUpdateMailoutEditSaga() {
   }
 }
 
+export function* checkIfPeerSelectedUpdateMailoutTemplateThemeSaga() {
+  const peerId = yield select(getSelectedPeerId);
+
+  if (peerId) {
+    yield updateMailoutTemplateThemeSaga({ peerId });
+  } else {
+    yield updateMailoutTemplateThemeSaga({});
+  }
+}
+
 export function* checkIfPeerSelectedRevertMailoutEditSaga() {
   const peerId = yield select(getSelectedPeerId);
 
@@ -349,6 +379,10 @@ export default function*() {
   );
   yield takeLatest(GET_MAILOUT_EDIT_PENDING, checkIfPeerSelectedGetMailoutEditSaga);
   yield takeLatest(UPDATE_MAILOUT_EDIT_PENDING, checkIfPeerSelectedUpdateMailoutEditSaga);
+  yield takeLatest(
+    UPDATE_MAILOUT_TEMPLATE_THEME_PENDING,
+    checkIfPeerSelectedUpdateMailoutTemplateThemeSaga
+  );
   yield takeLatest(REVERT_MAILOUT_EDIT_PENDING, checkIfPeerSelectedRevertMailoutEditSaga);
   yield takeLatest(ARCHIVE_MAILOUT_PENDING, checkIfPeerSelectedArchiveMailoutSaga);
   yield takeLatest(UNDO_ARCHIVE_MAILOUT_PENDING, checkIfPeerSelectedUndoArchiveMailoutSaga);

@@ -17,6 +17,7 @@ import {
 import {
   changeMailoutDisplayAgentPending,
   updateMailoutEditPending,
+  updateMailoutTemplateThemePending,
 } from '../../store/modules/mailout/actions';
 import { differenceObjectDeep, objectIsEmpty, sleep, postcardDimensions } from '../utils/utils';
 import { Button, Icon, Image, Menu, Message, Page, Segment, Snackbar } from '../Base';
@@ -103,7 +104,6 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   if (mailoutDetails.backResourceUrl) renderBackDetails = false;
 
   const currentPostcardSize = mailoutDetails?.postcardSize;
-  const currentTemplateTheme = mailoutDetails?.templateTheme;
   const currentMailoutDisplayAgentUserID = mailoutDetails.mailoutDisplayAgent
     ? mailoutDetails.mailoutDisplayAgent?.userId
     : mailoutDetails.userId;
@@ -114,7 +114,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const [error, setError] = useState(null);
 
   const [postcardSize, setPostcardSize] = useState(currentPostcardSize);
-  const [templateTheme, setTemplateTheme] = useState(currentTemplateTheme);
+  const templateTheme = useSelector(store => store.mailout.mailoutEdit.templateTheme);
   const [selectedBrandColor, setSelectedBrandColor] = useState(
     mailoutDetails.mergeVariables
       ? Object.values(mailoutDetails.mergeVariables).find(
@@ -272,6 +272,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   };
 
   const handleEditSubmitClick = async () => {
+    debugger;
     const newMergeVariables = [];
     newMergeVariables.push({
       name: 'brandColor',
@@ -279,17 +280,14 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     });
     newMergeVariables.push({ name: 'frontImgUrl', value: coverPhoto });
 
-    Object.keys(formValues)
-      .filter(key => key !== 'brandColor' && key !== 'frontImgUrl')
-      .forEach(key =>
-        newMergeVariables.push({ name: formValues[key].name, value: formValues[key].value })
-      );
+    formValues
+      .filter(value => value.name !== 'brandColor' && value.name !== 'frontImgUrl')
+      .forEach(value => newMergeVariables.push(value));
 
     const newData = Object.assign(
       {},
       { postcardSize },
       { templateTheme },
-      { mergeVariables: mailoutEdit?.mergeVariables },
       { mergeVariables: newMergeVariables },
       { mailoutDisplayAgent } // add the   "ctas" object here
     );
@@ -412,23 +410,13 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   };
 
   const renderTemplatePicture = (templateName, src, isNew = false) => {
-    const resolveSource = type => {
-      const types = {
-        ribbon: require('../../assets/ribbon-preview.png'),
-        bookmark: require('../../assets/bookmark-preview.png'),
-        stack: require('../../assets/stack-preview.png'),
-        undefined: null,
-      };
-      return type ? types[type] : types['undefined'];
-    };
-
     return (
       <div key={templateName}>
         <input
           type="radio"
           checked={templateTheme === templateName}
           value={templateName}
-          onChange={(e, { value }) => setTemplateTheme(value)}
+          onChange={(e, { value }) => dispatch(updateMailoutTemplateThemePending(value))}
           style={{ visibility: 'hidden', display: 'none' }}
         />
         <div
@@ -451,8 +439,8 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           }
         >
           <img
-            onClick={e => setTemplateTheme(templateName)}
-            src={src ? src : resolveSource(templateName)}
+            onClick={e => dispatch(updateMailoutTemplateThemePending(templateName))}
+            src={src}
             alt={templateName}
           />
         </div>
@@ -470,7 +458,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     const { first, last, value } = selectedAgent;
 
     setMailoutDisplayAgent({ userId: value, first, last });
-    dispatch(changeMailoutDisplayAgentPending(value));
+    dispatch(changeMailoutDisplayAgentPending({ userId: value, first, last }));
   };
 
   const handleInputChange = (value, name) => {
@@ -487,8 +475,8 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
         .filter(field => {
           let passes = false;
           // TODO filter the field base on front/back
-          let currentField = mailoutEdit.fields.find(el => el.name === field.name);
-          if (currentField && currentField.sides?.includes(side)) passes = true;
+          let currentField = mailoutEdit?.fields?.find(el => el.name === field.name);
+          if (currentField?.sides?.includes(side)) passes = true;
           return passes;
         })
         .map(field => {
@@ -554,7 +542,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
         {currentPostcardSize !== postcardSize && (
           <Message negative style={{ margin: 0, display: 'flex', flexWrap: 'wrap' }}>
             <Message.Header style={{ flexShrink: 0, paddingRight: '1rem' }}>
-              <Icon name="times circle" color="darkred"></Icon>Warning!
+              <Icon name="times circle" color="red"></Icon>Warning!
             </Message.Header>
             <Message.Content>
               Changing postcard size may change the aspect ratio of your cover photo. Please upload
@@ -619,9 +607,6 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
             <div ref={sliderRef}>
               <Header as="h4">Template Theme</Header>
               <Slider {...sliderSettings}>
-                {renderTemplatePicture('bookmark')}
-                {renderTemplatePicture('ribbon')}
-                {renderTemplatePicture('stack')}
                 {stencilsAvailable &&
                   stencilsAvailable.map((stencil, ind) =>
                     renderTemplatePicture(stencil.templateTheme, stencil.thumbnail, stencil.new)

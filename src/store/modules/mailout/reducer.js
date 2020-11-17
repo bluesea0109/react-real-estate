@@ -24,6 +24,9 @@ import {
   UPDATE_MAILOUT_EDIT_PENDING,
   UPDATE_MAILOUT_EDIT_SUCCESS,
   UPDATE_MAILOUT_EDIT_ERROR,
+  UPDATE_MAILOUT_TEMPLATE_THEME_PENDING,
+  UPDATE_MAILOUT_TEMPLATE_THEME_SUCCESS,
+  UPDATE_MAILOUT_TEMPLATE_THEME_ERROR,
   UPDATE_MAILOUT_EDIT_POLYGON_COORDINATES,
   REVERT_MAILOUT_EDIT_PENDING,
   REVERT_MAILOUT_EDIT_SUCCESS,
@@ -45,6 +48,7 @@ const initialState = {
   changeDisplayAgentPending: false,
   getMailoutEditPending: false,
   updateMailoutEditPending: false,
+  updateMailoutTemplateThemePending: false,
   revertMailoutEditPending: false,
   archivePending: false,
 
@@ -65,6 +69,7 @@ const initialState = {
   changeDisplayAgentError: null,
   getMailoutEditError: null,
   updateMailoutEditError: null,
+  updateMailoutTemplateThemeError: null,
   revertMailoutEditError: null,
   archiveError: null,
 };
@@ -201,7 +206,11 @@ export default function mailout(state = initialState, action) {
       return {
         ...state,
         changeDisplayAgentPending: true,
-        mailoutDisplayAgent: action.payload,
+        mailoutDisplayAgent: action.payload.userId,
+        mailoutEdit: {
+          ...state.mailoutEdit,
+          mailoutDisplayAgent: action.payload,
+        },
         changeDisplayAgentError: null,
       };
 
@@ -213,11 +222,7 @@ export default function mailout(state = initialState, action) {
         mailoutEdit: {
           ...state.mailoutEdit,
           mergeVariables: {
-            ...state.mailoutEdit.mergeVariables,
-            ...Object.assign(
-              {},
-              ...action.payload.map(object => ({ [object.name]: object.value }))
-            ),
+            ...action.payload,
           },
         },
         changeDisplayAgentError: null,
@@ -276,6 +281,43 @@ export default function mailout(state = initialState, action) {
         ...state,
         updateMailoutEditPending: false,
         updateMailoutEditError: action.error,
+      };
+
+    case UPDATE_MAILOUT_TEMPLATE_THEME_PENDING:
+      return {
+        ...state,
+        updateMailoutTemplateThemePending: true,
+        mailoutEdit: {
+          ...state.mailoutEdit,
+          templateTheme: action.payload,
+        },
+        details: {
+          ...state.details,
+          templateTheme: action.payload,
+        },
+        updateMailoutTemplateThemeError: null,
+      };
+
+    case UPDATE_MAILOUT_TEMPLATE_THEME_SUCCESS:
+      return {
+        ...state,
+        details: {
+          ...state.details,
+          mergeVariables: action.payload.mergeVariables,
+        },
+        mailoutEdit: {
+          ...state.mailoutEdit,
+          mergeVariables: action.payload.mergeVariables,
+          fields: action.payload.fields,
+        },
+        updateMailoutTemplateThemePending: false,
+      };
+
+    case UPDATE_MAILOUT_TEMPLATE_THEME_ERROR:
+      return {
+        ...state,
+        updateMailoutTemplateThemePending: false,
+        updateMailoutTemplateThemeError: action.error,
       };
 
     case UPDATE_MAILOUT_EDIT_POLYGON_COORDINATES:
