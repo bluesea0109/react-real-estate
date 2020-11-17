@@ -147,9 +147,11 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const [shortenCTA, setShortenCTA] = useState(mailoutDetails.shortenCTA);
   const defaultCTAUrl = useSelector(store => {
     let bestCta = mailoutDetails.cta;
-    if (!bestCta) bestCta = store.onLogin.userBranding[currentListingStatus]?.cta;
-    if (!bestCta) bestCta = store.onLogin.teamBranding[currentListingStatus]?.cta;
-    if (!bestCta) bestCta = store.onLogin.teamProfile.website;
+    if (!bestCta)
+      bestCta = store.onLogin.userBranding && store.onLogin.userBranding[currentListingStatus]?.cta;
+    if (!bestCta)
+      bestCta = store.onLogin.teamBranding && store.onLogin.teamBranding[currentListingStatus]?.cta;
+    if (!bestCta) bestCta = store.onLogin.teamProfile?.website;
     if (!bestCta) return 'https://www.google.com';
     return bestCta;
   });
