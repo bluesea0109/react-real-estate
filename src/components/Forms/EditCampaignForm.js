@@ -17,14 +17,9 @@ import {
 import {
   changeMailoutDisplayAgentPending,
   updateMailoutEditPending,
+  updateMailoutTemplateThemePending,
 } from '../../store/modules/mailout/actions';
-import {
-  differenceObjectDeep,
-  maxLength,
-  objectIsEmpty,
-  sleep,
-  postcardDimensions,
-} from '../utils/utils';
+import { differenceObjectDeep, objectIsEmpty, sleep, postcardDimensions } from '../utils/utils';
 import { Button, Icon, Image, Menu, Message, Page, Segment, Snackbar } from '../Base';
 import { StyledHeader, colors } from '../utils/helpers';
 import PageTitleHeader from '../PageTitleHeader';
@@ -36,16 +31,6 @@ import PostcardSizeButton from './Common/PostcardSizeButton';
 import styled from 'styled-components';
 import Slider from 'react-slick';
 import * as brandColors from '../utils/brandColors';
-
-const blacklistNames = [
-  'brandColor',
-  'frontImgUrl',
-  'agentPicture',
-  'brokerageLogo',
-  'teamLogo',
-  'backUrl',
-  'frontAgentUrl',
-];
 
 const CoverButtonGroup = styled(Button.Group)`
   height: 40px;
@@ -97,9 +82,6 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   );
   const peerId = useSelector(store => store.peer.peerId);
   const dispatch = useDispatch();
-  const bookmarkTemplate = useSelector(store => store.templates.available?.bookmark);
-  const ribbonTemplate = useSelector(store => store.templates.available?.ribbon);
-  const stackTemplate = useSelector(store => store.templates.available?.stack);
   const stencilsAvailable = useSelector(store => store.templates.available?.stencils);
   const onLoginMode = useSelector(store => store.onLogin?.mode);
   const multiUser = onLoginMode === 'multiuser';
@@ -122,7 +104,6 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   if (mailoutDetails.backResourceUrl) renderBackDetails = false;
 
   const currentPostcardSize = mailoutDetails?.postcardSize;
-  const currentTemplateTheme = mailoutDetails?.templateTheme;
   const currentMailoutDisplayAgentUserID = mailoutDetails.mailoutDisplayAgent
     ? mailoutDetails.mailoutDisplayAgent?.userId
     : mailoutDetails.userId;
@@ -133,14 +114,20 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const [error, setError] = useState(null);
 
   const [postcardSize, setPostcardSize] = useState(currentPostcardSize);
-  const [templateTheme, setTemplateTheme] = useState(currentTemplateTheme);
+  const templateTheme = useSelector(store => store.mailout.mailoutEdit.templateTheme);
   const [selectedBrandColor, setSelectedBrandColor] = useState(
-    mailoutEdit?.mergeVariables?.brandColor
+    mailoutDetails.mergeVariables
+      ? Object.values(mailoutDetails.mergeVariables).find(
+          variable => variable.name === 'brandColor'
+        ).value
+      : ''
   );
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
   const [tempColor, setTempColor] = useState(mailoutEdit?.mergeVariables?.brandColor);
   const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(currentMailoutDisplayAgent);
-  const [formValues, setFormValues] = useState(mailoutEdit?.mergeVariables);
+  const [formValues, setFormValues] = useState(
+    mailoutEdit?.fields ? Object.values(mailoutEdit?.fields) : null
+  );
 
   let _coverPhotoMv = _.get(mailoutDetails, 'mergeVariables', []).find(
     mv => mv.name === 'frontImgUrl'
@@ -163,13 +150,27 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     return bestCta;
   });
 
+  let slides = [];
+  if (stencilsAvailable) {
+    stencilsAvailable.forEach(stencil => {
+      slides.push(stencil.templateTheme);
+    });
+  }
+  let startSlide = 0;
+  if (mailoutEdit && mailoutEdit.templateTheme)
+    startSlide = slides.findIndex(slide => slide === mailoutEdit.templateTheme);
+
+  let numSlides = Math.floor(sliderWidth / 260) || 1;
+
   const sliderSettings = {
-    className: 'slider variable-width',
+    className: 'slider center',
     infinite: true,
-    slidesToShow: sliderWidth > 320 ? Math.floor(sliderWidth / 320) : 1,
+    centerMode: true,
+    slidesToShow: numSlides < stencilsAvailable?.length ? numSlides : stencilsAvailable.length,
     focusOnSelect: true,
     nextArrow: <StyledButtonNext />,
     prevArrow: <StyledButtonBack />,
+    initialSlide: startSlide,
   };
 
   const popover = {
@@ -294,15 +295,14 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     });
     newMergeVariables.push({ name: 'frontImgUrl', value: coverPhoto });
 
-    Object.keys(formValues)
-      .filter(key => key !== 'brandColor' && key !== 'frontImgUrl')
-      .forEach(key => newMergeVariables.push({ name: key, value: formValues[key] }));
+    formValues
+      .filter(value => value.name !== 'brandColor' && value.name !== 'frontImgUrl')
+      .forEach(value => newMergeVariables.push(value));
 
     const newData = Object.assign(
       {},
       { postcardSize },
       { templateTheme },
-      { mergeVariables: mailoutEdit?.mergeVariables },
       { mergeVariables: newMergeVariables },
       { mailoutDisplayAgent } // add the   "ctas" object here
     );
@@ -314,7 +314,6 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     } else {
       newData.ctas = { dontOverride: true };
     }
-
     dispatch(updateMailoutEditPending(newData));
     await sleep(500);
     handleBackClick();
@@ -426,23 +425,13 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   };
 
   const renderTemplatePicture = (templateName, src, isNew = false) => {
-    const resolveSource = type => {
-      const types = {
-        ribbon: require('../../assets/ribbon-preview.png'),
-        bookmark: require('../../assets/bookmark-preview.png'),
-        stack: require('../../assets/stack-preview.png'),
-        undefined: null,
-      };
-      return type ? types[type] : types['undefined'];
-    };
-
     return (
       <div key={templateName}>
         <input
           type="radio"
           checked={templateTheme === templateName}
           value={templateName}
-          onChange={(e, { value }) => setTemplateTheme(value)}
+          onChange={(e, { value }) => dispatch(updateMailoutTemplateThemePending(value))}
           style={{ visibility: 'hidden', display: 'none' }}
         />
         <div
@@ -451,22 +440,22 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
               ? {
                   border: `2px solid ${brandColors.primary}`,
                   padding: '0.5em',
-                  margin: '0 auto',
+                  margin: '0.5rem',
                   borderRadius: '5px',
-                  maxWidth: 260,
+                  maxWidth: 500,
                 }
               : {
                   border: '1px solid lightgray',
                   padding: '0.5em',
-                  margin: '0 auto',
+                  margin: '0.5rem',
                   borderRadius: '5px',
-                  maxWidth: 260,
+                  maxWidth: 500,
                 }
           }
         >
           <img
-            onClick={e => setTemplateTheme(templateName)}
-            src={src ? src : resolveSource(templateName)}
+            onClick={e => dispatch(updateMailoutTemplateThemePending(templateName))}
+            src={src}
             alt={templateName}
           />
         </div>
@@ -484,178 +473,57 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     const { first, last, value } = selectedAgent;
 
     setMailoutDisplayAgent({ userId: value, first, last });
-    dispatch(changeMailoutDisplayAgentPending(value));
+    dispatch(changeMailoutDisplayAgentPending({ userId: value, first, last }));
   };
 
   const handleInputChange = (value, name) => {
-    const newValues = Object.assign({}, formValues, { [name]: value });
+    let changeIndex = formValues.findIndex(field => field.name === name);
+    let newValues = [...formValues];
+    formValues[changeIndex].value = value;
     setFormValues(newValues);
   };
 
-  const renderThemeSpecificData = side => {
-    switch (templateTheme) {
-      case 'ribbon':
-        const ribbonFields = ribbonTemplate[currentListingStatus].fields
-          .filter(field => {
-            let passes = true;
-            if (blacklistNames.includes(field.name)) passes = false;
-            if (side && field.sides && !_.includes(field.sides, side)) passes = false;
-            return passes;
-          })
-          .map(field => {
-            let fieldName = startCase(field.name);
-            const error = maxLength(field.max)(formValues[field.name]);
-            // console.log(field);
+  const renderMergeVariables = side => {
+    let renderedFields = [];
+    if (formValues) {
+      renderedFields = formValues
+        .filter(field => {
+          let passes = false;
+          // TODO filter the field base on front/back
+          let currentField = mailoutEdit?.fields?.find(el => el.name === field.name);
+          if (currentField?.sides?.includes(side)) passes = true;
+          return passes;
+        })
+        .map(field => {
+          let fieldName = startCase(field.name);
 
-            if (fieldName.includes('Url')) fieldName = fieldName.replace(/Url/g, 'URL');
-            if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
+          if (fieldName.includes('Url')) fieldName = fieldName.replace(/Url/g, 'URL');
+          if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
 
-            return (
-              <Form.Field
-                key={formValuesHaveChanged ? formValues[field.name] || fieldName : fieldName}
-              >
-                <Form.Input
-                  fluid
-                  error={error && { content: error }}
-                  label={fieldName}
-                  placeholder={field.default}
-                  type={field.type}
-                  onChange={(e, input) => handleInputChange(input.value, field.name)}
-                  defaultValue={formValues[field.name]}
-                />
-              </Form.Field>
-            );
-          });
-
-        return (
-          <Form color="green">
-            <Segment basic padded className={isMobile ? null : 'secondary-grid-container'}>
-              {ribbonFields}
-            </Segment>
-          </Form>
-        );
-
-      case 'bookmark':
-        const bookmarkFields = bookmarkTemplate[currentListingStatus].fields
-          .filter(field => {
-            let passes = true;
-            if (blacklistNames.includes(field.name)) passes = false;
-            if (side && field.sides && !_.includes(field.sides, side)) passes = false;
-            return passes;
-          })
-          .map(field => {
-            let fieldName = startCase(field.name);
-            const error = maxLength(field.max)(formValues[field.name]);
-
-            if (fieldName.includes('Url')) fieldName = fieldName.replace(/Url/g, 'URL');
-            if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
-
-            return (
-              <Form.Field
-                key={formValuesHaveChanged ? formValues[field.name] || fieldName : fieldName}
-              >
-                <Form.Input
-                  fluid
-                  error={error && { content: error }}
-                  label={fieldName}
-                  placeholder={field.default}
-                  type={field.type}
-                  onChange={(e, input) => handleInputChange(input.value, field.name)}
-                  defaultValue={formValues[field.name]}
-                />
-              </Form.Field>
-            );
-          });
-
-        return (
-          <Form color="green">
-            <Segment basic padded className={isMobile ? null : 'secondary-grid-container'}>
-              {bookmarkFields}
-            </Segment>
-          </Form>
-        );
-
-      case 'stack':
-        const stackFields = stackTemplate[currentListingStatus].fields
-          .filter(field => {
-            let passes = true;
-            if (blacklistNames.includes(field.name)) passes = false;
-            if (side && field.sides && !_.includes(field.sides, side)) passes = false;
-            return passes;
-          })
-          .map(field => {
-            let fieldName = startCase(field.name);
-            const error = maxLength(field.max)(formValues[field.name]);
-
-            if (fieldName.includes('Url')) fieldName = fieldName.replace(/Url/g, 'URL');
-            if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
-
-            return (
-              <Form.Field
-                key={formValuesHaveChanged ? formValues[field.name] || fieldName : fieldName}
-              >
-                <Form.Input
-                  fluid
-                  error={error && { content: error }}
-                  label={fieldName}
-                  placeholder={field.default}
-                  type={field.type}
-                  onChange={(e, input) => handleInputChange(input.value, field.name)}
-                  defaultValue={formValues[field.name]}
-                />
-              </Form.Field>
-            );
-          });
-
-        return (
-          <Form color="green">
-            <Segment basic padded className={isMobile ? null : 'secondary-grid-container'}>
-              {stackFields}
-            </Segment>
-          </Form>
-        );
-
-      default:
-        const defaultFields = ribbonTemplate[currentListingStatus].fields
-          .filter(field => {
-            let passes = true;
-            if (blacklistNames.includes(field.name)) passes = false;
-            if (side && field.sides && !_.includes(field.sides, side)) passes = false;
-            return passes;
-          })
-          .map(field => {
-            let fieldName = startCase(field.name);
-            const error = maxLength(field.max)(formValues[field.name]);
-            // console.log(field);
-
-            if (fieldName.includes('Url')) fieldName = fieldName.replace(/Url/g, 'URL');
-            if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
-
-            return (
-              <Form.Field
-                key={formValuesHaveChanged ? formValues[field.name] || fieldName : fieldName}
-              >
-                <Form.Input
-                  fluid
-                  error={error && { content: error }}
-                  label={fieldName}
-                  placeholder={field.default}
-                  type={field.type}
-                  onChange={(e, input) => handleInputChange(input.value, field.name)}
-                  defaultValue={formValues[field.name]}
-                />
-              </Form.Field>
-            );
-          });
-
-        return (
-          <Form color="green">
-            <Segment basic padded className={isMobile ? null : 'secondary-grid-container'}>
-              {defaultFields}
-            </Segment>
-          </Form>
-        );
+          return (
+            <Form.Field
+              key={formValuesHaveChanged ? formValues[field.name] || fieldName : fieldName}
+            >
+              <Form.Input
+                fluid
+                error={error && { content: error }}
+                label={fieldName}
+                placeholder={fieldName}
+                onChange={(e, input) => handleInputChange(input.value, field.name)}
+                value={field.value || field.defaultValue}
+              />
+            </Form.Field>
+          );
+        });
     }
+
+    return (
+      <Form color="green">
+        <Segment basic padded className={isMobile ? null : 'secondary-grid-container'}>
+          {renderedFields}
+        </Segment>
+      </Form>
+    );
   };
 
   return (
@@ -689,7 +557,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
         {currentPostcardSize !== postcardSize && (
           <Message negative style={{ margin: 0, display: 'flex', flexWrap: 'wrap' }}>
             <Message.Header style={{ flexShrink: 0, paddingRight: '1rem' }}>
-              <Icon name="times circle" color="darkred"></Icon>Warning!
+              <Icon name="times circle" color="red"></Icon>Warning!
             </Message.Header>
             <Message.Content>
               Changing postcard size may change the aspect ratio of your cover photo. Please upload
@@ -750,13 +618,10 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
         </ContentBottomHeaderLayout>
 
         {currentListingStatus !== 'custom' && (
-          <Segment basic padded style={{}}>
+          <Segment basic padded>
             <div ref={sliderRef}>
               <Header as="h4">Template Theme</Header>
               <Slider {...sliderSettings}>
-                {renderTemplatePicture('bookmark')}
-                {renderTemplatePicture('ribbon')}
-                {renderTemplatePicture('stack')}
                 {stencilsAvailable &&
                   stencilsAvailable.map((stencil, ind) =>
                     renderTemplatePicture(stencil.templateTheme, stencil.thumbnail, stencil.new)
@@ -884,14 +749,14 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
             Front Postcard details
           </Header>
         )}
-        {renderFrontDetails && renderThemeSpecificData('front')}
+        {renderFrontDetails && renderMergeVariables('front')}
 
         {renderBackDetails && (
           <Header as="h4" style={{ marginLeft: '1.5em', marginBottom: '-0.5em' }}>
             Back Postcard details
           </Header>
         )}
-        {renderBackDetails && renderThemeSpecificData('back')}
+        {renderBackDetails && renderMergeVariables('back')}
 
         <div>
           <Header as="h4">Customize call to action URL</Header>

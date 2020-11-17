@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const StyledButtonBack = styled.div`
   z-index: 100;
-  transform: translate(1.5rem, -2rem);
+  transform: translate(0.25rem, -2rem);
   &::before {
     opacity: 1;
     color: rgb(224, 225, 226);

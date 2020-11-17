@@ -187,6 +187,10 @@ const directory = {
         path: `/api/user/mailout/${mailoutId}?include_destinations=true`,
         method: 'get',
       }),
+      getStencilFields: (mailoutId, templateId) => ({
+        path: `/api/user/mailout/${mailoutId}/edit/stencil/${templateId}/fields`,
+        method: `get`,
+      }),
       csv: ({ userId, mailoutId }) => ({ path: `/api/user/${userId}/mailout/${mailoutId}/csv` }),
       byMls: mlsNum => ({ path: `/api/user/mailout/byMls`, method: 'post' }),
       edit: {
