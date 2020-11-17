@@ -3,7 +3,7 @@ import * as brandColors from '../../../utils/brandColors';
 
 const NewLabel = styled.div`
   max-width: 260px;
-  margin: auto;
+  margin: 0.5rem;
   padding: 0.5em 0;
   & .label {
     background-color: ${brandColors.secondary};

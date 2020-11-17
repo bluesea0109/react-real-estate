@@ -158,10 +158,13 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   if (mailoutEdit && mailoutEdit.templateTheme)
     startSlide = slides.findIndex(slide => slide === mailoutEdit.templateTheme);
 
+  let numSlides = Math.floor(sliderWidth / 260) || 1;
+
   const sliderSettings = {
-    className: 'slider variable-width',
+    className: 'slider center',
     infinite: true,
-    slidesToShow: sliderWidth > 320 ? Math.floor(sliderWidth / 320) : 1,
+    centerMode: true,
+    slidesToShow: numSlides < stencilsAvailable?.length ? numSlides : stencilsAvailable.length,
     focusOnSelect: true,
     nextArrow: <StyledButtonNext />,
     prevArrow: <StyledButtonBack />,
@@ -436,16 +439,16 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
               ? {
                   border: `2px solid ${brandColors.primary}`,
                   padding: '0.5em',
-                  margin: '0 auto',
+                  margin: '0.5rem',
                   borderRadius: '5px',
-                  maxWidth: 260,
+                  maxWidth: 500,
                 }
               : {
                   border: '1px solid lightgray',
                   padding: '0.5em',
-                  margin: '0 auto',
+                  margin: '0.5rem',
                   borderRadius: '5px',
-                  maxWidth: 260,
+                  maxWidth: 500,
                 }
           }
         >
@@ -614,7 +617,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
         </ContentBottomHeaderLayout>
 
         {currentListingStatus !== 'custom' && (
-          <Segment basic padded style={{}}>
+          <Segment basic padded>
             <div ref={sliderRef}>
               <Header as="h4">Template Theme</Header>
               <Slider {...sliderSettings}>
