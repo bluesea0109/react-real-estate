@@ -148,6 +148,16 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     return bestCta;
   });
 
+  let slides = [];
+  if (stencilsAvailable) {
+    stencilsAvailable.forEach(stencil => {
+      slides.push(stencil.templateTheme);
+    });
+  }
+  let startSlide = 0;
+  if (mailoutEdit && mailoutEdit.templateTheme)
+    startSlide = slides.findIndex(slide => slide === mailoutEdit.templateTheme);
+
   const sliderSettings = {
     className: 'slider variable-width',
     infinite: true,
@@ -155,6 +165,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     focusOnSelect: true,
     nextArrow: <StyledButtonNext />,
     prevArrow: <StyledButtonBack />,
+    initialSlide: startSlide,
   };
 
   const popover = {
