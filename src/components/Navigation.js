@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import { Header, Popup } from 'semantic-ui-react';
 import React, { createRef, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useDispatch } from 'react-redux';
+import { resetMailout } from '../store/modules/mailout/actions';
 
 import { StepLayout, StepsLayout, MobileDisabledLayout, NavigationLayout } from '../layouts';
 import { Dimmer, Menu, Initials, Icon, Step } from './Base';
@@ -73,7 +75,7 @@ const StyledIcon = styled(FontAwesomeIcon)`
 
 export default () => {
   const isMobile = useIsMobile();
-
+  const dispatch = useDispatch();
   const location = useLocation();
   const [activeItem, setActiveItem] = useState('');
   const [appIsBusy, setAppIsBusy] = useState(false);
@@ -290,6 +292,7 @@ export default () => {
   }
 
   const mobileCollapse = () => {
+    dispatch(resetMailout());
     if (moblileVisible) {
       setMobileVisible(false);
     }

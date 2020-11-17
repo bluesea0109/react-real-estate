@@ -51,7 +51,6 @@ const MailoutDetailsPage = () => {
     ) {
       history.goBack();
     }
-    dispatch(resetMailout());
   };
 
   return (
