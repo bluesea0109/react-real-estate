@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const StyledButtonNext = styled.div`
-  z-index: 100;
+  z-index: 2;
   transform: translate(-1.5rem, -2rem);
   &::before {
     opacity: 1;

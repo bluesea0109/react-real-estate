@@ -163,7 +163,8 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   if (mailoutEdit && mailoutEdit.templateTheme)
     startSlide = slides.findIndex(slide => slide === mailoutEdit.templateTheme);
 
-  let numSlides = Math.floor(sliderWidth / 260) || 1;
+  let numSlides = Math.floor(sliderWidth / 240) || 1;
+  if (numSlides % 2 === 0) numSlides -= 1;
 
   const sliderSettings = {
     className: 'slider center',
@@ -174,6 +175,11 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     nextArrow: <StyledButtonNext />,
     prevArrow: <StyledButtonBack />,
     initialSlide: startSlide,
+    swipeToSlide: true,
+    afterChange: current => {
+      if (current !== startSlide)
+        dispatch(updateMailoutTemplateThemePending(stencilsAvailable[current].templateTheme));
+    },
   };
 
   const popover = {
@@ -430,13 +436,6 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const renderTemplatePicture = (templateName, src, isNew = false) => {
     return (
       <div key={templateName}>
-        <input
-          type="radio"
-          checked={templateTheme === templateName}
-          value={templateName}
-          onChange={(e, { value }) => dispatch(updateMailoutTemplateThemePending(value))}
-          style={{ visibility: 'hidden', display: 'none' }}
-        />
         <div
           style={
             templateTheme === templateName
@@ -456,11 +455,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
                 }
           }
         >
-          <img
-            onClick={e => dispatch(updateMailoutTemplateThemePending(templateName))}
-            src={src}
-            alt={templateName}
-          />
+          <img src={src} alt={templateName} />
         </div>
         {isNew && (
           <NewLabel>

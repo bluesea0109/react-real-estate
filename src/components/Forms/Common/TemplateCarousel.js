@@ -35,8 +35,14 @@ export default function TemplateCarousel({
   if (formValues && formValues[listingType])
     startSlide = slides.findIndex(slide => slide === formValues[listingType].templateTheme);
 
-  let numSlides = Math.floor(sliderWidth / 260) || 1;
-  console.log(numSlides);
+  let numSlides = Math.floor(sliderWidth / 240) || 1;
+  if (numSlides % 2 === 0) numSlides -= 1;
+
+  const handleTemplateChange = slideIndex => {
+    let newVal = { ...formValues };
+    newVal[listingType].templateTheme = stencilsAvailable[slideIndex].templateTheme;
+    setFormValues(newVal);
+  };
 
   const sliderSettings = {
     className: 'slider center',
@@ -47,6 +53,8 @@ export default function TemplateCarousel({
     nextArrow: <StyledButtonNext />,
     prevArrow: <StyledButtonBack />,
     initialSlide: startSlide,
+    swipeToSlide: true,
+    afterChange: current => handleTemplateChange(current),
   };
 
   return (
