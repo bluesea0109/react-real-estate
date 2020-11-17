@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format } from 'date-fns';
 
 import {
-  resetMailout,
   revertMailoutEditPending,
   stopMailoutPending,
   submitMailoutPending,
@@ -259,7 +258,6 @@ const MailoutDetailsPage = () => {
   ]);
 
   const handleBackClick = () => {
-    dispatch(resetMailout());
     if (
       lastLocation.pathname === `/dashboard/edit/${mailoutId}` ||
       lastLocation.pathname === `/dashboard/${mailoutId}`
