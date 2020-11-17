@@ -28,21 +28,9 @@ const TemplatePictureFormField = ({
     return type ? types[type] : types['undefined'];
   };
 
-  const handleTemplateChange = value => {
-    const newValue = Object.assign({}, formValues);
-    newValue[listingType].templateTheme = value;
-    setFormValues(newValue);
-  };
-
   if (!editable) {
     return (
       <div key={templateName}>
-        <input
-          type="radio"
-          defaultChecked={currentValue === templateName}
-          value={templateName}
-          style={{ visibility: 'hidden', display: 'none' }}
-        />
         <div
           style={
             currentValue === templateName
@@ -74,13 +62,6 @@ const TemplatePictureFormField = ({
   } else {
     return (
       <div key={templateName}>
-        <input
-          type="radio"
-          checked={currentValue === templateName}
-          value={templateName}
-          onChange={(e, { value }) => handleTemplateChange(value)}
-          style={{ visibility: 'hidden', display: 'none' }}
-        />
         <div
           style={
             currentValue === templateName
@@ -100,11 +81,7 @@ const TemplatePictureFormField = ({
                 }
           }
         >
-          <img
-            onClick={e => handleTemplateChange(templateName)}
-            src={src ? src : resolveSource(templateName)}
-            alt={templateName}
-          />
+          <img src={src ? src : resolveSource(templateName)} alt={templateName} />
         </div>
         {isNew && (
           <NewLabel>
