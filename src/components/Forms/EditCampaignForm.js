@@ -3,7 +3,7 @@ import startCase from 'lodash/startCase';
 import { BlockPicker, ChromePicker } from 'react-color';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { createRef, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Dropdown, Form, Header, Label, Popup, Checkbox } from 'semantic-ui-react';
+import { Dropdown, Form, Header, Label, Popup, Checkbox, Dimmer } from 'semantic-ui-react';
 import { NewLabel, StyledButtonBack, StyledButtonNext } from './Base/Carousel';
 
 import auth from '../../services/auth';
@@ -20,7 +20,7 @@ import {
   updateMailoutTemplateThemePending,
 } from '../../store/modules/mailout/actions';
 import { differenceObjectDeep, objectIsEmpty, sleep, postcardDimensions } from '../utils/utils';
-import { Button, Icon, Image, Menu, Message, Page, Segment, Snackbar } from '../Base';
+import { Button, Icon, Image, Loader, Menu, Message, Page, Segment, Snackbar } from '../Base';
 import { StyledHeader, colors } from '../utils/helpers';
 import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
@@ -127,6 +127,9 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(currentMailoutDisplayAgent);
   const [formValues, setFormValues] = useState(
     mailoutEdit?.fields ? Object.values(mailoutEdit?.fields) : null
+  );
+  const updateTemplateThemePending = useSelector(
+    state => state.mailout.updateMailoutTemplateThemePending
   );
 
   let _coverPhotoMv = _.get(mailoutDetails, 'mergeVariables', []).find(
@@ -744,19 +747,30 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           )}
         </Segment>
 
-        {renderFrontDetails && (
-          <Header as="h4" style={{ marginLeft: '1.5em', marginBottom: '-0.5em' }}>
-            Front Postcard details
-          </Header>
-        )}
-        {renderFrontDetails && renderMergeVariables('front')}
+        <div>
+          {renderFrontDetails && (
+            <Header as="h4" style={{ marginLeft: '1.5em', marginBottom: '-0.5em' }}>
+              Front Postcard details
+            </Header>
+          )}
 
-        {renderBackDetails && (
-          <Header as="h4" style={{ marginLeft: '1.5em', marginBottom: '-0.5em' }}>
-            Back Postcard details
-          </Header>
-        )}
-        {renderBackDetails && renderMergeVariables('back')}
+          {updateTemplateThemePending ? (
+            <Loader inline="centered" active />
+          ) : (
+            renderFrontDetails && renderMergeVariables('front')
+          )}
+
+          {renderBackDetails && (
+            <Header as="h4" style={{ marginLeft: '1.5em', marginBottom: '-0.5em' }}>
+              Back Postcard details
+            </Header>
+          )}
+          {updateTemplateThemePending ? (
+            <Loader inline="centered" active />
+          ) : (
+            renderBackDetails && renderMergeVariables('back')
+          )}
+        </div>
 
         <div>
           <Header as="h4">Customize call to action URL</Header>
