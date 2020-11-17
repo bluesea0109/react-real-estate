@@ -3,7 +3,7 @@ import startCase from 'lodash/startCase';
 import { BlockPicker, ChromePicker } from 'react-color';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { createRef, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Dropdown, Form, Header, Label, Popup, Checkbox, Dimmer } from 'semantic-ui-react';
+import { Dropdown, Form, Header, Label, Popup, Checkbox } from 'semantic-ui-react';
 import { NewLabel, StyledButtonBack, StyledButtonNext } from './Base/Carousel';
 
 import auth from '../../services/auth';
