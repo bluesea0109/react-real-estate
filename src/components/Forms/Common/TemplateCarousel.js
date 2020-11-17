@@ -2,7 +2,7 @@ import React, { useState, useRef, useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Header } from '../../Base';
 import { useWindowSize } from '../../Hooks/useWindowSize';
-import { StyledButtonBack, StyledButtonNext } from '../Base/Carousel';
+import { SliderButtons, StyledButtonBack, StyledButtonNext } from '../Base/Carousel';
 import TemplatePictureFormField from './TemplatePictureFormField';
 import Slider from 'react-slick';
 
@@ -16,16 +16,17 @@ export default function TemplateCarousel({
 }) {
   const stencilsAvailable = useSelector(store => store.templates.available?.stencils);
   const [sliderWidth, setsliderWidth] = useState(0);
-  const sliderRef = useRef(null);
+  const sliderContainerRef = useRef(null);
   const windowSize = useWindowSize();
   useLayoutEffect(
     _ => {
-      setsliderWidth(sliderRef.current ? sliderRef.current.offsetWidth : 0);
+      setsliderWidth(sliderContainerRef.current ? sliderContainerRef.current.offsetWidth : 0);
     },
     // eslint-disable-next-line
     [windowSize]
   );
   const editable = listingType === NEW_LISTING ? !!formValues?.listed : !!formValues?.sold;
+  const sliderRef = useRef(null);
 
   let slides = [];
   if (stencilsAvailable) {
@@ -53,8 +54,6 @@ export default function TemplateCarousel({
     centerMode: true,
     slidesToShow: numSlides < stencilsAvailable?.length ? numSlides : stencilsAvailable.length,
     focusOnSelect: editable,
-    nextArrow: editable && <StyledButtonNext />,
-    prevArrow: editable && <StyledButtonBack />,
     initialSlide: startSlide,
     swipeToSlide: editable,
     draggable: editable,
@@ -62,13 +61,20 @@ export default function TemplateCarousel({
     afterChange: current => handleTemplateChange(current),
   };
 
+  const handleSliderBtnClick = dir => {
+    dir === 'back' ? sliderRef.current.slickPrev() : sliderRef.current.slickNext();
+  };
+
   return (
     <div>
-      <div ref={sliderRef} style={{ maxWidth: '100%' }}>
+      <div
+        ref={sliderContainerRef}
+        style={{ maxWidth: '100%', position: 'relative', padding: '0 1rem' }}
+      >
         <Header as="h5" style={{ opacity: !editable ? 0.4 : 1 }}>
           Template Theme
         </Header>
-        <Slider {...sliderSettings}>
+        <Slider {...sliderSettings} ref={sliderRef}>
           {stencilsAvailable &&
             stencilsAvailable.map((stencil, ind) => {
               return TemplatePictureFormField({
@@ -82,6 +88,14 @@ export default function TemplateCarousel({
               });
             })}
         </Slider>
+        <SliderButtons>
+          {editable && sliderRef.current && (
+            <StyledButtonBack onClick={_ => handleSliderBtnClick('back')} />
+          )}
+          {editable && sliderRef.current && (
+            <StyledButtonNext onClick={_ => handleSliderBtnClick('next')} />
+          )}
+        </SliderButtons>
       </div>
     </div>
   );

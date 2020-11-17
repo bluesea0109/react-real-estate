@@ -1,18 +1,31 @@
+import React from 'react';
+import { Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
+import * as brandColors from '../../../utils/brandColors';
 
-const StyledButtonBack = styled.div`
+const ContainerDiv = styled.div`
   z-index: 2;
-  transform: translate(0.25rem, -2rem);
-  &::before {
-    opacity: 1;
-    color: rgb(224, 225, 226);
-    font-size: 2.75rem;
-  }
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateX(-2.5rem);
   &:hover {
-    &::before {
-      color: lightgrey;
-    }
+    background-color: ${brandColors.lightGreyHover};
   }
 `;
 
-export default StyledButtonBack;
+const StyledIcon = styled(Icon)`
+  color: grey;
+  margin: 0 !important;
+`;
+
+export default function StyledButtonBack(props) {
+  return (
+    <ContainerDiv onClick={props.onClick}>
+      <StyledIcon name="angle left" size="big" />
+    </ContainerDiv>
+  );
+}

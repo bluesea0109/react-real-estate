@@ -4,7 +4,7 @@ import { BlockPicker, ChromePicker } from 'react-color';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { createRef, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Dropdown, Form, Header, Label, Popup, Checkbox } from 'semantic-ui-react';
-import { NewLabel, StyledButtonBack, StyledButtonNext } from './Base/Carousel';
+import { NewLabel, SliderButtons, StyledButtonBack, StyledButtonNext } from './Base/Carousel';
 
 import auth from '../../services/auth';
 import api from '../../services/api';
@@ -72,14 +72,15 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const isMobile = useIsMobile();
   const windowSize = useWindowSize();
   const [sliderWidth, setsliderWidth] = useState(0);
-  const sliderRef = useRef(null);
+  const sliderContainerRef = useRef(null);
   useLayoutEffect(
     _ => {
-      setsliderWidth(sliderRef.current ? sliderRef.current.offsetWidth : 0);
+      setsliderWidth(sliderContainerRef.current ? sliderContainerRef.current.offsetWidth : 0);
     },
     // eslint-disable-next-line
     [windowSize]
   );
+  const sliderRef = useRef(null);
   const peerId = useSelector(store => store.peer.peerId);
   const dispatch = useDispatch();
   const stencilsAvailable = useSelector(store => store.templates.available?.stencils);
@@ -172,8 +173,6 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     centerMode: true,
     slidesToShow: numSlides < stencilsAvailable?.length ? numSlides : stencilsAvailable.length,
     focusOnSelect: true,
-    nextArrow: <StyledButtonNext />,
-    prevArrow: <StyledButtonBack />,
     initialSlide: startSlide,
     swipeToSlide: true,
     afterChange: current => {
@@ -481,6 +480,10 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     setFormValues(newValues);
   };
 
+  const handleSliderBtnClick = dir => {
+    dir === 'back' ? sliderRef.current.slickPrev() : sliderRef.current.slickNext();
+  };
+
   const renderMergeVariables = side => {
     let renderedFields = [];
     if (formValues) {
@@ -616,14 +619,18 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
         {currentListingStatus !== 'custom' && (
           <Segment basic padded>
-            <div ref={sliderRef}>
+            <div ref={sliderContainerRef}>
               <Header as="h4">Template Theme</Header>
-              <Slider {...sliderSettings}>
+              <Slider {...sliderSettings} ref={sliderRef}>
                 {stencilsAvailable &&
                   stencilsAvailable.map((stencil, ind) =>
                     renderTemplatePicture(stencil.templateTheme, stencil.thumbnail, stencil.new)
                   )}
               </Slider>
+              <SliderButtons>
+                <StyledButtonBack onClick={_ => handleSliderBtnClick('back')} editForm />
+                <StyledButtonNext onClick={_ => handleSliderBtnClick('next')} editForm />
+              </SliderButtons>
             </div>
           </Segment>
         )}
