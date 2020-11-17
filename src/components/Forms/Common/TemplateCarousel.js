@@ -25,7 +25,7 @@ export default function TemplateCarousel({
     [windowSize]
   );
 
-  let slides = ['ribbon', 'bookmark', 'stack'];
+  let slides = [];
   if (stencilsAvailable) {
     stencilsAvailable.forEach(stencil => {
       slides.push(stencil.templateTheme);
@@ -35,45 +35,27 @@ export default function TemplateCarousel({
   if (formValues && formValues[listingType])
     startSlide = slides.findIndex(slide => slide === formValues[listingType].templateTheme);
 
+  let numSlides = Math.floor(sliderWidth / 260) || 1;
+  console.log(numSlides);
+
   const sliderSettings = {
-    className: 'slider variable-width',
+    className: 'slider center',
     infinite: true,
-    slidesToShow: sliderWidth > 320 ? Math.floor(sliderWidth / 320) : 1,
+    centerMode: true,
+    slidesToShow: numSlides < stencilsAvailable?.length ? numSlides : stencilsAvailable.length,
     focusOnSelect: true,
     nextArrow: <StyledButtonNext />,
     prevArrow: <StyledButtonBack />,
     initialSlide: startSlide,
-    draggable: false,
   };
 
   return (
-    <div style={{ display: 'block' }}>
+    <div>
       <div ref={sliderRef} style={{ maxWidth: '100%' }}>
         <Header as="h5" style={{ opacity: !editable ? 0.4 : 1 }}>
           Template Theme
         </Header>
         <Slider {...sliderSettings}>
-          {TemplatePictureFormField({
-            templateName: 'ribbon',
-            listingType,
-            initialValues,
-            formValues,
-            setFormValues,
-          })}
-          {TemplatePictureFormField({
-            templateName: 'bookmark',
-            listingType,
-            initialValues,
-            formValues,
-            setFormValues,
-          })}
-          {TemplatePictureFormField({
-            templateName: 'stack',
-            listingType,
-            initialValues,
-            formValues,
-            setFormValues,
-          })}
           {stencilsAvailable &&
             stencilsAvailable.map((stencil, ind) => {
               return TemplatePictureFormField({
