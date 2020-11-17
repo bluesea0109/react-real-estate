@@ -53,7 +53,7 @@ const ColorPickerFormField = ({ listingType, initialValues, formValues, setFormV
     return (
       <>
         <Header as="h5">Brand Color</Header>
-        <div style={{ paddingTop: '1rem' }}>
+        <div>
           <BlockPicker
             triangle="hide"
             width="200px"
