@@ -169,7 +169,6 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
             <Segment padded>
               <StyledTemplateDiv>
                 <TemplateCarousel
-                  editable={true}
                   listingType={listingType}
                   initialValues={initialValues}
                   formValues={formValues}
