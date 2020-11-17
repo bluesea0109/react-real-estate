@@ -36,7 +36,7 @@ const TemplatePictureFormField = ({
 
   if (!editable) {
     return (
-      <div key={templateName} style={{ width: 260 }}>
+      <div key={templateName}>
         <input
           type="radio"
           defaultChecked={currentValue === templateName}
@@ -48,17 +48,17 @@ const TemplatePictureFormField = ({
             currentValue === templateName
               ? {
                   border: `2px solid ${brandColors.primary}`,
-                  margin: '0 auto',
+                  margin: '0 0.5em',
                   padding: '0.5em',
                   borderRadius: '5px',
-                  width: 260,
+                  maxWidth: 500,
                 }
               : {
                   border: '1px solid lightgray',
-                  margin: '0 auto',
+                  margin: '0 0.5em',
                   padding: '0.5em',
                   borderRadius: '5px',
-                  width: 260,
+                  maxWidth: 500,
                 }
           }
         >
@@ -86,17 +86,17 @@ const TemplatePictureFormField = ({
             currentValue === templateName
               ? {
                   border: '2px solid #59C4C4',
-                  margin: '0 auto',
+                  margin: '0 0.5em',
                   padding: '0.5em',
                   borderRadius: '5px',
-                  width: 260,
+                  maxWidth: 500,
                 }
               : {
                   border: '1px solid lightgray',
-                  margin: '0 auto',
+                  margin: '0 0.5em',
                   padding: '0.5em',
                   borderRadius: '5px',
-                  width: 260,
+                  maxWidth: 500,
                 }
           }
         >
