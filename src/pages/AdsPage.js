@@ -154,7 +154,7 @@ const EmptyPage = () => {
             <div className="adTableItemPreview" style={{backgroundImage: `url(${item.details.previewUrl ? item.details.previewUrl : 'https://reactnativecode.com/wp-content/uploads/2018/02/Default_Image_Thumbnail.png'})`}} />
           </div>}
             on='hover'
-            position="right center"
+            position="center"
           />
         </Table.Cell>
         <Table.Cell className="marketerGrey">
@@ -163,7 +163,7 @@ const EmptyPage = () => {
           {item.details.startDate && item.details.endDate ? <span>{`${getDateFromStr(item.details.startDate)} - ${getDateFromStr(item.details.endDate)}`}</span> : '-'}
         </Table.Cell>
         <Table.Cell className="marketerGrey">{item.details.budget ? `$${Math.trunc(Number(item.details.budget))}` : '-'}</Table.Cell>
-        <Table.Cell className="marketerGrey">{item.details.budget ? '$0' : '-'}</Table.Cell>
+        <Table.Cell className="marketerGrey">{item.details.spend ? `$${Math.floor(item.details.spend)}` : '-'}</Table.Cell>
         <Table.Cell><div><Icon name="facebook" size="large" className="adTableItemFacebookLogo" /><Icon name="instagram" size="large" className="adTableItemInstagramLogo" /></div></Table.Cell>
         <Table.Cell>{item.details.cpp ? `$${Math.floor(item.details.cpp)}` : '-'}</Table.Cell>
         <Table.Cell>{item.details.ctr ? `${Math.floor(item.details.ctr)}%` : '-'}</Table.Cell>
