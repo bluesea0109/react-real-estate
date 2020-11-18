@@ -116,10 +116,11 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
   const [postcardSize, setPostcardSize] = useState(currentPostcardSize);
   const templateTheme = useSelector(store => store.mailout.mailoutEdit.templateTheme);
+  const brandColorInMergeVars = mailoutEdit?.mergeVariables?.find(
+    variable => variable.name === 'brandColor'
+  );
   const [selectedBrandColor, setSelectedBrandColor] = useState(
-    mailoutEdit?.mergeVariables?.find(variable => variable.name === 'brandColor').value ||
-      mailoutEdit?.brandColor ||
-      ''
+    brandColorInMergeVars?.value ? brandColorInMergeVars.value : mailoutEdit?.brandColor || ''
   );
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
   const [tempColor, setTempColor] = useState(

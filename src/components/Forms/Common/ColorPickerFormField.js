@@ -18,7 +18,7 @@ const ColorPickerFormField = ({ listingType, initialValues, formValues, setFormV
   const handleClose = () => {
     setDisplayColorPicker(false);
     const newValue = Object.assign({}, formValues);
-    newValue[listingType].brandColor = tempColor.hex;
+    newValue[listingType].brandColor = tempColor?.hex ? tempColor.hex : tempColor;
     setFormValues(newValue);
   };
 
