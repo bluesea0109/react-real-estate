@@ -20,6 +20,7 @@ const ContainerDiv = styled.div`
 const StyledIcon = styled(Icon)`
   color: grey;
   margin: 0 !important;
+  transform: translateX(-1px);
 `;
 
 export default function StyledButtonBack(props) {
