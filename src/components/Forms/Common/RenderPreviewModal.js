@@ -152,8 +152,7 @@ const RenderPreviewModal = ({ formType, formValues, showModal }) => {
   const [customizationPreview, setCustomizationPreview] = useState(() => {
     if (formType === 'team') return teamCustomizationPreview;
     if (formType === 'agent') return agentCustomizationPreview;
-    if (formType === 'editTeamCampaign') return showModal;
-    if (formType === 'editAgentCampaign') return showModal;
+    if (formType === 'editTeamCampaign' || formType === 'editAgentCampaign') return showModal;
   });
 
   let listedPostcardFrontURL;
@@ -161,7 +160,7 @@ const RenderPreviewModal = ({ formType, formValues, showModal }) => {
   let soldPostcardFrontURL;
   let soldPostcardBackURL;
 
-  if (formType === 'team') {
+  if (formType === 'team' || formType === 'editTeamCampaign') {
     customizationPending = teamCustomizationPending;
     customizationError = teamCustomizationError;
     listedPostcardFrontURL = ApiService.directory.team.postcard.render.listed.front({ userId })
@@ -171,7 +170,7 @@ const RenderPreviewModal = ({ formType, formValues, showModal }) => {
     soldPostcardBackURL = ApiService.directory.team.postcard.render.sold.back({ userId }).path;
   }
 
-  if (formType === 'agent') {
+  if (formType === 'agent' || formType === 'editAgentCampaign') {
     customizationPending = agentCustomizationPending;
     customizationError = agentCustomizationError;
     listedPostcardFrontURL = peerId
@@ -250,16 +249,16 @@ const RenderPreviewModal = ({ formType, formValues, showModal }) => {
   };
 
   const handlePreviewComplete = () => {
-    if (formType === 'team') {
+    setCustomizationPreview(false);
+    if (formType === 'team' || formType === 'editTeamCampaign') {
       dispatch(previewTeamCustomizationCompleted());
     }
 
-    if (formType === 'agent') {
+    if (formType === 'agent' || formType === 'editAgentCampaign') {
       dispatch(previewCustomizationCompleted());
     }
   };
 
-  console.log('cusomizationPreviewInside', customizationPreview);
   if (customizationPending) {
     return (
       <Modal open={customizationPreview} size="tiny">
@@ -291,7 +290,7 @@ const RenderPreviewModal = ({ formType, formValues, showModal }) => {
         <ModalPreview open={customizationPreview} size="small">
           <ModalPreview.Header style={modalHeaderStyles}>
             <p style={modalHeaderP}>Preview</p>
-            <Button style={cancelX} onClick={() => setCustomizationPreview(false)}>
+            <Button style={cancelX} onClick={handlePreviewComplete}>
               <FontAwesomeIcon icon="times" style={{ color: '#B1B1B1', fontSize: '16px' }} />
             </Button>
           </ModalPreview.Header>
@@ -393,9 +392,7 @@ const RenderPreviewModal = ({ formType, formValues, showModal }) => {
             )}
             <Button
               primary
-              onClick={
-                inOnboardingMode ? handleReviewComplete : () => setCustomizationPreview(false)
-              }
+              onClick={inOnboardingMode ? handleReviewComplete : handlePreviewComplete}
             >
               <Icon name="checkmark" /> {inOnboardingMode ? 'Continue' : 'OK'}
             </Button>

@@ -38,8 +38,8 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
   const dispatch = useDispatch();
   const formRef = useRef();
 
-  const customizationPending = useSelector(
-    store => store.customization && store.customization.pending
+  const teamCustomizationPending = useSelector(
+    store => store.teamCustomization && store.teamCustomization.pending
   );
   const soldListingAgentShortenedURLPending = useSelector(
     store => store.shortcode.soldURLToShortenPending
@@ -154,7 +154,7 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
       });
     }
   };
-  console.log('showModal', showModal);
+
   const Listings = ({ listingType }) => {
     return (
       <Form
@@ -308,12 +308,12 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
                   primary
                   type="submit"
                   disabled={
-                    customizationPending ||
+                    teamCustomizationPending ||
                     soldListingAgentShortenedURLPending ||
                     newListingAgentShortenedURLPending
                   }
                   loading={
-                    customizationPending ||
+                    teamCustomizationPending ||
                     soldListingAgentShortenedURLPending ||
                     newListingAgentShortenedURLPending
                   }
@@ -332,13 +332,13 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
           <Menu.Item
             name="newListing"
             active={page === 1}
-            disabled={customizationPending || soldListingAgentShortenedURLPending}
+            disabled={teamCustomizationPending || soldListingAgentShortenedURLPending}
             onClick={prevPage}
           />
           <Menu.Item
             name="soldListing"
             active={page === 2}
-            disabled={customizationPending || newListingAgentShortenedURLPending}
+            disabled={teamCustomizationPending || newListingAgentShortenedURLPending}
             onClick={nextPage}
           />
         </Menu>

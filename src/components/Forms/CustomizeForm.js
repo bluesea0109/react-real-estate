@@ -161,7 +161,6 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
       });
     }
   };
-  console.log('showModal', showModal);
   const selectedPeer = () => {
     if (teammates.length > 0 && peerId) {
       return teammates.find(profile => profile.userId === peerId);
@@ -315,7 +314,7 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
         return <span> Nothing here </span>;
     }
   };
-
+  console.log('custom', showModal);
   return (
     <Page basic>
       <ContentTopHeaderLayout>
