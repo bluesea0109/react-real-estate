@@ -7,6 +7,7 @@ const SliderButtons = styled.div`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  z-index: 0;
 `;
 
 export default SliderButtons;

@@ -170,6 +170,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   if (numSlides % 2 === 0) numSlides -= 1;
 
   const sliderSettings = {
+    arrows: false,
     className: 'slider center',
     infinite: true,
     centerMode: true,
@@ -623,7 +624,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           <Segment basic padded>
             <div ref={sliderContainerRef}>
               <Header as="h4">Template Theme</Header>
-              <Slider {...sliderSettings} ref={sliderRef}>
+              <Slider {...sliderSettings} ref={sliderRef} style={{ zIndex: 10 }}>
                 {stencilsAvailable &&
                   stencilsAvailable.map((stencil, ind) =>
                     renderTemplatePicture(stencil.templateTheme, stencil.thumbnail, stencil.new)

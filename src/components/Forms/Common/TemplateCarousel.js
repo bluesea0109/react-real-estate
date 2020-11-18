@@ -49,6 +49,7 @@ export default function TemplateCarousel({
   };
 
   const sliderSettings = {
+    arrows: false,
     className: 'slider center',
     infinite: true,
     centerMode: true,
@@ -69,7 +70,7 @@ export default function TemplateCarousel({
     <div>
       <div
         ref={sliderContainerRef}
-        style={{ maxWidth: '100%', position: 'relative', padding: '0 1rem' }}
+        style={{ maxWidth: '100%', position: 'relative', padding: '0 1rem', zIndex: 10 }}
       >
         <Header as="h5" style={{ opacity: !editable ? 0.4 : 1 }}>
           Template Theme
