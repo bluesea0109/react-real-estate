@@ -23,6 +23,7 @@ import {
   archiveMailoutPending,
   undoArchiveMailoutPending,
   updateMailoutNamePending,
+  resetMailout,
 } from '../../store/modules/mailout/actions';
 import styled from 'styled-components';
 import * as brandColors from '../utils/brandColors';
@@ -160,6 +161,7 @@ const ListHeader = ({
 
   // Redirect the user to the edit page from the dashboard
   const handleEditClickFromDropdown = id => {
+    dispatch(resetMailout());
     history.push(`/dashboard/edit/${id}`);
   };
 

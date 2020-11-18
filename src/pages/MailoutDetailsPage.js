@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format } from 'date-fns';
 
 import {
-  resetMailout,
   revertMailoutEditPending,
   stopMailoutPending,
   submitMailoutPending,
@@ -259,16 +258,18 @@ const MailoutDetailsPage = () => {
   ]);
 
   const handleBackClick = () => {
-    dispatch(resetMailout());
     if (
       lastLocation.pathname === `/dashboard/edit/${mailoutId}` ||
       lastLocation.pathname === `/dashboard/${mailoutId}`
     ) {
       history.push(`/dashboard`);
     }
-    if (lastLocation.pathname === `/dashboard` || `/dashboard/archived`) {
-      history.goBack();
-    }
+    //commented out, but i think will be used when archive is inside dashboard page
+    //currently causing dashboard to navigate back to campaign when leaving
+    //campaign edit and campaign for dashboard
+    // if (lastLocation.pathname === `/dashboard` || `/dashboard/archived`) {
+    //   history.goBack();
+    // }
   };
 
   const handleApproveAndSendMailoutDetailsClick = () => {
