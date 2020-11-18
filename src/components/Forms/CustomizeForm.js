@@ -38,7 +38,6 @@ const NEW_LISTING = 'listed';
 
 const CustomizeForm = ({ customizationData, initialValues }) => {
   const isMobile = useIsMobile();
-
   const dispatch = useDispatch();
   const formRef = useRef();
 
@@ -53,6 +52,7 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
   const newListingAgentShortenedURLPending = useSelector(
     store => store.shortcode.listedURLToShortenPending
   );
+  const showModal = useSelector(state => state.customization.preview);
 
   const [formValues, setFormValues] = useReducer(formReducer, customizationData);
   const [page, setPage] = useState(1);
@@ -160,7 +160,6 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
       });
     }
   };
-
   const selectedPeer = () => {
     if (teammates.length > 0 && peerId) {
       return teammates.find(profile => profile.userId === peerId);
@@ -379,7 +378,7 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
         {renderSteps()}
       </Segment>
 
-      {RenderPreviewModal({ formType: 'agent', formValues })}
+      {RenderPreviewModal({ formType: 'editAgentCampaign', formValues, showModal })}
     </Page>
   );
 };
