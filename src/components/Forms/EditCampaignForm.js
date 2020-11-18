@@ -117,14 +117,14 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const [postcardSize, setPostcardSize] = useState(currentPostcardSize);
   const templateTheme = useSelector(store => store.mailout.mailoutEdit.templateTheme);
   const [selectedBrandColor, setSelectedBrandColor] = useState(
-    mailoutDetails.mergeVariables
-      ? Object.values(mailoutDetails.mergeVariables).find(
-          variable => variable.name === 'brandColor'
-        ).value
-      : ''
+    mailoutEdit?.mergeVariables?.find(variable => variable.name === 'brandColor').value ||
+      mailoutEdit?.brandColor ||
+      ''
   );
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
-  const [tempColor, setTempColor] = useState(mailoutEdit?.mergeVariables?.brandColor);
+  const [tempColor, setTempColor] = useState(
+    mailoutEdit?.mergeVariables?.brandColor || mailoutEdit?.brandColor
+  );
   const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(currentMailoutDisplayAgent);
   const [formValues, setFormValues] = useState(
     mailoutEdit?.fields ? Object.values(mailoutEdit?.fields) : null
@@ -302,7 +302,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     const newMergeVariables = [];
     newMergeVariables.push({
       name: 'brandColor',
-      value: selectedBrandColor.hex || selectedBrandColor,
+      value: selectedBrandColor?.hex || selectedBrandColor || '',
     });
     newMergeVariables.push({ name: 'frontImgUrl', value: coverPhoto });
 
