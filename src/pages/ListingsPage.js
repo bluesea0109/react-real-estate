@@ -98,7 +98,7 @@ const ListingCard = ({listingDetails, listingItem}) => {
                   className="icon cardIconButton"
                 >
                   <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`}>
+                    <Dropdown.Item onClick={() => window.location = `https://listings.ui.production.brivitymarketer.com/marketer?${createQS(listingItem)}`}>
                       View Facebook Ad
                     </Dropdown.Item>
                     <Dropdown.Item onClick={() => window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`}>
