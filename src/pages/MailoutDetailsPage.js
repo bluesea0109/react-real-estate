@@ -259,17 +259,12 @@ const MailoutDetailsPage = () => {
 
   const handleBackClick = () => {
     if (
-      lastLocation.pathname === `/dashboard/edit/${mailoutId}` ||
-      lastLocation.pathname === `/dashboard/${mailoutId}`
+      lastLocation.pathname === `/dashboard/${mailoutId}` ||
+      `/dashboard/archived` ||
+      `/dashboard/edit/${mailoutId}`
     ) {
-      history.push(`/dashboard`);
+      history.goBack();
     }
-    //commented out, but i think will be used when archive is inside dashboard page
-    //currently causing dashboard to navigate back to campaign when leaving
-    //campaign edit and campaign for dashboard
-    // if (lastLocation.pathname === `/dashboard` || `/dashboard/archived`) {
-    //   history.goBack();
-    // }
   };
 
   const handleApproveAndSendMailoutDetailsClick = () => {
