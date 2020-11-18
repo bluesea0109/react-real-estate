@@ -457,7 +457,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
                 }
           }
         >
-          <img src={src} alt={templateName} />
+          <img src={src} alt={templateName} style={{ width: '100%' }} />
         </div>
         {isNew && (
           <NewLabel>

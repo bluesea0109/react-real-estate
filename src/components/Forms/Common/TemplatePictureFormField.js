@@ -81,7 +81,11 @@ const TemplatePictureFormField = ({
                 }
           }
         >
-          <img src={src ? src : resolveSource(templateName)} alt={templateName} />
+          <img
+            src={src ? src : resolveSource(templateName)}
+            alt={templateName}
+            style={{ width: '100%' }}
+          />
         </div>
         {isNew && (
           <NewLabel>
