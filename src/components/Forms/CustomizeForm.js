@@ -38,7 +38,6 @@ const NEW_LISTING = 'listed';
 
 const CustomizeForm = ({ customizationData, initialValues }) => {
   const isMobile = useIsMobile();
-
   const dispatch = useDispatch();
   const formRef = useRef();
 
@@ -314,7 +313,7 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
         return <span> Nothing here </span>;
     }
   };
-  console.log('custom', showModal);
+
   return (
     <Page basic>
       <ContentTopHeaderLayout>

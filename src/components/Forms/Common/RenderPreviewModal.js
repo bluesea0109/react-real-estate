@@ -152,8 +152,13 @@ const RenderPreviewModal = ({ formType, formValues, showModal }) => {
   const [customizationPreview, setCustomizationPreview] = useState(() => {
     if (formType === 'team') return teamCustomizationPreview;
     if (formType === 'agent') return agentCustomizationPreview;
-    if (formType === 'editTeamCampaign' || formType === 'editAgentCampaign') return showModal;
   });
+
+  useEffect(() => {
+    if (formType === 'editTeamCampaign' || formType === 'editAgentCampaign') {
+      setCustomizationPreview(showModal);
+    }
+  }, [showModal, setCustomizationPreview, formType]);
 
   let listedPostcardFrontURL;
   let listedPostcardBackURL;
