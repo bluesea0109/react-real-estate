@@ -14,6 +14,7 @@ const ContainerDiv = styled.div`
   transform: translateX(-2.5rem);
   &:hover {
     background-color: ${brandColors.lightGreyHover};
+    cursor: pointer;
   }
 `;
 

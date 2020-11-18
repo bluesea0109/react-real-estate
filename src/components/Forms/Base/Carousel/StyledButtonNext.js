@@ -14,6 +14,7 @@ const ContainerDiv = styled.div`
   transform: ${props => (props.editForm ? 'translateX(-6px)' : 'translateX(0.75rem)')};
   &:hover {
     background-color: ${brandColors.lightGreyHover};
+    cursor: pointer;
   }
 `;
 
