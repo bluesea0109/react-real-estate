@@ -60,7 +60,7 @@ export default function TemplateCarousel({
     initialSlide: startSlide,
     swipeToSlide: editable,
     draggable: editable,
-    style: editable ? {} : { opacity: 0.4 },
+    style: editable ? { zIndex: 1 } : { opacity: 0.4 },
     afterChange: current => handleTemplateChange(current),
   };
 
