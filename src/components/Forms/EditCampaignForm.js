@@ -157,9 +157,18 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     return bestCta;
   });
 
+  const filteredStencils = stencilsAvailable.filter(stencil => {
+    if (
+      stencil.templateTheme === 'bookmark-multi' &&
+      mailoutDetails.created < new Date('2020-11-19T17:54:37.344Z').getTime()
+    )
+      return false;
+    return true;
+  });
+
   let slides = [];
-  if (stencilsAvailable) {
-    stencilsAvailable.forEach(stencil => {
+  if (filteredStencils) {
+    filteredStencils.forEach(stencil => {
       slides.push(stencil.templateTheme);
     });
   }
@@ -175,13 +184,13 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     className: 'slider center',
     infinite: true,
     centerMode: true,
-    slidesToShow: numSlides < stencilsAvailable?.length ? numSlides : stencilsAvailable.length,
+    slidesToShow: numSlides < filteredStencils?.length ? numSlides : filteredStencils.length,
     focusOnSelect: true,
     initialSlide: startSlide,
     swipeToSlide: true,
     afterChange: current => {
       if (current !== startSlide)
-        dispatch(updateMailoutTemplateThemePending(stencilsAvailable[current].templateTheme));
+        dispatch(updateMailoutTemplateThemePending(filteredStencils[current].templateTheme));
     },
   };
 
@@ -459,6 +468,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
               width: '100%',
               border: '1px solid lightgrey',
               boxShadow: '1px 1px 4px lightgrey',
+              zIndex: 10,
             }}
           />
         </div>
@@ -627,21 +637,14 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           <Segment basic padded>
             <div ref={sliderContainerRef}>
               <Header as="h4">Template Theme</Header>
-              <Slider {...sliderSettings} ref={sliderRef} style={{ zIndex: 10 }}>
-                {stencilsAvailable &&
-                  stencilsAvailable
-                    .filter(stencil => {
-                      if (
-                        stencil.templateTheme === 'bookmark-multi' &&
-                        mailoutDetails.created < new Date('2020-11-19T17:54:37.344Z').getTime()
-                      )
-                        return false;
-                      return true;
-                    })
-                    .map((stencil, ind) =>
+              <div style={{ position: 'relative', zIndex: 10 }}>
+                <Slider {...sliderSettings} ref={sliderRef} style={{ zIndex: 10 }}>
+                  {filteredStencils &&
+                    filteredStencils.map((stencil, ind) =>
                       renderTemplatePicture(stencil.templateTheme, stencil.thumbnail, stencil.new)
                     )}
-              </Slider>
+                </Slider>
+              </div>
               <SliderButtons>
                 <StyledButtonBack onClick={_ => handleSliderBtnClick('back')} editForm />
                 <StyledButtonNext onClick={_ => handleSliderBtnClick('next')} editForm />
