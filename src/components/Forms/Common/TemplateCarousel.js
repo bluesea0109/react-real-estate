@@ -25,7 +25,9 @@ export default function TemplateCarousel({
     // eslint-disable-next-line
     [windowSize]
   );
-  const editable = listingType === NEW_LISTING ? !!formValues?.listed : !!formValues?.sold;
+  const [editable] = useState(
+    listingType === NEW_LISTING ? !!formValues?.listed : !!formValues?.sold
+  );
   const sliderRef = useRef(null);
 
   let slides = [];

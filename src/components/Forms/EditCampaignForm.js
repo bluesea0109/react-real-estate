@@ -449,16 +449,18 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
                   borderRadius: '5px',
                   maxWidth: 500,
                 }
-              : {
-                  border: '1px solid lightgray',
-                  padding: '0.5em',
-                  margin: '0.5rem',
-                  borderRadius: '5px',
-                  maxWidth: 500,
-                }
+              : { padding: '0.5em', margin: '0.5rem' }
           }
         >
-          <img src={src} alt={templateName} style={{ width: '100%' }} />
+          <img
+            src={src}
+            alt={templateName}
+            style={{
+              width: '100%',
+              border: '1px solid lightgrey',
+              boxShadow: '1px 1px 4px lightgrey',
+            }}
+          />
         </div>
         {isNew && (
           <NewLabel>
