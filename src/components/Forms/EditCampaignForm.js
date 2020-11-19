@@ -640,18 +640,9 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
               <div style={{ position: 'relative', zIndex: 10 }}>
                 <Slider {...sliderSettings} ref={sliderRef} style={{ zIndex: 10 }}>
                   {filteredStencils &&
-                    filteredStencils
-                      .filter(stencil => {
-                        if (
-                          stencil.templateTheme === 'bookmark-multi' &&
-                          mailoutDetails.created < new Date('2020-11-19T17:54:37.344Z').getTime()
-                        )
-                          return false;
-                        return true;
-                      })
-                      .map((stencil, ind) =>
-                        renderTemplatePicture(stencil.templateTheme, stencil.thumbnail, stencil.new)
-                      )}
+                    filteredStencils.map((stencil, ind) =>
+                      renderTemplatePicture(stencil.templateTheme, stencil.thumbnail, stencil.new)
+                    )}
                 </Slider>
               </div>
               <SliderButtons>
