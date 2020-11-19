@@ -1,3 +1,14 @@
+## Release 5.1 https://gitlab.rmcloud.com/groups/gabby/-/milestones/3
+Changes:
+- User agent switcher improvements including better sorting.
+- Added ability to edit Custom campaigns titles
+- Added 4 new templates that can be selected for a postcard
+- Added a new carousel component to help users select a template from a bigger list
+- The billing page now shows the credit balance on the teams account. This balance is the credit from returned postcards
+- For boards that require it, a realtor logo will show for compliance reasons
+- Bugs fixed with archive postcards display
+- Bugs fixed with some display agent issues on postcards 
+
 ## Release 5.0
 Changes:
 - Added ability to choose from different postcard sizes when creating campaigns
