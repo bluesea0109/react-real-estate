@@ -308,8 +308,8 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     newMergeVariables.push({ name: 'frontImgUrl', value: coverPhoto });
 
     formValues
-      .filter(value => value.name !== 'brandColor' && value.name !== 'frontImgUrl')
-      .forEach(value => newMergeVariables.push(value));
+      .filter(value => value.name !== 'brandColor' && value.name !== 'frontImgUrl' && value.value)
+      .forEach(value => newMergeVariables.push({name: value.name, value: value.value}));
 
     const newData = Object.assign(
       {},
