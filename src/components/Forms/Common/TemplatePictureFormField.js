@@ -73,18 +73,19 @@ const TemplatePictureFormField = ({
                   maxWidth: 500,
                 }
               : {
-                  border: '1px solid lightgray',
                   margin: '0 0.5em',
                   padding: '0.5em',
-                  borderRadius: '5px',
-                  maxWidth: 500,
                 }
           }
         >
           <img
             src={src ? src : resolveSource(templateName)}
             alt={templateName}
-            style={{ width: '100%' }}
+            style={{
+              width: '100%',
+              border: '1px solid lightgrey',
+              boxShadow: '1px 1px 4px lightgrey',
+            }}
           />
         </div>
         {isNew && (
