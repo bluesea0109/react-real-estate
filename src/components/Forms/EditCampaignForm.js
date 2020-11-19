@@ -629,9 +629,18 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
               <Header as="h4">Template Theme</Header>
               <Slider {...sliderSettings} ref={sliderRef} style={{ zIndex: 10 }}>
                 {stencilsAvailable &&
-                  stencilsAvailable.map((stencil, ind) =>
-                    renderTemplatePicture(stencil.templateTheme, stencil.thumbnail, stencil.new)
-                  )}
+                  stencilsAvailable
+                    .filter(stencil => {
+                      if (
+                        stencil.templateTheme === 'bookmark-multi' &&
+                        mailoutDetails.created < new Date('2020-11-19T17:54:37.344Z').getTime()
+                      )
+                        return false;
+                      return true;
+                    })
+                    .map((stencil, ind) =>
+                      renderTemplatePicture(stencil.templateTheme, stencil.thumbnail, stencil.new)
+                    )}
               </Slider>
               <SliderButtons>
                 <StyledButtonBack onClick={_ => handleSliderBtnClick('back')} editForm />
