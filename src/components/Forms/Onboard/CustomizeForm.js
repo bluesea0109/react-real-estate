@@ -7,6 +7,7 @@ import { saveCustomizationPending } from '../../../store/modules/customization/a
 import { Button, Icon, Image, Menu, Page, Segment } from '../../Base';
 import { ContentTopHeaderLayout } from '../../../layouts';
 import { StyledHeader } from '../../utils/helpers';
+import { strippedKWKLY } from '../../utils/utils';
 import Wizard from './CustomizationWizard';
 
 import InputFormField from '../Common/InputFormField';
@@ -55,7 +56,8 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
       }
 
       if (!data.listed.shortenCTA && data.listed.kwkly) {
-        data.listed.kwkly = `Text ${data.listed.kwkly} to 59559 for details!`;
+        let kwklyCode = strippedKWKLY(data.listed.kwkly);
+        data.listed.kwkly = `Text ${kwklyCode} to 59559 for details!`;
       }
 
       if (!data.listed.defaultDisplayAgent.userId) {
@@ -71,7 +73,8 @@ const CustomizeForm = ({ customizationData, initialValues }) => {
       }
 
       if (!data.sold.shortenCTA && data.sold.kwkly) {
-        data.sold.kwkly = `Text ${data.sold.kwkly} to 59559 for details!`;
+        let kwklyCode = strippedKWKLY(data.sold.kwkly);
+        data.sold.kwkly = `Text ${kwklyCode} to 59559 for details!`;
       }
 
       if (!data.sold.defaultDisplayAgent.userId) {

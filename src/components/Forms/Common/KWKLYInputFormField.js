@@ -8,6 +8,7 @@ import {
   minLength,
   popup,
   required,
+  strippedKWKLY,
 } from '../../utils/utils';
 import { Input } from '../Base';
 
@@ -27,13 +28,11 @@ const KWKLYInputFormField = ({ listingType, initialValues, formValues, setFormVa
     : initialValues?.[listingType]?.kwkly;
 
   if (currentValue && currentValue.includes('to 59559 for details!')) {
-    currentValue = currentValue.replace(/Text /g, '').replace(/ to 59559 for details!/g, '');
+    currentValue = strippedKWKLY(currentValue);
   }
 
   if (formValues?.[listingType]?.kwkly?.includes('to 59559 for details!')) {
-    formValues[listingType].kwkly = formValues[listingType].kwkly
-      .replace(/Text /g, '')
-      .replace(/ to 59559 for details!/g, '');
+    formValues[listingType].kwkly = strippedKWKLY(formValues[listingType].kwkly);
   }
 
   const handleKwklyChange = input => {

@@ -127,3 +127,7 @@ export const iframeDimensions = size => {
   }
   return { width, height };
 };
+
+export const strippedKWKLY = kwklyString => {
+  return kwklyString.replace(/Text /g, '').replace(/ to 59559 for details!/g, '');
+};
