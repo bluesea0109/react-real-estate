@@ -33,6 +33,10 @@ const formReducer = (state, action) => {
   return _.merge({}, action);
 };
 
+const strippedKWKLY = kwklyString => {
+  return kwklyString.replace(/Text /g, '').replace(/ to 59559 for details!/g, '');
+};
+
 const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
   const isMobile = useIsMobile();
   const dispatch = useDispatch();
@@ -82,7 +86,8 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
       }
 
       if (!data.listed.shortenCTA && data.listed.kwkly) {
-        data.listed.kwkly = `Text ${data.listed.kwkly} to 59559 for details!`;
+        let kwklyCode = strippedKWKLY(data.listed.kwkly);
+        data.listed.kwkly = `Text ${kwklyCode} to 59559 for details!`;
       }
 
       if (!data.listed.defaultDisplayAgent.userId) {
@@ -98,7 +103,8 @@ const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
       }
 
       if (!data.sold.shortenCTA && data.sold.kwkly) {
-        data.sold.kwkly = `Text ${data.sold.kwkly} to 59559 for details!`;
+        let kwklyCode = strippedKWKLY(data.sold.kwkly);
+        data.sold.kwkly = `Text ${kwklyCode} to 59559 for details!`;
       }
 
       if (!data.sold.defaultDisplayAgent.userId) {
