@@ -146,7 +146,7 @@ const ListHeader = ({
 
   const saveName = async () => {
     if (newCampaignName !== campaignName)
-      dispatch(updateMailoutNamePending({ name: newCampaignName }));
+      dispatch(updateMailoutNamePending({ name: newCampaignName, mailoutId: data._id }));
     setEditingName(false);
   };
 
