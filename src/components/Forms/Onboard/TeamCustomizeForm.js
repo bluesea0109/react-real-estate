@@ -7,6 +7,7 @@ import { saveTeamCustomizationPending } from '../../../store/modules/teamCustomi
 import { Button, Icon, Image, Menu, Page, Segment } from '../../Base';
 import { ContentTopHeaderLayout } from '../../../layouts';
 import { StyledHeader } from '../../utils/helpers';
+import { strippedKWKLY } from '../../utils/utils';
 import Wizard from './CustomizationWizard';
 
 import InputFormField from '../Common/InputFormField';
@@ -25,10 +26,6 @@ import TemplateCarousel from '../Common/TemplateCarousel';
 
 const formReducer = (state, action) => {
   return _.merge({}, action);
-};
-
-const strippedKWKLY = kwklyString => {
-  return kwklyString.replace(/Text /g, '').replace(/ to 59559 for details!/g, '');
 };
 
 const NEW_LISTING = 'listed';

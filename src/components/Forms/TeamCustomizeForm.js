@@ -10,7 +10,7 @@ import {
 import { saveTeamCustomizationPending } from '../../store/modules/teamCustomization/actions';
 import { ContentTopHeaderLayout } from '../../layouts';
 import { Button, Menu, Page, Segment } from '../Base';
-import { objectIsEmpty } from '../utils/utils';
+import { objectIsEmpty, strippedKWKLY } from '../utils/utils';
 import { Form } from './Base';
 
 import PageTitleHeader from '../PageTitleHeader';
@@ -31,10 +31,6 @@ import TemplateCarousel from './Common/TemplateCarousel';
 
 const formReducer = (state, action) => {
   return _.merge({}, action);
-};
-
-const strippedKWKLY = kwklyString => {
-  return kwklyString.replace(/Text /g, '').replace(/ to 59559 for details!/g, '');
 };
 
 const CustomizeForm = ({ teamCustomizationData, initialValues }) => {
