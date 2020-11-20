@@ -177,14 +177,16 @@ export default function mailout(state = initialState, action) {
       };
 
     case UPDATE_MAILOUT_NAME_PENDING:
-      let newDetails = { ...state.details };
-      newDetails.name = action.payload.name;
       return {
         ...state,
         updateMailoutNamePending: true,
         mailoutName: action.payload.name,
-        details: newDetails,
+        mailoutId: action.payload.mailoutId,
         updateMailoutNameError: null,
+        details: {
+          ...state.details,
+          name: action.payload.name,
+        },
       };
 
     case UPDATE_MAILOUT_NAME_SUCCESS:
@@ -192,12 +194,15 @@ export default function mailout(state = initialState, action) {
         ...state,
         updateMailoutNamePending: false,
         mailoutName: null,
+        mailoutId: null,
         updateMailoutNameError: null,
       };
 
     case UPDATE_MAILOUT_NAME_ERROR:
       return {
         ...state,
+        mailoutName: null,
+        mailoutId: null,
         updateMailoutNamePending: false,
         updateMailoutNameError: action.error,
       };
