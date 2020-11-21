@@ -45,7 +45,7 @@ import PostcardSizeButton from '../components/Forms/Common/PostcardSizeButton';
 import { calculateCost } from '../components/MailoutListItem/utils/helpers';
 import Styled from 'styled-components';
 import styled from 'styled-components';
-import { setAddMailoutError } from '../store/modules/mailout/actions';
+import { clearAddMailoutError, setAddMailoutError } from '../store/modules/mailout/actions';
 
 const AddCampaignContainer = Styled.div`
 @media only screen and (max-width: 1200px) {
@@ -165,6 +165,7 @@ const Dashboard = () => {
     if (file.type !== 'image/png' && file.type !== 'image/jpeg')
       return dispatch(setAddMailoutError('File needs to be a jpg or png'));
 
+    if (addMailoutError) dispatch(clearAddMailoutError());
     setUploadingInProgress(true);
 
     const formData = new FormData();
@@ -608,7 +609,7 @@ const Dashboard = () => {
                             id="cardFrontCoverFile"
                             name="postcardcover"
                             type="file"
-                            accept="image/png, image/jpeg"
+                            // accept="image/png, image/jpeg"
                             onChange={handleFileChange}
                           ></input>
                         </div>
