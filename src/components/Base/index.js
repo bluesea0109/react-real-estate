@@ -13,6 +13,7 @@ import Input from './Input';
 import Item from './Item';
 import List from './List';
 import Loader from './Loader';
+import ModalLoader from './ModalLoader';
 import Menu from './Menu';
 import Message from './Message';
 import Modal from './Modal';
@@ -42,6 +43,7 @@ export {
   Item,
   List,
   Loader,
+  ModalLoader,
   Menu,
   Message,
   Modal,

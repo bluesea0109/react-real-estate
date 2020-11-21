@@ -32,6 +32,7 @@ import {
   Page,
   Segment,
   Snackbar,
+  ModalLoader,
 } from '../components/Base';
 import IframeGroup from '../components/MailoutListItem/IframeGroup';
 import ListHeader from '../components/MailoutListItem/ListHeader';
@@ -44,6 +45,7 @@ import PostcardSizeButton from '../components/Forms/Common/PostcardSizeButton';
 import { calculateCost } from '../components/MailoutListItem/utils/helpers';
 import Styled from 'styled-components';
 import styled from 'styled-components';
+import { setAddMailoutError } from '../store/modules/mailout/actions';
 
 const AddCampaignContainer = Styled.div`
 @media only screen and (max-width: 1200px) {
@@ -136,6 +138,7 @@ const Dashboard = () => {
   const page = useSelector(store => store.mailouts.page);
   const mailoutList = useSelector(store => store.mailouts.list);
   const error = useSelector(store => store.mailouts.error?.message);
+  const addMailoutError = useSelector(store => store.mailout.addMailoutError);
   const [showAddCampaign, setShowAddCampaign] = useState(false);
   const [showChooseSize, setShowChooseSize] = useState(false);
   const [useMLSNumberToAddCampaign, setUseMLSNumberToAddCampaign] = useState(true);
@@ -143,7 +146,7 @@ const Dashboard = () => {
   const [AddCampaignName, setAddCampaignName] = useState('');
   const [CampaignCoverUpload, setCampaignCoverUpload] = useState(null);
   const [UploadingInProgress, setUploadingInProgress] = useState(false);
-  const [campaignPostcardSize, setCampaignPostcardSize] = useState('4x6');
+  const [campaignPostcardSize, setCampaignPostcardSize] = useState('6x4');
 
   useFetching(getMailoutsPending, onboarded, useDispatch());
 
@@ -158,11 +161,9 @@ const Dashboard = () => {
   const triggerFileDialog = () => document.getElementById('cardFrontCoverFile').click();
   const handleFileChange = async e => {
     const file = e.target.files[0];
-    // do some checking
-    // let ok = false
-    // if (file.type === 'image/png') ok = true
-    // if (file.type === 'image/jpeg') ok = true
-    // if (!ok) return setError('File needs to be a jpg or png')
+    // check file type
+    if (file.type !== 'image/png' && file.type !== 'image/jpeg')
+      return dispatch(setAddMailoutError('File needs to be a jpg or png'));
 
     setUploadingInProgress(true);
 
@@ -172,7 +173,6 @@ const Dashboard = () => {
     try {
       let path = `/api/user/mailout/create/front`;
       if (peerId) path = `/api/user/peer/${peerId}/mailout/create/front`;
-
       const headers = {};
       const accessToken = await auth.getAccessToken();
       headers['authorization'] = `Bearer ${accessToken}`;
@@ -183,18 +183,16 @@ const Dashboard = () => {
         credentials: 'include',
       });
       let { url, contentType } = await api.handleResponse(response);
-      setTimeout(() => {
-        console.log(url, contentType);
-        setUploadingInProgress(false);
-        setCampaignCoverUpload({
-          name: file.name,
-          url,
-          contentType,
-        });
-      }, 1000);
+      console.log(url, contentType);
+      setUploadingInProgress(false);
+      setCampaignCoverUpload({
+        name: file.name,
+        url,
+        contentType,
+      });
     } catch (e) {
       setUploadingInProgress(false);
-      //setError(e.message)
+      dispatch(setAddMailoutError(e.message));
     }
   };
 
@@ -453,6 +451,7 @@ const Dashboard = () => {
               Add Campaign
             </ModalAddCampaign.Header>
             <ModalAddCampaign.Content>
+              {addMailoutError && <Message error>{addMailoutError.message}</Message>}
               <AddCampaignContainer>
                 <p>
                   Enter a property MLS number to import a listing, or you can create a custom
@@ -609,6 +608,7 @@ const Dashboard = () => {
                             id="cardFrontCoverFile"
                             name="postcardcover"
                             type="file"
+                            accept="image/png, image/jpeg"
                             onChange={handleFileChange}
                           ></input>
                         </div>
@@ -621,7 +621,11 @@ const Dashboard = () => {
                         </Message>
                       </div>
                     )}
-                    {UploadingInProgress && <p>Please wait...</p>}
+                    {UploadingInProgress && (
+                      <ModalLoader active inline="centered" inverted indeterminate>
+                        Uploading...
+                      </ModalLoader>
+                    )}
                   </NewCampaignContainer>
                 )}
               </AddCampaignContainer>
