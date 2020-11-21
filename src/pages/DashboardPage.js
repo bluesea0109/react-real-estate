@@ -609,7 +609,7 @@ const Dashboard = () => {
                             id="cardFrontCoverFile"
                             name="postcardcover"
                             type="file"
-                            // accept="image/png, image/jpeg"
+                            accept="image/png, image/jpeg"
                             onChange={handleFileChange}
                           ></input>
                         </div>
