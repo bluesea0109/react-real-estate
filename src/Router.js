@@ -19,11 +19,6 @@ import SettingsPage from './pages/SettingsPage';
 import BillingPage from './pages/BillingPage';
 import EmptyPage from './pages/EmptyPage';
 import ArchivedPage from './pages/ArchivedPage';
-// import onRouteChanges from './onRouteChange';
-//
-// onRouteChanges(route => {
-//   console.log(`route changed to "${route}"`);
-// });
 
 export default () => {
   return (
