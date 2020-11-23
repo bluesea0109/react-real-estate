@@ -37,6 +37,10 @@ import {
   UNDO_ARCHIVE_MAILOUT_PENDING,
   UNDO_ARCHIVE_MAILOUT_SUCCESS,
   UNDO_ARCHIVE_MAILOUT_ERROR,
+  SET_MAILOUT_ERROR,
+  CLEAR_MAILOUT_ERROR,
+  SET_ADD_MAILOUT_ERROR,
+  CLEAR_ADD_MAILOUT_ERROR,
 } from './actions';
 
 const initialState = {
@@ -61,6 +65,7 @@ const initialState = {
   details: null,
   archiveId: null,
 
+  addMailoutError: null,
   error: null,
   submitError: null,
   stopError: null,
@@ -389,6 +394,30 @@ export default function mailout(state = initialState, action) {
         archivePending: false,
         archiveId: null,
         archiveError: action.error,
+      };
+    case SET_MAILOUT_ERROR:
+      return {
+        ...state,
+        error: {
+          message: action.payload,
+        },
+      };
+    case CLEAR_MAILOUT_ERROR:
+      return {
+        ...state,
+        error: null,
+      };
+    case SET_ADD_MAILOUT_ERROR:
+      return {
+        ...state,
+        addMailoutError: {
+          message: action.payload,
+        },
+      };
+    case CLEAR_ADD_MAILOUT_ERROR:
+      return {
+        ...state,
+        addMailoutError: null,
       };
     default:
       return state;

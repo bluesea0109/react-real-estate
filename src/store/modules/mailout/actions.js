@@ -52,6 +52,12 @@ export const UNDO_ARCHIVE_MAILOUT_PENDING = 'UNDO_ARCHIVE_MAILOUT_PENDING';
 export const UNDO_ARCHIVE_MAILOUT_SUCCESS = 'UNDO_ARCHIVE_MAILOUT_SUCCESS';
 export const UNDO_ARCHIVE_MAILOUT_ERROR = 'UNDO_ARCHIVE_MAILOUT_ERROR';
 
+export const SET_MAILOUT_ERROR = 'SET_MAILOUT_ERROR';
+export const CLEAR_MAILOUT_ERROR = 'CLEAR_MAILOUT_ERROR';
+
+export const SET_ADD_MAILOUT_ERROR = 'SET_ADD_MAILOUT_ERROR';
+export const CLEAR_ADD_MAILOUT_ERROR = 'CLEAR_ADD_MAILOUT_ERROR';
+
 export function getMailoutPending(payload) {
   return createAction(GET_MAILOUT_PENDING, payload);
 }
@@ -202,4 +208,20 @@ export function undoArchiveMailoutSuccess(payload) {
 
 export function undoArchiveMailoutError(error) {
   return createErrorAction(UNDO_ARCHIVE_MAILOUT_ERROR, error);
+}
+
+export function setMailoutError(error) {
+  return createAction(SET_MAILOUT_ERROR, error);
+}
+
+export function clearMailoutError() {
+  return createAction(CLEAR_MAILOUT_ERROR);
+}
+
+export function setAddMailoutError(error) {
+  return createAction(SET_ADD_MAILOUT_ERROR, error);
+}
+
+export function clearAddMailoutError() {
+  return createAction(CLEAR_ADD_MAILOUT_ERROR);
 }

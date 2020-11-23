@@ -26,6 +26,9 @@ export const ADD_CAMPAIGN_PENDING = 'ADD_CAMPAIGN_PENDING';
 export const ADD_CAMPAIGN_SUCCESS = 'ADD_CAMPAIGN_SUCCESS';
 export const ADD_CAMPAIGN_ERROR = 'ADD_CAMPAIGN_ERROR';
 
+export const SET_MAILOUTS_ERROR = 'SET_MAILOUT_ERROR';
+export const CLEAR_MAILOUTS_ERROR = 'CLEAR_MAILOUT_ERROR';
+
 export function getMailoutsPending() {
   return createAction(GET_MAILOUTS_PENDING);
 }
@@ -108,4 +111,12 @@ export function addCampaignSuccess() {
 
 export function addCampaignError(error) {
   return createErrorAction(ADD_CAMPAIGN_ERROR, error);
+}
+
+export function setMailoutsError(error) {
+  return createAction(SET_MAILOUTS_ERROR, error);
+}
+
+export function clearMailoutsError() {
+  return createAction(SET_MAILOUTS_ERROR);
 }

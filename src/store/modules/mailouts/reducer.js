@@ -20,6 +20,8 @@ import {
   // ADD_CAMPAIGN_PENDING,
   ADD_CAMPAIGN_SUCCESS,
   ADD_CAMPAIGN_ERROR,
+  SET_MAILOUTS_ERROR,
+  CLEAR_MAILOUTS_ERROR,
 } from './actions';
 import { ARCHIVE_MAILOUT_SUCCESS, UNDO_ARCHIVE_MAILOUT_SUCCESS } from '../mailout/actions';
 
@@ -191,6 +193,18 @@ export default function mailouts(state = initialState, action) {
         ...state,
         addCampaignMlsNumPending: false,
         error: action.error,
+      };
+    case SET_MAILOUTS_ERROR:
+      return {
+        ...state,
+        error: {
+          message: action.payload,
+        },
+      };
+    case CLEAR_MAILOUTS_ERROR:
+      return {
+        ...state,
+        error: null,
       };
     default:
       return state;
