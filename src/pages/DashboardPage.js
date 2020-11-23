@@ -184,7 +184,6 @@ const Dashboard = () => {
         credentials: 'include',
       });
       let { url, contentType } = await api.handleResponse(response);
-      console.log(url, contentType);
       setUploadingInProgress(false);
       setCampaignCoverUpload({
         name: file.name,
