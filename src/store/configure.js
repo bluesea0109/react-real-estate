@@ -1,7 +1,7 @@
 import createSagaMiddleware from 'redux-saga';
 import { applyMiddleware, compose, createStore } from 'redux';
 
-import middleware from './middleware';
+import * as middleware from './middleware';
 import rootReducer from './reducers';
 import rootSaga from './sagas';
 import crashReporter from './crashReporter';
@@ -15,10 +15,8 @@ const configureStore = ({ initialState, AuthService }) => {
 
   const sagaMiddleware = createSagaMiddleware();
   const enhancer = composeEnhancers(
-    applyMiddleware(crashReporter, ...middleware, sagaMiddleware)
-    // other store enhancers if any
+    applyMiddleware(crashReporter, ...Object.values(middleware), sagaMiddleware)
   );
-
   const store = createStore(rootReducer, initialState, enhancer);
 
   const services = { AuthService };
