@@ -8,6 +8,8 @@
     "build": "craco build",
     "build-local": "craco build",
     "test": "npm run formatCheck && npm run lint",
+    "test:noWatch": "craco test --watchAll=false",
+    "test:watch": "craco test",
     "eject": "craco eject",
     "lint": "./node_modules/.bin/eslint src/**/*.js",
     "format": "prettier --write 'src/**/*.{js,jsx,json}'",
