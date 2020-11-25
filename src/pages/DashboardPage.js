@@ -19,7 +19,6 @@ import {
   addCampaignStart,
 } from '../store/modules/mailouts/actions';
 import { setCompletedDashboardModal } from '../store/modules/onboarded/actions';
-import { Checkbox, List } from 'semantic-ui-react';
 import {
   Button,
   Grid,
@@ -33,6 +32,7 @@ import {
   Segment,
   Snackbar,
   ModalLoader,
+  Tab,
 } from '../components/Base';
 import IframeGroup from '../components/MailoutListItem/IframeGroup';
 import ListHeader from '../components/MailoutListItem/ListHeader';
@@ -44,7 +44,6 @@ import { useIsMobile } from '../components/Hooks/useIsMobile';
 import PostcardSizeButton from '../components/Forms/Common/PostcardSizeButton';
 import { calculateCost } from '../components/MailoutListItem/utils/helpers';
 import Styled from 'styled-components';
-import styled from 'styled-components';
 import { clearAddMailoutError, setAddMailoutError } from '../store/modules/mailout/actions';
 
 const AddCampaignContainer = Styled.div`
@@ -59,7 +58,7 @@ const NewCampaignContainer = Styled.div`
 
 `;
 
-const CampaignTypeButtons = styled.div`
+const CampaignTypeButtons = Styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
@@ -142,6 +141,9 @@ const Dashboard = () => {
   const [showAddCampaign, setShowAddCampaign] = useState(false);
   const [showChooseSize, setShowChooseSize] = useState(false);
   const [useMLSNumberToAddCampaign, setUseMLSNumberToAddCampaign] = useState(true);
+
+  const [tabIndex, setTabIndex] = useState(0);
+
   const [AddCampaignType, setAddCampaignType] = useState(null);
   const [AddCampaignName, setAddCampaignName] = useState('');
   const [CampaignCoverUpload, setCampaignCoverUpload] = useState(null);
@@ -341,6 +343,174 @@ const Dashboard = () => {
     </div>
   );
 
+  useEffect(() => {
+    setUseMLSNumberToAddCampaign(tabIndex === 0);
+  }, [tabIndex]);
+
+  const campaignTabs = () => {
+    const handleTabChange = (e, data) => setTabIndex(data.activeIndex);
+
+    const panes = [
+      {
+        menuItem: 'MLS Number',
+        render: () => (
+          <Tab.Pane attached={false}>
+            <p>
+              Enter a property MLS number to import a listing, or you can create a custom campaign
+              and upload your own design.
+            </p>
+            <div>
+              <Input type="text" fluid placeholder="Property MLS Number" id="addCampaignInput" />
+            </div>
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: 'Custom Campagin',
+        render: () => (
+          <Tab.Pane attached={false}>
+            <NewCampaignContainer>
+              <h5>Campaign Name</h5>
+              <Input
+                type="text"
+                fluid
+                placeholder="New Custom Campaign"
+                value={AddCampaignName}
+                id="addCampaignName"
+                onChange={e => {
+                  setAddCampaignName(e.target.value);
+                }}
+              ></Input>
+              <h5>Campaign Type</h5>
+              <CampaignTypeButtons>
+                <Button
+                  inverted
+                  primary
+                  size="big"
+                  toggle
+                  active={AddCampaignType === 'Market Listing'}
+                  onClick={() => setAddCampaignType('Market Listing')}
+                  style={{ width: '226px' }}
+                >
+                  <Icon name="home" />
+                  Market Listing
+                </Button>
+                <Button
+                  inverted
+                  primary
+                  size="big"
+                  toggle
+                  active={AddCampaignType === 'Home Value'}
+                  onClick={() => setAddCampaignType('Home Value')}
+                >
+                  <Icon name="dollar sign" />
+                  Home Value
+                </Button>
+                <Button
+                  inverted
+                  primary
+                  size="big"
+                  toggle
+                  active={AddCampaignType === 'Event'}
+                  onClick={() => setAddCampaignType('Event')}
+                >
+                  <Icon name="calendar check outline" />
+                  Event
+                </Button>
+                <Button
+                  inverted
+                  primary
+                  size="big"
+                  toggle
+                  active={AddCampaignType === 'Sphere'}
+                  onClick={() => setAddCampaignType('Sphere')}
+                >
+                  <Icon name="address book outline" />
+                  Sphere
+                </Button>
+                <Button
+                  inverted
+                  primary
+                  size="big"
+                  toggle
+                  active={AddCampaignType === 'Farm Area'}
+                  onClick={() => setAddCampaignType('Farm Area')}
+                >
+                  <Icon name="map outline" />
+                  Farm Area
+                </Button>
+                <Button
+                  inverted
+                  primary
+                  size="big"
+                  toggle
+                  active={AddCampaignType === 'Recruiting'}
+                  onClick={() => setAddCampaignType('Recruiting')}
+                >
+                  <Icon name="user plus" />
+                  Recruiting
+                </Button>
+                <Button
+                  inverted
+                  primary
+                  size="big"
+                  toggle
+                  active={AddCampaignType === 'Other'}
+                  onClick={() => setAddCampaignType('Other')}
+                >
+                  <Icon name="crosshairs" />
+                  Other
+                </Button>
+              </CampaignTypeButtons>
+              <h5>Card Front</h5>
+              {!UploadingInProgress && (
+                <div>
+                  <div id="uploadCardFront" onClick={triggerFileDialog}>
+                    <div>
+                      {CampaignCoverUpload && <b>{CampaignCoverUpload.name}</b>}
+                      {!CampaignCoverUpload && <b>Upload Your Own Design</b>}
+                      <br />
+                      {campaignPostcardSize === '11x6'
+                        ? '(6.25"x11.25" PNG or JPEG - max 5MB)'
+                        : campaignPostcardSize === '9x6'
+                        ? '(6.25"x9.25" PNG or JPEG - max 5MB)'
+                        : '(4.25"x6.25" PNG or JPEG - max 5MB)'}
+                    </div>
+                    <Icon name="upload" size="big" />
+                    <input
+                      id="cardFrontCoverFile"
+                      name="postcardcover"
+                      type="file"
+                      accept="image/png, image/jpeg"
+                      onChange={handleFileChange}
+                    ></input>
+                  </div>
+                  <Message warning>
+                    <Message.Header>Include a safe zone of 1/2&quot; inch!</Message.Header>
+                    <p>
+                      Make sure no critical elements are within 1/2&quot; from the edge of the
+                      image. It risks being cropped during the postcard production.
+                    </p>
+                  </Message>
+                </div>
+              )}
+              {UploadingInProgress && (
+                <ModalLoader active inline="centered" inverted indeterminate>
+                  Uploading...
+                </ModalLoader>
+              )}
+            </NewCampaignContainer>
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: 'Holiday Campaign',
+        render: () => <Tab.Pane attached={false}>Holiday</Tab.Pane>,
+      },
+    ];
+    return <Tab menu={{ secondary: true }} panes={panes} onTabChange={handleTabChange} />;
+  };
+
   return (
     <Page basic>
       <ContentTopHeaderLayout>
@@ -452,183 +622,7 @@ const Dashboard = () => {
             </ModalAddCampaign.Header>
             <ModalAddCampaign.Content>
               {addMailoutError && <Message error>{addMailoutError.message}</Message>}
-              <AddCampaignContainer>
-                <p>
-                  Enter a property MLS number to import a listing, or you can create a custom
-                  campaign and upload your own design.
-                </p>
-
-                <List horizontal id="selectAddCampaignType">
-                  <List.Item>
-                    <Checkbox
-                      radio
-                      label="MLS Number"
-                      name="checkboxRadioGroup"
-                      value="this"
-                      checked={useMLSNumberToAddCampaign}
-                      onClick={() => {
-                        setUseMLSNumberToAddCampaign(true);
-                      }}
-                    />
-                  </List.Item>
-                  <List.Item>
-                    <Checkbox
-                      radio
-                      label="Custom Campaign"
-                      name="checkboxRadioGroup"
-                      value="that"
-                      checked={!useMLSNumberToAddCampaign}
-                      onClick={() => {
-                        setUseMLSNumberToAddCampaign(false);
-                      }}
-                    />
-                  </List.Item>
-                </List>
-
-                {useMLSNumberToAddCampaign && (
-                  <div>
-                    <Input
-                      type="text"
-                      fluid
-                      placeholder="Property MLS Number"
-                      id="addCampaignInput"
-                    />
-                  </div>
-                )}
-                {!useMLSNumberToAddCampaign && (
-                  <NewCampaignContainer>
-                    <h5>Campaign Name</h5>
-                    <Input
-                      type="text"
-                      fluid
-                      placeholder="New Custom Campaign"
-                      value={AddCampaignName}
-                      id="addCampaignName"
-                      onChange={e => {
-                        setAddCampaignName(e.target.value);
-                      }}
-                    ></Input>
-                    <h5>Campaign Type</h5>
-                    <CampaignTypeButtons>
-                      <Button
-                        inverted
-                        primary
-                        size="big"
-                        toggle
-                        active={AddCampaignType === 'Market Listing'}
-                        onClick={() => setAddCampaignType('Market Listing')}
-                        style={{ width: '226px' }}
-                      >
-                        <Icon name="home" />
-                        Market Listing
-                      </Button>
-                      <Button
-                        inverted
-                        primary
-                        size="big"
-                        toggle
-                        active={AddCampaignType === 'Home Value'}
-                        onClick={() => setAddCampaignType('Home Value')}
-                      >
-                        <Icon name="dollar sign" />
-                        Home Value
-                      </Button>
-                      <Button
-                        inverted
-                        primary
-                        size="big"
-                        toggle
-                        active={AddCampaignType === 'Event'}
-                        onClick={() => setAddCampaignType('Event')}
-                      >
-                        <Icon name="calendar check outline" />
-                        Event
-                      </Button>
-                      <Button
-                        inverted
-                        primary
-                        size="big"
-                        toggle
-                        active={AddCampaignType === 'Sphere'}
-                        onClick={() => setAddCampaignType('Sphere')}
-                      >
-                        <Icon name="address book outline" />
-                        Sphere
-                      </Button>
-                      <Button
-                        inverted
-                        primary
-                        size="big"
-                        toggle
-                        active={AddCampaignType === 'Farm Area'}
-                        onClick={() => setAddCampaignType('Farm Area')}
-                      >
-                        <Icon name="map outline" />
-                        Farm Area
-                      </Button>
-                      <Button
-                        inverted
-                        primary
-                        size="big"
-                        toggle
-                        active={AddCampaignType === 'Recruiting'}
-                        onClick={() => setAddCampaignType('Recruiting')}
-                      >
-                        <Icon name="user plus" />
-                        Recruiting
-                      </Button>
-                      <Button
-                        inverted
-                        primary
-                        size="big"
-                        toggle
-                        active={AddCampaignType === 'Other'}
-                        onClick={() => setAddCampaignType('Other')}
-                      >
-                        <Icon name="crosshairs" />
-                        Other
-                      </Button>
-                    </CampaignTypeButtons>
-                    <h5>Card Front</h5>
-                    {!UploadingInProgress && (
-                      <div>
-                        <div id="uploadCardFront" onClick={triggerFileDialog}>
-                          <div>
-                            {CampaignCoverUpload && <b>{CampaignCoverUpload.name}</b>}
-                            {!CampaignCoverUpload && <b>Upload Your Own Design</b>}
-                            <br />
-                            {campaignPostcardSize === '11x6'
-                              ? '(6.25"x11.25" PNG or JPEG - max 5MB)'
-                              : campaignPostcardSize === '9x6'
-                              ? '(6.25"x9.25" PNG or JPEG - max 5MB)'
-                              : '(4.25"x6.25" PNG or JPEG - max 5MB)'}
-                          </div>
-                          <Icon name="upload" size="big" />
-                          <input
-                            id="cardFrontCoverFile"
-                            name="postcardcover"
-                            type="file"
-                            accept="image/png, image/jpeg"
-                            onChange={handleFileChange}
-                          ></input>
-                        </div>
-                        <Message warning>
-                          <Message.Header>Include a safe zone of 1/2&quot; inch!</Message.Header>
-                          <p>
-                            Make sure no critical elements are within 1/2&quot; from the edge of the
-                            image. It risks being cropped during the postcard production.
-                          </p>
-                        </Message>
-                      </div>
-                    )}
-                    {UploadingInProgress && (
-                      <ModalLoader active inline="centered" inverted indeterminate>
-                        Uploading...
-                      </ModalLoader>
-                    )}
-                  </NewCampaignContainer>
-                )}
-              </AddCampaignContainer>
+              <AddCampaignContainer>{campaignTabs()}</AddCampaignContainer>
             </ModalAddCampaign.Content>
             <ModalAddCampaign.Actions>
               <Button inverted primary onClick={_ => setShowChooseSize(true)}>
