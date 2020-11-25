@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="ui basic segment "
+  style={
+    Object {
+      "margin": "6em auto",
+    }
+  }
+>
+  <div
+    className="ui centered card "
+    onClick={[Function]}
+    style={
+      Object {
+        "backgroundColor": "#f9f8f7",
+        "boxShadow": "none",
+        "minWidth": "380px",
+      }
+    }
+  >
+    <img
+      className="ui tiny centered image "
+      src="loading.gif"
+      style={
+        Object {
+          "background": "unset",
+          "marginTop": "1em",
+        }
+      }
+    />
+    <div
+      className="content"
+      style={
+        Object {
+          "borderTop": "none",
+        }
+      }
+    >
+      <h2
+        className="ui center aligned header"
+      >
+        <div
+          className="content"
+        >
+          Loading, please wait...
+        </div>
+      </h2>
+    </div>
+  </div>
+</div>
+`;

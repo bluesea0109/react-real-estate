@@ -2,14 +2,14 @@
 
 exports[`renders correctly 1`] = `
 <div
-  className="ui placeholder segment sc-dxgOiQ hTjMfW"
+  className="ui placeholder segment "
 >
   <div
-    className="ui icon header sc-gzVnrw ibZhkv"
+    className="ui icon header "
   >
     <i
       aria-hidden="true"
-      className="file outline icon sc-htoDjs bZzhDu"
+      className="file outline icon "
       onClick={[Function]}
     />
     No Mailouts found.

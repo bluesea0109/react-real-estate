@@ -1,9 +1,9 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import EmptyItem from '../EmptyItem';
 import 'jest-styled-components';
+import LogoImage from '../LogoImage';
 
-it('renders correctly', () => {
-  const tree = renderer.create(<EmptyItem />).toJSON();
+test('renders correctly', () => {
+  const tree = renderer.create(<LogoImage />);
   expect(tree).toMatchSnapshot();
 });

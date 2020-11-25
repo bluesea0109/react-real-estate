@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders-correctly 1`] = `
+.c0.c0.c0 {
+  min-width: 100px;
+  margin: 0.25em;
+}
+
+.c0.c0.c0.c0.c0.c0.c0.c0.c0.button.primary:hover,
+.c0.c0.c0.c0.c0.c0.c0.c0.c0.button.primary:active,
+.c0.c0.c0.c0.c0.c0.c0.c0.c0.button.primary:focus {
+  background-color: transparent;
+  box-shadow: 0 0 0 2px #59C4C4 inset !important;
+  color: #59C4C4;
+}
+
+.c0.c0.c0.c0.c0.c0.c0.c0.c0.button.primary.inverted {
+  background-color: transparent;
+  box-shadow: 0 0 0 2px #59C4C4 inset !important;
+  color: #59C4C4;
+}
+
+.c0.c0.c0.c0.c0.c0.c0.c0.c0.button.primary.inverted:hover,
+.c0.c0.c0.c0.c0.c0.c0.c0.c0.button.primary.inverted:active,
+.c0.c0.c0.c0.c0.c0.c0.c0.c0.button.primary.inverted:focus {
+  background-color: #59C4C4;
+  color: white;
+}
+
+.c0.c0.c0.c0.c0.c0.c0.c0.c0.button.secondary:hover,
+.c0.c0.c0.c0.c0.c0.c0.c0.c0.button.secondary:active,
+.c0.c0.c0.c0.c0.c0.c0.c0.c0.button.secondary:focus {
+  background-color: transparent;
+  box-shadow: 0 0 0 2px #F2714D inset !important;
+  color: #F2714D;
+}
+
+.c0.c0.c0.c0.c0.c0.c0.c0.c0.button.secondary.inverted {
+  background-color: transparent;
+  box-shadow: 0 0 0 2px #F2714D inset !important;
+  color: #F2714D;
+}
+
+.c0.c0.c0.c0.c0.c0.c0.c0.c0.button.secondary.inverted:hover,
+.c0.c0.c0.c0.c0.c0.c0.c0.c0.button.secondary.inverted:active,
+.c0.c0.c0.c0.c0.c0.c0.c0.c0.button.secondary.inverted:focus {
+  background-color: #F2714D;
+  color: white;
+}
+
+<button
+  className="ui button c0"
+  onClick={[Function]}
+/>
+`;
