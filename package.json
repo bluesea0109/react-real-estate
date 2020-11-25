@@ -9,6 +9,7 @@
     "build-local": "craco build",
     "test": "npm run formatCheck && npm run lint",
     "test:noWatch": "craco test --watchAll=false",
+    "test:ci": "cross-env REACT_APP_AUTH0_DOMAIN=TEST REACT_APP_AUTH0_AUDIENCE=TEST REACT_APP_AUTH0_CLIENT_ID=TEST craco test --watchAll=false",
     "test:watch": "craco test",
     "eject": "craco eject",
     "lint": "./node_modules/.bin/eslint src/**/*.js",

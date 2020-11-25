@@ -11,7 +11,7 @@ test:
   script:
     - npm install --silent
     - npm run test
-    - npm run test:noWatch
+    - npm run test:ci
 
 build_dev:
   stage: build
