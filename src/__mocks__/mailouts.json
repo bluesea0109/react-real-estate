@@ -1,304 +1,1269 @@
 [
   {
-    "_id": "ck34pkmza003t01qwnqwnyg4d",
-    "_rev": "1-81da1720db1485e59f083cce39d7d8bc",
+    "_id": "ckhpckemy00nl01x124jc375m",
+    "_rev": "22-b38e56eaa65527a907e61f66ef9f11ee",
     "type": "mailout",
-    "userId": "cd08e72676c683ae9b02182cf74da962",
-    "mlsNum": "21918210",
-    "board": "245",
-    "blueroofMlsId": 436,
-    "listingStatus": "listed",
-    "createdBy": "user",
-    "created": 1574098446934,
-    "mailoutSize": 1,
-    "mailoutStatus": "scheduled",
-    "statusHistory": [],
+    "userId": "brivity-5a77aadd-323c-4797-b04f-b2fb8032c046",
+    "mlsNum": "1681318",
+    "board": "21",
+    "blueroofMlsId": "101",
+    "listingStatus": "sold",
     "details": {
-      "latitude": 46.88218,
-      "longitude": -113.904591,
-      "displayAddress": "1305 Thibodeau Ln",
-      "city": "Missoula",
-      "state": "MT",
-      "postalCode": "59802",
-      "squareFeet": 1696,
-      "baths": 2,
-      "beds": 4,
-      "price": 219900,
-      "listDate": "2019-11-14T13:02:47.000Z",
-      "coverPhoto": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/0.jpg?v=1"
+      "blueroofMlsId": "101",
+      "mlsNum": "1681318",
+      "neighborhood": "Clearwood",
+      "latitude": 46.814833,
+      "longitude": -122.469452,
+      "displayAddress": "18735 Woodburn Ct SE",
+      "city": "Yelm",
+      "state": "WA",
+      "postalCode": "98597",
+      "squareFeet": 1236,
+      "baths": 2.25,
+      "beds": 3,
+      "price": 305000,
+      "listDate": "2020-10-27T10:27:36.000Z",
+      "coverPhoto": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/0.jpg?v=0",
+      "propertyPhoto0": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/0.jpg?v=0",
+      "propertyPhoto1": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/1.jpg?v=0",
+      "propertyPhoto2": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/2.jpg?v=0",
+      "propertyPhoto3": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/3.jpg?v=0",
+      "propertyPhoto4": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/4.jpg?v=0",
+      "propertyPhoto5": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/5.jpg?v=0",
+      "propertyPhoto6": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/6.jpg?v=0",
+      "propertyPhoto7": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/7.jpg?v=0",
+      "propertyPhoto8": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/8.jpg?v=0",
+      "propertyPhoto9": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/9.jpg?v=0",
+      "propertyPhoto10": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/10.jpg?v=0",
+      "propertyPhoto11": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/11.jpg?v=0",
+      "propertyPhoto12": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/12.jpg?v=0",
+      "propertyPhoto13": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/13.jpg?v=0",
+      "propertyPhoto14": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/14.jpg?v=0",
+      "propertyPhoto15": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/15.jpg?v=0",
+      "propertyPhoto16": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/16.jpg?v=0",
+      "propertyPhoto17": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/17.jpg?v=0",
+      "propertyPhoto18": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/18.jpg?v=0",
+      "propertyPhoto19": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/19.jpg?v=0",
+      "propertyPhoto20": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/20.jpg?v=0",
+      "propertyPhoto21": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/21.jpg?v=0",
+      "propertyPhoto22": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/22.jpg?v=0",
+      "propertyPhoto23": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/23.jpg?v=0",
+      "propertyPhoto24": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/24.jpg?v=0",
+      "propertyPhoto25": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/25.jpg?v=0",
+      "propertyPhoto26": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/26.jpg?v=0",
+      "propertyPhoto27": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/27.jpg?v=0",
+      "propertyPhoto28": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/28.jpg?v=0",
+      "propertyPhoto29": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/29.jpg?v=0",
+      "propertyPhoto30": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/30.jpg?v=0",
+      "propertyPhoto31": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/31.jpg?v=0",
+      "propertyPhoto32": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/32.jpg?v=0",
+      "propertyPhoto33": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/33.jpg?v=0",
+      "propertyPhoto34": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/34.jpg?v=0",
+      "propertyPhoto35": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/35.jpg?v=0",
+      "propertyPhoto36": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/36.jpg?v=0",
+      "propertyPhoto37": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/37.jpg?v=0",
+      "propertyPhoto38": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/38.jpg?v=0",
+      "propertyPhoto39": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/39.jpg?v=0",
+      "bathsTotalRooms": 2.25,
+      "status": "sold"
     },
     "raw": {
-      "blossorId": "245-21918210",
-      "blueroofMlsId": 436,
-      "mlsNum": "21918210",
-      "standardStatus": "Active",
-      "mlsStatus": "Active",
+      "mongoId": "5f9859306a8c91457cadb3a6",
+      "blossorId": "21-1681318",
+      "blueroofMlsId": 101,
+      "mlsNum": "1681318",
+      "standardStatus": "Pending",
+      "mlsStatus": "Pending",
       "openhouses": [],
-      "history": [],
-      "lotSize": 1,
-      "streetAddress": "1305 Thibodeau Ln",
-      "city": "Missoula",
-      "state": "MT",
-      "postalCode": "59802",
-      "county": "Missoula",
-      "listAgentId": "20160111120730978636000000",
-      "listAgentName": "Jason Baker",
-      "listAgentEmail": "jason@jasonbakerteam.com",
-      "listAgentPhone": "(406) 552-4111",
+      "history": [
+        { "status": 2, "statusSet": "2020-10-27T10:27:36.000Z", "date": "2020-10-28T15:25:07.000Z" }
+      ],
+      "lotSize": 0.23,
+      "streetAddress": "18735 Woodburn Ct SE",
+      "city": "Yelm",
+      "state": "WA",
+      "postalCode": "98597",
+      "county": "Thurston",
+      "area": "Yelm/Rainier",
+      "neighborhood": "Clearwood",
+      "listAgentId": "773983",
+      "listAgentName": "Cynthia Schmier",
+      "listAgentPhone": "3604004663",
+      "listOfficeId": "419",
+      "listOfficeName": "RE/MAX Country",
+      "listOfficePhone": "3604004663",
+      "hasHoa": false,
+      "hoaFee": 75,
+      "hoaFeeYn": false,
+      "squareFeet": 1236,
+      "bedrooms": 3,
+      "bathsTotalDecimal": 2.25,
+      "fullBaths": 1,
+      "halfBaths": 1,
+      "threeQuarterBaths": 1,
+      "quarterBaths": 0,
+      "garageSpaces": 2,
+      "hasBasement": false,
+      "hasGarage": true,
+      "hasWaterfront": false,
+      "hasView": true,
+      "isNewConstruction": false,
+      "poolFeatures": [],
+      "parkingFeatures": ["Garage-Attached"],
+      "interiorFeatures": [
+        "Ceiling Fan(s)",
+        "Dbl Pane/Storm Windw",
+        "Dining Room",
+        "Master on Main",
+        "Laminate"
+      ],
+      "exteriorFeatures": ["Wood", "Deck", "Dog Run", "Gated Entry", "Outbuildings", "RV Parking"],
+      "communityFeatures": ["Boat Launch", "CCRs", "Clubhouse", "Community Waterfront/Pvt Beach"],
+      "propertyFeatures": [
+        "Cul-de-sac",
+        "Paved Street",
+        "Deck",
+        "Dog Run",
+        "Gated Entry",
+        "Outbuildings",
+        "RV Parking",
+        "Septic",
+        "Community",
+        "Private"
+      ],
+      "greenFeatures": [],
+      "view": ["Territorial"],
+      "heating": ["Wall", "Electric"],
+      "cooling": [],
+      "lotFeatures": [
+        "Cul-de-sac",
+        "Paved Street",
+        "Deck",
+        "Dog Run",
+        "Gated Entry",
+        "Outbuildings",
+        "RV Parking",
+        "Garden Space",
+        "Level",
+        "Wooded"
+      ],
+      "homeStyle": ["2 Story"],
+      "financialInformation": ["Cash Out", "Conventional", "FHA", "State Bond", "USDA", "VA"],
+      "propertySubTypes": ["Built On Lot"],
+      "foreclosure": false,
+      "shortSale": false,
+      "lat": 46.814833,
+      "lng": -122.469452,
+      "topography": "Garden Space,Level,Wooded",
+      "listDate": "2020-10-27T10:27:36.000Z",
+      "pendingDate": "2020-10-30T20:36:04.000Z",
+      "updateDate": "2020-11-13T13:08:31.000Z",
+      "lastStatusChangeDate": "2020-10-30T20:36:04.000Z",
+      "stories": 2,
+      "hideAddress": false,
+      "hideListing": false,
+      "photosAvailable": 40,
+      "price": 305000,
+      "mlsPropertyType": "Residential",
+      "propertyType": "Residential",
+      "standardPropertyType": "Residential",
+      "remarks": "Welcome to the charming gated lakeside community of Clearwood. This 2-story,3 bed 2.5 bathroom is the perfect starter home. Located in a quaint cul-de-sac it boasts laminate floors and new carpets throughout. Open oak cabinetry- kitchen w/tile counters. Featuring  ceiling fans, walk-in closets, pellet stove, French doors, wooden covered deck, 12x10 Shed, RV Parking  Custom leaf guard gutters AND a  hot tub that stays with the home. Enjoy community lifestyle w/3 lakes, pool & more! Close to JBLM!",
+      "schoolDistrict": "Yelm",
+      "elementarySchool": "Prairie Elementary",
+      "highSchool": "Yelm High12",
+      "middleSchool": "Ridgeline Middle",
+      "sewer": "Septic",
+      "water": "Community,Private",
+      "year": 1994,
+      "zoning": "County",
+      "taxId": "41230002100",
+      "taxAmount": 2114,
+      "taxYear": 2020,
+      "originatingSystemName": "WA_NWMLS",
+      "daysOnMarket": 17,
+      "photos": [
+        { "order": 1, "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/0.jpg?v=0" },
+        { "order": 2, "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/1.jpg?v=0" },
+        { "order": 3, "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/2.jpg?v=0" },
+        { "order": 4, "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/3.jpg?v=0" },
+        { "order": 5, "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/4.jpg?v=0" },
+        { "order": 6, "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/5.jpg?v=0" },
+        { "order": 7, "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/6.jpg?v=0" },
+        { "order": 8, "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/7.jpg?v=0" },
+        { "order": 9, "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/8.jpg?v=0" },
+        {
+          "order": 10,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/9.jpg?v=0"
+        },
+        {
+          "order": 11,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/10.jpg?v=0"
+        },
+        {
+          "order": 12,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/11.jpg?v=0"
+        },
+        {
+          "order": 13,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/12.jpg?v=0"
+        },
+        {
+          "order": 14,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/13.jpg?v=0"
+        },
+        {
+          "order": 15,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/14.jpg?v=0"
+        },
+        {
+          "order": 16,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/15.jpg?v=0"
+        },
+        {
+          "order": 17,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/16.jpg?v=0"
+        },
+        {
+          "order": 18,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/17.jpg?v=0"
+        },
+        {
+          "order": 19,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/18.jpg?v=0"
+        },
+        {
+          "order": 20,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/19.jpg?v=0"
+        },
+        {
+          "order": 21,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/20.jpg?v=0"
+        },
+        {
+          "order": 22,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/21.jpg?v=0"
+        },
+        {
+          "order": 23,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/22.jpg?v=0"
+        },
+        {
+          "order": 24,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/23.jpg?v=0"
+        },
+        {
+          "order": 25,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/24.jpg?v=0"
+        },
+        {
+          "order": 26,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/25.jpg?v=0"
+        },
+        {
+          "order": 27,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/26.jpg?v=0"
+        },
+        {
+          "order": 28,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/27.jpg?v=0"
+        },
+        {
+          "order": 29,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/28.jpg?v=0"
+        },
+        {
+          "order": 30,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/29.jpg?v=0"
+        },
+        {
+          "order": 31,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/30.jpg?v=0"
+        },
+        {
+          "order": 32,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/31.jpg?v=0"
+        },
+        {
+          "order": 33,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/32.jpg?v=0"
+        },
+        {
+          "order": 34,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/33.jpg?v=0"
+        },
+        {
+          "order": 35,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/34.jpg?v=0"
+        },
+        {
+          "order": 36,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/35.jpg?v=0"
+        },
+        {
+          "order": 37,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/36.jpg?v=0"
+        },
+        {
+          "order": 38,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/37.jpg?v=0"
+        },
+        {
+          "order": 39,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/38.jpg?v=0"
+        },
+        {
+          "order": 40,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/39.jpg?v=0"
+        }
+      ],
+      "nextToken": "2020-10-27T10:27:36.000Z",
+      "brUpdateDate": "2020-11-13T21:22:10.312Z"
+    },
+    "createdBy": "user",
+    "created": 1605821343514,
+    "mailoutStatus": "calculated",
+    "statusHistory": [],
+    "mailoutSize": 10,
+    "templateTheme": "internal-2222222",
+    "backTemplateTheme": "d2b991302c5ecc11374a99ed0126d07f",
+    "mergeVariables": [
+      { "name": "brandColor", "value": "#f4b450" },
+      {
+        "name": "frontImgUrl",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/0.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto0",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/0.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto1",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/1.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto2",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/2.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto3",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/3.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto4",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/4.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto5",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/5.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto6",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/6.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto7",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/7.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto8",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/8.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto9",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/9.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto10",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/10.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto11",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/11.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto12",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/12.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto13",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/13.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto14",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/14.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto15",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/15.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto16",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/16.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto17",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/17.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto18",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/18.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto19",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/19.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto20",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/20.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto21",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/21.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto22",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/22.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto23",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/23.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto24",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/24.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto25",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/25.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto26",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/26.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto27",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/27.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto28",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/28.jpg?v=0"
+      },
+      {
+        "name": "propertyPhoto29",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/29.jpg?v=0"
+      },
+      { "name": "frontAddressLine", "value": "18735 Woodburn Ct SE" },
+      { "name": "frontPropertyFeatures", "value": "3 bed | 2.25 bath | 1,236 sqft" },
+      { "name": "propertyLatitude", "value": "46.814833" },
+      { "name": "propertyLongitude", "value": "-122.469452" },
+      {
+        "name": "propertyCoverPhoto",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/8/1/3/1/8/0.jpg?v=0"
+      },
+      { "name": "propertyDisplayAddress", "value": "18735 Woodburn Ct SE" },
+      { "name": "propertyCity", "value": "Yelm" },
+      { "name": "propertyState", "value": "WA" },
+      { "name": "propertyPostalCode", "value": "98597" },
+      { "name": "propertyNeighbourhood", "value": "Clearwood" },
+      { "name": "propertySquareFeet", "value": "1236" },
+      { "name": "propertyBaths", "value": "2.25" },
+      { "name": "propertyBathsTotalRooms", "value": "2.25" },
+      { "name": "propertyBeds", "value": "3" },
+      { "name": "propertyStatus", "value": "sold" },
+      { "name": "propertyPrice", "value": "$305,000" },
+      {
+        "name": "agentPicture",
+        "value": "https://alf-gabbi-uploads.s3.amazonaws.com/realtor-headshot.png"
+      },
+      { "name": "agentFullName", "value": "Derryk Boyd" },
+      { "name": "teamBrokerageName", "value": "Redman Tech | Redman Tech" },
+      { "name": "backPhoneNumbers", "value": "(o): (855) 427-4848" },
+      { "name": "agentAddress", "value": "2211 Rimland Dr, Bellingham, WA, 98226" },
+      { "name": "phone", "value": "(855) 427-4848" },
+      {
+        "name": "brokerageLogo",
+        "value": "https://alf-gabbi-uploads.s3.amazonaws.com/brivity-team-8398/resized/brokerageLogo.1583858747223.png"
+      },
+      { "name": "teamName", "value": "Redman Tech" },
+      { "name": "brokerageName", "value": "Redman Tech" },
+      { "name": "teamAddressLine", "value": "2211 Rimland Dr" },
+      { "name": "teamCity", "value": "Bellingham" },
+      { "name": "teamState", "value": "WA" },
+      { "name": "teamPhone", "value": "(855) 427-4848" },
+      { "name": "agentFirstName", "value": "Derryk" },
+      { "name": "agentLastName", "value": "Boyd" },
+      { "name": "agentEmail", "value": "derryk@redmantech.com" },
+      { "name": "frontHeadline", "value": "Just Sold!" },
+      {
+        "name": "frontCtaContent",
+        "value": "Get the scoop on what your neighbor's home sold for!"
+      },
+      { "name": "backHeadline", "value": "Curious?" },
+      {
+        "name": "backContent",
+        "value": "We all like to know what our neighbor's home sold for. A higher sales price could mean getting more equity out of your home too."
+      },
+      { "name": "secondaryHeadline", "value": "IN YOUR NEIGHBORHOOD" },
+      { "name": "backCtaLead", "value": "See what your home is worth at:" },
+      { "name": "phoneCtaIntro", "value": "How can I be of service?" },
+      { "name": "phonePreText", "value": "Let's chat!" },
+      {
+        "name": "disclaimer",
+        "value": "This is not intended to solicit property currently listed for sale."
+      }
+    ],
+    "recipientCount": 10,
+    "needsUpdate": true,
+    "edited": true,
+    "mailoutDisplayAgent": {
+      "userId": "brivity-21d146a5-0550-4b13-bbea-2342e856a76e",
+      "first": "Derryk",
+      "last": "Boyd"
+    },
+    "postcardSize": "6x4"
+  },
+  {
+    "_id": "ckhp89bot006101x165hhe288",
+    "_rev": "2-4ec7e8b080920c02f393ebc759442631",
+    "type": "mailout",
+    "userId": "brivity-5a77aadd-323c-4797-b04f-b2fb8032c046",
+    "mlsNum": "1679531",
+    "board": "21",
+    "blueroofMlsId": "101",
+    "listingStatus": "sold",
+    "details": {
+      "blueroofMlsId": "101",
+      "mlsNum": "1679531",
+      "neighborhood": "Downtown Carnation",
+      "latitude": 47.649969,
+      "longitude": -121.913919,
+      "displayAddress": "31845 W Rutherford St",
+      "city": "Carnation",
+      "state": "WA",
+      "postalCode": "98014",
+      "squareFeet": 1700,
+      "baths": 1.5,
+      "beds": 4,
+      "price": 499900,
+      "listDate": "2020-10-23T12:50:55.000Z",
+      "coverPhoto": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/0.jpg?v=0",
+      "propertyPhoto0": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/0.jpg?v=0",
+      "propertyPhoto1": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/1.jpg?v=0",
+      "propertyPhoto2": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/2.jpg?v=0",
+      "propertyPhoto3": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/3.jpg?v=0",
+      "propertyPhoto4": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/4.jpg?v=0",
+      "propertyPhoto5": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/5.jpg?v=0",
+      "propertyPhoto6": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/6.jpg?v=0",
+      "propertyPhoto7": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/7.jpg?v=0",
+      "propertyPhoto8": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/8.jpg?v=0",
+      "propertyPhoto9": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/9.jpg?v=0",
+      "propertyPhoto10": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/10.jpg?v=0",
+      "propertyPhoto11": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/11.jpg?v=0",
+      "propertyPhoto12": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/12.jpg?v=0",
+      "propertyPhoto13": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/13.jpg?v=0",
+      "propertyPhoto14": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/14.jpg?v=0",
+      "propertyPhoto15": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/15.jpg?v=0",
+      "propertyPhoto16": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/16.jpg?v=0",
+      "propertyPhoto17": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/17.jpg?v=0",
+      "propertyPhoto18": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/18.jpg?v=0",
+      "propertyPhoto19": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/19.jpg?v=0",
+      "propertyPhoto20": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/20.jpg?v=0",
+      "propertyPhoto21": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/21.jpg?v=0",
+      "propertyPhoto22": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/22.jpg?v=0",
+      "propertyPhoto23": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/23.jpg?v=0",
+      "propertyPhoto24": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/24.jpg?v=0",
+      "propertyPhoto25": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/25.jpg?v=0",
+      "propertyPhoto26": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/26.jpg?v=0",
+      "propertyPhoto27": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/27.jpg?v=0",
+      "propertyPhoto28": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/28.jpg?v=0",
+      "bathsTotalRooms": 1.5,
+      "status": "sold"
+    },
+    "raw": {
+      "mongoId": "5f9335296a8c91457cc52afb",
+      "blossorId": "21-1679531",
+      "blueroofMlsId": 101,
+      "mlsNum": "1679531",
+      "standardStatus": "Pending",
+      "mlsStatus": "Pending",
+      "openhouses": [],
+      "history": [
+        {
+          "price": 515000,
+          "priceSet": "2020-10-23T12:50:55.000Z",
+          "status": 2,
+          "date": "2020-11-02T17:42:43.000Z"
+        },
+        { "status": 2, "statusSet": "2020-10-23T12:50:55.000Z", "date": "2020-11-03T11:59:12.000Z" }
+      ],
+      "lotSize": 0.23,
+      "streetAddress": "31845 W Rutherford St",
+      "city": "Carnation",
+      "state": "WA",
+      "postalCode": "98014",
+      "county": "King",
+      "area": "Redmond/Carnatio",
+      "neighborhood": "Downtown Carnation",
+      "listAgentId": "98057",
+      "listAgentName": "Diane Lucas",
+      "listAgentPhone": "4254540911",
+      "listOfficeId": "5243",
+      "listOfficeName": "Keller Williams Rlty Bellevue",
+      "listOfficePhone": "4254540911",
       "hasHoa": false,
       "hoaFee": 0,
       "hoaFeeYn": false,
-      "squareFeet": 1696,
+      "squareFeet": 1700,
       "bedrooms": 4,
-      "bathsTotalDecimal": 2,
-      "fullBaths": 2,
-      "halfBaths": 0,
+      "bathsTotalDecimal": 1.5,
+      "fullBaths": 1,
+      "halfBaths": 1,
       "threeQuarterBaths": 0,
-      "garageSpaces": 0,
-      "hasBasement": true,
-      "hasGarage": false,
+      "quarterBaths": 0,
+      "garageSpaces": 1,
+      "hasBasement": false,
+      "hasGarage": true,
       "hasWaterfront": false,
+      "hasView": false,
+      "isNewConstruction": false,
       "poolFeatures": [],
-      "parkingFeatures": [],
+      "parkingFeatures": ["Garage-Detached"],
       "interiorFeatures": [
-        "Utilities Main Floor",
-        "Basement: Under addition",
-        "Basement: Crawl Space"
+        "Dbl Pane/Storm Windw",
+        "Dining Room",
+        "Master on Main",
+        "Ceramic Tile",
+        "Hardwood",
+        "Wall to Wall Carpet"
       ],
-      "exteriorFeatures": ["Porch", "Moved to Site", "Wood"],
+      "exteriorFeatures": ["Wood", "Cable TV", "Fenced-Fully", "Gas Available", "RV Parking"],
       "communityFeatures": [],
-      "propertyFeatures": ["1500 - 1750", "Moved to Site", "Wood"],
+      "propertyFeatures": [
+        "Alley",
+        "Paved Street",
+        "Cable TV",
+        "Fenced-Fully",
+        "Gas Available",
+        "RV Parking",
+        "Sewer Connected",
+        "Public"
+      ],
       "greenFeatures": [],
-      "view": ["Mountains"],
-      "heating": [],
-      "cooling": ["A/C Central Air", "Gas Forced Air", "Gas Hot Water"],
-      "lotFeatures": ["1500 - 1750"],
-      "homeStyle": ["Single Wide"],
-      "financialInformation": ["Cash"],
-      "propertySubTypes": ["Manufactured Home"],
-      "lat": 46.88218,
-      "lng": -113.904591,
-      "dimensions": ".51-1.0",
-      "listDate": "2019-11-14T13:02:47.000Z",
-      "updateDate": "2019-11-15T10:43:23.000Z",
+      "view": [],
+      "heating": ["Forced Air", "Natural Gas"],
+      "cooling": [],
+      "lotFeatures": [
+        "Alley",
+        "Paved Street",
+        "Cable TV",
+        "Fenced-Fully",
+        "Gas Available",
+        "RV Parking",
+        "Fruit Trees",
+        "Garden Space",
+        "Level"
+      ],
+      "homeStyle": ["2 Story"],
+      "financialInformation": ["Cash Out", "Conventional", "FHA"],
+      "propertySubTypes": ["Built On Lot"],
+      "foreclosure": false,
+      "shortSale": false,
+      "lat": 47.649969,
+      "lng": -121.913919,
+      "topography": "Fruit Trees,Garden Space,Level",
+      "listDate": "2020-10-23T12:50:55.000Z",
+      "pendingDate": "2020-11-07T20:53:44.000Z",
+      "updateDate": "2020-11-07T20:53:44.000Z",
+      "lastStatusChangeDate": "2020-11-07T20:53:44.000Z",
+      "stories": 2,
       "hideAddress": false,
       "hideListing": false,
+      "photosAvailable": 29,
+      "price": 499900,
+      "mlsPropertyType": "Residential",
+      "propertyType": "Residential",
+      "standardPropertyType": "Residential",
+      "remarks": "Enchanting 1939 home with all the charm of yesteryear! Enjoy original millwork & light fixtures, original HW floors, and open living spaces with oversized windows. Home is drenched in light! New roof 2014, new fence 2019. Kitchen with eating space plus huge mud room for storage. 2 bdrms & 1 bath downstairs + 2 bdrms, 1/2 bath & loft upstairs. Level lot with fenced yard has alley access; garage w/ shop space. Walk to Starbucks, grocery, schools, Tolt-MacDonald Park. Pre-inspected, 1-yr warranty.",
+      "schoolDistrict": "Riverview",
+      "sewer": "Sewer Connected",
+      "water": "Public",
+      "year": 1939,
+      "zoning": "R24",
+      "taxId": "8658302335",
+      "taxAmount": 4562,
+      "taxYear": 2020,
+      "virtualTourBranded": "https://www.tourfactory.com/idxr2811257",
+      "originatingSystemName": "WA_NWMLS",
+      "daysOnMarket": 15,
       "photos": [
+        { "order": 1, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/0.jpg?v=0" },
+        { "order": 2, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/1.jpg?v=0" },
+        { "order": 3, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/2.jpg?v=0" },
+        { "order": 4, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/3.jpg?v=0" },
+        { "order": 5, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/4.jpg?v=0" },
+        { "order": 6, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/5.jpg?v=0" },
+        { "order": 7, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/6.jpg?v=0" },
+        { "order": 8, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/7.jpg?v=0" },
+        { "order": 9, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/8.jpg?v=0" },
         {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/0.jpg?v=1",
-          "order": 1
+          "order": 10,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/9.jpg?v=0"
         },
         {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/1.jpg?v=1",
-          "order": 2
+          "order": 11,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/10.jpg?v=0"
         },
         {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/2.jpg?v=1",
-          "order": 3
+          "order": 12,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/11.jpg?v=0"
         },
         {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/3.jpg?v=1",
-          "order": 4
+          "order": 13,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/12.jpg?v=0"
         },
         {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/4.jpg?v=1",
-          "order": 5
+          "order": 14,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/13.jpg?v=0"
         },
         {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/5.jpg?v=1",
-          "order": 6
+          "order": 15,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/14.jpg?v=0"
         },
         {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/6.jpg?v=1",
-          "order": 7
+          "order": 16,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/15.jpg?v=0"
         },
         {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/7.jpg?v=1",
-          "order": 8
+          "order": 17,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/16.jpg?v=0"
         },
         {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/8.jpg?v=1",
-          "order": 9
+          "order": 18,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/17.jpg?v=0"
         },
         {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/9.jpg?v=1",
-          "order": 10
+          "order": 19,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/18.jpg?v=0"
         },
         {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/10.jpg?v=1",
-          "order": 11
+          "order": 20,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/19.jpg?v=0"
         },
         {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/11.jpg?v=1",
-          "order": 12
+          "order": 21,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/20.jpg?v=0"
         },
         {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/12.jpg?v=1",
-          "order": 13
+          "order": 22,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/21.jpg?v=0"
         },
         {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/13.jpg?v=1",
-          "order": 14
+          "order": 23,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/22.jpg?v=0"
         },
         {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/14.jpg?v=1",
-          "order": 15
+          "order": 24,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/23.jpg?v=0"
         },
         {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/15.jpg?v=1",
-          "order": 16
+          "order": 25,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/24.jpg?v=0"
         },
         {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/16.jpg?v=1",
-          "order": 17
+          "order": 26,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/25.jpg?v=0"
         },
         {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/17.jpg?v=1",
-          "order": 18
+          "order": 27,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/26.jpg?v=0"
         },
         {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/18.jpg?v=1",
-          "order": 19
+          "order": 28,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/27.jpg?v=0"
         },
         {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/19.jpg?v=1",
-          "order": 20
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/20.jpg?v=1",
-          "order": 21
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/21.jpg?v=1",
-          "order": 22
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/22.jpg?v=1",
-          "order": 23
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/23.jpg?v=1",
-          "order": 24
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/24.jpg?v=1",
-          "order": 25
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/25.jpg?v=1",
-          "order": 26
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/26.jpg?v=1",
-          "order": 27
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/27.jpg?v=1",
-          "order": 28
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/28.jpg?v=1",
-          "order": 29
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/29.jpg?v=1",
-          "order": 30
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/30.jpg?v=1",
-          "order": 31
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/31.jpg?v=1",
-          "order": 32
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/32.jpg?v=1",
-          "order": 33
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/33.jpg?v=1",
-          "order": 34
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/245/photo/2/1/9/1/8/2/1/0/34.jpg?v=1",
-          "order": 35
+          "order": 29,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/28.jpg?v=0"
         }
       ],
-      "photosAvailable": 35,
-      "photoVersion": 1,
-      "price": 219900,
-      "leasePrice": 219900,
-      "mlsPropertyType": "Manufactured Home",
-      "propertyType": "Manufactured Home",
-      "standardPropertyType": "Manufactured Home",
-      "remarks": "Located on a quiet road, surrounded by pine trees, and only minutes from downtown Missoula and U of M, is this 1987 4 bedroom manufactured home with lots of updates inside! This 1696 SF single wide with an addition is located on an acre with NO covenants! The inside is open and bright, and has been recently refreshed with new flooring, paint, and kitchen cabinets.  Spacious bedrooms, 2 full bathrooms, and a laundry room complete the interior. Outside, the backyard is fenced, and has a shed for storage, a fire pit and a well house for the 25 gpm well. Walking distance to the Clark Fork River and Milltown State Park, and close to Kettlehouse Amphitheater, Marshall Canyon Trailheads, and Mountain Line bus stops. Call Jason Baker at 406-552-4111 or your real estate professional.",
-      "year": 1987,
-      "zoning": "UZ",
-      "taxAmount": 1419.8,
-      "taxYear": 2019
+      "nextToken": "2020-10-23T12:50:55.000Z",
+      "brUpdateDate": "2020-11-08T05:05:28.826Z"
     },
-    "frontTemplateId": "tmpl_7361e2ddc856e17",
-    "backTemplateId": "tmpl_4e76cb950e3d0b2",
-    "recipientCount": 100,
-    "generatedAssetRevs": {},
-    "sampleFrontLargeUrl": "https://lob-assets.com/postcards/psc_c7c818dae0be2c24_thumb_large_1.png?version=v1&expires=1576690772&signature=zoqOEZ5XXSL0MPWivtWrmri0B_JEsvKOh2tcXPukiKG3U_tRwibbz9wmTzZOL17rr-4RRWOJMB3rg06hEfOADw",
-    "sampleBackLargeUrl": "https://lob-assets.com/postcards/psc_c7c818dae0be2c24_thumb_large_2.png?version=v1&expires=1576690772&signature=Slb3d3xMzrMAiJVNRW4yHEhDIZbgK33oXqWwn-3ytIaVk8gXsWEYtBE_otaiFFoc1H7h04REiFpZfRoKlEYGDg",
-    "sampleFrontUrl": "https://lob-assets.com/postcards/psc_c7c818dae0be2c24_thumb_small_1.png?version=v1&expires=1576690772&signature=uhf_j9vM9uhdEyfh8t3P9nM1VV06KBg7ddcMbBTnil7NMHxycZSp6t0InoQEVcVovYUNuGJNFQTMtzJcj6LGCw",
-    "sampleBackUrl": "https://lob-assets.com/postcards/psc_c7c818dae0be2c24_thumb_small_2.png?version=v1&expires=1576690772&signature=tGLXsEq-sDHS5qXOdEPo6VSNFR4yBtRRX-rcXDQxnxUDkwSeRBSwPoOsZN-89DenOL5PeQ-R1T41lCGQfd5kAw",
-    "expected_delivery_date": "2019-11-26"
-  },
-  {
-    "_id": "ck30csg5n001o01qww0xd56nk",
-    "_rev": "7-8e7fabaed7ea2d9cd694383392002468",
-    "type": "mailout",
-    "userId": "cd08e72676c683ae9b02182cf74da962",
-    "mlsNum": "1524011",
-    "board": "21",
-    "blueroofMlsId": 101,
-    "listingStatus": "listed",
     "createdBy": "user",
-    "created": 1573835111627,
-    "mailoutSize": 1,
+    "created": 1605814108013,
     "mailoutStatus": "calculated",
     "statusHistory": [],
+    "mailoutDisplayAgent": {
+      "userId": "brivity-5a77aadd-323c-4797-b04f-b2fb8032c046",
+      "first": "Ryan",
+      "last": "Ramage"
+    },
+    "postcardSize": "6x4",
+    "mailoutSize": 10,
+    "templateTheme": "bookmark-multi",
+    "backTemplateTheme": "d2b991302c5ecc11374a99ed0126d07f",
+    "mergeVariables": [
+      { "name": "brandColor", "value": "#79c34d" },
+      {
+        "name": "frontImgUrl",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/0.jpg?v=0"
+      },
+      { "name": "frontHeadline", "value": "Just Sold!" },
+      { "name": "secondaryHeadline", "value": "IN YOUR NEIGHBORHOOD" },
+      { "name": "frontAddressLine", "value": "31845 W Rutherford St" },
+      { "name": "frontPropertyFeatures", "value": "$499,900 | 4 bed | 1.5 bath" },
+      {
+        "name": "frontCtaContent",
+        "value": "Get the scoop on what your neighbor's home sold for!"
+      },
+      { "name": "teamBrokerageName", "value": "Redman Tech | Redman Tech" },
+      { "name": "backPhoneNumbers", "value": "(c): 780-555-2352 | (o): (855) 427-4848" },
+      { "name": "agentAddress", "value": "2211 Rimland Dr, Bellingham, WA, 98226" },
+      { "name": "backCtaLead", "value": "See what your home is worth at:" },
+      { "name": "phoneCtaIntro", "value": "How can I be of service?" },
+      { "name": "phonePreText", "value": "Let's chat!" },
+      { "name": "agentPhone", "value": "780-555-2352" },
+      { "name": "backHeadline", "value": "Curious?" },
+      {
+        "name": "backContent",
+        "value": "We all like to know what our neighbor's home sold for. A higher sales price could mean getting more equity out of your home too."
+      },
+      {
+        "name": "disclaimer",
+        "value": "This is not intended to solicit property currently listed for sale."
+      }
+    ],
+    "recipientCount": 10,
+    "edited": true,
+    "needsUpdate": true
+  },
+  {
+    "_id": "ckhgxfx3001kk01xb5oz68mv9",
+    "_rev": "32-ccc3eeea9a67bb3c5877e8c2dfc94d36",
+    "type": "mailout",
+    "userId": "brivity-5a77aadd-323c-4797-b04f-b2fb8032c046",
+    "mlsNum": "1679531",
+    "board": "21",
+    "blueroofMlsId": "101",
+    "listingStatus": "sold",
     "details": {
-      "latitude": 47.09062,
-      "longitude": -122.196476,
-      "displayAddress": "836 Harman Way S Unit 21",
-      "city": "Orting",
+      "blueroofMlsId": "101",
+      "mlsNum": "1679531",
+      "neighborhood": "Downtown Carnation",
+      "latitude": 47.649969,
+      "longitude": -121.913919,
+      "displayAddress": "31845 W Rutherford St",
+      "city": "Carnation",
       "state": "WA",
-      "postalCode": "98360",
-      "squareFeet": 1332,
-      "baths": 2,
-      "beds": 2,
-      "price": 69000,
-      "listDate": "2019-09-25T15:15:22.000Z",
-      "coverPhoto": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/0.jpg"
+      "postalCode": "98014",
+      "squareFeet": 1700,
+      "baths": 1.5,
+      "beds": 4,
+      "price": 499900,
+      "listDate": "2020-10-23T12:50:55.000Z",
+      "coverPhoto": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/0.jpg?v=0",
+      "propertyPhoto0": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/0.jpg?v=0",
+      "propertyPhoto1": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/1.jpg?v=0",
+      "propertyPhoto2": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/2.jpg?v=0",
+      "propertyPhoto3": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/3.jpg?v=0",
+      "propertyPhoto4": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/4.jpg?v=0",
+      "propertyPhoto5": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/5.jpg?v=0",
+      "propertyPhoto6": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/6.jpg?v=0",
+      "propertyPhoto7": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/7.jpg?v=0",
+      "propertyPhoto8": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/8.jpg?v=0",
+      "propertyPhoto9": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/9.jpg?v=0",
+      "propertyPhoto10": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/10.jpg?v=0",
+      "propertyPhoto11": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/11.jpg?v=0",
+      "propertyPhoto12": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/12.jpg?v=0",
+      "propertyPhoto13": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/13.jpg?v=0",
+      "propertyPhoto14": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/14.jpg?v=0",
+      "propertyPhoto15": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/15.jpg?v=0",
+      "propertyPhoto16": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/16.jpg?v=0",
+      "propertyPhoto17": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/17.jpg?v=0",
+      "propertyPhoto18": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/18.jpg?v=0",
+      "propertyPhoto19": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/19.jpg?v=0",
+      "propertyPhoto20": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/20.jpg?v=0",
+      "propertyPhoto21": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/21.jpg?v=0",
+      "propertyPhoto22": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/22.jpg?v=0",
+      "propertyPhoto23": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/23.jpg?v=0",
+      "propertyPhoto24": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/24.jpg?v=0",
+      "propertyPhoto25": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/25.jpg?v=0",
+      "propertyPhoto26": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/26.jpg?v=0",
+      "propertyPhoto27": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/27.jpg?v=0",
+      "propertyPhoto28": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/28.jpg?v=0",
+      "bathsTotalRooms": 1.5,
+      "status": "sold"
     },
     "raw": {
-      "blossorId": "21-1524011",
+      "mongoId": "5f9335296a8c91457cc52afb",
+      "blossorId": "21-1679531",
       "blueroofMlsId": 101,
-      "mlsNum": "1524011",
-      "standardStatus": "Active",
-      "mlsStatus": "Active",
+      "mlsNum": "1679531",
+      "standardStatus": "Pending",
+      "mlsStatus": "Pending",
       "openhouses": [],
-      "history": [],
-      "lotSize": 0,
-      "streetAddress": "836 Harman Way S Unit 21",
-      "city": "Orting",
+      "history": [
+        {
+          "price": 515000,
+          "priceSet": "2020-10-23T12:50:55.000Z",
+          "status": 2,
+          "date": "2020-11-02T17:42:43.000Z"
+        },
+        { "status": 2, "statusSet": "2020-10-23T12:50:55.000Z", "date": "2020-11-03T11:59:12.000Z" }
+      ],
+      "lotSize": 0.23,
+      "streetAddress": "31845 W Rutherford St",
+      "city": "Carnation",
       "state": "WA",
-      "postalCode": "98360",
-      "county": "Pierce",
-      "area": "Orting",
-      "neighborhood": "Orting",
-      "listAgentId": "33587",
-      "listAgentName": "John Hurlbut",
-      "listAgentPhone": "2538485304",
+      "postalCode": "98014",
+      "county": "King",
+      "area": "Redmond/Carnatio",
+      "neighborhood": "Downtown Carnation",
+      "listAgentId": "98057",
+      "listAgentName": "Diane Lucas",
+      "listAgentPhone": "4254540911",
+      "listOfficeId": "5243",
+      "listOfficeName": "Keller Williams Rlty Bellevue",
+      "listOfficePhone": "4254540911",
+      "hasHoa": false,
+      "hoaFee": 0,
+      "hoaFeeYn": false,
+      "squareFeet": 1700,
+      "bedrooms": 4,
+      "bathsTotalDecimal": 1.5,
+      "fullBaths": 1,
+      "halfBaths": 1,
+      "threeQuarterBaths": 0,
+      "quarterBaths": 0,
+      "garageSpaces": 1,
+      "hasBasement": false,
+      "hasGarage": true,
+      "hasWaterfront": false,
+      "hasView": false,
+      "isNewConstruction": false,
+      "poolFeatures": [],
+      "parkingFeatures": ["Garage-Detached"],
+      "interiorFeatures": [
+        "Dbl Pane/Storm Windw",
+        "Dining Room",
+        "Master on Main",
+        "Ceramic Tile",
+        "Hardwood",
+        "Wall to Wall Carpet"
+      ],
+      "exteriorFeatures": ["Wood", "Cable TV", "Fenced-Fully", "Gas Available", "RV Parking"],
+      "communityFeatures": [],
+      "propertyFeatures": [
+        "Alley",
+        "Paved Street",
+        "Cable TV",
+        "Fenced-Fully",
+        "Gas Available",
+        "RV Parking",
+        "Sewer Connected",
+        "Public"
+      ],
+      "greenFeatures": [],
+      "view": [],
+      "heating": ["Forced Air", "Natural Gas"],
+      "cooling": [],
+      "lotFeatures": [
+        "Alley",
+        "Paved Street",
+        "Cable TV",
+        "Fenced-Fully",
+        "Gas Available",
+        "RV Parking",
+        "Fruit Trees",
+        "Garden Space",
+        "Level"
+      ],
+      "homeStyle": ["2 Story"],
+      "financialInformation": ["Cash Out", "Conventional", "FHA"],
+      "propertySubTypes": ["Built On Lot"],
+      "foreclosure": false,
+      "shortSale": false,
+      "lat": 47.649969,
+      "lng": -121.913919,
+      "topography": "Fruit Trees,Garden Space,Level",
+      "listDate": "2020-10-23T12:50:55.000Z",
+      "pendingDate": "2020-11-07T20:53:44.000Z",
+      "updateDate": "2020-11-07T20:53:44.000Z",
+      "lastStatusChangeDate": "2020-11-07T20:53:44.000Z",
+      "stories": 2,
+      "hideAddress": false,
+      "hideListing": false,
+      "photosAvailable": 29,
+      "price": 499900,
+      "mlsPropertyType": "Residential",
+      "propertyType": "Residential",
+      "standardPropertyType": "Residential",
+      "remarks": "Enchanting 1939 home with all the charm of yesteryear! Enjoy original millwork & light fixtures, original HW floors, and open living spaces with oversized windows. Home is drenched in light! New roof 2014, new fence 2019. Kitchen with eating space plus huge mud room for storage. 2 bdrms & 1 bath downstairs + 2 bdrms, 1/2 bath & loft upstairs. Level lot with fenced yard has alley access; garage w/ shop space. Walk to Starbucks, grocery, schools, Tolt-MacDonald Park. Pre-inspected, 1-yr warranty.",
+      "schoolDistrict": "Riverview",
+      "sewer": "Sewer Connected",
+      "water": "Public",
+      "year": 1939,
+      "zoning": "R24",
+      "taxId": "8658302335",
+      "taxAmount": 4562,
+      "taxYear": 2020,
+      "virtualTourBranded": "https://www.tourfactory.com/idxr2811257",
+      "originatingSystemName": "WA_NWMLS",
+      "daysOnMarket": 15,
+      "photos": [
+        { "order": 1, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/0.jpg?v=0" },
+        { "order": 2, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/1.jpg?v=0" },
+        { "order": 3, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/2.jpg?v=0" },
+        { "order": 4, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/3.jpg?v=0" },
+        { "order": 5, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/4.jpg?v=0" },
+        { "order": 6, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/5.jpg?v=0" },
+        { "order": 7, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/6.jpg?v=0" },
+        { "order": 8, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/7.jpg?v=0" },
+        { "order": 9, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/8.jpg?v=0" },
+        {
+          "order": 10,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/9.jpg?v=0"
+        },
+        {
+          "order": 11,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/10.jpg?v=0"
+        },
+        {
+          "order": 12,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/11.jpg?v=0"
+        },
+        {
+          "order": 13,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/12.jpg?v=0"
+        },
+        {
+          "order": 14,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/13.jpg?v=0"
+        },
+        {
+          "order": 15,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/14.jpg?v=0"
+        },
+        {
+          "order": 16,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/15.jpg?v=0"
+        },
+        {
+          "order": 17,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/16.jpg?v=0"
+        },
+        {
+          "order": 18,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/17.jpg?v=0"
+        },
+        {
+          "order": 19,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/18.jpg?v=0"
+        },
+        {
+          "order": 20,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/19.jpg?v=0"
+        },
+        {
+          "order": 21,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/20.jpg?v=0"
+        },
+        {
+          "order": 22,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/21.jpg?v=0"
+        },
+        {
+          "order": 23,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/22.jpg?v=0"
+        },
+        {
+          "order": 24,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/23.jpg?v=0"
+        },
+        {
+          "order": 25,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/24.jpg?v=0"
+        },
+        {
+          "order": 26,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/25.jpg?v=0"
+        },
+        {
+          "order": 27,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/26.jpg?v=0"
+        },
+        {
+          "order": 28,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/27.jpg?v=0"
+        },
+        {
+          "order": 29,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/28.jpg?v=0"
+        }
+      ],
+      "nextToken": "2020-10-23T12:50:55.000Z",
+      "brUpdateDate": "2020-11-08T05:05:28.826Z"
+    },
+    "createdBy": "user",
+    "created": 1605312210492,
+    "mailoutStatus": "sent",
+    "statusHistory": [],
+    "mailoutDisplayAgent": {
+      "userId": "brivity-5a77aadd-323c-4797-b04f-b2fb8032c046",
+      "first": "Ryan",
+      "last": "Ramage"
+    },
+    "postcardSize": "6x4",
+    "templateTheme": "internal-5u484jjfd73h",
+    "mailoutSize": 240,
+    "mergeVariables": [
+      { "name": "brandColor", "value": "#0e2b5b" },
+      {
+        "name": "frontImgUrl",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/27.jpg?v=0"
+      },
+      { "name": "frontHeadline", "value": "Just Sold!" },
+      { "name": "secondaryHeadline", "value": "IN YOUR NEIGHBORHOOD" },
+      { "name": "frontAddressLine", "value": "31845 W Rutherford St" },
+      {
+        "name": "frontCtaContent",
+        "value": "Get the scoop on what your neighbor's home sold for!"
+      },
+      { "name": "teamBrokerageName", "value": "Redman Tech | Redman Tech" },
+      { "name": "backPhoneNumbers", "value": "(c): 780-555-2352 | (o): (855) 427-4848" },
+      { "name": "agentAddress", "value": "2211 Rimland Dr, Bellingham, WA, 98226" },
+      { "name": "backCtaLead", "value": "See what your home is worth at:" },
+      { "name": "phoneCtaIntro", "value": "How can I be of service?" },
+      { "name": "phonePreText", "value": "Let's chat!" },
+      { "name": "agentPhone", "value": "780-555-2352" },
+      { "name": "backHeadline", "value": "Curious?" },
+      {
+        "name": "backContent",
+        "value": "We all like to know what our neighbor's home sold for. A higher sales price could mean getting more equity out of your home too."
+      },
+      {
+        "name": "disclaimer",
+        "value": "This is not intended to solicit property currently listed for sale."
+      }
+    ],
+    "generatedAssetRevs": {
+      "brokerageLogo": "1-27d68fe5ca5408bd8287ab9e0725fa76",
+      "realtorPhoto": "1-bab6fd20df9a156e1ce38034c5cebf4f",
+      "userBranding": "35-8329c9b4cf19bdaf1df0be29ae3b8215",
+      "userProfile": "14-9c73abd6fd1d65248f876f379b69bc75",
+      "user": "5-7e8c6865621f698cab204c1cf8720f2f",
+      "teamBranding": "1-40599b1b305ec8f9560f9ee6dc391bf6",
+      "teamProfile": "112-cb4f8291a3b4d21ead0965cd18e1e252"
+    },
+    "themeTemplateVersion": "1.0.4",
+    "recipientCount": 240,
+    "edited": true,
+    "needsUpdate": true,
+    "send_date": "2020-11-20T18:12:21.039Z",
+    "expected_delivery_date": "2020-12-01",
+    "lobId": "psc_170d2adf750e7089",
+    "lobEnvironment": "test",
+    "approvedByUser": {
+      "userId": "brivity-5a77aadd-323c-4797-b04f-b2fb8032c046",
+      "first": "Ryan",
+      "last": "Ramage"
+    }
+  },
+  {
+    "_id": "ckhgxecwg01dv01xb012a69kt",
+    "_rev": "7-e0d73b8428b9d65720c35cc9e0101119",
+    "type": "mailout",
+    "userId": "brivity-5a77aadd-323c-4797-b04f-b2fb8032c046",
+    "mlsNum": "1621630",
+    "board": "21",
+    "blueroofMlsId": "101",
+    "listingStatus": "sold",
+    "details": {
+      "blueroofMlsId": "101",
+      "mlsNum": "1621630",
+      "neighborhood": "Coupeville",
+      "latitude": 48.208036,
+      "longitude": -122.690097,
+      "displayAddress": "204 SW Terry Rd Unit 60",
+      "city": "Coupeville",
+      "state": "WA",
+      "postalCode": "98239",
+      "squareFeet": 1639,
+      "baths": 2,
+      "beds": 3,
+      "price": 75000,
+      "listDate": "2020-06-26T13:18:26.000Z",
+      "coverPhoto": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/0.jpg?v=1",
+      "propertyPhoto0": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/0.jpg?v=1",
+      "propertyPhoto1": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/1.jpg?v=1",
+      "propertyPhoto2": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/2.jpg?v=1",
+      "propertyPhoto3": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/3.jpg?v=1",
+      "propertyPhoto4": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/4.jpg?v=1",
+      "propertyPhoto5": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/5.jpg?v=1",
+      "propertyPhoto6": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/6.jpg?v=1",
+      "propertyPhoto7": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/7.jpg?v=1",
+      "propertyPhoto8": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/8.jpg?v=1",
+      "propertyPhoto9": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/9.jpg?v=1",
+      "propertyPhoto10": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/10.jpg?v=1",
+      "propertyPhoto11": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/11.jpg?v=1",
+      "propertyPhoto12": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/12.jpg?v=1",
+      "propertyPhoto13": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/13.jpg?v=1",
+      "propertyPhoto14": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/14.jpg?v=1",
+      "propertyPhoto15": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/15.jpg?v=1",
+      "propertyPhoto16": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/16.jpg?v=1",
+      "propertyPhoto17": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/17.jpg?v=1",
+      "propertyPhoto18": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/18.jpg?v=1",
+      "propertyPhoto19": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/19.jpg?v=1",
+      "propertyPhoto20": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/20.jpg?v=1",
+      "propertyPhoto21": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/21.jpg?v=1",
+      "propertyPhoto22": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/22.jpg?v=1",
+      "propertyPhoto23": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/23.jpg?v=1",
+      "propertyPhoto24": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/24.jpg?v=1",
+      "propertyPhoto25": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/25.jpg?v=1",
+      "propertyPhoto26": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/26.jpg?v=1",
+      "propertyPhoto27": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/27.jpg?v=1",
+      "propertyPhoto28": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/28.jpg?v=1",
+      "propertyPhoto29": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/29.jpg?v=1",
+      "propertyPhoto30": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/30.jpg?v=1",
+      "propertyPhoto31": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/31.jpg?v=1",
+      "propertyPhoto32": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/32.jpg?v=1",
+      "bathsTotalRooms": 2,
+      "status": "sold"
+    },
+    "raw": {
+      "mongoId": "5ef65a0b73aa1715b5ef1c86",
+      "blossorId": "21-1621630",
+      "blueroofMlsId": 101,
+      "mlsNum": "1621630",
+      "standardStatus": "Closed",
+      "mlsStatus": "Sold",
+      "openhouses": [],
+      "history": [
+        {
+          "status": 4,
+          "statusSet": "2020-06-26T13:18:26.000Z",
+          "date": "2020-06-29T10:24:44.000Z"
+        },
+        { "status": 4, "statusSet": "2020-07-01T09:27:55.000Z", "date": "2020-07-01T09:27:55.000Z" }
+      ],
+      "lotSize": 0,
+      "streetAddress": "204 SW Terry Rd Unit 60",
+      "city": "Coupeville",
+      "state": "WA",
+      "postalCode": "98239",
+      "county": "Island",
+      "area": "Central Whidbey",
+      "neighborhood": "Coupeville",
+      "listAgentId": "108803",
+      "listAgentName": "Vicki Crocker",
+      "listAgentPhone": "3606755915",
+      "listOfficeId": "4247",
+      "listOfficeName": "Coldwell Banker 360 Team",
+      "listOfficePhone": "3606755915",
       "hasHoa": false,
       "hoaFeeYn": false,
-      "squareFeet": 1332,
-      "bedrooms": 2,
+      "squareFeet": 1639,
+      "bedrooms": 3,
       "bathsTotalDecimal": 2,
       "fullBaths": 2,
       "halfBaths": 0,
@@ -307,137 +1272,1129 @@
       "hasBasement": false,
       "hasGarage": false,
       "hasWaterfront": false,
-      "hasView": true,
+      "hasView": false,
+      "isNewConstruction": false,
       "poolFeatures": [],
-      "parkingFeatures": ["Carport"],
-      "interiorFeatures": ["Vinyl", "Wall to Wall Carpet"],
-      "exteriorFeatures": ["Wood Products"],
+      "parkingFeatures": [],
+      "interiorFeatures": ["Laminate", "Wall to Wall Carpet"],
+      "exteriorFeatures": ["Cement/Concrete"],
       "communityFeatures": [],
-      "propertyFeatures": ["Paved Street", "Public"],
+      "propertyFeatures": ["Community"],
       "greenFeatures": [],
-      "view": ["Mountain"],
-      "heating": ["Forced Air", "Electric"],
-      "cooling": ["Central A/C"],
-      "lotFeatures": ["Paved Street"],
+      "view": [],
+      "heating": ["Electric"],
+      "cooling": [],
+      "lotFeatures": [],
       "homeStyle": ["Manuf-Double Wide"],
-      "financialInformation": ["Cash Out"],
+      "financialInformation": ["Conv", "Cash Out"],
       "propertySubTypes": [],
       "foreclosure": false,
       "shortSale": false,
-      "lat": 47.09062,
-      "lng": -122.196476,
-      "listDate": "2019-09-25T15:15:22.000Z",
-      "updateDate": "2019-10-07T15:57:34.000Z",
+      "lat": 48.208036,
+      "lng": -122.690097,
+      "listDate": "2020-06-26T13:18:26.000Z",
+      "pendingDate": "2020-07-01T09:27:55.000Z",
+      "updateDate": "2020-07-25T09:13:53.000Z",
+      "soldDate": "2020-07-24T00:00:00.000Z",
+      "lastStatusChangeDate": "2020-07-25T09:13:53.000Z",
       "hideAddress": false,
       "hideListing": false,
-      "photos": [
-        {
-          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/0.jpg",
-          "order": 1
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/1.jpg",
-          "order": 2
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/2.jpg",
-          "order": 3
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/3.jpg",
-          "order": 4
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/4.jpg",
-          "order": 5
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/5.jpg",
-          "order": 6
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/6.jpg",
-          "order": 7
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/7.jpg",
-          "order": 8
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/8.jpg",
-          "order": 9
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/9.jpg",
-          "order": 10
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/10.jpg",
-          "order": 11
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/11.jpg",
-          "order": 12
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/12.jpg",
-          "order": 13
-        },
-        {
-          "url": "https://cdn10.mlsfinder.com/images/21/photo/1/5/2/4/0/1/1/13.jpg",
-          "order": 14
-        }
-      ],
-      "photosAvailable": 14,
-      "price": 69000,
-      "leasePrice": 69000,
+      "photosAvailable": 33,
+      "photoVersion": 1,
+      "price": 75000,
+      "soldPrice": 80000,
       "mlsPropertyType": "Manufactured Home",
       "propertyType": "Manufactured Home",
       "standardPropertyType": "Manufactured Home",
-      "remarks": "You'll know if the mountain is out or not with this one! Great manufactured home in 55+ park with an amazing view of Mt Rainier! You'll truly feel like it's YOUR mountain with this one!  Spacious family room, dining room, kitchen with breakfast bar and 2 bedrooms with 2 bathrooms round out this great home! master bedroom has attached bath & large walk in closet. LARGE covered carport for 2 cars +, Generous sized shop as well. Great back yard and did we mention the view! Don't pass this one up!",
-      "schoolDistrict": "Orting",
-      "highSchool": "Orting High",
-      "middleSchool": "Orting Middle",
-      "water": "Public",
-      "year": 1989,
-      "taxAmount": 0,
+      "remarks": "Check out this well maintained one owner home. Features include open concept living, good sized kitchen with ample counter space as well as an island and newer appliances, split floor bedroom plan with full bathroom in the master and walk in closet. Home has newer hot water heater plus large laundry room. Outside there are 2 sheds, 1 with power. Quality and affordability. Go Show!",
+      "schoolDistrict": "Coupeville",
+      "water": "Community",
+      "year": 1994,
+      "taxId": "M913000000601",
+      "taxAmount": 182,
       "taxYear": 2019,
-      "originatingSystemName": "WA_NWMLS"
+      "virtualTourBranded": "https://virtualtours.intrepidmedia360.com/idx/746921",
+      "originatingSystemName": "WA_NWMLS",
+      "daysOnMarket": 5,
+      "photos": [
+        { "order": 1, "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/0.jpg?v=1" },
+        { "order": 2, "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/1.jpg?v=1" },
+        { "order": 3, "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/2.jpg?v=1" },
+        { "order": 4, "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/3.jpg?v=1" },
+        { "order": 5, "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/4.jpg?v=1" },
+        { "order": 6, "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/5.jpg?v=1" },
+        { "order": 7, "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/6.jpg?v=1" },
+        { "order": 8, "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/7.jpg?v=1" },
+        { "order": 9, "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/8.jpg?v=1" },
+        {
+          "order": 10,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/9.jpg?v=1"
+        },
+        {
+          "order": 11,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/10.jpg?v=1"
+        },
+        {
+          "order": 12,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/11.jpg?v=1"
+        },
+        {
+          "order": 13,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/12.jpg?v=1"
+        },
+        {
+          "order": 14,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/13.jpg?v=1"
+        },
+        {
+          "order": 15,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/14.jpg?v=1"
+        },
+        {
+          "order": 16,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/15.jpg?v=1"
+        },
+        {
+          "order": 17,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/16.jpg?v=1"
+        },
+        {
+          "order": 18,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/17.jpg?v=1"
+        },
+        {
+          "order": 19,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/18.jpg?v=1"
+        },
+        {
+          "order": 20,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/19.jpg?v=1"
+        },
+        {
+          "order": 21,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/20.jpg?v=1"
+        },
+        {
+          "order": 22,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/21.jpg?v=1"
+        },
+        {
+          "order": 23,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/22.jpg?v=1"
+        },
+        {
+          "order": 24,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/23.jpg?v=1"
+        },
+        {
+          "order": 25,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/24.jpg?v=1"
+        },
+        {
+          "order": 26,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/25.jpg?v=1"
+        },
+        {
+          "order": 27,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/26.jpg?v=1"
+        },
+        {
+          "order": 28,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/27.jpg?v=1"
+        },
+        {
+          "order": 29,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/28.jpg?v=1"
+        },
+        {
+          "order": 30,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/29.jpg?v=1"
+        },
+        {
+          "order": 31,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/30.jpg?v=1"
+        },
+        {
+          "order": 32,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/31.jpg?v=1"
+        },
+        {
+          "order": 33,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/32.jpg?v=1"
+        }
+      ],
+      "nextToken": "2020-06-26T13:18:26.000Z",
+      "brUpdateDate": "2020-10-15T22:31:41.207Z"
     },
-    "frontTemplateId": "tmpl_7361e2ddc856e17",
-    "backTemplateId": "tmpl_4e76cb950e3d0b2",
-    "recipientCount": 1,
-    "generatedAssetRevs": {},
-    "sampleFrontLargeUrl": "https://alf-gabbi-uploads.s3.amazonaws.com/eaf3d721c183f8dda74083f48a865777/ck30csg5n001o01qww0xd56nk/psc_fb906cb5151013ad_thumb_large_1.png",
-    "sampleBackLargeUrl": "https://alf-gabbi-uploads.s3.amazonaws.com/eaf3d721c183f8dda74083f48a865777/ck30csg5n001o01qww0xd56nk/psc_fb906cb5151013ad_thumb_large_2.png",
-    "sampleFrontUrl": "https://alf-gabbi-uploads.s3.amazonaws.com/eaf3d721c183f8dda74083f48a865777/ck30csg5n001o01qww0xd56nk/psc_fb906cb5151013ad_thumb_small_1.png",
-    "sampleBackUrl": "https://alf-gabbi-uploads.s3.amazonaws.com/eaf3d721c183f8dda74083f48a865777/ck30csg5n001o01qww0xd56nk/psc_fb906cb5151013ad_thumb_small_2.png"
+    "createdBy": "user",
+    "created": 1605312137680,
+    "mailoutStatus": "calculated",
+    "statusHistory": [],
+    "mailoutDisplayAgent": {
+      "userId": "brivity-5a77aadd-323c-4797-b04f-b2fb8032c046",
+      "first": "Ryan",
+      "last": "Ramage"
+    },
+    "postcardSize": "11x6",
+    "templateTheme": "c2b990302c5ecb01374a98ed0126d07f",
+    "mailoutSize": 240,
+    "mergeVariables": [
+      { "name": "brandColor", "value": "#0e2b5b" },
+      {
+        "name": "frontImgUrl",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/0.jpg?v=1"
+      },
+      { "name": "frontHeadline", "value": "Just Solder!" },
+      { "name": "secondaryHeadline", "value": "IN YOUR NEIGHBORHOOD" },
+      { "name": "frontAddressLine", "value": "204 SW Terry Rd Unit 60" },
+      {
+        "name": "frontCtaContent",
+        "value": "Get the scoop on what your neighbor's home sold for!"
+      },
+      { "name": "teamBrokerageName", "value": "Redman Tech | Redman Tech" },
+      { "name": "backPhoneNumbers", "value": "(c): 780-555-2352 | (o): (855) 427-4848" },
+      { "name": "agentAddress", "value": "2211 Rimland Dr, Bellingham, WA, 98226" },
+      { "name": "backCtaLead", "value": "See what your home is worth at:" },
+      { "name": "phoneCtaIntro", "value": "How can I be of service?" },
+      { "name": "phonePreText", "value": "Let's chat!" },
+      { "name": "agentPhone", "value": "780-555-2352" },
+      { "name": "backHeadline", "value": "Curious?" },
+      {
+        "name": "backContent",
+        "value": "We all like to know what our neighbor's home sold for. A higher sales price could mean getting more equity out of your home too."
+      },
+      {
+        "name": "disclaimer",
+        "value": "This is not intended to solicit property currently listed for sale."
+      }
+    ],
+    "generatedAssetRevs": {
+      "realtorPhoto": "1-bab6fd20df9a156e1ce38034c5cebf4f",
+      "brokerageLogo": "1-27d68fe5ca5408bd8287ab9e0725fa76",
+      "userBranding": "35-8329c9b4cf19bdaf1df0be29ae3b8215",
+      "userProfile": "14-9c73abd6fd1d65248f876f379b69bc75",
+      "user": "5-7e8c6865621f698cab204c1cf8720f2f",
+      "teamBranding": "1-40599b1b305ec8f9560f9ee6dc391bf6",
+      "teamProfile": "112-cb4f8291a3b4d21ead0965cd18e1e252"
+    },
+    "themeTemplateVersion": "1.0.4",
+    "recipientCount": 240,
+    "edited": true,
+    "needsUpdate": true,
+    "send_date": "2020-11-19T17:23:39.302Z",
+    "expected_delivery_date": "2020-11-27"
   },
   {
-    "_id": "cjz4ev2070000ycw6koum5vd1",
-    "_rev": "2-f6179f14719ee74c931b54032689f358",
+    "_id": "ckhc8uakp000001tq8l86az22",
+    "_rev": "25-2f3dd51b52ec858da8adadfd25f1eaa8",
     "type": "mailout",
-    "userId": "cd08e72676c683ae9b02182cf74da962",
-    "mlsNum": "414401",
-    "board": "446",
-    "listingStatus": "sold",
-    "createdBy": "listing-feed",
-    "created": 1565373327847,
-    "mailoutStatus": "excluded",
+    "subtype": "campaign",
+    "userId": "brivity-5a77aadd-323c-4797-b04f-b2fb8032c046",
+    "listingStatus": "custom",
+    "created": 1605029026057,
+    "mailoutStatus": "sent",
     "statusHistory": [],
-    "details": {
-      "latitude": 48.448324,
-      "longitude": -123.428762,
-      "displayAddress": "121 Aldersmith Pl Unit 203",
-      "city": "View Royal",
-      "state": "BC",
-      "postalCode": "V9A 7M7",
-      "neighborhood": "Glentana",
-      "squareFeet": 1120,
-      "baths": 2,
-      "beds": 2,
-      "price": 349000,
-      "listDate": "2019-08-07T00:00:00"
+    "frontResourceUrl": "https://alf-gabbi-uploads.s3.amazonaws.com/brivity-5a77aadd-323c-4797-b04f-b2fb8032c046/resized/1605029009512.jpg",
+    "name": "Market Listing - Edit Test",
+    "postcardSize": "6x4",
+    "templateTheme": "c2b991302c5ecc11374a99ed0126d07f",
+    "mailoutSize": 1000,
+    "mergeVariables": [
+      { "name": "brandColor", "value": "#0e2b5b" },
+      { "name": "frontHeadline", "value": "Just Listed" },
+      { "name": "secondaryHeadline", "value": "IN YOUR NEIGHBORHOOD" },
+      { "name": "frontCtaContent", "value": "See the price and photos:" },
+      { "name": "teamBrokerageName", "value": "Redman Tech | Redman Tech" },
+      { "name": "backPhoneNumbers", "value": "(c): 780-555-2352 | (o): (855) 427-4848" },
+      { "name": "agentAddress", "value": "2211 Rimland Dr, Bellingham, WA, 98226" },
+      { "name": "backCtaLead", "value": "See what your home is worth at:" },
+      { "name": "phoneCtaIntro", "value": "How can I be of service?" },
+      { "name": "phonePreText", "value": "Let's chat!" },
+      { "name": "agentPhone", "value": "780-555-23523434" },
+      {
+        "name": "backHeadline",
+        "value": "See what your neighbor's home is selling for or schedule a tour"
+      },
+      { "name": "backContent", "value": "(You know you want to see inside!)" },
+      {
+        "name": "disclaimer",
+        "value": "This is not intended to solicit property currently listed for sale."
+      }
+    ],
+    "generatedAssetRevs": {
+      "brokerageLogo": "1-27d68fe5ca5408bd8287ab9e0725fa76",
+      "realtorPhoto": "1-bab6fd20df9a156e1ce38034c5cebf4f",
+      "userBranding": "34-b9a099bcf568e54d7b0bed972549f5b8",
+      "userProfile": "14-9c73abd6fd1d65248f876f379b69bc75",
+      "user": "5-7e8c6865621f698cab204c1cf8720f2f",
+      "teamBranding": "1-40599b1b305ec8f9560f9ee6dc391bf6",
+      "teamProfile": "112-cb4f8291a3b4d21ead0965cd18e1e252"
+    },
+    "themeTemplateVersion": "1.0.4",
+    "destinationsOptions": {
+      "mode": "manual",
+      "manual": { "fillDestinationOptions": {}, "searchTimestampId": "1605029045267" }
+    },
+    "recipientCount": 1000,
+    "send_date": "2020-11-19T17:39:25.392Z",
+    "expected_delivery_date": "2020-11-27",
+    "edited": true,
+    "mailoutDisplayAgent": { "userId": "brivity-5a77aadd-323c-4797-b04f-b2fb8032c046" },
+    "needsUpdate": true,
+    "lobId": "psc_2723c2e7122b09fd",
+    "lobEnvironment": "test",
+    "approvedByUser": {
+      "userId": "brivity-5a77aadd-323c-4797-b04f-b2fb8032c046",
+      "first": "Ryan",
+      "last": "Ramage"
     }
+  },
+  {
+    "_id": "ckgs7rs05000001vi79ykh7uf",
+    "_rev": "10-2cabb8d9fcc971c27c3db7aa4a3e2bd3",
+    "type": "mailout",
+    "userId": "brivity-5a77aadd-323c-4797-b04f-b2fb8032c046",
+    "mlsNum": "1679531",
+    "board": "21",
+    "blueroofMlsId": "101",
+    "listingStatus": "listed",
+    "details": {
+      "blueroofMlsId": "101",
+      "mlsNum": "1679531",
+      "neighborhood": "Downtown Carnation",
+      "latitude": 47.649969,
+      "longitude": -121.913919,
+      "displayAddress": "31845 W Rutherford St",
+      "city": "Carnation",
+      "state": "WA",
+      "postalCode": "98014",
+      "squareFeet": 1700,
+      "baths": 1.5,
+      "beds": 4,
+      "price": 515000,
+      "listDate": "2020-10-23T12:50:55.000Z",
+      "coverPhoto": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/0.jpg?v=0",
+      "bathsTotalRooms": 1.5
+    },
+    "raw": {
+      "mongoId": "5f9335296a8c91457cc52afb",
+      "blossorId": "21-1679531",
+      "blueroofMlsId": 101,
+      "mlsNum": "1679531",
+      "standardStatus": "Active",
+      "mlsStatus": "Active",
+      "openhouses": [],
+      "history": [],
+      "lotSize": 0.23,
+      "streetAddress": "31845 W Rutherford St",
+      "city": "Carnation",
+      "state": "WA",
+      "postalCode": "98014",
+      "county": "King",
+      "area": "Redmond/Carnatio",
+      "neighborhood": "Downtown Carnation",
+      "listAgentId": "98057",
+      "listAgentName": "Diane Lucas",
+      "listAgentPhone": "4254540911",
+      "listOfficeId": "5243",
+      "listOfficeName": "Keller Williams Rlty Bellevue",
+      "listOfficePhone": "4254540911",
+      "hasHoa": false,
+      "hoaFee": 0,
+      "hoaFeeYn": false,
+      "squareFeet": 1700,
+      "bedrooms": 4,
+      "bathsTotalDecimal": 1.5,
+      "fullBaths": 1,
+      "halfBaths": 1,
+      "threeQuarterBaths": 0,
+      "quarterBaths": 0,
+      "garageSpaces": 1,
+      "hasBasement": false,
+      "hasGarage": true,
+      "hasWaterfront": false,
+      "hasView": false,
+      "isNewConstruction": false,
+      "poolFeatures": [],
+      "parkingFeatures": ["Garage-Detached"],
+      "interiorFeatures": [
+        "Dbl Pane/Storm Windw",
+        "Dining Room",
+        "Master on Main",
+        "Ceramic Tile",
+        "Hardwood",
+        "Wall to Wall Carpet"
+      ],
+      "exteriorFeatures": ["Wood", "Cable TV", "Fenced-Fully", "Gas Available", "RV Parking"],
+      "communityFeatures": [],
+      "propertyFeatures": [
+        "Alley",
+        "Paved Street",
+        "Cable TV",
+        "Fenced-Fully",
+        "Gas Available",
+        "RV Parking",
+        "Sewer Connected",
+        "Public"
+      ],
+      "greenFeatures": [],
+      "view": [],
+      "heating": ["Forced Air", "Natural Gas"],
+      "cooling": [],
+      "lotFeatures": [
+        "Alley",
+        "Paved Street",
+        "Cable TV",
+        "Fenced-Fully",
+        "Gas Available",
+        "RV Parking",
+        "Fruit Trees",
+        "Garden Space",
+        "Level"
+      ],
+      "homeStyle": ["2 Story"],
+      "financialInformation": ["Cash Out", "Conventional", "FHA"],
+      "propertySubTypes": ["Built On Lot"],
+      "foreclosure": false,
+      "shortSale": false,
+      "lat": 47.649969,
+      "lng": -121.913919,
+      "topography": "Fruit Trees,Garden Space,Level",
+      "listDate": "2020-10-23T12:50:55.000Z",
+      "updateDate": "2020-10-27T08:36:26.000Z",
+      "lastStatusChangeDate": "2020-10-23T12:50:55.000Z",
+      "stories": 2,
+      "hideAddress": false,
+      "hideListing": false,
+      "photosAvailable": 29,
+      "price": 515000,
+      "mlsPropertyType": "Residential",
+      "propertyType": "Residential",
+      "standardPropertyType": "Residential",
+      "remarks": "Enchanting 1939 home with all the charm of yesteryear! Enjoy original millwork & light fixtures, original HW floors, and open living spaces with oversized windows. Home is drenched in light! New roof 2014, new fence 2019. Kitchen with eating space plus huge mud room for storage. 2 bdrms & 1 bath downstairs + 2 bdrms, 1/2 bath & loft upstairs. Level lot with fenced yard has alley access; garage w/ shop space. Walk to Starbucks, grocery, schools, Tolt-MacDonald Park. Pre-inspected, 1-yr warranty.",
+      "schoolDistrict": "Riverview",
+      "sewer": "Sewer Connected",
+      "water": "Public",
+      "year": 1939,
+      "zoning": "R24",
+      "taxId": "8658302335",
+      "taxAmount": 4562,
+      "taxYear": 2020,
+      "virtualTourBranded": "https://www.tourfactory.com/idxr2811257",
+      "originatingSystemName": "WA_NWMLS",
+      "photos": [
+        { "order": 1, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/0.jpg?v=0" },
+        { "order": 2, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/1.jpg?v=0" },
+        { "order": 3, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/2.jpg?v=0" },
+        { "order": 4, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/3.jpg?v=0" },
+        { "order": 5, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/4.jpg?v=0" },
+        { "order": 6, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/5.jpg?v=0" },
+        { "order": 7, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/6.jpg?v=0" },
+        { "order": 8, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/7.jpg?v=0" },
+        { "order": 9, "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/8.jpg?v=0" },
+        {
+          "order": 10,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/9.jpg?v=0"
+        },
+        {
+          "order": 11,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/10.jpg?v=0"
+        },
+        {
+          "order": 12,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/11.jpg?v=0"
+        },
+        {
+          "order": 13,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/12.jpg?v=0"
+        },
+        {
+          "order": 14,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/13.jpg?v=0"
+        },
+        {
+          "order": 15,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/14.jpg?v=0"
+        },
+        {
+          "order": 16,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/15.jpg?v=0"
+        },
+        {
+          "order": 17,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/16.jpg?v=0"
+        },
+        {
+          "order": 18,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/17.jpg?v=0"
+        },
+        {
+          "order": 19,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/18.jpg?v=0"
+        },
+        {
+          "order": 20,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/19.jpg?v=0"
+        },
+        {
+          "order": 21,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/20.jpg?v=0"
+        },
+        {
+          "order": 22,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/21.jpg?v=0"
+        },
+        {
+          "order": 23,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/22.jpg?v=0"
+        },
+        {
+          "order": 24,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/23.jpg?v=0"
+        },
+        {
+          "order": 25,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/24.jpg?v=0"
+        },
+        {
+          "order": 26,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/25.jpg?v=0"
+        },
+        {
+          "order": 27,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/26.jpg?v=0"
+        },
+        {
+          "order": 28,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/27.jpg?v=0"
+        },
+        {
+          "order": 29,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/28.jpg?v=0"
+        }
+      ],
+      "nextToken": "2020-10-23T12:50:55.000Z",
+      "brUpdateDate": "2020-10-27T15:51:34.296Z"
+    },
+    "createdBy": "user",
+    "created": 1603817905541,
+    "mailoutStatus": "sent",
+    "statusHistory": [],
+    "templateTheme": "stack",
+    "mailoutSize": 1,
+    "mergeVariables": [
+      { "name": "brandColor", "value": "#0e2b5b" },
+      {
+        "name": "frontImgUrl",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/7/9/5/3/1/0.jpg?v=0"
+      },
+      { "name": "frontHeadline", "value": "Just Listed" },
+      { "name": "secondaryHeadline", "value": "IN YOUR NEIGHBORHOOD" },
+      { "name": "frontAddressLine", "value": "31845 W Rutherford St" },
+      { "name": "frontPropertyFeatures", "value": "$515,000 | 4 bed | 1.5 bath" },
+      { "name": "frontCtaContent", "value": "See the price and photos:" },
+      { "name": "frontAgentUrl" },
+      {
+        "name": "agentPicture",
+        "value": "https://alf-gabbi-uploads.s3.amazonaws.com/brivity-5a77aadd-323c-4797-b04f-b2fb8032c046/resized/realtorPhoto.1584149430662.png"
+      },
+      { "name": "name", "value": "Ryan Ramage" },
+      { "name": "teamBrokerageName", "value": "Redman Tech | Redman Tech" },
+      { "name": "backPhoneNumbers", "value": "(c): 780-555-2352 | (o): (855) 427-4848" },
+      { "name": "agentAddress", "value": "2211 Rimland Dr, Bellingham, 98226" },
+      { "name": "backUrlCta", "value": "See what your home is worth at:" },
+      { "name": "backUrl" },
+      {
+        "name": "backHeadline",
+        "value": "See what your neighbor's home is selling for or schedule a tour"
+      },
+      { "name": "backContent", "value": "(You know you want to see inside!)" },
+      { "name": "phoneCtaIntro", "value": "How can I be of service?" },
+      { "name": "phonePreText", "value": "Let's chat!" },
+      { "name": "phone", "value": "780-555-2352" },
+      {
+        "name": "brokerageLogo",
+        "value": "https://alf-gabbi-uploads.s3.amazonaws.com/brivity-team-8398/resized/brokerageLogo.1583858747223.png"
+      },
+      { "name": "teamLogo" },
+      {
+        "name": "disclaimer",
+        "value": "This is not intended to solicit property currently listed for sale."
+      }
+    ],
+    "generatedAssetRevs": {
+      "realtorPhoto": "1-bab6fd20df9a156e1ce38034c5cebf4f",
+      "brokerageLogo": "1-27d68fe5ca5408bd8287ab9e0725fa76",
+      "userBranding": "30-c0cea1a7c00d3176dcee974221439fee",
+      "userProfile": "13-67102ff381670503a9627810fd4bf836",
+      "user": "5-7e8c6865621f698cab204c1cf8720f2f",
+      "teamBranding": "10-65024b2a50f198d1e24c560b0474eb26",
+      "teamProfile": "110-5ea09c59ce95818c91bade4030b6c8fb"
+    },
+    "themeTemplateVersion": "1.0.4",
+    "recipientCount": 1,
+    "needsUpdate": true,
+    "edited": true,
+    "mailoutDisplayAgent": { "userId": "brivity-5a77aadd-323c-4797-b04f-b2fb8032c046" },
+    "postcardSize": "11x6",
+    "send_date": "2020-10-28T17:22:59.472Z",
+    "expected_delivery_date": "2020-11-05",
+    "approvedByUser": {
+      "userId": "brivity-5a77aadd-323c-4797-b04f-b2fb8032c046",
+      "first": "Ryan",
+      "last": "Ramage"
+    }
+  },
+  {
+    "_id": "ckgs2ph5v0000011r2r5d1pmp",
+    "_rev": "18-724465365a1f56e2e616b6c59948048e",
+    "type": "mailout",
+    "userId": "brivity-5a77aadd-323c-4797-b04f-b2fb8032c046",
+    "mlsNum": "1621630",
+    "board": "21",
+    "blueroofMlsId": "101",
+    "listingStatus": "sold",
+    "details": {
+      "blueroofMlsId": "101",
+      "mlsNum": "1621630",
+      "neighborhood": "Coupeville",
+      "latitude": 48.208036,
+      "longitude": -122.690097,
+      "displayAddress": "204 SW Terry Rd Unit 60",
+      "city": "Coupeville",
+      "state": "WA",
+      "postalCode": "98239",
+      "squareFeet": 1639,
+      "baths": 2,
+      "beds": 3,
+      "price": 75000,
+      "listDate": "2020-06-26T13:18:26.000Z",
+      "coverPhoto": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/0.jpg?v=1",
+      "bathsTotalRooms": 2,
+      "status": "sold"
+    },
+    "raw": {
+      "mongoId": "5ef65a0b73aa1715b5ef1c86",
+      "blossorId": "21-1621630",
+      "blueroofMlsId": 101,
+      "mlsNum": "1621630",
+      "standardStatus": "Closed",
+      "mlsStatus": "Sold",
+      "openhouses": [],
+      "history": [
+        {
+          "status": 4,
+          "statusSet": "2020-06-26T13:18:26.000Z",
+          "date": "2020-06-29T10:24:44.000Z"
+        },
+        { "status": 4, "statusSet": "2020-07-01T09:27:55.000Z", "date": "2020-07-01T09:27:55.000Z" }
+      ],
+      "lotSize": 0,
+      "streetAddress": "204 SW Terry Rd Unit 60",
+      "city": "Coupeville",
+      "state": "WA",
+      "postalCode": "98239",
+      "county": "Island",
+      "area": "Central Whidbey",
+      "neighborhood": "Coupeville",
+      "listAgentId": "108803",
+      "listAgentName": "Vicki Crocker",
+      "listAgentPhone": "3606755915",
+      "listOfficeId": "4247",
+      "listOfficeName": "Coldwell Banker 360 Team",
+      "listOfficePhone": "3606755915",
+      "hasHoa": false,
+      "hoaFeeYn": false,
+      "squareFeet": 1639,
+      "bedrooms": 3,
+      "bathsTotalDecimal": 2,
+      "fullBaths": 2,
+      "halfBaths": 0,
+      "threeQuarterBaths": 0,
+      "quarterBaths": 0,
+      "hasBasement": false,
+      "hasGarage": false,
+      "hasWaterfront": false,
+      "hasView": false,
+      "isNewConstruction": false,
+      "poolFeatures": [],
+      "parkingFeatures": [],
+      "interiorFeatures": ["Laminate", "Wall to Wall Carpet"],
+      "exteriorFeatures": ["Cement/Concrete"],
+      "communityFeatures": [],
+      "propertyFeatures": ["Community"],
+      "greenFeatures": [],
+      "view": [],
+      "heating": ["Electric"],
+      "cooling": [],
+      "lotFeatures": [],
+      "homeStyle": ["Manuf-Double Wide"],
+      "financialInformation": ["Conv", "Cash Out"],
+      "propertySubTypes": [],
+      "foreclosure": false,
+      "shortSale": false,
+      "lat": 48.208036,
+      "lng": -122.690097,
+      "listDate": "2020-06-26T13:18:26.000Z",
+      "pendingDate": "2020-07-01T09:27:55.000Z",
+      "updateDate": "2020-07-25T09:13:53.000Z",
+      "soldDate": "2020-07-24T00:00:00.000Z",
+      "lastStatusChangeDate": "2020-07-25T09:13:53.000Z",
+      "hideAddress": false,
+      "hideListing": false,
+      "photosAvailable": 33,
+      "photoVersion": 1,
+      "price": 75000,
+      "soldPrice": 80000,
+      "mlsPropertyType": "Manufactured Home",
+      "propertyType": "Manufactured Home",
+      "standardPropertyType": "Manufactured Home",
+      "remarks": "Check out this well maintained one owner home. Features include open concept living, good sized kitchen with ample counter space as well as an island and newer appliances, split floor bedroom plan with full bathroom in the master and walk in closet. Home has newer hot water heater plus large laundry room. Outside there are 2 sheds, 1 with power. Quality and affordability. Go Show!",
+      "schoolDistrict": "Coupeville",
+      "water": "Community",
+      "year": 1994,
+      "taxId": "M913000000601",
+      "taxAmount": 182,
+      "taxYear": 2019,
+      "virtualTourBranded": "https://virtualtours.intrepidmedia360.com/idx/746921",
+      "originatingSystemName": "WA_NWMLS",
+      "daysOnMarket": 5,
+      "photos": [
+        { "order": 1, "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/0.jpg?v=1" },
+        { "order": 2, "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/1.jpg?v=1" },
+        { "order": 3, "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/2.jpg?v=1" },
+        { "order": 4, "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/3.jpg?v=1" },
+        { "order": 5, "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/4.jpg?v=1" },
+        { "order": 6, "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/5.jpg?v=1" },
+        { "order": 7, "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/6.jpg?v=1" },
+        { "order": 8, "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/7.jpg?v=1" },
+        { "order": 9, "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/8.jpg?v=1" },
+        {
+          "order": 10,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/9.jpg?v=1"
+        },
+        {
+          "order": 11,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/10.jpg?v=1"
+        },
+        {
+          "order": 12,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/11.jpg?v=1"
+        },
+        {
+          "order": 13,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/12.jpg?v=1"
+        },
+        {
+          "order": 14,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/13.jpg?v=1"
+        },
+        {
+          "order": 15,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/14.jpg?v=1"
+        },
+        {
+          "order": 16,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/15.jpg?v=1"
+        },
+        {
+          "order": 17,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/16.jpg?v=1"
+        },
+        {
+          "order": 18,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/17.jpg?v=1"
+        },
+        {
+          "order": 19,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/18.jpg?v=1"
+        },
+        {
+          "order": 20,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/19.jpg?v=1"
+        },
+        {
+          "order": 21,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/20.jpg?v=1"
+        },
+        {
+          "order": 22,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/21.jpg?v=1"
+        },
+        {
+          "order": 23,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/22.jpg?v=1"
+        },
+        {
+          "order": 24,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/23.jpg?v=1"
+        },
+        {
+          "order": 25,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/24.jpg?v=1"
+        },
+        {
+          "order": 26,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/25.jpg?v=1"
+        },
+        {
+          "order": 27,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/26.jpg?v=1"
+        },
+        {
+          "order": 28,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/27.jpg?v=1"
+        },
+        {
+          "order": 29,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/28.jpg?v=1"
+        },
+        {
+          "order": 30,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/29.jpg?v=1"
+        },
+        {
+          "order": 31,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/30.jpg?v=1"
+        },
+        {
+          "order": 32,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/31.jpg?v=1"
+        },
+        {
+          "order": 33,
+          "url": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/32.jpg?v=1"
+        }
+      ],
+      "nextToken": "2020-06-26T13:18:26.000Z",
+      "brUpdateDate": "2020-10-15T22:31:41.207Z"
+    },
+    "createdBy": "user",
+    "created": 1603809400099,
+    "mailoutStatus": "sent",
+    "statusHistory": [],
+    "mailoutDisplayAgent": {
+      "userId": "brivity-5a77aadd-323c-4797-b04f-b2fb8032c046",
+      "first": "Ryan",
+      "last": "Ramage"
+    },
+    "postcardSize": "6x4",
+    "templateTheme": "internal-c2b991302",
+    "mailoutSize": 240,
+    "mergeVariables": [
+      { "name": "brandColor", "value": "#0e2b5b" },
+      {
+        "name": "frontImgUrl",
+        "value": "https://photos.brivity.com/images/21/photo/1/6/2/1/6/3/0/0.jpg?v=1"
+      },
+      { "name": "frontHeadline", "value": "Just Solder" },
+      { "name": "secondaryHeadline", "value": "IN YOUR NEIGHBORHOOD" },
+      { "name": "frontAddressLine", "value": "204 SW Terry Rd Unit 60" },
+      { "name": "frontPropertyFeatures", "value": "$75,000 | 3 bed | 2 bath" },
+      {
+        "name": "frontCtaContent",
+        "value": "Get the scoop on what your neighbor's home sold for!"
+      },
+      { "name": "frontAgentUrl" },
+      {
+        "name": "agentPicture",
+        "value": "https://alf-gabbi-uploads.s3.amazonaws.com/brivity-5a77aadd-323c-4797-b04f-b2fb8032c046/resized/realtorPhoto.1584149430662.png"
+      },
+      { "name": "name" },
+      { "name": "teamBrokerageName", "value": "Redman Tech | Redman Tech" },
+      { "name": "backPhoneNumbers", "value": "(c): 780-555-2352 | (o): (855) 427-4848" },
+      { "name": "agentAddress", "value": "2211 Rimland Dr, Bellingham, 98226" },
+      { "name": "backUrlCta" },
+      { "name": "backUrl" },
+      { "name": "backHeadline", "value": "Curious?" },
+      {
+        "name": "backContent",
+        "value": "We all like to know what our neighbor's home sold for. A higher sales price could mean getting more equity out of your home too."
+      },
+      { "name": "phoneCtaIntro", "value": "How can I be of service?" },
+      { "name": "phonePreText", "value": "Let's chat!" },
+      { "name": "phone" },
+      {
+        "name": "brokerageLogo",
+        "value": "https://alf-gabbi-uploads.s3.amazonaws.com/brivity-team-8398/resized/brokerageLogo.1583858747223.png"
+      },
+      { "name": "teamLogo" },
+      {
+        "name": "disclaimer",
+        "value": "This is not intended to solicit property currently listed for sale."
+      }
+    ],
+    "generatedAssetRevs": {
+      "realtorPhoto": "1-bab6fd20df9a156e1ce38034c5cebf4f",
+      "brokerageLogo": "1-27d68fe5ca5408bd8287ab9e0725fa76",
+      "userBranding": "30-c0cea1a7c00d3176dcee974221439fee",
+      "userProfile": "13-67102ff381670503a9627810fd4bf836",
+      "user": "5-7e8c6865621f698cab204c1cf8720f2f",
+      "teamBranding": "10-65024b2a50f198d1e24c560b0474eb26",
+      "teamProfile": "110-5ea09c59ce95818c91bade4030b6c8fb"
+    },
+    "themeTemplateVersion": "1.1.0",
+    "recipientCount": 240,
+    "edited": true,
+    "needsUpdate": true,
+    "name": "Custom Billing Page Test Edit",
+    "lobId": "psc_6318acbce0a86891",
+    "lobEnvironment": "test",
+    "send_date": "2020-11-19T17:30:18.460Z",
+    "expected_delivery_date": "2020-11-27",
+    "approvedByUser": {
+      "userId": "brivity-5a77aadd-323c-4797-b04f-b2fb8032c046",
+      "first": "Ryan",
+      "last": "Ramage"
+    }
+  },
+  {
+    "_id": "ckgpttpxr0003010m11q68c6t",
+    "_rev": "5-6c3dd9d79c16069c1041ac8b7573c42e",
+    "type": "mailout",
+    "subtype": "campaign",
+    "userId": "brivity-5a77aadd-323c-4797-b04f-b2fb8032c046",
+    "listingStatus": "custom",
+    "created": 1603673549199,
+    "mailoutStatus": "submitted",
+    "statusHistory": [],
+    "frontResourceUrl": "https://alf-gabbi-uploads.s3.amazonaws.com/brivity-5a77aadd-323c-4797-b04f-b2fb8032c046/resized/1603673530031.jpg",
+    "name": "Market Listing Edit",
+    "postcardSize": "11x6",
+    "templateTheme": "stack",
+    "mailoutSize": 1000,
+    "mergeVariables": [
+      { "name": "brandColor", "value": "#0e2b5b" },
+      { "name": "frontImgUrl" },
+      { "name": "frontHeadline", "value": "Just Listed" },
+      { "name": "secondaryHeadline", "value": "IN YOUR NEIGHBORHOOD" },
+      { "name": "frontAddressLine" },
+      { "name": "frontPropertyFeatures" },
+      { "name": "frontCtaContent", "value": "See the price and photos:" },
+      { "name": "frontAgentUrl" },
+      {
+        "name": "agentPicture",
+        "value": "https://alf-gabbi-uploads.s3.amazonaws.com/brivity-5a77aadd-323c-4797-b04f-b2fb8032c046/resized/realtorPhoto.1584149430662.png"
+      },
+      { "name": "name", "value": "Ryan Ramage" },
+      { "name": "teamBrokerageName", "value": "Redman Tech | Redman Tech" },
+      { "name": "backPhoneNumbers", "value": "(c): 780-555-2352 | (o): (855) 427-4848" },
+      { "name": "agentAddress", "value": "2211 Rimland Dr, Bellingham, 98226" },
+      { "name": "backUrlCta", "value": "See what your home is worth at:" },
+      { "name": "backUrl" },
+      {
+        "name": "backHeadline",
+        "value": "See what your neighbor's home is selling for or schedule a tour"
+      },
+      { "name": "backContent", "value": "(You know you want to see inside!)" },
+      { "name": "phoneCtaIntro", "value": "How can I be of service?" },
+      { "name": "phonePreText", "value": "Let's chat!" },
+      { "name": "phone", "value": "780-555-2352" },
+      {
+        "name": "brokerageLogo",
+        "value": "https://alf-gabbi-uploads.s3.amazonaws.com/brivity-team-8398/resized/brokerageLogo.1583858747223.png"
+      },
+      { "name": "teamLogo" },
+      {
+        "name": "disclaimer",
+        "value": "This is not intended to solicit property currently listed for sale."
+      }
+    ],
+    "generatedAssetRevs": {
+      "realtorPhoto": "1-bab6fd20df9a156e1ce38034c5cebf4f",
+      "brokerageLogo": "1-27d68fe5ca5408bd8287ab9e0725fa76",
+      "userBranding": "30-c0cea1a7c00d3176dcee974221439fee",
+      "userProfile": "12-3a0a2e02e9dd972b38d4066ceeb016a1",
+      "user": "5-7e8c6865621f698cab204c1cf8720f2f",
+      "teamBranding": "10-65024b2a50f198d1e24c560b0474eb26",
+      "teamProfile": "109-0059c1fc36ac4262876d745993f4440c"
+    },
+    "themeTemplateVersion": "1.0.4",
+    "destinationsOptions": {
+      "mode": "manual",
+      "manual": { "fillDestinationOptions": {}, "searchTimestampId": "1603831527065" }
+    },
+    "recipientCount": 1000,
+    "edited": true,
+    "mailoutDisplayAgent": { "userId": "brivity-5a77aadd-323c-4797-b04f-b2fb8032c046" },
+    "needsUpdate": true
+  },
+  {
+    "_id": "ckgmtukym0002010mga2hbtpi",
+    "_rev": "5-2807218d4cf6b398fa4ebd444b1844e4",
+    "type": "mailout",
+    "subtype": "campaign",
+    "userId": "brivity-5a77aadd-323c-4797-b04f-b2fb8032c046",
+    "listingStatus": "custom",
+    "created": 1603492190878,
+    "mailoutStatus": "calculated",
+    "statusHistory": [],
+    "frontResourceUrl": "https://alf-gabbi-uploads.s3.amazonaws.com/brivity-5a77aadd-323c-4797-b04f-b2fb8032c046/resized/1603492144751.jpg",
+    "name": "Market Listing Edit Test",
+    "postcardSize": "11x6",
+    "templateTheme": "stack",
+    "mailoutSize": 1,
+    "mergeVariables": [
+      { "name": "brandColor", "value": "#0e2b5b" },
+      { "name": "frontHeadline", "value": "Just Listed" },
+      { "name": "secondaryHeadline", "value": "IN YOUR NEIGHBORHOOD" },
+      { "name": "frontCtaContent", "value": "See the price and photos:" },
+      { "name": "backUrlCta", "value": "See what your home is worth at:" },
+      {
+        "name": "backHeadline",
+        "value": "See what your neighbor's home is selling for or schedule a tour"
+      },
+      { "name": "backContent", "value": "(You know you want to see inside!)" },
+      { "name": "phoneCtaIntro", "value": "How can I be of service?" },
+      { "name": "phonePreText", "value": "Let's chat!" },
+      {
+        "name": "disclaimer",
+        "value": "This is not intended to solicit property currently listed for sale."
+      },
+      {
+        "name": "agentPicture",
+        "value": "https://alf-gabbi-uploads.s3.amazonaws.com/brivity-5a77aadd-323c-4797-b04f-b2fb8032c046/resized/realtorPhoto.1584149430662.png"
+      },
+      { "name": "name", "value": "Ryan Ramage" },
+      { "name": "teamBrokerageName", "value": "Redman Tech | Redman Tech" },
+      { "name": "backPhoneNumbers", "value": "(c): 780-555-2352 | (o): (855) 427-4848" },
+      { "name": "agentAddress", "value": "2211 Rimland Dr, Bellingham, 98226" },
+      { "name": "phone", "value": "780-555-2352" },
+      {
+        "name": "brokerageLogo",
+        "value": "https://alf-gabbi-uploads.s3.amazonaws.com/brivity-team-8398/resized/brokerageLogo.1583858747223.png"
+      }
+    ],
+    "generatedAssetRevs": {
+      "brokerageLogo": "1-27d68fe5ca5408bd8287ab9e0725fa76",
+      "realtorPhoto": "1-bab6fd20df9a156e1ce38034c5cebf4f",
+      "userBranding": "30-c0cea1a7c00d3176dcee974221439fee",
+      "userProfile": "12-3a0a2e02e9dd972b38d4066ceeb016a1",
+      "user": "5-7e8c6865621f698cab204c1cf8720f2f",
+      "teamBranding": "10-65024b2a50f198d1e24c560b0474eb26",
+      "teamProfile": "109-0059c1fc36ac4262876d745993f4440c"
+    },
+    "themeTemplateVersion": "1.0.4",
+    "destinationsOptions": {
+      "mode": "userUploaded",
+      "userUploaded": {
+        "filename": "addresses.csv",
+        "created": 1605907359552,
+        "mapping": {
+          "lastNameColumn": 1,
+          "deliveryLineColumn": 2,
+          "cityColumn": 3,
+          "stateColumn": 4,
+          "zipColumn": 5
+        }
+      }
+    },
+    "recipientCount": 1
+  },
+  {
+    "_id": "ckgmtmkv40001010maro3gskp",
+    "_rev": "1-cef6ec56d0e5cfd4f8576f75bcd73e9d",
+    "type": "mailout",
+    "subtype": "campaign",
+    "userId": "brivity-5a77aadd-323c-4797-b04f-b2fb8032c046",
+    "listingStatus": "custom",
+    "created": 1603491817504,
+    "mailoutStatus": "created",
+    "statusHistory": [],
+    "frontResourceUrl": "https://alf-gabbi-uploads.s3.amazonaws.com/brivity-5a77aadd-323c-4797-b04f-b2fb8032c046/resized/1603491702630.jpg",
+    "name": "Market Listing",
+    "postcardSize": "11x6",
+    "templateTheme": "stack",
+    "mailoutSize": 800,
+    "mergeVariables": [
+      { "name": "brandColor", "value": "#0e2b5b" },
+      { "name": "frontHeadline", "value": "Just Listed" },
+      { "name": "secondaryHeadline", "value": "IN YOUR NEIGHBORHOOD" },
+      { "name": "frontCtaContent", "value": "See the price and photos:" },
+      { "name": "backUrlCta", "value": "See what your home is worth at:" },
+      {
+        "name": "backHeadline",
+        "value": "See what your neighbor's home is selling for or schedule a tour"
+      },
+      { "name": "backContent", "value": "(You know you want to see inside!)" },
+      { "name": "phoneCtaIntro", "value": "How can I be of service?" },
+      { "name": "phonePreText", "value": "Let's chat!" },
+      {
+        "name": "disclaimer",
+        "value": "This is not intended to solicit property currently listed for sale."
+      },
+      {
+        "name": "agentPicture",
+        "value": "https://alf-gabbi-uploads.s3.amazonaws.com/brivity-5a77aadd-323c-4797-b04f-b2fb8032c046/resized/realtorPhoto.1584149430662.png"
+      },
+      { "name": "name", "value": "Ryan Ramage" },
+      { "name": "teamBrokerageName", "value": "Redman Tech | Redman Tech" },
+      { "name": "backPhoneNumbers", "value": "(c): 780-555-2352 | (o): (855) 427-4848" },
+      { "name": "agentAddress", "value": "2211 Rimland Dr, Bellingham, 98226" },
+      { "name": "phone", "value": "780-555-2352" },
+      {
+        "name": "brokerageLogo",
+        "value": "https://alf-gabbi-uploads.s3.amazonaws.com/brivity-team-8398/resized/brokerageLogo.1583858747223.png"
+      }
+    ],
+    "generatedAssetRevs": {
+      "brokerageLogo": "1-27d68fe5ca5408bd8287ab9e0725fa76",
+      "realtorPhoto": "1-bab6fd20df9a156e1ce38034c5cebf4f",
+      "userBranding": "30-c0cea1a7c00d3176dcee974221439fee",
+      "userProfile": "12-3a0a2e02e9dd972b38d4066ceeb016a1",
+      "user": "5-7e8c6865621f698cab204c1cf8720f2f",
+      "teamBranding": "10-65024b2a50f198d1e24c560b0474eb26",
+      "teamProfile": "109-0059c1fc36ac4262876d745993f4440c"
+    },
+    "themeTemplateVersion": "1.0.4"
+  },
+  {
+    "_id": "ckgmtfkb80000010m23no6gfw",
+    "_rev": "4-5322114123a5d0000b33d6eb47f70ae1",
+    "type": "mailout",
+    "subtype": "campaign",
+    "userId": "brivity-5a77aadd-323c-4797-b04f-b2fb8032c046",
+    "listingStatus": "custom",
+    "created": 1603491490197,
+    "mailoutStatus": "created",
+    "statusHistory": [],
+    "frontResourceUrl": "https://alf-gabbi-uploads.s3.amazonaws.com/brivity-5a77aadd-323c-4797-b04f-b2fb8032c046/resized/1603491473752.jpg",
+    "name": "Market Listing",
+    "postcardSize": "6x4",
+    "templateTheme": "c2b990302c5ecb01374a98ed0126d07f",
+    "mailoutSize": 800,
+    "mergeVariables": [
+      { "name": "brandColor", "value": "#0e2b5b" },
+      { "name": "frontHeadline", "value": "Just Listed" },
+      { "name": "secondaryHeadline", "value": "IN YOUR NEIGHBORHOOD" },
+      { "name": "frontCtaContent", "value": "See the price and photos:" },
+      { "name": "teamBrokerageName", "value": "Redman Tech | Redman Tech" },
+      { "name": "backPhoneNumbers", "value": "(c): 780-555-2352 | (o): (855) 427-4848" },
+      { "name": "agentAddress", "value": "2211 Rimland Dr, Bellingham, 98226" },
+      { "name": "phoneCtaIntro", "value": "How can I be of service?" },
+      { "name": "phonePreText", "value": "Let's chat!" },
+      {
+        "name": "backHeadline",
+        "value": "See what your neighbor's home is selling for or schedule a tour"
+      },
+      { "name": "backContent", "value": "(You know you want to see inside!)" },
+      {
+        "name": "disclaimer",
+        "value": "This is not intended to solicit property currently listed for sale."
+      }
+    ],
+    "generatedAssetRevs": {
+      "brokerageLogo": "1-27d68fe5ca5408bd8287ab9e0725fa76",
+      "realtorPhoto": "1-bab6fd20df9a156e1ce38034c5cebf4f",
+      "userBranding": "30-c0cea1a7c00d3176dcee974221439fee",
+      "userProfile": "12-3a0a2e02e9dd972b38d4066ceeb016a1",
+      "user": "5-7e8c6865621f698cab204c1cf8720f2f",
+      "teamBranding": "10-65024b2a50f198d1e24c560b0474eb26",
+      "teamProfile": "109-0059c1fc36ac4262876d745993f4440c"
+    },
+    "themeTemplateVersion": "1.0.4",
+    "edited": true,
+    "mailoutDisplayAgent": { "userId": "brivity-5a77aadd-323c-4797-b04f-b2fb8032c046" },
+    "needsUpdate": true
   }
 ]

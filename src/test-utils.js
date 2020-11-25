@@ -1,17 +1,16 @@
 // test-utils.js
 import React from 'react';
 import { render as rtlRender } from '@testing-library/react';
-import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { LastLocationProvider } from 'react-router-last-location';
 import PolygonGoogleMapsHOC from './components/Forms/PolygonGoogleMaps/PolygonGoogleMapsHOC';
-// Import your own reducer
-import reducer from '../reducer';
+import AuthService from './services/auth';
+import configureStore from './store/configure';
 
 function render(
   ui,
-  { initialState, store = createStore(reducer, initialState), ...renderOptions } = {}
+  { initialState, store = configureStore({ initialState: {}, AuthService }), ...renderOptions } = {}
 ) {
   function Wrapper({ children }) {
     return (
