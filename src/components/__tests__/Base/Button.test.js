@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import 'jest-styled-components';
 import { Button } from '../../Base';
 
-test('renders-correctly', () => {
+it('renders correctly', () => {
   const tree = renderer.create(<Button />);
   expect(tree).toMatchSnapshot();
 });

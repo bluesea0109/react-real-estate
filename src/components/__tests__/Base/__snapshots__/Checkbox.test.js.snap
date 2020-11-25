@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+.c1 {
+  border: 0;
+  -webkit-clip: rect(0 0 0 0);
+  clip: rect(0 0 0 0);
+  -webkit-clip-path: inset(50%);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.c0 {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.c3 {
+  fill: none;
+  stroke: white;
+  stroke-width: 2px;
+}
+
+.c2 {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 3px;
+  -webkit-transition: all 150ms;
+  transition: all 150ms;
+  border: 1px solid black;
+}
+
+<div
+  className="c0"
+>
+  <input
+    className="c1"
+    type="checkbox"
+  />
+  <div
+    className="c2"
+  >
+    <svg
+      className="c3"
+      viewBox="0 0 24 24"
+    >
+      <polyline
+        points="20 6 9 17 4 12"
+      />
+    </svg>
+  </div>
+</div>
+`;

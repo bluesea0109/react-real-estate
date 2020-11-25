@@ -1,5 +1,6 @@
 import Button from './Button';
 import Card from './Card';
+import Checkbox from './Checkbox';
 import Container from './Container';
 import Dimmer from './Dimmer';
 import Divider from './Divider';
@@ -30,6 +31,7 @@ import Table from './Table';
 export {
   Button,
   Card,
+  Checkbox,
   Container,
   Dimmer,
   Divider,
