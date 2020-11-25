@@ -1,3 +1,3 @@
-const req = require.context('.', true, /\.\/.+\/middleware\.js$/);
+import Logger from './modules/logger/middleware';
 
-module.exports = req.keys().map(key => req(key).default);
+export { Logger };

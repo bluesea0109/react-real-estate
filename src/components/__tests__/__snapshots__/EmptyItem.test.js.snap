@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="ui placeholder segment "
+>
+  <div
+    className="ui icon header "
+  >
+    <i
+      aria-hidden="true"
+      className="file outline icon "
+      onClick={[Function]}
+    />
+    No Mailouts found.
+  </div>
+</div>
+`;
