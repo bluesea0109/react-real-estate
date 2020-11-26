@@ -142,6 +142,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const [coverPhoto, setCoverPhoto] = useState(_coverPhoto);
   const [coverPhotoIndex, setCoverPhotoIndex] = useState(0);
   const [photoUpdating, setPhotoUpdating] = useState(false);
+  const publishedTags = mailoutDetails?.publishedTags;
 
   //const defaultCTAUrl = useSelector(store => store.)
   const [ctaUrl, setCtaUrl] = useState(mailoutDetails.cta);
@@ -716,8 +717,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
               </div>
             ) : null}
           </div>
-
-          {!mailoutDetails.frontResourceUrl && (
+          {!mailoutDetails.frontResourceUrl && !publishedTags?.includes('holiday') && (
             <div style={{ maxWidth: 350, padding: '0 1rem', margin: 'auto' }}>
               <Header as="h4">Cover Photo</Header>
               {photoUpdating && <span>Please wait...</span>}
