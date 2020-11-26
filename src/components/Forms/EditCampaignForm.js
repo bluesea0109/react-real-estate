@@ -191,6 +191,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     afterChange: current => {
       if (current !== startSlide)
         dispatch(updateMailoutTemplateThemePending(filteredStencils[current].templateTheme));
+      console.log('send theme', filteredStencils[current].templateTheme);
     },
   };
 

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { useCallback, useEffect, useState, useRef, useLayoutEffect } from 'react';
 import { useHistory } from 'react-router';
 
@@ -108,6 +109,10 @@ const modalHeaderStyles = {
   justifyContent: 'space-between',
   borderBottom: 'none',
 };
+
+const tabPane = { border: 'none', boxShadow: 'none' };
+
+const tabPainP = { marginBottom: '20px' };
 
 const useFetching = (getActionCreator, onboarded, dispatch) => {
   useEffect(() => {
@@ -358,7 +363,9 @@ const Dashboard = () => {
     </div>
   );
 
-  const renderTemplatePicture = (templateName, src, isNew = false) => {
+  const renderTemplatePicture = (templateName, src, isNew = false, templateTheme) => {
+    console.log(templateName, 'templateNAMEeeeee');
+    console.log('templateTHEMEeeee', templateTheme);
     return (
       <div key={templateName}>
         <div
@@ -407,9 +414,10 @@ const Dashboard = () => {
       setsliderWidth(sliderContainerRef.current ? sliderContainerRef.current.offsetWidth : 0);
     },
     // eslint-disable-next-line
-    [windowSize]
+    [windowSize, tabIndex]
   );
-
+  console.log(sliderWidth, 'slider width');
+  console.log(sliderContainerRef, 'contain ref');
   let slides = [];
   if (stencilsAvailable) {
     stencilsAvailable.forEach(stencil => {
@@ -445,11 +453,7 @@ const Dashboard = () => {
       {
         menuItem: 'MLS Number',
         render: () => (
-          <Tab.Pane attached={false}>
-            <p>
-              Enter a property MLS number to import a listing, or you can create a custom campaign
-              and upload your own design.
-            </p>
+          <Tab.Pane style={tabPane} attached={false}>
             <div>
               <Input type="text" fluid placeholder="Property MLS Number" id="addCampaignInput" />
             </div>
@@ -459,7 +463,7 @@ const Dashboard = () => {
       {
         menuItem: 'Custom Campagin',
         render: () => (
-          <Tab.Pane attached={false}>
+          <Tab.Pane style={tabPane} attached={false}>
             <NewCampaignContainer>
               <h5>Campaign Name</h5>
               <Input
@@ -597,14 +601,19 @@ const Dashboard = () => {
       {
         menuItem: 'Holiday Campaign',
         render: () => (
-          <Tab.Pane attached={false}>
+          <Tab.Pane style={tabPane} attached={false}>
             <div ref={sliderContainerRef}>
               <Header as="h4">Template Theme</Header>
               <div style={{ position: 'relative', zIndex: 10 }}>
                 <Slider {...sliderSettings} ref={sliderRef} style={{ zIndex: 10 }}>
                   {stencilsAvailable &&
                     stencilsAvailable.map((stencil, ind) =>
-                      renderTemplatePicture(stencil.templateTheme, stencil.thumbnail, false)
+                      renderTemplatePicture(
+                        stencil.templateTheme,
+                        'https://chrome-aws-lambda-screenshots.s3.amazonaws.com/16064178421510dc9d8b8262c474f7490a5b74b15a975.png',
+                        false,
+                        templateTheme
+                      )
                     )}
                 </Slider>
               </div>
@@ -619,8 +628,8 @@ const Dashboard = () => {
     ];
     return <Tab menu={{ secondary: true }} panes={panes} onTabChange={handleTabChange} />;
   };
-
-  console.log('template theeeeme holiday', templateTheme);
+  console.log('stencilsAvailable', stencilsAvailable);
+  console.log('templateTheme', templateTheme);
   return (
     <Page basic>
       <ContentTopHeaderLayout>
@@ -732,7 +741,13 @@ const Dashboard = () => {
             </ModalAddCampaign.Header>
             <ModalAddCampaign.Content>
               {addMailoutError && <Message error>{addMailoutError.message}</Message>}
-              <AddCampaignContainer>{campaignTabs()}</AddCampaignContainer>
+              <AddCampaignContainer>
+                <p style={tabPainP}>
+                  Enter a property MLS number to import a listing, or you can create a custom
+                  campaign and upload your own design.
+                </p>
+                {campaignTabs()}
+              </AddCampaignContainer>
             </ModalAddCampaign.Content>
             <ModalAddCampaign.Actions>
               <Button inverted primary onClick={_ => setShowChooseSize(true)}>
