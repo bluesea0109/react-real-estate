@@ -525,9 +525,9 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
                 fluid
                 error={error && { content: error }}
                 label={fieldName}
-                placeholder={fieldName}
+                placeholder={field.defaultValue}
                 onChange={(e, input) => handleInputChange(input.value, field.name)}
-                value={field.value || field.defaultValue}
+                value={field.value || ''}
               />
             </Form.Field>
           );
