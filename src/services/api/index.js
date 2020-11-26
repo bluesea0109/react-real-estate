@@ -131,7 +131,10 @@ const directory = {
   onLogin: () => ({ path: `/api/user/onLogin`, method: 'get' }),
   templates: () => ({ path: `/api/templates`, method: 'get' }),
   stencils: mapper => ({ stencilPath: `/api/user/stencils/list/${mapper}`, stencilMethod: 'get' }),
-
+  stencilsByTag: tag => ({
+    stencilTagPath: `/api/user/stencils/byTag/${tag}`,
+    stencilTagMethod: 'get',
+  }),
   team: {
     list: () => ({ path: `/api/user/team/list`, method: 'get' }),
     sync: () => ({ path: `/api/user/team/settings/brivity/sync`, method: 'post' }),

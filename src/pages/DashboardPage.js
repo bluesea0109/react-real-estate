@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef, useLayoutEffect } from 'react';
 import { useHistory } from 'react-router';
 
 import { Progress } from 'semantic-ui-react';
@@ -34,6 +34,13 @@ import {
   ModalLoader,
   Tab,
 } from '../components/Base';
+import {
+  NewLabel,
+  SliderButtons,
+  StyledButtonBack,
+  StyledButtonNext,
+} from '../components/Forms/Base/Carousel';
+import Slider from 'react-slick';
 import IframeGroup from '../components/MailoutListItem/IframeGroup';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ItemList from '../components/MailoutListItem/ItemList';
@@ -45,6 +52,9 @@ import PostcardSizeButton from '../components/Forms/Common/PostcardSizeButton';
 import { calculateCost } from '../components/MailoutListItem/utils/helpers';
 import Styled from 'styled-components';
 import { clearAddMailoutError, setAddMailoutError } from '../store/modules/mailout/actions';
+import { useWindowSize } from '../components/Hooks/useWindowSize';
+import { updateMailoutTemplateThemePending } from '../store/modules/mailout/actions';
+import * as brandColors from '../components/utils/brandColors';
 
 const AddCampaignContainer = Styled.div`
 @media only screen and (max-width: 1200px) {
@@ -55,7 +65,6 @@ const AddCampaignContainer = Styled.div`
 `;
 
 const NewCampaignContainer = Styled.div`
-
 `;
 
 const CampaignTypeButtons = Styled.div`
@@ -114,6 +123,7 @@ const Dashboard = () => {
   const isMobile = useIsMobile();
   const history = useHistory();
   const dispatch = useDispatch();
+  const windowSize = useWindowSize();
   const peerId = useSelector(store => store.peer.peerId);
   const isInitiatingTeam = useSelector(store => store.teamInitialize.polling);
   const initiatingTeamState = useSelector(store => store.teamInitialize.available);
@@ -141,14 +151,19 @@ const Dashboard = () => {
   const [showAddCampaign, setShowAddCampaign] = useState(false);
   const [showChooseSize, setShowChooseSize] = useState(false);
   const [useMLSNumberToAddCampaign, setUseMLSNumberToAddCampaign] = useState(true);
-
-  const [tabIndex, setTabIndex] = useState(0);
+  const stencilsAvailable = useSelector(store => store.templates.available?.holiday);
+  const mailoutEdit = useSelector(store => store.mailout.mailoutEdit);
+  const templateTheme = useSelector(store => store.templates.available?.stencils);
 
   const [AddCampaignType, setAddCampaignType] = useState(null);
   const [AddCampaignName, setAddCampaignName] = useState('');
   const [CampaignCoverUpload, setCampaignCoverUpload] = useState(null);
   const [UploadingInProgress, setUploadingInProgress] = useState(false);
   const [campaignPostcardSize, setCampaignPostcardSize] = useState('6x4');
+  const [tabIndex, setTabIndex] = useState(0);
+  const sliderContainerRef = useRef(null);
+  const sliderRef = useRef(null);
+  const [sliderWidth, setsliderWidth] = useState(0);
 
   useFetching(getMailoutsPending, onboarded, useDispatch());
 
@@ -343,9 +358,85 @@ const Dashboard = () => {
     </div>
   );
 
+  const renderTemplatePicture = (templateName, src, isNew = false) => {
+    return (
+      <div key={templateName}>
+        <div
+          style={
+            templateTheme === templateName
+              ? {
+                  border: `2px solid ${brandColors.primary}`,
+                  padding: '0.5em',
+                  margin: '0.5rem',
+                  borderRadius: '5px',
+                  maxWidth: 500,
+                }
+              : { padding: '0.5em', margin: '0.5rem' }
+          }
+        >
+          <img
+            src={src}
+            alt={templateName}
+            style={{
+              width: '100%',
+              border: '1px solid lightgrey',
+              boxShadow: '1px 1px 4px lightgrey',
+              zIndex: 10,
+            }}
+          />
+        </div>
+        {isNew && (
+          <NewLabel>
+            <span className="label">New</span>
+          </NewLabel>
+        )}
+      </div>
+    );
+  };
+
+  const handleSliderBtnClick = dir => {
+    dir === 'back' ? sliderRef.current.slickPrev() : sliderRef.current.slickNext();
+  };
+
   useEffect(() => {
     setUseMLSNumberToAddCampaign(tabIndex === 0);
   }, [tabIndex]);
+
+  useLayoutEffect(
+    _ => {
+      setsliderWidth(sliderContainerRef.current ? sliderContainerRef.current.offsetWidth : 0);
+    },
+    // eslint-disable-next-line
+    [windowSize]
+  );
+
+  let slides = [];
+  if (stencilsAvailable) {
+    stencilsAvailable.forEach(stencil => {
+      slides.push(stencil.templateTheme);
+    });
+  }
+  let startSlide = 0;
+  if (mailoutEdit && mailoutEdit.templateTheme)
+    startSlide = slides.findIndex(slide => slide === mailoutEdit.templateTheme);
+
+  let numSlides = Math.floor(sliderWidth / 240) || 1;
+  if (numSlides % 2 === 0) numSlides -= 1;
+
+  const sliderSettings = {
+    arrows: false,
+    className: 'slider center',
+    infinite: true,
+    centerMode: true,
+    slidesToShow: numSlides < stencilsAvailable?.length ? numSlides : stencilsAvailable.length,
+    focusOnSelect: true,
+    initialSlide: startSlide,
+    swipeToSlide: true,
+    afterChange: current => {
+      if (current !== startSlide)
+        dispatch(updateMailoutTemplateThemePending(stencilsAvailable[current].templateTheme));
+    },
+  };
 
   const campaignTabs = () => {
     const handleTabChange = (e, data) => setTabIndex(data.activeIndex);
@@ -505,12 +596,31 @@ const Dashboard = () => {
       },
       {
         menuItem: 'Holiday Campaign',
-        render: () => <Tab.Pane attached={false}>Holiday</Tab.Pane>,
+        render: () => (
+          <Tab.Pane attached={false}>
+            <div ref={sliderContainerRef}>
+              <Header as="h4">Template Theme</Header>
+              <div style={{ position: 'relative', zIndex: 10 }}>
+                <Slider {...sliderSettings} ref={sliderRef} style={{ zIndex: 10 }}>
+                  {stencilsAvailable &&
+                    stencilsAvailable.map((stencil, ind) =>
+                      renderTemplatePicture(stencil.templateTheme, stencil.thumbnail, false)
+                    )}
+                </Slider>
+              </div>
+              <SliderButtons>
+                <StyledButtonBack onClick={_ => handleSliderBtnClick('back')} editForm />
+                <StyledButtonNext onClick={_ => handleSliderBtnClick('next')} editForm />
+              </SliderButtons>
+            </div>
+          </Tab.Pane>
+        ),
       },
     ];
     return <Tab menu={{ secondary: true }} panes={panes} onTabChange={handleTabChange} />;
   };
 
+  console.log('template theeeeme holiday', templateTheme);
   return (
     <Page basic>
       <ContentTopHeaderLayout>
