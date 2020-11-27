@@ -9,7 +9,7 @@ it('renders correctly', () => {
   expect(tree).toMatchSnapshot();
 });
 
-it('Runs function on click', () => {
+it('Runs function on submit', () => {
   const onSubmit = jest.fn();
   render(<Form data-testid="form" onSubmit={onSubmit} />);
   fireEvent.submit(screen.getByTestId('form'));
