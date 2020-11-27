@@ -172,6 +172,7 @@ const Dashboard = () => {
   const sliderContainerRef = useRef(null);
   const sliderRef = useRef(null);
   const [sliderWidth, setsliderWidth] = useState(0);
+  const [holidayPath, setHolidayPath] = useState('');
 
   useFetching(getMailoutsPending, onboarded, useDispatch());
 
@@ -226,10 +227,22 @@ const Dashboard = () => {
     setShowChooseSize(true);
   };
 
+  console.log('mailoutlist', mailoutList[0]?._id);
+  useEffect(() => {
+    if (mailoutList.length > 0) {
+      setHolidayPath(mailoutList[0]._id);
+    }
+  }, [mailoutList]);
+
   const cancelAddCampaign = e => setShowAddCampaign(false);
-  console.log(stencilsAvailable);
   const finishAddCampaign = async e => {
-    if (useHolidayTemplate) {
+    if (useMLSNumberToAddCampaign) {
+      let mlsNum = document.getElementById('addCampaignInput').value;
+      if (!mlsNum || !campaignPostcardSize) return;
+      if (!mlsNum.length) return;
+      setShowAddCampaign(false);
+      dispatch(addCampaignStart({ mlsNum: mlsNum, postcardSize: campaignPostcardSize }));
+    } else if (useHolidayTemplate) {
       dispatch(
         addHolidayCampaignStart({
           createdBy: 'user',
@@ -241,36 +254,30 @@ const Dashboard = () => {
           publishedTags: ['holiday'],
         })
       );
+      history.push(`/dashboard/edit/${holidayPath}/destinations`);
+    } else {
+      let path = `/api/user/mailout/withCover`;
+      if (peerId) path = `/api/user/peer/${peerId}/mailout/withCover`;
+
+      const headers = {};
+      const accessToken = await auth.getAccessToken();
+      headers['authorization'] = `Bearer ${accessToken}`;
+      const formData = new FormData();
+      formData.append('createdBy', 'user');
+      formData.append('skipEmailNotification', true);
+      formData.append('frontResourceUrl', CampaignCoverUpload.url);
+      formData.append('name', AddCampaignName || AddCampaignType);
+      formData.append('postcardSize', campaignPostcardSize);
+
+      const response = await fetch(path, {
+        headers,
+        method: 'post',
+        body: formData,
+        credentials: 'include',
+      });
+      let doc = await api.handleResponse(response);
+      return history.push(`/dashboard/edit/${doc._id}/destinations`);
     }
-    // if (useMLSNumberToAddCampaign) {
-    //   let mlsNum = document.getElementById('addCampaignInput').value;
-    //   if (!mlsNum || !campaignPostcardSize) return;
-    //   if (!mlsNum.length) return;
-    //   setShowAddCampaign(false);
-    //   dispatch(addCampaignStart({ mlsNum: mlsNum, postcardSize: campaignPostcardSize }));
-    // } else {
-    //   let path = `/api/user/mailout/withCover`;
-    //   if (peerId) path = `/api/user/peer/${peerId}/mailout/withCover`;
-
-    //   const headers = {};
-    //   const accessToken = await auth.getAccessToken();
-    //   headers['authorization'] = `Bearer ${accessToken}`;
-    //   const formData = new FormData();
-    //   formData.append('createdBy', 'user');
-    //   formData.append('skipEmailNotification', true);
-    //   formData.append('frontResourceUrl', CampaignCoverUpload.url);
-    //   formData.append('name', AddCampaignName || AddCampaignType);
-    //   formData.append('postcardSize', campaignPostcardSize);
-
-    //   const response = await fetch(path, {
-    //     headers,
-    //     method: 'post',
-    //     body: formData,
-    //     credentials: 'include',
-    //   });
-    //   let doc = await api.handleResponse(response);
-    //   return history.push(`/dashboard/edit/${doc._id}/destinations`);
-    // }
   };
 
   const handleKeyPress = e => {
