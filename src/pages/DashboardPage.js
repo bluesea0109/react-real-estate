@@ -158,7 +158,9 @@ const Dashboard = () => {
   const [useMLSNumberToAddCampaign, setUseMLSNumberToAddCampaign] = useState(true);
   const stencilsAvailable = useSelector(store => store.templates.available?.holiday);
   const mailoutEdit = useSelector(store => store.mailout.mailoutEdit);
-  const templateTheme = useSelector(store => store.templates.available?.stencils);
+  const [currentTemplateTheme, setCurrentTemplateTheme] = useState(
+    stencilsAvailable[0].templateTheme
+  );
 
   const [AddCampaignType, setAddCampaignType] = useState(null);
   const [AddCampaignName, setAddCampaignName] = useState('');
@@ -363,14 +365,12 @@ const Dashboard = () => {
     </div>
   );
 
-  const renderTemplatePicture = (templateName, src, isNew = false, templateTheme) => {
-    console.log(templateName, 'templateNAMEeeeee');
-    console.log('templateTHEMEeeee', templateTheme);
+  const renderTemplatePicture = (templateName, src, isNew = false) => {
     return (
       <div key={templateName}>
         <div
           style={
-            templateTheme === templateName
+            currentTemplateTheme === templateName
               ? {
                   border: `2px solid ${brandColors.primary}`,
                   padding: '0.5em',
@@ -416,8 +416,7 @@ const Dashboard = () => {
     // eslint-disable-next-line
     [windowSize, tabIndex]
   );
-  console.log(sliderWidth, 'slider width');
-  console.log(sliderContainerRef, 'contain ref');
+
   let slides = [];
   if (stencilsAvailable) {
     stencilsAvailable.forEach(stencil => {
@@ -441,8 +440,7 @@ const Dashboard = () => {
     initialSlide: startSlide,
     swipeToSlide: true,
     afterChange: current => {
-      if (current !== startSlide)
-        dispatch(updateMailoutTemplateThemePending(stencilsAvailable[current].templateTheme));
+      setCurrentTemplateTheme(stencilsAvailable[current].templateTheme);
     },
   };
 
@@ -608,12 +606,7 @@ const Dashboard = () => {
                 <Slider {...sliderSettings} ref={sliderRef} style={{ zIndex: 10 }}>
                   {stencilsAvailable &&
                     stencilsAvailable.map((stencil, ind) =>
-                      renderTemplatePicture(
-                        stencil.templateTheme,
-                        'https://chrome-aws-lambda-screenshots.s3.amazonaws.com/16064178421510dc9d8b8262c474f7490a5b74b15a975.png',
-                        false,
-                        templateTheme
-                      )
+                      renderTemplatePicture(stencil.templateTheme, stencil.thumbnail, false)
                     )}
                 </Slider>
               </div>
@@ -628,8 +621,7 @@ const Dashboard = () => {
     ];
     return <Tab menu={{ secondary: true }} panes={panes} onTabChange={handleTabChange} />;
   };
-  console.log('stencilsAvailable', stencilsAvailable);
-  console.log('templateTheme', templateTheme);
+
   return (
     <Page basic>
       <ContentTopHeaderLayout>
