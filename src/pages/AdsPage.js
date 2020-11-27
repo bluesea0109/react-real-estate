@@ -148,14 +148,20 @@ const EmptyPage = () => {
         <Table.Row key={index}>
         <Table.Cell className="marketerGrey adTableItemCampaignCell"><b>{item.details.campaignName}</b></Table.Cell>
         <Table.Cell>
-          <Popup
-            content={<AdPreview ad={item} viewMore={viewMore} adTextLength={adTextLength} toggleAdTextLength={toggleAdTextLength} />}
-            trigger={<div className="adTableItemPreviewContainer">
-            <div className="adTableItemPreview" style={{backgroundImage: `url(${item.details.previewUrl ? item.details.previewUrl : 'https://reactnativecode.com/wp-content/uploads/2018/02/Default_Image_Thumbnail.png'})`}} />
-          </div>}
-            on='hover'
-            position="center"
-          />
+          {
+            item.details.status === 'WITH_ISSUES' || item.details.status === 'DISSAPROVED' ?
+              <div className="adTableItemPreviewContainer">
+                <div className="adTableItemPreview" style={{backgroundImage: `url(${item.details.previewUrl ? item.details.previewUrl : 'https://reactnativecode.com/wp-content/uploads/2018/02/Default_Image_Thumbnail.png'})`}} />
+              </div>
+            :
+              <Popup
+                content={<AdPreview ad={item} viewMore={viewMore} adTextLength={adTextLength} toggleAdTextLength={toggleAdTextLength} />}
+                trigger={<div className="adTableItemPreviewContainer">
+                <div className="adTableItemPreview" style={{backgroundImage: `url(${item.details.previewUrl ? item.details.previewUrl : 'https://reactnativecode.com/wp-content/uploads/2018/02/Default_Image_Thumbnail.png'})`}} />
+              </div>}
+                position="center"
+              />
+          }          
         </Table.Cell>
         <Table.Cell className="marketerGrey">
           {item.details.startDate && item.details.endDate ? <Header as="h5" sub className="noMarginBottom">{`${daysTimeDiff(item.details.startDate, item.details.endDate)}`
@@ -163,7 +169,7 @@ const EmptyPage = () => {
           {item.details.startDate && item.details.endDate ? <span>{`${getDateFromStr(item.details.startDate)} - ${getDateFromStr(item.details.endDate)}`}</span> : '-'}
         </Table.Cell>
         <Table.Cell className="marketerGrey">{item.details.budget ? `$${Math.trunc(Number(item.details.budget))}` : '-'}</Table.Cell>
-        <Table.Cell className="marketerGrey">{item.details.spend ? `$${Math.floor(item.details.spend)}` : '-'}</Table.Cell>
+        <Table.Cell className="marketerGrey">{item.details.spend && item.details.budget ? `${Math.floor((item.details.spend / (item.details.budget - (item.details.budget * 0.20))) * 100)}%` : '-'}</Table.Cell>
         <Table.Cell><div><Icon name="facebook" size="large" className="adTableItemFacebookLogo" /><Icon name="instagram" size="large" className="adTableItemInstagramLogo" /></div></Table.Cell>
         <Table.Cell>{item.details.cpp ? `$${Math.floor(item.details.cpp)}` : '-'}</Table.Cell>
         <Table.Cell>{item.details.ctr ? `${Math.floor(item.details.ctr)}%` : '-'}</Table.Cell>
@@ -173,12 +179,18 @@ const EmptyPage = () => {
         <Table.Cell>
           {
             item.details.status === 'ACTIVE' ? <StatusPill type="solid" color="green">Active</StatusPill> :
+            
             item.details.status === 'PAUSED' || item.details.status === 'CAMPAIGN_PAUSED' || item.details.status === 'ADSET_PAUSED' ? <StatusPill type="solid" color="yellow">Paused</StatusPill> :
+            
             item.details.status === 'DELETED' ? <StatusPill type="solid" color="grey">Deleted</StatusPill> :
+            
             item.details.status === 'PENDING_REVIEW' || item.details.status === 'PENDING_BILLING_INFO' || item.details.status === 'IN_PROCESS' || item.details.status === 'PREAPPROVED' ?  <StatusPill type="solid" color="lightBlue">Pending</StatusPill> :
+            
             item.details.status === 'ARCHIVED' ? <StatusPill type="solid" color="grey">Archived</StatusPill> :
-            item.details.status === 'WITH_ISSUES' || item.details.status === 'DISSAPROVED' ? <StatusPill type="solid" color="red">Error</StatusPill> :
-            item.details.status === 'DELETED' ? <StatusPill type="solid" color="grey">Deleted</StatusPill> : <StatusPill type="solid" color="blue">Other</StatusPill>
+            
+            item.details.status === 'WITH_ISSUES' || item.details.status === 'DISSAPROVED' ? <Popup trigger={<div><StatusPill type="solid" color="red">Error</StatusPill></div>} content={item.details.error_message ? item.details.error_message : 'Facebook Error'} position="top right" /> :
+
+            item.details.status === 'DELETED' ? <StatusPill type="solid" color="grey">Deleted</StatusPill> : <StatusPill type="solid" color="astral">Other</StatusPill>
           }
           </Table.Cell>
       </Table.Row>
