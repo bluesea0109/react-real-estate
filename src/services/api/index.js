@@ -196,6 +196,7 @@ const directory = {
       }),
       csv: ({ userId, mailoutId }) => ({ path: `/api/user/${userId}/mailout/${mailoutId}/csv` }),
       byMls: mlsNum => ({ path: `/api/user/mailout/byMls`, method: 'post' }),
+      createCampaign: campaign => ({ path: `/api/user/mailout/campaign`, method: 'post' }),
       edit: {
         get: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'get' }),
         update: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'put' }),

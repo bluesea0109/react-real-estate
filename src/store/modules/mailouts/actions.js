@@ -26,6 +26,11 @@ export const ADD_CAMPAIGN_PENDING = 'ADD_CAMPAIGN_PENDING';
 export const ADD_CAMPAIGN_SUCCESS = 'ADD_CAMPAIGN_SUCCESS';
 export const ADD_CAMPAIGN_ERROR = 'ADD_CAMPAIGN_ERROR';
 
+export const ADD_HOLIDAY_CAMPAIGN_START = 'ADD_HOLIDAY_CAMPAIGN_START';
+export const ADD_HOLIDAY_CAMPAIGN_PENDING = 'ADD_HOLIDAY_CAMPAIGN_PENDING';
+export const ADD_HOLIDAY_CAMPAIGN_SUCCESS = 'ADD_HOLIDAY_CAMPAIGN_SUCCESS';
+export const ADD_HOLIDAY_CAMPAIGN_ERROR = 'ADD_HOLIDAY_CAMPAIGN_ERROR';
+
 export const SET_MAILOUTS_ERROR = 'SET_MAILOUT_ERROR';
 export const CLEAR_MAILOUTS_ERROR = 'CLEAR_MAILOUT_ERROR';
 
@@ -111,6 +116,22 @@ export function addCampaignSuccess() {
 
 export function addCampaignError(error) {
   return createErrorAction(ADD_CAMPAIGN_ERROR, error);
+}
+
+export function addHolidayCampaignStart(payload) {
+  return createAction(ADD_HOLIDAY_CAMPAIGN_START, payload);
+}
+
+export function addHolidayCampaignPending() {
+  return createAction(ADD_HOLIDAY_CAMPAIGN_PENDING);
+}
+
+export function addHolidayCampaignSuccess() {
+  return createAction(ADD_HOLIDAY_CAMPAIGN_SUCCESS);
+}
+
+export function addHolidayCampaignError() {
+  return createAction(ADD_HOLIDAY_CAMPAIGN_ERROR);
 }
 
 export function setMailoutsError(error) {
