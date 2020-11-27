@@ -164,7 +164,7 @@ const ListHeader = ({
     dispatch(resetMailout());
     history.push(`/dashboard/edit/${id}`);
   };
-
+  console.log('listing status', data.listingStatus);
   return (
     <ItemHeaderLayout attached="top" block>
       <span style={{ gridArea: 'label' }}>

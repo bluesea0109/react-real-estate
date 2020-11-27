@@ -116,7 +116,7 @@ const tabPainP = { marginBottom: '20px' };
 
 const useFetching = (getActionCreator, onboarded, dispatch) => {
   useEffect(() => {
-    // In order to prevent unnecessary call to the api when we are expecting an redirect,
+    // In order to prevent unnecessary call to the api when we are expecting a redirect,
     // we check for the existence of routerDestination used by the PrivatePath to route to a specific URL
     if (!localStorage.getItem('routerDestination') && onboarded) {
       dispatch(getActionCreator());
@@ -227,7 +227,6 @@ const Dashboard = () => {
     setShowChooseSize(true);
   };
 
-  console.log('mailoutlist', mailoutList[0]?._id);
   useEffect(() => {
     if (mailoutList.length > 0) {
       setHolidayPath(mailoutList[0]._id);
@@ -247,9 +246,9 @@ const Dashboard = () => {
         addHolidayCampaignStart({
           createdBy: 'user',
           skipEmailNotification: true,
-          name: 'test holiday card',
+          name: AddCampaignName,
           frontTemplateUuid: currentTemplateTheme,
-          postcardSize: '6x4',
+          postcardSize: campaignPostcardSize,
           mapperName: 'sphere',
           publishedTags: ['holiday'],
         })
@@ -622,6 +621,18 @@ const Dashboard = () => {
         menuItem: 'Holiday Campaign',
         render: () => (
           <Tab.Pane style={tabPane} attached={false}>
+            <h5>Campaign Name</h5>
+            <Input
+              style={{ marginBottom: '21px' }}
+              type="text"
+              fluid
+              placeholder="New Custom Campaign"
+              value={AddCampaignName}
+              id="addCampaignName"
+              onChange={e => {
+                setAddCampaignName(e.target.value);
+              }}
+            ></Input>
             <div ref={sliderContainerRef}>
               <Header as="h4">Template Theme</Header>
               <div style={{ position: 'relative', zIndex: 10 }}>
@@ -767,13 +778,21 @@ const Dashboard = () => {
               <Button inverted primary onClick={_ => setShowChooseSize(true)}>
                 Back
               </Button>
-              <Button
-                primary
-                onClick={finishAddCampaign}
-                // disabled={!useMLSNumberToAddCampaign && (!CampaignCoverUpload || !AddCampaignType)}
-              >
-                Add Campaign
-              </Button>
+              {tabIndex !== 2 ? (
+                <Button
+                  primary
+                  onClick={finishAddCampaign}
+                  disabled={
+                    !useMLSNumberToAddCampaign && (!CampaignCoverUpload || !AddCampaignType)
+                  }
+                >
+                  Add Campaign
+                </Button>
+              ) : (
+                <Button primary onClick={finishAddCampaign} disabled={!AddCampaignName}>
+                  Add Campaign
+                </Button>
+              )}
             </ModalAddCampaign.Actions>
           </>
         )}
