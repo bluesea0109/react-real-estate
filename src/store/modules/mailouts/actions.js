@@ -30,6 +30,8 @@ export const ADD_HOLIDAY_CAMPAIGN_START = 'ADD_HOLIDAY_CAMPAIGN_START';
 export const ADD_HOLIDAY_CAMPAIGN_PENDING = 'ADD_HOLIDAY_CAMPAIGN_PENDING';
 export const ADD_HOLIDAY_CAMPAIGN_SUCCESS = 'ADD_HOLIDAY_CAMPAIGN_SUCCESS';
 export const ADD_HOLIDAY_CAMPAIGN_ERROR = 'ADD_HOLIDAY_CAMPAIGN_ERROR';
+export const GET_NEW_HOLIDAY_ID = 'GET_NEW_HOLIDAY_ID';
+export const CLEAR_NEW_HOLIDAY_ID = 'CLEAR_NEW_HOLIDAY_ID';
 
 export const SET_MAILOUTS_ERROR = 'SET_MAILOUT_ERROR';
 export const CLEAR_MAILOUTS_ERROR = 'CLEAR_MAILOUT_ERROR';
@@ -134,6 +136,13 @@ export function addHolidayCampaignError() {
   return createAction(ADD_HOLIDAY_CAMPAIGN_ERROR);
 }
 
+export function getNewHolidayId(payload) {
+  return createAction(GET_NEW_HOLIDAY_ID, payload);
+}
+
+export function clearNewHolidayId() {
+  return createAction(CLEAR_NEW_HOLIDAY_ID);
+}
 export function setMailoutsError(error) {
   return createAction(SET_MAILOUTS_ERROR, error);
 }

@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React, { useCallback, useEffect, useState, useRef, useLayoutEffect } from 'react';
 import { useHistory } from 'react-router';
 
@@ -19,6 +18,7 @@ import {
   getMoreMailoutsPending,
   addCampaignStart,
   addHolidayCampaignStart,
+  clearNewHolidayId,
 } from '../store/modules/mailouts/actions';
 import { setCompletedDashboardModal } from '../store/modules/onboarded/actions';
 import {
@@ -162,6 +162,7 @@ const Dashboard = () => {
   const [currentTemplateTheme, setCurrentTemplateTheme] = useState(
     stencilsAvailable[0].templateTheme
   );
+  const holidayCampaignId = useSelector(store => store.mailouts?.newHolidayId);
 
   const [AddCampaignType, setAddCampaignType] = useState(null);
   const [AddCampaignName, setAddCampaignName] = useState('');
@@ -172,7 +173,6 @@ const Dashboard = () => {
   const sliderContainerRef = useRef(null);
   const sliderRef = useRef(null);
   const [sliderWidth, setsliderWidth] = useState(0);
-  const [holidayPath, setHolidayPath] = useState('');
 
   useFetching(getMailoutsPending, onboarded, useDispatch());
 
@@ -228,10 +228,11 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    if (mailoutList.length > 0) {
-      setHolidayPath(mailoutList[0]._id);
+    if (holidayCampaignId) {
+      history.push(`/dashboard/edit/${holidayCampaignId}/destinations`);
+      dispatch(clearNewHolidayId());
     }
-  }, [mailoutList]);
+  }, [holidayCampaignId, history, dispatch]);
 
   const cancelAddCampaign = e => setShowAddCampaign(false);
   const finishAddCampaign = async e => {
@@ -253,7 +254,6 @@ const Dashboard = () => {
           publishedTags: ['holiday'],
         })
       );
-      history.push(`/dashboard/edit/${holidayPath}/destinations`);
     } else {
       let path = `/api/user/mailout/withCover`;
       if (peerId) path = `/api/user/peer/${peerId}/mailout/withCover`;

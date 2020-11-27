@@ -21,6 +21,7 @@ import {
   ADD_HOLIDAY_CAMPAIGN_START,
   addHolidayCampaignError,
   addHolidayCampaignSuccess,
+  getNewHolidayId,
 } from './actions';
 import ApiService from '../../../services/api/index';
 import { SELECT_PEER_ID, DESELECT_PEER_ID } from '../peer/actions';
@@ -199,8 +200,11 @@ export function* addHolidayCampaignSaga() {
     const data = payload;
     const response = yield call(ApiService[method], path, data);
 
+    console.log('holiday redirect response id', response._id);
+    yield put(getNewHolidayId(response._id));
     yield put(resetMailouts());
     yield put(addHolidayCampaignSuccess(response));
+
     yield put(getMailoutsPending());
   } catch (err) {
     yield put(addHolidayCampaignError(err));
