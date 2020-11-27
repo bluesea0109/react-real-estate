@@ -459,7 +459,6 @@ const Dashboard = () => {
     },
   };
 
-  console.log('available', stencilsAvailable);
   const campaignTabs = () => {
     const handleTabChange = (e, data) => setTabIndex(data.activeIndex);
 

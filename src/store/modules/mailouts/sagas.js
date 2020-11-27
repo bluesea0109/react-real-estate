@@ -190,15 +190,13 @@ export function* addHolidayCampaignSaga() {
   const peerId = yield select(getSelectedPeerId);
   const payload = yield select(getHolidayCampaign);
 
-  const mlsNum = payload.getHolidayCampaign;
-  const postcardSize = payload.postcardSize;
+  // const postcardSize = payload.postcardSize;
   try {
     const { path, method } = peerId
-      ? ApiService.directory.peer.mailout.byMls(mlsNum, peerId)
-      : ApiService.directory.user.mailout.createCampaign();
+      ? ApiService.directory.peer.mailout.createPeerHolidayCampaign(peerId)
+      : ApiService.directory.user.mailout.createHolidayCampaign();
 
     const data = payload;
-    console.log('DATA', data);
     const response = yield call(ApiService[method], path, data);
 
     yield put(resetMailouts());
