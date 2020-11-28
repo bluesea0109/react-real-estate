@@ -9,6 +9,7 @@ export default styled(Tab)`
       padding-right: 0px;
       padding-bottom: 1.3em;
       font-weight: 600;
+      color: #979797;
     }
     .ui.secondary.pointing.menu {
       margin-left: 0px;
@@ -17,7 +18,9 @@ export default styled(Tab)`
     .ui.menu > .item:first-child {
       margin-left: 0px;
     }
-
+    .ui.menu {
+      margin: 19px 0em;
+    }
     .ui.secondary.pointing.menu .active.item {
       color: ${brandColors.primary};
     }

@@ -480,6 +480,7 @@ const Dashboard = () => {
         render: () => (
           <Tab.Pane style={tabPane} attached={false}>
             <div>
+              <h5>Property MLS Number</h5>
               <Input type="text" fluid placeholder="Property MLS Number" id="addCampaignInput" />
             </div>
           </Tab.Pane>
@@ -639,21 +640,23 @@ const Dashboard = () => {
                 setAddCampaignName(e.target.value);
               }}
             ></Input>
-            <div ref={sliderContainerRef}>
-              <Header as="h4">Template Theme</Header>
-              <div style={{ position: 'relative', zIndex: 10, width: '93%', margin: 'auto' }}>
-                <Slider {...sliderSettings} ref={sliderRef} style={{ zIndex: 10 }}>
-                  {stencilsAvailable &&
-                    stencilsAvailable.map((stencil, ind) =>
-                      renderTemplatePicture(stencil.templateTheme, stencil.thumbnail, false)
-                    )}
-                </Slider>
+            <Segment basic padded>
+              <div ref={sliderContainerRef}>
+                <Header as="h4">Template Theme</Header>
+                <div style={{ position: 'relative', zIndex: 10, width: '93%', margin: 'auto' }}>
+                  <Slider {...sliderSettings} ref={sliderRef} style={{ zIndex: 10 }}>
+                    {stencilsAvailable &&
+                      stencilsAvailable.map((stencil, ind) =>
+                        renderTemplatePicture(stencil.templateTheme, stencil.thumbnail, false)
+                      )}
+                  </Slider>
+                </div>
+                <SliderButtons>
+                  <StyledButtonBack onClick={_ => handleSliderBtnClick('back')} editForm />
+                  <StyledButtonNext onClick={_ => handleSliderBtnClick('next')} editForm />
+                </SliderButtons>
               </div>
-              <SliderButtons>
-                <StyledButtonBack onClick={_ => handleSliderBtnClick('back')} editForm />
-                <StyledButtonNext onClick={_ => handleSliderBtnClick('next')} editForm />
-              </SliderButtons>
-            </div>
+            </Segment>
           </Tab.Pane>
         ),
       },
