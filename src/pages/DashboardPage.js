@@ -81,6 +81,10 @@ const CampaignTypeButtons = Styled.div`
 const ModalAddCampaign = Styled(Modal)`
 &&&{
 width:60%;
+.content{
+padding-left:0px;
+padding-right:0px;
+}
 }
 @media only screen and (max-width: 1250px) {
   &&&{
@@ -110,7 +114,7 @@ const modalHeaderStyles = {
   borderBottom: 'none',
 };
 
-const tabPane = { border: 'none', boxShadow: 'none' };
+const tabPane = { border: 'none', boxShadow: 'none', padding: '0px' };
 
 const tabPainP = { marginBottom: '20px' };
 
@@ -449,6 +453,8 @@ const Dashboard = () => {
     startSlide = slides.findIndex(slide => slide === mailoutEdit.templateTheme);
 
   let numSlides = Math.floor(sliderWidth / 240) || 1;
+  console.log('num slides', sliderWidth);
+  console.log('num slides', numSlides);
   if (numSlides % 2 === 0) numSlides -= 1;
 
   const sliderSettings = {
@@ -635,7 +641,7 @@ const Dashboard = () => {
             ></Input>
             <div ref={sliderContainerRef}>
               <Header as="h4">Template Theme</Header>
-              <div style={{ position: 'relative', zIndex: 10 }}>
+              <div style={{ position: 'relative', zIndex: 10, width: '93%', margin: 'auto' }}>
                 <Slider {...sliderSettings} ref={sliderRef} style={{ zIndex: 10 }}>
                   {stencilsAvailable &&
                     stencilsAvailable.map((stencil, ind) =>
@@ -652,7 +658,9 @@ const Dashboard = () => {
         ),
       },
     ];
-    return <Tab menu={{ secondary: true }} panes={panes} onTabChange={handleTabChange} />;
+    return (
+      <Tab menu={{ secondary: true, pointing: true }} panes={panes} onTabChange={handleTabChange} />
+    );
   };
 
   return (
