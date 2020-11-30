@@ -195,12 +195,11 @@ export function* addHolidayCampaignSaga() {
   try {
     const { path, method } = peerId
       ? ApiService.directory.peer.mailout.createPeerHolidayCampaign(peerId)
-      : ApiService.directory.user.mailout.createHolidayCampaign();
+      : ApiService.directory.user.mailout.createGenericCampaign();
 
     const data = payload;
     const response = yield call(ApiService[method], path, data);
 
-    console.log('holiday redirect response id', response._id);
     yield put(getNewHolidayId(response._id));
     yield put(resetMailouts());
     yield put(addHolidayCampaignSuccess(response));
