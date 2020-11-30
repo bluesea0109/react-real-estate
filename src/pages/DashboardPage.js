@@ -161,10 +161,14 @@ const Dashboard = () => {
   const [showChooseSize, setShowChooseSize] = useState(false);
   const [useMLSNumberToAddCampaign, setUseMLSNumberToAddCampaign] = useState(true);
   const [useHolidayTemplate, setUseHolidayTemplate] = useState(false);
+  const [useGeneralTemplate, setUseGeneralTemplate] = useState(false);
   const stencilsAvailable = useSelector(store => store.templates.available?.holiday);
-  const mailoutEdit = useSelector(store => store.mailout.mailoutEdit);
+  const generalStencilsAvailable = useSelector(store => store.templates.available?.general);
   const [currentTemplateTheme, setCurrentTemplateTheme] = useState(
     stencilsAvailable[0].templateTheme
+  );
+  const [currentGeneralTheme, setCurrentGeneralTheme] = useState(
+    generalStencilsAvailable[0].templateTheme
   );
   const holidayCampaignId = useSelector(store => store.mailouts?.newHolidayId);
 
@@ -176,6 +180,8 @@ const Dashboard = () => {
   const [tabIndex, setTabIndex] = useState(0);
   const sliderContainerRef = useRef(null);
   const sliderRef = useRef(null);
+  const generalSliderContainerRef = useRef(null);
+  const generalSliderRef = useRef(null);
   const [sliderWidth, setsliderWidth] = useState(0);
 
   useFetching(getMailoutsPending, onboarded, useDispatch());
@@ -246,16 +252,18 @@ const Dashboard = () => {
       if (!mlsNum.length) return;
       setShowAddCampaign(false);
       dispatch(addCampaignStart({ mlsNum: mlsNum, postcardSize: campaignPostcardSize }));
-    } else if (useHolidayTemplate) {
+    } else if (useHolidayTemplate || useGeneralTemplate) {
+      let tags = useHolidayTemplate ? ['holiday'] : ['general'];
+      let currentTheme = useHolidayTemplate ? currentTemplateTheme : currentGeneralTheme;
       dispatch(
         addHolidayCampaignStart({
           createdBy: 'user',
           skipEmailNotification: true,
           name: AddCampaignName,
-          frontTemplateUuid: currentTemplateTheme,
+          frontTemplateUuid: currentTheme,
           postcardSize: campaignPostcardSize,
           mapperName: 'sphere',
-          publishedTags: ['holiday'],
+          publishedTags: tags,
         })
       );
     } else {
@@ -394,7 +402,7 @@ const Dashboard = () => {
       <div key={templateName}>
         <div
           style={
-            currentTemplateTheme === templateName
+            currentTemplateTheme === templateName || currentGeneralTheme === templateName
               ? {
                   border: `2px solid ${brandColors.primary}`,
                   padding: '0.5em',
@@ -426,31 +434,30 @@ const Dashboard = () => {
   };
 
   const handleSliderBtnClick = dir => {
-    dir === 'back' ? sliderRef.current.slickPrev() : sliderRef.current.slickNext();
+    if (tabIndex === 2)
+      dir === 'back' ? sliderRef.current.slickPrev() : sliderRef.current.slickNext();
+    if (tabIndex === 3)
+      dir === 'back' ? generalSliderRef.current.slickPrev() : generalSliderRef.current.slickNext();
   };
 
   useEffect(() => {
     setUseMLSNumberToAddCampaign(tabIndex === 0);
     setUseHolidayTemplate(tabIndex === 2);
+    setUseGeneralTemplate(tabIndex === 3);
   }, [tabIndex]);
 
   useLayoutEffect(
     _ => {
-      setsliderWidth(sliderContainerRef.current ? sliderContainerRef.current.offsetWidth : 0);
+      if (tabIndex === 2)
+        setsliderWidth(sliderContainerRef.current ? sliderContainerRef.current.offsetWidth : 0);
+      if (tabIndex === 3)
+        setsliderWidth(
+          generalSliderContainerRef.current ? generalSliderContainerRef.current.offsetWidth : 0
+        );
     },
     // eslint-disable-next-line
     [windowSize, tabIndex]
   );
-
-  let slides = [];
-  if (stencilsAvailable) {
-    stencilsAvailable.forEach(stencil => {
-      slides.push(stencil.templateTheme);
-    });
-  }
-  let startSlide = 0;
-  if (mailoutEdit && mailoutEdit.templateTheme)
-    startSlide = slides.findIndex(slide => slide === mailoutEdit.templateTheme);
 
   let numSlides = Math.floor(sliderWidth / 240) || 1;
 
@@ -463,10 +470,31 @@ const Dashboard = () => {
     centerMode: true,
     slidesToShow: numSlides < stencilsAvailable?.length ? numSlides : stencilsAvailable.length,
     focusOnSelect: true,
-    initialSlide: startSlide,
+    initialSlide: 0,
     swipeToSlide: true,
     afterChange: current => {
       setCurrentTemplateTheme(stencilsAvailable[current].templateTheme);
+    },
+  };
+
+  let generalNumSlides = Math.floor(sliderWidth / 240) || 1;
+
+  if (generalNumSlides % 2 === 0) generalNumSlides -= 1;
+
+  const generalSliderSettings = {
+    arrows: false,
+    className: 'slider center',
+    infinite: true,
+    centerMode: true,
+    slidesToShow:
+      numSlides < generalStencilsAvailable?.length
+        ? generalNumSlides
+        : generalStencilsAvailable.length,
+    focusOnSelect: true,
+    initialSlide: 0,
+    swipeToSlide: true,
+    afterChange: current => {
+      setCurrentGeneralTheme(generalStencilsAvailable[current].templateTheme);
     },
   };
 
@@ -659,6 +687,42 @@ const Dashboard = () => {
           </Tab.Pane>
         ),
       },
+      {
+        menuItem: 'Sphere Campaign',
+        render: () => (
+          <Tab.Pane style={tabPane} attached={false}>
+            <h5>Campaign Name</h5>
+            <Input
+              style={{ marginBottom: '21px' }}
+              type="text"
+              fluid
+              placeholder="New Custom Campaign"
+              value={AddCampaignName}
+              id="addCampaignName"
+              onChange={e => {
+                setAddCampaignName(e.target.value);
+              }}
+            ></Input>
+            <Segment basic padded>
+              <div ref={generalSliderContainerRef}>
+                <Header as="h4">Template Theme</Header>
+                <div style={{ position: 'relative', zIndex: 10, width: '93%', margin: 'auto' }}>
+                  <Slider {...generalSliderSettings} ref={generalSliderRef} style={{ zIndex: 10 }}>
+                    {generalStencilsAvailable &&
+                      generalStencilsAvailable.map((stencil, ind) =>
+                        renderTemplatePicture(stencil.templateTheme, stencil.thumbnail, false)
+                      )}
+                  </Slider>
+                </div>
+                <SliderButtons>
+                  <StyledButtonBack onClick={_ => handleSliderBtnClick('back')} editForm />
+                  <StyledButtonNext onClick={_ => handleSliderBtnClick('next')} editForm />
+                </SliderButtons>
+              </div>
+            </Segment>
+          </Tab.Pane>
+        ),
+      },
     ];
     return (
       <Tab menu={{ secondary: true, pointing: true }} panes={panes} onTabChange={handleTabChange} />
@@ -788,7 +852,7 @@ const Dashboard = () => {
               <Button inverted primary onClick={_ => setShowChooseSize(true)}>
                 Back
               </Button>
-              {tabIndex !== 2 ? (
+              {tabIndex !== 2 && tabIndex !== 3 ? (
                 <Button
                   primary
                   onClick={finishAddCampaign}

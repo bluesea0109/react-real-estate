@@ -512,7 +512,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           if (currentField?.sides?.includes(side)) passes = true;
           return passes;
         })
-        .map(field => {
+        .map((field, ind) => {
           let fieldName = startCase(field.name);
 
           if (fieldName.includes('Url')) fieldName = fieldName.replace(/Url/g, 'URL');
@@ -520,7 +520,11 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
           return (
             <Form.Field
-              key={formValuesHaveChanged ? formValues[field.name] || fieldName : fieldName}
+              key={
+                formValuesHaveChanged
+                  ? `${ind + formValues[field.name]}` || fieldName
+                  : `${ind + fieldName}`
+              }
             >
               <Form.Input
                 fluid
@@ -718,53 +722,55 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
               </div>
             ) : null}
           </div>
-          {!mailoutDetails.frontResourceUrl && !publishedTags?.includes('holiday') && (
-            <div style={{ maxWidth: 350, padding: '0 1rem', margin: 'auto' }}>
-              <Header as="h4">Cover Photo</Header>
-              {photoUpdating && <span>Please wait...</span>}
-              {!photoUpdating && (
-                <div>
-                  <img src={coverPhoto} alt="postcard cover" />
-                  <br />
-                  <div style={{ display: 'flex' }}>
-                    <CoverButtonGroup icon>
-                      <Button onClick={() => changeCoverPhotoDec()}>
-                        <Icon name="angle left" />
-                      </Button>
-                      <Button onClick={() => changeCoverPhotoInc()}>
-                        <Icon name="angle right" />
-                      </Button>
-                    </CoverButtonGroup>
-                    <div style={{ paddingLeft: '0.5rem' }}>
-                      <a href="#/ignore" onClick={triggerFileDialog} id="postcardUploadText">
-                        Upload new cover photo
-                      </a>
-                      <br />
-                      <span
-                        style={
-                          currentPostcardSize !== postcardSize
-                            ? { color: '#9F3A38', fontWeight: 'bold' }
-                            : {}
-                        }
-                      >
-                        {postcardSize === '11x6'
-                          ? '(preferred size: 3438x1485)'
-                          : postcardSize === '9x6'
-                          ? '(preferred size: 2060x1485)'
-                          : '(preferred size: 1375x990)'}
-                      </span>
+          {!mailoutDetails.frontResourceUrl &&
+            !publishedTags?.includes('holiday') &&
+            !publishedTags?.includes('general') && (
+              <div style={{ maxWidth: 350, padding: '0 1rem', margin: 'auto' }}>
+                <Header as="h4">Cover Photo</Header>
+                {photoUpdating && <span>Please wait...</span>}
+                {!photoUpdating && (
+                  <div>
+                    <img src={coverPhoto} alt="postcard cover" />
+                    <br />
+                    <div style={{ display: 'flex' }}>
+                      <CoverButtonGroup icon>
+                        <Button onClick={() => changeCoverPhotoDec()}>
+                          <Icon name="angle left" />
+                        </Button>
+                        <Button onClick={() => changeCoverPhotoInc()}>
+                          <Icon name="angle right" />
+                        </Button>
+                      </CoverButtonGroup>
+                      <div style={{ paddingLeft: '0.5rem' }}>
+                        <a href="#/ignore" onClick={triggerFileDialog} id="postcardUploadText">
+                          Upload new cover photo
+                        </a>
+                        <br />
+                        <span
+                          style={
+                            currentPostcardSize !== postcardSize
+                              ? { color: '#9F3A38', fontWeight: 'bold' }
+                              : {}
+                          }
+                        >
+                          {postcardSize === '11x6'
+                            ? '(preferred size: 3438x1485)'
+                            : postcardSize === '9x6'
+                            ? '(preferred size: 2060x1485)'
+                            : '(preferred size: 1375x990)'}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-              <input
-                id="postcardCoverFile"
-                name="postcardcover"
-                type="file"
-                onChange={handleFileChange}
-              ></input>
-            </div>
-          )}
+                )}
+                <input
+                  id="postcardCoverFile"
+                  name="postcardcover"
+                  type="file"
+                  onChange={handleFileChange}
+                ></input>
+              </div>
+            )}
         </Segment>
 
         <div>

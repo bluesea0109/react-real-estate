@@ -69,10 +69,15 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const [error, setError] = useState(null);
   const currentListingStatus = mailoutDetails?.listingStatus;
   const isCampaign = mailoutDetails?.subtype === 'campaign';
+  const isGeneralCampaign = mailoutDetails?.publishedTags?.includes('general');
   const isCalculationDeferred = mailoutDetails?.mailoutStatus === 'calculation-deferred';
 
   const [destinationsOptionsMode, setDestinationsOptionsMode] = useState(
-    mailoutDetails.destinationsOptions?.mode || isCampaign ? 'manual' : 'ai'
+    (mailoutDetails.destinationsOptions?.mode || isCampaign) && !isGeneralCampaign
+      ? 'manual'
+      : isGeneralCampaign
+      ? 'userUploaded'
+      : 'ai'
   );
   const [saveDetails, setSaveDetails] = useState({
     destinationsOptionsMode:
