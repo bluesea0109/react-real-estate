@@ -194,7 +194,7 @@ export function* addHolidayCampaignSaga() {
   // const postcardSize = payload.postcardSize;
   try {
     const { path, method } = peerId
-      ? ApiService.directory.peer.mailout.createPeerHolidayCampaign(peerId)
+      ? ApiService.directory.peer.mailout.createPeerGenericCampaign(peerId)
       : ApiService.directory.user.mailout.createGenericCampaign();
 
     const data = payload;

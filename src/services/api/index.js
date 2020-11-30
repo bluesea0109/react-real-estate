@@ -308,7 +308,7 @@ const directory = {
         path: `/api/user/peer/${peerId}/mailout/byMls`,
         method: 'post',
       }),
-      createPeerHolidayCampaign: peerId => ({
+      createPeerGenericCampaign: peerId => ({
         path: `/api/user/peer/${peerId}/mailout/campaign`,
         method: 'post',
       }),
