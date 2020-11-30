@@ -453,8 +453,7 @@ const Dashboard = () => {
     startSlide = slides.findIndex(slide => slide === mailoutEdit.templateTheme);
 
   let numSlides = Math.floor(sliderWidth / 240) || 1;
-  console.log('num slides', sliderWidth);
-  console.log('num slides', numSlides);
+
   if (numSlides % 2 === 0) numSlides -= 1;
 
   const sliderSettings = {

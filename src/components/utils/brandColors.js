@@ -5,6 +5,7 @@ export const brivityDarkCoral = '#BC340F';
 export const brivityYellow = '#FBC02E';
 export const brivityDarkYellow = '#F4B350';
 export const primary = brivityBlue;
+export const primaryHover = '#d5eded';
 export const primaryDark = brivityDarkBlue;
 export const primaryLight = '#eef9f9';
 export const secondary = brivityCoral;
