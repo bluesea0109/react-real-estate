@@ -27,6 +27,7 @@ import Segment from './Segment';
 import Select from './Select';
 import Step from './Step';
 import Table from './Table';
+import Tab from './Tab';
 
 export {
   Button,
@@ -58,4 +59,5 @@ export {
   Select,
   Step,
   Table,
+  Tab,
 };

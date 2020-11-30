@@ -18,6 +18,10 @@ import {
   ADD_CAMPAIGN_START,
   addCampaignError,
   addCampaignSuccess,
+  ADD_HOLIDAY_CAMPAIGN_START,
+  addHolidayCampaignError,
+  addHolidayCampaignSuccess,
+  getNewHolidayId,
 } from './actions';
 import ApiService from '../../../services/api/index';
 import { SELECT_PEER_ID, DESELECT_PEER_ID } from '../peer/actions';
@@ -27,6 +31,7 @@ export const getSelectedPeerId = state => state.peer.peerId;
 export const getMailoutsPage = state => state.mailouts.page;
 export const getArchivedMailoutsPage = state => state.mailouts.archivedPage;
 export const getAddCampaignMlsNum = state => state.mailouts.addCampaignMlsNum;
+export const getHolidayCampaign = state => state.mailouts.addHolidayCampaign;
 
 const limit = 25;
 const hideArchived = { hideExcluded: true, hideArchived: true };
@@ -182,6 +187,29 @@ export function* addCampaignStartSaga() {
   }
 }
 
+export function* addHolidayCampaignSaga() {
+  const peerId = yield select(getSelectedPeerId);
+  const payload = yield select(getHolidayCampaign);
+
+  // const postcardSize = payload.postcardSize;
+  try {
+    const { path, method } = peerId
+      ? ApiService.directory.peer.mailout.createPeerGenericCampaign(peerId)
+      : ApiService.directory.user.mailout.createGenericCampaign();
+
+    const data = payload;
+    const response = yield call(ApiService[method], path, data);
+
+    yield put(getNewHolidayId(response._id));
+    yield put(resetMailouts());
+    yield put(addHolidayCampaignSuccess(response));
+
+    yield put(getMailoutsPending());
+  } catch (err) {
+    yield put(addHolidayCampaignError(err));
+  }
+}
+
 export default function*() {
   yield takeLatest(GET_MAILOUTS_PENDING, checkIfPeerSelectedGetMailout);
   yield takeLatest(GET_MORE_MAILOUTS_PENDING, checkIfPeerSelectedGetMoreMailout);
@@ -190,4 +218,5 @@ export default function*() {
   yield takeLatest(SELECT_PEER_ID, resetAndGetMailoutSaga);
   yield takeLatest(DESELECT_PEER_ID, resetAndGetMailoutSaga);
   yield takeLatest(ADD_CAMPAIGN_START, addCampaignStartSaga);
+  yield takeLatest(ADD_HOLIDAY_CAMPAIGN_START, addHolidayCampaignSaga);
 }

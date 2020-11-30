@@ -20,8 +20,13 @@ import {
   // ADD_CAMPAIGN_PENDING,
   ADD_CAMPAIGN_SUCCESS,
   ADD_CAMPAIGN_ERROR,
+  ADD_HOLIDAY_CAMPAIGN_START,
+  ADD_HOLIDAY_CAMPAIGN_SUCCESS,
+  ADD_HOLIDAY_CAMPAIGN_ERROR,
   SET_MAILOUTS_ERROR,
   CLEAR_MAILOUTS_ERROR,
+  GET_NEW_HOLIDAY_ID,
+  CLEAR_NEW_HOLIDAY_ID,
 } from './actions';
 import { ARCHIVE_MAILOUT_SUCCESS, UNDO_ARCHIVE_MAILOUT_SUCCESS } from '../mailout/actions';
 
@@ -193,6 +198,36 @@ export default function mailouts(state = initialState, action) {
         ...state,
         addCampaignMlsNumPending: false,
         error: action.error,
+      };
+    case ADD_HOLIDAY_CAMPAIGN_START:
+      return {
+        ...state,
+        addHolidayCampaign: action.payload,
+        addHolidayCampaignPending: true,
+        error: null,
+      };
+    case ADD_HOLIDAY_CAMPAIGN_SUCCESS:
+      return {
+        ...state,
+        addHolidayCampaign: null,
+        addHolidayCampaignPending: false,
+        error: null,
+      };
+    case ADD_HOLIDAY_CAMPAIGN_ERROR:
+      return {
+        ...state,
+        addHolidayCampaignPending: false,
+        error: action.error,
+      };
+    case GET_NEW_HOLIDAY_ID:
+      return {
+        ...state,
+        newHolidayId: action.payload,
+      };
+    case CLEAR_NEW_HOLIDAY_ID:
+      return {
+        ...state,
+        newHolidayId: '',
       };
     case SET_MAILOUTS_ERROR:
       return {

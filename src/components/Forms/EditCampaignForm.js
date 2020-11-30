@@ -192,6 +192,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     afterChange: current => {
       if (current !== startSlide)
         dispatch(updateMailoutTemplateThemePending(filteredStencils[current].templateTheme));
+      console.log('send theme', filteredStencils[current].templateTheme);
     },
   };
 
@@ -646,11 +647,11 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
                     )}
                 </Slider>
               </div>
-              <SliderButtons>
-                <StyledButtonBack onClick={_ => handleSliderBtnClick('back')} editForm />
-                <StyledButtonNext onClick={_ => handleSliderBtnClick('next')} editForm />
-              </SliderButtons>
             </div>
+            <SliderButtons>
+              <StyledButtonBack onClick={_ => handleSliderBtnClick('back')} editForm />
+              <StyledButtonNext onClick={_ => handleSliderBtnClick('next')} editForm />
+            </SliderButtons>
           </Segment>
         )}
 
