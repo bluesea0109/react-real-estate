@@ -486,7 +486,7 @@ const Dashboard = () => {
         ),
       },
       {
-        menuItem: 'Custom Campagin',
+        menuItem: 'Custom Campaign',
         render: () => (
           <Tab.Pane style={tabPane} attached={false}>
             <NewCampaignContainer>
