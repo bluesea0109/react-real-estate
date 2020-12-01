@@ -36,6 +36,9 @@ export const CLEAR_NEW_HOLIDAY_ID = 'CLEAR_NEW_HOLIDAY_ID';
 export const SET_MAILOUTS_ERROR = 'SET_MAILOUT_ERROR';
 export const CLEAR_MAILOUTS_ERROR = 'CLEAR_MAILOUT_ERROR';
 
+export const SHOW_ADD_CAMPAIGN_MODAL = 'SHOW_ADD_CAMPAIGN_MODAL';
+export const HIDE_ADD_CAMPAIGN_MODAL = 'HIDE_ADD_CAMPAIGN_MODAL';
+
 export function getMailoutsPending() {
   return createAction(GET_MAILOUTS_PENDING);
 }
@@ -149,4 +152,12 @@ export function setMailoutsError(error) {
 
 export function clearMailoutsError() {
   return createAction(SET_MAILOUTS_ERROR);
+}
+
+export function showAddCampaignModal() {
+  return createAction(SHOW_ADD_CAMPAIGN_MODAL);
+}
+
+export function hideAddCampaignModal() {
+  return createAction(HIDE_ADD_CAMPAIGN_MODAL);
 }

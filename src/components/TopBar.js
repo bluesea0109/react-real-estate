@@ -14,6 +14,8 @@ import { Dropdown, Popup } from 'semantic-ui-react';
 import { useIsMobile } from './Hooks/useIsMobile';
 import * as brandColors from './utils/brandColors';
 
+import AlertPromo from '../components/AlertPromo';
+
 const StyledUserSelectorDropdown = styled(Dropdown)`
   &&&&& {
     height: 40px;
@@ -269,29 +271,37 @@ export default ({ auth0 }) => {
   }
 
   return (
-    <Menu fluid fixed="top" style={{ borderBottom: '2px solid #E6E6E6', boxShadow: 'none' }}>
-      <Menu.Item as="a" href="/" header>
-        <LogoImage />
-      </Menu.Item>
-      <Menu.Menu position="right">
-        {auth0.authenticated && (
-          <Fragment>
-            {multiUser && completedInviteTeammates && (
-              <Menu.Item style={menuSpacing()}>
-                <StyledUserSelectorDropdown
-                  className="activeDropdown"
-                  floating
-                  selection
-                  options={profiles}
-                  onChange={handleProfileSelect}
-                  value={activeUser}
-                  renderLabel={renderLabel}
-                />
-              </Menu.Item>
-            )}
-          </Fragment>
-        )}
-      </Menu.Menu>
-    </Menu>
+    <>
+      <Menu
+        fluid
+        fixed="top"
+        style={{ borderBottom: '2px solid #E6E6E6', boxShadow: 'none', flexWrap: 'wrap' }}
+      >
+        <AlertPromo />
+
+        <Menu.Item as="a" href="/" header>
+          <LogoImage />
+        </Menu.Item>
+        <Menu.Menu position="right">
+          {auth0.authenticated && (
+            <Fragment>
+              {multiUser && completedInviteTeammates && (
+                <Menu.Item style={menuSpacing()}>
+                  <StyledUserSelectorDropdown
+                    className="activeDropdown"
+                    floating
+                    selection
+                    options={profiles}
+                    onChange={handleProfileSelect}
+                    value={activeUser}
+                    renderLabel={renderLabel}
+                  />
+                </Menu.Item>
+              )}
+            </Fragment>
+          )}
+        </Menu.Menu>
+      </Menu>
+    </>
   );
 };
