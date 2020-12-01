@@ -250,6 +250,11 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     }
   }, [mailoutEdit.mergeVariables, formValues, setFormValues, formValuesHaveChanged]);
 
+  useEffect(() => {
+    if (templateTheme) dispatch(updateMailoutTemplateThemePending(templateTheme));
+    // eslint-disable-next-line
+  }, []);
+
   const triggerFileDialog = () => document.getElementById('postcardCoverFile').click();
 
   const handleFileChange = async e => {
