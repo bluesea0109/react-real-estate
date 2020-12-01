@@ -253,7 +253,7 @@ const Dashboard = () => {
       setShowAddCampaign(false);
       dispatch(addCampaignStart({ mlsNum: mlsNum, postcardSize: campaignPostcardSize }));
     } else if (useHolidayTemplate || useGeneralTemplate) {
-      let tags = useHolidayTemplate ? ['holiday'] : ['general'];
+      let tags = useHolidayTemplate ? ['holiday'] : ['general', 'buyingProperties'];
       let currentTheme = useHolidayTemplate ? currentTemplateTheme : currentGeneralTheme;
       dispatch(
         addHolidayCampaignStart({
