@@ -154,6 +154,7 @@ export default function mailout(state = initialState, action) {
       return {
         ...state,
         mailoutId: null,
+        mailoutEdit: null,
         details: null,
         error: null,
       };

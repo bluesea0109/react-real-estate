@@ -1,3 +1,12 @@
+## Release 5.2 https://gitlab.rmcloud.com/groups/gabby/-/milestones/2
+Changes:
+- Operation Holiday Cheer, create a holiday themed postcard for new campaigns
+- Added 4 new holiday postdard templates to choose from
+- Updated the "Create new campaign" UI to accomodate more postcard types
+- Fixed a bug where the edit postcard values could not be blank
+- Fixed a bug that would show "undefined" in the postcard fields
+- Fixed a bug where the edit campaign details would not reload when switching campaigns
+
 ## Release 5.1 https://gitlab.rmcloud.com/groups/gabby/-/milestones/3
 Changes:
 - User agent switcher improvements including better sorting.

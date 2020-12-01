@@ -11,8 +11,8 @@ export default styled(Button)`
         &:hover,
         &:active,
         &:focus {
-          background-color: transparent;
-          box-shadow: 0 0 0 2px ${brandColors.primary} inset !important;
+          background-color: ${brandColors.primaryHover};
+          box-shadow: 0 0 0 2px ${brandColors.primaryHover} inset !important;
           color: ${brandColors.primary};
         }
         &.inverted {

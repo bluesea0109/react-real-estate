@@ -131,7 +131,10 @@ const directory = {
   onLogin: () => ({ path: `/api/user/onLogin`, method: 'get' }),
   templates: () => ({ path: `/api/templates`, method: 'get' }),
   stencils: mapper => ({ stencilPath: `/api/user/stencils/list/${mapper}`, stencilMethod: 'get' }),
-
+  stencilsByTag: tag => ({
+    stencilTagPath: `/api/user/stencils/byTag/${tag}`,
+    stencilTagMethod: 'get',
+  }),
   team: {
     list: () => ({ path: `/api/user/team/list`, method: 'get' }),
     sync: () => ({ path: `/api/user/team/settings/brivity/sync`, method: 'post' }),
@@ -193,6 +196,7 @@ const directory = {
       }),
       csv: ({ userId, mailoutId }) => ({ path: `/api/user/${userId}/mailout/${mailoutId}/csv` }),
       byMls: mlsNum => ({ path: `/api/user/mailout/byMls`, method: 'post' }),
+      createGenericCampaign: campaign => ({ path: `/api/user/mailout/campaign`, method: 'post' }),
       edit: {
         get: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'get' }),
         update: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'put' }),
@@ -302,6 +306,10 @@ const directory = {
       }),
       byMls: (mlsNum, peerId) => ({
         path: `/api/user/peer/${peerId}/mailout/byMls`,
+        method: 'post',
+      }),
+      createPeerGenericCampaign: peerId => ({
+        path: `/api/user/peer/${peerId}/mailout/campaign`,
         method: 'post',
       }),
       edit: {

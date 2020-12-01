@@ -20,6 +20,7 @@ import teamInitialize from './modules/teamInitialize/reducer';
 import teamProfile from './modules/teamProfile/reducer';
 import teamShortcode from './modules/teamShortcode/reducer';
 import templates from './modules/templates/reducer';
+import ui from './modules/ui/reducer';
 
 const reducers = {
   auth0,
@@ -42,6 +43,7 @@ const reducers = {
   teamProfile,
   teamShortcode,
   templates,
+  ui,
 };
 
 export default combineReducers(reducers);

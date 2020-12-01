@@ -250,6 +250,11 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     }
   }, [mailoutEdit.mergeVariables, formValues, setFormValues, formValuesHaveChanged]);
 
+  useEffect(() => {
+    if (templateTheme) dispatch(updateMailoutTemplateThemePending(templateTheme));
+    // eslint-disable-next-line
+  }, []);
+
   const triggerFileDialog = () => document.getElementById('postcardCoverFile').click();
 
   const handleFileChange = async e => {
@@ -525,9 +530,9 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
                 fluid
                 error={error && { content: error }}
                 label={fieldName}
-                placeholder={fieldName}
+                placeholder={field.defaultValue}
                 onChange={(e, input) => handleInputChange(input.value, field.name)}
-                value={field.value || field.defaultValue}
+                value={field.value || ''}
               />
             </Form.Field>
           );
@@ -646,11 +651,11 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
                     )}
                 </Slider>
               </div>
-              <SliderButtons>
-                <StyledButtonBack onClick={_ => handleSliderBtnClick('back')} editForm />
-                <StyledButtonNext onClick={_ => handleSliderBtnClick('next')} editForm />
-              </SliderButtons>
             </div>
+            <SliderButtons>
+              <StyledButtonBack onClick={_ => handleSliderBtnClick('back')} editForm />
+              <StyledButtonNext onClick={_ => handleSliderBtnClick('next')} editForm />
+            </SliderButtons>
           </Segment>
         )}
 

@@ -9,8 +9,8 @@ exports[`renders correctly 1`] = `
 .c0.c0.c0.c0.c0.c0.c0.c0.c0.button.primary:hover,
 .c0.c0.c0.c0.c0.c0.c0.c0.c0.button.primary:active,
 .c0.c0.c0.c0.c0.c0.c0.c0.c0.button.primary:focus {
-  background-color: transparent;
-  box-shadow: 0 0 0 2px #59C4C4 inset !important;
+  background-color: #d5eded;
+  box-shadow: 0 0 0 2px #d5eded inset !important;
   color: #59C4C4;
 }
 
