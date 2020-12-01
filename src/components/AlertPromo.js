@@ -77,7 +77,7 @@ const AlertPromo = () => {
     <div style={showAlert ? containerStyles : { ...containerStyles, ...hide }}>
       <p style={pStyles}>
         <span style={{ fontWeight: 'bold' }}>NEW Holiday Postcards are here!</span> Choose from four
-        customizable designs by click "Add Campaign" on the Dashboard, or{' '}
+        customizable designs by clicking "Add Campaign" on the Dashboard, or{' '}
         <CampaignButton style={CampaignButtonStyles} onClick={addHolidayCampaign}>
           get started here
         </CampaignButton>
