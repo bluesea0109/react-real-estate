@@ -19,7 +19,7 @@ function App() {
         <TopBarContainer />
       </HeaderLayout>
       <SidebarLayout>
-        <Navigation />
+        <Navigation style={{ marginTop: '39px' }} />
       </SidebarLayout>
       <ContentLayout>
         <Router />

@@ -19,6 +19,7 @@ import {
   addCampaignStart,
   addHolidayCampaignStart,
   clearNewHolidayId,
+  hideAddCampaignModal,
 } from '../store/modules/mailouts/actions';
 import { setCompletedDashboardModal } from '../store/modules/onboarded/actions';
 import {
@@ -157,7 +158,11 @@ const Dashboard = () => {
   const mailoutList = useSelector(store => store.mailouts.list);
   const error = useSelector(store => store.mailouts.error?.message);
   const addMailoutError = useSelector(store => store.mailout.addMailoutError);
+  const showAddModal = useSelector(store => store.mailouts.showAddCampaignModal);
+  const showPostcardSizeModal = useSelector(store => store.mailouts.showChoosePostcardSize);
+
   const [showAddCampaign, setShowAddCampaign] = useState(false);
+
   const [showChooseSize, setShowChooseSize] = useState(false);
   const [useMLSNumberToAddCampaign, setUseMLSNumberToAddCampaign] = useState(true);
   const [useHolidayTemplate, setUseHolidayTemplate] = useState(false);
@@ -232,19 +237,31 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+    if (showAddModal) {
+      setShowAddCampaign(showAddModal);
+      setShowChooseSize(showPostcardSizeModal);
+    }
+  }, [showAddModal, showPostcardSizeModal]);
+
+  useEffect(() => {
     if (holidayCampaignId) {
       history.push(`/dashboard/edit/${holidayCampaignId}/destinations`);
       dispatch(clearNewHolidayId());
     }
   }, [holidayCampaignId, history, dispatch]);
 
-  const cancelAddCampaign = e => setShowAddCampaign(false);
+  const cancelAddCampaign = e => {
+    setShowAddCampaign(false);
+    dispatch(hideAddCampaignModal());
+  };
+
   const finishAddCampaign = async e => {
     if (useMLSNumberToAddCampaign) {
       let mlsNum = document.getElementById('addCampaignInput').value;
       if (!mlsNum || !campaignPostcardSize) return;
       if (!mlsNum.length) return;
       setShowAddCampaign(false);
+      dispatch(hideAddCampaignModal());
       dispatch(addCampaignStart({ mlsNum: mlsNum, postcardSize: campaignPostcardSize }));
     } else if (useHolidayTemplate) {
       dispatch(
