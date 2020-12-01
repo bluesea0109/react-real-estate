@@ -253,8 +253,16 @@ const Dashboard = () => {
       setShowAddCampaign(false);
       dispatch(addCampaignStart({ mlsNum: mlsNum, postcardSize: campaignPostcardSize }));
     } else if (useHolidayTemplate || useGeneralTemplate) {
-      let tags = useHolidayTemplate ? ['holiday'] : ['general', 'buyingProperties'];
+      let tags = [];
       let currentTheme = useHolidayTemplate ? currentTemplateTheme : currentGeneralTheme;
+      if (useHolidayTemplate) {
+        tags = stencilsAvailable?.find(stencil => stencil.templateTheme === currentTemplateTheme)
+          .publishedTags;
+      } else if (useGeneralTemplate) {
+        tags = generalStencilsAvailable?.find(
+          stencil => stencil.templateTheme === currentGeneralTheme
+        ).publishedTags;
+      }
       dispatch(
         addHolidayCampaignStart({
           createdBy: 'user',
