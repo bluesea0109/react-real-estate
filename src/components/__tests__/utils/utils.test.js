@@ -64,8 +64,7 @@ it('Returns correct tag types', () => {
        
     </span>
   `);
-  const errTag = tag('Something');
-  expect(errTag).toEqual(undefined);
+  expect(tag('NotATagValue')).toEqual(undefined);
 });
 
 it('Returns required for empty values', () => {
