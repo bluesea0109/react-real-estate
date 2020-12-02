@@ -13,7 +13,8 @@ import StatusPill from '../components/StatusPill';
 import auth from '../services/auth';
 import api from '../services/api';
 
-const trimText = (string, length, noDots) => {
+export const trimText = (string, length, noDots) => {
+  if(string.length <= length) return string;
   if(noDots) return string.substring(0, length);
   if(string.length + 3 < length) return string;
   return string.substring(0, length) + "...";
@@ -41,7 +42,7 @@ const AdPreview = ({ ad, viewMore, adTextLength, toggleAdTextLength }) => {
             </span>
           </Grid.Column>
           {/* <span className="adPreviewText">{trimText(text, adTextLength, viewMore)} <span className="adPreviewTextExpand" onClick={() => toggleAdTextLength(text)}>Read {viewMore ? 'less' : 'more'}</span></span> */}
-          <span className="adPreviewText">{trimText(ad.details.adText ? ad.details.adText : '', 510, false)}</span>
+          <span className="adPreviewText">{ad.details.adText && `${ad.details.adText}...`}</span>
         </Grid>
         <Segment className='adPreviewContainer'>
           <div className='adPreviewImageContainer'>
@@ -143,6 +144,8 @@ const EmptyPage = () => {
         <Table.Cell />
         <Table.Cell />
         <Table.Cell />
+        <Table.Cell />
+        <Table.Cell />
       </Table.Row>
       :
         <Table.Row key={index}>
@@ -157,26 +160,31 @@ const EmptyPage = () => {
               <Popup
                 content={<AdPreview ad={item} viewMore={viewMore} adTextLength={adTextLength} toggleAdTextLength={toggleAdTextLength} />}
                 trigger={<div className="adTableItemPreviewContainer">
-                <div className="adTableItemPreview" style={{backgroundImage: `url(${item.details.previewUrl ? item.details.previewUrl : 'https://reactnativecode.com/wp-content/uploads/2018/02/Default_Image_Thumbnail.png'})`}} />
-              </div>}
-                position="center"
+                  <div className="adTableItemPreview" style={{backgroundImage: `url(${item.details.previewUrl ? item.details.previewUrl : 'https://reactnativecode.com/wp-content/uploads/2018/02/Default_Image_Thumbnail.png'})`}} />
+                </div>}
+                on={['hover', 'focus']}
+                position="right center"
+                hideOnScroll={false}
+                hoverable
               />
           }          
         </Table.Cell>
         <Table.Cell className="marketerGrey">
           {item.details.startDate && item.details.endDate ? <Header as="h5" sub className="noMarginBottom">{`${daysTimeDiff(item.details.startDate, item.details.endDate)}`
           }</Header> : '-'}
-          {item.details.startDate && item.details.endDate ? <span>{`${getDateFromStr(item.details.startDate)} - ${getDateFromStr(item.details.endDate)}`}</span> : '-'}
+          {item.details.startDate && item.details.endDate && <span>{`${getDateFromStr(item.details.startDate)} - ${getDateFromStr(item.details.endDate)}`}</span> }
         </Table.Cell>
-        <Table.Cell className="marketerGrey">{item.details.budget ? `$${Math.trunc(Number(item.details.budget))}` : '-'}</Table.Cell>
-        <Table.Cell className="marketerGrey">{item.details.spend && item.details.budget ? `${Math.floor((item.details.spend / (item.details.budget - (item.details.budget * 0.20))) * 100)}%` : '-'}</Table.Cell>
-        <Table.Cell><div><Icon name="facebook" size="large" className="adTableItemFacebookLogo" /><Icon name="instagram" size="large" className="adTableItemInstagramLogo" /></div></Table.Cell>
-        <Table.Cell>{item.details.cpp ? `$${Math.floor(item.details.cpp)}` : '-'}</Table.Cell>
-        <Table.Cell>{item.details.ctr ? `${Math.floor(item.details.ctr)}%` : '-'}</Table.Cell>
-        <Table.Cell>{item.details.clicks ? Math.floor(item.details.clicks) : '-'}</Table.Cell>
-        <Table.Cell>{item.details.cpc ? `$${Number(item.details.cpc).toFixed(2)}` : '-'}</Table.Cell>
-        <Table.Cell className="marketerGrey">Leads</Table.Cell>
-        <Table.Cell>
+        <Table.Cell className="marketerGrey alignCenter">{item.details.budget ? `$${Math.trunc(Number(item.details.budget))}` : '-'}</Table.Cell>
+        <Table.Cell className="marketerGrey alignCenter">{item.details.spend && item.details.budget ? `${Math.floor((item.details.spend / (item.details.budget - (item.details.budget * 0.20))) * 100)}%` : '-'}</Table.Cell>
+        <Table.Cell className="marketerGrey alignCenter"><div><Icon name="facebook" size="large" className="adTableItemFacebookLogo" /><Icon name="instagram" size="large" className="adTableItemInstagramLogo" /></div></Table.Cell>
+        <Table.Cell className="marketerGrey alignCenter">{item.details.impressions ? item.details.impressions : 0}</Table.Cell>
+        <Table.Cell className="marketerGrey alignCenter">{item.details.leads ? item.details.leads : 0}</Table.Cell>
+        <Table.Cell className="marketerGrey alignCenter">{item.details.cpp ? `$${Math.floor(item.details.cpp)}` : '-'}</Table.Cell>
+        <Table.Cell className="marketerGrey alignCenter">{item.details.ctr ? `${Math.floor(item.details.ctr)}%` : '-'}</Table.Cell>
+        <Table.Cell className="marketerGrey alignCenter">{item.details.clicks ? Math.floor(item.details.clicks) : '-'}</Table.Cell>
+        <Table.Cell className="marketerGrey alignCenter">{item.details.cpc ? `$${Number(item.details.cpc).toFixed(2)}` : '-'}</Table.Cell>
+        <Table.Cell className="marketerGrey alignCenter">Leads</Table.Cell>
+        <Table.Cell className="marketerGrey alignCenter">
           {
             item.details.status === 'ACTIVE' ? <StatusPill type="solid" color="green">Active</StatusPill> :
             
@@ -218,38 +226,40 @@ const EmptyPage = () => {
                   <Table.HeaderCell className="marketerGrey">CAMPAIGN</Table.HeaderCell>
                   <Table.HeaderCell className="marketerGrey">PREVIEW</Table.HeaderCell>
                   <Table.HeaderCell className="marketerGrey">DURATION</Table.HeaderCell>
-                  <Table.HeaderCell className="marketerGrey">BUDGET</Table.HeaderCell>
-                  <Table.HeaderCell className="marketerGrey">SPENT</Table.HeaderCell>
-                  <Table.HeaderCell className="marketerGrey">PLATFORMS</Table.HeaderCell>
-                  <Table.HeaderCell className="marketerGrey">
+                  <Table.HeaderCell className="marketerGrey alignCenter">BUDGET</Table.HeaderCell>
+                  <Table.HeaderCell className="marketerGrey alignCenter">SPENT</Table.HeaderCell>
+                  <Table.HeaderCell className="marketerGrey alignCenter">PLATFORMS</Table.HeaderCell>
+                  <Table.HeaderCell className="marketerGrey alignCenter">IMPRESSIONS</Table.HeaderCell>
+                  <Table.HeaderCell className="marketerGrey alignCenter">LEADS</Table.HeaderCell>
+                  <Table.HeaderCell className="marketerGrey alignCenter">
                     <Popup
                       content='The average cost to reach 1,000 people. This metric is estimated'
                       trigger={<span>CPP</span>}
                       on='hover'
                     />
                   </Table.HeaderCell>
-                  <Table.HeaderCell className="marketerGrey">
+                  <Table.HeaderCell className="marketerGrey alignCenter">
                     <Popup
                       content='The percentage of times people saw your ad and performed a click (all)'
                       trigger={<span>CTR</span>}
                       on='hover'
                     />
                   </Table.HeaderCell>
-                  <Table.HeaderCell className="marketerGrey">
+                  <Table.HeaderCell className="marketerGrey alignCenter">
                     <Popup
                       content='The number of clicks on your ads'
                       trigger={<span>CLICKS</span>}
                       on='hover'
                     />
                   </Table.HeaderCell>
-                  <Table.HeaderCell className="marketerGrey">
+                  <Table.HeaderCell className="marketerGrey alignCenter">
                     <Popup
                       content='The average cost for each click (all)'
                       trigger={<span>CPC</span>}
                       on='hover'
                     />
                   </Table.HeaderCell>
-                  <Table.HeaderCell className="marketerGrey">GOAL</Table.HeaderCell>
+                  <Table.HeaderCell className="marketerGrey alignCenter">GOAL</Table.HeaderCell>
                   <Table.HeaderCell className="marketerGrey alignCenter">STATUS</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
