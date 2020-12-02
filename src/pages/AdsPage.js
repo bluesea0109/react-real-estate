@@ -13,7 +13,8 @@ import StatusPill from '../components/StatusPill';
 import auth from '../services/auth';
 import api from '../services/api';
 
-const trimText = (string, length, noDots) => {
+export const trimText = (string, length, noDots) => {
+  if(string.length <= length) return string;
   if(noDots) return string.substring(0, length);
   if(string.length + 3 < length) return string;
   return string.substring(0, length) + "...";
@@ -41,7 +42,7 @@ const AdPreview = ({ ad, viewMore, adTextLength, toggleAdTextLength }) => {
             </span>
           </Grid.Column>
           {/* <span className="adPreviewText">{trimText(text, adTextLength, viewMore)} <span className="adPreviewTextExpand" onClick={() => toggleAdTextLength(text)}>Read {viewMore ? 'less' : 'more'}</span></span> */}
-          <span className="adPreviewText">{trimText(ad.details.adText ? ad.details.adText : '', 510, false)}</span>
+          <span className="adPreviewText">{ad.details.adText && `${ad.details.adText}...`}</span>
         </Grid>
         <Segment className='adPreviewContainer'>
           <div className='adPreviewImageContainer'>
@@ -176,8 +177,8 @@ const EmptyPage = () => {
         <Table.Cell className="marketerGrey alignCenter">{item.details.budget ? `$${Math.trunc(Number(item.details.budget))}` : '-'}</Table.Cell>
         <Table.Cell className="marketerGrey alignCenter">{item.details.spend && item.details.budget ? `${Math.floor((item.details.spend / (item.details.budget - (item.details.budget * 0.20))) * 100)}%` : '-'}</Table.Cell>
         <Table.Cell className="marketerGrey alignCenter"><div><Icon name="facebook" size="large" className="adTableItemFacebookLogo" /><Icon name="instagram" size="large" className="adTableItemInstagramLogo" /></div></Table.Cell>
-        <Table.Cell className="marketerGrey alignCenter">-</Table.Cell>
-        <Table.Cell className="marketerGrey alignCenter">-</Table.Cell>
+        <Table.Cell className="marketerGrey alignCenter">{item.details.impressions ? item.details.impressions : 0}</Table.Cell>
+        <Table.Cell className="marketerGrey alignCenter">{item.details.leads ? item.details.leads : 0}</Table.Cell>
         <Table.Cell className="marketerGrey alignCenter">{item.details.cpp ? `$${Math.floor(item.details.cpp)}` : '-'}</Table.Cell>
         <Table.Cell className="marketerGrey alignCenter">{item.details.ctr ? `${Math.floor(item.details.ctr)}%` : '-'}</Table.Cell>
         <Table.Cell className="marketerGrey alignCenter">{item.details.clicks ? Math.floor(item.details.clicks) : '-'}</Table.Cell>
