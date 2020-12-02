@@ -67,6 +67,7 @@
     "@sentry/cli": "1.49.0",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
+    "@testing-library/react-hooks": "^3.4.2",
     "cross-env": "^7.0.2",
     "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.15.0",
@@ -74,7 +75,7 @@
     "http-proxy-middleware": "0.20.0",
     "jest-styled-components": "^6.3.4",
     "prettier": "^1.19.1",
-    "react-test-renderer": "16.12.0",
+    "react-test-renderer": "^16.12.0",
     "request": "2.88.0",
     "request-promise": "4.2.5",
     "semantic-ui-less": "^2.4.1"
