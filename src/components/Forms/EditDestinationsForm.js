@@ -279,8 +279,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
         if (!isCsvBrivityFormat) {
           if (typeof firstNameColumn === 'number')
             formData.append('firstNameColumn', firstNameColumn);
-          if (typeof lastNameColumn === 'number')
-            formData.append('lastNameColumn', lastNameColumn);
+          if (typeof lastNameColumn === 'number') formData.append('lastNameColumn', lastNameColumn);
           formData.append('deliveryLineColumn', deliveryLineColumn);
           formData.append('cityColumn', cityColumn);
           formData.append('stateColumn', stateColumn);
