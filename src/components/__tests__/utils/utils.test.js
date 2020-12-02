@@ -11,6 +11,7 @@ import {
   strippedKWKLY,
   phoneRegExp,
   urlRegExp,
+  keywordRegExp,
 } from '../../utils/utils';
 
 it('Returns correct tag types', () => {
@@ -158,7 +159,7 @@ it('matches phone number', () => {
   expect(phone4).toMatch(phoneRegExp);
 });
 
-it('matches phone number', () => {
+it('matches url', () => {
   const url1 = 'http://google.ca';
   const url2 = 'https://google.ca';
   const url3 = 'https://www.google.ca';
@@ -171,4 +172,22 @@ it('matches phone number', () => {
   expect(url4).toMatch(urlRegExp);
   expect(url5).toMatch(urlRegExp);
   expect(url6).toMatch(urlRegExp);
+});
+
+it('is true', () => {
+  const word1 = 'hello';
+  const word2 = '123';
+  const word3 = '_abc123';
+  const str1 = keywordRegExp.test(word1);
+  const str2 = keywordRegExp.test(word2);
+  const str3 = keywordRegExp.test(word3);
+  expect(str1).toBe(true);
+  expect(str2).toBe(true);
+  expect(str3).toBe(true);
+});
+
+it('is false', () => {
+  const word1 = '%hello';
+  const str1 = keywordRegExp.test(word1);
+  expect(str1).toBe(false);
 });
