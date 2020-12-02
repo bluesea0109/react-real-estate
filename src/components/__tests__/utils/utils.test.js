@@ -9,6 +9,8 @@ import {
   postcardDimensionsDisplayed,
   iframeDimensions,
   strippedKWKLY,
+  phoneRegExp,
+  urlRegExp,
 } from '../../utils/utils';
 
 it('Returns correct tag types', () => {
@@ -143,4 +145,30 @@ it('Strips the KWKLY code correctly', () => {
   expect(strippedKWKLY(test2)).toEqual('');
   expect(strippedKWKLY(test3)).toEqual('MYCODE');
   expect(strippedKWKLY(test4)).toEqual('MYCODE');
+});
+
+it('matches phone number', () => {
+  const phone1 = '123456';
+  const phone2 = '12345678912345';
+  const phone3 = '111 222 3333';
+  const phone4 = '1-111 222 - 3333';
+  expect(phone1).toMatch(phoneRegExp);
+  expect(phone2).toMatch(phoneRegExp);
+  expect(phone3).toMatch(phoneRegExp);
+  expect(phone4).toMatch(phoneRegExp);
+});
+
+it('matches phone number', () => {
+  const url1 = 'http://google.ca';
+  const url2 = 'https://google.ca';
+  const url3 = 'https://www.google.ca';
+  const url4 = '192.168.1.15/24';
+  const url5 = 'https://en.wikipedia.org/wiki/IP_address';
+  const url6 = 'https://www.redmantech.com/_files/rwp-5016/large/redmanlogoWT.png';
+  expect(url1).toMatch(urlRegExp);
+  expect(url2).toMatch(urlRegExp);
+  expect(url3).toMatch(urlRegExp);
+  expect(url4).toMatch(urlRegExp);
+  expect(url5).toMatch(urlRegExp);
+  expect(url6).toMatch(urlRegExp);
 });
