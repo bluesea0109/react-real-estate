@@ -84,6 +84,8 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const peerId = useSelector(store => store.peer.peerId);
   const dispatch = useDispatch();
   const stencilsAvailable = useSelector(store => store.templates.available?.stencils);
+  const holidayStencils = useSelector(store => store.templates.available?.holiday);
+  const generalStencils = useSelector(store => store.templates.available?.general);
   const onLoginMode = useSelector(store => store.onLogin?.mode);
   const multiUser = onLoginMode === 'multiuser';
 
@@ -99,6 +101,9 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const teammates = useSelector(store => store.team.profiles);
 
   const currentListingStatus = mailoutDetails?.listingStatus;
+  const showThemes = ['general', 'holiday'].some(tag =>
+    mailoutDetails?.publishedTags?.includes(tag)
+  );
   let renderFrontDetails = true;
   let renderBackDetails = true;
   if (mailoutDetails.frontResourceUrl) renderFrontDetails = false;
@@ -158,7 +163,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     return bestCta;
   });
 
-  const filteredStencils = stencilsAvailable.filter(stencil => {
+  let filteredStencils = stencilsAvailable.filter(stencil => {
     if (
       stencil.templateTheme === 'bookmark-multi' &&
       mailoutDetails.created < new Date('2020-11-19T17:54:37.344Z').getTime()
@@ -166,6 +171,9 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
       return false;
     return true;
   });
+
+  if (mailoutDetails?.publishedTags?.includes('holiday')) filteredStencils = holidayStencils;
+  if (mailoutDetails?.publishedTags?.includes('general')) filteredStencils = generalStencils;
 
   let slides = [];
   if (filteredStencils) {
@@ -460,7 +468,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
               ? {
                   border: `2px solid ${brandColors.primary}`,
                   padding: '0.5em',
-                  margin: '0.5rem',
+                  margin: '0.5rem auto',
                   borderRadius: '5px',
                   maxWidth: 500,
                 }
@@ -516,7 +524,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           if (currentField?.sides?.includes(side)) passes = true;
           return passes;
         })
-        .map(field => {
+        .map((field, ind) => {
           let fieldName = startCase(field.name);
 
           if (fieldName.includes('Url')) fieldName = fieldName.replace(/Url/g, 'URL');
@@ -524,7 +532,11 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
           return (
             <Form.Field
-              key={formValuesHaveChanged ? formValues[field.name] || fieldName : fieldName}
+              key={
+                formValuesHaveChanged
+                  ? `${ind + formValues[field.name]}` || fieldName
+                  : `${ind + fieldName}`
+              }
             >
               <Form.Input
                 fluid
@@ -639,7 +651,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           )}
         </ContentBottomHeaderLayout>
 
-        {currentListingStatus !== 'custom' && (
+        {(currentListingStatus !== 'custom' || showThemes) && (
           <Segment basic padded>
             <div ref={sliderContainerRef}>
               <Header as="h4">Template Theme</Header>
@@ -667,10 +679,17 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           }
         >
           <div style={windowSize.width > 620 ? postcardContainer : mobilePostcardContainer}>
-            {currentListingStatus !== 'custom' && (
+            {(currentListingStatus !== 'custom' || showThemes) && (
               <>
                 <Header as="h4">Postcard Size</Header>
-                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    justifyContent: 'center',
+                    paddingBottom: '2rem',
+                  }}
+                >
                   {renderPostcardSize('4x6', 'left')}
                   {renderPostcardSize('6x9')}
                   {renderPostcardSize('6x11', 'right')}
@@ -722,53 +741,55 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
               </div>
             ) : null}
           </div>
-          {!mailoutDetails.frontResourceUrl && !publishedTags?.includes('holiday') && (
-            <div style={{ maxWidth: 350, padding: '0 1rem', margin: 'auto' }}>
-              <Header as="h4">Cover Photo</Header>
-              {photoUpdating && <span>Please wait...</span>}
-              {!photoUpdating && (
-                <div>
-                  <img src={coverPhoto} alt="postcard cover" />
-                  <br />
-                  <div style={{ display: 'flex' }}>
-                    <CoverButtonGroup icon>
-                      <Button onClick={() => changeCoverPhotoDec()}>
-                        <Icon name="angle left" />
-                      </Button>
-                      <Button onClick={() => changeCoverPhotoInc()}>
-                        <Icon name="angle right" />
-                      </Button>
-                    </CoverButtonGroup>
-                    <div style={{ paddingLeft: '0.5rem' }}>
-                      <a href="#/ignore" onClick={triggerFileDialog} id="postcardUploadText">
-                        Upload new cover photo
-                      </a>
-                      <br />
-                      <span
-                        style={
-                          currentPostcardSize !== postcardSize
-                            ? { color: '#9F3A38', fontWeight: 'bold' }
-                            : {}
-                        }
-                      >
-                        {postcardSize === '11x6'
-                          ? '(preferred size: 3438x1485)'
-                          : postcardSize === '9x6'
-                          ? '(preferred size: 2060x1485)'
-                          : '(preferred size: 1375x990)'}
-                      </span>
+          {!mailoutDetails.frontResourceUrl &&
+            !publishedTags?.includes('holiday') &&
+            !publishedTags?.includes('general') && (
+              <div style={{ maxWidth: 350, padding: '0 1rem', margin: 'auto' }}>
+                <Header as="h4">Cover Photo</Header>
+                {photoUpdating && <span>Please wait...</span>}
+                {!photoUpdating && (
+                  <div>
+                    <img src={coverPhoto} alt="postcard cover" />
+                    <br />
+                    <div style={{ display: 'flex' }}>
+                      <CoverButtonGroup icon>
+                        <Button onClick={() => changeCoverPhotoDec()}>
+                          <Icon name="angle left" />
+                        </Button>
+                        <Button onClick={() => changeCoverPhotoInc()}>
+                          <Icon name="angle right" />
+                        </Button>
+                      </CoverButtonGroup>
+                      <div style={{ paddingLeft: '0.5rem' }}>
+                        <a href="#/ignore" onClick={triggerFileDialog} id="postcardUploadText">
+                          Upload new cover photo
+                        </a>
+                        <br />
+                        <span
+                          style={
+                            currentPostcardSize !== postcardSize
+                              ? { color: '#9F3A38', fontWeight: 'bold' }
+                              : {}
+                          }
+                        >
+                          {postcardSize === '11x6'
+                            ? '(preferred size: 3438x1485)'
+                            : postcardSize === '9x6'
+                            ? '(preferred size: 2060x1485)'
+                            : '(preferred size: 1375x990)'}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-              <input
-                id="postcardCoverFile"
-                name="postcardcover"
-                type="file"
-                onChange={handleFileChange}
-              ></input>
-            </div>
-          )}
+                )}
+                <input
+                  id="postcardCoverFile"
+                  name="postcardcover"
+                  type="file"
+                  onChange={handleFileChange}
+                ></input>
+              </div>
+            )}
         </Segment>
 
         <div>
