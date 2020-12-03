@@ -79,11 +79,11 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
       ? 'userUploaded'
       : 'ai'
   );
-  const [saveDetails, setSaveDetails] = useState({
-    destinationsOptionsMode:
-      mailoutDetails.destinationsOptions?.mode || isCampaign ? 'manual' : 'ai',
-    ready: false,
-  });
+  const [saveDetails, setSaveDetails] = useState(
+    mailoutDetails.destinationsOptions?.mode || isCampaign
+      ? { destinationsOptionsMode: 'manual', ready: false }
+      : { destinationsOptionsMode: 'ai', ready: true }
+  );
 
   const [numberOfDestinations, setNumberOfDestinations] = useState(mailoutDetails.mailoutSize);
 
@@ -239,7 +239,11 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
 
   const handleSubmitClick = async () => {
     setSaving(true);
-    if (!saveDetails || !saveDetails.ready) return; // somehow got here, but not ready
+    if (!saveDetails || !saveDetails.ready) {
+      // somehow got here, but not ready
+      setSaving(false);
+      return;
+    }
     try {
       if (saveDetails.destinationsOptionsMode === 'ai') {
         let path = `/api/user/mailout/${mailoutDetails._id}/edit/mailoutSize`;
