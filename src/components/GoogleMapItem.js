@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Fragment, Component } from 'react';
+import React, { Fragment, Component, useState } from 'react';
 import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'google-maps-react';
 
 import { Header, Segment } from './Base';
@@ -10,93 +10,82 @@ const containerStyle = {
   height: '100%',
 };
 
-export class GoogleMapItem extends Component {
-  state = {
-    showingInfoWindow: false,
-    activeMarker: {},
-    selectedPlace: {},
-  };
+const GoogleMapItem = ({ data, google }) => {
+  const [showingInfoWindow, setShowingInfoWindow] = useState(false);
+  const [activeMarker, setActiveMarker] = useState({});
+  const [selectedPlace, setSelectedPlace] = useState({});
 
-  onMarkerClick = (props, marker, e) =>
-    this.setState({
-      selectedPlace: props,
-      activeMarker: marker,
-      showingInfoWindow: true,
-    });
+  onMarkerClick = (props, marker, e) => setSelectedPlace(props);
+  setActiveMarker(marker);
+  setShowingInfoWindow(true);
 
   onMapClicked = props => {
-    if (this.state.showingInfoWindow) {
-      this.setState({
-        showingInfoWindow: false,
-        activeMarker: null,
-      });
+    if (props) {
+      setShowingInfoWindow(false);
+      setActiveMarker(null);
     }
   };
 
-  render() {
-    const { data, google } = this.props;
+  const displayMarkers = () => {
+    return (
+      data.destinations &&
+      data.destinations.map((dest, index) => {
+        return (
+          <Marker
+            key={index}
+            id={index}
+            icon={{ url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png' }}
+            position={{
+              lat: dest.lat,
+              lng: dest.lon,
+            }}
+            title={dest?.deliveryLine}
+            onClick={onMarkerClick}
+          />
+        );
+      })
+    );
+  };
 
-    const displayMarkers = () => {
-      return (
-        data.destinations &&
-        data.destinations.map((dest, index) => {
-          return (
-            <Marker
-              key={index}
-              id={index}
-              icon={{ url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png' }}
-              position={{
-                lat: dest.lat,
-                lng: dest.lon,
-              }}
-              title={dest?.deliveryLine}
-              onClick={this.onMarkerClick}
-            />
-          );
-        })
-      );
-    };
+  const mainMarker = () => {
+    return (
+      <Marker
+        icon={{ url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' }}
+        position={{
+          lat: data.details && data.details.latitude,
+          lng: data.details && data.details.longitude,
+        }}
+        title={data.details && data.details.displayAddress}
+        onClick={onMarkerClick}
+      >
+        &nsbs;
+      </Marker>
+    );
+  };
 
-    const mainMarker = () => {
-      return (
-        <Marker
-          icon={{ url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' }}
-          position={{
+  return (
+    <Fragment>
+      <Segment attached style={{ height: '50vh', top: '-1px' }}>
+        <Map
+          google={google}
+          zoom={12}
+          containerStyle={containerStyle}
+          initialCenter={{
             lat: data.details && data.details.latitude,
             lng: data.details && data.details.longitude,
           }}
-          title={data.details && data.details.displayAddress}
-          onClick={this.onMarkerClick}
+          onClick={onMapClicked}
         >
-          &nsbs;
-        </Marker>
-      );
-    };
-
-    return (
-      <Fragment>
-        <Segment attached style={{ height: '50vh', top: '-1px' }}>
-          <Map
-            google={google}
-            zoom={12}
-            containerStyle={containerStyle}
-            initialCenter={{
-              lat: data.details && data.details.latitude,
-              lng: data.details && data.details.longitude,
-            }}
-            onClick={this.onMapClicked}
-          >
-            {displayMarkers()}
-            {mainMarker()}
-            <InfoWindow marker={this.state.activeMarker} visible={this.state.showingInfoWindow}>
-              <Header as="h5">{this.state.selectedPlace.title}</Header>
-            </InfoWindow>
-          </Map>
-        </Segment>
-      </Fragment>
-    );
-  }
-}
+          {displayMarkers()}
+          {mainMarker()}
+          <InfoWindow marker={activeMarker} visible={showingInfoWindow}>
+            <Header as="h5">{selectedPlace.title}</Header>
+          </InfoWindow>
+        </Map>
+      </Segment>
+    </Fragment>
+  );
+};
 
 GoogleMapItem.propTypes = {
   props: PropTypes.object,
