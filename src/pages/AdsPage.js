@@ -149,7 +149,13 @@ const EmptyPage = () => {
       </Table.Row>
       :
         <Table.Row key={index}>
-        <Table.Cell className="marketerGrey adTableItemCampaignCell"><b>{item.details.campaignName}</b></Table.Cell>
+        <Table.Cell className="marketerGrey adTableItemCampaignCell">
+          <Popup
+            content={<span>{item._id}</span>}
+            trigger={<b>{item.details.campaignName}</b>}
+            hoverable
+          />          
+        </Table.Cell>
         <Table.Cell>
           {
             item.details.status === 'WITH_ISSUES' || item.details.status === 'DISSAPROVED' ?
