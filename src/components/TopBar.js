@@ -146,15 +146,6 @@ export default ({ auth0 }) => {
 
   const menuSpacing = () => (isMobile ? {} : { marginLeft: '.5em', padding: '0px 14px' });
 
-  const getComponent = key => {
-    if (props.children.length < 1) {
-      throw new Error('Component TopBar requires 1 or more children to function');
-    }
-    return props.children[key];
-  };
-  console.log('props children', props.children);
-  console.log('props children', props.children[key]);
-
   useEffect(() => {
     if (loggedInUser && !activeUser) {
       setActiveUser(loggedInUser._id);
