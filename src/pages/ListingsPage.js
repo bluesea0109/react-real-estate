@@ -6,7 +6,6 @@ import { Grid, Segment, Dropdown, Button, Popup, List, Icon } from 'semantic-ui-
 
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
-import { useIsMobile } from '../components/Hooks/useIsMobile'
 import { useWindowSize } from '../components/Hooks/useWindowSize';
 import StatusPill from '../components/StatusPill';
 
@@ -20,7 +19,7 @@ export const trimText = (string, length, noDots) => {
   return string.substring(0, length) + "...";
 };
 
-const ListingCard = ({listingDetails, listingItem}) => {
+const ListingCard = ({listingDetails, listingItem, userInfo, peerUser, userType, mlsId}) => {
   const windowSize = useWindowSize();
   if(!listingItem) return (<Grid.Column><Segment className="cardSegment">Loading...</Segment></Grid.Column>)
   else{
@@ -30,6 +29,7 @@ const ListingCard = ({listingDetails, listingItem}) => {
     const bed = '4 bed';
     const bath = '3 bath';
     const sqft = '2,392 sqft';
+    let userObj = userType === 'loggedIn' ? userInfo : userType === 'peer' && peerUser;
 
     let createQS = (item) => {
       console.log({item});
@@ -55,35 +55,32 @@ const ListingCard = ({listingDetails, listingItem}) => {
       <Grid.Column className="listingCard">
         <Segment className="cardSegment">
           <div className="cardImgWrapper">
-            <div className={ windowSize.width <= 1366 ? 'listingCardImgContainerSmall' : 'listingCardImgContainerLarge' } onClick={() => createQS(listingItem)}>
+            <div className={ windowSize.width <= 1366 ? 'listingCardImgContainerSmall' : 'listingCardImgContainerLarge' } onClick={() => window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`}>
               <div className="listingCardImg" style={{ backgroundImage:`url(${listingItem.photos.length > 0 ? listingItem.photos[0].url : 'https://i0.wp.com/reviveyouthandfamily.org/wp-content/uploads/2016/11/house-placeholder.jpg?ssl=1'})`}} />
             </div>
-            {/* <div className="imgPillContainer">
-              <StatusPill type="paper">Listing</StatusPill>
-            </div> */}
           </div>
           <div className="listingCardBodyContainer">
             <Grid className="centeredRowGrid noMargin cardTopMarginXS">
               <Grid.Column width={12} className='noPaddingTop noPaddingLeft noPaddingBottom'>
                 <Header as="h3" className="cardFont listingCardTitle" onClick={() => window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`}>{title}</Header>
               </Grid.Column>
-              <Grid.Column width={4} className='noPaddingTop noPaddingRight noPaddingBottom listingStatusPillAlignment'>
+              <Grid.Column width={4} className='noPaddingTop noPaddingRight noPaddingBottom listingStatusPillAlignment defaultCursor'>
                 {renderPill(listingItem.standardStatus)}
               </Grid.Column>
             </Grid>
             <Header as="h4" className="normalFontWeight noMargin cardFont cardTopMarginXS">{subtitle}</Header>
             <Header as="h5" className="noMargin cardTopMarginS cardFont">{price}<span className="normalFontWeight"> | </span>{bed}<span className="normalFontWeight"> | </span>{bath}<span className="normalFontWeight"> | </span>{sqft}</Header>
-            <Header as="h6" className="noMargin cardTopMarginM cardFont">MLS #: <span className="normalFontWeight">12345</span></Header>
+            <Header as="h6" className="noMargin cardTopMarginM cardFont">MLS #: <span className="normalFontWeight">{mlsId ? mlsId : '-'}</span></Header>
             <Grid className="centeredRowGrid cardTopMarginS cardBottomMargin">
               <Grid.Column mobile={3} tablet={3} computer={3} largeScreen={3}  widescreen={2} >
                 <div className='agentProfileImgContainer'>
-                  <div className="agentProfileImg" style={{ backgroundImage: `url(https://www.andrewcollings.com/wp-content/uploads/2019/06/Hero-01-009-Chicago-Studio-Corporate-Headshot.jpg-V.jpg-1024x683-JPG60.JPG-1024x683.jpg)` }} />
+                  <div className="agentProfileImg" style={{ backgroundImage: `url(${userType === 'loggedIn' ? userObj.userProfileImgResized : userObj.realtorPhoto})` }} />
                 </div>
               </Grid.Column>
               <Grid.Column mobile={9} tablet={9} computer={9} largeScreen={9} widescreen={10}  className="leftCenteredColumnGrid">
                 <Grid.Row className="agentInfoContainer">
                   <Grid.Column>
-                    <Header as="h4">Kyle Williams</Header>
+                    <Header as="h4">{`${userObj.first} ${userObj.last}`}</Header>
                   </Grid.Column>
                   <Grid.Column>
                     <Header as="h6" className="noMargin capsText">Agent</Header>
@@ -156,9 +153,18 @@ const ListingsPage = () => {
   const [listingDetails, setListingDetails] = useState(null);
   const [listings, setListings] = useState(null);
   const [activeFilters, setActiveFilters] = useState(['All']);
+  const [userType, setUserType] = useState('loggedIn');
 
-  const peerId = useSelector(store => store.peer.peerId)
-  const isMobile = useIsMobile();
+  const peerId = useSelector(store => store.peer.peerId);
+  const userProfile = useSelector(store => store.onLogin?.userProfile);
+  const userProfileImgResized = useSelector(store => store.onLogin?.realtorPhoto?.resized);
+  
+  const userInfo={...userProfile, userProfileImgResized};
+  const peerUser = useSelector(store => store.team?.profiles.filter(profile => profile.userId === peerId)[0]);
+
+  const mlsId = useSelector(store => store.profile?.available?.boards[0]?.mlsId);
+
+  const windowSize = useWindowSize();
 
   useEffect(() => {
     async function fetchData () {
@@ -174,6 +180,11 @@ const ListingsPage = () => {
       setListings(results.listings);
     }
     fetchData()
+    if(peerId){
+      setUserType('peer');
+    } else{
+      setUserType('loggedIn');
+    }  
   }, [listingDetails, peerId]);
 
   useEffect(() => {
@@ -203,16 +214,38 @@ const ListingsPage = () => {
         setActiveFilters(localFilters);
       }
     }
+  };
+  const getColumns = () => {
+    if(windowSize.width >= 3000){
+      return 8;
+    }
+    if(windowSize.width >= 2000){
+      return 6;
+    }
+    if(windowSize.width >= 1300){
+      return 4;
+    }
+    if(windowSize.width >= 1000){
+      return 3;
+    }
+    if(windowSize.width >= 768){
+      return 2;
+    }
+    if(windowSize.width >= 320){
+      return 1;
+    }
+    if(windowSize.width <= 329){
+      return 1;
+    }
+    return 4;
   }
- 
-  console.log(listings);
   return (
     <Page basic>
       <ContentTopHeaderLayout>
         <PageTitleHeader>
           <Menu borderless fluid secondary>
             <Menu.Item>
-              <Header as="h1" className="adAppPageTitle">Listings</Header>
+              <Header as="h1">Listings</Header>
             </Menu.Item>
             <Menu.Menu position='right'>
             <Popup
@@ -226,21 +259,16 @@ const ListingsPage = () => {
           </Menu>
         </PageTitleHeader>
       </ContentTopHeaderLayout>
-      <div style={isMobile ? { marginTop: '80px' } : { marginTop: '-46px' }}>
-        <div>
-          <ContentBottomHeaderLayout>
-            {!listingDetails && <Loading message="Loading Listings..." />}
-          </ContentBottomHeaderLayout>
-
-          <Grid stackable padded='vertically' columns={4} >
-            {listings ? 
-              listings.length > 0 ? listings.map((item, i) => {
-              return <ListingCard key={i} listingDetails={listingDetails} listingItem={item} />
-              }) 
-              : <Header as="h3" className='normalFontWeight noMargin cardFont noFilteredListingsText'>No Listings meet the current filtering criteria.</Header>
-            : undefined}
-          </Grid>
-        </div>
+      <div >
+        {!listingDetails && <ContentBottomHeaderLayout><Loading message="Loading Listings..." /></ContentBottomHeaderLayout>}        
+        <Grid padded='vertically' columns={getColumns()} >
+          {listings ? 
+            listings.length > 0 ? listings.map((item, i) => {
+            return <ListingCard key={i} listingDetails={listingDetails} listingItem={item} userInfo={userInfo} peerUser={peerUser} userType={userType} mlsId={mlsId} />
+            }) 
+            : <Header as="h3" className='normalFontWeight noMargin cardFont noFilteredListingsText'>No Listings meet the current filtering criteria.</Header>
+          : undefined}
+        </Grid>
       </div>
     </Page>
   );

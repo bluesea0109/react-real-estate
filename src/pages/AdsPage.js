@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import Loading from '../components/Loading';
 import { Header, Menu, Page, Segment, Icon } from '../components/Base';
-import { Table, Loader, Popup, Grid } from 'semantic-ui-react';
+import { Table, Loader, Popup, Grid, Card, Image } from 'semantic-ui-react';
 
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
@@ -82,7 +82,6 @@ const EmptyPage = () => {
     const response = await fetch(path, { headers, method: 'get', credentials: 'include' });
     const results = await api.handleResponse(response);
     let orderedResults = results.reverse();
-    console.log(orderedResults)
     if(orderedResults !== adDetails) setAdDetails(orderedResults);
   }, [adDetails, peerId]);
 
@@ -149,12 +148,9 @@ const EmptyPage = () => {
       </Table.Row>
       :
         <Table.Row key={index}>
-        <Table.Cell className="marketerGrey adTableItemCampaignCell">
-          <Popup
-            content={<span>{item._id}</span>}
-            trigger={<b>{item.details.campaignName}</b>}
-            hoverable
-          />          
+        <Table.Cell className="marketerGrey adTableItemCampaignCell defaultCursor">
+          {item.details.campaignName}
+          <span hidden>{item._id}</span> 
         </Table.Cell>
         <Table.Cell>
           {
@@ -175,22 +171,22 @@ const EmptyPage = () => {
               />
           }          
         </Table.Cell>
-        <Table.Cell className="marketerGrey">
+        <Table.Cell className="adTableDurationContentColumn marketerGrey defaultCursor">
           {item.details.startDate && item.details.endDate ? <Header as="h5" sub className="noMarginBottom">{`${daysTimeDiff(item.details.startDate, item.details.endDate)}`
           }</Header> : '-'}
           {item.details.startDate && item.details.endDate && <span>{`${getDateFromStr(item.details.startDate)} - ${getDateFromStr(item.details.endDate)}`}</span> }
         </Table.Cell>
-        <Table.Cell className="marketerGrey alignCenter">{item.details.budget ? `$${Math.trunc(Number(item.details.budget))}` : '-'}</Table.Cell>
-        <Table.Cell className="marketerGrey alignCenter">{item.details.spend && item.details.budget ? `${Math.floor((item.details.spend / (item.details.budget - (item.details.budget * 0.20))) * 100)}%` : '-'}</Table.Cell>
-        <Table.Cell className="marketerGrey alignCenter"><div><Icon name="facebook" size="large" className="adTableItemFacebookLogo" /><Icon name="instagram" size="large" className="adTableItemInstagramLogo" /></div></Table.Cell>
-        <Table.Cell className="marketerGrey alignCenter">{item.details.impressions ? item.details.impressions : 0}</Table.Cell>
-        <Table.Cell className="marketerGrey alignCenter">{item.details.leads ? item.details.leads : 0}</Table.Cell>
-        <Table.Cell className="marketerGrey alignCenter">{item.details.cpp ? `$${Math.floor(item.details.cpp)}` : '-'}</Table.Cell>
-        <Table.Cell className="marketerGrey alignCenter">{item.details.ctr ? `${Math.floor(item.details.ctr)}%` : '-'}</Table.Cell>
-        <Table.Cell className="marketerGrey alignCenter">{item.details.clicks ? Math.floor(item.details.clicks) : '-'}</Table.Cell>
-        <Table.Cell className="marketerGrey alignCenter">{item.details.cpc ? `$${Number(item.details.cpc).toFixed(2)}` : '-'}</Table.Cell>
-        <Table.Cell className="marketerGrey alignCenter">Leads</Table.Cell>
-        <Table.Cell className="marketerGrey alignCenter">
+        <Table.Cell className="marketerGrey alignCenter defaultCursor">{item.details.budget ? `$${Math.trunc(Number(item.details.budget))}` : '-'}</Table.Cell>
+        <Table.Cell className="marketerGrey alignCenter defaultCursor">{item.details.spend && item.details.budget ? `${Math.floor((item.details.spend / (item.details.budget - (item.details.budget * 0.20))) * 100)}%` : '-'}</Table.Cell>
+        <Table.Cell className="marketerGrey alignCenter defaultCursor"><div><Icon name="facebook" size="large" className="adTableItemFacebookLogo" /><Icon name="instagram" size="large" className="adTableItemInstagramLogo" /></div></Table.Cell>
+        <Table.Cell className="marketerGrey alignCenter defaultCursor">{item.details.impressions ? item.details.impressions : 0}</Table.Cell>
+        <Table.Cell className="marketerGrey alignCenter defaultCursor">{item.details.leads ? item.details.leads : 0}</Table.Cell>
+        <Table.Cell className="marketerGrey alignCenter defaultCursor">{item.details.cpp ? `$${Math.floor(item.details.cpp)}` : '-'}</Table.Cell>
+        <Table.Cell className="marketerGrey alignCenter defaultCursor">{item.details.ctr ? `${Math.floor(item.details.ctr)}%` : '-'}</Table.Cell>
+        <Table.Cell className="marketerGrey alignCenter defaultCursor">{item.details.clicks ? Math.floor(item.details.clicks) : '-'}</Table.Cell>
+        <Table.Cell className="marketerGrey alignCenter defaultCursor">{item.details.cpc ? `$${Number(item.details.cpc).toFixed(2)}` : '-'}</Table.Cell>
+        <Table.Cell className="marketerGrey alignCenter defaultCursor">Leads</Table.Cell>
+        <Table.Cell className="marketerGrey alignCenter defaultCursor">
           {
             item.details.status === 'ACTIVE' ? <StatusPill type="solid" color="green">Active</StatusPill> :
             
@@ -217,56 +213,70 @@ const EmptyPage = () => {
         <PageTitleHeader>
           <Menu borderless fluid secondary>
             <Menu.Item>
-              <Header as="h1" className="adAppPageTitle">Paid Ads</Header>
+              <Header as="h1">Paid Ads</Header>
             </Menu.Item>
           </Menu>
         </PageTitleHeader>
       </ContentTopHeaderLayout>
-      <div style={isMobile ? { marginTop: '80px' } : { marginTop: '21px' }}>
+      {
+        adDetails && adDetails.length > 0 ? 
+        <div style={isMobile ? { marginTop: '80px' } : { marginTop: '21px' }}>
         <Segment>
-          {!adDetails && <ContentBottomHeaderLayout><Loading message="Loading Listings..." /></ContentBottomHeaderLayout>}
+          {!adDetails && <ContentBottomHeaderLayout><Loading message="Loading ads..." whiteBg /></ContentBottomHeaderLayout>}
           {adDetails && (
             <Table basic='very' className="BillingTable">
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell className="marketerGrey">CAMPAIGN</Table.HeaderCell>
-                  <Table.HeaderCell className="marketerGrey">PREVIEW</Table.HeaderCell>
-                  <Table.HeaderCell className="marketerGrey">DURATION</Table.HeaderCell>
-                  <Table.HeaderCell className="marketerGrey alignCenter">BUDGET</Table.HeaderCell>
-                  <Table.HeaderCell className="marketerGrey alignCenter">SPENT</Table.HeaderCell>
-                  <Table.HeaderCell className="marketerGrey alignCenter">PLATFORMS</Table.HeaderCell>
-                  <Table.HeaderCell className="marketerGrey alignCenter">IMPRESSIONS</Table.HeaderCell>
-                  <Table.HeaderCell className="marketerGrey alignCenter">LEADS</Table.HeaderCell>
-                  <Table.HeaderCell className="marketerGrey alignCenter">
+                  <Table.HeaderCell className="adTableHeaderText marketerGrey defaultCursor">CAMPAIGN</Table.HeaderCell>
+                  <Table.HeaderCell className="adTableHeaderText marketerGrey defaultCursor">PREVIEW</Table.HeaderCell>
+                  <Table.HeaderCell className="adTableHeaderText marketerGrey defaultCursor">DURATION</Table.HeaderCell>
+                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">BUDGET</Table.HeaderCell>
+                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">SPENT</Table.HeaderCell>
+                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">PLATFORMS</Table.HeaderCell>
+                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
+                    <Popup
+                      content='The number of times your ads were displayed on a screen'
+                      trigger={<span>IMPRESSIONS</span>}
+                      on='hover'
+                    />
+                  </Table.HeaderCell>
+                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
+                    <Popup
+                      content='The number of people who filled out your ad’s lead form'
+                      trigger={<span>LEADS</span>}
+                      on='hover'
+                    />
+                  </Table.HeaderCell>
+                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
                     <Popup
                       content='The average cost to reach 1,000 people. This metric is estimated'
                       trigger={<span>CPP</span>}
                       on='hover'
                     />
                   </Table.HeaderCell>
-                  <Table.HeaderCell className="marketerGrey alignCenter">
+                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
                     <Popup
                       content='The percentage of times people saw your ad and performed a click (all)'
                       trigger={<span>CTR</span>}
                       on='hover'
                     />
                   </Table.HeaderCell>
-                  <Table.HeaderCell className="marketerGrey alignCenter">
+                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
                     <Popup
                       content='The number of clicks on your ads'
                       trigger={<span>CLICKS</span>}
                       on='hover'
                     />
                   </Table.HeaderCell>
-                  <Table.HeaderCell className="marketerGrey alignCenter">
+                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
                     <Popup
                       content='The average cost for each click (all)'
                       trigger={<span>CPC</span>}
                       on='hover'
                     />
                   </Table.HeaderCell>
-                  <Table.HeaderCell className="marketerGrey alignCenter">GOAL</Table.HeaderCell>
-                  <Table.HeaderCell className="marketerGrey alignCenter">STATUS</Table.HeaderCell>
+                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">GOAL</Table.HeaderCell>
+                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">STATUS</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
@@ -275,7 +285,20 @@ const EmptyPage = () => {
             </Table>
           )}
         </Segment>
-      </div>
+        </div>
+      :
+      <Segment>
+        <Card centered style={{ minWidth: '380px', boxShadow: 'none' }}>
+          <Image centered  size='large' src={require('../assets/paid-ads-empty-state.svg')} style={{ background: 'unset', marginTop: '2em', marginBottom: '1em' }} />
+          <Card.Content style={{ borderTop: 'none' }}>
+            <Header as="h5" textAlign="center">
+              <Header.Content style={{ width: '380px', textAlign: 'center', cursor: 'default' }}>Your ad campaigns will appear here</Header.Content>
+            </Header>
+          </Card.Content>
+        </Card>
+      </Segment>
+      }
+      
     </Page>
   );
 
