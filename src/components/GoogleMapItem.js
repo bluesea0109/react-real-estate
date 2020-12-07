@@ -99,7 +99,7 @@ export class GoogleMapItem extends Component {
 }
 
 GoogleMapItem.propTypes = {
-  props: PropTypes.object,
+  props: PropTypes.object.isRequired,
 };
 
 export default GoogleApiWrapper({
