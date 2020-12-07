@@ -23,12 +23,12 @@ const ListingCard = ({listingDetails, listingItem, userInfo, peerUser, userType,
   const windowSize = useWindowSize();
   if(!listingItem) return (<Grid.Column><Segment className="cardSegment">Loading...</Segment></Grid.Column>)
   else{
-    const title = trimText(listingItem.streetAddress, windowSize.width <= 1366 ? 15 : 27, false);
+    const title = trimText(listingItem.streetAddress, windowSize.width <= 1366 ? 13 : windowSize.width <= 1700 ? 15 : 27, false);
     const subtitle = `${listingItem.city}, ${listingItem.state} ${listingItem.postalCode}`;
     const price = `$${listingItem.price.toLocaleString('en', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
-    const bed = '4 bed';
-    const bath = '3 bath';
-    const sqft = '2,392 sqft';
+    const bed = listingItem ? listingItem.bedrooms ? listingItem.bedrooms : '-' : '-';
+    const bath = listingItem ? listingItem.bathsTotalDecimal ? listingItem.bathsTotalDecimal : '-' : '-';
+    const sqft = '2,392';
     let userObj = userType === 'loggedIn' ? userInfo : userType === 'peer' && peerUser;
 
     let createQS = (item) => {
@@ -50,9 +50,8 @@ const ListingCard = ({listingDetails, listingItem, userInfo, peerUser, userType,
         return (<StatusPill type="solid" color='astral'>{status}</StatusPill>)
       }
     };
-
     return(
-      <Grid.Column className="listingCard">
+      <Grid.Column className="listingCard" stretched={false}>
         <Segment className="cardSegment">
           <div className="cardImgWrapper">
             <div className={ windowSize.width <= 1366 ? 'listingCardImgContainerSmall' : 'listingCardImgContainerLarge' } onClick={() => window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`}>
@@ -69,7 +68,7 @@ const ListingCard = ({listingDetails, listingItem, userInfo, peerUser, userType,
               </Grid.Column>
             </Grid>
             <Header as="h4" className="normalFontWeight noMargin cardFont cardTopMarginXS">{subtitle}</Header>
-            <Header as="h5" className="noMargin cardTopMarginS cardFont">{price}<span className="normalFontWeight"> | </span>{bed}<span className="normalFontWeight"> | </span>{bath}<span className="normalFontWeight"> | </span>{sqft}</Header>
+            <Header as="h5" className="noMargin cardTopMarginS cardFont">{price}<span className="normalFontWeight"> | </span>{bed} bed<span className="normalFontWeight"> | </span>{bath} bath</Header>
             <Header as="h6" className="noMargin cardTopMarginM cardFont">MLS #: <span className="normalFontWeight">{mlsId ? mlsId : '-'}</span></Header>
             <Grid className="centeredRowGrid cardTopMarginS cardBottomMargin">
               <Grid.Column mobile={3} tablet={3} computer={3} largeScreen={3}  widescreen={2} >
@@ -98,9 +97,13 @@ const ListingCard = ({listingDetails, listingItem, userInfo, peerUser, userType,
                     <Dropdown.Item onClick={() => window.location = `https://listings.ui.production.brivitymarketer.com/marketer?${createQS(listingItem)}`}>
                       View Facebook Ad
                     </Dropdown.Item>
-                    <Dropdown.Item onClick={() => window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`}>
-                      View Postcard Campaign
-                    </Dropdown.Item>
+                    {
+                      listingItem.campaignInfo ?
+                        <Dropdown.Item onClick={() => window.location = `/dashboard/${listingItem.campaignInfo}`}>
+                          View Postcard Campaign
+                        </Dropdown.Item>
+                      : undefined
+                    }
                   </Dropdown.Menu>
                 </Dropdown>
               </Grid.Column>
@@ -239,6 +242,7 @@ const ListingsPage = () => {
     }
     return 4;
   }
+  console.log(listings)
   return (
     <Page basic>
       <ContentTopHeaderLayout>

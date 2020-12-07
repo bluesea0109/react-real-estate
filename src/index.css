@@ -691,6 +691,7 @@ h1 {
   padding: 0px!important;
   border-radius: 6px!important;
   color: #666666!important;
+  max-height: 96%!important;
 }
 .cardFont {
   font-family: 'Open Sans'!important;
@@ -925,6 +926,9 @@ h1 {
   margin: 20px;
   width: 80%;
 }
+.adTableCampaignName {
+  font-weight: 600!important;
+}
 .adTableItemPreviewContainer {
   height: 40px;
   cursor: pointer;
@@ -952,10 +956,10 @@ h1 {
   -webkit-background-clip: text;
 }
 .adTableHeaderText {
-  font-size: 10pt!important;
+  font-size: 12px!important;
 }
 .adTableDurationContentColumn {
-  font-size: 12pt!important;
+  font-size: 12px!important;
 }
 .marketerGrey {
   color: #666!important;
