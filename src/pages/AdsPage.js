@@ -148,7 +148,7 @@ const EmptyPage = () => {
       :
         <Table.Row key={index}>
         <Table.Cell className="marketerGrey adTableItemCampaignCell defaultCursor">
-          {item.details.campaignName}
+          <span className="adTableCampaignName">{item.details.campaignName}</span>
           <span hidden>{item._id}</span> 
         </Table.Cell>
         <Table.Cell>
@@ -216,80 +216,75 @@ const EmptyPage = () => {
           </Menu>
         </PageTitleHeader>
       </ContentTopHeaderLayout>
-      {
-        adDetails && adDetails.length > 0 ? 
-        <div style={isMobile ? { marginTop: '80px' } : { marginTop: '21px' }}>
-        <Segment>
-          {!adDetails && <ContentBottomHeaderLayout><Loading message="Loading ads..." whiteBg /></ContentBottomHeaderLayout>}
-          {adDetails && (
-            <Table basic='very' className="BillingTable">
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell className="adTableHeaderText marketerGrey defaultCursor">CAMPAIGN</Table.HeaderCell>
-                  <Table.HeaderCell className="adTableHeaderText marketerGrey defaultCursor">PREVIEW</Table.HeaderCell>
-                  <Table.HeaderCell className="adTableHeaderText marketerGrey defaultCursor">DURATION</Table.HeaderCell>
-                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">BUDGET</Table.HeaderCell>
-                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">SPENT</Table.HeaderCell>
-                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">PLATFORMS</Table.HeaderCell>
-                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
-                    <Popup
-                      content='The number of times your ads were displayed on a screen'
-                      trigger={<span>IMPRESSIONS</span>}
-                      on='hover'
-                    />
-                  </Table.HeaderCell>
-                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
-                    <Popup
-                      content='The number of people who filled out your ad’s lead form'
-                      trigger={<span>LEADS</span>}
-                      on='hover'
-                    />
-                  </Table.HeaderCell>
-                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
-                    <Popup
-                      content='The percentage of times people saw your ad and performed a click (all)'
-                      trigger={<span>CTR</span>}
-                      on='hover'
-                    />
-                  </Table.HeaderCell>
-                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
-                    <Popup
-                      content='The number of clicks on your ads'
-                      trigger={<span>CLICKS</span>}
-                      on='hover'
-                    />
-                  </Table.HeaderCell>
-                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
-                    <Popup
-                      content='The average cost for each click (all)'
-                      trigger={<span>CPC</span>}
-                      on='hover'
-                    />
-                  </Table.HeaderCell>
-                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">GOAL</Table.HeaderCell>
-                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">STATUS</Table.HeaderCell>
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                {adDetails && tableBody(viewMore, adTextLength, toggleAdTextLength)}
-              </Table.Body>
-            </Table>
-          )}
-        </Segment>
-        </div>
-      :
+      <div style={isMobile ? { marginTop: '80px' } : { marginTop: '21px' }}>
       <Segment>
-        <Card centered style={{ minWidth: '380px', boxShadow: 'none' }}>
-          <Image centered  size='large' src={require('../assets/paid-ads-empty-state.svg')} style={{ background: 'unset', marginTop: '2em', marginBottom: '1em' }} />
-          <Card.Content style={{ borderTop: 'none' }}>
-            <Header as="h5" textAlign="center">
-              <Header.Content style={{ width: '380px', textAlign: 'center', cursor: 'default' }}>Your ad campaigns will appear here</Header.Content>
-            </Header>
-          </Card.Content>
-        </Card>
+        {!adDetails ? <ContentBottomHeaderLayout><Loading message="Loading ads..." whiteBg /></ContentBottomHeaderLayout>
+          :
+          adDetails.length > 0 ? (
+          <Table basic='very' className="BillingTable">
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell className="adTableHeaderText marketerGrey defaultCursor">CAMPAIGN</Table.HeaderCell>
+                <Table.HeaderCell className="adTableHeaderText marketerGrey defaultCursor">PREVIEW</Table.HeaderCell>
+                <Table.HeaderCell className="adTableHeaderText marketerGrey defaultCursor">DURATION</Table.HeaderCell>
+                <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">BUDGET</Table.HeaderCell>
+                <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">SPENT</Table.HeaderCell>
+                <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">PLATFORMS</Table.HeaderCell>
+                <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
+                  <Popup
+                    content='The number of times your ads were displayed on a screen'
+                    trigger={<span>IMPRESSIONS</span>}
+                    on='hover'
+                  />
+                </Table.HeaderCell>
+                <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
+                  <Popup
+                    content='The number of people who filled out your ad’s lead form'
+                    trigger={<span>LEADS</span>}
+                    on='hover'
+                  />
+                </Table.HeaderCell>
+                <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
+                  <Popup
+                    content='The percentage of times people saw your ad and performed a click (all)'
+                    trigger={<span>CTR</span>}
+                    on='hover'
+                  />
+                </Table.HeaderCell>
+                <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
+                  <Popup
+                    content='The number of clicks on your ads'
+                    trigger={<span>CLICKS</span>}
+                    on='hover'
+                  />
+                </Table.HeaderCell>
+                <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
+                  <Popup
+                    content='The average cost for each click (all)'
+                    trigger={<span>CPC</span>}
+                    on='hover'
+                  />
+                </Table.HeaderCell>
+                <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">GOAL</Table.HeaderCell>
+                <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">STATUS</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {adDetails && tableBody(viewMore, adTextLength, toggleAdTextLength)}
+            </Table.Body>
+          </Table>
+        ) :
+          <Card centered style={{ minWidth: '380px', boxShadow: 'none' }}>
+            <Image centered  size='large' src={require('../assets/paid-ads-empty-state.svg')} style={{ background: 'unset', marginTop: '2em', marginBottom: '1em' }} />
+            <Card.Content style={{ borderTop: 'none' }}>
+              <Header as="h5" textAlign="center">
+                <Header.Content style={{ width: '380px', textAlign: 'center', cursor: 'default' }}>Your ad campaigns will appear here</Header.Content>
+              </Header>
+            </Card.Content>
+          </Card>
+        }
       </Segment>
-      }
-      
+      </div>
     </Page>
   );
 

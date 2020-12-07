@@ -926,6 +926,9 @@ h1 {
   margin: 20px;
   width: 80%;
 }
+.adTableCampaignName {
+  font-weight: 600!important;
+}
 .adTableItemPreviewContainer {
   height: 40px;
   cursor: pointer;
