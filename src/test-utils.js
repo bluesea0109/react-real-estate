@@ -1,6 +1,6 @@
 // test-utils.js
 import React from 'react';
-import { render as rtlRender, screen } from '@testing-library/react';
+import { render as rtlRender, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Router, Route } from 'react-router-dom';
 import { LastLocationProvider } from 'react-router-last-location';
@@ -8,9 +8,11 @@ import PolygonGoogleMapsHOC from './components/Forms/PolygonGoogleMaps/PolygonGo
 import AuthService from './services/auth';
 import configureStore from './store/configure';
 import { createMemoryHistory } from 'history';
-import MailoutListItem from './components/MailoutListItem';
+import MailoutDetailsPage from './pages/MailoutDetailsPage';
 import mailoutsData from './__mocks__/mailouts';
-
+import DashboardPage from './pages/DashboardPage';
+import '@testing-library/jest-dom';
+import MemoryRouter from 'react-router-dom';
 export function render(
   ui,
   { initialState, store = configureStore({ initialState: {}, AuthService }), ...renderOptions } = {}
@@ -33,24 +35,24 @@ export function render(
 // export * from '@testing-library/react';
 // // override render method
 // export { render };
-// handleBackClick()
+//handleBackClick();
+
 // it('clicking "Back" menu item goes back', async () => {
-//   const data = mailoutsData[0];
 //   const history = createMemoryHistory();
-//   history.push('/dashboard/archived');
+//   history.push('/dashboard');
 //   history.push('/activePage');
 //   render(
-//     <Router history={createMemoryHistory({ initialEntries: ['/dashboard/archived'] })}>
-//       <Route path="/dashboard/archived">
-//         <>I am previous page</>
+//     <Router history={createMemoryHistory({ initialEntries: [`/dashboard/activePage`] })}>
+//       <Route path="/dashboard">
+//         <DashboardPage />
 //       </Route>
 //       <Route path="/activePage">
-//         <MailoutListItem data={data} />
+//         <MailoutDetailsPage />
 //       </Route>
 //     </Router>
 //   );
 
-//   expect(screen.getByText('I am previous page')).not.toBeInTheDocument();
+//   expect(screen.queryByText('Dashboard')).not.toBeInTheDocument();
 //   fireEvent.click(screen.getByRole('button', { name: 'Back' }));
-//   expect(await screen.findByText('I am previous page')).toBeInTheDocument();
+//   expect(await screen.queryByText('Dashboard')).toBeInTheDocument();
 // });
