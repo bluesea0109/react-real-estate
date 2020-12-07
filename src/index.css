@@ -951,8 +951,17 @@ h1 {
   -webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
 }
+.adTableHeaderText {
+  font-size: 10pt!important;
+}
+.adTableDurationContentColumn {
+  font-size: 12pt!important;
+}
 .marketerGrey {
   color: #666!important;
+}
+.defaultCursor {
+  cursor: default!important;
 }
 
 @media (min-width: 1920px) {
