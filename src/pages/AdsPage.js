@@ -144,7 +144,6 @@ const EmptyPage = () => {
         <Table.Cell />
         <Table.Cell />
         <Table.Cell />
-        <Table.Cell />
       </Table.Row>
       :
         <Table.Row key={index}>
@@ -181,7 +180,6 @@ const EmptyPage = () => {
         <Table.Cell className="marketerGrey alignCenter defaultCursor"><div><Icon name="facebook" size="large" className="adTableItemFacebookLogo" /><Icon name="instagram" size="large" className="adTableItemInstagramLogo" /></div></Table.Cell>
         <Table.Cell className="marketerGrey alignCenter defaultCursor">{item.details.impressions ? item.details.impressions : 0}</Table.Cell>
         <Table.Cell className="marketerGrey alignCenter defaultCursor">{item.details.leads ? item.details.leads : 0}</Table.Cell>
-        <Table.Cell className="marketerGrey alignCenter defaultCursor">{item.details.cpp ? `$${Math.floor(item.details.cpp)}` : '-'}</Table.Cell>
         <Table.Cell className="marketerGrey alignCenter defaultCursor">{item.details.ctr ? `${Math.floor(item.details.ctr)}%` : '-'}</Table.Cell>
         <Table.Cell className="marketerGrey alignCenter defaultCursor">{item.details.clicks ? Math.floor(item.details.clicks) : '-'}</Table.Cell>
         <Table.Cell className="marketerGrey alignCenter defaultCursor">{item.details.cpc ? `$${Number(item.details.cpc).toFixed(2)}` : '-'}</Table.Cell>
@@ -244,13 +242,6 @@ const EmptyPage = () => {
                     <Popup
                       content='The number of people who filled out your ad’s lead form'
                       trigger={<span>LEADS</span>}
-                      on='hover'
-                    />
-                  </Table.HeaderCell>
-                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
-                    <Popup
-                      content='The average cost to reach 1,000 people. This metric is estimated'
-                      trigger={<span>CPP</span>}
                       on='hover'
                     />
                   </Table.HeaderCell>
