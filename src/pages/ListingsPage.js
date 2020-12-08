@@ -366,7 +366,7 @@ const ListingsPage = () => {
     }
     return 4;
   };
- 
+
   return (
     <Page basic>
       <ContentTopHeaderLayout>
