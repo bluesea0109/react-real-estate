@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Loading from '../components/Loading';
-import { Header, Menu, Page } from '../components/Base';
-import { Grid, Segment, Dropdown, Button, Popup, List, Icon } from 'semantic-ui-react';
+import { Header, Menu, Page, Dropdown } from '../components/Base';
+import Styled from 'styled-components';
+import { Grid, Segment, Button, Popup, List, Icon } from 'semantic-ui-react';
 
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
@@ -12,12 +13,23 @@ import StatusPill from '../components/StatusPill';
 import auth from '../services/auth';
 import api from '../services/api';
 
+import * as brandColors from '../components/utils/brandColors';
+
 export const trimText = (string, length, noDots) => {
   if (string.length <= length) return string;
   if (noDots) return string.substring(0, length);
   if (string.length + 3 < length) return string;
   return string.substring(0, length) + '...';
 };
+
+const DotsDropDown = Styled(Dropdown)`
+&&&.ui.button{
+color: #000000;
+&:hover{
+  background-color:${brandColors.darkGreyHover}
+}
+}
+`;
 
 const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType, mlsId }) => {
   const windowSize = useWindowSize();
@@ -181,15 +193,15 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                 className="alignEnd cardIconButtonColumn"
               >
                 {adProduct || listingItem.campaignInfo ? (
-                  <Dropdown
+                  <DotsDropDown
                     icon="ellipsis horizontal"
                     direction="left"
                     button
                     className="icon cardIconButton"
                   >
-                    <Dropdown.Menu>
+                    <DotsDropDown.Menu>
                       {adProduct && (
-                        <Dropdown.Item
+                        <DotsDropDown.Item
                           onClick={() =>
                             (window.location = `https://listings.ui.production.brivitymarketer.com/marketer?${createQS(
                               listingItem
@@ -197,22 +209,22 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                           }
                         >
                           View Facebook Ad
-                        </Dropdown.Item>
+                        </DotsDropDown.Item>
                       )}
 
                       {listingItem.campaignInfo ? (
-                        <Dropdown.Item
+                        <DotsDropDown.Item
                           onClick={() =>
                             (window.location = `/dashboard/${listingItem.campaignInfo}`)
                           }
                         >
                           View Postcard Campaign
-                        </Dropdown.Item>
+                        </DotsDropDown.Item>
                       ) : (
                         undefined
                       )}
-                    </Dropdown.Menu>
-                  </Dropdown>
+                    </DotsDropDown.Menu>
+                  </DotsDropDown>
                 ) : null}
               </Grid.Column>
             </Grid>
