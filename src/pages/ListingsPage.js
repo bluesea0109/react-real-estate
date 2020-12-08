@@ -21,6 +21,8 @@ export const trimText = (string, length, noDots) => {
 
 const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType, mlsId }) => {
   const windowSize = useWindowSize();
+  const adProduct = useSelector(store => store.onLogin.permissions?.adProduct);
+
   if (!listingItem)
     return (
       <Grid.Column>
@@ -48,16 +50,10 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
     let userObj = userType === 'loggedIn' ? userInfo : userType === 'peer' && peerUser;
 
     let createQS = item => {
-      console.log({ item });
-      console.log(listingDetails.adProduct.qs);
       let params = { ...listingDetails.adProduct.qs };
       params.listing = item.mlsNum;
       params.mls = item.blueroofMlsId;
-      console.log(
-        Object.keys(params)
-          .map(param => `${param}=${params[param]}`)
-          .join('&')
-      );
+
       return Object.keys(params)
         .map(param => `${param}=${params[param]}`)
         .join('&');
@@ -184,33 +180,40 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                 widescreen={4}
                 className="alignEnd cardIconButtonColumn"
               >
-                <Dropdown
-                  icon="ellipsis horizontal"
-                  direction="left"
-                  button
-                  className="icon cardIconButton"
-                >
-                  <Dropdown.Menu>
-                    <Dropdown.Item
-                      onClick={() =>
-                        (window.location = `https://listings.ui.production.brivitymarketer.com/marketer?${createQS(
-                          listingItem
-                        )}`)
-                      }
-                    >
-                      View Facebook Ad
-                    </Dropdown.Item>
-                    {listingItem.campaignInfo ? (
-                      <Dropdown.Item
-                        onClick={() => (window.location = `/dashboard/${listingItem.campaignInfo}`)}
-                      >
-                        View Postcard Campaign
-                      </Dropdown.Item>
-                    ) : (
-                      undefined
-                    )}
-                  </Dropdown.Menu>
-                </Dropdown>
+                {adProduct || listingItem.campaignInfo ? (
+                  <Dropdown
+                    icon="ellipsis horizontal"
+                    direction="left"
+                    button
+                    className="icon cardIconButton"
+                  >
+                    <Dropdown.Menu>
+                      {adProduct && (
+                        <Dropdown.Item
+                          onClick={() =>
+                            (window.location = `https://listings.ui.production.brivitymarketer.com/marketer?${createQS(
+                              listingItem
+                            )}`)
+                          }
+                        >
+                          View Facebook Ad
+                        </Dropdown.Item>
+                      )}
+
+                      {listingItem.campaignInfo ? (
+                        <Dropdown.Item
+                          onClick={() =>
+                            (window.location = `/dashboard/${listingItem.campaignInfo}`)
+                          }
+                        >
+                          View Postcard Campaign
+                        </Dropdown.Item>
+                      ) : (
+                        undefined
+                      )}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                ) : null}
               </Grid.Column>
             </Grid>
           </div>

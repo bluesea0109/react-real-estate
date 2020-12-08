@@ -66,7 +66,7 @@ const menuP = {
 const StyledCog = styled(Cog)`
   width: 15px;
   height: 20px;
-  margin-left: 12px;
+  margin-left: 14px;
   margin-top: 17px;
 `;
 
@@ -74,8 +74,12 @@ const StyledIcon = styled(FontAwesomeIcon)`
   margin: 0em 1em 0em 0.65em;
 `;
 
+const ArchiveStyledIcon = styled(FontAwesomeIcon)`
+  margin: 0em 1.2em 0em 0.65em;
+`;
+
 const FacebookStyledIcon = styled(FontAwesomeIcon)`
-  margin: 0em 1em 0em 0.86em;
+  margin: 0em 1.3em 0em 0.86em;
 `;
 
 export default () => {
@@ -132,6 +136,7 @@ export default () => {
   const mailoutUpdateMailoutSizePendingState = useSelector(
     store => store.mailout.updateMailoutSizePending
   );
+  const adProduct = useSelector(store => store.onLogin.permissions?.adProduct);
 
   const profiles = [];
 
@@ -352,20 +357,20 @@ export default () => {
               <StyledIcon icon="home" className="iconWithStyle" /> Listings
             </MobileDisabledLayout>
           </Menu.Item>
-
-          <Menu.Item
-            as={Link}
-            name="ads"
-            active={activeItem === '/ads'}
-            to="/ads"
-            style={menuItemStyles}
-            onClick={mobileCollapse}
-          >
-            <MobileDisabledLayout>
-              <FacebookStyledIcon icon={faFacebookF} className="facebookIconWithStyle" /> Paid Ads
-            </MobileDisabledLayout>
-          </Menu.Item>
-
+          {adProduct && (
+            <Menu.Item
+              as={Link}
+              name="ads"
+              active={activeItem === '/ads'}
+              to="/ads"
+              style={menuItemStyles}
+              onClick={mobileCollapse}
+            >
+              <MobileDisabledLayout>
+                <FacebookStyledIcon icon={faFacebookF} className="facebookIconWithStyle" /> Paid Ads
+              </MobileDisabledLayout>
+            </Menu.Item>
+          )}
           <Menu.Item
             as={Link}
             name="archived"
@@ -375,7 +380,7 @@ export default () => {
             onClick={mobileCollapse}
           >
             <MobileDisabledLayout>
-              <StyledIcon icon="archive" className="iconWithStyle" /> Archive
+              <ArchiveStyledIcon icon="archive" className="archvieIconWithStyle" /> Archive
             </MobileDisabledLayout>
           </Menu.Item>
 

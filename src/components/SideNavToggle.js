@@ -73,10 +73,13 @@ const ToggleContainer = styled.div`
       margin: 0em 1em 0em 0.35em;
     }
     .facebookIconWithStyle {
-      margin: 0em 1em 0em 0.57em;
+      margin: 0em 1.3em 0em 0.57em;
+    }
+    .archvieIconWithStyle {
+      margin: 0em 1.2em 0em 0.35em;
     }
     .cogIconStyle {
-      margin-left: 7px;
+      margin-left: 8px;
     }
     svg {
       path {
