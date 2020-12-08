@@ -6,7 +6,7 @@ import React, { createRef, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch } from 'react-redux';
 import { resetMailout } from '../store/modules/mailout/actions';
-import { faFacebookF } from "@fortawesome/free-brands-svg-icons"
+import { faFacebookF } from '@fortawesome/free-brands-svg-icons';
 
 import { StepLayout, StepsLayout, MobileDisabledLayout, NavigationLayout } from '../layouts';
 import { Dimmer, Menu, Initials, Icon, Step } from './Base';
@@ -339,33 +339,32 @@ export default () => {
               <StyledIcon icon="tachometer-alt" className="iconWithStyle" /> Dashboard
             </MobileDisabledLayout>
           </Menu.Item>
-          
-          <Menu.Item 
-            as={Link} 
-            name="listings" 
-            active={activeItem === '/listings'} 
-            to="/listings" 
+
+          <Menu.Item
+            as={Link}
+            name="listings"
+            active={activeItem === '/listings'}
+            to="/listings"
             style={menuItemStyles}
             onClick={mobileCollapse}
-            >
+          >
             <MobileDisabledLayout>
               <StyledIcon icon="home" className="iconWithStyle" /> Listings
             </MobileDisabledLayout>
           </Menu.Item>
 
-          <Menu.Item 
-            as={Link} 
-            name="ads" 
-            active={activeItem === '/ads'} 
-            to="/ads" 
+          <Menu.Item
+            as={Link}
+            name="ads"
+            active={activeItem === '/ads'}
+            to="/ads"
             style={menuItemStyles}
             onClick={mobileCollapse}
-            >
+          >
             <MobileDisabledLayout>
               <FacebookStyledIcon icon={faFacebookF} className="facebookIconWithStyle" /> Paid Ads
             </MobileDisabledLayout>
           </Menu.Item>
-
 
           <Menu.Item
             as={Link}

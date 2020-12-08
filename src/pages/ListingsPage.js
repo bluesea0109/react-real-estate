@@ -13,80 +13,177 @@ import auth from '../services/auth';
 import api from '../services/api';
 
 export const trimText = (string, length, noDots) => {
-  if(string.length <= length) return string;
-  if(noDots) return string.substring(0, length);
-  if(string.length + 3 < length) return string;
-  return string.substring(0, length) + "...";
+  if (string.length <= length) return string;
+  if (noDots) return string.substring(0, length);
+  if (string.length + 3 < length) return string;
+  return string.substring(0, length) + '...';
 };
 
-const ListingCard = ({listingDetails, listingItem, userInfo, peerUser, userType, mlsId}) => {
+const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType, mlsId }) => {
   const windowSize = useWindowSize();
-  if(!listingItem) return (<Grid.Column><Segment className="cardSegment">Loading...</Segment></Grid.Column>)
-  else{
-    const title = trimText(listingItem.streetAddress, windowSize.width <= 1366 ? 13 : windowSize.width <= 1700 ? 15 : 27, false);
+  if (!listingItem)
+    return (
+      <Grid.Column>
+        <Segment className="cardSegment">Loading...</Segment>
+      </Grid.Column>
+    );
+  else {
+    const title = trimText(
+      listingItem.streetAddress,
+      windowSize.width <= 1366 ? 13 : windowSize.width <= 1700 ? 15 : 27,
+      false
+    );
     const subtitle = `${listingItem.city}, ${listingItem.state} ${listingItem.postalCode}`;
-    const price = `$${listingItem.price.toLocaleString('en', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
-    const bed = listingItem ? listingItem.bedrooms ? listingItem.bedrooms : '-' : '-';
-    const bath = listingItem ? listingItem.bathsTotalDecimal ? listingItem.bathsTotalDecimal : '-' : '-';
-    const sqft = '2,392';
+    const price = `$${listingItem.price.toLocaleString('en', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    })}`;
+    const bed = listingItem ? (listingItem.bedrooms ? listingItem.bedrooms : '-') : '-';
+    const bath = listingItem
+      ? listingItem.bathsTotalDecimal
+        ? listingItem.bathsTotalDecimal
+        : '-'
+      : '-';
+
     let userObj = userType === 'loggedIn' ? userInfo : userType === 'peer' && peerUser;
 
-    let createQS = (item) => {
-      console.log({item});
+    let createQS = item => {
+      console.log({ item });
       console.log(listingDetails.adProduct.qs);
-      let params = {...listingDetails.adProduct.qs};
+      let params = { ...listingDetails.adProduct.qs };
       params.listing = item.mlsNum;
       params.mls = item.blueroofMlsId;
-      console.log(Object.keys(params).map(param => `${param}=${params[param]}`).join('&'));
-      return Object.keys(params).map(param => `${param}=${params[param]}`).join('&');
-    }
+      console.log(
+        Object.keys(params)
+          .map(param => `${param}=${params[param]}`)
+          .join('&')
+      );
+      return Object.keys(params)
+        .map(param => `${param}=${params[param]}`)
+        .join('&');
+    };
 
-    const renderPill = (status) => {
-      if(status === 'Active'){
-        return (<StatusPill type="solid" color='yellow'>{status}</StatusPill>)
-      } else if(status === 'Pending'){
-        return (<StatusPill type="solid" color='red'>{status}</StatusPill>)
+    const renderPill = status => {
+      if (status === 'Active') {
+        return (
+          <StatusPill type="solid" color="yellow">
+            {status}
+          </StatusPill>
+        );
+      } else if (status === 'Pending') {
+        return (
+          <StatusPill type="solid" color="red">
+            {status}
+          </StatusPill>
+        );
       } else {
-        return (<StatusPill type="solid" color='astral'>{status}</StatusPill>)
+        return (
+          <StatusPill type="solid" color="astral">
+            {status}
+          </StatusPill>
+        );
       }
     };
-    return(
+    return (
       <Grid.Column className="listingCard" stretched={false}>
         <Segment className="cardSegment">
           <div className="cardImgWrapper">
-            <div className={ windowSize.width <= 1366 ? 'listingCardImgContainerSmall' : 'listingCardImgContainerLarge' } onClick={() => window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`}>
-              <div className="listingCardImg" style={{ backgroundImage:`url(${listingItem.photos.length > 0 ? listingItem.photos[0].url : 'https://i0.wp.com/reviveyouthandfamily.org/wp-content/uploads/2016/11/house-placeholder.jpg?ssl=1'})`}} />
+            <div
+              className={
+                windowSize.width <= 1366
+                  ? 'listingCardImgContainerSmall'
+                  : 'listingCardImgContainerLarge'
+              }
+              onClick={() =>
+                (window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`)
+              }
+            >
+              <div
+                className="listingCardImg"
+                style={{
+                  backgroundImage: `url(${
+                    listingItem.photos.length > 0
+                      ? listingItem.photos[0].url
+                      : 'https://i0.wp.com/reviveyouthandfamily.org/wp-content/uploads/2016/11/house-placeholder.jpg?ssl=1'
+                  })`,
+                }}
+              />
             </div>
           </div>
           <div className="listingCardBodyContainer">
             <Grid className="centeredRowGrid noMargin cardTopMarginXS">
-              <Grid.Column width={12} className='noPaddingTop noPaddingLeft noPaddingBottom'>
-                <Header as="h3" className="cardFont listingCardTitle" onClick={() => window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`}>{title}</Header>
+              <Grid.Column width={12} className="noPaddingTop noPaddingLeft noPaddingBottom">
+                <Header
+                  as="h3"
+                  className="cardFont listingCardTitle"
+                  onClick={() =>
+                    (window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`)
+                  }
+                >
+                  {title}
+                </Header>
               </Grid.Column>
-              <Grid.Column width={4} className='noPaddingTop noPaddingRight noPaddingBottom listingStatusPillAlignment defaultCursor'>
+              <Grid.Column
+                width={4}
+                className="noPaddingTop noPaddingRight noPaddingBottom listingStatusPillAlignment defaultCursor"
+              >
                 {renderPill(listingItem.standardStatus)}
               </Grid.Column>
             </Grid>
-            <Header as="h4" className="normalFontWeight noMargin cardFont cardTopMarginXS">{subtitle}</Header>
-            <Header as="h5" className="noMargin cardTopMarginS cardFont">{price}<span className="normalFontWeight"> | </span>{bed} bed<span className="normalFontWeight"> | </span>{bath} bath</Header>
-            <Header as="h6" className="noMargin cardTopMarginM cardFont">MLS #: <span className="normalFontWeight">{mlsId ? mlsId : '-'}</span></Header>
+            <Header as="h4" className="normalFontWeight noMargin cardFont cardTopMarginXS">
+              {subtitle}
+            </Header>
+            <Header as="h5" className="noMargin cardTopMarginS cardFont">
+              {price}
+              <span className="normalFontWeight"> | </span>
+              {bed} bed<span className="normalFontWeight"> | </span>
+              {bath} bath
+            </Header>
+            <Header as="h6" className="noMargin cardTopMarginM cardFont">
+              MLS #: <span className="normalFontWeight">{mlsId ? mlsId : '-'}</span>
+            </Header>
             <Grid className="centeredRowGrid cardTopMarginS cardBottomMargin">
-              <Grid.Column mobile={3} tablet={3} computer={3} largeScreen={3}  widescreen={2} >
-                <div className='agentProfileImgContainer'>
-                  <div className="agentProfileImg" style={{ backgroundImage: `url(${userType === 'loggedIn' ? userObj.userProfileImgResized : userObj.realtorPhoto})` }} />
+              <Grid.Column mobile={3} tablet={3} computer={3} largeScreen={3} widescreen={2}>
+                <div className="agentProfileImgContainer">
+                  <div
+                    className="agentProfileImg"
+                    style={{
+                      backgroundImage: `url(${
+                        userType === 'loggedIn'
+                          ? userObj.userProfileImgResized
+                          : userObj.realtorPhoto
+                      })`,
+                    }}
+                  />
                 </div>
               </Grid.Column>
-              <Grid.Column mobile={9} tablet={9} computer={9} largeScreen={9} widescreen={10}  className="leftCenteredColumnGrid">
+              <Grid.Column
+                mobile={9}
+                tablet={9}
+                computer={9}
+                largeScreen={9}
+                widescreen={10}
+                className="leftCenteredColumnGrid"
+              >
                 <Grid.Row className="agentInfoContainer">
                   <Grid.Column>
                     <Header as="h4">{`${userObj.first} ${userObj.last}`}</Header>
                   </Grid.Column>
                   <Grid.Column>
-                    <Header as="h6" className="noMargin capsText">Agent</Header>
+                    <Header as="h6" className="noMargin capsText">
+                      Agent
+                    </Header>
                   </Grid.Column>
                 </Grid.Row>
               </Grid.Column>
-              <Grid.Column mobile={4} tablet={4} computer={4} largeScreen={4} widescreen={4}  className="alignEnd cardIconButtonColumn">
+              <Grid.Column
+                mobile={4}
+                tablet={4}
+                computer={4}
+                largeScreen={4}
+                widescreen={4}
+                className="alignEnd cardIconButtonColumn"
+              >
                 <Dropdown
                   icon="ellipsis horizontal"
                   direction="left"
@@ -94,16 +191,24 @@ const ListingCard = ({listingDetails, listingItem, userInfo, peerUser, userType,
                   className="icon cardIconButton"
                 >
                   <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => window.location = `https://listings.ui.production.brivitymarketer.com/marketer?${createQS(listingItem)}`}>
+                    <Dropdown.Item
+                      onClick={() =>
+                        (window.location = `https://listings.ui.production.brivitymarketer.com/marketer?${createQS(
+                          listingItem
+                        )}`)
+                      }
+                    >
                       View Facebook Ad
                     </Dropdown.Item>
-                    {
-                      listingItem.campaignInfo ?
-                        <Dropdown.Item onClick={() => window.location = `/dashboard/${listingItem.campaignInfo}`}>
-                          View Postcard Campaign
-                        </Dropdown.Item>
-                      : undefined
-                    }
+                    {listingItem.campaignInfo ? (
+                      <Dropdown.Item
+                        onClick={() => (window.location = `/dashboard/${listingItem.campaignInfo}`)}
+                      >
+                        View Postcard Campaign
+                      </Dropdown.Item>
+                    ) : (
+                      undefined
+                    )}
                   </Dropdown.Menu>
                 </Dropdown>
               </Grid.Column>
@@ -115,35 +220,50 @@ const ListingCard = ({listingDetails, listingItem, userInfo, peerUser, userType,
   }
 };
 
-const FilterList = ({activeFilters, handleFilterSelected}) => {
-  return(
+const FilterList = ({ activeFilters, handleFilterSelected }) => {
+  return (
     <List relaxed="very" selection>
       <List.Item onClick={() => handleFilterSelected('All')}>
-        <Icon name={activeFilters.includes('All') ? "check square" : "square outline"} className={`${'filterIcon'} ${activeFilters.includes('All') && 'filterIconActive'}`} />
+        <Icon
+          name={activeFilters.includes('All') ? 'check square' : 'square outline'}
+          className={`${'filterIcon'} ${activeFilters.includes('All') && 'filterIconActive'}`}
+        />
         <List.Content>
           <List.Description>All Statuses</List.Description>
         </List.Content>
       </List.Item>
       <List.Item onClick={() => handleFilterSelected('Active')}>
-        <Icon name={activeFilters.includes('Active') ? "check square" : "square outline"} className={`${'filterIcon'} ${activeFilters.includes('Active') && 'filterIconActive'}`} />
+        <Icon
+          name={activeFilters.includes('Active') ? 'check square' : 'square outline'}
+          className={`${'filterIcon'} ${activeFilters.includes('Active') && 'filterIconActive'}`}
+        />
         <List.Content>
           <List.Description>Active</List.Description>
         </List.Content>
       </List.Item>
       <List.Item onClick={() => handleFilterSelected('Pending')}>
-        <Icon name={activeFilters.includes('Pending') ? "check square" : "square outline"} className={`${'filterIcon'} ${activeFilters.includes('Pending') && 'filterIconActive'}`} />
+        <Icon
+          name={activeFilters.includes('Pending') ? 'check square' : 'square outline'}
+          className={`${'filterIcon'} ${activeFilters.includes('Pending') && 'filterIconActive'}`}
+        />
         <List.Content>
           <List.Description>Pending</List.Description>
         </List.Content>
       </List.Item>
       <List.Item onClick={() => handleFilterSelected('Sold')}>
-        <Icon name={activeFilters.includes('Sold') ? "check square" : "square outline"} className={`${'filterIcon'} ${activeFilters.includes('Sold') && 'filterIconActive'}`} />
+        <Icon
+          name={activeFilters.includes('Sold') ? 'check square' : 'square outline'}
+          className={`${'filterIcon'} ${activeFilters.includes('Sold') && 'filterIconActive'}`}
+        />
         <List.Content>
           <List.Description>Sold</List.Description>
         </List.Content>
       </List.Item>
       <List.Item onClick={() => handleFilterSelected('Closed')}>
-        <Icon name={activeFilters.includes('Closed') ? "check square" : "square outline"} className={`${'filterIcon'} ${activeFilters.includes('Closed') && 'filterIconActive'}`} />
+        <Icon
+          name={activeFilters.includes('Closed') ? 'check square' : 'square outline'}
+          className={`${'filterIcon'} ${activeFilters.includes('Closed') && 'filterIconActive'}`}
+        />
         <List.Content>
           <List.Description>Closed</List.Description>
         </List.Content>
@@ -161,88 +281,92 @@ const ListingsPage = () => {
   const peerId = useSelector(store => store.peer.peerId);
   const userProfile = useSelector(store => store.onLogin?.userProfile);
   const userProfileImgResized = useSelector(store => store.onLogin?.realtorPhoto?.resized);
-  
-  const userInfo={...userProfile, userProfileImgResized};
-  const peerUser = useSelector(store => store.team?.profiles.filter(profile => profile.userId === peerId)[0]);
+
+  const userInfo = { ...userProfile, userProfileImgResized };
+  const peerUser = useSelector(
+    store => store.team?.profiles.filter(profile => profile.userId === peerId)[0]
+  );
 
   const mlsId = useSelector(store => store.profile?.available?.boards[0]?.mlsId);
 
   const windowSize = useWindowSize();
 
   useEffect(() => {
-    async function fetchData () {
-      if (listingDetails) return
-      let path = `/api/user/listings?forgeBlueroofToken=true`
-      if (peerId) path = `/api/user/peer/${peerId}/listings?forgeBlueroofToken=true`
+    async function fetchData() {
+      if (listingDetails) return;
+      let path = `/api/user/listings?forgeBlueroofToken=true`;
+      if (peerId) path = `/api/user/peer/${peerId}/listings?forgeBlueroofToken=true`;
       const headers = {};
       const accessToken = await auth.getAccessToken();
       headers['authorization'] = `Bearer ${accessToken}`;
       const response = await fetch(path, { headers, method: 'get', credentials: 'include' });
-      const results = await api.handleResponse(response)
+      const results = await api.handleResponse(response);
       setListingDetails(results);
       setListings(results.listings);
     }
-    fetchData()
-    if(peerId){
+    fetchData();
+    if (peerId) {
       setUserType('peer');
-    } else{
+    } else {
       setUserType('loggedIn');
-    }  
+    }
   }, [listingDetails, peerId]);
 
   useEffect(() => {
-    if(activeFilters.includes('All')){
+    if (activeFilters.includes('All')) {
       setListings(listingDetails && listingDetails.listings);
-    } else{
-      let filteredListingDetails = listingDetails && listingDetails.listings.filter(el => activeFilters.includes(el.standardStatus));
+    } else {
+      let filteredListingDetails =
+        listingDetails &&
+        listingDetails.listings.filter(el => activeFilters.includes(el.standardStatus));
       setListings(filteredListingDetails);
     }
-  }, [listingDetails, activeFilters])
+  }, [listingDetails, activeFilters]);
 
-  const handleFilterSelected = (val) => {
-    if(val === 'All'){
+  const handleFilterSelected = val => {
+    if (val === 'All') {
       setActiveFilters(['All']);
-    } else{
+    } else {
       let temp = [...activeFilters];
       let localFilters = temp.filter(el => el !== 'All');
-      if(localFilters.find(el => el === val)){
-        if(localFilters.length === 1){
+      if (localFilters.find(el => el === val)) {
+        if (localFilters.length === 1) {
           setActiveFilters(['All']);
-        } else{
+        } else {
           let uniqueLocalFilters = localFilters.filter(filter => filter !== val);
           setActiveFilters(uniqueLocalFilters);
         }
-      } else{
+      } else {
         localFilters = [...localFilters, val];
         setActiveFilters(localFilters);
       }
     }
   };
   const getColumns = () => {
-    if(windowSize.width >= 3000){
+    if (windowSize.width >= 3000) {
       return 8;
     }
-    if(windowSize.width >= 2000){
+    if (windowSize.width >= 2000) {
       return 6;
     }
-    if(windowSize.width >= 1300){
+    if (windowSize.width >= 1300) {
       return 4;
     }
-    if(windowSize.width >= 1000){
+    if (windowSize.width >= 1000) {
       return 3;
     }
-    if(windowSize.width >= 768){
+    if (windowSize.width >= 768) {
       return 2;
     }
-    if(windowSize.width >= 320){
+    if (windowSize.width >= 320) {
       return 1;
     }
-    if(windowSize.width <= 329){
+    if (windowSize.width <= 329) {
       return 1;
     }
     return 4;
-  }
-  console.log(listings)
+  };
+ 
   return (
     <Page basic>
       <ContentTopHeaderLayout>
@@ -251,32 +375,57 @@ const ListingsPage = () => {
             <Menu.Item>
               <Header as="h1">Listings</Header>
             </Menu.Item>
-            <Menu.Menu position='right'>
-            <Popup
-              content={<FilterList activeFilters={activeFilters} handleFilterSelected={handleFilterSelected} />}
-              trigger={<Button primary content='FILTER' className='listingFilterButton' />}
-              position='bottom right'
-              on='click'
-              hideOnScroll
-            />
+            <Menu.Menu position="right">
+              <Popup
+                content={
+                  <FilterList
+                    activeFilters={activeFilters}
+                    handleFilterSelected={handleFilterSelected}
+                  />
+                }
+                trigger={<Button primary content="FILTER" className="listingFilterButton" />}
+                position="bottom right"
+                on="click"
+                hideOnScroll
+              />
             </Menu.Menu>
           </Menu>
         </PageTitleHeader>
       </ContentTopHeaderLayout>
-      <div >
-        {!listingDetails && <ContentBottomHeaderLayout><Loading message="Loading Listings..." /></ContentBottomHeaderLayout>}        
-        <Grid padded='vertically' columns={getColumns()} >
-          {listings ? 
-            listings.length > 0 ? listings.map((item, i) => {
-            return <ListingCard key={i} listingDetails={listingDetails} listingItem={item} userInfo={userInfo} peerUser={peerUser} userType={userType} mlsId={mlsId} />
-            }) 
-            : <Header as="h3" className='normalFontWeight noMargin cardFont noFilteredListingsText'>No Listings meet the current filtering criteria.</Header>
-          : undefined}
+      <div>
+        {!listingDetails && (
+          <ContentBottomHeaderLayout>
+            <Loading message="Loading Listings..." />
+          </ContentBottomHeaderLayout>
+        )}
+        <Grid padded="vertically" columns={getColumns()}>
+          {listings ? (
+            listings.length > 0 ? (
+              listings.map((item, i) => {
+                return (
+                  <ListingCard
+                    key={i}
+                    listingDetails={listingDetails}
+                    listingItem={item}
+                    userInfo={userInfo}
+                    peerUser={peerUser}
+                    userType={userType}
+                    mlsId={mlsId}
+                  />
+                );
+              })
+            ) : (
+              <Header as="h3" className="normalFontWeight noMargin cardFont noFilteredListingsText">
+                No Listings meet the current filtering criteria.
+              </Header>
+            )
+          ) : (
+            undefined
+          )}
         </Grid>
       </div>
     </Page>
   );
-
-}
+};
 
 export default ListingsPage;
