@@ -13,6 +13,7 @@ export const secondaryDark = brivityDarkCoral;
 export const primaryBorder = '#336E7B';
 export const secondaryBorder = '#BC340E';
 export const lightGreyHover = 'rgba(0, 0, 0, 0.03)';
+export const darkGreyHover = '#cacbcd';
 export const grey01 = '#212121';
 export const grey02 = '#3B3B3B';
 export const grey03 = '#666666';

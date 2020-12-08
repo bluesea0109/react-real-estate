@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Loading from '../components/Loading';
-import { Header, Menu, Page } from '../components/Base';
-import { Grid, Segment, Dropdown, Button, Popup, List, Icon } from 'semantic-ui-react';
+import { Header, Menu, Page, Dropdown } from '../components/Base';
+import Styled from 'styled-components';
+import { Grid, Segment, Button, Popup, List, Icon } from 'semantic-ui-react';
 
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
@@ -12,6 +13,8 @@ import StatusPill from '../components/StatusPill';
 import auth from '../services/auth';
 import api from '../services/api';
 
+import * as brandColors from '../components/utils/brandColors';
+
 export const trimText = (string, length, noDots) => {
   if (string.length <= length) return string;
   if (noDots) return string.substring(0, length);
@@ -19,8 +22,19 @@ export const trimText = (string, length, noDots) => {
   return string.substring(0, length) + '...';
 };
 
+const DotsDropDown = Styled(Dropdown)`
+&&&.ui.button{
+color: #000000;
+&:hover{
+  background-color:${brandColors.darkGreyHover}
+}
+}
+`;
+
 const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType, mlsId }) => {
   const windowSize = useWindowSize();
+  const adProduct = useSelector(store => store.onLogin.permissions?.adProduct);
+
   if (!listingItem)
     return (
       <Grid.Column>
@@ -48,16 +62,10 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
     let userObj = userType === 'loggedIn' ? userInfo : userType === 'peer' && peerUser;
 
     let createQS = item => {
-      console.log({ item });
-      console.log(listingDetails.adProduct.qs);
       let params = { ...listingDetails.adProduct.qs };
       params.listing = item.mlsNum;
       params.mls = item.blueroofMlsId;
-      console.log(
-        Object.keys(params)
-          .map(param => `${param}=${params[param]}`)
-          .join('&')
-      );
+
       return Object.keys(params)
         .map(param => `${param}=${params[param]}`)
         .join('&');
@@ -184,33 +192,40 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                 widescreen={4}
                 className="alignEnd cardIconButtonColumn"
               >
-                <Dropdown
-                  icon="ellipsis horizontal"
-                  direction="left"
-                  button
-                  className="icon cardIconButton"
-                >
-                  <Dropdown.Menu>
-                    <Dropdown.Item
-                      onClick={() =>
-                        (window.location = `https://listings.ui.production.brivitymarketer.com/marketer?${createQS(
-                          listingItem
-                        )}`)
-                      }
-                    >
-                      View Facebook Ad
-                    </Dropdown.Item>
-                    {listingItem.campaignInfo ? (
-                      <Dropdown.Item
-                        onClick={() => (window.location = `/dashboard/${listingItem.campaignInfo}`)}
-                      >
-                        View Postcard Campaign
-                      </Dropdown.Item>
-                    ) : (
-                      undefined
-                    )}
-                  </Dropdown.Menu>
-                </Dropdown>
+                {adProduct || listingItem.campaignInfo ? (
+                  <DotsDropDown
+                    icon="ellipsis horizontal"
+                    direction="left"
+                    button
+                    className="icon cardIconButton"
+                  >
+                    <DotsDropDown.Menu>
+                      {adProduct && (
+                        <DotsDropDown.Item
+                          onClick={() =>
+                            (window.location = `https://listings.ui.production.brivitymarketer.com/marketer?${createQS(
+                              listingItem
+                            )}`)
+                          }
+                        >
+                          View Facebook Ad
+                        </DotsDropDown.Item>
+                      )}
+
+                      {listingItem.campaignInfo ? (
+                        <DotsDropDown.Item
+                          onClick={() =>
+                            (window.location = `/dashboard/${listingItem.campaignInfo}`)
+                          }
+                        >
+                          View Postcard Campaign
+                        </DotsDropDown.Item>
+                      ) : (
+                        undefined
+                      )}
+                    </DotsDropDown.Menu>
+                  </DotsDropDown>
+                ) : null}
               </Grid.Column>
             </Grid>
           </div>
