@@ -504,3 +504,340 @@ h1 {
   color: #59c4c4;
   font-weight: 600;
 }
+/* Listings page */
+/* .listingsMainContainer {
+  margin: 0!important;
+  width: 100%!important;
+  padding: 8px!important;
+} */
+.listingFilterButton{
+  border-radius: 30px!important;
+  height: 36px!important;
+  margin-top: 8px!important;
+}
+.filterIcon{
+  transition: color 0.3s ease!important;
+  color: rgba(0,0,0,.4)!important
+}
+.filterIconActive{
+  color: #59c4c4!important
+}
+.listingCardBodyContainer {
+  padding: 16px;
+}
+.mainGridContainer {
+  margin-right: -92px!important;
+}
+.listingCardTitle {
+  cursor: pointer;
+}
+.listingCardImgContainerSmall {
+  height: 190px;
+  cursor: pointer;
+}
+.listingCardImgContainerLarge {
+  height: 225px;
+  cursor: pointer;
+}
+.listingCardImg {
+  height: 100%;
+  width: 100%;
+  background-position: center;
+  background-size: cover;
+  border-radius: 6px 6px 0px 0px;
+}
+.adAppPageTitle {
+  color: #666!important;
+}
+.listingCard {
+  padding: 10px!important;
+}
+.cardSegment {
+  padding: 0px!important;
+  border-radius: 6px!important;
+  color: #666666!important;
+  max-height: 96%!important;
+}
+.cardFont {
+  font-family: 'Open Sans'!important;
+}
+.noFilteredListingsText {
+  padding-top: 48px!important;
+  padding-left: 38%!important;
+  font-weight: 700!important;
+}
+.agentProfileImgContainer {
+  height: 50px;
+  width: 50px;
+}
+.agentProfileImg {
+  height: 100%;
+  width: 100%;
+  background-position: center;
+  background-size: cover;
+  border-radius: 27px;
+}
+.normalFontWeight {
+  font-weight: 500;
+}
+.capsText {
+  text-transform: uppercase;
+}
+.centeredRowGrid {
+  display: flex!important;
+  align-items: center!important;
+  flex-direction: row!important;
+}
+.leftCenteredColumnGrid {
+  justify-content: left;
+  align-items: center;
+  display: flex;
+}
+.cardIconButton {
+  border-radius: 25px!important;
+  max-width: 34px!important;
+  max-height: 36px!important;
+  display: flex!important;
+  padding-left: 10px!important;
+  margin: 0px!important;
+}
+.cardIconButtonColumn {
+  display: flex!important;
+  justify-content: flex-end!important;
+}
+.alignCenter {
+  text-align: center!important;
+}
+.alignEnd {
+  text-align: end!important;
+}
+.noMargin {
+  margin: 0px!important;
+}
+.noMarginBottom {
+  margin-bottom: 0px!important;
+}
+.noPaddingTop {
+  padding-top: 0px!important;
+}
+.noPaddingRight {
+  padding-right: 0px!important;
+}
+.noPaddingBottom {
+  padding-bottom: 0px!important;
+}
+.noPaddingLeft {
+  padding-left: 0px!important;
+}
+.cardTopMarginXS {
+  margin-top: 4px!important;
+}
+.cardTopMarginS {
+  margin-top: 8px!important;
+}
+.cardTopMarginM {
+  margin-top: 16px!important;
+}
+.cardBottomMargin {
+  margin-bottom: -4px!important
+}
+.statusPill {
+  background-color: #B2B2B2;
+  color: #666;
+  border-radius: 13px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 4px;
+  text-transform: uppercase;
+}
+/* special pills */
+.floatPill {
+  background-color: #fff;
+  box-shadow: 0px 8px 9px -3px rgba(0,0,0,0.49);
+  padding: 2px 16px;
+}
+/* opaque pills */
+.redPillOpaque {
+  background-color: rgba(242, 113, 77, 0.2);
+  color: #F2714D;
+}
+.greenPillOpaque {
+  background-color: #00c85333;
+  color: #00C853
+}
+/* solid pills */
+.solidPill {
+  color: #fff;
+  max-width: 80px;
+}
+.greenPillSolid { 
+  background-color: #00C853
+}
+.yellowPillSolid {
+  /* background-color: #FFC82C; */
+  background-color: #F5B350;
+}
+.redPillSolid {
+  /* background-color: #FF5216 */
+  background-color: #F2714D;
+}
+.greyPillSolid {
+  background-color: #B2B2B2;
+}
+.lightBluePillSolid {
+  background-color: #85D7FF;
+}
+.bluePillSolid {
+  background-color: #009EEB;
+}
+.astralPillSolid {
+  background-color: #336E7B;
+}
+.listingStatusPillAlignment {
+  text-align: right!important;
+  text-align: -webkit-right!important;
+}
+.listingCardImgContainer{
+  position: relative;
+}
+.imgPillContainer {
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 16px;
+}
+.adPreviewWrapper{
+  padding: 24px;
+  font-family: 'Open Sans', sans-serif !important;
+}
+.adPreviewContainer {
+  padding: 0px!important
+}
+.adPreviewPageProfilePicContainer {
+  width: 48px;
+  height: 48px;
+}
+.adPreviewPageProfilePic {
+  height: 100%;
+  width: 100%;
+  background-position: center;
+  background-size: cover;
+  border-radius: 30px;
+}
+.adPreviewPageInfoContainer{
+  padding-top: 20px!important;
+}
+.adPreviewPage {
+  margin: 0px;
+}
+.adPreviewSubtitleContainer {
+  display: flex;
+  align-items: center;
+  color: gray;
+  padding-top: 4px;
+}
+.adPreviewPageSubtitle {
+  font-weight: 500;
+  margin: 0px!important;
+}
+.adPreviewAdIcon{
+  padding-top: 1px;
+  padding-left: 6px;
+}
+.adPreviewText {
+  padding-bottom: 16px;
+}
+.adPreviewTextExpand {
+  color: #2f55a4;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.adPreviewTextExpand:hover {
+  color: #3b5998;
+}
+.adPreviewImageContainer {
+  height: 270px;
+  margin: 0px;
+}
+.adPreviewImage {
+  height: 100%;
+  width: 490px;
+  background-position: center;
+  background-size: cover;
+  border-radius: 2px;
+}
+.adPreviewTitle{
+  margin: 0px!important;
+  padding: 16px 16px 0px 16px
+}
+.adPreviewSubtitle {
+  font-weight: 500;
+  margin: 0px!important;
+  padding: 8px 16px 16px 16px;
+}
+.adPreviewCTA {
+  border: 1px solid #666;
+  border-radius: 4px;
+  color: #666;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: default;
+  padding: 8px;
+  margin: 20px;
+  width: 80%;
+}
+.adTableCampaignName {
+  font-weight: 600!important;
+}
+.adTableItemPreviewContainer {
+  height: 40px;
+  cursor: pointer;
+}
+.adTableItemPreview {
+  height: 100%;
+  width: 64px;
+  background-position: center;
+  background-size: cover;
+  border-radius: 6px;
+}
+.adTableInlineLoader {
+  z-index: 0!important;
+}
+.adTableItemCampaignCell {
+  font-size: 1.20em!important;
+}
+.adTableItemFacebookLogo{
+  color: #4267B2;
+}
+.adTableItemInstagramLogo {
+  background: #d6249f;
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+}
+.adTableHeaderText {
+  font-size: 12px!important;
+}
+.adTableDurationContentColumn {
+  font-size: 12px!important;
+}
+.marketerGrey {
+  color: #666!important;
+}
+.defaultCursor {
+  cursor: default!important;
+}
+
+@media (min-width: 1920px) {
+  .agentInfoContainer{
+    padding-left: 16px!important;
+  }
+  .mainGridContainer {
+    margin-right: 0px!important;
+  }
+}

@@ -3,7 +3,7 @@ import { Header } from 'semantic-ui-react';
 
 import { Card, Image, Segment } from './Base';
 
-const Loading = ({ message = 'Loading, please wait...' }) => (
+const Loading = ({ message = 'Loading, please wait...', whiteBg }) => (
   <Segment basic style={{ margin: '6em auto' }}>
     <Card centered style={{ backgroundColor: '#f9f8f7', minWidth: '380px', boxShadow: 'none' }}>
       <Image
