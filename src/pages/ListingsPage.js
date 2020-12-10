@@ -203,12 +203,12 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                       {adProduct && (
                         <DotsDropDown.Item
                           onClick={() =>
-                            (window.location = `https://listings.ui.production.brivitymarketer.com/marketer?${createQS(
+                            (window.location = `${listingDetails.adProduct.url}?${createQS(
                               listingItem
                             )}`)
                           }
                         >
-                          View Facebook Ad
+                          View Ad
                         </DotsDropDown.Item>
                       )}
 
