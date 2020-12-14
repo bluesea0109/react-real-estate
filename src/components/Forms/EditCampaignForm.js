@@ -24,13 +24,13 @@ import { Button, Icon, Image, Loader, Menu, Message, Page, Segment, Snackbar } f
 import { StyledHeader, colors } from '../utils/helpers';
 import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
-import { useIsMobile } from '../Hooks/useIsMobile';
 import { useWindowSize } from '../Hooks/useWindowSize';
 import { calculateCost, resolveLabelStatus } from '../MailoutListItem/utils/helpers';
 import PostcardSizeButton from './Common/PostcardSizeButton';
 import styled from 'styled-components';
 import Slider from 'react-slick';
 import * as brandColors from '../utils/brandColors';
+import PostcardDetailsGrid from './Common/PostcardDetailsGrid';
 
 const CoverButtonGroup = styled(Button.Group)`
   height: 40px;
@@ -69,7 +69,6 @@ const mobilePostcardContainer = {
 };
 
 const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
-  const isMobile = useIsMobile();
   const windowSize = useWindowSize();
   const [sliderWidth, setsliderWidth] = useState(0);
   const sliderContainerRef = useRef(null);
@@ -530,6 +529,29 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           if (fieldName.includes('Url')) fieldName = fieldName.replace(/Url/g, 'URL');
           if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
 
+          if (field.defaultValue.length > 60) {
+            return (
+              <Form.Field
+                className="text-area"
+                key={
+                  formValuesHaveChanged
+                    ? `${ind + formValues[field.name]}` || fieldName
+                    : `${ind + fieldName}`
+                }
+              >
+                <Form.TextArea
+                  fluid
+                  error={error && { content: error }}
+                  label={fieldName}
+                  placeholder={field.defaultValue}
+                  onChange={(e, input) => handleInputChange(input.value, field.name)}
+                  value={field.value || ''}
+                  rows={6}
+                />
+              </Form.Field>
+            );
+          }
+
           return (
             <Form.Field
               key={
@@ -553,8 +575,8 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
     return (
       <Form color="green">
-        <Segment basic padded className={isMobile ? null : 'secondary-grid-container'}>
-          {renderedFields}
+        <Segment basic padded>
+          <PostcardDetailsGrid>{renderedFields}</PostcardDetailsGrid>
         </Segment>
       </Form>
     );
