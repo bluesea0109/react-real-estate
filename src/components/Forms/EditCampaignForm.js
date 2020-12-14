@@ -516,7 +516,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const renderMergeVariables = side => {
     let renderedFields = [];
     if (formValues) {
-      renderedFields = formValues
+      renderedFields = Array.from(formValues)
         .filter(field => {
           let passes = false;
           let currentField = mailoutEdit?.fields?.find(el => el.name === field.name);
@@ -533,14 +533,9 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
             return (
               <Form.Field
                 className="text-area"
-                key={
-                  formValuesHaveChanged
-                    ? `${ind + formValues[field.name]}` || fieldName
-                    : `${ind + fieldName}`
-                }
+                key={`${mailoutDisplayAgent.first}-${mailoutDisplayAgent.last}-${field.name}`}
               >
                 <Form.TextArea
-                  fluid
                   error={error && { content: error }}
                   label={fieldName}
                   placeholder={field.defaultValue}
@@ -554,11 +549,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
 
           return (
             <Form.Field
-              key={
-                formValuesHaveChanged
-                  ? `${ind + formValues[field.name]}` || fieldName
-                  : `${ind + fieldName}`
-              }
+              key={`${mailoutDisplayAgent.first}-${mailoutDisplayAgent.last}-${field.name}`}
             >
               <Form.Input
                 fluid
