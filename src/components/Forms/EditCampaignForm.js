@@ -529,7 +529,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           if (fieldName.includes('Url')) fieldName = fieldName.replace(/Url/g, 'URL');
           if (fieldName.includes('Cta')) fieldName = fieldName.replace(/Cta/g, 'CTA');
 
-          if (field.defaultValue?.length > 60) {
+          if (field.defaultValue?.length > 60 || field.name === 'message') {
             return (
               <Form.Field
                 className="text-area"
