@@ -211,7 +211,7 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                             )}`)
                           }
                         >
-                          View Ad
+                          Create Ad
                         </DotsDropDown.Item>
                       )}
 
