@@ -148,7 +148,10 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
               {bath} bath
             </Header>
             <Header as="h6" className="noMargin cardTopMarginM cardFont">
-              MLS #: <span className="normalFontWeight">{listingItem.mlsNum ? listingItem.mlsNum : '-'}</span>
+              MLS #:{' '}
+              <span className="normalFontWeight">
+                {listingItem.mlsNum ? listingItem.mlsNum : '-'}
+              </span>
             </Header>
             <Grid className="centeredRowGrid cardTopMarginS cardBottomMargin">
               <Grid.Column mobile={3} tablet={3} computer={3} largeScreen={3} widescreen={2}>
