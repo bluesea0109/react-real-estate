@@ -31,7 +31,7 @@ color: #000000;
 }
 `;
 
-const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType, mlsId }) => {
+const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType }) => {
   const windowSize = useWindowSize();
   const adProduct = useSelector(store => store.onLogin.permissions?.adProduct);
 
@@ -148,7 +148,7 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
               {bath} bath
             </Header>
             <Header as="h6" className="noMargin cardTopMarginM cardFont">
-              MLS #: <span className="normalFontWeight">{mlsId ? mlsId : '-'}</span>
+              MLS #: <span className="normalFontWeight">{listingItem.mlsNum ? listingItem.mlsNum : '-'}</span>
             </Header>
             <Grid className="centeredRowGrid cardTopMarginS cardBottomMargin">
               <Grid.Column mobile={3} tablet={3} computer={3} largeScreen={3} widescreen={2}>
@@ -302,8 +302,6 @@ const ListingsPage = () => {
     store => store.team?.profiles.filter(profile => profile.userId === peerId)[0]
   );
 
-  const mlsId = useSelector(store => store.profile?.available?.boards[0]?.mlsId);
-
   const windowSize = useWindowSize();
 
   useEffect(() => {
@@ -425,7 +423,6 @@ const ListingsPage = () => {
                     userInfo={userInfo}
                     peerUser={peerUser}
                     userType={userType}
-                    mlsId={mlsId}
                   />
                 );
               })
