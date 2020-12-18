@@ -14,11 +14,21 @@ export function* getTemplatesSaga() {
     const { stencilPath, stencilMethod } = ApiService.directory.stencils('singleListing');
     const StencilResponse = yield call(ApiService[stencilMethod], stencilPath);
 
-    const { stencilTagPath, stencilTagMethod } = ApiService.directory.stencilsByTag('holiday');
-    const StencilTagResponse = yield call(ApiService[stencilTagMethod], stencilTagPath);
+    const {
+      stencilTagPath: holidayPath,
+      stencilTagMethod: holidayMethod,
+    } = ApiService.directory.stencilsByTag('holiday');
+    const holidayResponse = yield call(ApiService[holidayMethod], holidayPath);
+
+    const {
+      stencilTagPath: generalPath,
+      stencilTagMethod: generalMethod,
+    } = ApiService.directory.stencilsByTag('general');
+    const generalResponse = yield call(ApiService[generalMethod], generalPath);
 
     const response = Object.assign(TemplateResponse, StencilResponse);
-    response.holiday = [...StencilTagResponse.stencils];
+    response.holiday = [...holidayResponse.stencils];
+    response.general = [...generalResponse.stencils];
 
     yield put(getTemplatesSuccess(response));
   } catch (err) {

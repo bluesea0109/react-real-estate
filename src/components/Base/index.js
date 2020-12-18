@@ -2,6 +2,7 @@ import Button from './Button';
 import Card from './Card';
 import Checkbox from './Checkbox';
 import Container from './Container';
+import Dropdown from './Dropdown';
 import Dimmer from './Dimmer';
 import Divider from './Divider';
 import Form from './Form';
@@ -34,6 +35,7 @@ export {
   Card,
   Checkbox,
   Container,
+  Dropdown,
   Dimmer,
   Divider,
   Form,

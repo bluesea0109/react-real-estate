@@ -30,8 +30,16 @@ exports[`renders correctly 1`] = `
   margin: 0em 1em 0em 0.35em;
 }
 
+.c0.c0.c0 .active.item .facebookIconWithStyle {
+  margin: 0em 1.3em 0em 0.57em;
+}
+
+.c0.c0.c0 .active.item .archvieIconWithStyle {
+  margin: 0em 1.2em 0em 0.35em;
+}
+
 .c0.c0.c0 .active.item .cogIconStyle {
-  margin-left: 7px;
+  margin-left: 8px;
 }
 
 .c0.c0.c0 .active.item svg path {

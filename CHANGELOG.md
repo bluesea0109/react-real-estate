@@ -1,7 +1,12 @@
+## Release 6.0 https://gitlab.rmcloud.com/groups/gabby/-/milestones/5
+Changes
+ - ads released, but only available by turning on permissions to the product for a user
+ - sphere campaign tab with one postcard, a handwritten note
+
 ## Release 5.2 https://gitlab.rmcloud.com/groups/gabby/-/milestones/2
 Changes:
 - Operation Holiday Cheer, create a holiday themed postcard for new campaigns
-- Added 4 new holiday postdard templates to choose from
+- Added 4 new holiday postcard templates to choose from
 - Updated the "Create new campaign" UI to accomodate more postcard types
 - Fixed a bug where the edit postcard values could not be blank
 - Fixed a bug that would show "undefined" in the postcard fields
@@ -16,7 +21,7 @@ Changes:
 - The billing page now shows the credit balance on the teams account. This balance is the credit from returned postcards
 - For boards that require it, a realtor logo will show for compliance reasons
 - Bugs fixed with archive postcards display
-- Bugs fixed with some display agent issues on postcards 
+- Bugs fixed with some display agent issues on postcards
 
 ## Release 5.0
 Changes:
