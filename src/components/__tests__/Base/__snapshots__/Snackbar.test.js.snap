@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+.c0 {
+  min-width: 500px;
+  border-left: solid 3px;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  border-radius: 0 !important;
+  font-size: 1em;
+  z-index: 110;
+  position: fixed !important;
+  top: 1.5%;
+  left: 50%;
+  -webkit-transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+  display: block !important;
+}
+
+<div
+  className="ui message c0"
+>
+  <i
+    aria-hidden="true"
+    className="icon"
+    onClick={[Function]}
+  />
+  <b />
+  <span />
+  <i
+    aria-hidden="true"
+    className="times icon"
+    onClick={[Function]}
+    style={
+      Object {
+        "cursor": "pointer",
+        "float": "right",
+      }
+    }
+  />
+</div>
+`;

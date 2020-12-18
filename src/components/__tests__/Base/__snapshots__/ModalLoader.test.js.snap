@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+.c0.c0.c0.c0 {
+  color: rgba(0,0,0,0.9);
+}
+
+.c0.c0.c0.c0::before {
+  border-color: rgba(0,0,0,0.1);
+}
+
+.c0.c0.c0.c0::after {
+  border-color: #767676 transparent transparent;
+}
+
+<div
+  className="ui loader c0"
+/>
+`;

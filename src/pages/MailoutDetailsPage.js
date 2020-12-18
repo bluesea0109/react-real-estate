@@ -260,8 +260,8 @@ const MailoutDetailsPage = () => {
   const handleBackClick = () => {
     if (
       lastLocation.pathname === `/dashboard/${mailoutId}` ||
-      `/dashboard/archived` ||
-      `/dashboard/edit/${mailoutId}`
+      lastLocation.pathname === `/dashboard/archived` ||
+      lastLocation.pathname === `/dashboard/edit/${mailoutId}`
     ) {
       history.goBack();
     }

@@ -7,8 +7,9 @@ import { LastLocationProvider } from 'react-router-last-location';
 import PolygonGoogleMapsHOC from './components/Forms/PolygonGoogleMaps/PolygonGoogleMapsHOC';
 import AuthService from './services/auth';
 import configureStore from './store/configure';
+import '@testing-library/jest-dom';
 
-function render(
+export function render(
   ui,
   { initialState, store = configureStore({ initialState: {}, AuthService }), ...renderOptions } = {}
 ) {
@@ -25,8 +26,3 @@ function render(
   }
   return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
 }
-
-// re-export everything
-export * from '@testing-library/react';
-// override render method
-export { render };
