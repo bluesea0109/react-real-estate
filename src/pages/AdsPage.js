@@ -260,7 +260,7 @@ const EmptyPage = () => {
           <Table.Cell className="marketerGrey alignCenter defaultCursor">
             <div>
               <Icon name="facebook" size="large" className="adTableItemFacebookLogo" />
-              <Icon name="instagram" size="large" className="adTableItemInstagramLogo" />
+              {/* <Icon name="instagram" size="large" className="adTableItemInstagramLogo" /> */}
             </div>
           </Table.Cell>
           <Table.Cell className="marketerGrey alignCenter defaultCursor">
