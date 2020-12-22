@@ -72,7 +72,7 @@ const ApproveAndSendButton = ({
   if (!mailoutDetailPage) {
     return (
       <Fragment>
-        {canSend(data.mailoutStatus) && data.mailout?.details.destinations !== null && (
+        {canSend(data.mailoutStatus) && (
           <Link to={`dashboard/${data._id}`}>
             <Button primary>
               <MobileDisabledLayout>
