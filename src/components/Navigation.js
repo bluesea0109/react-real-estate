@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { Header, Popup } from 'semantic-ui-react';
 import React, { createRef, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faImage } from '@fortawesome/free-regular-svg-icons';
 import { useDispatch } from 'react-redux';
 import { resetMailout } from '../store/modules/mailout/actions';
 import { faFacebookF } from '@fortawesome/free-brands-svg-icons';
@@ -357,6 +358,20 @@ export default () => {
               <StyledIcon icon="home" className="iconWithStyle" /> Listings
             </MobileDisabledLayout>
           </Menu.Item>
+
+          <Menu.Item
+            as={Link}
+            name="postcards"
+            active={activeItem === '/postcards'}
+            to="/postcards"
+            style={menuItemStyles}
+            onClick={mobileCollapse}
+          >
+            <MobileDisabledLayout>
+              <StyledIcon icon={faImage} className="iconWithStyle" /> Postcards
+            </MobileDisabledLayout>
+          </Menu.Item>
+
           {adProduct && (
             <Menu.Item
               as={Link}
