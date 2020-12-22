@@ -383,8 +383,6 @@ const ListingsPage = () => {
     }
     return 4;
   };
-  console.log({ listingDetails });
-  console.log(listingDetails?.listings.length > 0);
   return (
     <Page basic>
       <ContentTopHeaderLayout>
