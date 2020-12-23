@@ -31,6 +31,7 @@ const ContentItemContainer = styled.div`
   & img {
     width: 240px;
     height: 160px;
+    padding: 0.5rem;
     object-fit: cover;
     border-radius: 6px;
     margin-bottom: 0.5rem;
