@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState, useRef, useLayoutEffect } from 'react';
 import { useHistory } from 'react-router';
-
 import { Progress } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 
 import auth from '../services/auth';
 import api from '../services/api';
@@ -28,9 +28,47 @@ import {
 import PageTitleHeader from '../components/PageTitleHeader';
 import Loading from '../components/Loading';
 import { calculateCost } from '../components/MailoutListItem/utils/helpers';
-import Styled from 'styled-components';
 import { useWindowSize } from '../components/Hooks/useWindowSize';
 import * as brandColors from '../components/utils/brandColors';
+
+const SectionHeader = styled.h3`
+  color: ${brandColors.grey04};
+  padding-bottom: 1rem;
+  padding-left: 0.5rem;
+`;
+
+const SectionGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+`;
+
+const DashboardItemContainer = styled.a`
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  color: ${brandColors.grey04};
+  font-weight: bold;
+  cursor: pointer;
+  & img {
+    width: 196px;
+    height: 140px;
+    border-radius: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+  &:hover {
+    color: ${brandColors.grey04};
+    font-weight: bold;
+  }
+`;
+
+const DashboardItem = ({ className, item }) => {
+  return (
+    <DashboardItemContainer className={className} href="#">
+      <img src="https://via.placeholder.com/400" alt="dashboard-item" />
+      <span>Test item {item}</span>
+    </DashboardItemContainer>
+  );
+};
 
 const Dashboard = () => {
   const history = useHistory();
@@ -93,6 +131,32 @@ const Dashboard = () => {
           />
         </ContentBottomHeaderLayout>
       )}
+
+      <Segment>
+        <SectionHeader>What do you want to create?</SectionHeader>
+        <SectionGrid>
+          <DashboardItem item="test"></DashboardItem>
+          <DashboardItem></DashboardItem>
+          <DashboardItem></DashboardItem>
+          <DashboardItem></DashboardItem>
+          <DashboardItem></DashboardItem>
+          <DashboardItem></DashboardItem>
+          <DashboardItem></DashboardItem>
+          <DashboardItem></DashboardItem>
+          <DashboardItem></DashboardItem>
+          <DashboardItem></DashboardItem>
+          <DashboardItem item="test"></DashboardItem>
+          <DashboardItem></DashboardItem>
+          <DashboardItem></DashboardItem>
+          <DashboardItem></DashboardItem>
+          <DashboardItem></DashboardItem>
+          <DashboardItem></DashboardItem>
+          <DashboardItem></DashboardItem>
+          <DashboardItem></DashboardItem>
+          <DashboardItem></DashboardItem>
+          <DashboardItem></DashboardItem>
+        </SectionGrid>
+      </Segment>
 
       {error && <Snackbar error>{error}</Snackbar>}
       {/* show the loading state */}
