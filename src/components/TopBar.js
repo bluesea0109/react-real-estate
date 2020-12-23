@@ -266,7 +266,11 @@ export default ({ auth0 }) => {
     });
     // sort profiles A-Z (not including logout or admin)
     let notSorted = profiles.splice(0, 2);
-    profiles.sort((a, b) => a.first.localeCompare(b.first));
+    profiles.sort((a, b) => {
+      if (a.first && b.first) {
+        return a.first.localeCompare(b.first);
+      } else return 0;
+    });
     profiles = [...notSorted, ...profiles];
   }
 
