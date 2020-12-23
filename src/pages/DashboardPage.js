@@ -1,34 +1,12 @@
-import React, { useCallback, useEffect, useState, useRef, useLayoutEffect } from 'react';
-import { useHistory } from 'react-router';
+import React from 'react';
 import { Progress } from 'semantic-ui-react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import auth from '../services/auth';
-import api from '../services/api';
-
-import {
-  ContentBottomHeaderLayout,
-  ContentTopHeaderLayout,
-  ItemBodyLayout,
-  ItemLayout,
-} from '../layouts';
-import {
-  Button,
-  Header,
-  Icon,
-  Input,
-  Menu,
-  Modal,
-  Message,
-  Page,
-  Segment,
-  Snackbar,
-} from '../components/Base';
+import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
+import { Button, Header, Menu, Page, Segment, Snackbar } from '../components/Base';
 import PageTitleHeader from '../components/PageTitleHeader';
 import Loading from '../components/Loading';
-import { calculateCost } from '../components/MailoutListItem/utils/helpers';
-import { useWindowSize } from '../components/Hooks/useWindowSize';
 import * as brandColors from '../components/utils/brandColors';
 
 const SectionHeader = styled.h3`
@@ -56,26 +34,48 @@ const DashboardItemContainer = styled.a`
     margin-bottom: 0.25rem;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   }
+  & .item-name {
+    text-transform: capitalize;
+    & .kwkly-code {
+      text-transform: uppercase;
+    }
+  }
   &:hover {
     color: ${brandColors.grey04};
     font-weight: bold;
   }
 `;
 
-const DashboardItem = ({ className, item }) => {
+const StyledMenu = styled(Menu)`
+  &&& .item {
+    padding: 0.5rem;
+  }
+`;
+
+const getDashboardImg = fileName =>
+  `https://stencil-alf-assets.s3.amazonaws.com/marketer/${fileName}`;
+
+const DashboardItem = ({ className, name }) => {
+  let imgSrc = getDashboardImg(`${name} preview.png`);
+  if (name === 'custom postcard') imgSrc = 'https://via.placeholder.com/400';
   return (
     <DashboardItemContainer className={className} href="#">
-      <img src="https://via.placeholder.com/400" alt="dashboard-item" />
-      <span>Test item {item}</span>
+      <img src={imgSrc} alt={`dashboard-item-${name}`} />
+      <span className="item-name">
+        {name === 'kwkly sign' ? (
+          <>
+            <span className="kwkly-code">KWKLY </span>
+            <span>Sign</span>
+          </>
+        ) : (
+          name
+        )}
+      </span>
     </DashboardItemContainer>
   );
 };
 
 const Dashboard = () => {
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const windowSize = useWindowSize();
-  const peerId = useSelector(store => store.peer.peerId);
   const isInitiatingTeam = useSelector(store => store.teamInitialize.polling);
   const initiatingTeamState = useSelector(store => store.teamInitialize.available);
   const currentTeamUserTotal = initiatingTeamState && initiatingTeamState.currentUserTotal;
@@ -92,7 +92,7 @@ const Dashboard = () => {
     <Page basic>
       <ContentTopHeaderLayout>
         <PageTitleHeader>
-          <Menu borderless fluid secondary>
+          <StyledMenu borderless fluid secondary>
             <Menu.Item>
               <Header as="h1">Dashboard</Header>
             </Menu.Item>
@@ -103,7 +103,7 @@ const Dashboard = () => {
                 </Button>
               </div>
             </Menu.Item>
-          </Menu>
+          </StyledMenu>
         </PageTitleHeader>
       </ContentTopHeaderLayout>
 
@@ -136,26 +136,21 @@ const Dashboard = () => {
       <Segment>
         <SectionHeader>What do you want to create?</SectionHeader>
         <SectionGrid>
-          <DashboardItem item="test"></DashboardItem>
-          <DashboardItem></DashboardItem>
-          <DashboardItem></DashboardItem>
-          <DashboardItem></DashboardItem>
-          <DashboardItem></DashboardItem>
-          <DashboardItem></DashboardItem>
-          <DashboardItem></DashboardItem>
-          <DashboardItem></DashboardItem>
-          <DashboardItem></DashboardItem>
-          <DashboardItem></DashboardItem>
-          <DashboardItem item="test"></DashboardItem>
-          <DashboardItem></DashboardItem>
-          <DashboardItem></DashboardItem>
-          <DashboardItem></DashboardItem>
-          <DashboardItem></DashboardItem>
-          <DashboardItem></DashboardItem>
-          <DashboardItem></DashboardItem>
-          <DashboardItem></DashboardItem>
-          <DashboardItem></DashboardItem>
-          <DashboardItem></DashboardItem>
+          <DashboardItem name="just listed postcard"></DashboardItem>
+          <DashboardItem name="just sold postcard"></DashboardItem>
+          <DashboardItem name="handwritten postcard"></DashboardItem>
+          <DashboardItem name="holiday postcard"></DashboardItem>
+          <DashboardItem name="custom postcard"></DashboardItem>
+          <DashboardItem name="just listed ad"></DashboardItem>
+          <DashboardItem name="just sold ad"></DashboardItem>
+          <DashboardItem name="open house ad"></DashboardItem>
+          <DashboardItem name="home value ad"></DashboardItem>
+          <DashboardItem name="buyer search ad"></DashboardItem>
+          <DashboardItem name="business card"></DashboardItem>
+          <DashboardItem name="kwkly sign"></DashboardItem>
+          <DashboardItem name="listing sign"></DashboardItem>
+          <DashboardItem name="sign rider"></DashboardItem>
+          <DashboardItem name="name tag"></DashboardItem>
         </SectionGrid>
       </Segment>
 
