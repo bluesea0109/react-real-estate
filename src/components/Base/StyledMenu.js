@@ -8,6 +8,6 @@ export default styled(Menu)`
   }
   &&& .secondary-heading {
     font-size: 1.25rem;
-    color: ${brandColors.grey04};
+    color: ${brandColors.grey03};
   }
 `;
