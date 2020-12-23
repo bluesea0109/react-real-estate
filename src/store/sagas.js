@@ -2,6 +2,7 @@ import { all, fork } from 'redux-saga/effects';
 
 import auth0 from './modules/auth0/sagas';
 import boards from './modules/boards/sagas';
+import content from './modules/content/sagas';
 import customization from './modules/customization/sagas';
 import initialize from './modules/initialize/sagas';
 import inviteUsers from './modules/inviteUsers/sagas';
@@ -23,6 +24,7 @@ import templates from './modules/templates/sagas';
 const sagas = {
   auth0,
   boards,
+  content,
   customization,
   initialize,
   inviteUsers,
