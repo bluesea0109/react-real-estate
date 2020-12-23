@@ -50,16 +50,27 @@ const StyledMenu = styled(Menu)`
   &&& .item {
     padding: 0.5rem;
   }
+  &&& .secondary-heading {
+    font-size: 1.25rem;
+    color: ${brandColors.grey04};
+  }
 `;
 
 const getDashboardImg = fileName =>
   `https://stencil-alf-assets.s3.amazonaws.com/marketer/${fileName}`;
 
-const DashboardItem = ({ className, name }) => {
+const DashboardItem = ({ className, name, linkTo }) => {
   let imgSrc = getDashboardImg(`${name} preview.png`);
   if (name === 'custom postcard') imgSrc = 'https://via.placeholder.com/400';
+  const linkAttributes = linkTo
+    ? {
+        href: linkTo,
+        target: '_blank',
+        rel: 'noopener noreferrer',
+      }
+    : {};
   return (
-    <DashboardItemContainer className={className} href="#">
+    <DashboardItemContainer className={className} {...linkAttributes}>
       <img src={imgSrc} alt={`dashboard-item-${name}`} />
       <span className="item-name">
         {name === 'kwkly sign' ? (
@@ -146,13 +157,37 @@ const Dashboard = () => {
           <DashboardItem name="open house ad"></DashboardItem>
           <DashboardItem name="home value ad"></DashboardItem>
           <DashboardItem name="buyer search ad"></DashboardItem>
-          <DashboardItem name="business card"></DashboardItem>
-          <DashboardItem name="kwkly sign"></DashboardItem>
-          <DashboardItem name="listing sign"></DashboardItem>
-          <DashboardItem name="sign rider"></DashboardItem>
-          <DashboardItem name="name tag"></DashboardItem>
+          <DashboardItem
+            name="business card"
+            linkTo="https://brandco.com/business-cards/"
+          ></DashboardItem>
+          <DashboardItem
+            name="kwkly sign"
+            linkTo="https://brandco.com/custom-print/"
+          ></DashboardItem>
+          <DashboardItem
+            name="listing sign"
+            linkTo="https://brandco.com/custom-print/"
+          ></DashboardItem>
+          <DashboardItem
+            name="sign rider"
+            linkTo="https://brandco.com/custom-print/"
+          ></DashboardItem>
+          <DashboardItem name="name tag" linkTo="https://brandco.com/custom-print/"></DashboardItem>
         </SectionGrid>
       </Segment>
+
+      <ContentTopHeaderLayout>
+        <PageTitleHeader>
+          <StyledMenu borderless fluid secondary>
+            <Menu.Item>
+              <Header as="h2" className="secondary-heading">
+                Ready made designs - coming soon!
+              </Header>
+            </Menu.Item>
+          </StyledMenu>
+        </PageTitleHeader>
+      </ContentTopHeaderLayout>
 
       {error && <Snackbar error>{error}</Snackbar>}
       {/* show the loading state */}
