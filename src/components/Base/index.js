@@ -23,10 +23,12 @@ import Page from './Page';
 import Pagination from './Pagination';
 import Popup from './Popup';
 import Responsive from './Responsive';
-import Snackbar from './Snackbar';
+import SectionHeader from './SectionHeader';
 import Segment from './Segment';
 import Select from './Select';
+import Snackbar from './Snackbar';
 import Step from './Step';
+import StyledMenu from './StyledMenu';
 import Table from './Table';
 import Tab from './Tab';
 
@@ -57,9 +59,11 @@ export {
   Popup,
   Responsive,
   Snackbar,
+  SectionHeader,
   Segment,
   Select,
   Step,
+  StyledMenu,
   Table,
   Tab,
 };

@@ -4,16 +4,20 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
-import { Button, Header, Menu, Page, Segment, Snackbar } from '../components/Base';
+import {
+  Button,
+  Header,
+  Menu,
+  Page,
+  Segment,
+  Snackbar,
+  SectionHeader,
+  StyledMenu,
+} from '../components/Base';
 import PageTitleHeader from '../components/PageTitleHeader';
 import Loading from '../components/Loading';
 import * as brandColors from '../components/utils/brandColors';
-
-const SectionHeader = styled.h3`
-  color: ${brandColors.grey04};
-  padding-bottom: 1rem;
-  padding-left: 0.5rem;
-`;
+import { Link } from 'react-router-dom';
 
 const SectionGrid = styled.div`
   display: grid;
@@ -43,16 +47,6 @@ const DashboardItemContainer = styled.a`
   &:hover {
     color: ${brandColors.grey04};
     font-weight: bold;
-  }
-`;
-
-const StyledMenu = styled(Menu)`
-  &&& .item {
-    padding: 0.5rem;
-  }
-  &&& .secondary-heading {
-    font-size: 1.25rem;
-    color: ${brandColors.grey04};
   }
 `;
 
@@ -179,9 +173,11 @@ const Dashboard = () => {
       <PageTitleHeader>
         <StyledMenu borderless fluid secondary>
           <Menu.Item>
-            <Header as="h2" className="secondary-heading">
-              Ready made designs - coming soon!
-            </Header>
+            <Link to="/ready-made-designs">
+              <Header as="h2" className="secondary-heading">
+                Ready made designs - coming soon!
+              </Header>
+            </Link>
           </Menu.Item>
         </StyledMenu>
       </PageTitleHeader>
