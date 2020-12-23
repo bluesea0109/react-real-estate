@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import { ContentTopHeaderLayout } from '../layouts';
 import {
   Button,
@@ -13,16 +14,50 @@ import {
 } from '../components/Base';
 import PageTitleHeader from '../components/PageTitleHeader';
 import Loading from '../components/Loading';
-import { useSelector } from 'react-redux';
+import * as brandColors from '../components/utils/brandColors';
 
 const SectionGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 `;
+
+const ContentItemContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  color: ${brandColors.grey03};
+  font-weight: bold;
+  & img {
+    width: 240px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 3px 8px 0 rgba(201, 201, 201, 0.4);
+  }
+  & .item-name {
+    text-transform: capitalize;
+  }
+`;
+
+const ContentItem = ({ item }) => {
+  return (
+    <ContentItemContainer>
+      <img src={item.thumbnail} alt="content-list-item" />
+      <span className="item-name">{item.name}</span>
+    </ContentItemContainer>
+  );
+};
 
 export default function ReadyMadeDesignPage() {
   const error = false;
   const content = useSelector(store => store.content);
+  const testItems = () => {
+    let items = [];
+    for (let i = 0; i < 20; i++) items.push(content.list[0]);
+    return items;
+  };
   return (
     <Page basic>
       <ContentTopHeaderLayout>
@@ -45,7 +80,12 @@ export default function ReadyMadeDesignPage() {
       <Segment>
         <SectionHeader>All Designs (dropdown)</SectionHeader>
         <SectionGrid>
-          <img src={content.list[0].thumbnail} alt="content-list-item" />
+          {testItems().map((item, index) => (
+            <ContentItem key={item.id + index} item={item} />
+          ))}
+          {/* {content.list.map(item => (
+            <ContentItem key={item.id} item={item} />
+          ))} */}
         </SectionGrid>
       </Segment>
 

@@ -175,7 +175,7 @@ const Dashboard = () => {
           <Menu.Item>
             <Link to="/ready-made-designs">
               <Header as="h2" className="secondary-heading">
-                Ready made designs - coming soon!
+                Ready made designs - Click Here!
               </Header>
             </Link>
           </Menu.Item>
