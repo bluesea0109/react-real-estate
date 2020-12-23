@@ -30,9 +30,9 @@ const DashboardItemContainer = styled.a`
   & img {
     width: 196px;
     height: 140px;
-    border-radius: 0.25rem;
+    border-radius: 6px;
     margin-bottom: 0.25rem;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 8px 0 rgba(201, 201, 201, 0.4);
   }
   & .item-name {
     text-transform: capitalize;
@@ -60,8 +60,8 @@ const getDashboardImg = fileName =>
   `https://stencil-alf-assets.s3.amazonaws.com/marketer/${fileName}`;
 
 const DashboardItem = ({ className, name, linkTo }) => {
-  let imgSrc = getDashboardImg(`${name} preview.png`);
-  if (name === 'custom postcard') imgSrc = 'https://via.placeholder.com/400';
+  let imgFileName = `${name.replaceAll(' ', '_')}.jpg`;
+  let imgSrc = getDashboardImg(`${imgFileName}`);
   const linkAttributes = linkTo
     ? {
         href: linkTo,
@@ -91,7 +91,6 @@ const Dashboard = () => {
   const initiatingTeamState = useSelector(store => store.teamInitialize.available);
   const currentTeamUserTotal = initiatingTeamState && initiatingTeamState.currentUserTotal;
   const currentTeamUserCompleted = initiatingTeamState && initiatingTeamState.currentUserCompleted;
-
   const isInitiatingUser = useSelector(store => store.initialize.polling);
   const initiatingUserState = useSelector(store => store.initialize.available);
   const currentUserTotal = initiatingUserState && initiatingUserState.campaignsTotal;
@@ -177,17 +176,15 @@ const Dashboard = () => {
         </SectionGrid>
       </Segment>
 
-      <ContentTopHeaderLayout>
-        <PageTitleHeader>
-          <StyledMenu borderless fluid secondary>
-            <Menu.Item>
-              <Header as="h2" className="secondary-heading">
-                Ready made designs - coming soon!
-              </Header>
-            </Menu.Item>
-          </StyledMenu>
-        </PageTitleHeader>
-      </ContentTopHeaderLayout>
+      <PageTitleHeader>
+        <StyledMenu borderless fluid secondary>
+          <Menu.Item>
+            <Header as="h2" className="secondary-heading">
+              Ready made designs - coming soon!
+            </Header>
+          </Menu.Item>
+        </StyledMenu>
+      </PageTitleHeader>
 
       {error && <Snackbar error>{error}</Snackbar>}
       {/* show the loading state */}
