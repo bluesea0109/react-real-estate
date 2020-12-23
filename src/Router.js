@@ -36,6 +36,14 @@ export default () => {
       <PrivateRoute exact path="/listings" component={ListingsPage} />
       <PrivateRoute exact path="/ads" component={AdsPage} />
       <PrivateRoute exact path="/postcards" component={PostcardsPage} />
+      <PrivateRoute exact path="/postcards/archived" component={ArchivedPage} />
+      <PrivateRoute exact path="/postcards/:mailoutId" component={MailoutDetailsPage} />
+      <PrivateRoute exact path="/postcards/edit/:mailoutId" component={MailoutEditPage} />
+      <PrivateRoute
+        exact
+        path="/postcards/edit/:mailoutId/destinations"
+        component={MailoutDestinationsPage}
+      />
       <PrivateRoute exact path="/dashboard/archived" component={ArchivedPage} />
       <PrivateRoute exact path="/dashboard/:mailoutId" component={MailoutDetailsPage} />
       <PrivateRoute exact path="/dashboard/edit/:mailoutId" component={MailoutEditPage} />
