@@ -22,6 +22,7 @@ import SettingsPage from './pages/SettingsPage';
 import BillingPage from './pages/BillingPage';
 import EmptyPage from './pages/EmptyPage';
 import ArchivedPage from './pages/ArchivedPage';
+import ReadyMadeDesignPage from './pages/ReadyMadeDesignPage';
 
 export default () => {
   return (
@@ -58,6 +59,7 @@ export default () => {
       <PrivateRoute path="/profile" component={ProfilePage} />
       <PrivateRoute path="/settings" component={SettingsPage} />
       <PrivateRoute path="/billing" component={BillingPage} />
+      <PrivateRoute exact path="/ready-made-designs" component={ReadyMadeDesignPage} />
       <Route path="*" component={EmptyPage} />
     </Switch>
   );
