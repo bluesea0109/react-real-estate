@@ -52,8 +52,9 @@ const DashboardItemContainer = styled.a`
   & img {
     width: 196px;
     height: 140px;
-    border-radius: 0.5rem;
+    border-radius: 0.25rem;
     margin-bottom: 0.25rem;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   }
   &:hover {
     color: ${brandColors.grey04};
