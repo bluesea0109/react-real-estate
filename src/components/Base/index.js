@@ -13,6 +13,7 @@ import Image from './Image';
 import Initials from './Initials';
 import Input from './Input';
 import Item from './Item';
+import Label from './Label';
 import List from './List';
 import Loader from './Loader';
 import ModalLoader from './ModalLoader';
@@ -48,6 +49,7 @@ export {
   Initials,
   Input,
   Item,
+  Label,
   List,
   Loader,
   ModalLoader,
