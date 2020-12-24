@@ -18,14 +18,14 @@ import * as brandColors from '../components/utils/brandColors';
 
 const SectionGrid = styled.div`
   display: grid;
-  gap: 1rem;
+  gap: 2rem;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  padding: 0.5rem;
 `;
 
 const ContentItemContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 1rem;
   color: ${brandColors.grey03};
   font-weight: bold;
   & img {
