@@ -15,6 +15,7 @@ import {
 import PageTitleHeader from '../components/PageTitleHeader';
 import Loading from '../components/Loading';
 import * as brandColors from '../components/utils/brandColors';
+import { Link } from 'react-router-dom';
 
 const SectionGrid = styled.div`
   display: grid;
@@ -54,11 +55,7 @@ const ContentItem = ({ item }) => {
 export default function ReadyMadeDesignPage() {
   const error = false;
   const content = useSelector(store => store.content);
-  const testItems = () => {
-    let items = [];
-    for (let i = 0; i < 20; i++) items.push(content.list[0]);
-    return items;
-  };
+
   return (
     <Page basic>
       <ContentTopHeaderLayout>
@@ -69,9 +66,11 @@ export default function ReadyMadeDesignPage() {
             </Menu.Item>
             <Menu.Item position="right">
               <div className="right menu">
-                <Button primary inverted onClick={() => console.log('TODO - Back Button')}>
-                  Back
-                </Button>
+                <Link to="/dashboard">
+                  <Button primary inverted>
+                    Back
+                  </Button>
+                </Link>
               </div>
             </Menu.Item>
           </StyledMenu>
@@ -81,12 +80,9 @@ export default function ReadyMadeDesignPage() {
       <Segment>
         <SectionHeader>All Designs (dropdown)</SectionHeader>
         <SectionGrid>
-          {testItems().map((item, index) => (
-            <ContentItem key={item.id + index} item={item} />
-          ))}
-          {/* {content.list.map(item => (
+          {content.list.map(item => (
             <ContentItem key={item.id} item={item} />
-          ))} */}
+          ))}
         </SectionGrid>
       </Segment>
 
