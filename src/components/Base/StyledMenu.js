@@ -3,6 +3,7 @@ import Menu from './Menu';
 import * as brandColors from '../utils/brandColors';
 
 export default styled(Menu)`
+  flex-wrap: wrap;
   &&& .item {
     padding: 0.5rem;
   }
