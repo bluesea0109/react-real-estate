@@ -33,16 +33,52 @@ const ContentItemContainer = styled.div`
   flex-direction: column;
   color: ${brandColors.grey03};
   font-weight: bold;
-  & img {
-    width: 240px;
-    height: 160px;
-    padding: 0.5rem;
-    object-fit: cover;
+  border-radius: 6px;
+  & .image-container {
+    width: 248px;
+    height: 168px;
+    position: relative;
     border-radius: 6px;
-    margin-bottom: 0.5rem;
+    padding: 0.5rem;
     box-shadow: 0 3px 8px 0 rgba(201, 201, 201, 0.4);
+    & .image-overlay {
+      color: white;
+      display: none;
+      position: absolute;
+      top: 0.5rem;
+      left: 0.5rem;
+      width: calc(100% - 1rem);
+      height: calc(100% - 1rem);
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      text-transform: uppercase;
+      padding: 2rem 0;
+      font-size: 12px;
+      & div {
+        cursor: pointer;
+      }
+      & #image-download {
+        color: white;
+        padding: 0.25rem 1rem;
+        border-radius: 1.5rem;
+        border: 2px solid white;
+      }
+    }
+    & img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+    &:hover {
+      & .image-overlay {
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+      }
+    }
   }
   & .item-name {
+    padding-top: 1rem;
     text-transform: capitalize;
   }
 `;
@@ -68,9 +104,21 @@ const SearchContainer = styled(Menu.Item)`
 `;
 
 const ContentItem = ({ item }) => {
+  // TODO ask Ryan about image download - neither ID working
+  const userId = useSelector(store => store.onLogin.user.auth0.id);
   return (
     <ContentItemContainer>
-      <img src={item.thumbnail} alt="content-list-item" />
+      <div className="image-container">
+        <img src={item.thumbnail} alt="content-list-item" />
+        <div className="image-overlay">
+          <a id="image-download" href={`/api/user/${userId}/content/download/${item.id}`}>
+            Download
+          </a>
+          <div>
+            <Icon name="eye" /> view
+          </div>
+        </div>
+      </div>
       <span className="item-name">{item.name}</span>
     </ContentItemContainer>
   );
