@@ -1,14 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button, Header, Menu, Page, Segment, StyledMenu, Tab } from '../components/Base';
-import PageTitleHeader from '../components/PageTitleHeader';
-import { ContentTopHeaderLayout } from '../layouts';
+import { Button, Header, Menu, Page, Segment, StyledMenu, Tab } from '../../components/Base';
+import PageTitleHeader from '../../components/PageTitleHeader';
+import { ContentTopHeaderLayout } from '../../layouts';
+import PostcardSizes from './PostcardSizes';
 
 const TemplatesTab = () => {
   return (
     <>
       <p>Select a size</p>
-      <div>Sizes here...</div>
+      <PostcardSizes />
       <p>All Templates (dropdown - filter)</p>
       <div>Templates here...</div>
     </>
@@ -16,7 +17,14 @@ const TemplatesTab = () => {
 };
 
 const CustomTab = () => {
-  return <div>Custom Tab</div>;
+  return (
+    <>
+      <p>Select a size</p>
+      <PostcardSizes />
+      <p>Card Front</p>
+      <div>Upload</div>
+    </>
+  );
 };
 
 const panes = [
@@ -40,6 +48,7 @@ const panes = [
 
 const StyledTab = styled(Tab)`
   &&&& {
+    padding: 0 1rem;
     .ui.menu {
       margin-top: 0;
     }

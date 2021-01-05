@@ -23,7 +23,7 @@ import BillingPage from './pages/BillingPage';
 import EmptyPage from './pages/EmptyPage';
 import ArchivedPage from './pages/ArchivedPage';
 import ReadyMadeDesignPage from './pages/ReadyMadeDesignPage';
-import CreatePostcard from './pages/CreatePostcard';
+import { CreatePostcard } from './pages/CreatePostcard';
 
 export default () => {
   return (
