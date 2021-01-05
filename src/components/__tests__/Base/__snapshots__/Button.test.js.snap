@@ -6,6 +6,20 @@ exports[`renders correctly 1`] = `
   margin: 0.25em;
 }
 
+.c0.c0.c0.c0.c0.c0.c0.c0.c0.button {
+  color: #969696;
+  background-color: #eaeaea;
+}
+
+.c0.c0.c0.c0.c0.c0.c0.c0.c0.button:hover {
+  background-color: #e0e0e0;
+}
+
+.c0.c0.c0.c0.c0.c0.c0.c0.c0.button.primary {
+  background-color: #59C4C4;
+  color: white;
+}
+
 .c0.c0.c0.c0.c0.c0.c0.c0.c0.button.primary:hover,
 .c0.c0.c0.c0.c0.c0.c0.c0.c0.button.primary:active,
 .c0.c0.c0.c0.c0.c0.c0.c0.c0.button.primary:focus {
@@ -24,6 +38,11 @@ exports[`renders correctly 1`] = `
 .c0.c0.c0.c0.c0.c0.c0.c0.c0.button.primary.inverted:active,
 .c0.c0.c0.c0.c0.c0.c0.c0.c0.button.primary.inverted:focus {
   background-color: #59C4C4;
+  color: white;
+}
+
+.c0.c0.c0.c0.c0.c0.c0.c0.c0.button.secondary {
+  background-color: #F2714D;
   color: white;
 }
 

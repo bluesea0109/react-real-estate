@@ -23,6 +23,7 @@ import BillingPage from './pages/BillingPage';
 import EmptyPage from './pages/EmptyPage';
 import ArchivedPage from './pages/ArchivedPage';
 import ReadyMadeDesignPage from './pages/ReadyMadeDesignPage';
+import CreatePostcard from './pages/CreatePostcard';
 
 export default () => {
   return (
@@ -60,6 +61,7 @@ export default () => {
       <PrivateRoute path="/settings" component={SettingsPage} />
       <PrivateRoute path="/billing" component={BillingPage} />
       <PrivateRoute exact path="/ready-made-designs" component={ReadyMadeDesignPage} />
+      <PrivateRoute exact path="/create-postcard" component={CreatePostcard} />
       <Route path="*" component={EmptyPage} />
     </Switch>
   );

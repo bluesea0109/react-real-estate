@@ -24,11 +24,10 @@ const SectionGrid = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 `;
 
-const DashboardItemContainer = styled.a`
+const DashboardItemContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0.5rem;
-  color: ${brandColors.grey04};
   font-weight: bold;
   cursor: pointer;
   & img {
@@ -39,6 +38,7 @@ const DashboardItemContainer = styled.a`
     box-shadow: 0 3px 8px 0 rgba(201, 201, 201, 0.4);
   }
   & .item-name {
+    color: ${brandColors.grey04};
     text-transform: capitalize;
     & .kwkly-code {
       text-transform: uppercase;
@@ -53,29 +53,41 @@ const DashboardItemContainer = styled.a`
 const getDashboardImg = fileName =>
   `https://stencil-alf-assets.s3.amazonaws.com/marketer/${fileName}`;
 
-const DashboardItem = ({ className, name, linkTo }) => {
+const DashboardItem = ({ className, name, linkTo, external }) => {
   let imgFileName = `${name.replaceAll(' ', '_')}.jpg`;
   let imgSrc = getDashboardImg(`${imgFileName}`);
-  const linkAttributes = linkTo
+  const linkAttributes = external
     ? {
         href: linkTo,
         target: '_blank',
         rel: 'noopener noreferrer',
       }
     : {};
+  if (external) {
+    return (
+      <DashboardItemContainer className={className}>
+        <a {...linkAttributes}>
+          <img src={imgSrc} alt={`dashboard-item-${name}`} />
+          <span className="item-name">
+            {name === 'kwkly sign' ? (
+              <>
+                <span className="kwkly-code">KWKLY </span>
+                <span>Sign</span>
+              </>
+            ) : (
+              name
+            )}
+          </span>
+        </a>
+      </DashboardItemContainer>
+    );
+  }
   return (
-    <DashboardItemContainer className={className} {...linkAttributes}>
-      <img src={imgSrc} alt={`dashboard-item-${name}`} />
-      <span className="item-name">
-        {name === 'kwkly sign' ? (
-          <>
-            <span className="kwkly-code">KWKLY </span>
-            <span>Sign</span>
-          </>
-        ) : (
-          name
-        )}
-      </span>
+    <DashboardItemContainer className={className}>
+      <Link to={linkTo}>
+        <img src={imgSrc} alt={`dashboard-item-${name}`} />
+        <span className="item-name">{name}</span>
+      </Link>
     </DashboardItemContainer>
   );
 };
@@ -140,33 +152,56 @@ const Dashboard = () => {
       <Segment>
         <SectionHeader>What do you want to create?</SectionHeader>
         <SectionGrid>
-          <DashboardItem name="just listed postcard"></DashboardItem>
-          <DashboardItem name="just sold postcard"></DashboardItem>
-          <DashboardItem name="handwritten postcard"></DashboardItem>
-          <DashboardItem name="holiday postcard"></DashboardItem>
-          <DashboardItem name="custom postcard"></DashboardItem>
-          <DashboardItem name="just listed ad"></DashboardItem>
-          <DashboardItem name="just sold ad"></DashboardItem>
-          <DashboardItem name="open house ad"></DashboardItem>
-          <DashboardItem name="home value ad"></DashboardItem>
-          <DashboardItem name="buyer search ad"></DashboardItem>
+          <DashboardItem
+            name="just listed postcard"
+            linkTo={{ pathname: 'create-postcard', state: { filter: 'listed' } }}
+          ></DashboardItem>
+          <DashboardItem
+            name="just sold postcard"
+            linkTo={{ pathname: 'create-postcard', state: { filter: 'sold' } }}
+          ></DashboardItem>
+          <DashboardItem
+            name="handwritten postcard"
+            linkTo={{ pathname: 'create-postcard', state: { filter: 'handwritten' } }}
+          ></DashboardItem>
+          <DashboardItem
+            name="holiday postcard"
+            linkTo={{ pathname: 'create-postcard', state: { filter: 'holiday' } }}
+          ></DashboardItem>
+          <DashboardItem
+            name="custom postcard"
+            linkTo={{ pathname: 'create-postcard', state: { filter: 'custom' } }}
+          ></DashboardItem>
+          <DashboardItem name="just listed ad" linkTo="#"></DashboardItem>
+          <DashboardItem name="just sold ad" linkTo="#"></DashboardItem>
+          <DashboardItem name="open house ad" linkTo="#"></DashboardItem>
+          <DashboardItem name="home value ad" linkTo="#"></DashboardItem>
+          <DashboardItem name="buyer search ad" linkTo="#"></DashboardItem>
           <DashboardItem
             name="business card"
             linkTo="https://brandco.com/business-cards/"
+            external
           ></DashboardItem>
           <DashboardItem
             name="kwkly sign"
             linkTo="https://brandco.com/custom-print/"
+            external
           ></DashboardItem>
           <DashboardItem
             name="listing sign"
             linkTo="https://brandco.com/custom-print/"
+            external
           ></DashboardItem>
           <DashboardItem
             name="sign rider"
             linkTo="https://brandco.com/custom-print/"
+            external
           ></DashboardItem>
-          <DashboardItem name="name tag" linkTo="https://brandco.com/custom-print/"></DashboardItem>
+          <DashboardItem
+            name="name tag"
+            linkTo="https://brandco.com/custom-print/"
+            external
+          ></DashboardItem>
         </SectionGrid>
       </Segment>
 
