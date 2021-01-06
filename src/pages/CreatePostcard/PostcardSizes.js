@@ -25,7 +25,11 @@ export default function PostcardSizes({ sizes, selectedSize, setSelectedSize }) 
       {sizes.map(size => {
         const [height, width] = size.split('x');
         return (
-          <GridItem onClick={() => setSelectedSize(size)} selected={size === selectedSize}>
+          <GridItem
+            key={size}
+            onClick={() => setSelectedSize(size)}
+            selected={size === selectedSize}
+          >
             <PostcardImg height={height} width={width} selected={size === selectedSize}>
               <span>{size}"</span>
             </PostcardImg>
