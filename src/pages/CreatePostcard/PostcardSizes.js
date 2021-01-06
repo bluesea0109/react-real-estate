@@ -12,6 +12,7 @@ const PostcardImg = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
   & > span {
     font-size: 27px;
     font-weight: 600;

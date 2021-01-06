@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { startCase } from 'lodash';
 import {
   Button,
   Dropdown,
@@ -67,7 +68,7 @@ const TemplatesTab = ({
             {tagList.map(tag => (
               <Dropdown.Item key={tag} onClick={() => addTag(tag)}>
                 <ItemContent>
-                  <span>{tag}</span>
+                  <span>{startCase(tag)}</span>
                   {selectedTags.includes(tag) && <Icon name="check" />}
                 </ItemContent>
               </Dropdown.Item>
