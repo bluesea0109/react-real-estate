@@ -39,13 +39,27 @@ const StyledSectionHeader = styled(SectionHeader)`
   }
 `;
 
-const TemplatesTab = ({ addTag, filteredTemplates, removeTag, selectedTags, tagList }) => {
+const postcardSizes = ['4x6', '6x9', '6x11'];
+
+const TemplatesTab = ({
+  addTag,
+  filteredTemplates,
+  removeTag,
+  selectedTags,
+  tagList,
+  selectedSize,
+  setSelectedSize,
+}) => {
   return (
     <>
       <StyledSectionHeader>
         <p>Select a size</p>
       </StyledSectionHeader>
-      <PostcardSizes />
+      <PostcardSizes
+        sizes={postcardSizes}
+        selectedSize={selectedSize}
+        setSelectedSize={setSelectedSize}
+      />
       <StyledSectionHeader>
         <Dropdown text="All Templates">
           <Dropdown.Menu>
@@ -76,13 +90,17 @@ const TemplatesTab = ({ addTag, filteredTemplates, removeTag, selectedTags, tagL
   );
 };
 
-const CustomTab = () => {
+const CustomTab = ({ selectedSize, setSelectedSize }) => {
   return (
     <>
       <StyledSectionHeader>
         <p>Select a size</p>
       </StyledSectionHeader>
-      <PostcardSizes />
+      <PostcardSizes
+        sizes={postcardSizes}
+        selectedSize={selectedSize}
+        setSelectedSize={setSelectedSize}
+      />
       <StyledSectionHeader>
         <p>Card Front</p>
       </StyledSectionHeader>
@@ -115,7 +133,7 @@ export default function CreatePostcard(props) {
 
   const [filteredTemplates, setFilteredTemplates] = useState(allTemplates);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
-  const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedSize, setSelectedSize] = useState('4x6');
   const [uploadedPhoto, setUploadedPhoto] = useState(null);
   const [selectedTags, setSelectedTags] = useState([]);
 
@@ -154,7 +172,9 @@ export default function CreatePostcard(props) {
             addTag={addTag}
             filteredTemplates={filteredTemplates}
             removeTag={removeTag}
+            selectedSize={selectedSize}
             selectedTags={selectedTags}
+            setSelectedSize={setSelectedSize}
             tagList={tagList}
           />
         </Tab.Pane>
@@ -164,7 +184,7 @@ export default function CreatePostcard(props) {
       menuItem: 'Custom Design',
       render: () => (
         <Tab.Pane as="div">
-          <CustomTab />
+          <CustomTab setSelectedSize={setSelectedSize} selectedSize={selectedSize} />
         </Tab.Pane>
       ),
     },
