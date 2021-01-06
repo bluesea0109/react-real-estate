@@ -23,3 +23,4 @@ export const grey06 = '#949393';
 export const grey07 = '#B3B3B3';
 export const grey08 = '#E6E6E6';
 export const grey09 = '#F8F7F6';
+export const boxShadow = 'rgba(201, 201, 201, 0.5)';

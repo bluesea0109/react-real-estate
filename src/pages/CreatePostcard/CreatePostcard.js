@@ -1,17 +1,21 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Button, Header, Menu, Page, Segment, StyledMenu, Tab } from '../../components/Base';
 import PageTitleHeader from '../../components/PageTitleHeader';
 import { ContentTopHeaderLayout } from '../../layouts';
+import GridItem from './GridItem';
+import GridLayout from './GridLayout';
 import PostcardSizes from './PostcardSizes';
+import TemplatesGrid from './TemplatesGrid';
 
-const TemplatesTab = () => {
+const TemplatesTab = ({ templates }) => {
   return (
     <>
       <p>Select a size</p>
       <PostcardSizes />
       <p>All Templates (dropdown - filter)</p>
-      <div>Templates here...</div>
+      <TemplatesGrid templates={templates} />
     </>
   );
 };
@@ -22,29 +26,12 @@ const CustomTab = () => {
       <p>Select a size</p>
       <PostcardSizes />
       <p>Card Front</p>
-      <div>Upload</div>
+      <GridLayout>
+        <GridItem>Upload</GridItem>
+      </GridLayout>
     </>
   );
 };
-
-const panes = [
-  {
-    menuItem: 'Templates',
-    render: () => (
-      <Tab.Pane as="div">
-        <TemplatesTab />
-      </Tab.Pane>
-    ),
-  },
-  {
-    menuItem: 'Custom Design',
-    render: () => (
-      <Tab.Pane as="div">
-        <CustomTab />
-      </Tab.Pane>
-    ),
-  },
-];
 
 const StyledTab = styled(Tab)`
   &&&& {
@@ -56,6 +43,30 @@ const StyledTab = styled(Tab)`
 `;
 
 export default function CreatePostcard(props) {
+  const allTemplates = Object.values(useSelector(state => state.templates.available)).reduce(
+    (acc, cur) => [...acc, ...cur],
+    []
+  );
+
+  const panes = [
+    {
+      menuItem: 'Templates',
+      render: () => (
+        <Tab.Pane as="div">
+          <TemplatesTab templates={allTemplates} />
+        </Tab.Pane>
+      ),
+    },
+    {
+      menuItem: 'Custom Design',
+      render: () => (
+        <Tab.Pane as="div">
+          <CustomTab />
+        </Tab.Pane>
+      ),
+    },
+  ];
+
   return (
     <Page basic>
       <ContentTopHeaderLayout>
