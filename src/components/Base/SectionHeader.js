@@ -5,7 +5,7 @@ export default styled.h3`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  color: ${brandColors.grey03};
+  color: ${brandColors.textDark};
   padding-bottom: 1rem;
   padding-left: 0.5rem;
 `;

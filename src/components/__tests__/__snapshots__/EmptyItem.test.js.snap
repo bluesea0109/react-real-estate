@@ -1,11 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders correctly 1`] = `
+.c0 {
+  color: #343434;
+  font-weight: 600;
+}
+
 <div
   className="ui placeholder segment "
 >
   <div
-    className="ui icon header "
+    className="ui icon header c0"
   >
     <i
       aria-hidden="true"
