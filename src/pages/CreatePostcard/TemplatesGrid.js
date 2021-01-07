@@ -11,8 +11,8 @@ const TemplateImg = styled.img`
 
 const ImgOverlay = styled.div`
   position: absolute;
-  width: 238px;
-  height: 162px;
+  width: calc(100% - 16px);
+  height: calc(100% - 12px);
   top: 6px;
   left: 8px;
   background-color: rgba(0, 0, 0, 0.5);
