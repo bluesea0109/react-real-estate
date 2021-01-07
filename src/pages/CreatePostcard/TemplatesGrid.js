@@ -56,11 +56,8 @@ export default function TemplatesGrid({
   return (
     <GridLayout>
       {templates.map((template, index) => (
-        <GridItemContainer>
-          <GridItem
-            key={template.templateTheme}
-            selected={selectedTemplate === template.templateTheme}
-          >
+        <GridItemContainer key={template.templateTheme}>
+          <GridItem selected={selectedTemplate === template.templateTheme}>
             <ImgOverlay>
               <button
                 id="select-template"

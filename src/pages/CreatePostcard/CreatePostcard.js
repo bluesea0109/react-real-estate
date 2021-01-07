@@ -126,6 +126,7 @@ const CustomTab = ({ selectedSize, setSelectedSize }) => {
           <GridItem>Upload</GridItem>
           <div className="label-text">Upload your own design</div>
         </GridItemContainer>
+        <div>Upload Text</div>
       </GridLayout>
     </>
   );
@@ -151,13 +152,14 @@ export default function CreatePostcard(props) {
     return list;
   }, []);
 
-  const [filteredTemplates, setFilteredTemplates] = useState(allTemplates);
-  const [selectedTemplate, setSelectedTemplate] = useState(null);
-  const [selectedSize, setSelectedSize] = useState('4x6');
-  const [uploadedPhoto, setUploadedPhoto] = useState(null);
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [showImageModal, setShowImageModal] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(1);
   const [currentItem, setCurrentItem] = useState(null);
+  const [filteredTemplates, setFilteredTemplates] = useState(allTemplates);
+  const [selectedSize, setSelectedSize] = useState('4x6');
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [uploadedPhoto, setUploadedPhoto] = useState(null);
 
   const prevImg = () => {
     let newImgIndex = currentItem - 1;
@@ -248,7 +250,12 @@ export default function CreatePostcard(props) {
         </PageTitleHeader>
       </ContentTopHeaderLayout>
       <Segment>
-        <StyledTab menu={{ secondary: true, pointing: true }} panes={panes} />
+        <StyledTab
+          activeIndex={activeIndex}
+          onTabChange={(e, { activeIndex }) => setActiveIndex(activeIndex)}
+          menu={{ secondary: true, pointing: true }}
+          panes={panes}
+        />
       </Segment>
       <PreviewModal open={showImageModal}>
         <ModalClose onClick={() => setShowImageModal(false)}>
