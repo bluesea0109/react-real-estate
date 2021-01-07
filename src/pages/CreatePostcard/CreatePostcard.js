@@ -49,7 +49,9 @@ const TemplatesTab = ({
   selectedTags,
   tagList,
   selectedSize,
+  selectedTemplate,
   setSelectedSize,
+  setSelectedTemplate,
 }) => {
   return (
     <>
@@ -86,7 +88,11 @@ const TemplatesTab = ({
           </TagsContainer>
         )}
       </StyledSectionHeader>
-      <TemplatesGrid templates={filteredTemplates} />
+      <TemplatesGrid
+        templates={filteredTemplates}
+        selectedTemplate={selectedTemplate}
+        setSelectedTemplate={setSelectedTemplate}
+      />
     </>
   );
 };
@@ -175,7 +181,9 @@ export default function CreatePostcard(props) {
             removeTag={removeTag}
             selectedSize={selectedSize}
             selectedTags={selectedTags}
+            selectedTemplate={selectedTemplate}
             setSelectedSize={setSelectedSize}
+            setSelectedTemplate={setSelectedTemplate}
             tagList={tagList}
           />
         </Tab.Pane>

@@ -2,17 +2,70 @@ import React from 'react';
 import GridItem from './GridItem';
 import GridLayout from './GridLayout';
 import styled from 'styled-components';
+import { Icon } from '../../components/Base';
 
 const TemplateImg = styled.img`
-  width: 100%;
+  width: 240px;
   border: 1px solid #d3d3d3;
 `;
 
-export default function TemplatesGrid({ templates }) {
+const ImgOverlay = styled.div`
+  position: absolute;
+  width: 238px;
+  height: 162px;
+  top: 6px;
+  left: 8px;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  & button {
+    width: 100px;
+    height: 36px;
+    background: transparent;
+    padding: 0 1rem;
+    border: none;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    &:focus {
+      outline: none;
+    }
+    &#select-template {
+      margin: 2rem 0 1rem 0;
+      border: 2px solid white;
+      border-radius: 32px;
+    }
+  }
+  &:hover {
+    opacity: 1;
+  }
+`;
+
+export default function TemplatesGrid({ templates, selectedTemplate, setSelectedTemplate }) {
   return (
     <GridLayout>
       {templates.map(template => (
-        <GridItem key={template.templateTheme}>
+        <GridItem
+          key={template.templateTheme}
+          selected={selectedTemplate === template.templateTheme}
+        >
+          <ImgOverlay>
+            <button
+              id="select-template"
+              onClick={() => setSelectedTemplate(template.templateTheme)}
+            >
+              SELECT
+            </button>
+            <button id="view-template">
+              <Icon name="eye" />
+              VIEW
+            </button>
+          </ImgOverlay>
           <TemplateImg src={template.thumbnail} alt="template thumbnail" />
         </GridItem>
       ))}

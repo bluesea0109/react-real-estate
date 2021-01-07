@@ -9,6 +9,7 @@ export default styled.div`
   border-radius: 5px;
   margin: 1rem;
   box-shadow: ${brandColors.boxShadow};
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
