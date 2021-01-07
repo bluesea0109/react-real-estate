@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { startCase } from 'lodash';
 import {
   Button,
+  ButtonOutline,
   Dropdown,
   Header,
   Icon,
@@ -27,6 +28,7 @@ import { GridItem, GridItemContainer } from './GridItem';
 import GridLayout from './GridLayout';
 import PostcardSizes from './PostcardSizes';
 import TemplatesGrid from './TemplatesGrid';
+import * as brandColors from '../../components/utils/brandColors';
 
 const ItemContent = styled.div`
   display: flex;
@@ -46,7 +48,92 @@ const StyledSectionHeader = styled(SectionHeader)`
   }
 `;
 
+const UploadImage = styled.div`
+  position: relative;
+  height: 100%;
+  width: 100%;
+  padding: 6px;
+  border: 1px dashed #d3d3d3;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  grid-template-rows: 1fr 1.25rem;
+  &:hover {
+    & .overlay {
+      opacity: 1;
+    }
+    color: white;
+  }
+  & .overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: grid;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    grid-template-rows: 1fr 1.25rem;
+    opacity: 0;
+  }
+  & i {
+    color: ${brandColors.grey05};
+    font-size: 40px;
+    line-height: 50px;
+    vertical-align: bottom;
+    margin: 0;
+    width: 50px;
+    height: 50px;
+  }
+  & .upload-directions {
+    font-size: 12px;
+    z-index: 10;
+  }
+`;
+
+const UploadTextContainer = styled.div`
+  grid-column: span 2;
+  align-self: center;
+  margin: 1rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 5px;
+  background-color: ${brandColors.grey02};
+  color: white;
+  position: relative;
+  & .upload-text-title {
+    font-weight: 600;
+  }
+  @media (min-width: 1094px) {
+    &:after {
+      position: absolute;
+      content: '';
+      width: 0;
+      height: 0;
+      border-top: 20px solid transparent;
+      border-bottom: 20px solid transparent;
+      border-right: 20px solid ${brandColors.grey02};
+      left: -20px;
+    }
+  }
+`;
+
 const postcardSizes = ['4x6', '6x9', '6x11'];
+
+const getUploadSizes = size => {
+  switch (size) {
+    case '6x9':
+    case '9x6':
+      return '6.25"x9.25"';
+    case '6x11':
+    case '11x6':
+      return '6.25"x11.25"';
+    default:
+      return '4.25"x6.25"';
+  }
+};
 
 const TemplatesTab = ({
   addTag,
@@ -123,10 +210,26 @@ const CustomTab = ({ selectedSize, setSelectedSize }) => {
       </StyledSectionHeader>
       <GridLayout>
         <GridItemContainer>
-          <GridItem>Upload</GridItem>
+          <GridItem>
+            <UploadImage>
+              <div className="overlay">
+                <ButtonOutline>UPLOAD</ButtonOutline>
+              </div>
+              <Icon name="upload" />
+              <span className="upload-directions">{`(${getUploadSizes(
+                selectedSize
+              )} PNG or JPEG = max 5MB)`}</span>
+            </UploadImage>
+          </GridItem>
           <div className="label-text">Upload your own design</div>
         </GridItemContainer>
-        <div>Upload Text</div>
+        <UploadTextContainer>
+          <p className="upload-text-title">Include a safe zone of 1/2" inch!</p>
+          <p>
+            Make sure no critical elements are within 1/2" from the edge of the image. It risks
+            being cropped during the postcard production.
+          </p>
+        </UploadTextContainer>
       </GridLayout>
     </>
   );
@@ -153,6 +256,7 @@ export default function CreatePostcard(props) {
   }, []);
 
   const [activeIndex, setActiveIndex] = useState(1);
+  const [createDisabled, setCreateDisabled] = useState(true);
   const [currentItem, setCurrentItem] = useState(null);
   const [filteredTemplates, setFilteredTemplates] = useState(allTemplates);
   const [selectedSize, setSelectedSize] = useState('4x6');
@@ -160,6 +264,12 @@ export default function CreatePostcard(props) {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [showImageModal, setShowImageModal] = useState(false);
   const [uploadedPhoto, setUploadedPhoto] = useState(null);
+
+  useEffect(() => {
+    if (activeIndex === 1 && !uploadedPhoto) setCreateDisabled(true);
+    else if (activeIndex === 0 && !selectedTemplate) setCreateDisabled(true);
+    else setCreateDisabled(false);
+  }, [activeIndex, createDisabled, uploadedPhoto, selectedTemplate]);
 
   const prevImg = () => {
     let newImgIndex = currentItem - 1;
@@ -241,7 +351,11 @@ export default function CreatePostcard(props) {
             <Menu.Item position="right">
               <div className="right menu">
                 <Button onClick={() => console.log('TODO - Back to dashboard?')}>Cancel</Button>
-                <Button primary onClick={() => console.log('TODO - Create...')}>
+                <Button
+                  primary
+                  className={createDisabled ? 'btn-disabled' : ''}
+                  onClick={() => console.log('TODO - Create...')}
+                >
                   Create
                 </Button>
               </div>

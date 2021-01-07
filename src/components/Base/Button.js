@@ -6,6 +6,9 @@ export default styled(Button)`
   &&& {
     min-width: 100px;
     margin: 0.25em;
+    &.btn-disabled {
+      opacity: 0.5;
+    }
     &&&.button {
       color: ${brandColors.grey05};
       background-color: #eaeaea;

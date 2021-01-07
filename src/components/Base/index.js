@@ -1,4 +1,5 @@
 import Button from './Button';
+import ButtonOutline from './ButtonOutline';
 import Card from './Card';
 import Checkbox from './Checkbox';
 import Container from './Container';
@@ -35,6 +36,7 @@ import Tab from './Tab';
 
 export {
   Button,
+  ButtonOutline,
   Card,
   Checkbox,
   Container,
