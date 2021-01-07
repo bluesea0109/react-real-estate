@@ -15,8 +15,13 @@ import {
   Icon,
   Label,
   Input,
-  Modal,
 } from '../components/Base';
+import {
+  ModalActions,
+  ModalClose,
+  PreviewImage,
+  PreviewModal,
+} from '../components/Base/PreviewModal';
 import PageTitleHeader from '../components/PageTitleHeader';
 import Loading from '../components/Loading';
 import * as brandColors from '../components/utils/brandColors';
@@ -102,51 +107,6 @@ const SearchContainer = styled(Menu.Item)`
   &&& {
     flex: 1 0 250px;
     max-width: 400px;
-  }
-`;
-
-const PreviewModal = styled(Modal)`
-  &&&& {
-    position: relative;
-    padding: 2.5rem 2.5rem 0 2.5rem;
-  }
-`;
-
-const ModalClose = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 0.75rem;
-  cursor: pointer;
-  & i {
-    margin: 0;
-  }
-`;
-
-const PreviewImage = styled.img`
-  width: 800px;
-`;
-
-const ModalActions = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem 0.5rem;
-  & .arrow {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 1rem;
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    cursor: pointer;
-    &:hover {
-      background-color: ${brandColors.lightGreyHover};
-    }
-    & i {
-      margin: 0;
-    }
   }
 `;
 

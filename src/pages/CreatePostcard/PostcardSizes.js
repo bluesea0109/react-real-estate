@@ -1,8 +1,9 @@
 import React from 'react';
-import GridItem from './GridItem';
+import { GridItem, GridItemContainer } from './GridItem';
 import GridLayout from './GridLayout';
 import styled from 'styled-components';
 import * as brandColors from '../../components/utils/brandColors';
+import { calculateCost } from '../../components/MailoutListItem/utils/helpers';
 
 const PostcardImg = styled.div`
   width: 240px;
@@ -20,21 +21,33 @@ const PostcardImg = styled.div`
   }
 `;
 
+const labelText = size => {
+  switch (size) {
+    case '6x9':
+    case '9x6':
+      return `Large Postcard (${calculateCost(1, size)}/each)`;
+    case '6x11':
+    case '11x6':
+      return `Jumbo Postcard (${calculateCost(1, size)}/each)`;
+    default:
+      return `Standard Postcard (${calculateCost(1, size)}/each)`;
+  }
+};
+
 export default function PostcardSizes({ sizes, selectedSize, setSelectedSize }) {
   return (
     <GridLayout>
       {sizes.map(size => {
         const [height, width] = size.split('x');
         return (
-          <GridItem
-            key={size}
-            onClick={() => setSelectedSize(size)}
-            selected={size === selectedSize}
-          >
-            <PostcardImg height={height} width={width} selected={size === selectedSize}>
-              <span>{size}"</span>
-            </PostcardImg>
-          </GridItem>
+          <GridItemContainer key={size} type="size" selected={size === selectedSize}>
+            <GridItem onClick={() => setSelectedSize(size)} selected={size === selectedSize}>
+              <PostcardImg height={height} width={width} selected={size === selectedSize}>
+                <span>{size}"</span>
+              </PostcardImg>
+            </GridItem>
+            <div className="label-text">{labelText(size)}</div>
+          </GridItemContainer>
         );
       })}
     </GridLayout>

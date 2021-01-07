@@ -1,5 +1,5 @@
 import React from 'react';
-import GridItem from './GridItem';
+import { GridItem, GridItemContainer } from './GridItem';
 import GridLayout from './GridLayout';
 import styled from 'styled-components';
 import { Icon } from '../../components/Base';
@@ -46,28 +46,43 @@ const ImgOverlay = styled.div`
   }
 `;
 
-export default function TemplatesGrid({ templates, selectedTemplate, setSelectedTemplate }) {
+export default function TemplatesGrid({
+  templates,
+  selectedTemplate,
+  setCurrentItem,
+  setSelectedTemplate,
+  setShowImageModal,
+}) {
   return (
     <GridLayout>
-      {templates.map(template => (
-        <GridItem
-          key={template.templateTheme}
-          selected={selectedTemplate === template.templateTheme}
-        >
-          <ImgOverlay>
-            <button
-              id="select-template"
-              onClick={() => setSelectedTemplate(template.templateTheme)}
-            >
-              SELECT
-            </button>
-            <button id="view-template">
-              <Icon name="eye" />
-              VIEW
-            </button>
-          </ImgOverlay>
-          <TemplateImg src={template.thumbnail} alt="template thumbnail" />
-        </GridItem>
+      {templates.map((template, index) => (
+        <GridItemContainer>
+          <GridItem
+            key={template.templateTheme}
+            selected={selectedTemplate === template.templateTheme}
+          >
+            <ImgOverlay>
+              <button
+                id="select-template"
+                onClick={() => setSelectedTemplate(template.templateTheme)}
+              >
+                SELECT
+              </button>
+              <button
+                onClick={() => {
+                  setCurrentItem(index);
+                  setShowImageModal(true);
+                }}
+                id="view-template"
+              >
+                <Icon name="eye" />
+                VIEW
+              </button>
+            </ImgOverlay>
+            <TemplateImg src={template.thumbnail} alt="template thumbnail" />
+          </GridItem>
+          <div className="label-text">{template.templateTheme}</div>
+        </GridItemContainer>
       ))}
     </GridLayout>
   );

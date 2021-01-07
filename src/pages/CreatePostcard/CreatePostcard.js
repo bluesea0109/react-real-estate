@@ -15,9 +15,15 @@ import {
   StyledMenu,
   Tab,
 } from '../../components/Base';
+import {
+  ModalActions,
+  ModalClose,
+  PreviewImage,
+  PreviewModal,
+} from '../../components/Base/PreviewModal';
 import PageTitleHeader from '../../components/PageTitleHeader';
 import { ContentTopHeaderLayout } from '../../layouts';
-import GridItem from './GridItem';
+import { GridItem, GridItemContainer } from './GridItem';
 import GridLayout from './GridLayout';
 import PostcardSizes from './PostcardSizes';
 import TemplatesGrid from './TemplatesGrid';
@@ -50,8 +56,10 @@ const TemplatesTab = ({
   tagList,
   selectedSize,
   selectedTemplate,
+  setCurrentItem,
   setSelectedSize,
   setSelectedTemplate,
+  setShowImageModal,
 }) => {
   return (
     <>
@@ -91,7 +99,9 @@ const TemplatesTab = ({
       <TemplatesGrid
         templates={filteredTemplates}
         selectedTemplate={selectedTemplate}
+        setCurrentItem={setCurrentItem}
         setSelectedTemplate={setSelectedTemplate}
+        setShowImageModal={setShowImageModal}
       />
     </>
   );
@@ -112,7 +122,10 @@ const CustomTab = ({ selectedSize, setSelectedSize }) => {
         <p>Card Front</p>
       </StyledSectionHeader>
       <GridLayout>
-        <GridItem>Upload</GridItem>
+        <GridItemContainer>
+          <GridItem>Upload</GridItem>
+          <div className="label-text">Upload your own design</div>
+        </GridItemContainer>
       </GridLayout>
     </>
   );
@@ -143,6 +156,20 @@ export default function CreatePostcard(props) {
   const [selectedSize, setSelectedSize] = useState('4x6');
   const [uploadedPhoto, setUploadedPhoto] = useState(null);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [currentItem, setCurrentItem] = useState(null);
+
+  const prevImg = () => {
+    let newImgIndex = currentItem - 1;
+    if (newImgIndex < 0) newImgIndex = filteredTemplates.length - 1;
+    setCurrentItem(newImgIndex);
+  };
+
+  const nextImg = () => {
+    let newImgIndex = currentItem + 1;
+    if (newImgIndex > filteredTemplates.length - 1) newImgIndex = 0;
+    setCurrentItem(newImgIndex);
+  };
 
   const addTag = tag => {
     if (selectedTags.includes(tag)) return;
@@ -182,8 +209,10 @@ export default function CreatePostcard(props) {
             selectedSize={selectedSize}
             selectedTags={selectedTags}
             selectedTemplate={selectedTemplate}
+            setCurrentItem={setCurrentItem}
             setSelectedSize={setSelectedSize}
             setSelectedTemplate={setSelectedTemplate}
+            setShowImageModal={setShowImageModal}
             tagList={tagList}
           />
         </Tab.Pane>
@@ -221,6 +250,29 @@ export default function CreatePostcard(props) {
       <Segment>
         <StyledTab menu={{ secondary: true, pointing: true }} panes={panes} />
       </Segment>
+      <PreviewModal open={showImageModal}>
+        <ModalClose onClick={() => setShowImageModal(false)}>
+          <Icon name="close" color="grey" size="large" />
+        </ModalClose>
+        <PreviewImage src={filteredTemplates[currentItem]?.thumbnail} alt="download preview" />
+        <ModalActions>
+          <div className="arrow" onClick={prevImg}>
+            <Icon name="chevron left" size="big" color="grey" />
+          </div>
+          <Button
+            primary
+            onClick={() => {
+              setSelectedTemplate(filteredTemplates[currentItem].templateTheme);
+              setShowImageModal(false);
+            }}
+          >
+            SELECT
+          </Button>
+          <div className="arrow" onClick={nextImg}>
+            <Icon name="chevron right" size="big" color="grey" />
+          </div>
+        </ModalActions>
+      </PreviewModal>
     </Page>
   );
 }
