@@ -6,6 +6,10 @@ exports[`renders correctly 1`] = `
   margin: 0.25em;
 }
 
+.c0.c0.c0.btn-disabled {
+  opacity: 0.5;
+}
+
 .c0.c0.c0.c0.c0.c0.c0.c0.c0.button {
   color: #969696;
   background-color: #eaeaea;

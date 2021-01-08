@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { startCase } from 'lodash';
 import {
   Button,
+  ButtonNoStyle,
   ButtonOutline,
   Dropdown,
   Header,
@@ -52,12 +53,17 @@ const UploadImage = styled.div`
   position: relative;
   height: 100%;
   width: 100%;
-  padding: 6px;
   border: 1px dashed #d3d3d3;
   display: grid;
   justify-items: center;
   align-items: center;
-  grid-template-rows: 1fr 1.25rem;
+  grid-template-rows: 1fr minmax(0, 1.25rem);
+  & img {
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 100%;
+    grid-row: span 2;
+  }
   &:hover {
     & .overlay {
       opacity: 1;
@@ -88,6 +94,7 @@ const UploadImage = styled.div`
   & .upload-directions {
     font-size: 12px;
     z-index: 10;
+    padding-bottom: 4px;
   }
 `;
 
@@ -120,6 +127,10 @@ const UploadTextContainer = styled.div`
   }
 `;
 
+const ViewButton = styled(ButtonNoStyle)`
+  color: ${brandColors.grey04};
+`;
+
 const postcardSizes = ['4x6', '6x9', '6x11'];
 
 const getUploadSizes = size => {
@@ -144,6 +155,7 @@ const TemplatesTab = ({
   selectedSize,
   selectedTemplate,
   setCurrentItem,
+  setPreviewImage,
   setSelectedSize,
   setSelectedTemplate,
   setShowImageModal,
@@ -187,6 +199,7 @@ const TemplatesTab = ({
         templates={filteredTemplates}
         selectedTemplate={selectedTemplate}
         setCurrentItem={setCurrentItem}
+        setPreviewImage={setPreviewImage}
         setSelectedTemplate={setSelectedTemplate}
         setShowImageModal={setShowImageModal}
       />
@@ -194,7 +207,15 @@ const TemplatesTab = ({
   );
 };
 
-const CustomTab = ({ selectedSize, setSelectedSize }) => {
+const CustomTab = ({
+  handleFileChange,
+  selectedSize,
+  setPreviewImage,
+  setSelectedSize,
+  setShowImageModal,
+  uploadedImage,
+  uploadedImageName,
+}) => {
   return (
     <>
       <StyledSectionHeader>
@@ -209,19 +230,52 @@ const CustomTab = ({ selectedSize, setSelectedSize }) => {
         <p>Card Front</p>
       </StyledSectionHeader>
       <GridLayout>
-        <GridItemContainer>
-          <GridItem>
+        <GridItemContainer selected={uploadedImageName}>
+          <GridItem selected={uploadedImageName}>
             <UploadImage>
               <div className="overlay">
-                <ButtonOutline>UPLOAD</ButtonOutline>
+                <ButtonOutline
+                  onClick={() => {
+                    document.getElementById('custom-upload-input').click();
+                  }}
+                >
+                  UPLOAD
+                </ButtonOutline>
               </div>
-              <Icon name="upload" />
-              <span className="upload-directions">{`(${getUploadSizes(
-                selectedSize
-              )} PNG or JPEG = max 5MB)`}</span>
+              {uploadedImage ? (
+                <img src={uploadedImage} alt="custom-front"></img>
+              ) : (
+                <>
+                  <Icon name="upload" />
+                  <span className="upload-directions">{`(${getUploadSizes(
+                    selectedSize
+                  )} PNG or JPEG = max 5MB)`}</span>
+                </>
+              )}
+              <input
+                id="custom-upload-input"
+                style={{ display: 'none' }}
+                name="postcardcover"
+                type="file"
+                accept="image/png, image/jpeg"
+                onChange={handleFileChange}
+              ></input>
             </UploadImage>
           </GridItem>
-          <div className="label-text">Upload your own design</div>
+          <div className="label-text">
+            {uploadedImageName ? `${uploadedImageName}` : 'Upload your own design'}
+            {uploadedImage && (
+              <ViewButton
+                onClick={() => {
+                  setPreviewImage(uploadedImage);
+                  setShowImageModal(true);
+                }}
+              >
+                <Icon name="eye" />
+                VIEW
+              </ViewButton>
+            )}
+          </div>
         </GridItemContainer>
         <UploadTextContainer>
           <p className="upload-text-title">Include a safe zone of 1/2" inch!</p>
@@ -255,32 +309,36 @@ export default function CreatePostcard(props) {
     return list;
   }, []);
 
-  const [activeIndex, setActiveIndex] = useState(1);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [createDisabled, setCreateDisabled] = useState(true);
   const [currentItem, setCurrentItem] = useState(null);
   const [filteredTemplates, setFilteredTemplates] = useState(allTemplates);
+  const [previewImage, setPreviewImage] = useState(null);
   const [selectedSize, setSelectedSize] = useState('4x6');
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [showImageModal, setShowImageModal] = useState(false);
-  const [uploadedPhoto, setUploadedPhoto] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState(null);
+  const [uploadedImageName, setUploadedImageName] = useState('');
 
   useEffect(() => {
-    if (activeIndex === 1 && !uploadedPhoto) setCreateDisabled(true);
+    if (activeIndex === 1 && !uploadedImage) setCreateDisabled(true);
     else if (activeIndex === 0 && !selectedTemplate) setCreateDisabled(true);
     else setCreateDisabled(false);
-  }, [activeIndex, createDisabled, uploadedPhoto, selectedTemplate]);
+  }, [activeIndex, createDisabled, uploadedImage, selectedTemplate]);
 
   const prevImg = () => {
     let newImgIndex = currentItem - 1;
     if (newImgIndex < 0) newImgIndex = filteredTemplates.length - 1;
     setCurrentItem(newImgIndex);
+    setPreviewImage(filteredTemplates[newImgIndex].thumbnail);
   };
 
   const nextImg = () => {
     let newImgIndex = currentItem + 1;
     if (newImgIndex > filteredTemplates.length - 1) newImgIndex = 0;
     setCurrentItem(newImgIndex);
+    setPreviewImage(filteredTemplates[newImgIndex].thumbnail);
   };
 
   const addTag = tag => {
@@ -309,6 +367,16 @@ export default function CreatePostcard(props) {
     // eslint-disable-next-line
   }, [selectedTags]);
 
+  const handleFileChange = e => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = e => {
+      setUploadedImage(e.target.result);
+      setUploadedImageName(file.name);
+    };
+    reader.readAsDataURL(file);
+  };
+
   const panes = [
     {
       menuItem: 'Templates',
@@ -322,6 +390,7 @@ export default function CreatePostcard(props) {
             selectedTags={selectedTags}
             selectedTemplate={selectedTemplate}
             setCurrentItem={setCurrentItem}
+            setPreviewImage={setPreviewImage}
             setSelectedSize={setSelectedSize}
             setSelectedTemplate={setSelectedTemplate}
             setShowImageModal={setShowImageModal}
@@ -334,7 +403,15 @@ export default function CreatePostcard(props) {
       menuItem: 'Custom Design',
       render: () => (
         <Tab.Pane as="div">
-          <CustomTab setSelectedSize={setSelectedSize} selectedSize={selectedSize} />
+          <CustomTab
+            handleFileChange={handleFileChange}
+            selectedSize={selectedSize}
+            setPreviewImage={setPreviewImage}
+            setSelectedSize={setSelectedSize}
+            setShowImageModal={setShowImageModal}
+            uploadedImage={uploadedImage}
+            uploadedImageName={uploadedImageName}
+          />
         </Tab.Pane>
       ),
     },
@@ -371,28 +448,30 @@ export default function CreatePostcard(props) {
           panes={panes}
         />
       </Segment>
-      <PreviewModal open={showImageModal}>
+      <PreviewModal open={showImageModal} padBottom={activeIndex === 1}>
         <ModalClose onClick={() => setShowImageModal(false)}>
           <Icon name="close" color="grey" size="large" />
         </ModalClose>
-        <PreviewImage src={filteredTemplates[currentItem]?.thumbnail} alt="download preview" />
-        <ModalActions>
-          <div className="arrow" onClick={prevImg}>
-            <Icon name="chevron left" size="big" color="grey" />
-          </div>
-          <Button
-            primary
-            onClick={() => {
-              setSelectedTemplate(filteredTemplates[currentItem].templateTheme);
-              setShowImageModal(false);
-            }}
-          >
-            SELECT
-          </Button>
-          <div className="arrow" onClick={nextImg}>
-            <Icon name="chevron right" size="big" color="grey" />
-          </div>
-        </ModalActions>
+        <PreviewImage src={previewImage} alt="download preview" />
+        {activeIndex === 0 && (
+          <ModalActions>
+            <div className="arrow" onClick={prevImg}>
+              <Icon name="chevron left" size="big" color="grey" />
+            </div>
+            <Button
+              primary
+              onClick={() => {
+                setSelectedTemplate(filteredTemplates[currentItem].templateTheme);
+                setShowImageModal(false);
+              }}
+            >
+              SELECT
+            </Button>
+            <div className="arrow" onClick={nextImg}>
+              <Icon name="chevron right" size="big" color="grey" />
+            </div>
+          </ModalActions>
+        )}
       </PreviewModal>
     </Page>
   );
