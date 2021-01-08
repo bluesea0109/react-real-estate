@@ -9,8 +9,10 @@ import {
   Dropdown,
   Header,
   Icon,
+  Input,
   Label,
   Menu,
+  Message,
   Page,
   SectionHeader,
   Segment,
@@ -30,6 +32,7 @@ import GridLayout from './GridLayout';
 import PostcardSizes from './PostcardSizes';
 import TemplatesGrid from './TemplatesGrid';
 import * as brandColors from '../../components/utils/brandColors';
+import { Link } from 'react-router-dom';
 
 const ItemContent = styled.div`
   display: flex;
@@ -131,6 +134,10 @@ const ViewButton = styled(ButtonNoStyle)`
   color: ${brandColors.grey04};
 `;
 
+const NameInput = styled(Input)`
+  margin: 1rem 1.5rem;
+`;
+
 const postcardSizes = ['4x6', '6x9', '6x11'];
 
 const getUploadSizes = size => {
@@ -208,8 +215,12 @@ const TemplatesTab = ({
 };
 
 const CustomTab = ({
+  customName,
   handleFileChange,
+  imageError,
   selectedSize,
+  setCustomName,
+  setImageError,
   setPreviewImage,
   setSelectedSize,
   setShowImageModal,
@@ -227,11 +238,28 @@ const CustomTab = ({
         setSelectedSize={setSelectedSize}
       />
       <StyledSectionHeader>
+        <p>Campaign Name</p>
+      </StyledSectionHeader>
+      <NameInput
+        type="text"
+        fluid
+        placeholder="Custom Campaign"
+        value={customName}
+        onChange={e => setCustomName(e.target.value)}
+      />
+      <StyledSectionHeader>
         <p>Card Front</p>
       </StyledSectionHeader>
+      {imageError && (
+        <Message error>
+          <Icon name="times circle" />
+          <span>{imageError}</span>
+          <Icon name="close" onClick={() => setImageError(null)} />
+        </Message>
+      )}
       <GridLayout>
         <GridItemContainer selected={uploadedImageName}>
-          <GridItem selected={uploadedImageName}>
+          <GridItem selected={uploadedImageName} error={imageError}>
             <UploadImage>
               <div className="overlay">
                 <ButtonOutline
@@ -298,9 +326,10 @@ const StyledTab = styled(Tab)`
   }
 `;
 
-export default function CreatePostcard(props) {
+export default function CreatePostcard({ location }) {
   const storeTemplates = useSelector(state => state.templates.available);
   const allTemplates = Object.values(storeTemplates).reduce((acc, cur) => [...acc, ...cur], []);
+  const initialFilter = location?.state?.filter;
 
   const tagList = allTemplates.reduce((list, stencil) => {
     stencil.publishedTags.forEach(tag => {
@@ -309,13 +338,17 @@ export default function CreatePostcard(props) {
     return list;
   }, []);
 
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(initialFilter === 'custom' ? 1 : 0);
   const [createDisabled, setCreateDisabled] = useState(true);
+  const [customName, setCustomName] = useState('');
   const [currentItem, setCurrentItem] = useState(null);
   const [filteredTemplates, setFilteredTemplates] = useState(allTemplates);
+  const [imageError, setImageError] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [selectedSize, setSelectedSize] = useState('4x6');
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState(
+    initialFilter && initialFilter !== 'custom' ? [initialFilter] : []
+  );
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [showImageModal, setShowImageModal] = useState(false);
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -368,13 +401,33 @@ export default function CreatePostcard(props) {
   }, [selectedTags]);
 
   const handleFileChange = e => {
+    setImageError(null);
     const file = e.target.files[0];
+    if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
+      setImageError('Warning! File upload failed. Your design is not a supported file type.');
+      return;
+    }
+    if (file.size > 5000000) {
+      setImageError('Warning! File upload failed. Your design exceeded the 5MB size limit.');
+      return;
+    }
     const reader = new FileReader();
     reader.onload = e => {
       setUploadedImage(e.target.result);
       setUploadedImageName(file.name);
     };
     reader.readAsDataURL(file);
+  };
+
+  const createCampaign = () => {
+    if (activeIndex === 1 && !uploadedImage) {
+      setImageError(
+        'Warning! A card front must be uploaded in order to create a Custom Design Postcard Campaign'
+      );
+      return;
+    }
+    if (createDisabled) return;
+    console.log('TODO Create Campaign');
   };
 
   const panes = [
@@ -404,8 +457,12 @@ export default function CreatePostcard(props) {
       render: () => (
         <Tab.Pane as="div">
           <CustomTab
+            customName={customName}
             handleFileChange={handleFileChange}
+            imageError={imageError}
             selectedSize={selectedSize}
+            setCustomName={setCustomName}
+            setImageError={setImageError}
             setPreviewImage={setPreviewImage}
             setSelectedSize={setSelectedSize}
             setShowImageModal={setShowImageModal}
@@ -427,11 +484,13 @@ export default function CreatePostcard(props) {
             </Menu.Item>
             <Menu.Item position="right">
               <div className="right menu">
-                <Button onClick={() => console.log('TODO - Back to dashboard?')}>Cancel</Button>
+                <Link to="/dashboard">
+                  <Button>Cancel</Button>
+                </Link>
                 <Button
                   primary
                   className={createDisabled ? 'btn-disabled' : ''}
-                  onClick={() => console.log('TODO - Create...')}
+                  onClick={createCampaign}
                 >
                   Create
                 </Button>

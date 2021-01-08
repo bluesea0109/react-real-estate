@@ -112,13 +112,6 @@ const Dashboard = () => {
             <Menu.Item>
               <Header as="h1">Dashboard</Header>
             </Menu.Item>
-            <Menu.Item position="right">
-              <div className="right menu">
-                <Button primary onClick={() => console.log('TODO - Add new project dropdown')}>
-                  + New Project
-                </Button>
-              </div>
-            </Menu.Item>
           </StyledMenu>
         </PageTitleHeader>
       </ContentTopHeaderLayout>
@@ -154,11 +147,11 @@ const Dashboard = () => {
         <SectionGrid>
           <DashboardItem
             name="just listed postcard"
-            linkTo={{ pathname: 'create-postcard', state: { filter: 'listed' } }}
+            linkTo={{ pathname: 'create-postcard', state: { filter: 'just-listed' } }}
           ></DashboardItem>
           <DashboardItem
             name="just sold postcard"
-            linkTo={{ pathname: 'create-postcard', state: { filter: 'sold' } }}
+            linkTo={{ pathname: 'create-postcard', state: { filter: 'just-sold' } }}
           ></DashboardItem>
           <DashboardItem
             name="handwritten postcard"

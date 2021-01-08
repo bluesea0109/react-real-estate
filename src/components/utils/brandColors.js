@@ -25,3 +25,4 @@ export const grey08 = '#E6E6E6';
 export const grey09 = '#F8F7F6';
 export const boxShadow = '0 2px 6px rgba(201, 201, 201, 0.5)';
 export const textDark = '#343434';
+export const error = '#9f3a38';
