@@ -6,7 +6,9 @@ export const PreviewModal = styled(Modal)`
   &&&& {
     position: relative;
     padding: 2.5rem 2.5rem 0 2.5rem;
-    ${props => props.padBottom && 'padding-bottom: 2.5rem;'}
+    &.pad-bottom {
+      padding-bottom: 2.5rem;
+    }
   }
 `;
 

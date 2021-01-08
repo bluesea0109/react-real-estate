@@ -5,7 +5,6 @@ import styled from 'styled-components';
 
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
 import {
-  Button,
   Header,
   Menu,
   Page,

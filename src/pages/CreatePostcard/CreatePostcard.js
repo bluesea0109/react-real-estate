@@ -507,7 +507,7 @@ export default function CreatePostcard({ location }) {
           panes={panes}
         />
       </Segment>
-      <PreviewModal open={showImageModal} padBottom={activeIndex === 1}>
+      <PreviewModal open={showImageModal} className={activeIndex === 1 ? 'pad-bottom' : ''}>
         <ModalClose onClick={() => setShowImageModal(false)}>
           <Icon name="close" color="grey" size="large" />
         </ModalClose>
