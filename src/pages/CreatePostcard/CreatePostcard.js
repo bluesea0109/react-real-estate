@@ -33,6 +33,7 @@ import PostcardSizes from './PostcardSizes';
 import TemplatesGrid from './TemplatesGrid';
 import * as brandColors from '../../components/utils/brandColors';
 import { Link } from 'react-router-dom';
+import ListingModal from '../../components/ListingModal';
 
 const ItemContent = styled.div`
   display: flex;
@@ -345,6 +346,7 @@ export default function CreatePostcard({ location }) {
   const [filteredTemplates, setFilteredTemplates] = useState(allTemplates);
   const [imageError, setImageError] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
+  const [selectListing, setSelectListing] = useState(true); //true for testinge
   const [selectedSize, setSelectedSize] = useState('4x6');
   const [selectedTags, setSelectedTags] = useState(
     initialFilter && initialFilter !== 'custom' ? [initialFilter] : []
@@ -532,6 +534,7 @@ export default function CreatePostcard({ location }) {
           </ModalActions>
         )}
       </PreviewModal>
+      <ListingModal open={selectListing} setOpen={setSelectListing} />
     </Page>
   );
 }

@@ -6,6 +6,7 @@ export default styled(Button)`
   &&& {
     min-width: 100px;
     margin: 0.25em;
+    border-radius: 100px;
     &.btn-disabled {
       opacity: 0.5;
     }
