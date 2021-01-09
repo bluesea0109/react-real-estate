@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Search } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { Button, Icon, Modal } from './Base';
@@ -84,7 +84,15 @@ const ListingModal = ({ open, setOpen }) => {
   const [results, setResults] = useState([]);
   const [filteredResults, setFilteredResults] = useState([]);
 
+  useEffect(() => {
+    const newFilteredResults = results?.map(res => {
+      return { title: res.fieldValues.fullAddress };
+    });
+    setFilteredResults(newFilteredResults);
+  }, [results]);
+
   const getListings = async value => {
+    if (!value) return [];
     const path = `/api/user/listing/autocomplete?prefix=${value}`;
     const headers = {};
     const accessToken = await auth.getAccessToken();
@@ -98,10 +106,6 @@ const ListingModal = ({ open, setOpen }) => {
     debounce(async value => {
       const newResults = await getListings(value);
       setResults(newResults);
-      const newFilteredResults = newResults?.map(res => {
-        return { title: res.fieldValues.fullAddress };
-      });
-      setFilteredResults(newFilteredResults);
       setIsLoading(false);
     }, 1000),
     []
