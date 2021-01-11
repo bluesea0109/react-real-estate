@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Loading from '../components/Loading';
 import { Header, Menu, Page, Dropdown } from '../components/Base';
 import Styled from 'styled-components';
-import { Grid, Segment, Button, Popup, List, Icon } from 'semantic-ui-react';
+import { Grid, Segment, Button, Popup, List, Icon, Card, Image } from 'semantic-ui-react';
 
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
@@ -382,7 +383,6 @@ const ListingsPage = () => {
     }
     return 4;
   };
-
   return (
     <Page basic>
       <ContentTopHeaderLayout>
@@ -391,20 +391,22 @@ const ListingsPage = () => {
             <Menu.Item>
               <Header as="h1">Listings</Header>
             </Menu.Item>
-            <Menu.Menu position="right">
-              <Popup
-                content={
-                  <FilterList
-                    activeFilters={activeFilters}
-                    handleFilterSelected={handleFilterSelected}
-                  />
-                }
-                trigger={<Button primary content="FILTER" className="listingFilterButton" />}
-                position="bottom right"
-                on="click"
-                hideOnScroll
-              />
-            </Menu.Menu>
+            {listingDetails && (
+              <Menu.Menu position="right">
+                <Popup
+                  content={
+                    <FilterList
+                      activeFilters={activeFilters}
+                      handleFilterSelected={handleFilterSelected}
+                    />
+                  }
+                  trigger={<Button primary content="FILTER" className="listingFilterButton" />}
+                  position="bottom right"
+                  on="click"
+                  hideOnScroll
+                />
+              </Menu.Menu>
+            )}
           </Menu>
         </PageTitleHeader>
       </ContentTopHeaderLayout>
@@ -414,30 +416,59 @@ const ListingsPage = () => {
             <Loading message="Loading Listings..." />
           </ContentBottomHeaderLayout>
         )}
-        <Grid padded="vertically" columns={getColumns()}>
-          {listings ? (
-            listings.length > 0 ? (
-              listings.map((item, i) => {
-                return (
-                  <ListingCard
-                    key={i}
-                    listingDetails={listingDetails}
-                    listingItem={item}
-                    userInfo={userInfo}
-                    peerUser={peerUser}
-                    userType={userType}
-                  />
-                );
-              })
+        {listingDetails?.listings.length > 0 ? (
+          <Grid padded="vertically" columns={getColumns()}>
+            {listings ? (
+              listings.length > 0 ? (
+                listings.map((item, i) => {
+                  return (
+                    <ListingCard
+                      key={i}
+                      listingDetails={listingDetails}
+                      listingItem={item}
+                      userInfo={userInfo}
+                      peerUser={peerUser}
+                      userType={userType}
+                    />
+                  );
+                })
+              ) : (
+                <Header
+                  as="h3"
+                  className="normalFontWeight noMargin cardFont noFilteredListingsText"
+                >
+                  No Listings meet the current filtering criteria.
+                </Header>
+              )
             ) : (
-              <Header as="h3" className="normalFontWeight noMargin cardFont noFilteredListingsText">
-                No Listings meet the current filtering criteria.
-              </Header>
-            )
-          ) : (
-            undefined
-          )}
-        </Grid>
+              undefined
+            )}
+          </Grid>
+        ) : (
+          <Segment>
+            <Card centered style={{ minWidth: '500px', boxShadow: 'none' }}>
+              <Image
+                centered
+                size="large"
+                src={require('../assets/listings-page-empty.svg')}
+                style={{ background: 'unset', marginTop: '2em', marginBottom: '1em' }}
+              />
+              <Card.Content style={{ borderTop: 'none' }}>
+                <Header as="h5" textAlign="center">
+                  <Header.Content style={{ textAlign: 'center', cursor: 'default' }}>
+                    <p>
+                      Your listings will appear here. If you haven't done so yet, <br />
+                      <Link to="/profile" className="briv-marketerLink">
+                        add your MLS and Agent ID on the &quot;Profile&quot; page
+                      </Link>
+                      .
+                    </p>
+                  </Header.Content>
+                </Header>
+              </Card.Content>
+            </Card>
+          </Segment>
+        )}
       </div>
     </Page>
   );
