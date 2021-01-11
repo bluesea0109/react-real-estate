@@ -14,8 +14,6 @@ import { Dropdown, Popup } from 'semantic-ui-react';
 import { useIsMobile } from './Hooks/useIsMobile';
 import * as brandColors from './utils/brandColors';
 
-import AlertPromo from '../components/AlertPromo';
-
 const StyledUserSelectorDropdown = styled(Dropdown)`
   &&&&& {
     height: 40px;
@@ -281,8 +279,6 @@ export default ({ auth0 }) => {
         fixed="top"
         style={{ borderBottom: '2px solid #E6E6E6', boxShadow: 'none', flexWrap: 'wrap' }}
       >
-        <AlertPromo />
-
         <Menu.Item as="a" href="/" header>
           <LogoImage />
         </Menu.Item>
