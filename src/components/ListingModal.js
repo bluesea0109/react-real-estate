@@ -117,7 +117,9 @@ const ListingModal = ({ open, setOpen }) => {
   );
 
   const handleListingSelect = e => {
-    setSelectedListing(results.find(result => result.text === e.target.innerHTML));
+    setSelectedListing(
+      results.find(result => result.fieldValues.fullAddress === e.target.innerHTML)
+    );
   };
 
   return (
@@ -145,8 +147,8 @@ const ListingModal = ({ open, setOpen }) => {
               onResultSelect={handleListingSelect}
             />
           )}
-          <CreateButton primary disabled>
-            Create Ad
+          <CreateButton primary disabled={!selectedListing}>
+            Create Postcard
           </CreateButton>
         </div>
       </div>
