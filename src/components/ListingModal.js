@@ -5,6 +5,7 @@ import { Button, Icon, Modal } from './Base';
 import * as brandColors from './utils/brandColors';
 import { debounce } from 'lodash';
 import auth from '../services/auth';
+import ListingPreviewCard from './ListingPreviewCard';
 
 const StyledModal = styled(Modal)`
   &&&& {
@@ -75,7 +76,10 @@ const SearchBar = styled(Search)`
 `;
 
 const CreateButton = styled(Button)`
-  width: 100%;
+  &&&& {
+    width: 100%;
+    margin: 1rem 0;
+  }
 `;
 
 const ListingModal = ({ open, setOpen }) => {
@@ -83,6 +87,7 @@ const ListingModal = ({ open, setOpen }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState([]);
   const [filteredResults, setFilteredResults] = useState([]);
+  const [selectedListing, setSelectedListing] = useState(null);
 
   useEffect(() => {
     const newFilteredResults = results?.map(res => {
@@ -111,6 +116,10 @@ const ListingModal = ({ open, setOpen }) => {
     []
   );
 
+  const handleListingSelect = e => {
+    setSelectedListing(results.find(result => result.text === e.target.innerHTML));
+  };
+
   return (
     <StyledModal open={open}>
       <div className="modal-content">
@@ -118,19 +127,24 @@ const ListingModal = ({ open, setOpen }) => {
         <Header>Import Listing Data</Header>
         <p>Search for listings to populate your template with dynamic data</p>
         <div className="search-container">
-          <SearchBar
-            loading={isLoading}
-            onSearchChange={(e, { value }) => {
-              setSearchValue(value);
-              setIsLoading(true);
-              handleSearchChange(value);
-            }}
-            fluid
-            placeholder="Search by address or MLS number"
-            value={searchValue}
-            results={filteredResults}
-            noResultsMessage={isLoading ? 'Loading' : 'No results found'}
-          />
+          {selectedListing ? (
+            <ListingPreviewCard listing={selectedListing} setListing={setSelectedListing} />
+          ) : (
+            <SearchBar
+              loading={isLoading}
+              onSearchChange={(e, { value }) => {
+                setSearchValue(value);
+                setIsLoading(true);
+                handleSearchChange(value);
+              }}
+              fluid
+              placeholder="Search by address or MLS number"
+              value={searchValue}
+              results={filteredResults}
+              noResultsMessage={isLoading ? 'Loading' : 'No results found'}
+              onResultSelect={handleListingSelect}
+            />
+          )}
           <CreateButton primary disabled>
             Create Ad
           </CreateButton>
