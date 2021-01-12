@@ -70,7 +70,6 @@ const Dashboard = () => {
   const isMobile = useIsMobile();
   const history = useHistory();
   const dispatch = useDispatch();
-
   const isInitiatingTeam = useSelector(store => store.teamInitialize.polling);
   const initiatingTeamState = useSelector(store => store.teamInitialize.available);
   const currentTeamUserTotal = initiatingTeamState && initiatingTeamState.currentUserTotal;
