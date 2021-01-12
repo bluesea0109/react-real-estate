@@ -104,6 +104,7 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
         <Segment className="cardSegment">
           <div className="cardImgWrapper">
             <div
+              style={displayClick ? null : { cursor: 'default' }}
               className={
                 windowSize.width <= 1366
                   ? 'listingCardImgContainerSmall'
