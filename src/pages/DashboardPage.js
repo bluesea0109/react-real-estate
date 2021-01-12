@@ -164,11 +164,11 @@ const Dashboard = () => {
             name="custom postcard"
             linkTo={{ pathname: 'create-postcard', state: { filter: 'custom' } }}
           ></DashboardItem>
-          <DashboardItem name="just listed ad" linkTo="#"></DashboardItem>
-          <DashboardItem name="just sold ad" linkTo="#"></DashboardItem>
-          <DashboardItem name="open house ad" linkTo="#"></DashboardItem>
-          <DashboardItem name="home value ad" linkTo="#"></DashboardItem>
-          <DashboardItem name="buyer search ad" linkTo="#"></DashboardItem>
+          <DashboardItem name="just listed ad" linkTo="listings"></DashboardItem>
+          <DashboardItem name="just sold ad" linkTo="listings"></DashboardItem>
+          <DashboardItem name="open house ad" linkTo="listings"></DashboardItem>
+          <DashboardItem name="home value ad" linkTo="listings"></DashboardItem>
+          <DashboardItem name="buyer search ad" linkTo="listings"></DashboardItem>
           <DashboardItem
             name="business card"
             linkTo="https://brandco.com/business-cards/"

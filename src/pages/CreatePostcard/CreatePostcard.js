@@ -34,7 +34,7 @@ import GridLayout from './GridLayout';
 import PostcardSizes from './PostcardSizes';
 import TemplatesGrid from './TemplatesGrid';
 import * as brandColors from '../../components/utils/brandColors';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import ListingModal from '../../components/ListingModal';
 import { addHolidayCampaignStart } from '../../store/modules/mailouts/actions';
 import { postcardDimensions } from '../../components/utils/utils';
@@ -573,9 +573,15 @@ export default function CreatePostcard({ location }) {
               </Menu.Item>
               <Menu.Item position="right">
                 <div className="right menu">
-                  <Link to="/dashboard">
-                    <Button>Cancel</Button>
-                  </Link>
+                  <Button
+                    onClick={() =>
+                      location?.state?.from === 'postcards'
+                        ? history.push('postcards')
+                        : history.push('dashboard')
+                    }
+                  >
+                    Cancel
+                  </Button>
                   <Button
                     primary
                     className={createDisabled ? 'btn-disabled' : ''}
