@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { startCase } from 'lodash';
 import {
   Button,
   ButtonNoStyle,
   ButtonOutline,
+  Dimmer,
   Dropdown,
   Header,
   Icon,
   Input,
   Label,
+  Loader,
   Menu,
   Message,
   Page,
@@ -32,8 +34,13 @@ import GridLayout from './GridLayout';
 import PostcardSizes from './PostcardSizes';
 import TemplatesGrid from './TemplatesGrid';
 import * as brandColors from '../../components/utils/brandColors';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import ListingModal from '../../components/ListingModal';
+import { addHolidayCampaignStart } from '../../store/modules/mailouts/actions';
+import { postcardDimensions } from '../../components/utils/utils';
+import auth from '../../services/auth';
+import api from '../../services/api';
+import { setAddMailoutError } from '../../store/modules/mailout/actions';
 
 const ItemContent = styled.div`
   display: flex;
@@ -328,6 +335,9 @@ const StyledTab = styled(Tab)`
 `;
 
 export default function CreatePostcard({ location }) {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const peerId = useSelector(store => store.peer.peerId);
   const storeTemplates = useSelector(state => state.templates.available);
   const allTemplates = Object.values(storeTemplates).reduce((acc, cur) => [...acc, ...cur], []);
   const initialFilter = location?.state?.filter;
@@ -341,18 +351,21 @@ export default function CreatePostcard({ location }) {
 
   const [activeIndex, setActiveIndex] = useState(initialFilter === 'custom' ? 1 : 0);
   const [createDisabled, setCreateDisabled] = useState(true);
+  const [creatingCampaign, setCreatingCampaign] = useState(false);
+  const [customImageFile, setCustomImageFile] = useState(null);
   const [customName, setCustomName] = useState('');
   const [currentItem, setCurrentItem] = useState(null);
   const [filteredTemplates, setFilteredTemplates] = useState(allTemplates);
   const [imageError, setImageError] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
-  const [selectListing, setSelectListing] = useState(true); //true for testinge
+  const [selectedListing, setSelectedListing] = useState(false);
   const [selectedSize, setSelectedSize] = useState('4x6');
   const [selectedTags, setSelectedTags] = useState(
     initialFilter && initialFilter !== 'custom' ? [initialFilter] : []
   );
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [showImageModal, setShowImageModal] = useState(false);
+  const [showListingModal, setShowListingModal] = useState(false);
   const [uploadedImage, setUploadedImage] = useState(null);
   const [uploadedImageName, setUploadedImageName] = useState('');
 
@@ -417,11 +430,37 @@ export default function CreatePostcard({ location }) {
     reader.onload = e => {
       setUploadedImage(e.target.result);
       setUploadedImageName(file.name);
+      setCustomImageFile(file);
     };
     reader.readAsDataURL(file);
   };
 
-  const createCampaign = () => {
+  const getCustomImageURL = async image => {
+    const formData = new FormData();
+    const size = postcardDimensions(selectedSize);
+    formData.append('front', image);
+    formData.append('postcardSize', size);
+    try {
+      let path = `/api/user/mailout/create/front`;
+      if (peerId) path = `/api/user/peer/${peerId}/mailout/create/front`;
+      const headers = {};
+      const accessToken = await auth.getAccessToken();
+      headers['authorization'] = `Bearer ${accessToken}`;
+      const response = await fetch(path, {
+        headers,
+        method: 'post',
+        body: formData,
+        credentials: 'include',
+      });
+      const { url } = await api.handleResponse(response);
+      return url;
+    } catch (e) {
+      dispatch(setAddMailoutError(e.message));
+    }
+  };
+
+  const createCampaign = async () => {
+    setShowListingModal(false);
     if (activeIndex === 1 && !uploadedImage) {
       setImageError(
         'Warning! A card front must be uploaded in order to create a Custom Design Postcard Campaign'
@@ -429,7 +468,54 @@ export default function CreatePostcard({ location }) {
       return;
     }
     if (createDisabled) return;
-    console.log('TODO Create Campaign');
+    const size = postcardDimensions(selectedSize);
+    if (activeIndex === 1) {
+      if (!customImageFile) {
+        setImageError('There was an error uploading your file.');
+        return;
+      }
+      setCreatingCampaign(true);
+      const imageURL = await getCustomImageURL(customImageFile);
+      let path = `/api/user/mailout/withCover`;
+      if (peerId) path = `/api/user/peer/${peerId}/mailout/withCover`;
+
+      const headers = {};
+      const accessToken = await auth.getAccessToken();
+      headers['authorization'] = `Bearer ${accessToken}`;
+      const formData = new FormData();
+      formData.append('createdBy', 'user');
+      formData.append('skipEmailNotification', true);
+      formData.append('frontResourceUrl', imageURL);
+      formData.append('name', customName || 'Custom Campaign');
+      formData.append('postcardSize', size);
+      const response = await fetch(path, {
+        headers,
+        method: 'post',
+        body: formData,
+        credentials: 'include',
+      });
+      let doc = await api.handleResponse(response);
+      return history.push(`/dashboard/edit/${doc._id}/destinations`);
+    }
+    if (selectedTemplate?.activities.includes('listingMarketing')) {
+      setShowListingModal(true);
+      return;
+    }
+    let tags = [];
+    let currentTheme = selectedTemplate.templateTheme;
+    tags = allTemplates?.find(stencil => stencil.templateTheme === currentTheme).publishedTags;
+    dispatch(
+      addHolidayCampaignStart({
+        createdBy: 'user',
+        skipEmailNotification: true,
+        name: currentTheme,
+        frontTemplateUuid: currentTheme,
+        postcardSize: size,
+        mapperName: 'sphere',
+        publishedTags: tags,
+      })
+    );
+    return history.push('/postcards');
   };
 
   const panes = [
@@ -477,64 +563,76 @@ export default function CreatePostcard({ location }) {
   ];
 
   return (
-    <Page basic>
-      <ContentTopHeaderLayout>
-        <PageTitleHeader>
-          <StyledMenu borderless fluid secondary>
-            <Menu.Item>
-              <Header as="h1">Create Postcard Campaign</Header>
-            </Menu.Item>
-            <Menu.Item position="right">
-              <div className="right menu">
-                <Link to="/dashboard">
-                  <Button>Cancel</Button>
-                </Link>
-                <Button
-                  primary
-                  className={createDisabled ? 'btn-disabled' : ''}
-                  onClick={createCampaign}
-                >
-                  Create
-                </Button>
+    <>
+      <Page basic>
+        <ContentTopHeaderLayout>
+          <PageTitleHeader>
+            <StyledMenu borderless fluid secondary>
+              <Menu.Item>
+                <Header as="h1">Create Postcard Campaign</Header>
+              </Menu.Item>
+              <Menu.Item position="right">
+                <div className="right menu">
+                  <Link to="/dashboard">
+                    <Button>Cancel</Button>
+                  </Link>
+                  <Button
+                    primary
+                    className={createDisabled ? 'btn-disabled' : ''}
+                    onClick={createCampaign}
+                  >
+                    Create
+                  </Button>
+                </div>
+              </Menu.Item>
+            </StyledMenu>
+          </PageTitleHeader>
+        </ContentTopHeaderLayout>
+        <Segment>
+          <StyledTab
+            activeIndex={activeIndex}
+            onTabChange={(e, { activeIndex }) => setActiveIndex(activeIndex)}
+            menu={{ secondary: true, pointing: true }}
+            panes={panes}
+          />
+        </Segment>
+        <PreviewModal open={showImageModal} className={activeIndex === 1 ? 'pad-bottom' : ''}>
+          <ModalClose onClick={() => setShowImageModal(false)}>
+            <Icon name="close" color="grey" size="large" />
+          </ModalClose>
+          <PreviewImage src={previewImage} alt="download preview" />
+          {activeIndex === 0 && (
+            <ModalActions>
+              <div className="arrow" onClick={prevImg}>
+                <Icon name="chevron left" size="big" color="grey" />
               </div>
-            </Menu.Item>
-          </StyledMenu>
-        </PageTitleHeader>
-      </ContentTopHeaderLayout>
-      <Segment>
-        <StyledTab
-          activeIndex={activeIndex}
-          onTabChange={(e, { activeIndex }) => setActiveIndex(activeIndex)}
-          menu={{ secondary: true, pointing: true }}
-          panes={panes}
+              <Button
+                primary
+                onClick={() => {
+                  setSelectedTemplate(filteredTemplates[currentItem]);
+                  setShowImageModal(false);
+                }}
+              >
+                SELECT
+              </Button>
+              <div className="arrow" onClick={nextImg}>
+                <Icon name="chevron right" size="big" color="grey" />
+              </div>
+            </ModalActions>
+          )}
+        </PreviewModal>
+        <ListingModal
+          createCampaign={createCampaign}
+          open={showListingModal}
+          setOpen={setShowListingModal}
+          selectedListing={selectedListing}
+          selectedSize={selectedSize}
+          setSelectedListing={setSelectedListing}
         />
-      </Segment>
-      <PreviewModal open={showImageModal} className={activeIndex === 1 ? 'pad-bottom' : ''}>
-        <ModalClose onClick={() => setShowImageModal(false)}>
-          <Icon name="close" color="grey" size="large" />
-        </ModalClose>
-        <PreviewImage src={previewImage} alt="download preview" />
-        {activeIndex === 0 && (
-          <ModalActions>
-            <div className="arrow" onClick={prevImg}>
-              <Icon name="chevron left" size="big" color="grey" />
-            </div>
-            <Button
-              primary
-              onClick={() => {
-                setSelectedTemplate(filteredTemplates[currentItem].templateTheme);
-                setShowImageModal(false);
-              }}
-            >
-              SELECT
-            </Button>
-            <div className="arrow" onClick={nextImg}>
-              <Icon name="chevron right" size="big" color="grey" />
-            </div>
-          </ModalActions>
-        )}
-      </PreviewModal>
-      <ListingModal open={selectListing} setOpen={setSelectListing} />
-    </Page>
+      </Page>
+      <Dimmer active={creatingCampaign}>
+        <Loader>Creating Campaign</Loader>
+      </Dimmer>
+    </>
   );
 }

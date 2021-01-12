@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
 import { Search } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { Button, Icon, Modal } from './Base';
@@ -6,6 +7,9 @@ import * as brandColors from './utils/brandColors';
 import { debounce } from 'lodash';
 import auth from '../services/auth';
 import ListingPreviewCard from './ListingPreviewCard';
+import { addCampaignStart } from '../store/modules/mailouts/actions';
+import { useDispatch } from 'react-redux';
+import { postcardDimensions } from './utils/utils';
 
 const StyledModal = styled(Modal)`
   &&&& {
@@ -82,12 +86,13 @@ const CreateButton = styled(Button)`
   }
 `;
 
-const ListingModal = ({ open, setOpen }) => {
+const ListingModal = ({ open, setOpen, selectedListing, selectedSize, setSelectedListing }) => {
+  const dispatch = useDispatch();
+  const history = useHistory();
   const [searchValue, setSearchValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState([]);
   const [filteredResults, setFilteredResults] = useState([]);
-  const [selectedListing, setSelectedListing] = useState(null);
 
   useEffect(() => {
     const newFilteredResults = results?.map(res => {
@@ -122,6 +127,14 @@ const ListingModal = ({ open, setOpen }) => {
     );
   };
 
+  const createMLSCampaign = () => {
+    let mlsNum = selectedListing?.listing?.mlsNum;
+    let size = postcardDimensions(selectedSize);
+    if (!mlsNum?.length || !size) return;
+    dispatch(addCampaignStart({ mlsNum: mlsNum, postcardSize: size }));
+    return history.push('/postcards');
+  };
+
   return (
     <StyledModal open={open}>
       <div className="modal-content">
@@ -147,7 +160,7 @@ const ListingModal = ({ open, setOpen }) => {
               onResultSelect={handleListingSelect}
             />
           )}
-          <CreateButton primary disabled={!selectedListing}>
+          <CreateButton primary disabled={!selectedListing} onClick={createMLSCampaign}>
             Create Postcard
           </CreateButton>
         </div>

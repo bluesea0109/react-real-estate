@@ -40,13 +40,10 @@ export default function TemplatesGrid({
   return (
     <GridLayout>
       {templates.map((template, index) => (
-        <GridItemContainer key={template.templateTheme}>
-          <GridItem selected={selectedTemplate === template.templateTheme}>
+        <GridItemContainer key={template?.templateTheme}>
+          <GridItem selected={selectedTemplate?.templateTheme === template?.templateTheme}>
             <ImgOverlay>
-              <ButtonOutline
-                id="select-template"
-                onClick={() => setSelectedTemplate(template.templateTheme)}
-              >
+              <ButtonOutline id="select-template" onClick={() => setSelectedTemplate(template)}>
                 SELECT
               </ButtonOutline>
               <ButtonNoStyle
