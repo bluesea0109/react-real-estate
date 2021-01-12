@@ -37,9 +37,7 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
   const adProduct = useSelector(store => store.onLogin.permissions?.adProduct);
   const onLoginMode = useSelector(store => store.onLogin.mode);
   const multiUser = onLoginMode === 'multiuser';
-  const isAdmin = useSelector(
-    store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin
-  );
+
   if (!listingItem)
     return (
       <Grid.Column>
@@ -98,7 +96,7 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
       }
     };
 
-    const displayClick = adProduct && multiUser && !isAdmin;
+    const displayClick = adProduct && multiUser;
     return (
       <Grid.Column className="listingCard" stretched={false}>
         <Segment className="cardSegment">
