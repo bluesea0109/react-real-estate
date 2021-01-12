@@ -171,27 +171,27 @@ const Dashboard = () => {
           <DashboardItem name="buyer search ad" linkTo="listings"></DashboardItem>
           <DashboardItem
             name="business card"
-            linkTo="https://brandco.com/business-cards/"
+            linkTo="https://agentstore.com/product-category/business-cards/"
             external
           ></DashboardItem>
           <DashboardItem
             name="kwkly sign"
-            linkTo="https://brandco.com/custom-print/"
+            linkTo="https://agentstore.com/kwkly"
             external
           ></DashboardItem>
           <DashboardItem
             name="listing sign"
-            linkTo="https://brandco.com/custom-print/"
+            linkTo="https://agentstore.com/product-category/signs/"
             external
           ></DashboardItem>
           <DashboardItem
             name="sign rider"
-            linkTo="https://brandco.com/custom-print/"
+            linkTo="https://agentstore.com/product/3mm-pvc-sign-riders-18-x-6-3-pack/"
             external
           ></DashboardItem>
           <DashboardItem
             name="name tag"
-            linkTo="https://brandco.com/custom-print/"
+            linkTo="https://agentstore.com/product-category/name-tags/"
             external
           ></DashboardItem>
         </SectionGrid>
