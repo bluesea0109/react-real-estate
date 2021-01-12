@@ -96,7 +96,7 @@ const ListingModal = ({ open, setOpen, selectedListing, selectedSize, setSelecte
 
   useEffect(() => {
     const newFilteredResults = results?.map(res => {
-      return { title: res.fieldValues.fullAddress };
+      return { title: res.text };
     });
     setFilteredResults(newFilteredResults);
   }, [results]);
@@ -122,9 +122,7 @@ const ListingModal = ({ open, setOpen, selectedListing, selectedSize, setSelecte
   );
 
   const handleListingSelect = e => {
-    setSelectedListing(
-      results.find(result => result.fieldValues.fullAddress === e.target.innerHTML)
-    );
+    setSelectedListing(results.find(result => result.text === e.target.innerHTML));
   };
 
   const createMLSCampaign = () => {

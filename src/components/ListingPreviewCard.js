@@ -23,10 +23,10 @@ const PreviewCard = styled.div`
   & > .content {
     display: grid;
     grid-template-columns: 100px 1fr;
-    grid-template-rows: 70px auto;
-    gap: 1rem;
+    grid-template-rows: minmax(75px, auto) auto;
+    gap: 0.5rem 1rem;
     & .listing-img > img {
-      height: 100%;
+      height: 75px;
       width: 100%;
       object-fit: contain;
       object-position: center top;
