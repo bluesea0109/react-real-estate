@@ -357,7 +357,7 @@ export default () => {
               <StyledIcon icon="home" className="iconWithStyle" /> Listings
             </MobileDisabledLayout>
           </Menu.Item>
-          {adProduct && (
+          {adProduct && multiUser && !isAdmin && (
             <Menu.Item
               as={Link}
               name="ads"
