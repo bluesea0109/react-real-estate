@@ -34,6 +34,8 @@ color: #000000;
 const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType }) => {
   const windowSize = useWindowSize();
   const adProduct = useSelector(store => store.onLogin.permissions?.adProduct);
+  const onLoginMode = useSelector(store => store.onLogin.mode);
+  const multiUser = onLoginMode === 'multiuser';
 
   if (!listingItem)
     return (
@@ -92,18 +94,24 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
         );
       }
     };
+
+    const displayClick = adProduct && multiUser;
     return (
       <Grid.Column className="listingCard" stretched={false}>
         <Segment className="cardSegment">
           <div className="cardImgWrapper">
             <div
+              style={displayClick ? null : { cursor: 'default' }}
               className={
                 windowSize.width <= 1366
                   ? 'listingCardImgContainerSmall'
                   : 'listingCardImgContainerLarge'
               }
-              onClick={() =>
-                (window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`)
+              onClick={
+                displayClick
+                  ? () =>
+                      (window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`)
+                  : undefined
               }
             >
               <div
