@@ -1,7 +1,29 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders correctly 1`] = `
+.c0 {
+  border-left: solid 3px;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  border-radius: 0 !important;
+  font-size: 1em;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c0.c0.c0 > .close.icon {
+  position: initial;
+  opacity: 1;
+  margin-left: auto;
+}
+
 <div
-  className="ui message "
+  className="ui message c0"
 />
 `;

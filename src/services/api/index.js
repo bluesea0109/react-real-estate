@@ -177,6 +177,8 @@ const directory = {
   },
 
   user: {
+    content: () => ({ path: `/api/user/content/list`, method: 'get' }),
+    contentByTag: tag => ({ path: `/api/user/content/list/tag/${tag}`, method: 'get' }),
     listing: {
       initial: () => ({
         path: `/api/user/listing/mailout/initial?removeUnsent=true&skipEmailNotification=true`,
