@@ -20,7 +20,11 @@ import { Link } from 'react-router-dom';
 
 const SectionGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.5rem;
+  grid-template-columns: repeat(5, minmax(220px, 1fr));
+  @media (max-width: 1260px) {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
 `;
 
 const DashboardItemContainer = styled.div`
@@ -30,8 +34,8 @@ const DashboardItemContainer = styled.div`
   font-weight: bold;
   cursor: pointer;
   & img {
-    width: 196px;
-    height: 140px;
+    width: 220px;
+    height: 160px;
     border-radius: 6px;
     margin-bottom: 0.25rem;
     box-shadow: 0 3px 8px 0 rgba(201, 201, 201, 0.4);
