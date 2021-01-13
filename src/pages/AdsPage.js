@@ -172,7 +172,7 @@ const EmptyPage = () => {
               Pending
             </Loader>
           </Table.Cell>
-          <Table.Cell />
+          {/* <Table.Cell /> */}
           <Table.Cell />
           <Table.Cell />
           <Table.Cell />
@@ -250,13 +250,13 @@ const EmptyPage = () => {
           <Table.Cell className="marketerGrey alignCenter defaultCursor">
             {item.details.budget ? `$${Math.trunc(Number(item.details.budget))}` : '-'}
           </Table.Cell>
-          <Table.Cell className="marketerGrey alignCenter defaultCursor">
+          {/* <Table.Cell className="marketerGrey alignCenter defaultCursor">
             {item.details.spend && item.details.budget
               ? `${Math.floor(
                   (item.details.spend / (item.details.budget - item.details.budget * 0.2)) * 100
                 )}%`
               : '-'}
-          </Table.Cell>
+          </Table.Cell> */}
           <Table.Cell className="marketerGrey alignCenter defaultCursor">
             <div>
               <Icon name="facebook" size="large" className="adTableItemFacebookLogo" />
@@ -364,9 +364,9 @@ const EmptyPage = () => {
                   <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
                     BUDGET
                   </Table.HeaderCell>
-                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
+                  {/* <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
                     SPENT
-                  </Table.HeaderCell>
+                  </Table.HeaderCell> */}
                   <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
                     PLATFORMS
                   </Table.HeaderCell>
