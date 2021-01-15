@@ -14,7 +14,7 @@ import {
   ItemHeaderMenuLayout,
 } from '../../layouts';
 import { tag } from '../utils/utils';
-import { Button, Menu, Page, Segment, Snackbar } from '../Base';
+import { Button, Icon, Menu, Page, Segment, Snackbar } from '../Base';
 import { resolveLabelStatus } from '../MailoutListItem/utils/helpers';
 import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
@@ -385,7 +385,8 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                   loading={saving}
                   disabled={saving}
                 >
-                  Back
+                  <Icon name="left arrow" />
+                  <span>Campaign Details</span>
                 </Button>
               </Menu.Item>
             </Menu.Menu>
