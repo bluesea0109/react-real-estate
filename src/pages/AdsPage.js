@@ -43,10 +43,6 @@ const AdPreview = ({ ad, website, viewMore, adTextLength, toggleAdTextLength }) 
           : '-'
         : '-';
     let sqft = ad && ad.listing ? (ad.listing.squareFeet ? ad.listing.squareFeet : '-') : '-';
-    // console.log({ ad });
-    // console.log({ website });
-    // console.log(website);
-    console.log(formatWebsite(website));
     const handleLearnMore = () =>
       window.open(`${formatWebsite(website)}/mls/landing/${ad.details.mlsNum}`, '_blank');
     return (
@@ -149,9 +145,7 @@ const EmptyPage = () => {
       credentials: 'include',
     });
     const resultsListing = await api.handleResponse(responseListing);
-
     setListingDetails(resultsListing);
-    console.log({ resultsListing });
   }, [adDetails, peerId, listingDetails]);
 
   useEffect(() => {
