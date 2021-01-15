@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { startCase } from 'lodash';
@@ -11,7 +11,6 @@ import {
   Header,
   Icon,
   Input,
-  Label,
   Loader,
   Menu,
   Message,
@@ -47,16 +46,15 @@ const ItemContent = styled.div`
   justify-content: space-between;
 `;
 
-const TagsContainer = styled.div`
-  padding-left: 1rem;
-`;
-
 const StyledSectionHeader = styled(SectionHeader)`
   padding: 0.5rem 0;
   font-size: 17px;
   font-weight: 600;
   & .ui.dropdown > .text {
     padding: 4px 0;
+  }
+  &&& .loader {
+    margin-left: 1rem;
   }
 `;
 
@@ -162,16 +160,16 @@ const getUploadSizes = size => {
 };
 
 const TemplatesTab = ({
-  addTag,
+  availableTags,
   filteredTemplates,
-  removeTag,
-  selectedTags,
-  tagList,
+  templatesLoading,
   selectedSize,
+  selectedTag,
   selectedTemplate,
   setCurrentItem,
   setPreviewImage,
   setSelectedSize,
+  setSelectedTag,
   setSelectedTemplate,
   setShowImageModal,
 }) => {
@@ -186,32 +184,23 @@ const TemplatesTab = ({
         setSelectedSize={setSelectedSize}
       />
       <StyledSectionHeader>
-        <Dropdown text="All Templates">
+        <Dropdown text={startCase(selectedTag.tag)}>
           <Dropdown.Menu>
-            <Dropdown.Header icon="tags" content="Filter by tag" />
-            {tagList.map(tag => (
-              <Dropdown.Item key={tag} onClick={() => addTag(tag)}>
+            {availableTags.map(tag => (
+              <Dropdown.Item key={tag.tag} onClick={() => setSelectedTag(tag)}>
                 <ItemContent>
-                  <span>{startCase(tag)}</span>
-                  {selectedTags.includes(tag) && <Icon name="check" />}
+                  <span>{startCase(tag.tag)}</span>
                 </ItemContent>
               </Dropdown.Item>
             ))}
             <Dropdown.Header />
           </Dropdown.Menu>
         </Dropdown>
-        {selectedTags.length > 0 && (
-          <TagsContainer>
-            {selectedTags.map(tag => (
-              <Label key={tag}>
-                <Icon name="tag" /> {tag} <Icon name="delete" onClick={() => removeTag(tag)} />
-              </Label>
-            ))}
-          </TagsContainer>
-        )}
+        <Loader active={templatesLoading} inline size="small" />
       </StyledSectionHeader>
       <TemplatesGrid
         templates={filteredTemplates}
+        selectedSize={selectedSize}
         selectedTemplate={selectedTemplate}
         setCurrentItem={setCurrentItem}
         setPreviewImage={setPreviewImage}
@@ -338,16 +327,16 @@ export default function CreatePostcard({ location }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const peerId = useSelector(store => store.peer.peerId);
-  const storeTemplates = useSelector(state => state.templates.available);
-  const allTemplates = Object.values(storeTemplates).reduce((acc, cur) => [...acc, ...cur], []);
   const initialFilter = location?.state?.filter;
 
-  const tagList = allTemplates.reduce((list, stencil) => {
-    stencil.publishedTags.forEach(tag => {
-      if (!list.includes(tag)) list.push(tag);
-    });
-    return list;
-  }, []);
+  const availableTags = [
+    { tag: 'Just Listed', intentPath: 'listingMarketing|listed' },
+    { tag: 'Just Sold', intentPath: 'listingMarketing|sold' },
+    { tag: 'Open House', intentPath: 'listingMarketing|openHouse' },
+    { tag: 'Holiday', intentPath: 'holiday|christmas' },
+    { tag: 'New Year', intentPath: 'holiday|new-year' },
+    { tag: 'Handwritten', intentPath: 'handwritten' },
+  ];
 
   const [activeIndex, setActiveIndex] = useState(initialFilter === 'custom' ? 1 : 0);
   const [createDisabled, setCreateDisabled] = useState(true);
@@ -355,17 +344,20 @@ export default function CreatePostcard({ location }) {
   const [customImageFile, setCustomImageFile] = useState(null);
   const [customName, setCustomName] = useState('');
   const [currentItem, setCurrentItem] = useState(null);
-  const [filteredTemplates, setFilteredTemplates] = useState(allTemplates);
+  const [filteredTemplates, setFilteredTemplates] = useState([]);
   const [imageError, setImageError] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [selectedListing, setSelectedListing] = useState(false);
   const [selectedSize, setSelectedSize] = useState('4x6');
-  const [selectedTags, setSelectedTags] = useState(
-    initialFilter && initialFilter !== 'custom' ? [initialFilter] : []
+  const [selectedTag, setSelectedTag] = useState(
+    initialFilter && initialFilter !== 'custom'
+      ? availableTags.find(tag => tag.tag === initialFilter)
+      : availableTags[0]
   );
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [showImageModal, setShowImageModal] = useState(false);
   const [showListingModal, setShowListingModal] = useState(false);
+  const [templatesLoading, setTemplatesLoading] = useState(false);
   const [uploadedImage, setUploadedImage] = useState(null);
   const [uploadedImageName, setUploadedImageName] = useState('');
 
@@ -389,31 +381,37 @@ export default function CreatePostcard({ location }) {
     setPreviewImage(filteredTemplates[newImgIndex].thumbnail);
   };
 
-  const addTag = tag => {
-    if (selectedTags.includes(tag)) return;
-    let newTags = [...selectedTags];
-    newTags.unshift(tag);
-    setSelectedTags(newTags);
-  };
-
-  const removeTag = tagToRemove => {
-    let newTags = [...selectedTags];
-    newTags.splice(
-      newTags.findIndex(tag => tag === tagToRemove),
-      1
-    );
-    setSelectedTags(newTags);
-  };
+  const getStencilsByIntent = useCallback(
+    async intentPath => {
+      setTemplatesLoading(true);
+      try {
+        let path = `/api/user/stencils/byIntent/${intentPath}`;
+        if (peerId) path = `/api/user/peer/${peerId}/stencils/byIntent/${intentPath}`;
+        const headers = {};
+        const accessToken = await auth.getAccessToken();
+        headers['authorization'] = `Bearer ${accessToken}`;
+        const response = await fetch(path, {
+          headers,
+          method: 'get',
+          credentials: 'include',
+        });
+        const { stencils } = await api.handleResponse(response);
+        setFilteredTemplates(stencils);
+      } catch (e) {
+        console.log('Error getting stencils', e);
+      } finally {
+        setTemplatesLoading(false);
+      }
+    },
+    [peerId]
+  );
 
   useEffect(() => {
-    let newFilteredTemplates = allTemplates;
-    if (selectedTags.length)
-      newFilteredTemplates = newFilteredTemplates.filter(stencil =>
-        stencil.publishedTags.some(tag => selectedTags.includes(tag))
-      );
-    setFilteredTemplates(newFilteredTemplates);
+    if (selectedTag) {
+      getStencilsByIntent(selectedTag.intentPath);
+    }
     // eslint-disable-next-line
-  }, [selectedTags]);
+  }, [selectedTag]);
 
   const handleFileChange = e => {
     setImageError(null);
@@ -501,18 +499,15 @@ export default function CreatePostcard({ location }) {
       setShowListingModal(true);
       return;
     }
-    let tags = [];
-    let currentTheme = selectedTemplate.templateTheme;
-    tags = allTemplates?.find(stencil => stencil.templateTheme === currentTheme).publishedTags;
     dispatch(
       addHolidayCampaignStart({
         createdBy: 'user',
         skipEmailNotification: true,
-        name: currentTheme,
-        frontTemplateUuid: currentTheme,
+        name: selectedTemplate.name,
+        frontTemplateUuid: selectedTemplate.templateUuid,
         postcardSize: size,
         mapperName: 'sphere',
-        publishedTags: tags,
+        publishedTags: selectedTemplate.intentPath.split('|'),
       })
     );
     return history.push('/postcards');
@@ -524,18 +519,18 @@ export default function CreatePostcard({ location }) {
       render: () => (
         <Tab.Pane as="div">
           <TemplatesTab
-            addTag={addTag}
+            availableTags={availableTags}
             filteredTemplates={filteredTemplates}
-            removeTag={removeTag}
+            templatesLoading={templatesLoading}
             selectedSize={selectedSize}
-            selectedTags={selectedTags}
+            selectedTag={selectedTag}
             selectedTemplate={selectedTemplate}
             setCurrentItem={setCurrentItem}
             setPreviewImage={setPreviewImage}
             setSelectedSize={setSelectedSize}
+            setSelectedTag={setSelectedTag}
             setSelectedTemplate={setSelectedTemplate}
             setShowImageModal={setShowImageModal}
-            tagList={tagList}
           />
         </Tab.Pane>
       ),
@@ -554,6 +549,7 @@ export default function CreatePostcard({ location }) {
             setPreviewImage={setPreviewImage}
             setSelectedSize={setSelectedSize}
             setShowImageModal={setShowImageModal}
+            templatesLoading={templatesLoading}
             uploadedImage={uploadedImage}
             uploadedImageName={uploadedImageName}
           />
@@ -633,6 +629,7 @@ export default function CreatePostcard({ location }) {
           setOpen={setShowListingModal}
           selectedListing={selectedListing}
           selectedSize={selectedSize}
+          selectedTemplate={selectedTemplate}
           setSelectedListing={setSelectedListing}
         />
       </Page>

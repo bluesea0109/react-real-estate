@@ -3,9 +3,11 @@ import { GridItem, GridItemContainer } from './GridItem';
 import GridLayout from './GridLayout';
 import styled from 'styled-components';
 import { ButtonNoStyle, ButtonOutline, Icon } from '../../components/Base';
+import { postcardDimensions } from '../../components/utils/utils';
 
 const TemplateImg = styled.img`
   width: 240px;
+  height: 160px;
   border: 1px solid #d3d3d3;
 `;
 
@@ -31,6 +33,7 @@ const ImgOverlay = styled.div`
 
 export default function TemplatesGrid({
   templates,
+  selectedSize,
   selectedTemplate,
   setCurrentItem,
   setPreviewImage,
@@ -39,30 +42,32 @@ export default function TemplatesGrid({
 }) {
   return (
     <GridLayout>
-      {templates.map((template, index) => (
-        <GridItemContainer key={template?.templateTheme}>
-          <GridItem selected={selectedTemplate?.templateTheme === template?.templateTheme}>
-            <ImgOverlay>
-              <ButtonOutline id="select-template" onClick={() => setSelectedTemplate(template)}>
-                SELECT
-              </ButtonOutline>
-              <ButtonNoStyle
-                onClick={() => {
-                  setCurrentItem(index);
-                  setPreviewImage(template.thumbnail);
-                  setShowImageModal(true);
-                }}
-                id="view-template"
-              >
-                <Icon name="eye" />
-                VIEW
-              </ButtonNoStyle>
-            </ImgOverlay>
-            <TemplateImg src={template.thumbnail} alt="template thumbnail" />
-          </GridItem>
-          <div className="label-text">{template.templateTheme}</div>
-        </GridItemContainer>
-      ))}
+      {templates
+        .filter(template => template.sizes.includes(postcardDimensions(selectedSize)))
+        .map((template, index) => (
+          <GridItemContainer key={template?.name}>
+            <GridItem selected={selectedTemplate?.name === template?.name}>
+              <ImgOverlay>
+                <ButtonOutline id="select-template" onClick={() => setSelectedTemplate(template)}>
+                  SELECT
+                </ButtonOutline>
+                <ButtonNoStyle
+                  onClick={() => {
+                    setCurrentItem(index);
+                    setPreviewImage(template.thumbnail);
+                    setShowImageModal(true);
+                  }}
+                  id="view-template"
+                >
+                  <Icon name="eye" />
+                  VIEW
+                </ButtonNoStyle>
+              </ImgOverlay>
+              <TemplateImg src={template.thumbnail} alt="template thumbnail" />
+            </GridItem>
+            <div className="label-text">{template.name}</div>
+          </GridItemContainer>
+        ))}
     </GridLayout>
   );
 }
