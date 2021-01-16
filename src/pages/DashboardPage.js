@@ -170,10 +170,10 @@ const Dashboard = () => {
   const stencilsAvailable = useSelector(store => store.templates.available?.holiday);
   const generalStencilsAvailable = useSelector(store => store.templates.available?.general);
   const [currentTemplateTheme, setCurrentTemplateTheme] = useState(
-    stencilsAvailable[0].templateTheme
+    stencilsAvailable[0]?.templateTheme
   );
   const [currentGeneralTheme, setCurrentGeneralTheme] = useState(
-    generalStencilsAvailable[0].templateTheme
+    generalStencilsAvailable[0]?.templateTheme
   );
   const holidayCampaignId = useSelector(store => store.mailouts?.newHolidayId);
 
