@@ -410,8 +410,7 @@ export default function CreatePostcard({ location }) {
     if (selectedTag) {
       getStencilsByIntent(selectedTag.intentPath);
     }
-    // eslint-disable-next-line
-  }, [selectedTag]);
+  }, [selectedTag, getStencilsByIntent]);
 
   const handleFileChange = e => {
     setImageError(null);
