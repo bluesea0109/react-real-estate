@@ -333,9 +333,9 @@ export default function CreatePostcard({ location }) {
     { tag: 'Just Listed', intentPath: 'listingMarketing|listed' },
     { tag: 'Just Sold', intentPath: 'listingMarketing|sold' },
     { tag: 'Open House', intentPath: 'listingMarketing|openHouse' },
-    { tag: 'Holiday', intentPath: 'holiday|christmas' },
-    { tag: 'New Year', intentPath: 'holiday|new-year' },
-    { tag: 'Handwritten', intentPath: 'handwritten' },
+    { tag: 'Holiday', intentPath: 'sphere|holiday|christmas' },
+    { tag: 'New Year', intentPath: 'sphere|holiday|new-year' },
+    { tag: 'Handwritten', intentPath: 'sphere|handwritten' },
   ];
 
   const [activeIndex, setActiveIndex] = useState(initialFilter === 'custom' ? 1 : 0);
