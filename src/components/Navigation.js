@@ -372,7 +372,7 @@ export default () => {
             </MobileDisabledLayout>
           </Menu.Item>
 
-          {adProduct && multiUser &&(
+          {adProduct && multiUser && (
             <Menu.Item
               as={Link}
               name="ads"
