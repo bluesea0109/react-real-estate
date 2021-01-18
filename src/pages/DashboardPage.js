@@ -150,19 +150,25 @@ const Dashboard = () => {
         <SectionGrid>
           <DashboardItem
             name="just listed postcard"
-            linkTo={{ pathname: 'create-postcard', state: { filter: 'just-listed' } }}
+            linkTo={{
+              pathname: 'create-postcard',
+              state: { filter: 'Just Listed' },
+            }}
           ></DashboardItem>
           <DashboardItem
             name="just sold postcard"
-            linkTo={{ pathname: 'create-postcard', state: { filter: 'just-sold' } }}
+            linkTo={{
+              pathname: 'create-postcard',
+              state: { filter: 'Just Sold' },
+            }}
           ></DashboardItem>
           <DashboardItem
             name="handwritten postcard"
-            linkTo={{ pathname: 'create-postcard', state: { filter: 'handwritten' } }}
+            linkTo={{ pathname: 'create-postcard', state: { filter: 'Handwritten' } }}
           ></DashboardItem>
           <DashboardItem
             name="holiday postcard"
-            linkTo={{ pathname: 'create-postcard', state: { filter: 'holiday' } }}
+            linkTo={{ pathname: 'create-postcard', state: { filter: 'Holiday' } }}
           ></DashboardItem>
           <DashboardItem
             name="custom postcard"

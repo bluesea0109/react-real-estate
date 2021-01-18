@@ -86,7 +86,14 @@ const CreateButton = styled(Button)`
   }
 `;
 
-const ListingModal = ({ open, setOpen, selectedListing, selectedSize, setSelectedListing }) => {
+const ListingModal = ({
+  open,
+  setOpen,
+  selectedListing,
+  selectedSize,
+  selectedTemplate,
+  setSelectedListing,
+}) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [searchValue, setSearchValue] = useState('');
@@ -126,10 +133,11 @@ const ListingModal = ({ open, setOpen, selectedListing, selectedSize, setSelecte
   };
 
   const createMLSCampaign = () => {
-    let mlsNum = selectedListing?.listing?.mlsNum;
-    let size = postcardDimensions(selectedSize);
-    if (!mlsNum?.length || !size) return;
-    dispatch(addCampaignStart({ mlsNum: mlsNum, postcardSize: size }));
+    const mlsNum = selectedListing?.listing?.mlsNum;
+    const frontTemplateUuid = selectedTemplate.templateUuid;
+    const postcardSize = postcardDimensions(selectedSize);
+    if (!mlsNum || !postcardSize || !frontTemplateUuid) return;
+    dispatch(addCampaignStart({ mlsNum, postcardSize, frontTemplateUuid }));
     return history.push('/postcards');
   };
 
