@@ -590,7 +590,8 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
                   loading={updateMailoutEditIsPending || changeDisplayAgentPending}
                   disabled={updateMailoutEditIsPending || changeDisplayAgentPending}
                 >
-                  Back
+                  <Icon name="arrow left" />
+                  <span>Campaign Details</span>
                 </Button>
               </Menu.Item>
             </Menu.Menu>
