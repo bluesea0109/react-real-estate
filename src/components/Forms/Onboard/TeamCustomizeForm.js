@@ -36,9 +36,8 @@ const TeamCustomizeForm = ({ teamCustomizationData, initialValues }) => {
 
   const teammates = useSelector(store => store.team.profiles);
   const onLoginUserId = useSelector(store => store.onLogin.user._id);
-  const firstTeamAdmin = useSelector(
-    store => store.team?.profiles.filter(profile => profile.userId === store.onLogin.user._id)[0]
-  );
+  const defaultFirst = useSelector(store => store.onLogin?.userProfile?.first || '');
+  const defaultLast = useSelector(store => store.onLogin?.userProfile?.last || '');
 
   const profiles = [];
 
@@ -65,16 +64,19 @@ const TeamCustomizeForm = ({ teamCustomizationData, initialValues }) => {
 
     if (!teamCustomizationData) {
       data.listed.defaultDisplayAgent = {
-        userId: firstTeamAdmin && firstTeamAdmin.userId,
-        first: firstTeamAdmin && firstTeamAdmin.first,
-        last: firstTeamAdmin && firstTeamAdmin.last,
+        userId: onLoginUserId,
+        first: defaultFirst,
+        last: defaultLast,
       };
       data.sold.defaultDisplayAgent = {
-        userId: firstTeamAdmin && firstTeamAdmin.userId,
-        first: firstTeamAdmin && firstTeamAdmin.first,
-        last: firstTeamAdmin && firstTeamAdmin.last,
+        userId: onLoginUserId,
+        first: defaultFirst,
+        last: defaultLast,
       };
     }
+
+    if (!data.listed?.defaultDisplayAgent?.userId) delete data.listed?.defaultDisplayAgent;
+    if (!data.sold?.defaultDisplayAgent?.userId) delete data.sold?.defaultDisplayAgent;
 
     if (data.listed.shortenCTA) {
       delete data.listed.kwkly;

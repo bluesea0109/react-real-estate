@@ -2,7 +2,6 @@ import { useHistory, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import auth from '../services/auth';
 import api from '../services/api';
-import { useLastLocation } from 'react-router-last-location';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format } from 'date-fns';
@@ -33,6 +32,7 @@ import {
   Popup,
   Segment,
   Table,
+  Icon,
 } from '../components/Base';
 import PopupContent from '../components/MailoutListItem/PopupContent';
 import { getMailoutPending } from '../store/modules/mailout/actions';
@@ -141,7 +141,6 @@ const MailoutDetailsPage = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const { mailoutId } = useParams();
-  const lastLocation = useLastLocation();
 
   const [currentNumberOfRecipients, setCurrentNumberOfRecipients] = useState(0);
   const [showConsentModal, setShowConsentModal] = useState(false);
@@ -258,13 +257,7 @@ const MailoutDetailsPage = () => {
   ]);
 
   const handleBackClick = () => {
-    if (
-      lastLocation.pathname === `/dashboard/${mailoutId}` ||
-      lastLocation.pathname === `/dashboard/archived` ||
-      lastLocation.pathname === `/dashboard/edit/${mailoutId}`
-    ) {
-      history.goBack();
-    }
+    history.push(`/dashboard`);
   };
 
   const handleApproveAndSendMailoutDetailsClick = () => {
@@ -477,7 +470,8 @@ const MailoutDetailsPage = () => {
                   disabled={working}
                   loading={working}
                 >
-                  Back
+                  <Icon name="left arrow" />
+                  <span>All Campaigns</span>
                 </Button>
               </Menu.Item>
             </Menu.Menu>

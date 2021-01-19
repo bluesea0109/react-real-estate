@@ -1,7 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
-import { useLastLocation } from 'react-router-last-location';
 import { getMailoutPending, getMailoutEditPending } from '../store/modules/mailout/actions';
 import EditDestinationsForm from '../components/Forms/EditDestinationsForm';
 
@@ -18,7 +17,6 @@ const MailoutDestinationsPage = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const { mailoutId } = useParams();
-  const lastLocation = useLastLocation();
 
   const mailoutDetailsPending = useSelector(store => store.mailout.pending);
   const mailoutDetails = useSelector(store => store.mailout.details);
@@ -37,13 +35,7 @@ const MailoutDestinationsPage = () => {
   }, [mailoutDetails, mailoutEdit, dispatch, mailoutId]);
 
   const handleBackClick = () => {
-    if (lastLocation.pathname === `/dashboard/edit/${mailoutId}`) {
-      return history.push(`/dashboard/${mailoutId}`);
-    }
-    if (lastLocation.pathname === `/dashboard/${mailoutId}`) {
-      return history.goBack();
-    }
-    return history.push(`/dashboard/${mailoutId}`);
+    history.push(`/dashboard/${mailoutId}`);
   };
 
   return (

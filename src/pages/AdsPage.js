@@ -20,7 +20,19 @@ export const trimText = (string, length, noDots) => {
   return string.substring(0, length) + '...';
 };
 
-const AdPreview = ({ ad, viewMore, adTextLength, toggleAdTextLength }) => {
+const formatWebsite = website => {
+  let tempWebsite = null;
+  if (website) {
+    if (!website.includes('http://') || !website.includes('https://')) {
+      tempWebsite = 'http://' + website;
+      return tempWebsite;
+    } else {
+      return website;
+    }
+  }
+};
+
+const AdPreview = ({ ad, website, viewMore, adTextLength, toggleAdTextLength }) => {
   if (!ad) return 'Loading...';
   else {
     let beds = ad && ad.listing ? (ad.listing.bedrooms ? ad.listing.bedrooms : '-') : '-';
@@ -31,6 +43,8 @@ const AdPreview = ({ ad, viewMore, adTextLength, toggleAdTextLength }) => {
           : '-'
         : '-';
     let sqft = ad && ad.listing ? (ad.listing.squareFeet ? ad.listing.squareFeet : '-') : '-';
+    const handleLearnMore = () =>
+      window.open(`${formatWebsite(website)}/mls/landing/${ad.details.mlsNum}`, '_blank');
     return (
       <div className="adPreviewWrapper">
         <Grid>
@@ -87,7 +101,12 @@ const AdPreview = ({ ad, viewMore, adTextLength, toggleAdTextLength }) => {
               >{`${beds} beds | ${baths} baths | ${sqft} sqft`}</Header>
             </Grid.Column>
             <Grid.Column width={6}>
-              <div className="adPreviewCTA">Learn More</div>
+              <div
+                className={`adPreviewCTA ${website && 'listingCardTitle'}`}
+                onClick={website ? handleLearnMore : undefined}
+              >
+                Learn More
+              </div>
             </Grid.Column>
           </Grid>
         </Segment>
@@ -98,6 +117,7 @@ const AdPreview = ({ ad, viewMore, adTextLength, toggleAdTextLength }) => {
 
 const EmptyPage = () => {
   const [adDetails, setAdDetails] = useState(null);
+  const [listingDetails, setListingDetails] = useState(null);
   const [viewMore, setViewMore] = useState(false);
   const [adTextLength, setAdTextLength] = useState(280);
 
@@ -115,7 +135,18 @@ const EmptyPage = () => {
     const results = await api.handleResponse(response);
     let orderedResults = results.reverse();
     if (orderedResults !== adDetails) setAdDetails(orderedResults);
-  }, [adDetails, peerId]);
+
+    if (listingDetails) return;
+    let pathListing = `/api/user/listings?forgeBlueroofToken=true`;
+    if (peerId) pathListing = `/api/user/peer/${peerId}/listings?forgeBlueroofToken=true`;
+    const responseListing = await fetch(pathListing, {
+      headers,
+      method: 'get',
+      credentials: 'include',
+    });
+    const resultsListing = await api.handleResponse(responseListing);
+    setListingDetails(resultsListing);
+  }, [adDetails, peerId, listingDetails]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -172,7 +203,7 @@ const EmptyPage = () => {
               Pending
             </Loader>
           </Table.Cell>
-          <Table.Cell />
+          {/* <Table.Cell /> */}
           <Table.Cell />
           <Table.Cell />
           <Table.Cell />
@@ -188,7 +219,7 @@ const EmptyPage = () => {
             <span hidden>{item._id}</span>
           </Table.Cell>
           <Table.Cell>
-            {item.details.status === 'WITH_ISSUES' || item.details.status === 'DISSAPROVED' ? (
+            {item.details.status === 'WITH_ISSUES' ? (
               <div className="adTableItemPreviewContainer">
                 <div
                   className="adTableItemPreview"
@@ -206,6 +237,11 @@ const EmptyPage = () => {
                 content={
                   <AdPreview
                     ad={item}
+                    website={
+                      listingDetails?.adProduct?.qs?.website
+                        ? listingDetails.adProduct.qs.website
+                        : false
+                    }
                     viewMore={viewMore}
                     adTextLength={adTextLength}
                     toggleAdTextLength={toggleAdTextLength}
@@ -250,17 +286,17 @@ const EmptyPage = () => {
           <Table.Cell className="marketerGrey alignCenter defaultCursor">
             {item.details.budget ? `$${Math.trunc(Number(item.details.budget))}` : '-'}
           </Table.Cell>
-          <Table.Cell className="marketerGrey alignCenter defaultCursor">
+          {/* <Table.Cell className="marketerGrey alignCenter defaultCursor">
             {item.details.spend && item.details.budget
               ? `${Math.floor(
                   (item.details.spend / (item.details.budget - item.details.budget * 0.2)) * 100
                 )}%`
               : '-'}
-          </Table.Cell>
+          </Table.Cell> */}
           <Table.Cell className="marketerGrey alignCenter defaultCursor">
             <div>
               <Icon name="facebook" size="large" className="adTableItemFacebookLogo" />
-              {/* <Icon name="instagram" size="large" className="adTableItemInstagramLogo" /> */}
+              <Icon name="instagram" size="large" className="adTableItemInstagramLogo" />
             </div>
           </Table.Cell>
           <Table.Cell className="marketerGrey alignCenter defaultCursor">
@@ -279,7 +315,7 @@ const EmptyPage = () => {
             {item.details.cpc ? `$${Number(item.details.cpc).toFixed(2)}` : '-'}
           </Table.Cell>
           <Table.Cell className="marketerGrey alignCenter defaultCursor">Leads</Table.Cell>
-          <Table.Cell className="marketerGrey alignCenter defaultCursor">
+          <Table.Cell className="marketerGrey alignCenter defaultCursor" collapsing>
             {item.details.status === 'ACTIVE' ? (
               <StatusPill type="solid" color="green">
                 Active
@@ -305,7 +341,11 @@ const EmptyPage = () => {
               <StatusPill type="solid" color="grey">
                 Archived
               </StatusPill>
-            ) : item.details.status === 'WITH_ISSUES' || item.details.status === 'DISSAPROVED' ? (
+            ) : item.details.status === 'DISAPPROVED' ? (
+              <StatusPill type="solid" color="astral">
+                Disapproved
+              </StatusPill>
+            ) : item.details.status === 'WITH_ISSUES' ? (
               <Popup
                 trigger={
                   <div>
@@ -364,9 +404,9 @@ const EmptyPage = () => {
                   <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
                     BUDGET
                   </Table.HeaderCell>
-                  <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
+                  {/* <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
                     SPENT
-                  </Table.HeaderCell>
+                  </Table.HeaderCell> */}
                   <Table.HeaderCell className="adTableHeaderText marketerGrey alignCenter defaultCursor">
                     PLATFORMS
                   </Table.HeaderCell>
