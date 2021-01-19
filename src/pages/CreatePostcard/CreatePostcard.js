@@ -507,10 +507,12 @@ export default function CreatePostcard({ location }) {
           return history.push('/postcards');
         } catch (err) {
           console.error('Error creating listing campaign: ', err);
+          return;
         }
+      } else {
+        setShowListingModal(true);
+        return;
       }
-      setShowListingModal(true);
-      return;
     }
     dispatch(
       addHolidayCampaignStart({
