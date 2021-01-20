@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Progress } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -11,17 +11,29 @@ import {
   Snackbar,
   StyledMenu,
   ButtonNoStyle,
+  Icon,
+  Button,
 } from '../components/Base';
 import PageTitleHeader from '../components/PageTitleHeader';
 import Loading from '../components/Loading';
 import * as brandColors from '../components/utils/brandColors';
 import { Link, useHistory } from 'react-router-dom';
+import ReadyMadeContentSlider from '../components/ReadyMadeContentSlider';
+import { useWindowSize } from '../components/Hooks/useWindowSize';
+import ReadyMadeContentItem from '../components/ReadyMadeContentItem';
+import auth from '../services/auth';
+import {
+  ModalActions,
+  ModalClose,
+  PreviewImage,
+  PreviewModal,
+} from '../components/Base/PreviewModal';
 
 const StyledHeading = styled.div`
   display: flex;
   justify-content: space-between;
   color: ${brandColors.grey03};
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   padding: 0.5rem 0.5rem 1rem 0.5rem;
 `;
 
@@ -108,8 +120,10 @@ const DashboardItem = ({ className, name, linkTo, external }) => {
 
 const Dashboard = () => {
   const history = useHistory();
+  const windowSize = useWindowSize();
   const isInitiatingTeam = useSelector(store => store.teamInitialize.polling);
   const initiatingTeamState = useSelector(store => store.teamInitialize.available);
+  const readyMadeContent = useSelector(store => store.content.list);
   const currentTeamUserTotal = initiatingTeamState && initiatingTeamState.currentUserTotal;
   const currentTeamUserCompleted = initiatingTeamState && initiatingTeamState.currentUserCompleted;
   const isInitiatingUser = useSelector(store => store.initialize.polling);
@@ -118,6 +132,37 @@ const Dashboard = () => {
   const currentUserCompleted = initiatingUserState && initiatingUserState.campaignsCompleted;
 
   const error = useSelector(store => store.mailouts.error?.message);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [currentItem, setCurrentItem] = useState(0);
+
+  async function downloadImage(item) {
+    const path = `/api/user/content/download/${item.id}`;
+    const headers = {};
+    const accessToken = await auth.getAccessToken();
+    headers['authorization'] = `Bearer ${accessToken}`;
+    const imageRes = await fetch(path, { headers, method: 'get', credentials: 'include' });
+    let anchor = document.createElement('a');
+    document.body.appendChild(anchor);
+    imageRes.blob().then(imgBlob => {
+      let imgURL = window.URL.createObjectURL(imgBlob);
+      anchor.href = imgURL;
+      anchor.download = item.name;
+      anchor.click();
+      window.URL.revokeObjectURL(imgURL);
+    });
+  }
+
+  const prevImg = () => {
+    let newImgIndex = currentItem - 1;
+    if (newImgIndex < 0) newImgIndex = readyMadeContent.length - 1;
+    setCurrentItem(newImgIndex);
+  };
+
+  const nextImg = () => {
+    let newImgIndex = currentItem + 1;
+    if (newImgIndex > readyMadeContent.length - 1) newImgIndex = 0;
+    setCurrentItem(newImgIndex);
+  };
 
   return (
     <Page basic>
@@ -228,7 +273,60 @@ const Dashboard = () => {
             View All
           </ViewAllButton>
         </StyledHeading>
+        {readyMadeContent.length > 5 ? (
+          windowSize.width < 1258 ? (
+            <SectionGrid>
+              {readyMadeContent.slice(0, 8).map(contentItem => (
+                <ReadyMadeContentItem
+                  key={contentItem.id}
+                  contentList={readyMadeContent}
+                  downloadImage={downloadImage}
+                  item={contentItem}
+                  setCurrentItem={setCurrentItem}
+                  setShowImageModal={setShowImageModal}
+                />
+              ))}
+            </SectionGrid>
+          ) : (
+            <ReadyMadeContentSlider
+              contentList={readyMadeContent}
+              downloadImage={downloadImage}
+              setCurrentItem={setCurrentItem}
+              setShowImageModal={setShowImageModal}
+            />
+          )
+        ) : (
+          <div>
+            {readyMadeContent.map(contentItem => (
+              <ReadyMadeContentItem
+                key={contentItem.id}
+                contentList={readyMadeContent}
+                downloadImage={downloadImage}
+                item={contentItem}
+                setCurrentItem={setCurrentItem}
+                setShowImageModal={setShowImageModal}
+              />
+            ))}
+          </div>
+        )}
       </Segment>
+      <PreviewModal open={showImageModal}>
+        <ModalClose onClick={() => setShowImageModal(false)}>
+          <Icon name="close" color="grey" size="large" />
+        </ModalClose>
+        <PreviewImage src={readyMadeContent[currentItem]?.preview} alt="download preview" />
+        <ModalActions>
+          <div className="arrow" onClick={prevImg}>
+            <Icon name="chevron left" size="big" color="grey" />
+          </div>
+          <Button primary onClick={() => downloadImage(readyMadeContent[currentItem])}>
+            Download
+          </Button>
+          <div className="arrow" onClick={nextImg}>
+            <Icon name="chevron right" size="big" color="grey" />
+          </div>
+        </ModalActions>
+      </PreviewModal>
 
       {error && <Snackbar error>{error}</Snackbar>}
       {/* show the loading state */}
