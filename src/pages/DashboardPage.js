@@ -2,7 +2,6 @@ import React from 'react';
 import { Progress } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
 import {
   Header,
@@ -10,13 +9,25 @@ import {
   Page,
   Segment,
   Snackbar,
-  SectionHeader,
   StyledMenu,
+  ButtonNoStyle,
 } from '../components/Base';
 import PageTitleHeader from '../components/PageTitleHeader';
 import Loading from '../components/Loading';
 import * as brandColors from '../components/utils/brandColors';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+
+const StyledHeading = styled.div`
+  display: flex;
+  justify-content: space-between;
+  color: ${brandColors.grey03};
+  font-size: 1.25rem;
+  padding: 0.5rem 0.5rem 1rem 0.5rem;
+`;
+
+const ViewAllButton = styled(ButtonNoStyle)`
+  color: ${brandColors.primary};
+`;
 
 const SectionGrid = styled.div`
   display: grid;
@@ -96,6 +107,7 @@ const DashboardItem = ({ className, name, linkTo, external }) => {
 };
 
 const Dashboard = () => {
+  const history = useHistory();
   const isInitiatingTeam = useSelector(store => store.teamInitialize.polling);
   const initiatingTeamState = useSelector(store => store.teamInitialize.available);
   const currentTeamUserTotal = initiatingTeamState && initiatingTeamState.currentUserTotal;
@@ -146,7 +158,9 @@ const Dashboard = () => {
       )}
 
       <Segment>
-        <SectionHeader>What do you want to create?</SectionHeader>
+        <StyledHeading>
+          <h3>What do you want to create?</h3>
+        </StyledHeading>
         <SectionGrid>
           <DashboardItem
             name="just listed postcard"
@@ -207,17 +221,14 @@ const Dashboard = () => {
         </SectionGrid>
       </Segment>
 
-      <PageTitleHeader>
-        <StyledMenu borderless fluid secondary>
-          <Menu.Item>
-            <Link to="/ready-made-designs">
-              <Header as="h2" className="secondary-heading">
-                Ready made designs - Click Here!
-              </Header>
-            </Link>
-          </Menu.Item>
-        </StyledMenu>
-      </PageTitleHeader>
+      <Segment>
+        <StyledHeading>
+          <h3>Ready Made Designs</h3>
+          <ViewAllButton onClick={() => history.push('/ready-made-designs')}>
+            View All
+          </ViewAllButton>
+        </StyledHeading>
+      </Segment>
 
       {error && <Snackbar error>{error}</Snackbar>}
       {/* show the loading state */}
