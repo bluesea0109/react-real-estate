@@ -15,7 +15,6 @@ import {
   Menu,
   Message,
   Page,
-  SectionHeader,
   Segment,
   StyledMenu,
   Tab,
@@ -46,7 +45,7 @@ const ItemContent = styled.div`
   justify-content: space-between;
 `;
 
-const StyledSectionHeader = styled(SectionHeader)`
+const StyledHeading = styled.div`
   padding: 0.5rem 0;
   font-size: 17px;
   font-weight: 600;
@@ -175,15 +174,15 @@ const TemplatesTab = ({
 }) => {
   return (
     <>
-      <StyledSectionHeader>
+      <StyledHeading>
         <p>Select a size</p>
-      </StyledSectionHeader>
+      </StyledHeading>
       <PostcardSizes
         sizes={postcardSizes}
         selectedSize={selectedSize}
         setSelectedSize={setSelectedSize}
       />
-      <StyledSectionHeader>
+      <StyledHeading>
         <Dropdown text={startCase(selectedTag.tag)}>
           <Dropdown.Menu>
             {availableTags.map(tag => (
@@ -197,7 +196,7 @@ const TemplatesTab = ({
           </Dropdown.Menu>
         </Dropdown>
         <Loader active={templatesLoading} inline size="small" />
-      </StyledSectionHeader>
+      </StyledHeading>
       <TemplatesGrid
         templates={filteredTemplates}
         selectedSize={selectedSize}
@@ -226,17 +225,17 @@ const CustomTab = ({
 }) => {
   return (
     <>
-      <StyledSectionHeader>
+      <StyledHeading>
         <p>Select a size</p>
-      </StyledSectionHeader>
+      </StyledHeading>
       <PostcardSizes
         sizes={postcardSizes}
         selectedSize={selectedSize}
         setSelectedSize={setSelectedSize}
       />
-      <StyledSectionHeader>
+      <StyledHeading>
         <p>Campaign Name</p>
-      </StyledSectionHeader>
+      </StyledHeading>
       <NameInput
         type="text"
         fluid
@@ -244,9 +243,9 @@ const CustomTab = ({
         value={customName}
         onChange={e => setCustomName(e.target.value)}
       />
-      <StyledSectionHeader>
+      <StyledHeading>
         <p>Card Front</p>
-      </StyledSectionHeader>
+      </StyledHeading>
       {imageError && (
         <Message error>
           <Icon name="times circle" />

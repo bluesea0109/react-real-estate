@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import * as brandColors from '../utils/brandColors';
 
-export default styled.h3`
+export default styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: center;

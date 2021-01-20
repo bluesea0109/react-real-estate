@@ -241,7 +241,7 @@ export default function ReadyMadeDesignPage() {
       </ContentTopHeaderLayout>
 
       <Segment>
-        <SectionHeader>
+        <SectionHeader as="h3">
           <StyledDropdown text="All Designs">
             <Dropdown.Menu>
               <Dropdown.Header icon="tags" content="Filter by tag" />

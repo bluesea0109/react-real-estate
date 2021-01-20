@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 export default styled.div`
-  grid-area: content-top-header;
   margin-left: 0em;
   min-height: 72px;
   min-width: calc(100% - 172px);
