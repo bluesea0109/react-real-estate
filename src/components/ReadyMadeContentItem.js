@@ -6,8 +6,9 @@ import * as brandColors from './utils/brandColors';
 const ContentItemContainer = styled.div`
   display: flex;
   flex-direction: column;
-  color: ${brandColors.grey03};
+  color: ${brandColors.grey04};
   font-weight: bold;
+  text-transform: capitalize;
   border-radius: 6px;
   max-width: 256px;
   & .image-container {
