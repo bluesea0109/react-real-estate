@@ -45,6 +45,12 @@ const SectionGrid = styled.div`
   display: grid;
   gap: 0.5rem;
   grid-template-columns: repeat(5, minmax(220px, 1fr));
+  & > div {
+    padding: 0.5rem;
+  }
+  & .image-container {
+    width: 220px;
+  }
   @media (max-width: 1260px) {
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }
@@ -53,7 +59,6 @@ const SectionGrid = styled.div`
 const DashboardItemContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0.5rem;
   font-weight: bold;
   cursor: pointer;
   & img {
@@ -297,16 +302,18 @@ const Dashboard = () => {
           )
         ) : (
           <div>
-            {readyMadeContent.map(contentItem => (
-              <ReadyMadeContentItem
-                key={contentItem.id}
-                contentList={readyMadeContent}
-                downloadImage={downloadImage}
-                item={contentItem}
-                setCurrentItem={setCurrentItem}
-                setShowImageModal={setShowImageModal}
-              />
-            ))}
+            <SectionGrid>
+              {readyMadeContent.map(contentItem => (
+                <ReadyMadeContentItem
+                  key={contentItem.id}
+                  contentList={readyMadeContent}
+                  downloadImage={downloadImage}
+                  item={contentItem}
+                  setCurrentItem={setCurrentItem}
+                  setShowImageModal={setShowImageModal}
+                />
+              ))}
+            </SectionGrid>
           </div>
         )}
       </Segment>
