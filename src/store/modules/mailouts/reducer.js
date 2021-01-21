@@ -17,16 +17,14 @@ import {
   GET_MORE_ARCHIVED_MAILOUTS_SUCCESS,
   GET_MORE_ARCHIVED_MAILOUTS_ERROR,
   ADD_CAMPAIGN_START,
-  // ADD_CAMPAIGN_PENDING,
   ADD_CAMPAIGN_SUCCESS,
   ADD_CAMPAIGN_ERROR,
+  ADD_CAMPAIGN_RESET,
   ADD_HOLIDAY_CAMPAIGN_START,
   ADD_HOLIDAY_CAMPAIGN_SUCCESS,
   ADD_HOLIDAY_CAMPAIGN_ERROR,
   SET_MAILOUTS_ERROR,
   CLEAR_MAILOUTS_ERROR,
-  GET_NEW_HOLIDAY_ID,
-  CLEAR_NEW_HOLIDAY_ID,
   SHOW_ADD_CAMPAIGN_MODAL,
   HIDE_ADD_CAMPAIGN_MODAL,
 } from './actions';
@@ -43,8 +41,11 @@ const initialState = {
   archived: [],
   error: null,
   generateError: false,
+  addCampaignPending: false,
+  addCampaignSuccess: false,
+  addCampaignResponse: null,
+  addCampaignHoliday: null,
   addCampaignMlsNum: null,
-  addCampaignMlsNumPending: false,
   showAddCampaignModal: false,
   showChoosePostcardSize: false,
 };
@@ -187,51 +188,61 @@ export default function mailouts(state = initialState, action) {
       return {
         ...state,
         addCampaignMlsNum: action.payload,
-        addCampaignMlsNumPending: true,
+        addCampaignPending: true,
         error: null,
       };
     case ADD_CAMPAIGN_SUCCESS:
+      let newMlsList = [...state.list];
+      newMlsList.unshift(action.payload);
+      if (state.canLoadMore) newMlsList.pop();
       return {
         ...state,
-        addCampaignMlsNum: null,
-        addCampaignMlsNumPending: false,
+        list: newMlsList,
+        AddCampaignSuccess: true,
+        addCampaignPending: false,
+        addCampaignResponse: action.payload,
         error: null,
       };
     case ADD_CAMPAIGN_ERROR:
       return {
         ...state,
-        addCampaignMlsNumPending: false,
+        addCampaignPending: false,
         error: action.error,
+      };
+    case ADD_CAMPAIGN_RESET:
+      return {
+        ...state,
+        addCampaignMlsNum: null,
+        addCampaignHoliday: null,
+        AddCampaignSuccess: false,
+        addCampaignPending: false,
+        addCampaignResponse: null,
+        error: null,
       };
     case ADD_HOLIDAY_CAMPAIGN_START:
       return {
         ...state,
-        addHolidayCampaign: action.payload,
-        addHolidayCampaignPending: true,
+        addCampaignHoliday: action.payload,
+        addCampaignPending: true,
         error: null,
       };
     case ADD_HOLIDAY_CAMPAIGN_SUCCESS:
+      let newHolidayList = [...state.list];
+      newHolidayList.unshift(action.payload);
+      if (state.canLoadMore) newHolidayList.pop();
       return {
         ...state,
-        addHolidayCampaign: null,
-        addHolidayCampaignPending: false,
+        list: newHolidayList,
+        addCampaignPending: false,
+        addCampaignSuccess: true,
+        addCampaignResponse: action.payload,
         error: null,
       };
     case ADD_HOLIDAY_CAMPAIGN_ERROR:
       return {
         ...state,
-        addHolidayCampaignPending: false,
+        addCampaignPending: false,
         error: action.error,
-      };
-    case GET_NEW_HOLIDAY_ID:
-      return {
-        ...state,
-        newHolidayId: action.payload,
-      };
-    case CLEAR_NEW_HOLIDAY_ID:
-      return {
-        ...state,
-        newHolidayId: '',
       };
     case SET_MAILOUTS_ERROR:
       return {

@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
 import { Search } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { Button, Icon, Modal } from './Base';
@@ -95,7 +94,6 @@ const ListingModal = ({
   setSelectedListing,
 }) => {
   const dispatch = useDispatch();
-  const history = useHistory();
   const [searchValue, setSearchValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState([]);
@@ -138,7 +136,7 @@ const ListingModal = ({
     const postcardSize = postcardDimensions(selectedSize);
     if (!mlsNum || !postcardSize || !frontTemplateUuid) return;
     dispatch(addCampaignStart({ mlsNum, postcardSize, frontTemplateUuid }));
-    return history.push('/postcards');
+    setOpen(false);
   };
 
   return (

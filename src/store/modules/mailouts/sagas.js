@@ -21,7 +21,6 @@ import {
   ADD_HOLIDAY_CAMPAIGN_START,
   addHolidayCampaignError,
   addHolidayCampaignSuccess,
-  getNewHolidayId,
 } from './actions';
 import ApiService from '../../../services/api/index';
 import { SELECT_PEER_ID, DESELECT_PEER_ID } from '../peer/actions';
@@ -31,7 +30,7 @@ export const getSelectedPeerId = state => state.peer.peerId;
 export const getMailoutsPage = state => state.mailouts.page;
 export const getArchivedMailoutsPage = state => state.mailouts.archivedPage;
 export const getAddCampaignMlsNum = state => state.mailouts.addCampaignMlsNum;
-export const getHolidayCampaign = state => state.mailouts.addHolidayCampaign;
+export const getHolidayCampaign = state => state.mailouts.addCampaignHoliday;
 
 const limit = 25;
 const hideArchived = { hideExcluded: true, hideArchived: true };
@@ -177,10 +176,7 @@ export function* addCampaignStartSaga() {
 
     const data = { mlsNum, postcardSize, templateUuid, skipEmailNotification: true };
     const response = yield call(ApiService[method], path, data);
-
-    yield put(resetMailouts());
     yield put(addCampaignSuccess(response));
-    yield put(getMailoutsPending());
   } catch (err) {
     yield put(addCampaignError(err));
   }
@@ -189,8 +185,6 @@ export function* addCampaignStartSaga() {
 export function* addHolidayCampaignSaga() {
   const peerId = yield select(getSelectedPeerId);
   const payload = yield select(getHolidayCampaign);
-
-  // const postcardSize = payload.postcardSize;
   try {
     const { path, method } = peerId
       ? ApiService.directory.peer.mailout.createPeerGenericCampaign(peerId)
@@ -199,11 +193,7 @@ export function* addHolidayCampaignSaga() {
     const data = payload;
     const response = yield call(ApiService[method], path, data);
 
-    yield put(getNewHolidayId(response._id));
-    yield put(resetMailouts());
     yield put(addHolidayCampaignSuccess(response));
-
-    yield put(getMailoutsPending());
   } catch (err) {
     yield put(addHolidayCampaignError(err));
   }
