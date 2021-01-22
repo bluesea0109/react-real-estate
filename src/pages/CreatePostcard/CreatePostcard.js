@@ -16,6 +16,7 @@ import {
   Message,
   Page,
   Segment,
+  Snackbar,
   StyledMenu,
   Tab,
 } from '../../components/Base';
@@ -329,6 +330,7 @@ const StyledTab = styled(Tab)`
 export default function CreatePostcard({ location }) {
   const dispatch = useDispatch();
   const history = useHistory();
+  const addCampaignError = useSelector(store => store.mailouts.error?.message);
   const addCampaignPending = useSelector(store => store.mailouts.addCampaignPending);
   const addCampaignResponse = useSelector(store => store.mailouts.addCampaignResponse);
   const peerId = useSelector(store => store.peer.peerId);
@@ -618,6 +620,7 @@ export default function CreatePostcard({ location }) {
             </StyledMenu>
           </PageTitleHeader>
         </ContentTopHeaderLayout>
+        {addCampaignError && <Snackbar error>{addCampaignError}</Snackbar>}
         <Segment>
           <StyledTab
             activeIndex={activeIndex}
