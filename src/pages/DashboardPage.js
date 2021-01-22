@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Progress } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
 import {
   Header,
@@ -10,18 +9,48 @@ import {
   Page,
   Segment,
   Snackbar,
-  SectionHeader,
   StyledMenu,
+  ButtonNoStyle,
+  Icon,
+  Button,
 } from '../components/Base';
 import PageTitleHeader from '../components/PageTitleHeader';
 import Loading from '../components/Loading';
 import * as brandColors from '../components/utils/brandColors';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import ReadyMadeContentSlider from '../components/ReadyMadeContentSlider';
+import { useWindowSize } from '../components/Hooks/useWindowSize';
+import ReadyMadeContentItem from '../components/ReadyMadeContentItem';
+import auth from '../services/auth';
+import {
+  ModalActions,
+  ModalClose,
+  PreviewImage,
+  PreviewModal,
+} from '../components/Base/PreviewModal';
+
+const StyledHeading = styled.div`
+  display: flex;
+  justify-content: space-between;
+  color: ${brandColors.grey03};
+  font-size: 1.1rem;
+  padding: 0.5rem 0.5rem 1rem 0.5rem;
+`;
+
+const ViewAllButton = styled(ButtonNoStyle)`
+  color: ${brandColors.primary};
+`;
 
 const SectionGrid = styled.div`
   display: grid;
   gap: 0.5rem;
   grid-template-columns: repeat(5, minmax(220px, 1fr));
+  & > div {
+    padding: 0.5rem;
+  }
+  & .image-container {
+    width: 220px;
+  }
   @media (max-width: 1260px) {
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }
@@ -30,7 +59,6 @@ const SectionGrid = styled.div`
 const DashboardItemContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0.5rem;
   font-weight: bold;
   cursor: pointer;
   & img {
@@ -96,8 +124,11 @@ const DashboardItem = ({ className, name, linkTo, external }) => {
 };
 
 const Dashboard = () => {
+  const history = useHistory();
+  const windowSize = useWindowSize();
   const isInitiatingTeam = useSelector(store => store.teamInitialize.polling);
   const initiatingTeamState = useSelector(store => store.teamInitialize.available);
+  const readyMadeContent = useSelector(store => store.content.list);
   const currentTeamUserTotal = initiatingTeamState && initiatingTeamState.currentUserTotal;
   const currentTeamUserCompleted = initiatingTeamState && initiatingTeamState.currentUserCompleted;
   const isInitiatingUser = useSelector(store => store.initialize.polling);
@@ -106,6 +137,37 @@ const Dashboard = () => {
   const currentUserCompleted = initiatingUserState && initiatingUserState.campaignsCompleted;
 
   const error = useSelector(store => store.mailouts.error?.message);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [currentItem, setCurrentItem] = useState(0);
+
+  async function downloadImage(item) {
+    const path = `/api/user/content/download/${item.id}`;
+    const headers = {};
+    const accessToken = await auth.getAccessToken();
+    headers['authorization'] = `Bearer ${accessToken}`;
+    const imageRes = await fetch(path, { headers, method: 'get', credentials: 'include' });
+    let anchor = document.createElement('a');
+    document.body.appendChild(anchor);
+    imageRes.blob().then(imgBlob => {
+      let imgURL = window.URL.createObjectURL(imgBlob);
+      anchor.href = imgURL;
+      anchor.download = item.name;
+      anchor.click();
+      window.URL.revokeObjectURL(imgURL);
+    });
+  }
+
+  const prevImg = () => {
+    let newImgIndex = currentItem - 1;
+    if (newImgIndex < 0) newImgIndex = readyMadeContent.length - 1;
+    setCurrentItem(newImgIndex);
+  };
+
+  const nextImg = () => {
+    let newImgIndex = currentItem + 1;
+    if (newImgIndex > readyMadeContent.length - 1) newImgIndex = 0;
+    setCurrentItem(newImgIndex);
+  };
 
   return (
     <Page basic>
@@ -146,7 +208,9 @@ const Dashboard = () => {
       )}
 
       <Segment>
-        <SectionHeader>What do you want to create?</SectionHeader>
+        <StyledHeading>
+          <h3>What do you want to create?</h3>
+        </StyledHeading>
         <SectionGrid>
           <DashboardItem
             name="just listed postcard"
@@ -207,17 +271,69 @@ const Dashboard = () => {
         </SectionGrid>
       </Segment>
 
-      <PageTitleHeader>
-        <StyledMenu borderless fluid secondary>
-          <Menu.Item>
-            <Link to="/ready-made-designs">
-              <Header as="h2" className="secondary-heading">
-                Ready made designs - Click Here!
-              </Header>
-            </Link>
-          </Menu.Item>
-        </StyledMenu>
-      </PageTitleHeader>
+      <Segment>
+        <StyledHeading>
+          <h3>Ready Made Designs</h3>
+          <ViewAllButton onClick={() => history.push('/ready-made-designs')}>
+            View All
+          </ViewAllButton>
+        </StyledHeading>
+        {readyMadeContent.length > 5 ? (
+          windowSize.width < 1258 ? (
+            <SectionGrid>
+              {readyMadeContent.slice(0, 8).map(contentItem => (
+                <ReadyMadeContentItem
+                  key={contentItem.id}
+                  contentList={readyMadeContent}
+                  downloadImage={downloadImage}
+                  item={contentItem}
+                  setCurrentItem={setCurrentItem}
+                  setShowImageModal={setShowImageModal}
+                />
+              ))}
+            </SectionGrid>
+          ) : (
+            <ReadyMadeContentSlider
+              contentList={readyMadeContent}
+              downloadImage={downloadImage}
+              setCurrentItem={setCurrentItem}
+              setShowImageModal={setShowImageModal}
+            />
+          )
+        ) : (
+          <div>
+            <SectionGrid>
+              {readyMadeContent.map(contentItem => (
+                <ReadyMadeContentItem
+                  key={contentItem.id}
+                  contentList={readyMadeContent}
+                  downloadImage={downloadImage}
+                  item={contentItem}
+                  setCurrentItem={setCurrentItem}
+                  setShowImageModal={setShowImageModal}
+                />
+              ))}
+            </SectionGrid>
+          </div>
+        )}
+      </Segment>
+      <PreviewModal open={showImageModal}>
+        <ModalClose onClick={() => setShowImageModal(false)}>
+          <Icon name="close" color="grey" size="large" />
+        </ModalClose>
+        <PreviewImage src={readyMadeContent[currentItem]?.preview} alt="download preview" />
+        <ModalActions>
+          <div className="arrow" onClick={prevImg}>
+            <Icon name="chevron left" size="big" color="grey" />
+          </div>
+          <Button primary onClick={() => downloadImage(readyMadeContent[currentItem])}>
+            Download
+          </Button>
+          <div className="arrow" onClick={nextImg}>
+            <Icon name="chevron right" size="big" color="grey" />
+          </div>
+        </ModalActions>
+      </PreviewModal>
 
       {error && <Snackbar error>{error}</Snackbar>}
       {/* show the loading state */}
