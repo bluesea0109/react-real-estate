@@ -16,6 +16,7 @@ import {
   Message,
   Page,
   Segment,
+  Snackbar,
   StyledMenu,
   Tab,
 } from '../../components/Base';
@@ -34,7 +35,11 @@ import TemplatesGrid from './TemplatesGrid';
 import * as brandColors from '../../components/utils/brandColors';
 import { useHistory } from 'react-router-dom';
 import ListingModal from '../../components/ListingModal';
-import { addCampaignStart, addHolidayCampaignStart } from '../../store/modules/mailouts/actions';
+import {
+  addCampaignStart,
+  addHolidayCampaignStart,
+  addCampaignReset,
+} from '../../store/modules/mailouts/actions';
 import { postcardDimensions } from '../../components/utils/utils';
 import auth from '../../services/auth';
 import api from '../../services/api';
@@ -325,6 +330,9 @@ const StyledTab = styled(Tab)`
 export default function CreatePostcard({ location }) {
   const dispatch = useDispatch();
   const history = useHistory();
+  const addCampaignError = useSelector(store => store.mailouts.error?.message);
+  const addCampaignPending = useSelector(store => store.mailouts.addCampaignPending);
+  const addCampaignResponse = useSelector(store => store.mailouts.addCampaignResponse);
   const peerId = useSelector(store => store.peer.peerId);
   const initialFilter = location?.state?.filter;
 
@@ -359,6 +367,15 @@ export default function CreatePostcard({ location }) {
   const [templatesLoading, setTemplatesLoading] = useState(false);
   const [uploadedImage, setUploadedImage] = useState(null);
   const [uploadedImageName, setUploadedImageName] = useState('');
+
+  useEffect(() => {
+    if (addCampaignResponse) {
+      addCampaignResponse.mailoutStatus === 'calculated'
+        ? history.push(`/postcards/${addCampaignResponse._id}`)
+        : history.push(`/postcards/edit/${addCampaignResponse._id}/destinations`);
+      dispatch(addCampaignReset());
+    }
+  }, [addCampaignResponse, history, dispatch]);
 
   useEffect(() => {
     if (activeIndex === 1 && !uploadedImage) setCreateDisabled(true);
@@ -503,7 +520,7 @@ export default function CreatePostcard({ location }) {
           if (!postcardSize) throw new Error('Missing postcardSize');
           if (!frontTemplateUuid) throw new Error('Missing frontTemplateUuid');
           dispatch(addCampaignStart({ mlsNum, postcardSize, frontTemplateUuid }));
-          return history.push('/postcards');
+          return;
         } catch (err) {
           console.error('Error creating listing campaign: ', err);
           return;
@@ -524,7 +541,6 @@ export default function CreatePostcard({ location }) {
         publishedTags: selectedTemplate.intentPath.split('|'),
       })
     );
-    return history.push('/postcards');
   };
 
   const panes = [
@@ -604,6 +620,7 @@ export default function CreatePostcard({ location }) {
             </StyledMenu>
           </PageTitleHeader>
         </ContentTopHeaderLayout>
+        {addCampaignError && <Snackbar error>{addCampaignError}</Snackbar>}
         <Segment>
           <StyledTab
             activeIndex={activeIndex}
@@ -647,7 +664,7 @@ export default function CreatePostcard({ location }) {
           setSelectedListing={setSelectedListing}
         />
       </Page>
-      <Dimmer active={creatingCampaign}>
+      <Dimmer active={creatingCampaign || addCampaignPending}>
         <Loader>Creating Campaign</Loader>
       </Dimmer>
     </>

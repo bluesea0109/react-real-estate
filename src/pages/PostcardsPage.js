@@ -10,11 +10,7 @@ import {
   ItemBodyLayout,
   ItemLayout,
 } from '../layouts';
-import {
-  getMailoutsPending,
-  getMoreMailoutsPending,
-  clearNewHolidayId,
-} from '../store/modules/mailouts/actions';
+import { getMailoutsPending, getMoreMailoutsPending } from '../store/modules/mailouts/actions';
 import { setCompletedDashboardModal } from '../store/modules/onboarded/actions';
 import {
   Button,
@@ -93,8 +89,6 @@ const Dashboard = () => {
   const mailoutList = useSelector(store => store.mailouts.list);
   const error = useSelector(store => store.mailouts.error?.message);
 
-  const holidayCampaignId = useSelector(store => store.mailouts?.newHolidayId);
-
   useFetching(getMailoutsPending, onboarded, useDispatch());
 
   const boundFetchMoreMailouts = value => dispatch(getMoreMailoutsPending(value));
@@ -104,13 +98,6 @@ const Dashboard = () => {
   const handleClick = e => {
     boundFetchMoreMailouts(page + 1);
   };
-
-  useEffect(() => {
-    if (holidayCampaignId) {
-      history.push(`/dashboard/edit/${holidayCampaignId}/destinations`);
-      dispatch(clearNewHolidayId());
-    }
-  }, [holidayCampaignId, history, dispatch]);
 
   const handleKeyPress = e => {
     // Prevent the default action to stop scrolling when space is pressed

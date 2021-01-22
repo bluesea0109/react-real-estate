@@ -22,16 +22,14 @@ export const GET_MORE_ARCHIVED_MAILOUTS_SUCCESS = 'GET_MORE_ARCHIVED_MAILOUTS_SU
 export const GET_MORE_ARCHIVED_MAILOUTS_ERROR = 'GET_MORE_ARCHIVED_MAILOUTS_ERROR';
 
 export const ADD_CAMPAIGN_START = 'ADD_CAMPAIGN_START';
-export const ADD_CAMPAIGN_PENDING = 'ADD_CAMPAIGN_PENDING';
 export const ADD_CAMPAIGN_SUCCESS = 'ADD_CAMPAIGN_SUCCESS';
 export const ADD_CAMPAIGN_ERROR = 'ADD_CAMPAIGN_ERROR';
 
+export const ADD_CAMPAIGN_RESET = 'ADD_CAMPAIGN_RESET';
+
 export const ADD_HOLIDAY_CAMPAIGN_START = 'ADD_HOLIDAY_CAMPAIGN_START';
-export const ADD_HOLIDAY_CAMPAIGN_PENDING = 'ADD_HOLIDAY_CAMPAIGN_PENDING';
 export const ADD_HOLIDAY_CAMPAIGN_SUCCESS = 'ADD_HOLIDAY_CAMPAIGN_SUCCESS';
 export const ADD_HOLIDAY_CAMPAIGN_ERROR = 'ADD_HOLIDAY_CAMPAIGN_ERROR';
-export const GET_NEW_HOLIDAY_ID = 'GET_NEW_HOLIDAY_ID';
-export const CLEAR_NEW_HOLIDAY_ID = 'CLEAR_NEW_HOLIDAY_ID';
 
 export const SET_MAILOUTS_ERROR = 'SET_MAILOUT_ERROR';
 export const CLEAR_MAILOUTS_ERROR = 'CLEAR_MAILOUT_ERROR';
@@ -111,41 +109,30 @@ export function addCampaignStart(payload) {
   return createAction(ADD_CAMPAIGN_START, payload);
 }
 
-export function addCampaignPending() {
-  return createAction(ADD_CAMPAIGN_PENDING);
-}
-
-export function addCampaignSuccess() {
-  return createAction(ADD_CAMPAIGN_SUCCESS);
+export function addCampaignSuccess(payload) {
+  return createAction(ADD_CAMPAIGN_SUCCESS, payload);
 }
 
 export function addCampaignError(error) {
   return createErrorAction(ADD_CAMPAIGN_ERROR, error);
 }
 
+export function addCampaignReset() {
+  return createAction(ADD_CAMPAIGN_RESET);
+}
+
 export function addHolidayCampaignStart(payload) {
   return createAction(ADD_HOLIDAY_CAMPAIGN_START, payload);
 }
 
-export function addHolidayCampaignPending() {
-  return createAction(ADD_HOLIDAY_CAMPAIGN_PENDING);
-}
-
-export function addHolidayCampaignSuccess() {
-  return createAction(ADD_HOLIDAY_CAMPAIGN_SUCCESS);
+export function addHolidayCampaignSuccess(payload) {
+  return createAction(ADD_HOLIDAY_CAMPAIGN_SUCCESS, payload);
 }
 
 export function addHolidayCampaignError() {
   return createAction(ADD_HOLIDAY_CAMPAIGN_ERROR);
 }
 
-export function getNewHolidayId(payload) {
-  return createAction(GET_NEW_HOLIDAY_ID, payload);
-}
-
-export function clearNewHolidayId() {
-  return createAction(CLEAR_NEW_HOLIDAY_ID);
-}
 export function setMailoutsError(error) {
   return createAction(SET_MAILOUTS_ERROR, error);
 }
