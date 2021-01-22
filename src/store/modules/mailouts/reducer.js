@@ -192,13 +192,9 @@ export default function mailouts(state = initialState, action) {
         error: null,
       };
     case ADD_CAMPAIGN_SUCCESS:
-      let newMlsList = [...state.list];
-      newMlsList.unshift(action.payload);
-      if (state.canLoadMore) newMlsList.pop();
       return {
         ...state,
-        list: newMlsList,
-        AddCampaignSuccess: true,
+        addCampaignSuccess: true,
         addCampaignPending: false,
         addCampaignResponse: action.payload,
         error: null,
@@ -214,7 +210,7 @@ export default function mailouts(state = initialState, action) {
         ...state,
         addCampaignMlsNum: null,
         addCampaignHoliday: null,
-        AddCampaignSuccess: false,
+        addCampaignSuccess: false,
         addCampaignPending: false,
         addCampaignResponse: null,
         error: null,
@@ -227,12 +223,8 @@ export default function mailouts(state = initialState, action) {
         error: null,
       };
     case ADD_HOLIDAY_CAMPAIGN_SUCCESS:
-      let newHolidayList = [...state.list];
-      newHolidayList.unshift(action.payload);
-      if (state.canLoadMore) newHolidayList.pop();
       return {
         ...state,
-        list: newHolidayList,
         addCampaignPending: false,
         addCampaignSuccess: true,
         addCampaignResponse: action.payload,

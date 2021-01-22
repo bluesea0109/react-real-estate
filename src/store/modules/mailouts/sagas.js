@@ -176,7 +176,9 @@ export function* addCampaignStartSaga() {
 
     const data = { mlsNum, postcardSize, templateUuid, skipEmailNotification: true };
     const response = yield call(ApiService[method], path, data);
+    yield put(resetMailouts());
     yield put(addCampaignSuccess(response));
+    yield put(getMailoutsPending());
   } catch (err) {
     yield put(addCampaignError(err));
   }
@@ -192,8 +194,9 @@ export function* addHolidayCampaignSaga() {
 
     const data = payload;
     const response = yield call(ApiService[method], path, data);
-
+    yield put(resetMailouts());
     yield put(addHolidayCampaignSuccess(response));
+    yield put(getMailoutsPending());
   } catch (err) {
     yield put(addHolidayCampaignError(err));
   }

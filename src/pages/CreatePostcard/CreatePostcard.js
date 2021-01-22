@@ -368,7 +368,9 @@ export default function CreatePostcard({ location }) {
 
   useEffect(() => {
     if (addCampaignResponse) {
-      history.push(`/postcards/edit/${addCampaignResponse._id}/destinations`);
+      addCampaignResponse.mailoutStatus === 'calculated'
+        ? history.push(`/postcards/${addCampaignResponse._id}`)
+        : history.push(`/postcards/edit/${addCampaignResponse._id}/destinations`);
       dispatch(addCampaignReset());
     }
   }, [addCampaignResponse, history, dispatch]);
@@ -516,6 +518,7 @@ export default function CreatePostcard({ location }) {
           if (!postcardSize) throw new Error('Missing postcardSize');
           if (!frontTemplateUuid) throw new Error('Missing frontTemplateUuid');
           dispatch(addCampaignStart({ mlsNum, postcardSize, frontTemplateUuid }));
+          return;
         } catch (err) {
           console.error('Error creating listing campaign: ', err);
           return;
