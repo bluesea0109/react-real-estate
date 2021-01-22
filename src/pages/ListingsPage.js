@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Loading from '../components/Loading';
 import { Header, Menu, Page, Dropdown } from '../components/Base';
 import Styled from 'styled-components';
@@ -35,6 +35,7 @@ color: #000000;
 const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType }) => {
   const windowSize = useWindowSize();
   const adProduct = useSelector(store => store.onLogin.permissions?.adProduct);
+  const history = useHistory();
   const onLoginMode = useSelector(store => store.onLogin.mode);
   const multiUser = onLoginMode === 'multiuser';
 
@@ -233,7 +234,21 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                           View Postcard Campaign
                         </DotsDropDown.Item>
                       ) : (
-                        undefined
+                        <DotsDropDown.Item
+                          onClick={() => {
+                            let filter =
+                              listingItem.standardStatus === 'Closed' ? 'Just Sold' : 'Just Listed';
+                            history.push({
+                              pathname: '/create-postcard',
+                              state: {
+                                mlsNum: listingItem.mlsNum,
+                                filter,
+                              },
+                            });
+                          }}
+                        >
+                          Create Postcard Campaign
+                        </DotsDropDown.Item>
                       )}
                     </DotsDropDown.Menu>
                   </DotsDropDown>

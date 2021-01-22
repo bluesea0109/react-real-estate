@@ -35,7 +35,7 @@ import TemplatesGrid from './TemplatesGrid';
 import * as brandColors from '../../components/utils/brandColors';
 import { useHistory } from 'react-router-dom';
 import ListingModal from '../../components/ListingModal';
-import { addHolidayCampaignStart } from '../../store/modules/mailouts/actions';
+import { addCampaignStart, addHolidayCampaignStart } from '../../store/modules/mailouts/actions';
 import { postcardDimensions } from '../../components/utils/utils';
 import auth from '../../services/auth';
 import api from '../../services/api';
@@ -495,8 +495,24 @@ export default function CreatePostcard({ location }) {
       return history.push(`/dashboard/edit/${doc._id}/destinations`);
     }
     if (selectedTemplate?.activities.includes('listingMarketing')) {
-      setShowListingModal(true);
-      return;
+      if (location?.state?.mlsNum) {
+        try {
+          const mlsNum = location?.state?.mlsNum;
+          const frontTemplateUuid = selectedTemplate?.templateUuid;
+          const postcardSize = size;
+          if (!mlsNum) throw new Error('Missing mlsNum');
+          if (!postcardSize) throw new Error('Missing postcardSize');
+          if (!frontTemplateUuid) throw new Error('Missing frontTemplateUuid');
+          dispatch(addCampaignStart({ mlsNum, postcardSize, frontTemplateUuid }));
+          return history.push('/postcards');
+        } catch (err) {
+          console.error('Error creating listing campaign: ', err);
+          return;
+        }
+      } else {
+        setShowListingModal(true);
+        return;
+      }
     }
     dispatch(
       addHolidayCampaignStart({
