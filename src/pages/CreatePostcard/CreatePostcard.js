@@ -341,7 +341,7 @@ export default function CreatePostcard({ location }) {
     { tag: 'Just Sold', intentPath: 'listingMarketing|sold' },
     { tag: 'Open House', intentPath: 'listingMarketing|openHouse' },
     { tag: 'Holiday', intentPath: 'sphere|holiday|christmas' },
-    { tag: 'New Year', intentPath: 'sphere|holiday|new-year' },
+    { tag: 'New Year', intentPath: 'sphere|holiday|newYear' },
     { tag: 'Handwritten', intentPath: 'sphere|handwritten' },
   ];
 
