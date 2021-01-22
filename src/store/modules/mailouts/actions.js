@@ -118,7 +118,7 @@ export function addCampaignError(error) {
 }
 
 export function addCampaignReset() {
-  return createErrorAction(ADD_CAMPAIGN_RESET);
+  return createAction(ADD_CAMPAIGN_RESET);
 }
 
 export function addHolidayCampaignStart(payload) {
