@@ -337,13 +337,14 @@ export default function CreatePostcard({ location }) {
   const initialFilter = location?.state?.filter;
 
   const availableTags = [
-    { tag: 'Just Listed', intentPath: 'listingMarketing|listed' },
-    { tag: 'Just Sold', intentPath: 'listingMarketing|sold' },
-    { tag: 'Open House', intentPath: 'listingMarketing|openHouse' },
-    { tag: 'Holiday', intentPath: 'sphere|holiday|christmas' },
-    { tag: 'New Year', intentPath: 'sphere|holiday|newYear' },
-    { tag: 'Valentine', intentPath: 'sphere|holiday|valentine' },
-    { tag: 'Handwritten', intentPath: 'sphere|handwritten' },
+    { tag: 'All', intentPath: '' },
+    { tag: 'Just Listed', intentPath: '/listingMarketing|listed' },
+    { tag: 'Just Sold', intentPath: '/listingMarketing|sold' },
+    { tag: 'Open House', intentPath: '/listingMarketing|openHouse' },
+    { tag: 'Holiday', intentPath: '/sphere|holiday|christmas' },
+    { tag: 'New Year', intentPath: '/sphere|holiday|newYear' },
+    { tag: 'Valentine', intentPath: '/sphere|holiday|valentine' },
+    { tag: 'Handwritten', intentPath: '/sphere|handwritten' },
   ];
 
   const [activeIndex, setActiveIndex] = useState(initialFilter === 'custom' ? 1 : 0);
@@ -402,7 +403,7 @@ export default function CreatePostcard({ location }) {
     async intentPath => {
       setTemplatesLoading(true);
       try {
-        let path = `/api/user/stencils/byIntent/${intentPath}`;
+        let path = `/api/user/stencils/byIntent${intentPath}`;
         if (peerId) path = `/api/user/peer/${peerId}/stencils/byIntent/${intentPath}`;
         const headers = {};
         const accessToken = await auth.getAccessToken();
