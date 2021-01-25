@@ -135,6 +135,10 @@ const directory = {
     stencilTagPath: `/api/user/stencils/byTag/${tag}`,
     stencilTagMethod: 'get',
   }),
+  stencilsByIntent: (intentPath = '') => ({
+    stencilIntentPath: `/api/user/stencils/byIntent${intentPath}`,
+    stencilIntentMethod: 'get',
+  }),
   team: {
     list: () => ({ path: `/api/user/team/list`, method: 'get' }),
     sync: () => ({ path: `/api/user/team/settings/brivity/sync`, method: 'post' }),
