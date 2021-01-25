@@ -43,7 +43,7 @@ export default function TemplatesGrid({
   return (
     <GridLayout>
       {templates
-        .filter(template => template.sizes.includes(postcardDimensions(selectedSize)))
+        .filter(template => template.sizes?.includes(postcardDimensions(selectedSize)))
         .map((template, index) => (
           <GridItemContainer key={`${template?.name}-${index}`}>
             <GridItem selected={selectedTemplate?.name === template?.name}>

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { startCase } from 'lodash';
@@ -164,16 +164,16 @@ const getUploadSizes = size => {
 };
 
 const TemplatesTab = ({
-  availableTags,
+  availableFilters,
+  currentFilter,
   filteredTemplates,
   templatesLoading,
   selectedSize,
-  selectedTag,
   selectedTemplate,
+  setCurrentFilter,
   setCurrentItem,
   setPreviewImage,
   setSelectedSize,
-  setSelectedTag,
   setSelectedTemplate,
   setShowImageModal,
 }) => {
@@ -188,12 +188,12 @@ const TemplatesTab = ({
         setSelectedSize={setSelectedSize}
       />
       <StyledHeading>
-        <Dropdown text={startCase(selectedTag.tag)}>
+        <Dropdown text={startCase(currentFilter)}>
           <Dropdown.Menu>
-            {availableTags.map(tag => (
-              <Dropdown.Item key={tag.tag} onClick={() => setSelectedTag(tag)}>
+            {availableFilters.map(filter => (
+              <Dropdown.Item key={filter} onClick={() => setCurrentFilter(filter)}>
                 <ItemContent>
-                  <span>{startCase(tag.tag)}</span>
+                  <span>{startCase(filter)}</span>
                 </ItemContent>
               </Dropdown.Item>
             ))}
@@ -333,42 +333,59 @@ export default function CreatePostcard({ location }) {
   const addCampaignError = useSelector(store => store.mailouts.error?.message);
   const addCampaignPending = useSelector(store => store.mailouts.addCampaignPending);
   const addCampaignResponse = useSelector(store => store.mailouts.addCampaignResponse);
+  const availableTemplates = useSelector(store => store.templates.available.byIntent);
+  const templatesLoading = useSelector(store => store.templates.pending);
   const peerId = useSelector(store => store.peer.peerId);
   const initialFilter = location?.state?.filter;
 
-  const availableTags = [
-    { tag: 'All', intentPath: '' },
-    { tag: 'Just Listed', intentPath: '/listingMarketing|listed' },
-    { tag: 'Just Sold', intentPath: '/listingMarketing|sold' },
-    { tag: 'Open House', intentPath: '/listingMarketing|openHouse' },
-    { tag: 'Holiday', intentPath: '/sphere|holiday|christmas' },
-    { tag: 'New Year', intentPath: '/sphere|holiday|newYear' },
-    { tag: 'Valentine', intentPath: '/sphere|holiday|valentine' },
-    { tag: 'Handwritten', intentPath: '/sphere|handwritten' },
-  ];
-
   const [activeIndex, setActiveIndex] = useState(initialFilter === 'custom' ? 1 : 0);
+  const [availableFilters, setAvailableFilters] = useState(['All Templates']);
   const [createDisabled, setCreateDisabled] = useState(true);
   const [creatingCampaign, setCreatingCampaign] = useState(false);
+  const [currentFilter, setCurrentFilter] = useState(
+    initialFilter && initialFilter !== 'custom' ? initialFilter : 'All Templates'
+  );
+  const [currentItem, setCurrentItem] = useState(null);
   const [customImageFile, setCustomImageFile] = useState(null);
   const [customName, setCustomName] = useState('');
-  const [currentItem, setCurrentItem] = useState(null);
   const [filteredTemplates, setFilteredTemplates] = useState([]);
   const [imageError, setImageError] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [selectedListing, setSelectedListing] = useState(false);
   const [selectedSize, setSelectedSize] = useState('4x6');
-  const [selectedTag, setSelectedTag] = useState(
-    initialFilter && initialFilter !== 'custom'
-      ? availableTags.find(tag => tag.tag === initialFilter)
-      : availableTags[0]
-  );
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [showImageModal, setShowImageModal] = useState(false);
   const [showListingModal, setShowListingModal] = useState(false);
-  const [templatesLoading, setTemplatesLoading] = useState(false);
   const [uploadedImage, setUploadedImage] = useState(null);
   const [uploadedImageName, setUploadedImageName] = useState('');
+
+  useEffect(() => {
+    const newFilters = availableTemplates.reduce(
+      (filterList, template) => {
+        const intents = template.intentPath.split('|');
+        if (intents.length === 2 && !filterList?.includes(intents[1])) filterList.push(intents[1]);
+        if (intents.length > 2) {
+          for (const i in intents) {
+            if (parseInt(i) === 0 || parseInt(i) === intents.length - 1) continue;
+            else if (!filterList.includes(intents[i])) filterList.push(intents[i]);
+          }
+        }
+        return filterList;
+      },
+      ['All Templates']
+    );
+    setAvailableFilters(newFilters);
+  }, [availableTemplates]);
+
+  useEffect(() => {
+    if (currentFilter === 'All Templates') setFilteredTemplates(availableTemplates);
+    else {
+      const newFiltered = availableTemplates.filter(template =>
+        template.intentPath?.includes(currentFilter)
+      );
+      setFilteredTemplates(newFiltered);
+    }
+  }, [currentFilter, availableTemplates]);
 
   useEffect(() => {
     if (addCampaignResponse) {
@@ -398,37 +415,6 @@ export default function CreatePostcard({ location }) {
     setCurrentItem(newImgIndex);
     setPreviewImage(filteredTemplates[newImgIndex].thumbnail);
   };
-
-  const getStencilsByIntent = useCallback(
-    async intentPath => {
-      setTemplatesLoading(true);
-      try {
-        let path = `/api/user/stencils/byIntent${intentPath}`;
-        if (peerId) path = `/api/user/peer/${peerId}/stencils/byIntent/${intentPath}`;
-        const headers = {};
-        const accessToken = await auth.getAccessToken();
-        headers['authorization'] = `Bearer ${accessToken}`;
-        const response = await fetch(path, {
-          headers,
-          method: 'get',
-          credentials: 'include',
-        });
-        const { stencils } = await api.handleResponse(response);
-        setFilteredTemplates(stencils);
-      } catch (e) {
-        console.log('Error getting stencils', e);
-      } finally {
-        setTemplatesLoading(false);
-      }
-    },
-    [peerId]
-  );
-
-  useEffect(() => {
-    if (selectedTag) {
-      getStencilsByIntent(selectedTag.intentPath);
-    }
-  }, [selectedTag, getStencilsByIntent]);
 
   const handleFileChange = e => {
     setImageError(null);
@@ -551,16 +537,16 @@ export default function CreatePostcard({ location }) {
       render: () => (
         <Tab.Pane as="div">
           <TemplatesTab
-            availableTags={availableTags}
+            availableFilters={availableFilters}
             filteredTemplates={filteredTemplates}
             templatesLoading={templatesLoading}
             selectedSize={selectedSize}
-            selectedTag={selectedTag}
+            currentFilter={currentFilter}
             selectedTemplate={selectedTemplate}
             setCurrentItem={setCurrentItem}
             setPreviewImage={setPreviewImage}
             setSelectedSize={setSelectedSize}
-            setSelectedTag={setSelectedTag}
+            setCurrentFilter={setCurrentFilter}
             setSelectedTemplate={setSelectedTemplate}
             setShowImageModal={setShowImageModal}
           />

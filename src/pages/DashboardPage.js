@@ -216,23 +216,23 @@ const Dashboard = () => {
             name="just listed postcard"
             linkTo={{
               pathname: 'create-postcard',
-              state: { filter: 'Just Listed' },
+              state: { filter: 'listed' },
             }}
           ></DashboardItem>
           <DashboardItem
             name="just sold postcard"
             linkTo={{
               pathname: 'create-postcard',
-              state: { filter: 'Just Sold' },
+              state: { filter: 'sold' },
             }}
           ></DashboardItem>
           <DashboardItem
             name="handwritten postcard"
-            linkTo={{ pathname: 'create-postcard', state: { filter: 'Handwritten' } }}
+            linkTo={{ pathname: 'create-postcard', state: { filter: 'handwritten' } }}
           ></DashboardItem>
           <DashboardItem
             name="holiday postcard"
-            linkTo={{ pathname: 'create-postcard', state: { filter: 'Holiday' } }}
+            linkTo={{ pathname: 'create-postcard', state: { filter: 'holiday' } }}
           ></DashboardItem>
           <DashboardItem
             name="custom postcard"
