@@ -45,7 +45,7 @@ export default function TemplatesGrid({
       {templates
         .filter(template => template.sizes.includes(postcardDimensions(selectedSize)))
         .map((template, index) => (
-          <GridItemContainer key={template?.name}>
+          <GridItemContainer key={`${template?.name}-${index}`}>
             <GridItem selected={selectedTemplate?.name === template?.name}>
               <ImgOverlay>
                 <ButtonOutline id="select-template" onClick={() => setSelectedTemplate(template)}>
