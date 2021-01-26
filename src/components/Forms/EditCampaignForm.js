@@ -82,9 +82,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const sliderRef = useRef(null);
   const peerId = useSelector(store => store.peer.peerId);
   const dispatch = useDispatch();
-  const stencilsAvailable = useSelector(store => store.templates.available?.stencils);
-  const holidayStencils = useSelector(store => store.templates.available?.holiday);
-  const generalStencils = useSelector(store => store.templates.available?.general);
+  const stencilsAvailable = useSelector(store => store.templates?.available?.byIntent);
   const onLoginMode = useSelector(store => store.onLogin?.mode);
   const multiUser = onLoginMode === 'multiuser';
 
@@ -119,7 +117,8 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const [error, setError] = useState(null);
 
   const [postcardSize, setPostcardSize] = useState(currentPostcardSize);
-  const templateTheme = useSelector(store => store.mailout.mailoutEdit.templateTheme);
+  const editIntentPath = useSelector(store => store.mailout?.mailoutEdit?.intentPath);
+  const editTemplateTheme = useSelector(store => store.mailout?.mailoutEdit?.templateTheme);
   const brandColorInMergeVars = mailoutEdit?.mergeVariables?.find(
     variable => variable.name === 'brandColor'
   );
@@ -147,6 +146,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const [coverPhotoIndex, setCoverPhotoIndex] = useState(0);
   const [photoUpdating, setPhotoUpdating] = useState(false);
   const publishedTags = mailoutDetails?.publishedTags;
+  const intentPath = mailoutDetails?.intentPath;
 
   //const defaultCTAUrl = useSelector(store => store.)
   const [ctaUrl, setCtaUrl] = useState(mailoutDetails.cta);
@@ -161,28 +161,44 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     if (!bestCta) return 'https://www.google.com';
     return bestCta;
   });
-
-  let filteredStencils = stencilsAvailable.filter(stencil => {
+  let filteredStencils = stencilsAvailable?.filter(stencil => {
     if (
-      stencil.templateTheme === 'bookmark-multi' &&
+      stencil.templateUuid === 'bookmark-multi' &&
       mailoutDetails.created < new Date('2020-11-19T17:54:37.344Z').getTime()
     )
       return false;
     return true;
   });
 
-  if (mailoutDetails?.publishedTags?.includes('holiday')) filteredStencils = holidayStencils;
-  if (mailoutDetails?.publishedTags?.includes('general')) filteredStencils = generalStencils;
+  if (publishedTags?.includes('holiday') || intentPath?.includes('holiday'))
+    filteredStencils = stencilsAvailable?.filter(stencil =>
+      stencil.intentPath?.includes('holiday')
+    );
+  else if (publishedTags?.includes('handwritten') || intentPath?.includes('handwritten'))
+    filteredStencils = stencilsAvailable?.filter(stencil =>
+      stencil.intentPath?.includes('handwritten')
+    );
+  else {
+    intentPath
+      ? (filteredStencils = stencilsAvailable?.filter(stencil =>
+          stencil.intentPath?.includes(intentPath)
+        ))
+      : (filteredStencils = stencilsAvailable?.filter(stencil =>
+          stencil.intentPath?.includes(publishedTags.join('|'))
+        ));
+  }
 
   let slides = [];
   if (filteredStencils) {
     filteredStencils.forEach(stencil => {
-      slides.push(stencil.templateTheme);
+      slides.push(`${stencil.intentPath}-${stencil.templateUuid}`);
     });
   }
   let startSlide = 0;
-  if (mailoutEdit && mailoutEdit.templateTheme)
-    startSlide = slides.findIndex(slide => slide === mailoutEdit.templateTheme);
+  if (mailoutEdit?.intentPath && mailoutEdit.templateTheme)
+    startSlide = slides.findIndex(
+      slide => slide === `${mailoutEdit.intentPath}-${mailoutEdit.templateTheme}`
+    );
 
   let numSlides = Math.floor(sliderWidth / 240) || 1;
   if (numSlides % 2 === 0) numSlides -= 1;
@@ -192,13 +208,18 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     className: 'slider center',
     infinite: true,
     centerMode: true,
-    slidesToShow: numSlides < filteredStencils?.length ? numSlides : filteredStencils.length,
+    slidesToShow: numSlides < filteredStencils?.length ? numSlides : filteredStencils?.length,
     focusOnSelect: true,
     initialSlide: startSlide,
     swipeToSlide: true,
     afterChange: current => {
       if (current !== startSlide)
-        dispatch(updateMailoutTemplateThemePending(filteredStencils[current].templateTheme));
+        dispatch(
+          updateMailoutTemplateThemePending({
+            templateUuid: filteredStencils[current].templateUuid,
+            intentPath: filteredStencils[current].intentPath,
+          })
+        );
     },
   };
 
@@ -256,11 +277,6 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
       setFormValues(mailoutEdit.mergeVariables);
     }
   }, [mailoutEdit.mergeVariables, formValues, setFormValues, formValuesHaveChanged]);
-
-  useEffect(() => {
-    if (templateTheme) dispatch(updateMailoutTemplateThemePending(templateTheme));
-    // eslint-disable-next-line
-  }, []);
 
   const triggerFileDialog = () => document.getElementById('postcardCoverFile').click();
 
@@ -336,7 +352,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     const newData = Object.assign(
       {},
       { postcardSize },
-      { templateTheme },
+      { templateTheme: mailoutEdit?.templateTheme },
       { mergeVariables: newMergeVariables },
       { mailoutDisplayAgent } // add the   "ctas" object here
     );
@@ -458,12 +474,12 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     );
   };
 
-  const renderTemplatePicture = (templateName, src, isNew = false) => {
+  const renderTemplatePicture = (intentPath, templateTheme, src, isNew = false) => {
     return (
-      <div key={templateName}>
+      <div key={intentPath}>
         <div
           style={
-            templateTheme === templateName
+            editIntentPath === intentPath && editTemplateTheme === templateTheme
               ? {
                   border: `2px solid ${brandColors.primary}`,
                   padding: '0.5em',
@@ -476,7 +492,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
         >
           <img
             src={src}
-            alt={templateName}
+            alt={intentPath}
             style={{
               width: '100%',
               border: '1px solid lightgrey',
@@ -665,15 +681,20 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           )}
         </ContentBottomHeaderLayout>
 
-        {(currentListingStatus !== 'custom' || showThemes) && (
+        {(currentListingStatus !== 'custom' || showThemes) && filteredStencils?.length && (
           <Segment basic padded>
             <div ref={sliderContainerRef}>
               <Header as="h4">Template Theme</Header>
               <div style={{ position: 'relative', zIndex: 10 }}>
                 <Slider {...sliderSettings} ref={sliderRef} style={{ zIndex: 10 }}>
                   {filteredStencils &&
-                    filteredStencils.map((stencil, ind) =>
-                      renderTemplatePicture(stencil.templateTheme, stencil.thumbnail, stencil.new)
+                    filteredStencils.map(stencil =>
+                      renderTemplatePicture(
+                        stencil.intentPath,
+                        stencil.templateUuid,
+                        stencil.thumbnail,
+                        stencil.new
+                      )
                     )}
                 </Slider>
               </div>

@@ -526,7 +526,7 @@ export default function CreatePostcard({ location }) {
         frontTemplateUuid: selectedTemplate.templateUuid,
         postcardSize: size,
         mapperName: 'sphere',
-        publishedTags: selectedTemplate.intentPath.split('|'),
+        intentPath: selectedTemplate.intentPath,
       })
     );
   };
