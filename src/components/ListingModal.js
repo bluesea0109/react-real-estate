@@ -132,10 +132,11 @@ const ListingModal = ({
 
   const createMLSCampaign = () => {
     const mlsNum = selectedListing?.listing?.mlsNum;
-    const frontTemplateUuid = selectedTemplate.templateUuid;
+    const frontTemplateUuid = selectedTemplate?.templateUuid;
     const postcardSize = postcardDimensions(selectedSize);
+    const publishedTags = selectedTemplate?.intentPath?.split('|');
     if (!mlsNum || !postcardSize || !frontTemplateUuid) return;
-    dispatch(addCampaignStart({ mlsNum, postcardSize, frontTemplateUuid }));
+    dispatch(addCampaignStart({ mlsNum, postcardSize, frontTemplateUuid, publishedTags }));
     setOpen(false);
   };
 

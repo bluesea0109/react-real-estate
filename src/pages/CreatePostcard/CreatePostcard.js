@@ -504,10 +504,11 @@ export default function CreatePostcard({ location }) {
           const mlsNum = location?.state?.mlsNum;
           const frontTemplateUuid = selectedTemplate?.templateUuid;
           const postcardSize = size;
+          const publishedTags = selectedTemplate?.intentPath?.split('|');
           if (!mlsNum) throw new Error('Missing mlsNum');
           if (!postcardSize) throw new Error('Missing postcardSize');
           if (!frontTemplateUuid) throw new Error('Missing frontTemplateUuid');
-          dispatch(addCampaignStart({ mlsNum, postcardSize, frontTemplateUuid }));
+          dispatch(addCampaignStart({ mlsNum, postcardSize, frontTemplateUuid, publishedTags }));
           return;
         } catch (err) {
           console.error('Error creating listing campaign: ', err);
@@ -527,6 +528,7 @@ export default function CreatePostcard({ location }) {
         postcardSize: size,
         mapperName: 'sphere',
         intentPath: selectedTemplate.intentPath,
+        publishedTags: selectedTemplate?.intentPath?.split('|'),
       })
     );
   };
