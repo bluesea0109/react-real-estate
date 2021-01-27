@@ -168,13 +168,19 @@ export function* checkIfPeerSelectedGetMoreArchivedMailout() {
 export function* addCampaignStartSaga() {
   const peerId = yield select(getSelectedPeerId);
   const payload = yield select(getAddCampaignMlsNum);
-  const { mlsNum, postcardSize, frontTemplateUuid } = payload;
+  const { mlsNum, postcardSize, frontTemplateUuid, publishedTags } = payload;
   try {
     const { path, method } = peerId
       ? ApiService.directory.peer.mailout.byMls(mlsNum, peerId)
       : ApiService.directory.user.mailout.byMls(mlsNum);
 
-    const data = { mlsNum, postcardSize, frontTemplateUuid, skipEmailNotification: true };
+    const data = {
+      frontTemplateUuid,
+      mlsNum,
+      postcardSize,
+      publishedTags,
+      skipEmailNotification: true,
+    };
     const response = yield call(ApiService[method], path, data);
     yield put(resetMailouts());
     yield put(addCampaignSuccess(response));
