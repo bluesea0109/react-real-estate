@@ -316,7 +316,8 @@ const FilterList = ({ activeFilters, handleFilterSelected }) => {
 
 const ListingsPage = () => {
   const [listingDetails, setListingDetails] = useState(null);
-  const [listings, setListings] = useState(null);
+  const [sortedListings, setsortedListings] = useState(null);
+  const [filteredListings, setFitleredListings] = useState(null);
   const [activeFilters, setActiveFilters] = useState(['All']);
   const [userType, setUserType] = useState('loggedIn');
 
@@ -342,7 +343,12 @@ const ListingsPage = () => {
       const response = await fetch(path, { headers, method: 'get', credentials: 'include' });
       const results = await api.handleResponse(response);
       setListingDetails(results);
-      setListings(results.listings);
+      const newSortedListings = results.listings.sort((a, b) => {
+        if (a.listDate < b.listDate) return 1;
+        if (a.listDate > b.listDate) return -1;
+        return 0;
+      });
+      setsortedListings(newSortedListings);
     }
     fetchData();
     if (peerId) {
@@ -354,14 +360,14 @@ const ListingsPage = () => {
 
   useEffect(() => {
     if (activeFilters.includes('All')) {
-      setListings(listingDetails && listingDetails.listings);
+      setFitleredListings(sortedListings || listingDetails?.listings);
     } else {
       let filteredListingDetails =
         listingDetails &&
         listingDetails.listings.filter(el => activeFilters.includes(el.standardStatus));
-      setListings(filteredListingDetails);
+      setFitleredListings(filteredListingDetails);
     }
-  }, [listingDetails, activeFilters]);
+  }, [listingDetails, activeFilters, sortedListings]);
 
   const handleFilterSelected = val => {
     if (val === 'All') {
@@ -441,30 +447,23 @@ const ListingsPage = () => {
         )}
         {listingDetails?.listings.length > 0 ? (
           <Grid padded="vertically" columns={getColumns()}>
-            {listings ? (
-              listings.length > 0 ? (
-                listings.map((item, i) => {
-                  return (
-                    <ListingCard
-                      key={i}
-                      listingDetails={listingDetails}
-                      listingItem={item}
-                      userInfo={userInfo}
-                      peerUser={peerUser}
-                      userType={userType}
-                    />
-                  );
-                })
-              ) : (
-                <Header
-                  as="h3"
-                  className="normalFontWeight noMargin cardFont noFilteredListingsText"
-                >
-                  No Listings meet the current filtering criteria.
-                </Header>
-              )
+            {filteredListings?.length > 0 ? (
+              filteredListings.map((item, i) => {
+                return (
+                  <ListingCard
+                    key={i}
+                    listingDetails={listingDetails}
+                    listingItem={item}
+                    userInfo={userInfo}
+                    peerUser={peerUser}
+                    userType={userType}
+                  />
+                );
+              })
             ) : (
-              undefined
+              <Header as="h3" className="normalFontWeight noMargin cardFont noFilteredListingsText">
+                No Listings meet the current filtering criteria.
+              </Header>
             )}
           </Grid>
         ) : (
