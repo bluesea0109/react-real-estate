@@ -130,6 +130,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     mailoutEdit?.mergeVariables?.brandColor || mailoutEdit?.brandColor
   );
   const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(currentMailoutDisplayAgent);
+  const [filteredStencils, setFilteredStencils] = useState([]);
   const [formValues, setFormValues] = useState(
     mailoutEdit?.fields ? Object.values(mailoutEdit?.fields) : null
   );
@@ -161,32 +162,29 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     if (!bestCta) return 'https://www.google.com';
     return bestCta;
   });
-  let filteredStencils = stencilsAvailable?.filter(stencil => {
-    if (
-      stencil.templateUuid === 'bookmark-multi' &&
-      mailoutDetails.created < new Date('2020-11-19T17:54:37.344Z').getTime()
-    )
-      return false;
-    return true;
-  });
 
-  if (publishedTags?.includes('holiday') || intentPath?.includes('holiday'))
-    filteredStencils = stencilsAvailable?.filter(stencil =>
-      stencil.intentPath?.includes('holiday')
-    );
-  else if (publishedTags?.includes('handwritten') || intentPath?.includes('handwritten'))
-    filteredStencils = stencilsAvailable?.filter(stencil =>
-      stencil.intentPath?.includes('handwritten')
-    );
-  else {
-    intentPath
-      ? (filteredStencils = stencilsAvailable?.filter(stencil =>
-          stencil.intentPath?.includes(intentPath)
-        ))
-      : (filteredStencils = stencilsAvailable?.filter(stencil =>
-          stencil.intentPath?.includes(publishedTags.join('|'))
-        ));
-  }
+  useEffect(() => {
+    let newFilteredStencils = stencilsAvailable?.filter(stencil => {
+      if (
+        stencil.templateUuid === 'bookmark-multi' &&
+        mailoutDetails.created < new Date('2020-11-19T17:54:37.344Z').getTime()
+      )
+        return false;
+      return true;
+    });
+    if (!publishedTags?.includes('listingMarketing') && !intentPath?.includes('listingMarketing'))
+      newFilteredStencils = [];
+    else {
+      intentPath
+        ? (newFilteredStencils = stencilsAvailable?.filter(stencil =>
+            stencil.intentPath?.includes(intentPath)
+          ))
+        : (newFilteredStencils = stencilsAvailable?.filter(stencil =>
+            stencil.intentPath?.includes(publishedTags.join('|'))
+          ));
+    }
+    setFilteredStencils(newFilteredStencils);
+  }, [stencilsAvailable, mailoutDetails.created, intentPath, publishedTags]);
 
   let slides = [];
   if (filteredStencils) {
@@ -681,7 +679,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           )}
         </ContentBottomHeaderLayout>
 
-        {(currentListingStatus !== 'custom' || showThemes) && filteredStencils?.length && (
+        {(currentListingStatus !== 'custom' || showThemes) && filteredStencils?.length !== 0 && (
           <Segment basic padded>
             <div ref={sliderContainerRef}>
               <Header as="h4">Template Theme</Header>
