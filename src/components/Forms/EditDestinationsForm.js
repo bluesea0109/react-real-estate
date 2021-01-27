@@ -69,7 +69,10 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const [error, setError] = useState(null);
   const currentListingStatus = mailoutDetails?.listingStatus;
   const isCampaign = mailoutDetails?.subtype === 'campaign';
-  const isGeneralCampaign = mailoutDetails?.publishedTags?.includes('general');
+  const isGeneralCampaign =
+    mailoutDetails?.publishedTags?.includes('general') ||
+    mailoutDetails?.publishedTags?.includes('sphere') ||
+    mailoutDetails?.intentPath?.includes('sphere');
   const isCalculationDeferred = mailoutDetails?.mailoutStatus === 'calculation-deferred';
 
   const [destinationsOptionsMode, setDestinationsOptionsMode] = useState(

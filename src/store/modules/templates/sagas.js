@@ -23,9 +23,13 @@ export function* getTemplatesSaga() {
     } = ApiService.directory.stencilsByTag('general');
     const generalResponse = yield call(ApiService[generalMethod], generalPath);
 
+    const { stencilIntentPath, stencilIntentMethod } = ApiService.directory.stencilsByIntent();
+    const byIntentResponse = yield call(ApiService[stencilIntentMethod], stencilIntentPath);
+
     const response = Object.assign(StencilResponse);
     response.holiday = [...holidayResponse.stencils];
     response.general = [...generalResponse.stencils];
+    response.byIntent = [...byIntentResponse.stencils];
 
     yield put(getTemplatesSuccess(response));
   } catch (err) {
