@@ -360,14 +360,14 @@ const ListingsPage = () => {
 
   useEffect(() => {
     if (activeFilters.includes('All')) {
-      setFitleredListings(sortedListings || listingDetails?.listings);
+      setFitleredListings(sortedListings);
     } else {
-      let filteredListingDetails =
-        listingDetails &&
-        listingDetails.listings.filter(el => activeFilters.includes(el.standardStatus));
-      setFitleredListings(filteredListingDetails);
+      const newFilteredListings = sortedListings.filter(listing =>
+        activeFilters.includes(listing.standardStatus)
+      );
+      setFitleredListings(newFilteredListings);
     }
-  }, [listingDetails, activeFilters, sortedListings]);
+  }, [activeFilters, sortedListings]);
 
   const handleFilterSelected = val => {
     if (val === 'All') {
@@ -445,7 +445,7 @@ const ListingsPage = () => {
             <Loading message="Loading Listings..." />
           </ContentBottomHeaderLayout>
         )}
-        {listingDetails?.listings.length > 0 ? (
+        {sortedListings && listingDetails?.listings.length > 0 ? (
           <Grid padded="vertically" columns={getColumns()}>
             {filteredListings?.length > 0 ? (
               filteredListings.map((item, i) => {
@@ -460,10 +460,12 @@ const ListingsPage = () => {
                   />
                 );
               })
-            ) : (
+            ) : sortedListings.length > 0 ? (
               <Header as="h3" className="normalFontWeight noMargin cardFont noFilteredListingsText">
                 No Listings meet the current filtering criteria.
               </Header>
+            ) : (
+              undefined
             )}
           </Grid>
         ) : (
