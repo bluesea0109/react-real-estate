@@ -9,11 +9,9 @@ import {
   Page,
   Segment,
   Snackbar,
-  SectionHeader,
   StyledMenu,
   Dropdown,
   Icon,
-  Label,
   Input,
 } from '../components/Base';
 import {
@@ -27,12 +25,22 @@ import Loading from '../components/Loading';
 import { Link } from 'react-router-dom';
 import auth from '../services/auth';
 import ReadyMadeContentItem from '../components/ReadyMadeContentItem';
+import { startCase } from 'lodash';
 
 const SectionGrid = styled.div`
   display: grid;
   gap: 2rem;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   padding: 0.5rem;
+`;
+
+const StyledHeading = styled.div`
+  padding: 0.5rem 0;
+  font-size: 17px;
+  font-weight: 600;
+  & .ui.dropdown > .text {
+    padding: 4px 0;
+  }
 `;
 
 const StyledDropdown = styled(Dropdown)`
@@ -42,10 +50,6 @@ const StyledDropdown = styled(Dropdown)`
 const ItemContent = styled.div`
   display: flex;
   justify-content: space-between;
-`;
-
-const TagsContainer = styled.div`
-  padding-left: 1rem;
 `;
 
 const SearchContainer = styled(Menu.Item)`
@@ -58,35 +62,35 @@ const SearchContainer = styled(Menu.Item)`
 export default function ReadyMadeDesignPage() {
   const error = false;
   const content = useSelector(store => store.content);
-  const tagList = content.list.reduce((list, design) => {
-    design.tags.forEach(tag => {
-      if (!list.includes(tag)) {
-        list.push(tag);
-      }
-    });
-    return list;
-  }, []);
+  const filterList = content.list.reduce(
+    (list, design) => {
+      design.tags.forEach(tag => {
+        if (!list.includes(tag)) {
+          list.push(tag);
+        }
+      });
+      return list;
+    },
+    ['All Designs']
+  );
 
-  const [tags] = useState(tagList);
   const [filteredContentList, setFilteredContentList] = useState(content.list);
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [currentFilter, setCurrentFilter] = useState(filterList[0]);
   const [searchValue, setSearchValue] = useState('');
   const [showImageModal, setShowImageModal] = useState(false);
   const [currentItem, setCurrentItem] = useState(0);
 
   useEffect(() => {
     let newContentList = content.list;
-    if (selectedTags.length > 0)
-      newContentList = newContentList.filter(item =>
-        item.tags.some(tag => selectedTags.includes(tag))
-      );
+    if (currentFilter !== 'All Designs')
+      newContentList = newContentList.filter(item => item.tags.some(tag => currentFilter === tag));
     newContentList = newContentList.filter(
       item =>
         item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
         item.tags.some(tag => tag.toLowerCase().includes(searchValue.toLowerCase()))
     );
     setFilteredContentList(newContentList);
-  }, [selectedTags, searchValue, content.list]);
+  }, [currentFilter, searchValue, content.list]);
 
   async function downloadImage(item) {
     const path = `/api/user/content/download/${item.id}`;
@@ -115,22 +119,6 @@ export default function ReadyMadeDesignPage() {
     let newImgIndex = currentItem + 1;
     if (newImgIndex > filteredContentList.length - 1) newImgIndex = 0;
     setCurrentItem(newImgIndex);
-  };
-
-  const addTag = tag => {
-    if (selectedTags.includes(tag)) return;
-    let newTags = [...selectedTags];
-    newTags.unshift(tag);
-    setSelectedTags(newTags);
-  };
-
-  const removeTag = tagToRemove => {
-    let newTags = [...selectedTags];
-    newTags.splice(
-      newTags.findIndex(tag => tag === tagToRemove),
-      1
-    );
-    setSelectedTags(newTags);
   };
 
   return (
@@ -163,31 +151,19 @@ export default function ReadyMadeDesignPage() {
       </ContentTopHeaderLayout>
 
       <Segment>
-        <SectionHeader as="h3">
-          <StyledDropdown text="All Designs">
+        <StyledHeading>
+          <StyledDropdown text={startCase(currentFilter)}>
             <Dropdown.Menu>
-              <Dropdown.Header icon="tags" content="Filter by tag" />
-              {tags.map(tag => (
-                <Dropdown.Item key={tag} onClick={() => addTag(tag)}>
+              {filterList.map(filter => (
+                <Dropdown.Item key={filter} onClick={() => setCurrentFilter(filter)}>
                   <ItemContent>
-                    <span>{tag}</span>
-                    {selectedTags.includes(tag) && <Icon name="check" />}
+                    <span>{startCase(filter)}</span>
                   </ItemContent>
                 </Dropdown.Item>
               ))}
-              <Dropdown.Header />
             </Dropdown.Menu>
           </StyledDropdown>
-          {selectedTags.length > 0 && (
-            <TagsContainer>
-              {selectedTags.map(tag => (
-                <Label key={tag}>
-                  <Icon name="tag" /> {tag} <Icon name="delete" onClick={() => removeTag(tag)} />
-                </Label>
-              ))}
-            </TagsContainer>
-          )}
-        </SectionHeader>
+        </StyledHeading>
         <SectionGrid>
           {filteredContentList.map(item => (
             <ReadyMadeContentItem
