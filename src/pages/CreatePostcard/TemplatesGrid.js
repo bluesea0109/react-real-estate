@@ -63,7 +63,7 @@ export default function TemplatesGrid({
                   VIEW
                 </ButtonNoStyle>
               </ImgOverlay>
-              <TemplateImg src={template.thumbnail} alt="template thumbnail" />
+              <TemplateImg src={template.thumbnail} alt="template thumbnail" title={template.thumbnailId}/>
             </GridItem>
             <div className="label-text">{template.name}</div>
           </GridItemContainer>
