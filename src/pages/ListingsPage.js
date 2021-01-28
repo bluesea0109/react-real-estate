@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import Loading from '../components/Loading';
 import { Header, Menu, Page, Dropdown } from '../components/Base';
 import Styled from 'styled-components';
@@ -301,24 +301,16 @@ const FilterList = ({ activeFilters, handleFilterSelected }) => {
           <List.Description>Sold</List.Description>
         </List.Content>
       </List.Item>
-      <List.Item onClick={() => handleFilterSelected('Closed')}>
-        <Icon
-          name={activeFilters.includes('Closed') ? 'check square' : 'square outline'}
-          className={`${'filterIcon'} ${activeFilters.includes('Closed') && 'filterIconActive'}`}
-        />
-        <List.Content>
-          <List.Description>Closed</List.Description>
-        </List.Content>
-      </List.Item>
     </List>
   );
 };
 
 const ListingsPage = () => {
+  const location = useLocation();
   const [listingDetails, setListingDetails] = useState(null);
   const [sortedListings, setsortedListings] = useState(null);
   const [filteredListings, setFitleredListings] = useState(null);
-  const [activeFilters, setActiveFilters] = useState(['All']);
+  const [activeFilters, setActiveFilters] = useState(location?.state?.filters || 'All');
   const [userType, setUserType] = useState('loggedIn');
 
   const peerId = useSelector(store => store.peer.peerId);
@@ -362,7 +354,7 @@ const ListingsPage = () => {
     if (activeFilters.includes('All')) {
       setFitleredListings(sortedListings);
     } else {
-      const newFilteredListings = sortedListings.filter(listing =>
+      const newFilteredListings = sortedListings?.filter(listing =>
         activeFilters.includes(listing.standardStatus)
       );
       setFitleredListings(newFilteredListings);
