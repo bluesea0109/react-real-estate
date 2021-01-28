@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Progress } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -10,24 +10,24 @@ import {
   Segment,
   Snackbar,
   StyledMenu,
-  ButtonNoStyle,
-  Icon,
-  Button,
+  // ButtonNoStyle,
+  // Icon,
+  // Button,
 } from '../components/Base';
 import PageTitleHeader from '../components/PageTitleHeader';
 import Loading from '../components/Loading';
 import * as brandColors from '../components/utils/brandColors';
-import { Link, useHistory } from 'react-router-dom';
-import ReadyMadeContentSlider from '../components/ReadyMadeContentSlider';
-import { useWindowSize } from '../components/Hooks/useWindowSize';
-import ReadyMadeContentItem from '../components/ReadyMadeContentItem';
-import auth from '../services/auth';
-import {
-  ModalActions,
-  ModalClose,
-  PreviewImage,
-  PreviewModal,
-} from '../components/Base/PreviewModal';
+import { Link } from 'react-router-dom';
+// import ReadyMadeContentSlider from '../components/ReadyMadeContentSlider';
+// import { useWindowSize } from '../components/Hooks/useWindowSize';
+// import ReadyMadeContentItem from '../components/ReadyMadeContentItem';
+// import auth from '../services/auth';
+// import {
+//   ModalActions,
+//   ModalClose,
+//   PreviewImage,
+//   PreviewModal,
+// } from '../components/Base/PreviewModal';
 
 const StyledHeading = styled.div`
   display: flex;
@@ -37,9 +37,9 @@ const StyledHeading = styled.div`
   padding: 0.5rem 0.5rem 1rem 0.5rem;
 `;
 
-const ViewAllButton = styled(ButtonNoStyle)`
-  color: ${brandColors.primary};
-`;
+// const ViewAllButton = styled(ButtonNoStyle)`
+//   color: ${brandColors.primary};
+// `;
 
 const SectionGrid = styled.div`
   display: grid;
@@ -124,11 +124,11 @@ const DashboardItem = ({ className, name, linkTo, external }) => {
 };
 
 const Dashboard = () => {
-  const history = useHistory();
-  const windowSize = useWindowSize();
+  // const history = useHistory();
+  // const windowSize = useWindowSize();
   const isInitiatingTeam = useSelector(store => store.teamInitialize.polling);
   const initiatingTeamState = useSelector(store => store.teamInitialize.available);
-  const readyMadeContent = useSelector(store => store.content.list);
+  // const readyMadeContent = useSelector(store => store.content.list);
   const currentTeamUserTotal = initiatingTeamState && initiatingTeamState.currentUserTotal;
   const currentTeamUserCompleted = initiatingTeamState && initiatingTeamState.currentUserCompleted;
   const isInitiatingUser = useSelector(store => store.initialize.polling);
@@ -137,37 +137,37 @@ const Dashboard = () => {
   const currentUserCompleted = initiatingUserState && initiatingUserState.campaignsCompleted;
 
   const error = useSelector(store => store.mailouts.error?.message);
-  const [showImageModal, setShowImageModal] = useState(false);
-  const [currentItem, setCurrentItem] = useState(0);
+  // const [showImageModal, setShowImageModal] = useState(false);
+  // const [currentItem, setCurrentItem] = useState(0);
 
-  async function downloadImage(item) {
-    const path = `/api/user/content/download/${item.id}`;
-    const headers = {};
-    const accessToken = await auth.getAccessToken();
-    headers['authorization'] = `Bearer ${accessToken}`;
-    const imageRes = await fetch(path, { headers, method: 'get', credentials: 'include' });
-    let anchor = document.createElement('a');
-    document.body.appendChild(anchor);
-    imageRes.blob().then(imgBlob => {
-      let imgURL = window.URL.createObjectURL(imgBlob);
-      anchor.href = imgURL;
-      anchor.download = item.name;
-      anchor.click();
-      window.URL.revokeObjectURL(imgURL);
-    });
-  }
+  // async function downloadImage(item) {
+  //   const path = `/api/user/content/download/${item.id}`;
+  //   const headers = {};
+  //   const accessToken = await auth.getAccessToken();
+  //   headers['authorization'] = `Bearer ${accessToken}`;
+  //   const imageRes = await fetch(path, { headers, method: 'get', credentials: 'include' });
+  //   let anchor = document.createElement('a');
+  //   document.body.appendChild(anchor);
+  //   imageRes.blob().then(imgBlob => {
+  //     let imgURL = window.URL.createObjectURL(imgBlob);
+  //     anchor.href = imgURL;
+  //     anchor.download = item.name;
+  //     anchor.click();
+  //     window.URL.revokeObjectURL(imgURL);
+  //   });
+  // }
 
-  const prevImg = () => {
-    let newImgIndex = currentItem - 1;
-    if (newImgIndex < 0) newImgIndex = readyMadeContent.length - 1;
-    setCurrentItem(newImgIndex);
-  };
+  // const prevImg = () => {
+  //   let newImgIndex = currentItem - 1;
+  //   if (newImgIndex < 0) newImgIndex = readyMadeContent.length - 1;
+  //   setCurrentItem(newImgIndex);
+  // };
 
-  const nextImg = () => {
-    let newImgIndex = currentItem + 1;
-    if (newImgIndex > readyMadeContent.length - 1) newImgIndex = 0;
-    setCurrentItem(newImgIndex);
-  };
+  // const nextImg = () => {
+  //   let newImgIndex = currentItem + 1;
+  //   if (newImgIndex > readyMadeContent.length - 1) newImgIndex = 0;
+  //   setCurrentItem(newImgIndex);
+  // };
 
   return (
     <Page basic>
@@ -271,7 +271,7 @@ const Dashboard = () => {
         </SectionGrid>
       </Segment>
 
-      <Segment>
+      {/* <Segment>
         <StyledHeading>
           <h3>Ready Made Designs</h3>
           <ViewAllButton onClick={() => history.push('/ready-made-designs')}>
@@ -333,7 +333,7 @@ const Dashboard = () => {
             <Icon name="chevron right" size="big" color="grey" />
           </div>
         </ModalActions>
-      </PreviewModal>
+      </PreviewModal> */}
 
       {error && <Snackbar error>{error}</Snackbar>}
       {/* show the loading state */}
