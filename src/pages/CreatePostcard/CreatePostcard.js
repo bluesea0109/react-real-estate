@@ -146,6 +146,7 @@ const ViewButton = styled(ButtonNoStyle)`
 
 const NameInput = styled(Input)`
   margin: 1rem 1.5rem;
+  max-width: 900px;
 `;
 
 const postcardSizes = ['4x6', '6x9', '6x11'];
@@ -363,13 +364,7 @@ export default function CreatePostcard({ location }) {
     const newFilters = availableTemplates.reduce(
       (filterList, template) => {
         const intents = template.intentPath.split('|');
-        if (intents.length === 2 && !filterList?.includes(intents[1])) filterList.push(intents[1]);
-        if (intents.length > 2) {
-          for (const i in intents) {
-            if (parseInt(i) === 0 || parseInt(i) === intents.length - 1) continue;
-            else if (!filterList.includes(intents[i])) filterList.push(intents[i]);
-          }
-        }
+        if (!filterList?.includes(intents[1])) filterList.push(intents[1]);
         return filterList;
       },
       ['All Templates']

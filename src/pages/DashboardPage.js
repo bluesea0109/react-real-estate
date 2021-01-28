@@ -43,16 +43,16 @@ const StyledHeading = styled.div`
 
 const SectionGrid = styled.div`
   display: grid;
-  gap: 0.5rem;
-  grid-template-columns: repeat(5, minmax(220px, 1fr));
+  gap: 0.75rem;
+  grid-template-columns: repeat(5, minmax(230px, 1fr));
   & > div {
-    padding: 0.5rem;
+    padding: 0.25rem;
   }
   & .image-container {
     width: 220px;
   }
-  @media (max-width: 1260px) {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  @media (max-width: 1320px) {
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   }
 `;
 
@@ -61,6 +61,7 @@ const DashboardItemContainer = styled.div`
   flex-direction: column;
   font-weight: bold;
   cursor: pointer;
+  ${props => (props.soon ? 'cursor: default;' : null)}
   & img {
     width: 220px;
     height: 160px;
@@ -84,7 +85,7 @@ const DashboardItemContainer = styled.div`
 const getDashboardImg = fileName =>
   `https://stencil-alf-assets.s3.amazonaws.com/marketer/${fileName}`;
 
-const DashboardItem = ({ className, name, linkTo, external }) => {
+const DashboardItem = ({ className, name, linkTo, external, soon }) => {
   let imgFileName = `${name.replaceAll(' ', '_')}.jpg`;
   let imgSrc = getDashboardImg(`${imgFileName}`);
   const linkAttributes = external
@@ -94,9 +95,9 @@ const DashboardItem = ({ className, name, linkTo, external }) => {
         rel: 'noopener noreferrer',
       }
     : {};
-  if (external) {
+  if (external || soon) {
     return (
-      <DashboardItemContainer className={className}>
+      <DashboardItemContainer className={className} soon={soon}>
         <a {...linkAttributes}>
           <img src={imgSrc} alt={`dashboard-item-${name}`} />
           <span className="item-name">
@@ -106,7 +107,7 @@ const DashboardItem = ({ className, name, linkTo, external }) => {
                 <span>Sign</span>
               </>
             ) : (
-              name
+              `${name}${soon ? ' - Coming Soon' : ''}`
             )}
           </span>
         </a>
@@ -238,11 +239,20 @@ const Dashboard = () => {
             name="custom postcard"
             linkTo={{ pathname: 'create-postcard', state: { filter: 'custom' } }}
           ></DashboardItem>
-          <DashboardItem name="just listed ad" linkTo="listings"></DashboardItem>
-          <DashboardItem name="just sold ad" linkTo="listings"></DashboardItem>
-          <DashboardItem name="open house ad" linkTo="listings"></DashboardItem>
-          <DashboardItem name="home value ad" linkTo="listings"></DashboardItem>
-          <DashboardItem name="buyer search ad" linkTo="listings"></DashboardItem>
+          <DashboardItem
+            name="just listed ad"
+            linkTo={{ pathname: 'listings', state: { filters: ['Active'] } }}
+          ></DashboardItem>
+          <DashboardItem
+            name="just sold ad"
+            linkTo={{ pathname: 'listings', state: { filters: ['Sold'] } }}
+          ></DashboardItem>
+          <DashboardItem
+            name="open house ad"
+            linkTo={{ pathname: 'listings', state: { filters: ['Active', 'Pending'] } }}
+          ></DashboardItem>
+          <DashboardItem name="home value ad" linkTo="" soon></DashboardItem>
+          <DashboardItem name="buyer search ad" linkTo="" soon></DashboardItem>
           <DashboardItem
             name="business card"
             linkTo="https://agentstore.com/product-category/business-cards/"
@@ -269,6 +279,12 @@ const Dashboard = () => {
             external
           ></DashboardItem>
         </SectionGrid>
+      </Segment>
+
+      <Segment>
+        <StyledHeading>
+          <h3>Ready Made Designs - Coming Soon</h3>
+        </StyledHeading>
       </Segment>
 
       {/* <Segment>
