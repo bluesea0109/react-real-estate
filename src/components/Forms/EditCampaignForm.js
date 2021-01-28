@@ -775,8 +775,8 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
             ) : null}
           </div>
           {!mailoutDetails.frontResourceUrl &&
-            !publishedTags?.includes('holiday') &&
-            !publishedTags?.includes('general') && (
+            !editIntentPath?.includes('sphere') &&
+            !publishedTags?.includes('holiday') && (
               <div style={{ maxWidth: 350, padding: '0 1rem', margin: 'auto' }}>
                 <Header as="h4">Cover Photo</Header>
                 {photoUpdating && <span>Please wait...</span>}
