@@ -34,7 +34,7 @@ const StyledHeading = styled.div`
   justify-content: space-between;
   color: ${brandColors.grey03};
   font-size: 1.1rem;
-  padding: 0.5rem 0.5rem 1rem 0.5rem;
+  padding: 0.5rem;
 `;
 
 // const ViewAllButton = styled(ButtonNoStyle)`
@@ -45,6 +45,7 @@ const SectionGrid = styled.div`
   display: grid;
   gap: 0.75rem;
   grid-template-columns: repeat(5, minmax(230px, 1fr));
+  padding-top: 0.5rem;
   & > div {
     padding: 0.25rem;
   }
@@ -281,7 +282,7 @@ const Dashboard = () => {
         </SectionGrid>
       </Segment>
 
-      <Segment style={{ paddingBottom: '1.5rem' }}>
+      <Segment style={{ marginBottom: '1rem' }}>
         <StyledHeading>
           <h3>Ready Made Designs - Coming Soon</h3>
         </StyledHeading>
