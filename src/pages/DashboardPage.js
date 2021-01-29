@@ -172,7 +172,7 @@ const Dashboard = () => {
   // };
 
   return (
-    <Page basic style={{ marginBottom: '1rem' }}>
+    <Page basic>
       <ContentTopHeaderLayout>
         <PageTitleHeader>
           <StyledMenu borderless fluid secondary>
@@ -282,7 +282,7 @@ const Dashboard = () => {
         </SectionGrid>
       </Segment>
 
-      <Segment style={{ marginBottom: '1rem' }}>
+      <Segment>
         <StyledHeading>
           <h3>Ready Made Designs - Coming Soon</h3>
         </StyledHeading>
