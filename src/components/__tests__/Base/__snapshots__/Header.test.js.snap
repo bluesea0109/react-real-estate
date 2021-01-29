@@ -1,7 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders correctly 1`] = `
+.c0 {
+  color: #343434;
+  font-weight: 600;
+}
+
 <div
-  className="ui header "
+  className="ui header c0"
 />
 `;

@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 
 import auth0 from './modules/auth0/reducer';
 import boards from './modules/boards/reducer';
+import content from './modules/content/reducer';
 import customization from './modules/customization/reducer';
 import initialize from './modules/initialize/reducer';
 import inviteUsers from './modules/inviteUsers/reducer';
@@ -25,6 +26,7 @@ import ui from './modules/ui/reducer';
 const reducers = {
   auth0,
   boards,
+  content,
   customization,
   initialize,
   inviteUsers,
