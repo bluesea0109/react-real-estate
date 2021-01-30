@@ -125,6 +125,7 @@ export default function ReadyMadeDesignPage() {
   }, [currentFilter, currentTypeFilter, searchValue, content.list]);
 
   async function downloadImage(item) {
+    setShowImageModal(false);
     const path = `/api/user/content/download/${item.id}`;
     const headers = {};
     const accessToken = await auth.getAccessToken();
