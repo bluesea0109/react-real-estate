@@ -26,7 +26,6 @@ import { Link, useLocation } from 'react-router-dom';
 import auth from '../services/auth';
 import ReadyMadeContentItem from '../components/ReadyMadeContentItem';
 import { startCase, lowerCase } from 'lodash';
-import { findIconDefinition } from '@fortawesome/fontawesome-svg-core';
 
 const SectionGrid = styled.div`
   display: grid;

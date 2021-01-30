@@ -225,7 +225,7 @@ const Dashboard = ({ className }) => {
           </ViewAllButton>
         </StyledHeading>
         {readyMadeContent.length > 5 ? (
-          windowSize.width < 1258 ? (
+          windowSize.width <= 1320 ? (
             <SectionGrid>
               {readyMadeContent.slice(0, 8).map(contentItem => (
                 <DashboardItemContainer key={contentItem.id} className={className}>
