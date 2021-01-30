@@ -25,7 +25,7 @@ import Loading from '../components/Loading';
 import { Link } from 'react-router-dom';
 import auth from '../services/auth';
 import ReadyMadeContentItem from '../components/ReadyMadeContentItem';
-import { startCase } from 'lodash';
+import { startCase, lowerCase } from 'lodash';
 
 const SectionGrid = styled.div`
   display: grid;
@@ -38,8 +38,11 @@ const StyledHeading = styled.div`
   padding: 0.5rem 0;
   font-size: 17px;
   font-weight: 600;
-  & .ui.dropdown > .text {
-    padding: 4px 0;
+  & .ui.dropdown {
+    margin-right: 2rem;
+    & > .text {
+      padding: 4px 0;
+    }
   }
 `;
 
@@ -73,24 +76,43 @@ export default function ReadyMadeDesignPage() {
     },
     ['All Designs']
   );
+  const typeFilterList = content.list.reduce(
+    (list, design) => {
+      design.formats.forEach(format => {
+        if (!list.includes(format)) {
+          list.push(format);
+        }
+      });
+      return list;
+    },
+    ['All Formats']
+  );
 
   const [filteredContentList, setFilteredContentList] = useState(content.list);
   const [currentFilter, setCurrentFilter] = useState(filterList[0]);
+  const [currentTypeFilter, setCurrentTypeFilter] = useState(typeFilterList[0]);
   const [searchValue, setSearchValue] = useState('');
   const [showImageModal, setShowImageModal] = useState(false);
   const [currentItem, setCurrentItem] = useState(0);
 
   useEffect(() => {
     let newContentList = content.list;
-    if (currentFilter !== 'All Designs')
+    if (currentFilter !== 'All Designs') {
       newContentList = newContentList.filter(item => item.tags.some(tag => currentFilter === tag));
+    }
+    if (currentTypeFilter !== 'All Formats') {
+      newContentList = newContentList.filter(item =>
+        item.formats.some(format => currentTypeFilter === format)
+      );
+    }
     newContentList = newContentList.filter(
       item =>
         item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.tags.some(tag => tag.toLowerCase().includes(searchValue.toLowerCase()))
+        item.tags.some(tag => lowerCase(tag).includes(searchValue.toLowerCase())) ||
+        item.formats.some(format => lowerCase(format).includes(searchValue.toLowerCase()))
     );
     setFilteredContentList(newContentList);
-  }, [currentFilter, searchValue, content.list]);
+  }, [currentFilter, currentTypeFilter, searchValue, content.list]);
 
   async function downloadImage(item) {
     const path = `/api/user/content/download/${item.id}`;
@@ -156,6 +178,17 @@ export default function ReadyMadeDesignPage() {
             <Dropdown.Menu>
               {filterList.map(filter => (
                 <Dropdown.Item key={filter} onClick={() => setCurrentFilter(filter)}>
+                  <ItemContent>
+                    <span>{startCase(filter)}</span>
+                  </ItemContent>
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </StyledDropdown>
+          <StyledDropdown text={startCase(currentTypeFilter)}>
+            <Dropdown.Menu>
+              {typeFilterList.map(filter => (
+                <Dropdown.Item key={filter} onClick={() => setCurrentTypeFilter(filter)}>
                   <ItemContent>
                     <span>{startCase(filter)}</span>
                   </ItemContent>
