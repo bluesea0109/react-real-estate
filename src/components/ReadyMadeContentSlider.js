@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import styled from 'styled-components';
 import { Icon } from './Base';
-import ReadyMadeContentItem from './ReadyMadeContentItem';
+import { DashboardItemContainer } from './DashboardItemContainer';
 import * as brandColors from './utils/brandColors';
 
 const StyledSlider = styled(Slider)`
@@ -46,12 +47,7 @@ function ArrowRight(props) {
   return <Icon className="slick-arrow slick-right" onClick={onClick} name="chevron right" />;
 }
 
-export default function ReadyMadeContentSlider({
-  contentList,
-  downloadImage,
-  setCurrentItem,
-  setShowImageModal,
-}) {
+export default function ReadyMadeContentSlider({ className, contentList }) {
   const [showArrow, setShowArrow] = useState('right');
 
   const sliderSettings = {
@@ -66,15 +62,13 @@ export default function ReadyMadeContentSlider({
 
   return (
     <StyledSlider {...sliderSettings} showArrow={showArrow}>
-      {contentList.slice(0, 10).map(item => (
-        <ReadyMadeContentItem
-          key={item.id}
-          contentList={contentList}
-          downloadImage={downloadImage}
-          item={item}
-          setCurrentItem={setCurrentItem}
-          setShowImageModal={setShowImageModal}
-        />
+      {contentList.slice(0, 10).map(contentItem => (
+        <DashboardItemContainer key={contentItem.id} className={className}>
+          <Link to={{ pathname: '/ready-made-designs', state: { item: contentItem } }}>
+            <img src={contentItem.thumbnail} alt="content item" />
+            <span className="item-name">{contentItem.name.split(':')[0]}</span>
+          </Link>
+        </DashboardItemContainer>
       ))}
     </StyledSlider>
   );

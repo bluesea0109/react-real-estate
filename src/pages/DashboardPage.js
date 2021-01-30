@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Progress } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -11,8 +11,6 @@ import {
   Snackbar,
   StyledMenu,
   ButtonNoStyle,
-  Icon,
-  Button,
 } from '../components/Base';
 import PageTitleHeader from '../components/PageTitleHeader';
 import Loading from '../components/Loading';
@@ -20,14 +18,7 @@ import * as brandColors from '../components/utils/brandColors';
 import { Link, useHistory } from 'react-router-dom';
 import ReadyMadeContentSlider from '../components/ReadyMadeContentSlider';
 import { useWindowSize } from '../components/Hooks/useWindowSize';
-import ReadyMadeContentItem from '../components/ReadyMadeContentItem';
-import auth from '../services/auth';
-import {
-  ModalActions,
-  ModalClose,
-  PreviewImage,
-  PreviewModal,
-} from '../components/Base/PreviewModal';
+import { DashboardItemContainer } from '../components/DashboardItemContainer';
 
 const StyledHeading = styled.div`
   display: flex;
@@ -54,32 +45,6 @@ const SectionGrid = styled.div`
   }
   @media (max-width: 1320px) {
     grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  }
-`;
-
-const DashboardItemContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  font-weight: bold;
-  cursor: pointer;
-  ${props => (props.soon ? 'cursor: default;' : null)}
-  & img {
-    width: 220px;
-    height: 160px;
-    border-radius: 6px;
-    margin-bottom: 0.25rem;
-    box-shadow: 0 3px 8px 0 rgba(201, 201, 201, 0.4);
-  }
-  & .item-name {
-    color: ${brandColors.grey04};
-    text-transform: capitalize;
-    & .kwkly-code {
-      text-transform: uppercase;
-    }
-  }
-  &:hover {
-    color: ${brandColors.grey04};
-    font-weight: bold;
   }
 `;
 
@@ -125,12 +90,13 @@ const DashboardItem = ({ className, name, linkTo, external, soon }) => {
   );
 };
 
-const Dashboard = () => {
+const Dashboard = ({ className }) => {
   const history = useHistory();
   const windowSize = useWindowSize();
   const isInitiatingTeam = useSelector(store => store.teamInitialize.polling);
   const initiatingTeamState = useSelector(store => store.teamInitialize.available);
-  const readyMadeContent = useSelector(store => store.content.list);
+  const contentList = useSelector(store => store.content.list);
+  const readyMadeContent = contentList.filter(item => item.formats.includes('square'));
   const currentTeamUserTotal = initiatingTeamState && initiatingTeamState.currentUserTotal;
   const currentTeamUserCompleted = initiatingTeamState && initiatingTeamState.currentUserCompleted;
   const isInitiatingUser = useSelector(store => store.initialize.polling);
@@ -139,37 +105,6 @@ const Dashboard = () => {
   const currentUserCompleted = initiatingUserState && initiatingUserState.campaignsCompleted;
 
   const error = useSelector(store => store.mailouts.error?.message);
-  const [showImageModal, setShowImageModal] = useState(false);
-  const [currentItem, setCurrentItem] = useState(0);
-
-  async function downloadImage(item) {
-    const path = `/api/user/content/download/${item.id}`;
-    const headers = {};
-    const accessToken = await auth.getAccessToken();
-    headers['authorization'] = `Bearer ${accessToken}`;
-    const imageRes = await fetch(path, { headers, method: 'get', credentials: 'include' });
-    let anchor = document.createElement('a');
-    document.body.appendChild(anchor);
-    imageRes.blob().then(imgBlob => {
-      let imgURL = window.URL.createObjectURL(imgBlob);
-      anchor.href = imgURL;
-      anchor.download = item.name;
-      anchor.click();
-      window.URL.revokeObjectURL(imgURL);
-    });
-  }
-
-  const prevImg = () => {
-    let newImgIndex = currentItem - 1;
-    if (newImgIndex < 0) newImgIndex = readyMadeContent.length - 1;
-    setCurrentItem(newImgIndex);
-  };
-
-  const nextImg = () => {
-    let newImgIndex = currentItem + 1;
-    if (newImgIndex > readyMadeContent.length - 1) newImgIndex = 0;
-    setCurrentItem(newImgIndex);
-  };
 
   return (
     <Page basic>
@@ -293,58 +228,32 @@ const Dashboard = () => {
           windowSize.width < 1258 ? (
             <SectionGrid>
               {readyMadeContent.slice(0, 8).map(contentItem => (
-                <ReadyMadeContentItem
-                  key={contentItem.id}
-                  contentList={readyMadeContent}
-                  downloadImage={downloadImage}
-                  item={contentItem}
-                  setCurrentItem={setCurrentItem}
-                  setShowImageModal={setShowImageModal}
-                />
+                <DashboardItemContainer key={contentItem.id} className={className}>
+                  <Link to={{ pathname: '/ready-made-designs', state: { item: contentItem } }}>
+                    <img src={contentItem.thumbnail} alt="content item" />
+                    <span className="item-name">{contentItem.name.split(':')[0]}</span>
+                  </Link>
+                </DashboardItemContainer>
               ))}
             </SectionGrid>
           ) : (
-            <ReadyMadeContentSlider
-              contentList={readyMadeContent}
-              downloadImage={downloadImage}
-              setCurrentItem={setCurrentItem}
-              setShowImageModal={setShowImageModal}
-            />
+            <ReadyMadeContentSlider contentList={readyMadeContent} />
           )
         ) : (
           <div>
             <SectionGrid>
               {readyMadeContent.map(contentItem => (
-                <ReadyMadeContentItem
-                  key={contentItem.id}
-                  contentList={readyMadeContent}
-                  downloadImage={downloadImage}
-                  item={contentItem}
-                  setCurrentItem={setCurrentItem}
-                  setShowImageModal={setShowImageModal}
-                />
+                <DashboardItemContainer key={contentItem.id} className={className}>
+                  <Link to={{ pathname: '/ready-made-designs', state: { item: contentItem } }}>
+                    <img src={contentItem.thumbnail} alt="content item" />
+                    <span className="item-name">{contentItem.name.split(':')[0]}</span>
+                  </Link>
+                </DashboardItemContainer>
               ))}
             </SectionGrid>
           </div>
         )}
       </Segment>
-      <PreviewModal open={showImageModal}>
-        <ModalClose onClick={() => setShowImageModal(false)}>
-          <Icon name="close" color="grey" size="large" />
-        </ModalClose>
-        <PreviewImage src={readyMadeContent[currentItem]?.preview} alt="download preview" />
-        <ModalActions>
-          <div className="arrow" onClick={prevImg}>
-            <Icon name="chevron left" size="big" color="grey" />
-          </div>
-          <Button primary onClick={() => downloadImage(readyMadeContent[currentItem])}>
-            Download
-          </Button>
-          <div className="arrow" onClick={nextImg}>
-            <Icon name="chevron right" size="big" color="grey" />
-          </div>
-        </ModalActions>
-      </PreviewModal>
 
       {error && <Snackbar error>{error}</Snackbar>}
       {/* show the loading state */}

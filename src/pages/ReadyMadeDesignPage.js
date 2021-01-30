@@ -22,10 +22,11 @@ import {
 } from '../components/Base/PreviewModal';
 import PageTitleHeader from '../components/PageTitleHeader';
 import Loading from '../components/Loading';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import auth from '../services/auth';
 import ReadyMadeContentItem from '../components/ReadyMadeContentItem';
 import { startCase, lowerCase } from 'lodash';
+import { findIconDefinition } from '@fortawesome/fontawesome-svg-core';
 
 const SectionGrid = styled.div`
   display: grid;
@@ -63,6 +64,8 @@ const SearchContainer = styled(Menu.Item)`
 `;
 
 export default function ReadyMadeDesignPage() {
+  const location = useLocation();
+  const clickedItem = location?.state?.item;
   const error = false;
   const content = useSelector(store => store.content);
   const filterList = content.list.reduce(
@@ -92,8 +95,10 @@ export default function ReadyMadeDesignPage() {
   const [currentFilter, setCurrentFilter] = useState(filterList[0]);
   const [currentTypeFilter, setCurrentTypeFilter] = useState(typeFilterList[0]);
   const [searchValue, setSearchValue] = useState('');
-  const [showImageModal, setShowImageModal] = useState(false);
-  const [currentItem, setCurrentItem] = useState(0);
+  const [showImageModal, setShowImageModal] = useState(clickedItem ? true : false);
+  const [currentItem, setCurrentItem] = useState(
+    clickedItem ? filteredContentList.findIndex(item => item.id === clickedItem.id) : 0
+  );
 
   useEffect(() => {
     let newContentList = content.list;
