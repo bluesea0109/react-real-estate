@@ -68,17 +68,22 @@ export default function ReadyMadeDesignPage() {
   const clickedItem = location?.state?.item;
   const error = false;
   const content = useSelector(store => store.content);
-  const filterList = content.list.reduce(
-    (list, design) => {
-      design.tags.forEach(tag => {
-        if (!list.includes(tag)) {
-          list.push(tag);
-        }
-      });
-      return list;
-    },
-    ['All Designs']
-  );
+  const filterList = content.list
+    .reduce(
+      (list, design) => {
+        design.tags.forEach(tag => {
+          if (!list.includes(tag)) {
+            list.push(tag);
+          }
+        });
+        return list;
+      },
+      ['All Designs']
+    )
+    .sort((a, b) => {
+      if (b === 'other') return -1;
+      else return 0;
+    });
   const typeFilterList = content.list.reduce(
     (list, design) => {
       design.formats.forEach(format => {
