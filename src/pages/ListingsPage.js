@@ -298,7 +298,7 @@ const FilterList = ({ activeFilters, handleFilterSelected }) => {
           className={`${'filterIcon'} ${activeFilters.includes('Sold') && 'filterIconActive'}`}
         />
         <List.Content>
-          <List.Description>Sold</List.Description>
+          <List.Description>Sold / Off Market</List.Description>
         </List.Content>
       </List.Item>
     </List>
@@ -353,6 +353,12 @@ const ListingsPage = () => {
   useEffect(() => {
     if (activeFilters.includes('All')) {
       setFitleredListings(sortedListings);
+    } else if (activeFilters.includes('Sold')) {
+      const newFilteredListings = sortedListings?.filter(
+        listing =>
+          activeFilters.includes(listing.standardStatus) || listing.standardStatus === 'Closed'
+      );
+      setFitleredListings(newFilteredListings);
     } else {
       const newFilteredListings = sortedListings?.filter(listing =>
         activeFilters.includes(listing.standardStatus)
