@@ -799,6 +799,7 @@ h1 {
   padding: 8px;
   margin: 20px;
   width: 80%;
+  cursor: pointer !important;
 }
 .adTableCampaignName {
   font-weight: 600 !important;
