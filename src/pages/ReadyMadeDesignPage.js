@@ -14,18 +14,30 @@ import {
   Icon,
   Input,
 } from '../components/Base';
-import {
-  ModalActions,
-  ModalClose,
-  PreviewImage,
-  PreviewModal,
-} from '../components/Base/PreviewModal';
+import { ModalActions, ModalClose, PreviewModal } from '../components/Base/PreviewModal';
 import PageTitleHeader from '../components/PageTitleHeader';
 import Loading from '../components/Loading';
 import { Link, useLocation } from 'react-router-dom';
 import auth from '../services/auth';
 import ReadyMadeContentItem from '../components/ReadyMadeContentItem';
 import { startCase, lowerCase } from 'lodash';
+
+const ReadyMadeModal = styled(PreviewModal)`
+  &&&& {
+    height: 650px;
+    max-width: 850px;
+    display: grid !important;
+    grid-template-rows: minmax(10px, 1fr) auto;
+    & > .img-container {
+      display: flex;
+      justify-content: center;
+      & > img {
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+  }
+`;
 
 const SectionGrid = styled.div`
   display: grid;
@@ -224,11 +236,13 @@ export default function ReadyMadeDesignPage() {
 
       {error && <Snackbar error>{error}</Snackbar>}
       {content.pending && <Loading />}
-      <PreviewModal open={showImageModal}>
+      <ReadyMadeModal open={showImageModal}>
         <ModalClose onClick={() => setShowImageModal(false)}>
           <Icon name="close" color="grey" size="large" />
         </ModalClose>
-        <PreviewImage src={filteredContentList[currentItem]?.preview} alt="download preview" />
+        <div className="img-container">
+          <img src={filteredContentList[currentItem]?.preview} alt="download preview" />
+        </div>
         <ModalActions>
           <div className="arrow" onClick={prevImg}>
             <Icon name="chevron left" size="big" color="grey" />
@@ -240,7 +254,7 @@ export default function ReadyMadeDesignPage() {
             <Icon name="chevron right" size="big" color="grey" />
           </div>
         </ModalActions>
-      </PreviewModal>
+      </ReadyMadeModal>
     </Page>
   );
 }
