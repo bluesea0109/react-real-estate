@@ -14,18 +14,30 @@ import {
   Icon,
   Input,
 } from '../components/Base';
-import {
-  ModalActions,
-  ModalClose,
-  PreviewImage,
-  PreviewModal,
-} from '../components/Base/PreviewModal';
+import { ModalActions, ModalClose, PreviewModal } from '../components/Base/PreviewModal';
 import PageTitleHeader from '../components/PageTitleHeader';
 import Loading from '../components/Loading';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import auth from '../services/auth';
 import ReadyMadeContentItem from '../components/ReadyMadeContentItem';
-import { startCase } from 'lodash';
+import { startCase, lowerCase } from 'lodash';
+
+const ReadyMadeModal = styled(PreviewModal)`
+  &&&& {
+    height: 650px;
+    max-width: 850px;
+    display: grid !important;
+    grid-template-rows: minmax(10px, 1fr) auto;
+    & > .img-container {
+      display: flex;
+      justify-content: center;
+      & > img {
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+  }
+`;
 
 const SectionGrid = styled.div`
   display: grid;
@@ -38,8 +50,11 @@ const StyledHeading = styled.div`
   padding: 0.5rem 0;
   font-size: 17px;
   font-weight: 600;
-  & .ui.dropdown > .text {
-    padding: 4px 0;
+  & .ui.dropdown {
+    margin-right: 2rem;
+    & > .text {
+      padding: 4px 0;
+    }
   }
 `;
 
@@ -60,39 +75,68 @@ const SearchContainer = styled(Menu.Item)`
 `;
 
 export default function ReadyMadeDesignPage() {
+  const location = useLocation();
+  const clickedItem = location?.state?.item;
   const error = false;
   const content = useSelector(store => store.content);
-  const filterList = content.list.reduce(
+  const filterList = content.list
+    .reduce(
+      (list, design) => {
+        design.tags.forEach(tag => {
+          if (!list.includes(tag)) {
+            list.push(tag);
+          }
+        });
+        return list;
+      },
+      ['All Designs']
+    )
+    .sort((a, b) => {
+      if (b === 'other') return -1;
+      else return 0;
+    });
+  const typeFilterList = content.list.reduce(
     (list, design) => {
-      design.tags.forEach(tag => {
-        if (!list.includes(tag)) {
-          list.push(tag);
+      design.formats.forEach(format => {
+        if (!list.includes(format)) {
+          list.push(format);
         }
       });
       return list;
     },
-    ['All Designs']
+    ['All Formats']
   );
 
   const [filteredContentList, setFilteredContentList] = useState(content.list);
   const [currentFilter, setCurrentFilter] = useState(filterList[0]);
+  const [currentTypeFilter, setCurrentTypeFilter] = useState(typeFilterList[0]);
   const [searchValue, setSearchValue] = useState('');
-  const [showImageModal, setShowImageModal] = useState(false);
-  const [currentItem, setCurrentItem] = useState(0);
+  const [showImageModal, setShowImageModal] = useState(clickedItem ? true : false);
+  const [currentItem, setCurrentItem] = useState(
+    clickedItem ? filteredContentList.findIndex(item => item.id === clickedItem.id) : 0
+  );
 
   useEffect(() => {
     let newContentList = content.list;
-    if (currentFilter !== 'All Designs')
+    if (currentFilter !== 'All Designs') {
       newContentList = newContentList.filter(item => item.tags.some(tag => currentFilter === tag));
+    }
+    if (currentTypeFilter !== 'All Formats') {
+      newContentList = newContentList.filter(item =>
+        item.formats.some(format => currentTypeFilter === format)
+      );
+    }
     newContentList = newContentList.filter(
       item =>
         item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.tags.some(tag => tag.toLowerCase().includes(searchValue.toLowerCase()))
+        item.tags.some(tag => lowerCase(tag).includes(searchValue.toLowerCase())) ||
+        item.formats.some(format => lowerCase(format).includes(searchValue.toLowerCase()))
     );
     setFilteredContentList(newContentList);
-  }, [currentFilter, searchValue, content.list]);
+  }, [currentFilter, currentTypeFilter, searchValue, content.list]);
 
   async function downloadImage(item) {
+    setShowImageModal(false);
     const path = `/api/user/content/download/${item.id}`;
     const headers = {};
     const accessToken = await auth.getAccessToken();
@@ -163,6 +207,17 @@ export default function ReadyMadeDesignPage() {
               ))}
             </Dropdown.Menu>
           </StyledDropdown>
+          <StyledDropdown text={startCase(currentTypeFilter)}>
+            <Dropdown.Menu>
+              {typeFilterList.map(filter => (
+                <Dropdown.Item key={filter} onClick={() => setCurrentTypeFilter(filter)}>
+                  <ItemContent>
+                    <span>{startCase(filter)}</span>
+                  </ItemContent>
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </StyledDropdown>
         </StyledHeading>
         <SectionGrid>
           {filteredContentList.map(item => (
@@ -181,11 +236,13 @@ export default function ReadyMadeDesignPage() {
 
       {error && <Snackbar error>{error}</Snackbar>}
       {content.pending && <Loading />}
-      <PreviewModal open={showImageModal}>
+      <ReadyMadeModal open={showImageModal}>
         <ModalClose onClick={() => setShowImageModal(false)}>
           <Icon name="close" color="grey" size="large" />
         </ModalClose>
-        <PreviewImage src={filteredContentList[currentItem]?.preview} alt="download preview" />
+        <div className="img-container">
+          <img src={filteredContentList[currentItem]?.preview} alt="download preview" />
+        </div>
         <ModalActions>
           <div className="arrow" onClick={prevImg}>
             <Icon name="chevron left" size="big" color="grey" />
@@ -197,7 +254,7 @@ export default function ReadyMadeDesignPage() {
             <Icon name="chevron right" size="big" color="grey" />
           </div>
         </ModalActions>
-      </PreviewModal>
+      </ReadyMadeModal>
     </Page>
   );
 }

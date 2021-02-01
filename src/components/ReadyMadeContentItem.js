@@ -10,9 +10,10 @@ const ContentItemContainer = styled.div`
   font-weight: bold;
   text-transform: capitalize;
   border-radius: 6px;
-  max-width: 256px;
+  width: 256px;
   & .image-container {
     width: 100%;
+    height: 176px;
     position: relative;
     border-radius: 6px;
     padding: 0.5rem;
@@ -42,7 +43,7 @@ const ContentItemContainer = styled.div`
       }
     }
     & img {
-      object-fit: cover;
+      object-fit: contain;
       width: 100%;
       height: 100%;
     }
