@@ -257,7 +257,7 @@ const MailoutDetailsPage = () => {
   ]);
 
   const handleBackClick = () => {
-    history.push(`/dashboard`);
+    history.push(`/postcards`);
   };
 
   const handleApproveAndSendMailoutDetailsClick = () => {

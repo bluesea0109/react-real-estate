@@ -298,11 +298,13 @@ export default function mailout(state = initialState, action) {
         updateMailoutTemplateThemePending: true,
         mailoutEdit: {
           ...state.mailoutEdit,
-          templateTheme: action.payload,
+          templateTheme: action.payload.templateUuid,
+          intentPath: action.payload.intentPath,
         },
         details: {
           ...state.details,
-          templateTheme: action.payload,
+          templateTheme: action.payload.templateUuid,
+          intentPath: action.payload.intentPath,
         },
         updateMailoutTemplateThemeError: null,
       };

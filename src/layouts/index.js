@@ -3,9 +3,7 @@ import HeaderLayout from './HeaderLayout';
 import SidebarLayout from './SidebarLayout';
 import ContentLayout from './ContentLayout';
 import ContentTopHeaderLayout from './ContentTopHeaderLayout';
-import ContentSpacerLayout from './ContentSpacerLayout';
 import ContentBottomHeaderLayout from './ContentBottomHeaderLayout';
-import ContentBodyLayout from './ContentBodyLayout';
 
 import StepLayout from './StepLayout';
 import StepsLayout from './StepsLayout';
@@ -29,9 +27,7 @@ export {
   SidebarLayout,
   ContentLayout,
   ContentTopHeaderLayout,
-  ContentSpacerLayout,
   ContentBottomHeaderLayout,
-  ContentBodyLayout,
   StepLayout,
   StepsLayout,
   NavigationLayout,
