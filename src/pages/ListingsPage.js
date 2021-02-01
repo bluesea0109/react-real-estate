@@ -130,7 +130,7 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
           </div>
           <div className="listingCardBodyContainer">
             <Grid className="centeredRowGrid noMargin cardTopMarginXS">
-              <Grid.Column width={12} className="noPaddingTop noPaddingLeft noPaddingBottom">
+              <Grid.Column width={11} className="noPaddingTop noPaddingLeft noPaddingBottom">
                 <Header
                   as="h3"
                   className="cardFont listingCardTitle"
@@ -142,7 +142,7 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                 </Header>
               </Grid.Column>
               <Grid.Column
-                width={4}
+                width={5}
                 className="noPaddingTop noPaddingRight noPaddingBottom listingStatusPillAlignment defaultCursor"
               >
                 {renderPill(
