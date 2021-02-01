@@ -96,7 +96,7 @@ const Dashboard = ({ className }) => {
   const isInitiatingTeam = useSelector(store => store.teamInitialize.polling);
   const initiatingTeamState = useSelector(store => store.teamInitialize.available);
   const contentList = useSelector(store => store.content.list);
-  const readyMadeContent = contentList.filter(item => item.formats.includes('rectangle'));
+  const readyMadeContent = contentList.filter(item => item.formats.includes('square'));
   const currentTeamUserTotal = initiatingTeamState && initiatingTeamState.currentUserTotal;
   const currentTeamUserCompleted = initiatingTeamState && initiatingTeamState.currentUserCompleted;
   const isInitiatingUser = useSelector(store => store.initialize.polling);
