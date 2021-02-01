@@ -241,7 +241,7 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                         <DotsDropDown.Item
                           onClick={() => {
                             let filter =
-                              listingItem.standardStatus === 'Closed' ? 'Just Sold' : 'Just Listed';
+                              listingItem.standardStatus === 'Closed' ? 'sold' : 'listed';
                             history.push({
                               pathname: '/create-postcard',
                               state: {
