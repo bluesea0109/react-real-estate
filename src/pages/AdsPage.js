@@ -384,7 +384,6 @@ const EmptyPage = () => {
       )
     );
   };
-  console.log(listingDetails);
   return (
     <Page basic>
       <ContentTopHeaderLayout>
