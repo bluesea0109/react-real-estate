@@ -130,7 +130,7 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
           </div>
           <div className="listingCardBodyContainer">
             <Grid className="centeredRowGrid noMargin cardTopMarginXS">
-              <Grid.Column width={12} className="noPaddingTop noPaddingLeft noPaddingBottom">
+              <Grid.Column width={11} className="noPaddingTop noPaddingLeft noPaddingBottom">
                 <Header
                   as="h3"
                   className="cardFont listingCardTitle"
@@ -142,10 +142,14 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                 </Header>
               </Grid.Column>
               <Grid.Column
-                width={4}
+                width={5}
                 className="noPaddingTop noPaddingRight noPaddingBottom listingStatusPillAlignment defaultCursor"
               >
-                {renderPill(listingItem.standardStatus)}
+                {renderPill(
+                  listingItem.standardStatus === 'Closed'
+                    ? 'Off Market'
+                    : listingItem.standardStatus
+                )}
               </Grid.Column>
             </Grid>
             <Header as="h4" className="normalFontWeight noMargin cardFont cardTopMarginXS">
@@ -298,7 +302,7 @@ const FilterList = ({ activeFilters, handleFilterSelected }) => {
           className={`${'filterIcon'} ${activeFilters.includes('Sold') && 'filterIconActive'}`}
         />
         <List.Content>
-          <List.Description>Sold</List.Description>
+          <List.Description>Sold / Off Market</List.Description>
         </List.Content>
       </List.Item>
     </List>
@@ -353,6 +357,12 @@ const ListingsPage = () => {
   useEffect(() => {
     if (activeFilters.includes('All')) {
       setFitleredListings(sortedListings);
+    } else if (activeFilters.includes('Sold')) {
+      const newFilteredListings = sortedListings?.filter(
+        listing =>
+          activeFilters.includes(listing.standardStatus) || listing.standardStatus === 'Closed'
+      );
+      setFitleredListings(newFilteredListings);
     } else {
       const newFilteredListings = sortedListings?.filter(listing =>
         activeFilters.includes(listing.standardStatus)
