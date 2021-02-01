@@ -6,8 +6,19 @@ export default styled(Button)`
   &&& {
     min-width: 100px;
     margin: 0.25em;
+    border-radius: 100px;
+    &.btn-disabled {
+      opacity: 0.5;
+    }
     &&&.button {
+      color: ${brandColors.grey05};
+      background-color: #eaeaea;
+      &:hover {
+        background-color: #e0e0e0;
+      }
       &.primary {
+        background-color: ${brandColors.primary};
+        color: white;
         &:hover,
         &:active,
         &:focus {
@@ -28,6 +39,8 @@ export default styled(Button)`
         }
       }
       &.secondary {
+        background-color: ${brandColors.secondary};
+        color: white;
         &:hover,
         &:active,
         &:focus {

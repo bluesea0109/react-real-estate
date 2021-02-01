@@ -1,4 +1,6 @@
 import Button from './Button';
+import ButtonNoStyle from './ButtonNoStyle';
+import ButtonOutline from './ButtonOutline';
 import Card from './Card';
 import Checkbox from './Checkbox';
 import Container from './Container';
@@ -13,6 +15,7 @@ import Image from './Image';
 import Initials from './Initials';
 import Input from './Input';
 import Item from './Item';
+import Label from './Label';
 import List from './List';
 import Loader from './Loader';
 import ModalLoader from './ModalLoader';
@@ -23,15 +26,19 @@ import Page from './Page';
 import Pagination from './Pagination';
 import Popup from './Popup';
 import Responsive from './Responsive';
-import Snackbar from './Snackbar';
+import SectionHeader from './SectionHeader';
 import Segment from './Segment';
 import Select from './Select';
+import Snackbar from './Snackbar';
 import Step from './Step';
+import StyledMenu from './StyledMenu';
 import Table from './Table';
 import Tab from './Tab';
 
 export {
   Button,
+  ButtonNoStyle,
+  ButtonOutline,
   Card,
   Checkbox,
   Container,
@@ -46,6 +53,7 @@ export {
   Initials,
   Input,
   Item,
+  Label,
   List,
   Loader,
   ModalLoader,
@@ -57,9 +65,11 @@ export {
   Popup,
   Responsive,
   Snackbar,
+  SectionHeader,
   Segment,
   Select,
   Step,
+  StyledMenu,
   Table,
   Tab,
 };

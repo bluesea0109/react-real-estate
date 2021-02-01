@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import Loading from '../components/Loading';
 import { Header, Menu, Page, Dropdown } from '../components/Base';
 import Styled from 'styled-components';
-import { Grid, Segment, Button, Popup, List, Icon } from 'semantic-ui-react';
+import { Grid, Segment, Button, Popup, List, Icon, Card, Image } from 'semantic-ui-react';
 
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
@@ -34,6 +35,7 @@ color: #000000;
 const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType }) => {
   const windowSize = useWindowSize();
   const adProduct = useSelector(store => store.onLogin.permissions?.adProduct);
+  const history = useHistory();
   const onLoginMode = useSelector(store => store.onLogin.mode);
   const multiUser = onLoginMode === 'multiuser';
 
@@ -128,7 +130,7 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
           </div>
           <div className="listingCardBodyContainer">
             <Grid className="centeredRowGrid noMargin cardTopMarginXS">
-              <Grid.Column width={12} className="noPaddingTop noPaddingLeft noPaddingBottom">
+              <Grid.Column width={11} className="noPaddingTop noPaddingLeft noPaddingBottom">
                 <Header
                   as="h3"
                   className="cardFont listingCardTitle"
@@ -140,10 +142,14 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                 </Header>
               </Grid.Column>
               <Grid.Column
-                width={4}
+                width={5}
                 className="noPaddingTop noPaddingRight noPaddingBottom listingStatusPillAlignment defaultCursor"
               >
-                {renderPill(listingItem.standardStatus)}
+                {renderPill(
+                  listingItem.standardStatus === 'Closed'
+                    ? 'Off Market'
+                    : listingItem.standardStatus
+                )}
               </Grid.Column>
             </Grid>
             <Header as="h4" className="normalFontWeight noMargin cardFont cardTopMarginXS">
@@ -232,7 +238,21 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                           View Postcard Campaign
                         </DotsDropDown.Item>
                       ) : (
-                        undefined
+                        <DotsDropDown.Item
+                          onClick={() => {
+                            let filter =
+                              listingItem.standardStatus === 'Closed' ? 'Just Sold' : 'Just Listed';
+                            history.push({
+                              pathname: '/create-postcard',
+                              state: {
+                                mlsNum: listingItem.mlsNum,
+                                filter,
+                              },
+                            });
+                          }}
+                        >
+                          Create Postcard Campaign
+                        </DotsDropDown.Item>
                       )}
                     </DotsDropDown.Menu>
                   </DotsDropDown>
@@ -282,16 +302,7 @@ const FilterList = ({ activeFilters, handleFilterSelected }) => {
           className={`${'filterIcon'} ${activeFilters.includes('Sold') && 'filterIconActive'}`}
         />
         <List.Content>
-          <List.Description>Sold</List.Description>
-        </List.Content>
-      </List.Item>
-      <List.Item onClick={() => handleFilterSelected('Closed')}>
-        <Icon
-          name={activeFilters.includes('Closed') ? 'check square' : 'square outline'}
-          className={`${'filterIcon'} ${activeFilters.includes('Closed') && 'filterIconActive'}`}
-        />
-        <List.Content>
-          <List.Description>Closed</List.Description>
+          <List.Description>Sold / Off Market</List.Description>
         </List.Content>
       </List.Item>
     </List>
@@ -299,9 +310,11 @@ const FilterList = ({ activeFilters, handleFilterSelected }) => {
 };
 
 const ListingsPage = () => {
+  const location = useLocation();
   const [listingDetails, setListingDetails] = useState(null);
-  const [listings, setListings] = useState(null);
-  const [activeFilters, setActiveFilters] = useState(['All']);
+  const [sortedListings, setsortedListings] = useState(null);
+  const [filteredListings, setFitleredListings] = useState(null);
+  const [activeFilters, setActiveFilters] = useState(location?.state?.filters || 'All');
   const [userType, setUserType] = useState('loggedIn');
 
   const peerId = useSelector(store => store.peer.peerId);
@@ -326,7 +339,12 @@ const ListingsPage = () => {
       const response = await fetch(path, { headers, method: 'get', credentials: 'include' });
       const results = await api.handleResponse(response);
       setListingDetails(results);
-      setListings(results.listings);
+      const newSortedListings = results.listings.sort((a, b) => {
+        if (a.listDate < b.listDate) return 1;
+        if (a.listDate > b.listDate) return -1;
+        return 0;
+      });
+      setsortedListings(newSortedListings);
     }
     fetchData();
     if (peerId) {
@@ -338,14 +356,20 @@ const ListingsPage = () => {
 
   useEffect(() => {
     if (activeFilters.includes('All')) {
-      setListings(listingDetails && listingDetails.listings);
+      setFitleredListings(sortedListings);
+    } else if (activeFilters.includes('Sold')) {
+      const newFilteredListings = sortedListings?.filter(
+        listing =>
+          activeFilters.includes(listing.standardStatus) || listing.standardStatus === 'Closed'
+      );
+      setFitleredListings(newFilteredListings);
     } else {
-      let filteredListingDetails =
-        listingDetails &&
-        listingDetails.listings.filter(el => activeFilters.includes(el.standardStatus));
-      setListings(filteredListingDetails);
+      const newFilteredListings = sortedListings?.filter(listing =>
+        activeFilters.includes(listing.standardStatus)
+      );
+      setFitleredListings(newFilteredListings);
     }
-  }, [listingDetails, activeFilters]);
+  }, [activeFilters, sortedListings]);
 
   const handleFilterSelected = val => {
     if (val === 'All') {
@@ -390,7 +414,6 @@ const ListingsPage = () => {
     }
     return 4;
   };
-
   return (
     <Page basic>
       <ContentTopHeaderLayout>
@@ -399,20 +422,22 @@ const ListingsPage = () => {
             <Menu.Item>
               <Header as="h1">Listings</Header>
             </Menu.Item>
-            <Menu.Menu position="right">
-              <Popup
-                content={
-                  <FilterList
-                    activeFilters={activeFilters}
-                    handleFilterSelected={handleFilterSelected}
-                  />
-                }
-                trigger={<Button primary content="FILTER" className="listingFilterButton" />}
-                position="bottom right"
-                on="click"
-                hideOnScroll
-              />
-            </Menu.Menu>
+            {listingDetails && (
+              <Menu.Menu position="right">
+                <Popup
+                  content={
+                    <FilterList
+                      activeFilters={activeFilters}
+                      handleFilterSelected={handleFilterSelected}
+                    />
+                  }
+                  trigger={<Button primary content="FILTER" className="listingFilterButton" />}
+                  position="bottom right"
+                  on="click"
+                  hideOnScroll
+                />
+              </Menu.Menu>
+            )}
           </Menu>
         </PageTitleHeader>
       </ContentTopHeaderLayout>
@@ -422,10 +447,10 @@ const ListingsPage = () => {
             <Loading message="Loading Listings..." />
           </ContentBottomHeaderLayout>
         )}
-        <Grid padded="vertically" columns={getColumns()}>
-          {listings ? (
-            listings.length > 0 ? (
-              listings.map((item, i) => {
+        {sortedListings && listingDetails?.listings.length > 0 ? (
+          <Grid padded="vertically" columns={getColumns()}>
+            {filteredListings?.length > 0 ? (
+              filteredListings.map((item, i) => {
                 return (
                   <ListingCard
                     key={i}
@@ -437,15 +462,39 @@ const ListingsPage = () => {
                   />
                 );
               })
-            ) : (
+            ) : sortedListings.length > 0 ? (
               <Header as="h3" className="normalFontWeight noMargin cardFont noFilteredListingsText">
                 No Listings meet the current filtering criteria.
               </Header>
-            )
-          ) : (
-            undefined
-          )}
-        </Grid>
+            ) : (
+              undefined
+            )}
+          </Grid>
+        ) : (
+          <Segment>
+            <Card centered style={{ minWidth: '500px', boxShadow: 'none' }}>
+              <Image
+                centered
+                size="large"
+                src={require('../assets/listings-page-empty.svg')}
+                style={{ background: 'unset', marginTop: '2em', marginBottom: '1em' }}
+              />
+              <Card.Content style={{ borderTop: 'none' }}>
+                <Header as="h5" textAlign="center">
+                  <Header.Content style={{ textAlign: 'center', cursor: 'default' }}>
+                    <p>
+                      Your listings will appear here. If you haven't done so yet, <br />
+                      <Link to="/profile" className="briv-marketerLink">
+                        add your MLS and Agent ID on the &quot;Profile&quot; page
+                      </Link>
+                      .
+                    </p>
+                  </Header.Content>
+                </Header>
+              </Card.Content>
+            </Card>
+          </Segment>
+        )}
       </div>
     </Page>
   );

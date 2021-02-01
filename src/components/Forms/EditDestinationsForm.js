@@ -14,7 +14,7 @@ import {
   ItemHeaderMenuLayout,
 } from '../../layouts';
 import { tag } from '../utils/utils';
-import { Button, Menu, Page, Segment, Snackbar } from '../Base';
+import { Button, Icon, Menu, Page, Segment, Snackbar } from '../Base';
 import { resolveLabelStatus } from '../MailoutListItem/utils/helpers';
 import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
@@ -69,7 +69,10 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const [error, setError] = useState(null);
   const currentListingStatus = mailoutDetails?.listingStatus;
   const isCampaign = mailoutDetails?.subtype === 'campaign';
-  const isGeneralCampaign = mailoutDetails?.publishedTags?.includes('general');
+  const isGeneralCampaign =
+    mailoutDetails?.publishedTags?.includes('general') ||
+    mailoutDetails?.publishedTags?.includes('sphere') ||
+    mailoutDetails?.intentPath?.includes('sphere');
   const isCalculationDeferred = mailoutDetails?.mailoutStatus === 'calculation-deferred';
 
   const [destinationsOptionsMode, setDestinationsOptionsMode] = useState(
@@ -79,11 +82,11 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
       ? 'userUploaded'
       : 'ai'
   );
-  const [saveDetails, setSaveDetails] = useState({
-    destinationsOptionsMode:
-      mailoutDetails.destinationsOptions?.mode || isCampaign ? 'manual' : 'ai',
-    ready: false,
-  });
+  const [saveDetails, setSaveDetails] = useState(
+    mailoutDetails.destinationsOptions?.mode || isCampaign
+      ? { destinationsOptionsMode: 'manual', ready: false }
+      : { destinationsOptionsMode: 'ai', ready: true }
+  );
 
   const [numberOfDestinations, setNumberOfDestinations] = useState(mailoutDetails.mailoutSize);
 
@@ -239,7 +242,11 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
 
   const handleSubmitClick = async () => {
     setSaving(true);
-    if (!saveDetails || !saveDetails.ready) return; // somehow got here, but not ready
+    if (!saveDetails || !saveDetails.ready) {
+      // somehow got here, but not ready
+      setSaving(false);
+      return;
+    }
     try {
       if (saveDetails.destinationsOptionsMode === 'ai') {
         let path = `/api/user/mailout/${mailoutDetails._id}/edit/mailoutSize`;
@@ -381,7 +388,8 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                   loading={saving}
                   disabled={saving}
                 >
-                  Back
+                  <Icon name="left arrow" />
+                  <span>Campaign Details</span>
                 </Button>
               </Menu.Item>
             </Menu.Menu>

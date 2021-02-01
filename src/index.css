@@ -52,7 +52,8 @@ h1 {
   border-color: #bc340e !important;
 }
 
-.ui.orange.label, .ui.orange.labels .label {
+.ui.orange.label,
+.ui.orange.labels .label {
   background-color: #f2714d !important;
   border-color: #f2714d !important;
   color: #fff !important;
@@ -62,7 +63,8 @@ h1 {
   border-color: #336e7b !important;
 }
 
-.ui.teal.label, .ui.orange.labels .label {
+.ui.teal.label,
+.ui.orange.labels .label {
   background-color: #59c4c4 !important;
   border-color: #59c4c4 !important;
   color: #fff !important;
@@ -136,27 +138,27 @@ h1 {
   }
 }
 
-.block-picker>div:nth-child(2)>div {
+.block-picker > div:nth-child(2) > div {
   display: none;
 }
 
-.block-picker>div:nth-child(3) {
+.block-picker > div:nth-child(3) {
   padding: 5px !important;
   margin-bottom: -0.75em;
 }
 
-.block-picker>div:nth-child(3)>div:nth-child(1) {
+.block-picker > div:nth-child(3) > div:nth-child(1) {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
 
-.block-picker>div:nth-child(3)>div:nth-child(1)>span {
+.block-picker > div:nth-child(3) > div:nth-child(1) > span {
   flex-basis: 0;
   flex-grow: 1;
 }
 
-.block-picker>div:nth-child(3)>div:nth-child(2) {
+.block-picker > div:nth-child(3) > div:nth-child(2) {
   display: none;
 }
 
@@ -168,12 +170,12 @@ h1 {
   min-width: 22em !important;
 }
 
-.ui.menu .ui.dropdown .menu>.active.item {
+.ui.menu .ui.dropdown .menu > .active.item {
   background: #59c4c4 !important;
   color: white !important;
 }
 
-.ui.menu .ui.dropdown .menu>.item:hover {
+.ui.menu .ui.dropdown .menu > .item:hover {
   background: white !important;
   color: #59c4c4 !important;
 }
@@ -184,7 +186,7 @@ h1 {
   line-height: 2.5;
 }
 
-.ui.steps .step>.icon {
+.ui.steps .step > .icon {
   font-size: 1em;
 }
 
@@ -196,7 +198,7 @@ h1 {
 
 /* Dashboard Start */
 
-.bar>.progress {
+.bar > .progress {
   display: none;
   visibility: hidden;
 }
@@ -205,18 +207,18 @@ h1 {
 
 /* Campaign Details Start */
 
-.display-only>input {
+.display-only > input {
   border: 1px solid transparent !important;
   border-radius: 0.28571429rem;
   cursor: text;
 }
 
-.display-only>input {
+.display-only > input {
   color: transparent !important;
   text-shadow: 0 0 0 #000000;
 }
 
-.display-only>input :focus {
+.display-only > input :focus {
   outline: none;
 }
 
@@ -224,7 +226,8 @@ h1 {
 
 /* Form Field Start */
 
-.disabled-form-field>div, .disabled-form-field>div>input {
+.disabled-form-field > div,
+.disabled-form-field > div > input {
   color: #969696 !important;
   background-color: #f0f0f0 !important;
 }
@@ -237,7 +240,7 @@ h1 {
   vertical-align: middle;
 }
 
-.blurring.dimmable>.dimmer {
+.blurring.dimmable > .dimmer {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
@@ -276,7 +279,8 @@ h1 {
   visibility: hidden;
 }
 
-.noUi-handle:before, .noUi-handle:after {
+.noUi-handle:before,
+.noUi-handle:after {
   display: none !important;
   visibility: hidden;
 }
@@ -354,7 +358,13 @@ h1 {
   font-size: 0.92857143em;
 }
 
-.ui.form .disabled.field, .ui.form .disabled.fields .field, .ui.form .field :disabled, .ui.disabled.input, .ui.input:not(.disabled) input[disabled], .ui.disabled.dropdown, .ui.dropdown .menu>.disabled.item {
+.ui.form .disabled.field,
+.ui.form .disabled.fields .field,
+.ui.form .field :disabled,
+.ui.disabled.input,
+.ui.input:not(.disabled) input[disabled],
+.ui.disabled.dropdown,
+.ui.dropdown .menu > .disabled.item {
   pointer-events: none;
   opacity: 1 !important;
 }
@@ -510,23 +520,23 @@ h1 {
   width: 100%!important;
   padding: 8px!important;
 } */
-.listingFilterButton{
-  border-radius: 30px!important;
-  height: 36px!important;
-  margin-top: 8px!important;
+.listingFilterButton {
+  border-radius: 30px !important;
+  height: 36px !important;
+  margin-top: 8px !important;
 }
-.filterIcon{
-  transition: color 0.3s ease!important;
-  color: rgba(0,0,0,.4)!important
+.filterIcon {
+  transition: color 0.3s ease !important;
+  color: rgba(0, 0, 0, 0.4) !important;
 }
-.filterIconActive{
-  color: #59c4c4!important
+.filterIconActive {
+  color: #59c4c4 !important;
 }
 .listingCardBodyContainer {
   padding: 16px;
 }
 .mainGridContainer {
-  margin-right: -92px!important;
+  margin-right: -92px !important;
 }
 .listingCardTitle {
   cursor: pointer;
@@ -547,24 +557,24 @@ h1 {
   border-radius: 6px 6px 0px 0px;
 }
 .adAppPageTitle {
-  color: #666!important;
+  color: #666 !important;
 }
 .listingCard {
-  padding: 10px!important;
+  padding: 10px !important;
 }
 .cardSegment {
-  padding: 0px!important;
-  border-radius: 6px!important;
-  color: #666666!important;
-  max-height: 96%!important;
+  padding: 0px !important;
+  border-radius: 6px !important;
+  color: #666666 !important;
+  max-height: 96% !important;
 }
 .cardFont {
-  font-family: 'Open Sans'!important;
+  font-family: 'Open Sans' !important;
 }
 .noFilteredListingsText {
-  padding-top: 48px!important;
-  padding-left: 38%!important;
-  font-weight: 700!important;
+  padding-top: 48px !important;
+  padding-left: 38% !important;
+  font-weight: 700 !important;
 }
 .agentProfileImgContainer {
   height: 50px;
@@ -584,9 +594,9 @@ h1 {
   text-transform: uppercase;
 }
 .centeredRowGrid {
-  display: flex!important;
-  align-items: center!important;
-  flex-direction: row!important;
+  display: flex !important;
+  align-items: center !important;
+  flex-direction: row !important;
 }
 .leftCenteredColumnGrid {
   justify-content: left;
@@ -594,55 +604,55 @@ h1 {
   display: flex;
 }
 .cardIconButton {
-  border-radius: 25px!important;
-  max-width: 34px!important;
-  max-height: 36px!important;
-  display: flex!important;
-  padding-left: 10px!important;
-  margin: 0px!important;
+  border-radius: 25px !important;
+  max-width: 34px !important;
+  max-height: 36px !important;
+  display: flex !important;
+  padding-left: 10px !important;
+  margin: 0px !important;
 }
 .cardIconButtonColumn {
-  display: flex!important;
-  justify-content: flex-end!important;
+  display: flex !important;
+  justify-content: flex-end !important;
 }
 .alignCenter {
-  text-align: center!important;
+  text-align: center !important;
 }
 .alignEnd {
-  text-align: end!important;
+  text-align: end !important;
 }
 .noMargin {
-  margin: 0px!important;
+  margin: 0px !important;
 }
 .noMarginBottom {
-  margin-bottom: 0px!important;
+  margin-bottom: 0px !important;
 }
 .noPaddingTop {
-  padding-top: 0px!important;
+  padding-top: 0px !important;
 }
 .noPaddingRight {
-  padding-right: 0px!important;
+  padding-right: 0px !important;
 }
 .noPaddingBottom {
-  padding-bottom: 0px!important;
+  padding-bottom: 0px !important;
 }
 .noPaddingLeft {
-  padding-left: 0px!important;
+  padding-left: 0px !important;
 }
 .cardTopMarginXS {
-  margin-top: 4px!important;
+  margin-top: 4px !important;
 }
 .cardTopMarginS {
-  margin-top: 8px!important;
+  margin-top: 8px !important;
 }
 .cardTopMarginM {
-  margin-top: 16px!important;
+  margin-top: 16px !important;
 }
 .cardBottomMargin {
-  margin-bottom: -4px!important
+  margin-bottom: -4px !important;
 }
 .statusPill {
-  background-color: #B2B2B2;
+  background-color: #b2b2b2;
   color: #666;
   border-radius: 13px;
   text-align: center;
@@ -654,51 +664,51 @@ h1 {
 /* special pills */
 .floatPill {
   background-color: #fff;
-  box-shadow: 0px 8px 9px -3px rgba(0,0,0,0.49);
+  box-shadow: 0px 8px 9px -3px rgba(0, 0, 0, 0.49);
   padding: 2px 16px;
 }
 /* opaque pills */
 .redPillOpaque {
   background-color: rgba(242, 113, 77, 0.2);
-  color: #F2714D;
+  color: #f2714d;
 }
 .greenPillOpaque {
   background-color: #00c85333;
-  color: #00C853
+  color: #00c853;
 }
 /* solid pills */
 .solidPill {
   color: #fff;
   max-width: 80px;
 }
-.greenPillSolid { 
-  background-color: #00C853
+.greenPillSolid {
+  background-color: #00c853;
 }
 .yellowPillSolid {
   /* background-color: #FFC82C; */
-  background-color: #F5B350;
+  background-color: #f5b350;
 }
 .redPillSolid {
   /* background-color: #FF5216 */
-  background-color: #F2714D;
+  background-color: #f2714d;
 }
 .greyPillSolid {
-  background-color: #B2B2B2;
+  background-color: #b2b2b2;
 }
 .lightBluePillSolid {
-  background-color: #85D7FF;
+  background-color: #85d7ff;
 }
 .bluePillSolid {
-  background-color: #009EEB;
+  background-color: #009eeb;
 }
 .astralPillSolid {
-  background-color: #336E7B;
+  background-color: #336e7b;
 }
 .listingStatusPillAlignment {
-  text-align: right!important;
-  text-align: -webkit-right!important;
+  text-align: right !important;
+  text-align: -webkit-right !important;
 }
-.listingCardImgContainer{
+.listingCardImgContainer {
   position: relative;
 }
 .imgPillContainer {
@@ -708,12 +718,12 @@ h1 {
   right: 0;
   padding: 16px;
 }
-.adPreviewWrapper{
+.adPreviewWrapper {
   padding: 24px;
   font-family: 'Open Sans', sans-serif !important;
 }
 .adPreviewContainer {
-  padding: 0px!important
+  padding: 0px !important;
 }
 .adPreviewPageProfilePicContainer {
   width: 48px;
@@ -726,8 +736,8 @@ h1 {
   background-size: cover;
   border-radius: 30px;
 }
-.adPreviewPageInfoContainer{
-  padding-top: 20px!important;
+.adPreviewPageInfoContainer {
+  padding-top: 20px !important;
 }
 .adPreviewPage {
   margin: 0px;
@@ -740,9 +750,9 @@ h1 {
 }
 .adPreviewPageSubtitle {
   font-weight: 500;
-  margin: 0px!important;
+  margin: 0px !important;
 }
-.adPreviewAdIcon{
+.adPreviewAdIcon {
   padding-top: 1px;
   padding-left: 6px;
 }
@@ -769,13 +779,13 @@ h1 {
   background-size: cover;
   border-radius: 2px;
 }
-.adPreviewTitle{
-  margin: 0px!important;
-  padding: 16px 16px 0px 16px
+.adPreviewTitle {
+  margin: 0px !important;
+  padding: 16px 16px 0px 16px;
 }
 .adPreviewSubtitle {
   font-weight: 500;
-  margin: 0px!important;
+  margin: 0px !important;
   padding: 8px 16px 16px 16px;
 }
 .adPreviewCTA {
@@ -789,9 +799,10 @@ h1 {
   padding: 8px;
   margin: 20px;
   width: 80%;
+  cursor: pointer !important;
 }
 .adTableCampaignName {
-  font-weight: 600!important;
+  font-weight: 600 !important;
 }
 .adTableItemPreviewContainer {
   height: 40px;
@@ -805,38 +816,52 @@ h1 {
   border-radius: 6px;
 }
 .adTableInlineLoader {
-  z-index: 0!important;
+  z-index: 0 !important;
 }
 .adTableItemCampaignCell {
-  font-size: 1.20em!important;
+  font-size: 1.2em !important;
 }
-.adTableItemFacebookLogo{
-  color: #4267B2;
+.adTableItemFacebookLogo {
+  color: #4267b2;
 }
 .adTableItemInstagramLogo {
   background: #d6249f;
-  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);
+  background: radial-gradient(
+    circle at 30% 107%,
+    #fdf497 0%,
+    #fdf497 5%,
+    #fd5949 45%,
+    #d6249f 60%,
+    #285aeb 90%
+  );
   -webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
 }
 .adTableHeaderText {
-  font-size: 12px!important;
+  font-size: 12px !important;
 }
 .adTableDurationContentColumn {
-  font-size: 12px!important;
+  font-size: 12px !important;
 }
 .marketerGrey {
-  color: #666!important;
+  color: #666 !important;
 }
 .defaultCursor {
-  cursor: default!important;
+  cursor: default !important;
+}
+.briv-marketerLink {
+  color: #59c4c4;
+  transition: all 0.5s ease;
+}
+.briv-marketerLink:hover {
+  color: #3e8989;
 }
 
 @media (min-width: 1920px) {
-  .agentInfoContainer{
-    padding-left: 16px!important;
+  .agentInfoContainer {
+    padding-left: 16px !important;
   }
   .mainGridContainer {
-    margin-right: 0px!important;
+    margin-right: 0px !important;
   }
 }

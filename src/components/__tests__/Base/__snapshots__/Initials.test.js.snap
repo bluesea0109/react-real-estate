@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<img
+  alt=""
+  className="ui mini circular inline image "
+  src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHBvaW50ZXItZXZlbnRzPSJub25lIiB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgc3R5bGU9IndpZHRoOjEwMHB4O2hlaWdodDoxMDBweDtiYWNrZ3JvdW5kLWNvbG9yOiM5YmEzN2U7Ym9yZGVyLXJhZGl1czowIj48dGV4dCB5PSI1MCUiIHg9IjUwJSIgZHk9IjAuMzVlbSIgcG9pbnRlci1ldmVudHM9ImF1dG8iIGZpbGw9IiNmZmZmZmYiIGZvbnQtZmFtaWx5PSJPcGVuIFNhbnMsIEhlbHZldGljYU5ldWUtTGlnaHQsIEhlbHZldGljYSBOZXVlIExpZ2h0LCBIZWx2ZXRpY2EgTmV1ZSwgSGVsdmV0aWNhLCBBcmlhbCwgTHVjaWRhIEdyYW5kZSwgc2Fucy1zZXJpZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgc3R5bGU9ImZvbnQtc2l6ZTo2MHB4O2ZvbnQtd2VpZ2h0OjQwMCI+SkQ8L3RleHQ+PC9zdmc+"
+/>
+`;

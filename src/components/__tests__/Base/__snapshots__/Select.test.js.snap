@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  aria-expanded={false}
+  className="ui selection dropdown "
+  onBlur={[Function]}
+  onChange={[Function]}
+  onClick={[Function]}
+  onFocus={[Function]}
+  onMouseDown={[Function]}
+  role="listbox"
+  tabIndex={0}
+>
+  <div
+    aria-atomic={true}
+    aria-live="polite"
+    className="text"
+    role="alert"
+  />
+  <i
+    aria-hidden="true"
+    className="dropdown icon"
+    onClick={[Function]}
+  />
+  <div
+    className="menu transition"
+  />
+</div>
+`;

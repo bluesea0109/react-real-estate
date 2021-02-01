@@ -63,6 +63,9 @@ const ApproveAndSendButton = ({
   mailoutDetailPage,
   onClickApproveAndSend,
   lockControls = false,
+  runArchive,
+  archiveId,
+  archivePending,
 }) => {
   if (!data) return;
 
@@ -82,16 +85,33 @@ const ApproveAndSendButton = ({
           </Link>
         )}
         {canPickDestinations(data.mailoutStatus) && (
-          <Link to={`dashboard/edit/${data._id}/destinations`}>
-            <Button primary>
-              <MobileDisabledLayout>
-                <Fragment>Choose Destinations</Fragment>
-              </MobileDisabledLayout>
-              <MobileEnabledLayout>
-                <FontAwesomeIcon icon="thumbs-up" />
-              </MobileEnabledLayout>
-            </Button>
-          </Link>
+          <>
+            <StyledDropdown
+              loading={data._id === archiveId && archivePending}
+              disabled={data._id === archiveId && archivePending}
+              icon="ellipsis horizontal"
+              direction="left"
+              button
+              className="icon"
+            >
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={runArchive}>
+                  <Icon name="archive" /> Archive
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </StyledDropdown>
+
+            <Link to={`dashboard/edit/${data._id}/destinations`}>
+              <Button primary>
+                <MobileDisabledLayout>
+                  <Fragment>Choose Destinations</Fragment>
+                </MobileDisabledLayout>
+                <MobileEnabledLayout>
+                  <FontAwesomeIcon icon="thumbs-up" />
+                </MobileEnabledLayout>
+              </Button>
+            </Link>
+          </>
         )}
       </Fragment>
     );
@@ -135,7 +155,6 @@ const ListHeader = ({
   const [newCampaignName, setNewCampaignName] = useState(data.name);
 
   const history = useHistory();
-
   const runArchive = () => {
     if (data.mailoutStatus === 'archived') {
       dispatch(undoArchiveMailoutPending(data._id));
@@ -294,6 +313,9 @@ const ListHeader = ({
             mailoutDetailPage={mailoutDetailPage}
             onClickApproveAndSend={onClickApproveAndSend}
             lockControls={lockControls}
+            runArchive={runArchive}
+            archiveId={archiveId}
+            archivePending={archivePending}
           />
         </span>
         <span>

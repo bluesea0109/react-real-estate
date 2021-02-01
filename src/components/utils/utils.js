@@ -74,12 +74,15 @@ export const postcardDimensions = size => {
   let dimension = '';
   switch (size) {
     case '4x6':
+    case '6x4':
       dimension = '6x4';
       break;
     case '6x9':
+    case '9x6':
       dimension = '9x6';
       break;
     case '6x11':
+    case '11x6':
       dimension = '11x6';
       break;
     default:
@@ -91,20 +94,14 @@ export const postcardDimensionsDisplayed = size => {
   let dimension = '';
   switch (size) {
     case '4x6':
-      dimension = '4x6';
-      break;
-    case '6x9':
-      dimension = '6x9';
-      break;
-    case '6x11':
-      dimension = '6x11';
-      break;
     case '6x4':
       dimension = '4x6';
       break;
+    case '6x9':
     case '9x6':
       dimension = '6x9';
       break;
+    case '6x11':
     case '11x6':
       dimension = '6x11';
       break;
@@ -116,12 +113,13 @@ export const postcardDimensionsDisplayed = size => {
 export const iframeDimensions = size => {
   let width = 600;
   let height = 408;
+  const formattedSize = postcardDimensions(size);
 
-  if (size === '9x6') {
+  if (formattedSize === '9x6') {
     width = 888;
     height = 600;
   }
-  if (size === '11x6') {
+  if (formattedSize === '11x6') {
     width = 1080;
     height = 600;
   }
@@ -129,5 +127,8 @@ export const iframeDimensions = size => {
 };
 
 export const strippedKWKLY = kwklyString => {
-  return kwklyString.replace(/Text /g, '').replace(/ to 59559 for details!/g, '');
+  return kwklyString
+    .replace(/Text /g, '')
+    .replace(/ to 59559 for details!/g, '')
+    .trim();
 };

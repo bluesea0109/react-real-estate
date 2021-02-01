@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import * as Sentry from '@sentry/browser';
 import { BrowserRouter } from 'react-router-dom';
-import { LastLocationProvider } from 'react-router-last-location';
 
 import 'semantic-ui-less/semantic.less';
 import './reset.css';
@@ -39,11 +38,9 @@ registerIcons();
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter basename={process.env.PUBLIC_URL}>
-      <LastLocationProvider>
-        <PolygonGoogleMapsHOC>
-          <App />
-        </PolygonGoogleMapsHOC>
-      </LastLocationProvider>
+      <PolygonGoogleMapsHOC>
+        <App />
+      </PolygonGoogleMapsHOC>
     </BrowserRouter>
   </Provider>,
   document.getElementById('root')
