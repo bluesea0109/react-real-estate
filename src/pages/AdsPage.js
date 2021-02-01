@@ -43,8 +43,13 @@ const AdPreview = ({ ad, website, viewMore, adTextLength, toggleAdTextLength }) 
           : '-'
         : '-';
     let sqft = ad && ad.listing ? (ad.listing.squareFeet ? ad.listing.squareFeet : '-') : '-';
-    const handleLearnMore = () =>
-      window.open(`${formatWebsite(website)}/mls/landing/${ad.details.mlsNum}`, '_blank');
+    const handleLearnMore = landingUrl => {
+      if (landingUrl) {
+        window.open(landingUrl, '_blank');
+      } else {
+        window.open(`${formatWebsite(website)}/mls/landing/${ad.details.mlsNum}`, '_blank');
+      }
+    };
     return (
       <div className="adPreviewWrapper">
         <Grid>
@@ -94,7 +99,6 @@ const AdPreview = ({ ad, website, viewMore, adTextLength, toggleAdTextLength }) 
               <Header as="h3" className="adPreviewTitle">
                 {ad.details.campaignName}
               </Header>
-              {/* <Header as="h5" className='adPreviewSubtitle'>4 beds | 2.5 baths | 3,144 sqft</Header> */}
               <Header
                 as="h5"
                 className="adPreviewSubtitle"
@@ -102,8 +106,15 @@ const AdPreview = ({ ad, website, viewMore, adTextLength, toggleAdTextLength }) 
             </Grid.Column>
             <Grid.Column width={6}>
               <div
-                className={`adPreviewCTA ${website && 'listingCardTitle'}`}
-                onClick={website ? handleLearnMore : undefined}
+                className={`adPreviewCTA ${ad.details.landingUrl ||
+                  (website && 'listingCardTitle')}`}
+                onClick={
+                  ad.details.landingUrl
+                    ? () => handleLearnMore(ad.details.landingUrl)
+                    : website
+                    ? handleLearnMore
+                    : undefined
+                }
               >
                 Learn More
               </div>
@@ -149,15 +160,17 @@ const EmptyPage = () => {
   }, [adDetails, peerId, listingDetails]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    let interval;
+
+    if (adDetails === null) {
       fetchData();
-    }, 4000);
+    } else {
+      interval = setInterval(() => {
+        fetchData();
+      }, 15000);
+    }
 
     return () => clearInterval(interval);
-  }, [fetchData]);
-
-  useEffect(() => {
-    fetchData();
   }, [adDetails, peerId, fetchData]);
 
   const toggleAdTextLength = adText => {
@@ -371,6 +384,7 @@ const EmptyPage = () => {
       )
     );
   };
+  console.log(listingDetails);
   return (
     <Page basic>
       <ContentTopHeaderLayout>
