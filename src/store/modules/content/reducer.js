@@ -19,10 +19,11 @@ export default function content(state = initialState, action) {
       };
 
     case GET_READY_MADE_CONTENT_SUCCESS:
+      let contentList = action.payload.results.sort((a, b) => b.uploaded - a.uploaded);
       return {
         ...state,
         pending: false,
-        list: action.payload.results,
+        list: contentList,
       };
 
     case GET_READY_MADE_CONTENT_ERROR:
