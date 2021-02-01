@@ -145,7 +145,11 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                 width={4}
                 className="noPaddingTop noPaddingRight noPaddingBottom listingStatusPillAlignment defaultCursor"
               >
-                {renderPill(listingItem.standardStatus)}
+                {renderPill(
+                  listingItem.standardStatus === 'Closed'
+                    ? 'Off Market'
+                    : listingItem.standardStatus
+                )}
               </Grid.Column>
             </Grid>
             <Header as="h4" className="normalFontWeight noMargin cardFont cardTopMarginXS">
