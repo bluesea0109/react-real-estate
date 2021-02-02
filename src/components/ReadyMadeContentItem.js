@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Icon, Popup } from './Base';
 import * as brandColors from './utils/brandColors';
 
-const Tooltip = styled(Popup)`
+const Tooltip = styled.div`
   [data-position='top center'][data-tooltip]:after {
     border-radius: 0px;
     background: #343434;
@@ -20,7 +20,6 @@ const Tooltip = styled(Popup)`
     left: 96%;
   }
 `;
-
 const ContentItemContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -138,16 +137,16 @@ export default function ReadyMadeContentItem({
       </div>
 
       {titleWidth > 255 ? (
-        <Tooltip
-          trigger={
-            <p style={ellipse} className="item-name">
-              {item.name}
-            </p>
-          }
-          content={item.name}
-          position="top center"
-          inverted
-        />
+        <div
+          className="ui icon"
+          data-tooltip={item.name}
+          data-inverted=""
+          data-position="top center"
+        >
+          <p style={ellipse} className="item-name">
+            {item.name}
+          </p>
+        </div>
       ) : (
         <p style={inlineWidth} className="item-name">
           {item.name}
