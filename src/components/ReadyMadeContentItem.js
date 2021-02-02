@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from './Base';
 import * as brandColors from './utils/brandColors';
@@ -60,6 +60,22 @@ const ContentItemContainer = styled.div`
   }
 `;
 
+//get p tag ref width value
+//if p tag width > = 256px then pass '256px' else pass null (to width value)
+
+const ellipse = {
+  width: '256px',
+  paddingTop: '1rem',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+};
+
+const inlineWidth = {
+  display: 'inline-block',
+  paddingTop: '1rem',
+};
+
 export default function ReadyMadeContentItem({
   contentList,
   downloadImage,
@@ -67,6 +83,13 @@ export default function ReadyMadeContentItem({
   setCurrentItem,
   setShowImageModal,
 }) {
+  const [titleWidth, setTitleWidth] = useState();
+  const widthRef = createRef();
+
+  useEffect(() => {
+    setTitleWidth(widthRef?.current.clientWidth);
+  }, [widthRef]);
+
   return (
     <ContentItemContainer>
       <div className="image-container">
@@ -85,7 +108,31 @@ export default function ReadyMadeContentItem({
           </div>
         </div>
       </div>
-      <span className="item-name">{item.name}</span>
+      {console.log('titleWidth', titleWidth)}
+
+      <div className="ui icon" data-tooltip={item.name} data-inverted="" data-position="top center">
+        <p ref={widthRef} style={inlineWidth} className="item-name">
+          {item.name}
+        </p>
+      </div>
+      {/* {titleWidth > 255 ? <p> greater</p> : <p> less</p>} */}
+
+      {titleWidth > 255 ? (
+        <div
+          className="ui icon"
+          data-tooltip={item.name}
+          data-inverted=""
+          data-position="top center"
+        >
+          <p style={ellipse} className="item-name">
+            {item.name}
+          </p>
+        </div>
+      ) : (
+        <p style={inlineWidth} className="item-name">
+          {item.name}
+        </p>
+      )}
     </ContentItemContainer>
   );
 }

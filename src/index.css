@@ -291,6 +291,14 @@ h1 {
   padding-bottom: 0;
 }
 
+[data-position='top center'][data-tooltip]:after {
+  border-radius: 0px;
+  background: #343434;
+}
+[data-inverted][data-position~='top'][data-tooltip]:before {
+  background: #343434;
+}
+
 .noUi-target {
   border: none;
   height: 5px;
