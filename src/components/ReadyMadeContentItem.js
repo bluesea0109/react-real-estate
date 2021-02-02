@@ -1,7 +1,25 @@
 import React, { createRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Icon } from './Base';
+import { Icon, Popup } from './Base';
 import * as brandColors from './utils/brandColors';
+
+const Tooltip = styled(Popup)`
+  [data-position='top center'][data-tooltip]:after {
+    border-radius: 0px;
+    background: #343434;
+    bottom: 55%;
+    left: 96%;
+  }
+
+  [data-inverted][data-position~='top'][data-tooltip]:before {
+    background: #343434;
+  }
+
+  [data-position='top center'][data-tooltip]:before {
+    bottom: 50%;
+    left: 96%;
+  }
+`;
 
 const ContentItemContainer = styled.div`
   display: flex;
@@ -120,16 +138,16 @@ export default function ReadyMadeContentItem({
       </div>
 
       {titleWidth > 255 ? (
-        <div
-          className="ui icon"
-          data-tooltip={item.name}
-          data-inverted=""
-          data-position="top center"
-        >
-          <p style={ellipse} className="item-name">
-            {item.name}
-          </p>
-        </div>
+        <Tooltip
+          trigger={
+            <p style={ellipse} className="item-name">
+              {item.name}
+            </p>
+          }
+          content={item.name}
+          position="top center"
+          inverted
+        />
       ) : (
         <p style={inlineWidth} className="item-name">
           {item.name}
