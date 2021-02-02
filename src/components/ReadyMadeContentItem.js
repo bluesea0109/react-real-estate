@@ -73,7 +73,6 @@ const ellipse = {
 
 const inlineWidth = {
   display: 'inline-block',
-  paddingTop: '1rem',
 };
 
 export default function ReadyMadeContentItem({
@@ -108,14 +107,17 @@ export default function ReadyMadeContentItem({
           </div>
         </div>
       </div>
-      {console.log('titleWidth', titleWidth)}
 
-      <div className="ui icon" data-tooltip={item.name} data-inverted="" data-position="top center">
-        <p ref={widthRef} style={inlineWidth} className="item-name">
+      {/* needs div wrapper for ref inline width, visiblity hidden for conditional rendering reference based on width */}
+      <div style={{ height: '0px' }}>
+        <p
+          ref={widthRef}
+          style={{ ...inlineWidth, ...{ visibility: 'hidden' } }}
+          className="item-name"
+        >
           {item.name}
         </p>
       </div>
-      {/* {titleWidth > 255 ? <p> greater</p> : <p> less</p>} */}
 
       {titleWidth > 255 ? (
         <div
