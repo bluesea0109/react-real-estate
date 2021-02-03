@@ -461,6 +461,8 @@ const ListingsPage = () => {
                   />
                 );
               })
+            ) : activeFilters.includes('All') ? (
+              undefined
             ) : sortedListings?.length > 0 ? (
               <Header as="h3" className="normalFontWeight noMargin cardFont noFilteredListingsText">
                 No Listings meet the current filtering criteria.
