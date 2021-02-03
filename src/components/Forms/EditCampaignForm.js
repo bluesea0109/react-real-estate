@@ -147,7 +147,6 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   const [coverPhotoIndex, setCoverPhotoIndex] = useState(0);
   const [photoUpdating, setPhotoUpdating] = useState(false);
   const publishedTags = mailoutDetails?.publishedTags;
-  const intentPath = mailoutDetails?.intentPath;
 
   //const defaultCTAUrl = useSelector(store => store.)
   const [ctaUrl, setCtaUrl] = useState(mailoutDetails.cta);
