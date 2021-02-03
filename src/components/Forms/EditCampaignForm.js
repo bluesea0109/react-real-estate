@@ -172,19 +172,22 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
         return false;
       return true;
     });
-    if (!publishedTags?.includes('listingMarketing') && !intentPath?.includes('listingMarketing'))
+    if (
+      !publishedTags?.includes('listingMarketing') &&
+      !editIntentPath?.includes('listingMarketing')
+    )
       newFilteredStencils = [];
     else {
-      intentPath
+      editIntentPath
         ? (newFilteredStencils = stencilsAvailable?.filter(stencil =>
-            stencil.intentPath?.includes(intentPath)
+            stencil.intentPath?.includes(editIntentPath)
           ))
         : (newFilteredStencils = stencilsAvailable?.filter(stencil =>
             stencil.intentPath?.includes(publishedTags.join('|'))
           ));
     }
     setFilteredStencils(newFilteredStencils);
-  }, [stencilsAvailable, mailoutDetails.created, intentPath, publishedTags]);
+  }, [stencilsAvailable, mailoutDetails.created, editIntentPath, publishedTags]);
 
   let slides = [];
   if (filteredStencils) {
