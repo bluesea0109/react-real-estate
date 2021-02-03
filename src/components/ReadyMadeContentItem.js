@@ -19,6 +19,13 @@ const Tooltip = styled.div`
     bottom: 50%;
     left: 50%;
   }
+  & p {
+    width: 256px;
+    padding-top: 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 `;
 
 const ContentItemContainer = styled.div`
@@ -78,17 +85,6 @@ const ContentItemContainer = styled.div`
   }
 `;
 
-//get p tag ref width value
-//if p tag width > = 256px then pass '256px' else pass null (to width value)
-
-const ellipse = {
-  width: '256px',
-  paddingTop: '1rem',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  whiteSpace: 'nowrap',
-};
-
 const inlineWidth = {
   display: 'inline-block',
 };
@@ -126,7 +122,6 @@ export default function ReadyMadeContentItem({
         </div>
       </div>
 
-      {/* needs div wrapper for ref inline width, visiblity hidden for conditional rendering reference based on width */}
       <div style={{ height: '0px' }}>
         <p
           ref={widthRef}
@@ -139,9 +134,7 @@ export default function ReadyMadeContentItem({
 
       {titleWidth > 255 ? (
         <Tooltip data-tooltip={item.name} data-position="top center" data-inverted="">
-          <p style={ellipse} className="item-name">
-            {item.name}
-          </p>
+          <p className="item-name tool">{item.name}</p>
         </Tooltip>
       ) : (
         <p style={inlineWidth} className="item-name">
