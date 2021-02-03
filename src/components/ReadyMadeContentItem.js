@@ -1,8 +1,25 @@
-import { isAbsolute } from 'path';
 import React, { createRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from './Base';
 import * as brandColors from './utils/brandColors';
+
+const Tooltip = styled.div`
+  &[data-position='top center'][data-tooltip]:after {
+    border-radius: 0px;
+    background: #343434;
+    bottom: 55%;
+    left: 50%;
+  }
+
+  &[data-inverted][data-position~='top'][data-tooltip]:before {
+    background: #343434;
+  }
+
+  &[data-position='top center'][data-tooltip]:before {
+    bottom: 50%;
+    left: 50%;
+  }
+`;
 
 const ContentItemContainer = styled.div`
   display: flex;
@@ -84,37 +101,7 @@ export default function ReadyMadeContentItem({
   setShowImageModal,
 }) {
   const [titleWidth, setTitleWidth] = useState();
-  const [hover, setHover] = useState(false);
   const widthRef = createRef();
-
-  const handleHoverIn = () => {
-    setHover(true);
-  };
-
-  const handleHoverOut = () => {
-    setHover(false);
-  };
-
-  const tooltip = {
-    position: 'relative',
-    overflow: 'visible',
-  };
-
-  const toolTipShow = {
-    visibility: 'visible',
-    backgroundColor: '#343434',
-    padding: '10px',
-    color: '#fff',
-    textAlign: 'center',
-    position: 'absolute',
-    top: '-50px',
-    //maxWidth: '400px',
-    width: 'auto',
-  };
-
-  const toolTipNone = {
-    visibility: 'hidden',
-  };
 
   useEffect(() => {
     setTitleWidth(widthRef?.current.clientWidth);
@@ -151,12 +138,16 @@ export default function ReadyMadeContentItem({
       </div>
 
       {titleWidth > 255 ? (
-        <div onMouseEnter={handleHoverIn} onMouseLeave={handleHoverOut} style={tooltip}>
+        <Tooltip
+          className="ui icon tool"
+          data-tooltip={item.name}
+          data-position="top center"
+          data-inverted=""
+        >
           <p style={ellipse} className="item-name">
             {item.name}
           </p>
-          <div style={hover ? toolTipShow : toolTipNone}>{item.name}</div>
-        </div>
+        </Tooltip>
       ) : (
         <p style={inlineWidth} className="item-name">
           {item.name}

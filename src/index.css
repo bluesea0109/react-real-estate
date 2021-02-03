@@ -291,11 +291,11 @@ h1 {
   padding-bottom: 0;
 }
 
-[data-position='top center'][data-tooltip]:after {
+/* [data-position='top center'][data-tooltip]:after {
   border-radius: 0px;
   background: #343434;
   bottom: 55%;
-  left: 96%;
+  left: 50%;
 }
 
 [data-inverted][data-position~='top'][data-tooltip]:before {
@@ -304,8 +304,8 @@ h1 {
 
 [data-position='top center'][data-tooltip]:before {
   bottom: 50%;
-  left: 96%;
-}
+  left: 50%;
+} */
 
 .noUi-target {
   border: none;
