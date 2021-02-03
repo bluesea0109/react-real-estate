@@ -138,12 +138,7 @@ export default function ReadyMadeContentItem({
       </div>
 
       {titleWidth > 255 ? (
-        <Tooltip
-          className="ui icon tool"
-          data-tooltip={item.name}
-          data-position="top center"
-          data-inverted=""
-        >
+        <Tooltip data-tooltip={item.name} data-position="top center" data-inverted="">
           <p style={ellipse} className="item-name">
             {item.name}
           </p>
