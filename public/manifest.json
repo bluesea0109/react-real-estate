@@ -3,17 +3,17 @@
   "name": "Brivity Marketer App",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "v2/favicon.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "v2/logo192.png",
       "type": "image/png",
       "sizes": "192x47"
     },
     {
-      "src": "logo512.png",
+      "src": "v2/logo512.png",
       "type": "image/png",
       "sizes": "512x124"
     }
