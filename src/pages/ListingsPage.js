@@ -442,12 +442,11 @@ const ListingsPage = () => {
         </PageTitleHeader>
       </ContentTopHeaderLayout>
       <div>
-        {!listingDetails && (
+        {!listingDetails ? (
           <ContentBottomHeaderLayout>
             <Loading message="Loading Listings..." />
           </ContentBottomHeaderLayout>
-        )}
-        {sortedListings && listingDetails?.listings.length > 0 ? (
+        ) : listingDetails?.listings.length > 0 ? (
           <Grid padded="vertically" columns={getColumns()}>
             {filteredListings?.length > 0 ? (
               filteredListings.map((item, i) => {
@@ -462,7 +461,9 @@ const ListingsPage = () => {
                   />
                 );
               })
-            ) : sortedListings.length > 0 ? (
+            ) : activeFilters.includes('All') ? (
+              undefined
+            ) : sortedListings?.length > 0 ? (
               <Header as="h3" className="normalFontWeight noMargin cardFont noFilteredListingsText">
                 No Listings meet the current filtering criteria.
               </Header>
