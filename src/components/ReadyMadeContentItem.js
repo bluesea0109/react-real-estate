@@ -1,7 +1,32 @@
-import React from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from './Base';
 import * as brandColors from './utils/brandColors';
+
+const Tooltip = styled.div`
+  &[data-position='top center'][data-tooltip]:after {
+    border-radius: 0px;
+    background: #343434;
+    bottom: 55%;
+    left: 50%;
+  }
+
+  &[data-inverted][data-position~='top'][data-tooltip]:before {
+    background: #343434;
+  }
+
+  &[data-position='top center'][data-tooltip]:before {
+    bottom: 50%;
+    left: 50%;
+  }
+  & p {
+    width: 256px;
+    padding-top: 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+`;
 
 const ContentItemContainer = styled.div`
   display: flex;
@@ -60,6 +85,10 @@ const ContentItemContainer = styled.div`
   }
 `;
 
+const inlineWidth = {
+  display: 'inline-block',
+};
+
 export default function ReadyMadeContentItem({
   contentList,
   downloadImage,
@@ -67,6 +96,13 @@ export default function ReadyMadeContentItem({
   setCurrentItem,
   setShowImageModal,
 }) {
+  const [titleWidth, setTitleWidth] = useState();
+  const widthRef = createRef();
+
+  useEffect(() => {
+    setTitleWidth(widthRef?.current.clientWidth);
+  }, [widthRef]);
+
   return (
     <ContentItemContainer>
       <div className="image-container">
@@ -85,7 +121,26 @@ export default function ReadyMadeContentItem({
           </div>
         </div>
       </div>
-      <span className="item-name">{item.name}</span>
+
+      <div style={{ height: '0px' }}>
+        <p
+          ref={widthRef}
+          style={{ ...inlineWidth, ...{ visibility: 'hidden' } }}
+          className="item-name"
+        >
+          {item.name}
+        </p>
+      </div>
+
+      {titleWidth > 255 ? (
+        <Tooltip data-tooltip={item.name} data-position="top center" data-inverted="">
+          <p className="item-name tool">{item.name}</p>
+        </Tooltip>
+      ) : (
+        <p style={inlineWidth} className="item-name">
+          {item.name}
+        </p>
+      )}
     </ContentItemContainer>
   );
 }
