@@ -232,7 +232,7 @@ export default function mailout(state = initialState, action) {
         mailoutDisplayAgent: null,
         mailoutEdit: {
           ...state.mailoutEdit,
-          mergeVariables: action.payload,
+          fields: action.payload,
         },
         changeDisplayAgentError: null,
       };

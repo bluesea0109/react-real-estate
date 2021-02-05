@@ -15,7 +15,7 @@ import {
   ItemHeaderMenuLayout,
 } from '../../layouts';
 import {
-  changeMailoutDisplayAgentPending,
+  // changeMailoutDisplayAgentPending,
   updateMailoutEditPending,
   updateMailoutTemplateThemePending,
 } from '../../store/modules/mailout/actions';
@@ -507,7 +507,8 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     const { first, last, value } = selectedAgent;
 
     setMailoutDisplayAgent({ userId: value, first, last });
-    dispatch(changeMailoutDisplayAgentPending({ userId: value, first, last }));
+    // TODO - Update the 'fields' when switching agent - pending API
+    // dispatch(changeMailoutDisplayAgentPending({ userId: value, first, last }));
   };
 
   const handleInputChange = (value, name) => {
