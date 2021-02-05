@@ -6,6 +6,8 @@ import { authenticate } from '../store/modules/auth0/actions';
 import { Message, Segment } from '../components/Base';
 import Loading from '../components/Loading';
 
+import AuthService from '../services/auth/index';
+
 const CallbackPage = () => {
   const dispatch = useDispatch();
   const auth0 = useSelector(store => store.auth0);
@@ -15,6 +17,7 @@ const CallbackPage = () => {
   if (!auth0.pending && !auth0.error) dispatch(authenticate());
 
   if (!auth0.pending && auth0.error) {
+    AuthService.signOut();
     return (
       <Segment basic>
         <Message>
