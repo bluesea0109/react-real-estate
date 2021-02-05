@@ -19,7 +19,7 @@ import {
   updateMailoutEditPending,
   updateMailoutTemplateThemePending,
 } from '../../store/modules/mailout/actions';
-import { differenceObjectDeep, objectIsEmpty, sleep, postcardDimensions } from '../utils/utils';
+import { sleep, postcardDimensions } from '../utils/utils';
 import { Button, Icon, Image, Loader, Menu, Message, Page, Segment, Snackbar } from '../Base';
 import { StyledHeader, colors } from '../utils/helpers';
 import PageTitleHeader from '../PageTitleHeader';
@@ -107,28 +107,26 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   if (mailoutDetails.backResourceUrl) renderBackDetails = false;
 
   const currentPostcardSize = mailoutDetails?.postcardSize;
-  const currentMailoutDisplayAgentUserID = mailoutDetails.mailoutDisplayAgent
-    ? mailoutDetails.mailoutDisplayAgent?.userId
-    : mailoutDetails.userId;
-  const currentMailoutDisplayAgent = mailoutDetails.mailoutDisplayAgent || {
-    userId: mailoutDetails.userId,
-  };
+  const currentMailoutDisplayAgentUserID =
+    mailoutEdit?.mailoutDisplayAgent?.userId ||
+    mailoutDetails?.mailoutDisplayAgent?.userId ||
+    mailoutDetails?.userId;
+  const currentMailoutDisplayAgent = mailoutEdit?.mailoutDisplayAgent ||
+    mailoutDetails?.mailoutDisplayAgent || {
+      userId: mailoutDetails.userId,
+    };
 
   const [error, setError] = useState(null);
 
   const [postcardSize, setPostcardSize] = useState(currentPostcardSize);
   const editIntentPath = useSelector(store => store.mailout?.mailoutEdit?.intentPath);
   const editTemplateTheme = useSelector(store => store.mailout?.mailoutEdit?.templateTheme);
-  const brandColorInMergeVars = mailoutEdit?.mergeVariables?.find(
-    variable => variable.name === 'brandColor'
-  );
+  const editBrandColor = mailoutEdit?.brandColor;
   const [selectedBrandColor, setSelectedBrandColor] = useState(
-    brandColorInMergeVars?.value ? brandColorInMergeVars.value : mailoutEdit?.brandColor || ''
+    editBrandColor?.value ? editBrandColor.value : mailoutEdit?.brandColor || ''
   );
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
-  const [tempColor, setTempColor] = useState(
-    mailoutEdit?.mergeVariables?.brandColor || mailoutEdit?.brandColor
-  );
+  const [tempColor, setTempColor] = useState(mailoutEdit?.brandColor);
   const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(currentMailoutDisplayAgent);
   const [filteredStencils, setFilteredStencils] = useState([]);
   const [formValues, setFormValues] = useState(
@@ -138,12 +136,11 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     state => state.mailout.updateMailoutTemplateThemePending
   );
 
-  let _coverPhotoMv = _.get(mailoutDetails, 'mergeVariables', []).find(
-    mv => mv.name === 'frontImgUrl'
-  );
-  let _coverPhoto = _.get(_coverPhotoMv, 'value', _.get(mailoutDetails, 'details.coverPhoto'));
+  let editCoverPhoto = mailoutEdit?.frontImgUrl;
 
-  const [coverPhoto, setCoverPhoto] = useState(_coverPhoto);
+  const [coverPhoto, setCoverPhoto] = useState(
+    editCoverPhoto || mailoutDetails?.details?.coverPhoto
+  );
   const [coverPhotoIndex, setCoverPhotoIndex] = useState(0);
   const [photoUpdating, setPhotoUpdating] = useState(false);
   const publishedTags = mailoutDetails?.publishedTags;
@@ -271,12 +268,10 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   }, [updateMailoutEditIsPending, changeDisplayAgentPending, setFormValuesHaveChanged]);
 
   useEffect(() => {
-    const diff = differenceObjectDeep(formValues, mailoutEdit.mergeVariables);
-
-    if (!objectIsEmpty(diff) && formValuesHaveChanged) {
-      setFormValues(mailoutEdit.mergeVariables);
+    if (formValuesHaveChanged) {
+      setFormValues(mailoutEdit.fields);
     }
-  }, [mailoutEdit.mergeVariables, formValues, setFormValues, formValuesHaveChanged]);
+  }, [mailoutEdit.fields, setFormValues, formValuesHaveChanged]);
 
   const triggerFileDialog = () => document.getElementById('postcardCoverFile').click();
 
@@ -338,23 +333,20 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
   };
 
   const handleEditSubmitClick = async () => {
-    const newMergeVariables = [];
-    newMergeVariables.push({
-      name: 'brandColor',
-      value: selectedBrandColor?.hex || selectedBrandColor || '',
-    });
-    newMergeVariables.push({ name: 'frontImgUrl', value: coverPhoto });
+    const newFields = [];
+    const newBrandColor = selectedBrandColor?.hex || selectedBrandColor || '';
+    const newFrontImgUrl = coverPhoto;
 
-    formValues
-      .filter(value => value.name !== 'brandColor' && value.name !== 'frontImgUrl' && value.value)
-      .forEach(value => newMergeVariables.push({ name: value.name, value: value.value + '' }));
+    formValues.forEach(value => newFields.push({ name: value.name, value: value.value + '' }));
 
     const newData = Object.assign(
       {},
       { postcardSize },
       { templateTheme: mailoutEdit?.templateTheme },
-      { mergeVariables: newMergeVariables },
-      { mailoutDisplayAgent } // add the   "ctas" object here
+      { fields: newFields },
+      { brandColor: newBrandColor },
+      { frontImgUrl: newFrontImgUrl },
+      { mailoutDisplayAgent }
     );
     if (ctaUrl) {
       newData.ctas = {
@@ -529,7 +521,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
     dir === 'back' ? sliderRef.current.slickPrev() : sliderRef.current.slickNext();
   };
 
-  const renderMergeVariables = side => {
+  const renderFields = side => {
     let renderedFields = [];
     if (formValues) {
       renderedFields = Array.from(formValues)
@@ -743,6 +735,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
                 <Dropdown
                   placeholder="Select Display Agent"
                   fluid
+                  search
                   selection
                   options={profiles}
                   value={mailoutDisplayAgent?.userId}
@@ -837,7 +830,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           {updateTemplateThemePending ? (
             <Loader inline="centered" active />
           ) : (
-            renderFrontDetails && renderMergeVariables('front')
+            renderFrontDetails && renderFields('front')
           )}
 
           {renderBackDetails && (
@@ -848,7 +841,7 @@ const EditCampaignForm = ({ mailoutDetails, mailoutEdit, handleBackClick }) => {
           {updateTemplateThemePending ? (
             <Loader inline="centered" active />
           ) : (
-            renderBackDetails && renderMergeVariables('back')
+            renderBackDetails && renderFields('back')
           )}
         </div>
 
