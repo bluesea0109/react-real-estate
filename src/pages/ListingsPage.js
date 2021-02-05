@@ -363,10 +363,18 @@ const ListingsPage = () => {
           activeFilters.includes(listing.standardStatus) || listing.standardStatus === 'Closed'
       );
       setFitleredListings(newFilteredListings);
+    } else if (activeFilters.includes('Active')) {
+      const newFilteredListings = sortedListings?.filter(
+        listing =>
+          activeFilters.includes(listing.standardStatus) ||
+          listing.standardStatus === 'Active Under Contract'
+      );
+      setFitleredListings(newFilteredListings);
     } else {
       const newFilteredListings = sortedListings?.filter(listing =>
         activeFilters.includes(listing.standardStatus)
       );
+
       setFitleredListings(newFilteredListings);
     }
   }, [activeFilters, sortedListings]);
@@ -377,6 +385,7 @@ const ListingsPage = () => {
     } else {
       let temp = [...activeFilters];
       let localFilters = temp.filter(el => el !== 'All');
+
       if (localFilters.find(el => el === val)) {
         if (localFilters.length === 1) {
           setActiveFilters(['All']);
@@ -385,11 +394,13 @@ const ListingsPage = () => {
           setActiveFilters(uniqueLocalFilters);
         }
       } else {
+        console.log('cunt 3');
         localFilters = [...localFilters, val];
         setActiveFilters(localFilters);
       }
     }
   };
+
   const getColumns = () => {
     if (windowSize.width >= 3000) {
       return 8;
@@ -414,6 +425,7 @@ const ListingsPage = () => {
     }
     return 4;
   };
+
   return (
     <Page basic>
       <ContentTopHeaderLayout>
