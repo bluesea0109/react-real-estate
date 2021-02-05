@@ -32,6 +32,11 @@ const ViewAllButton = styled(ButtonNoStyle)`
   color: ${brandColors.primary};
 `;
 
+const SectionHeader = styled.h3`
+  padding: 2rem 0 0 0.5rem;
+  color: ${brandColors.grey02};
+`;
+
 const SectionGrid = styled.div`
   display: grid;
   gap: 0.75rem;
@@ -148,6 +153,7 @@ const Dashboard = ({ className }) => {
         <StyledHeading>
           <h3>What do you want to create?</h3>
         </StyledHeading>
+        <SectionHeader>Postcards</SectionHeader>
         <SectionGrid>
           <DashboardItem
             name="just listed postcard"
@@ -175,6 +181,9 @@ const Dashboard = ({ className }) => {
             name="custom postcard"
             linkTo={{ pathname: 'create-postcard', state: { filter: 'custom' } }}
           ></DashboardItem>
+        </SectionGrid>
+        <SectionHeader>Ads</SectionHeader>
+        <SectionGrid>
           <DashboardItem
             name="just listed ad"
             linkTo={{ pathname: 'listings', state: { filters: ['Active'] } }}
@@ -189,6 +198,9 @@ const Dashboard = ({ className }) => {
           ></DashboardItem>
           <DashboardItem name="home value ad" linkTo="" soon></DashboardItem>
           <DashboardItem name="buyer search ad" linkTo="" soon></DashboardItem>
+        </SectionGrid>
+        <SectionHeader>Marketing Materials</SectionHeader>
+        <SectionGrid>
           <DashboardItem
             name="business card"
             linkTo="https://agentstore.com/product-category/business-cards/"
