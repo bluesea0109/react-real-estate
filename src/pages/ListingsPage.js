@@ -394,7 +394,6 @@ const ListingsPage = () => {
           setActiveFilters(uniqueLocalFilters);
         }
       } else {
-        console.log('cunt 3');
         localFilters = [...localFilters, val];
         setActiveFilters(localFilters);
       }
