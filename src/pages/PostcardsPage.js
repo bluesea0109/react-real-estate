@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 
 import { Progress } from 'semantic-ui-react';
@@ -17,6 +17,7 @@ import {
   Grid,
   Header,
   Icon,
+  Input,
   Menu,
   Modal,
   Page,
@@ -29,17 +30,25 @@ import ItemList from '../components/MailoutListItem/ItemList';
 import PageTitleHeader from '../components/PageTitleHeader';
 import Loading from '../components/Loading';
 import { useIsMobile } from '../components/Hooks/useIsMobile';
-import Styled from 'styled-components';
+import styled from 'styled-components';
+import { debounce, lowerCase } from 'lodash';
 
-const ModalWelcome = Styled(Modal)`
-&&&{
-  width:70%
-}
-@media only screen and (max-width: 800px) {
-  &&&{
-    width:90%;
+const SearchContainer = styled(Menu.Item)`
+  &&& {
+    flex: 1 0 250px;
+    max-width: 600px;
   }
-}
+`;
+
+const ModalWelcome = styled(Modal)`
+  &&& {
+    width: 70%;
+  }
+  @media only screen and (max-width: 800px) {
+    &&& {
+      width: 90%;
+    }
+  }
 `;
 
 const modalHeaderStyles = {
@@ -62,7 +71,46 @@ const useFetching = (getActionCreator, onboarded, dispatch) => {
   }, [getActionCreator, onboarded, dispatch]);
 };
 
-const Dashboard = () => {
+const CampaignSearch = ({ mailoutList, setFilteredListings, setIsSearching }) => {
+  const [searchValue, setSearchValue] = useState('');
+
+  const handleSearchChange = useCallback(
+    debounce((value, listings) => {
+      if (!value.length) {
+        setFilteredListings(listings);
+        setIsSearching(false);
+      } else {
+        setIsSearching(true);
+        let newListings = listings.filter(listing => {
+          return (
+            lowerCase(listing.details?.displayAddress).includes(lowerCase(value)) ||
+            (listing.name && lowerCase(listing.name).includes(lowerCase(value))) ||
+            (listing.mlsNum && listing.mlsNum.includes(value))
+          );
+        });
+        newListings.length ? setFilteredListings(newListings) : setFilteredListings(null);
+      }
+    }, 500),
+    []
+  );
+
+  return (
+    <SearchContainer>
+      <Input
+        fluid
+        icon="search"
+        placeholder="Search by Name, Address or MLS number"
+        value={searchValue}
+        onChange={e => {
+          setSearchValue(e.target.value);
+          handleSearchChange(e.target.value, mailoutList);
+        }}
+      />
+    </SearchContainer>
+  );
+};
+
+const PostcardsPage = () => {
   const isMobile = useIsMobile();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -88,6 +136,13 @@ const Dashboard = () => {
   const page = useSelector(store => store.mailouts.page);
   const mailoutList = useSelector(store => store.mailouts.list);
   const error = useSelector(store => store.mailouts.error?.message);
+  const [filteredListings, setFilteredListings] = useState(mailoutList);
+  const [isSearching, setIsSearching] = useState(false);
+
+  useEffect(() => {
+    !filteredListings?.length && setFilteredListings(mailoutList);
+    // eslint-disable-next-line
+  }, [mailoutList]);
 
   useFetching(getMailoutsPending, onboarded, useDispatch());
 
@@ -134,14 +189,14 @@ const Dashboard = () => {
 
     if (mailoutItemElementArray && mailoutItemElementArray.length > 0) {
       mailoutItemElementArray.forEach(mailoutItemElement => {
-        return observer.observe(mailoutItemElement);
+        if (mailoutItemElement instanceof Element) return observer.observe(mailoutItemElement);
       });
     }
   }, [mailoutItemElementArray]);
 
   useEffect(() => {
-    if (mailoutList && mailoutList.length > 0) {
-      mailoutList.map((item, index) => {
+    if (filteredListings && filteredListings.length > 0) {
+      filteredListings.map((item, index) => {
         const mailoutItemElement = document.querySelector(`#mailout-iframe-set-${index}`);
 
         return mailoutItemElementArray.push(mailoutItemElement);
@@ -149,11 +204,11 @@ const Dashboard = () => {
 
       createObserver();
     }
-  }, [mailoutList, mailoutItemElementArray, createObserver]);
+  }, [filteredListings, mailoutList, mailoutItemElementArray, createObserver]);
 
-  const MailoutsList = ({ list }) => {
-    if (list[0].started) return null;
-
+  const MailoutsList = ({ list, searching }) => {
+    if (searching && !list?.length) return <div>No listings match your search criteria</div>;
+    if (!list || list[0]?.started) return null;
     return list.map((item, index) => (
       <ItemLayout fluid key={`${item.userId}-${item._id}-${item.mlsNum}`}>
         <ListHeader data={item} />
@@ -181,6 +236,11 @@ const Dashboard = () => {
             <Menu.Item>
               <Header as="h1">Postcards</Header>
             </Menu.Item>
+            <CampaignSearch
+              mailoutList={mailoutList}
+              setFilteredListings={setFilteredListings}
+              setIsSearching={setIsSearching}
+            />
             <Menu.Item position="right">
               <div className="right menu">
                 {addCampaignMlsNumPendingState && (
@@ -289,11 +349,13 @@ const Dashboard = () => {
           </ModalWelcome>
 
           <Grid>
-            <Grid.Row>
-              <Grid.Column width={16}>
-                <MailoutsList list={mailoutList} />
-              </Grid.Column>
-            </Grid.Row>
+            {!mailoutsPendingState && (
+              <Grid.Row>
+                <Grid.Column width={16}>
+                  <MailoutsList list={filteredListings} searching={isSearching} />
+                </Grid.Column>
+              </Grid.Row>
+            )}
 
             {(isInitiatingTeam || isInitiatingUser || mailoutsPendingState) && (
               <Grid.Row>
@@ -328,4 +390,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default PostcardsPage;
