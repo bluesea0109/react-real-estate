@@ -129,6 +129,21 @@ const ModalPreview = Styled(Modal)`
   }
 `;
 
+const ModalTablePreview = Styled(Modal)`
+  width:${props => css`calc(${props.widthsize + 70}px)`};
+  .content{
+    justify-content:center;
+  }
+  @media (max-width: ${props => props.widthsize + 100}px) {
+    &&&{
+      width:90%;
+    }
+    .content{
+      justify-content:flex-start;
+    }
+  }
+`;
+
 const useFetching = (getActionCreator, dispatch, mailoutId) => {
   useEffect(() => {
     dispatch(getActionCreator(mailoutId));
@@ -144,10 +159,12 @@ const MailoutDetailsPage = () => {
 
   const [currentNumberOfRecipients, setCurrentNumberOfRecipients] = useState(0);
   const [showConsentModal, setShowConsentModal] = useState(false);
+  const [showTableModal, setShowTableModal] = useState(false);
 
   const [frontLoaded, setFrontLoaded] = useState(false);
   const [backLoaded, setBackLoaded] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [isTableFlipped, setIsTableFlipped] = useState(false);
   const [working, setWorking] = useState(false);
   const [DestinationCalculation, setDestinationCalculation] = useState(false);
 
@@ -186,6 +203,75 @@ const MailoutDetailsPage = () => {
   const csvURL = peerId
     ? `/api/user/${details?.userId}/peer/${peerId}/mailout/${details?._id}/csv`
     : `/api/user/${details?.userId}/mailout/${details?._id}/csv`;
+
+  const [previewUrl, setPreviewUrl] = useState([]);
+
+  const TableModal = () => {
+    return (
+      <ModalTablePreview
+        widthsize={postCardSize.width}
+        open={showTableModal}
+        onClose={() => {
+          setShowTableModal(false);
+          setIsTableFlipped(false);
+        }}
+        size="small"
+      >
+        {details && (
+          <div
+            style={{
+              maxWidth: '100%',
+              margin: 'auto',
+              width: `calc(${postCardSize.width}px + 70px)`,
+              height: '100%',
+              paddingBottom: '30px',
+            }}
+          >
+            <ModalTablePreview.Header style={modalHeaderStyles}>
+              <p>Preview</p>
+              <Button
+                style={cancelX}
+                onClick={() => {
+                  setShowTableModal(false);
+                  setIsTableFlipped(false);
+                }}
+              >
+                <FontAwesomeIcon icon="times" style={{ color: '#B1B1B1', fontSize: '16px' }} />
+              </Button>
+            </ModalTablePreview.Header>
+            <ModalTablePreview.Content style={postcardContainer}>
+              <FlipCard isFlipped={isTableFlipped}>
+                <Image src={previewUrl[0]} />
+                <Image src={previewUrl[1]} />
+              </FlipCard>
+            </ModalTablePreview.Content>
+            <ModalTablePreview.Content>
+              <div style={flipButtonContainer}>
+                <Button
+                  style={{
+                    ...flipButtonStyles,
+                    ...rightMargin,
+                    ...(isTableFlipped ? highlightButton : {}),
+                  }}
+                  floated="right"
+                  onClick={() => setIsTableFlipped(true)}
+                >
+                  Back
+                </Button>
+                <Button
+                  style={{ ...flipButtonStyles, ...(!isTableFlipped ? highlightButton : {}) }}
+                  floated="right"
+                  onClick={() => setIsTableFlipped(false)}
+                >
+                  Front
+                </Button>
+              </div>
+            </ModalTablePreview.Content>
+          </div>
+        )}
+      </ModalTablePreview>
+    );
+  };
 
   const handleOnload = useCallback(
     event => {
@@ -320,10 +406,21 @@ const MailoutDetailsPage = () => {
         return (
           <Table.Row key={dest.id}>
             <Table.Cell>{dest?.deliveryLine}</Table.Cell>
+            <Table.Cell>{dest?.name}</Table.Cell>
             <Table.Cell>{dest?.expected_delivery_date}</Table.Cell>
             <Table.Cell>{status}</Table.Cell>
             <Table.Cell>{ctaInteractions}</Table.Cell>
             <Table.Cell>{ctaDate}</Table.Cell>
+            <Table.Cell onClick={() => setShowTableModal(true)}>
+              <Image
+                onClick={() => {
+                  setPreviewUrl([dest?.frontResourceUrl, dest?.backResourceUrl]);
+                  setShowTableModal(true);
+                }}
+                style={{ width: '100%', maxWidth: '60px' }}
+                src={dest?.frontResourceUrl}
+              />
+            </Table.Cell>
           </Table.Row>
         );
       })
@@ -712,7 +809,8 @@ const MailoutDetailsPage = () => {
                 {!pendingState && destinationsOptionsMode === 'userUploaded' && (
                   <div>Upload: {details.destinationsOptions?.userUploaded?.filename}</div>
                 )}
-                {!pendingState &&
+                {/* not sure why there are two download csv buttons? Leaving it in incase its needed. */}
+                {/* {!pendingState &&
                   !error &&
                   details &&
                   resolveMailoutStatus(details.mailoutStatus) === 'Sent' && (
@@ -721,24 +819,28 @@ const MailoutDetailsPage = () => {
                         Download All Recipients as CSV
                       </a>
                     </div>
-                  )}
+                  )} */}
                 {!pendingState &&
                   !error &&
                   details &&
                   (destinationsOptionsMode === 'userUploaded' ||
                     resolveMailoutStatus(details.mailoutStatus) === 'Sent') && (
-                    <Table singleLine>
+                    <Table className="six wide tablet six wide computer column">
                       <Table.Header>
                         <Table.Row>
                           <Table.HeaderCell>Address</Table.HeaderCell>
+                          <Table.HeaderCell>Name</Table.HeaderCell>
                           <Table.HeaderCell>Delivery Date</Table.HeaderCell>
                           <Table.HeaderCell>Status</Table.HeaderCell>
                           <Table.HeaderCell>CTA count</Table.HeaderCell>
                           <Table.HeaderCell>CTA date</Table.HeaderCell>
+                          <Table.HeaderCell>Preview</Table.HeaderCell>
                         </Table.Row>
                       </Table.Header>
 
-                      <Table.Body>{renderDestinations()}</Table.Body>
+                      <Table.Body>
+                        {renderDestinations()} {TableModal()}
+                      </Table.Body>
                     </Table>
                   )}
                 {!pendingState &&
