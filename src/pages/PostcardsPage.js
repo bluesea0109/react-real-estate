@@ -18,6 +18,7 @@ import {
   Header,
   Icon,
   Input,
+  Loader,
   Menu,
   Modal,
   Page,
@@ -28,10 +29,10 @@ import IframeGroup from '../components/MailoutListItem/IframeGroup';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ItemList from '../components/MailoutListItem/ItemList';
 import PageTitleHeader from '../components/PageTitleHeader';
-import Loading from '../components/Loading';
 import { useIsMobile } from '../components/Hooks/useIsMobile';
 import styled from 'styled-components';
-import { debounce, lowerCase } from 'lodash';
+import { debounce } from 'lodash';
+import auth from '../services/auth';
 
 const SearchContainer = styled(Menu.Item)`
   &&& {
@@ -71,24 +72,33 @@ const useFetching = (getActionCreator, onboarded, dispatch) => {
   }, [getActionCreator, onboarded, dispatch]);
 };
 
-const CampaignSearch = ({ mailoutList, setFilteredListings, setIsSearching }) => {
+const CampaignSearch = ({ mailoutList, setFilteredListings, setIsFiltered, setIsSearching }) => {
   const [searchValue, setSearchValue] = useState('');
+  const peerId = useSelector(store => store.peer?.peerId);
+
+  const getSearchCampaigns = async value => {
+    if (!value) return [];
+    let path = `/api/user/mailout/search?text=${value}`;
+    if (peerId) path = `/api/user/peer/${peerId}/mailout/search?text=${value}`;
+    const headers = {};
+    const accessToken = await auth.getAccessToken();
+    headers['authorization'] = `Bearer ${accessToken}`;
+    const searchRes = await fetch(path, { headers, method: 'get', credentials: 'include' });
+    const data = await searchRes.json();
+    return data;
+  };
 
   const handleSearchChange = useCallback(
-    debounce((value, listings) => {
+    debounce(async (value, listings) => {
+      setIsSearching(true);
       if (!value.length) {
         setFilteredListings(listings);
         setIsSearching(false);
       } else {
-        setIsSearching(true);
-        let newListings = listings.filter(listing => {
-          return (
-            lowerCase(listing.details?.displayAddress).includes(lowerCase(value)) ||
-            (listing.name && lowerCase(listing.name).includes(lowerCase(value))) ||
-            (listing.mlsNum && listing.mlsNum.includes(value))
-          );
-        });
+        let newListings = await getSearchCampaigns(value);
         newListings.length ? setFilteredListings(newListings) : setFilteredListings(null);
+        setIsFiltered(true);
+        setIsSearching(false);
       }
     }, 500),
     []
@@ -138,6 +148,7 @@ const PostcardsPage = () => {
   const error = useSelector(store => store.mailouts.error?.message);
   const [filteredListings, setFilteredListings] = useState(mailoutList);
   const [isSearching, setIsSearching] = useState(false);
+  const [isFiltered, setIsFiltered] = useState(false);
 
   useEffect(() => {
     !filteredListings?.length && setFilteredListings(mailoutList);
@@ -239,6 +250,7 @@ const PostcardsPage = () => {
             <CampaignSearch
               mailoutList={mailoutList}
               setFilteredListings={setFilteredListings}
+              setIsFiltered={setIsFiltered}
               setIsSearching={setIsSearching}
             />
             <Menu.Item position="right">
@@ -349,23 +361,23 @@ const PostcardsPage = () => {
           </ModalWelcome>
 
           <Grid>
-            {!mailoutsPendingState && (
-              <Grid.Row>
+            <Grid.Row>
+              {mailoutsPendingState ||
+              isInitiatingTeam ||
+              isInitiatingUser ||
+              mailoutsPendingState ||
+              isSearching ? (
+                <Loader active inline="centered">
+                  Loading...
+                </Loader>
+              ) : (
                 <Grid.Column width={16}>
                   <MailoutsList list={filteredListings} searching={isSearching} />
                 </Grid.Column>
-              </Grid.Row>
-            )}
+              )}
+            </Grid.Row>
 
-            {(isInitiatingTeam || isInitiatingUser || mailoutsPendingState) && (
-              <Grid.Row>
-                <Grid.Column width={16}>
-                  <Loading />
-                </Grid.Column>
-              </Grid.Row>
-            )}
-
-            {canLoadMore && (
+            {canLoadMore && !isFiltered && !isSearching && (
               <Grid.Row>
                 <Grid.Column width={16}>
                   <Grid centered columns={2}>
@@ -385,7 +397,6 @@ const PostcardsPage = () => {
           </Grid>
         </Segment>
       )}
-      {mailoutsPendingState && !error && <Loading />}
     </Page>
   );
 };
