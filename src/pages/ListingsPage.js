@@ -379,8 +379,7 @@ const ListingsPage = () => {
         listing =>
           activeFiltersCase.includes(listing.standardStatus.toLowerCase()) ||
           listing.standardStatus.toLowerCase() === 'active under contract' ||
-          listing.standardStatus.toLowerCase() === 'active with contingency' ||
-          listing.standardStatus.toLowerCase() === 'pending'
+          listing.standardStatus.toLowerCase() === 'active with contingency'
       );
       setFitleredListings(newFilteredListings);
     } else {
