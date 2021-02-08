@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useHistory, useLocation } from 'react-router-dom';
@@ -76,13 +77,13 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
     };
 
     const renderPill = status => {
-      if (status === 'Active') {
+      if (status === 'active') {
         return (
           <StatusPill type="solid" color="yellow">
             {status}
           </StatusPill>
         );
-      } else if (status === 'Pending') {
+      } else if (status === 'pending') {
         return (
           <StatusPill type="solid" color="red">
             {status}
@@ -148,7 +149,7 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                 {renderPill(
                   listingItem.standardStatus === 'Closed'
                     ? 'Off Market'
-                    : listingItem.standardStatus
+                    : listingItem.standardStatus.toLowerCase()
                 )}
               </Grid.Column>
             </Grid>
@@ -241,7 +242,9 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                         <DotsDropDown.Item
                           onClick={() => {
                             let filter =
-                              listingItem.standardStatus === 'Closed' ? 'sold' : 'listed';
+                              listingItem.standardStatus.toLowerCase() === 'closed'
+                                ? 'sold'
+                                : 'listed';
                             history.push({
                               pathname: '/create-postcard',
                               state: {
@@ -269,37 +272,37 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
 const FilterList = ({ activeFilters, handleFilterSelected }) => {
   return (
     <List relaxed="very" selection>
-      <List.Item onClick={() => handleFilterSelected('All')}>
+      <List.Item onClick={() => handleFilterSelected('all')}>
         <Icon
-          name={activeFilters.includes('All') ? 'check square' : 'square outline'}
-          className={`${'filterIcon'} ${activeFilters.includes('All') && 'filterIconActive'}`}
+          name={activeFilters.includes('all') ? 'check square' : 'square outline'}
+          className={`${'filterIcon'} ${activeFilters.includes('all') && 'filterIconActive'}`}
         />
         <List.Content>
           <List.Description>All Statuses</List.Description>
         </List.Content>
       </List.Item>
-      <List.Item onClick={() => handleFilterSelected('Active')}>
+      <List.Item onClick={() => handleFilterSelected('active')}>
         <Icon
-          name={activeFilters.includes('Active') ? 'check square' : 'square outline'}
-          className={`${'filterIcon'} ${activeFilters.includes('Active') && 'filterIconActive'}`}
+          name={activeFilters.includes('active') ? 'check square' : 'square outline'}
+          className={`${'filterIcon'} ${activeFilters.includes('active') && 'filterIconActive'}`}
         />
         <List.Content>
           <List.Description>Active</List.Description>
         </List.Content>
       </List.Item>
-      <List.Item onClick={() => handleFilterSelected('Pending')}>
+      <List.Item onClick={() => handleFilterSelected('pending')}>
         <Icon
-          name={activeFilters.includes('Pending') ? 'check square' : 'square outline'}
-          className={`${'filterIcon'} ${activeFilters.includes('Pending') && 'filterIconActive'}`}
+          name={activeFilters.includes('pending') ? 'check square' : 'square outline'}
+          className={`${'filterIcon'} ${activeFilters.includes('pending') && 'filterIconActive'}`}
         />
         <List.Content>
           <List.Description>Pending</List.Description>
         </List.Content>
       </List.Item>
-      <List.Item onClick={() => handleFilterSelected('Sold')}>
+      <List.Item onClick={() => handleFilterSelected('sold')}>
         <Icon
-          name={activeFilters.includes('Sold') ? 'check square' : 'square outline'}
-          className={`${'filterIcon'} ${activeFilters.includes('Sold') && 'filterIconActive'}`}
+          name={activeFilters.includes('sold') ? 'check square' : 'square outline'}
+          className={`${'filterIcon'} ${activeFilters.includes('sold') && 'filterIconActive'}`}
         />
         <List.Content>
           <List.Description>Sold / Off Market</List.Description>
@@ -314,7 +317,7 @@ const ListingsPage = () => {
   const [listingDetails, setListingDetails] = useState(null);
   const [sortedListings, setsortedListings] = useState(null);
   const [filteredListings, setFitleredListings] = useState(null);
-  const [activeFilters, setActiveFilters] = useState(location?.state?.filters || 'All');
+  const [activeFilters, setActiveFilters] = useState(location?.state?.filters || 'all');
   const [userType, setUserType] = useState('loggedIn');
 
   const peerId = useSelector(store => store.peer.peerId);
@@ -327,7 +330,6 @@ const ListingsPage = () => {
   );
 
   const windowSize = useWindowSize();
-
   useEffect(() => {
     async function fetchData() {
       if (listingDetails) return;
@@ -355,24 +357,34 @@ const ListingsPage = () => {
   }, [listingDetails, peerId]);
 
   useEffect(() => {
-    if (activeFilters.includes('All')) {
+    let activeFiltersCase;
+    if (typeof activeFilters === 'string') {
+      activeFiltersCase = _.lowerCase(activeFilters);
+    }
+    if (typeof activeFilters === 'object') {
+      activeFiltersCase = activeFilters.map(val => val.toLowerCase());
+    }
+
+    if (activeFiltersCase.includes('all')) {
       setFitleredListings(sortedListings);
-    } else if (activeFilters.includes('Sold')) {
+    } else if (activeFiltersCase.includes('sold')) {
       const newFilteredListings = sortedListings?.filter(
         listing =>
-          activeFilters.includes(listing.standardStatus) || listing.standardStatus === 'Closed'
+          activeFiltersCase.includes(listing.standardStatus.toLowerCase()) ||
+          listing.standardStatus.toLowerCase() === 'closed'
       );
       setFitleredListings(newFilteredListings);
-    } else if (activeFilters.includes('Active')) {
+    } else if (activeFiltersCase.includes('active')) {
       const newFilteredListings = sortedListings?.filter(
         listing =>
-          activeFilters.includes(listing.standardStatus) ||
-          listing.standardStatus === 'Active Under Contract'
+          activeFiltersCase.includes(listing.standardStatus.toLowerCase()) ||
+          listing.standardStatus === 'active under contract' ||
+          listing.standardStatus === 'active with contingency'
       );
       setFitleredListings(newFilteredListings);
     } else {
       const newFilteredListings = sortedListings?.filter(listing =>
-        activeFilters.includes(listing.standardStatus)
+        activeFiltersCase.includes(listing.standardStatus.toLowerCase())
       );
 
       setFitleredListings(newFilteredListings);
@@ -380,15 +392,15 @@ const ListingsPage = () => {
   }, [activeFilters, sortedListings]);
 
   const handleFilterSelected = val => {
-    if (val === 'All') {
-      setActiveFilters(['All']);
+    if (val === 'all') {
+      setActiveFilters(['all']);
     } else {
       let temp = [...activeFilters];
-      let localFilters = temp.filter(el => el !== 'All');
+      let localFilters = temp.filter(el => el !== 'all');
 
       if (localFilters.find(el => el === val)) {
         if (localFilters.length === 1) {
-          setActiveFilters(['All']);
+          setActiveFilters(['all']);
         } else {
           let uniqueLocalFilters = localFilters.filter(filter => filter !== val);
           setActiveFilters(uniqueLocalFilters);
@@ -472,7 +484,7 @@ const ListingsPage = () => {
                   />
                 );
               })
-            ) : activeFilters.includes('All') ? (
+            ) : activeFilters.includes('all') ? (
               undefined
             ) : sortedListings?.length > 0 ? (
               <Header as="h3" className="normalFontWeight noMargin cardFont noFilteredListingsText">
