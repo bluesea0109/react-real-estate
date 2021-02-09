@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useHistory, useLocation } from 'react-router-dom';
@@ -77,13 +76,13 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
     };
 
     const renderPill = status => {
-      if (status === 'active') {
+      if (status === 'Active') {
         return (
           <StatusPill type="solid" color="yellow">
             {status}
           </StatusPill>
         );
-      } else if (status === 'pending') {
+      } else if (status === 'Pending') {
         return (
           <StatusPill type="solid" color="red">
             {status}
@@ -149,7 +148,7 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                 {renderPill(
                   listingItem.standardStatus === 'Closed'
                     ? 'Off Market'
-                    : listingItem.standardStatus.toLowerCase()
+                    : listingItem.standardStatus
                 )}
               </Grid.Column>
             </Grid>
@@ -242,9 +241,7 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                         <DotsDropDown.Item
                           onClick={() => {
                             let filter =
-                              listingItem.standardStatus.toLowerCase() === 'closed'
-                                ? 'sold'
-                                : 'listed';
+                              listingItem.standardStatus === 'Closed' ? 'sold' : 'listed';
                             history.push({
                               pathname: '/create-postcard',
                               state: {
@@ -281,19 +278,19 @@ const FilterList = ({ activeFilters, handleFilterSelected }) => {
           <List.Description>All Statuses</List.Description>
         </List.Content>
       </List.Item>
-      <List.Item onClick={() => handleFilterSelected('active')}>
+      <List.Item onClick={() => handleFilterSelected('Active')}>
         <Icon
-          name={activeFilters.includes('active') ? 'check square' : 'square outline'}
-          className={`${'filterIcon'} ${activeFilters.includes('active') && 'filterIconActive'}`}
+          name={activeFilters.includes('Active') ? 'check square' : 'square outline'}
+          className={`${'filterIcon'} ${activeFilters.includes('Active') && 'filterIconActive'}`}
         />
         <List.Content>
           <List.Description>Active</List.Description>
         </List.Content>
       </List.Item>
-      <List.Item onClick={() => handleFilterSelected('pending')}>
+      <List.Item onClick={() => handleFilterSelected('Pending')}>
         <Icon
-          name={activeFilters.includes('pending') ? 'check square' : 'square outline'}
-          className={`${'filterIcon'} ${activeFilters.includes('pending') && 'filterIconActive'}`}
+          name={activeFilters.includes('Pending') ? 'check square' : 'square outline'}
+          className={`${'filterIcon'} ${activeFilters.includes('Pending') && 'filterIconActive'}`}
         />
         <List.Content>
           <List.Description>Pending</List.Description>
@@ -359,10 +356,10 @@ const ListingsPage = () => {
   useEffect(() => {
     let activeFiltersCase;
     if (typeof activeFilters === 'string') {
-      activeFiltersCase = _.lowerCase(activeFilters);
+      activeFiltersCase = activeFilters;
     }
     if (typeof activeFilters === 'object') {
-      activeFiltersCase = activeFilters.map(val => val.toLowerCase());
+      activeFiltersCase = activeFilters.map(val => val);
     }
 
     if (activeFiltersCase.includes('all')) {
@@ -370,21 +367,20 @@ const ListingsPage = () => {
     } else if (activeFiltersCase.includes('sold')) {
       const newFilteredListings = sortedListings?.filter(
         listing =>
-          activeFiltersCase.includes(listing.standardStatus.toLowerCase()) ||
-          listing.standardStatus.toLowerCase() === 'closed'
+          activeFiltersCase.includes(listing.standardStatus) || listing.standardStatus === 'Closed'
       );
       setFitleredListings(newFilteredListings);
-    } else if (activeFiltersCase.includes('active')) {
+    } else if (activeFiltersCase.includes('Active')) {
       const newFilteredListings = sortedListings?.filter(
         listing =>
-          activeFiltersCase.includes(listing.standardStatus.toLowerCase()) ||
-          listing.standardStatus.toLowerCase() === 'active under contract' ||
-          listing.standardStatus.toLowerCase() === 'active with contingency'
+          activeFiltersCase.includes(listing.standardStatus) ||
+          listing.standardStatus === 'Active Under Contract' ||
+          listing.standardStatus === 'Active With Contingency'
       );
       setFitleredListings(newFilteredListings);
     } else {
       const newFilteredListings = sortedListings?.filter(listing =>
-        activeFiltersCase.includes(listing.standardStatus.toLowerCase())
+        activeFiltersCase.includes(listing.standardStatus)
       );
 
       setFitleredListings(newFilteredListings);
