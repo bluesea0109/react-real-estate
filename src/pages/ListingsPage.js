@@ -269,10 +269,10 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
 const FilterList = ({ activeFilters, handleFilterSelected }) => {
   return (
     <List relaxed="very" selection>
-      <List.Item onClick={() => handleFilterSelected('all')}>
+      <List.Item onClick={() => handleFilterSelected('All')}>
         <Icon
-          name={activeFilters.includes('all') ? 'check square' : 'square outline'}
-          className={`${'filterIcon'} ${activeFilters.includes('all') && 'filterIconActive'}`}
+          name={activeFilters.includes('All') ? 'check square' : 'square outline'}
+          className={`${'filterIcon'} ${activeFilters.includes('All') && 'filterIconActive'}`}
         />
         <List.Content>
           <List.Description>All Statuses</List.Description>
@@ -296,9 +296,9 @@ const FilterList = ({ activeFilters, handleFilterSelected }) => {
           <List.Description>Pending</List.Description>
         </List.Content>
       </List.Item>
-      <List.Item onClick={() => handleFilterSelected('sold')}>
+      <List.Item onClick={() => handleFilterSelected('Sold')}>
         <Icon
-          name={activeFilters.includes('sold') ? 'check square' : 'square outline'}
+          name={activeFilters.includes('Sold') ? 'check square' : 'square outline'}
           className={`${'filterIcon'} ${activeFilters.includes('sold') && 'filterIconActive'}`}
         />
         <List.Content>
@@ -314,7 +314,7 @@ const ListingsPage = () => {
   const [listingDetails, setListingDetails] = useState(null);
   const [sortedListings, setsortedListings] = useState(null);
   const [filteredListings, setFitleredListings] = useState(null);
-  const [activeFilters, setActiveFilters] = useState(location?.state?.filters || 'all');
+  const [activeFilters, setActiveFilters] = useState(location?.state?.filters || 'All');
   const [userType, setUserType] = useState('loggedIn');
 
   const peerId = useSelector(store => store.peer.peerId);
@@ -354,33 +354,25 @@ const ListingsPage = () => {
   }, [listingDetails, peerId]);
 
   useEffect(() => {
-    let activeFiltersCase;
-    if (typeof activeFilters === 'string') {
-      activeFiltersCase = activeFilters;
-    }
-    if (typeof activeFilters === 'object') {
-      activeFiltersCase = activeFilters.map(val => val);
-    }
-
-    if (activeFiltersCase.includes('all')) {
+    if (activeFilters.includes('All')) {
       setFitleredListings(sortedListings);
-    } else if (activeFiltersCase.includes('sold')) {
+    } else if (activeFilters.includes('Sold')) {
       const newFilteredListings = sortedListings?.filter(
         listing =>
-          activeFiltersCase.includes(listing.standardStatus) || listing.standardStatus === 'Closed'
+          activeFilters.includes(listing.standardStatus) || listing.standardStatus === 'Closed'
       );
       setFitleredListings(newFilteredListings);
-    } else if (activeFiltersCase.includes('Active')) {
+    } else if (activeFilters.includes('Active')) {
       const newFilteredListings = sortedListings?.filter(
         listing =>
-          activeFiltersCase.includes(listing.standardStatus) ||
+          activeFilters.includes(listing.standardStatus) ||
           listing.standardStatus === 'Active Under Contract' ||
           listing.standardStatus === 'Active With Contingency'
       );
       setFitleredListings(newFilteredListings);
     } else {
       const newFilteredListings = sortedListings?.filter(listing =>
-        activeFiltersCase.includes(listing.standardStatus)
+        activeFilters.includes(listing.standardStatus)
       );
 
       setFitleredListings(newFilteredListings);
@@ -388,15 +380,15 @@ const ListingsPage = () => {
   }, [activeFilters, sortedListings]);
 
   const handleFilterSelected = val => {
-    if (val === 'all') {
-      setActiveFilters(['all']);
+    if (val === 'All') {
+      setActiveFilters(['All']);
     } else {
       let temp = [...activeFilters];
-      let localFilters = temp.filter(el => el !== 'all');
+      let localFilters = temp.filter(el => el !== 'All');
 
       if (localFilters.find(el => el === val)) {
         if (localFilters.length === 1) {
-          setActiveFilters(['all']);
+          setActiveFilters(['All']);
         } else {
           let uniqueLocalFilters = localFilters.filter(filter => filter !== val);
           setActiveFilters(uniqueLocalFilters);
