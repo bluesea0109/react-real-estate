@@ -1,4 +1,4 @@
-import { lowerCase } from 'lodash';
+import _ from 'lodash';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useHistory, useLocation } from 'react-router-dom';
@@ -149,7 +149,7 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                 {renderPill(
                   listingItem.standardStatus === 'Closed'
                     ? 'Off Market'
-                    : lowerCase(listingItem.standardStatus)
+                    : listingItem.standardStatus.toLowerCase()
                 )}
               </Grid.Column>
             </Grid>
@@ -242,7 +242,7 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                         <DotsDropDown.Item
                           onClick={() => {
                             let filter =
-                              lowerCase(listingItem.standardStatus) === 'closed'
+                              listingItem.standardStatus.toLowerCase() === 'closed'
                                 ? 'sold'
                                 : 'listed';
                             history.push({
@@ -359,10 +359,10 @@ const ListingsPage = () => {
   useEffect(() => {
     let activeFiltersCase;
     if (typeof activeFilters === 'string') {
-      activeFiltersCase = lowerCase(activeFilters);
+      activeFiltersCase = _.lowerCase(activeFilters);
     }
     if (typeof activeFilters === 'object') {
-      activeFiltersCase = activeFilters.map(val => lowerCase(val));
+      activeFiltersCase = activeFilters.map(val => val.toLowerCase());
     }
 
     if (activeFiltersCase.includes('all')) {
@@ -370,21 +370,21 @@ const ListingsPage = () => {
     } else if (activeFiltersCase.includes('sold')) {
       const newFilteredListings = sortedListings?.filter(
         listing =>
-          activeFiltersCase.includes(lowerCase(listing.standardStatus)) ||
-          lowerCase(listing.standardStatus) === 'closed'
+          activeFiltersCase.includes(listing.standardStatus.toLowerCase()) ||
+          listing.standardStatus.toLowerCase() === 'closed'
       );
       setFitleredListings(newFilteredListings);
     } else if (activeFiltersCase.includes('active')) {
       const newFilteredListings = sortedListings?.filter(
         listing =>
-          activeFiltersCase.includes(lowerCase(listing.standardStatus)) ||
-          lowerCase(listing.standardStatus) === 'active under contract' ||
-          lowerCase(listing.standardStatus) === 'active with contingency'
+          activeFiltersCase.includes(listing.standardStatus.toLowerCase()) ||
+          listing.standardStatus.toLowerCase() === 'active under contract' ||
+          listing.standardStatus.toLowerCase() === 'active with contingency'
       );
       setFitleredListings(newFilteredListings);
     } else {
       const newFilteredListings = sortedListings?.filter(listing =>
-        activeFiltersCase.includes(lowerCase(listing.standardStatus))
+        activeFiltersCase.includes(listing.standardStatus.toLowerCase())
       );
 
       setFitleredListings(newFilteredListings);
