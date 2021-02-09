@@ -17,6 +17,7 @@ import api from '../services/api';
 import * as brandColors from '../components/utils/brandColors';
 
 export const trimText = (string, length, noDots) => {
+  if (!string) return '';
   if (string.length <= length) return string;
   if (noDots) return string.substring(0, length);
   if (string.length + 3 < length) return string;
