@@ -299,7 +299,7 @@ const FilterList = ({ activeFilters, handleFilterSelected }) => {
       <List.Item onClick={() => handleFilterSelected('Sold')}>
         <Icon
           name={activeFilters.includes('Sold') ? 'check square' : 'square outline'}
-          className={`${'filterIcon'} ${activeFilters.includes('sold') && 'filterIconActive'}`}
+          className={`${'filterIcon'} ${activeFilters.includes('Sold') && 'filterIconActive'}`}
         />
         <List.Content>
           <List.Description>Sold / Off Market</List.Description>
@@ -472,7 +472,7 @@ const ListingsPage = () => {
                   />
                 );
               })
-            ) : activeFilters.includes('all') ? (
+            ) : activeFilters.includes('All') ? (
               undefined
             ) : sortedListings?.length > 0 ? (
               <Header as="h3" className="normalFontWeight noMargin cardFont noFilteredListingsText">
