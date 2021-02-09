@@ -232,7 +232,7 @@ export default function mailout(state = initialState, action) {
         mailoutDisplayAgent: null,
         mailoutEdit: {
           ...state.mailoutEdit,
-          mergeVariables: action.payload,
+          fields: action.payload,
         },
         changeDisplayAgentError: null,
       };
@@ -312,13 +312,8 @@ export default function mailout(state = initialState, action) {
     case UPDATE_MAILOUT_TEMPLATE_THEME_SUCCESS:
       return {
         ...state,
-        details: {
-          ...state.details,
-          mergeVariables: action.payload.mergeVariables,
-        },
         mailoutEdit: {
           ...state.mailoutEdit,
-          mergeVariables: action.payload.mergeVariables,
           fields: action.payload.fields,
         },
         updateMailoutTemplateThemePending: false,

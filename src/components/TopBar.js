@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createRef, Fragment } from 'react';
 import { useHistory } from 'react-router';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectPeerId, deselectPeerId } from '../store/modules/peer/actions';
@@ -279,8 +279,10 @@ export default ({ auth0 }) => {
         fixed="top"
         style={{ borderBottom: '2px solid #E6E6E6', boxShadow: 'none', flexWrap: 'wrap' }}
       >
-        <Menu.Item as="a" href="/" header>
-          <LogoImage />
+        <Menu.Item header>
+          <Link to="/dashboard">
+            <LogoImage />
+          </Link>
         </Menu.Item>
         <Menu.Menu position="right">
           {auth0.authenticated && (
