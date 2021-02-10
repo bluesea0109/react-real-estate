@@ -199,9 +199,8 @@ const PostcardsPage = () => {
   ];
 
   useEffect(() => {
-    !filteredListings?.length && setFilteredListings(mailoutList);
-    // eslint-disable-next-line
-  }, [mailoutList]);
+    !isFiltered && setFilteredListings(mailoutList);
+  }, [isFiltered, mailoutList]);
 
   useFetching(getMailoutsPending, onboarded, useDispatch());
 
@@ -210,7 +209,6 @@ const PostcardsPage = () => {
     let sort = sortValue;
     type === 'filter' ? (filter = value) : (sort = value);
     if (!filter && !sort && !searchValue) {
-      setFilteredListings(mailoutList);
       setIsFiltered(false);
       return;
     }
