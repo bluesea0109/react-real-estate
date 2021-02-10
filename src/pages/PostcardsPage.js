@@ -14,6 +14,7 @@ import { getMailoutsPending, getMoreMailoutsPending } from '../store/modules/mai
 import { setCompletedDashboardModal } from '../store/modules/onboarded/actions';
 import {
   Button,
+  Dropdown,
   Grid,
   Header,
   Icon,
@@ -24,6 +25,7 @@ import {
   Page,
   Segment,
   Snackbar,
+  StyledMenu,
 } from '../components/Base';
 import IframeGroup from '../components/MailoutListItem/IframeGroup';
 import ListHeader from '../components/MailoutListItem/ListHeader';
@@ -38,6 +40,18 @@ const SearchContainer = styled(Menu.Item)`
   &&& {
     flex: 1 0 250px;
     max-width: 600px;
+  }
+`;
+
+const StyledDropdown = styled(Dropdown)`
+  && .visible.menu.transition {
+    min-width: 100% !important;
+    max-height: 50vh;
+  }
+  &&&.button {
+    border-radius: 4px;
+    font-weight: normal;
+    text-transform: capitalize;
   }
 `;
 
@@ -72,30 +86,44 @@ const useFetching = (getActionCreator, onboarded, dispatch) => {
   }, [getActionCreator, onboarded, dispatch]);
 };
 
-const CampaignSearch = ({ mailoutList, setFilteredListings, setIsFiltered, setIsSearching }) => {
-  const [searchValue, setSearchValue] = useState('');
-  const peerId = useSelector(store => store.peer?.peerId);
+const getSearchCampaigns = async (searchValue, filterValue, sortValue, peerId) => {
+  if (!searchValue && !filterValue && !sortValue) return [];
+  const params = new URLSearchParams();
+  if (searchValue) params.append('text', searchValue);
+  if (filterValue) params.append('filter', filterValue);
+  if (sortValue) params.append('sortBy', sortValue);
+  let path = `/api/user/mailout/search?${params.toString()}`;
+  if (peerId) path = `/api/user/peer/${peerId}/mailout/search?${params.toString()}`;
+  const headers = {};
+  const accessToken = await auth.getAccessToken();
+  headers['authorization'] = `Bearer ${accessToken}`;
+  const searchRes = await fetch(path, { headers, method: 'get', credentials: 'include' });
+  const data = await searchRes.json();
+  return data;
+};
 
-  const getSearchCampaigns = async value => {
-    if (!value) return [];
-    let path = `/api/user/mailout/search?text=${value}`;
-    if (peerId) path = `/api/user/peer/${peerId}/mailout/search?text=${value}`;
-    const headers = {};
-    const accessToken = await auth.getAccessToken();
-    headers['authorization'] = `Bearer ${accessToken}`;
-    const searchRes = await fetch(path, { headers, method: 'get', credentials: 'include' });
-    const data = await searchRes.json();
-    return data;
-  };
+const CampaignSearch = ({
+  filterValue,
+  mailoutList,
+  peerId,
+  setFilteredListings,
+  setIsFiltered,
+  setIsSearching,
+  setSearchValue,
+  sortValue,
+}) => {
+  const [value, setValue] = useState('');
 
   const handleSearchChange = useCallback(
-    debounce(async (value, listings) => {
+    debounce(async (searchValue, filterValue, sortValue, listings) => {
       setIsSearching(true);
-      if (!value.length) {
+      setSearchValue(searchValue);
+      if (!searchValue.length) {
         setFilteredListings(listings);
+        setIsFiltered(false);
         setIsSearching(false);
       } else {
-        let newListings = await getSearchCampaigns(value);
+        let newListings = await getSearchCampaigns(searchValue, filterValue, sortValue, peerId);
         newListings.length ? setFilteredListings(newListings) : setFilteredListings(null);
         setIsFiltered(true);
         setIsSearching(false);
@@ -110,10 +138,10 @@ const CampaignSearch = ({ mailoutList, setFilteredListings, setIsFiltered, setIs
         fluid
         icon="search"
         placeholder="Search by Name, Address or MLS number"
-        value={searchValue}
+        value={value}
         onChange={e => {
-          setSearchValue(e.target.value);
-          handleSearchChange(e.target.value, mailoutList);
+          setValue(e.target.value);
+          handleSearchChange(e.target.value, filterValue, sortValue, mailoutList);
         }}
       />
     </SearchContainer>
@@ -146,9 +174,29 @@ const PostcardsPage = () => {
   const page = useSelector(store => store.mailouts.page);
   const mailoutList = useSelector(store => store.mailouts.list);
   const error = useSelector(store => store.mailouts.error?.message);
+  const peerId = useSelector(store => store.peer?.peerId);
   const [filteredListings, setFilteredListings] = useState(mailoutList);
   const [isSearching, setIsSearching] = useState(false);
   const [isFiltered, setIsFiltered] = useState(false);
+  const [searchValue, setSearchValue] = useState(null);
+  const [sortValue, setSortValue] = useState(null);
+  const [filterValue, setFilterValue] = useState(null);
+
+  const sortOptions = [
+    { key: 0, text: 'Created (Newest First)', value: 'createdDateDesc' },
+    { key: 1, text: 'Created (Oldest First)', value: 'createdDateAsc' },
+    { key: 2, text: 'Sent (Newest First)', value: 'sendDateDesc' },
+    { key: 3, text: 'Sent (Oldest First)', value: 'sendDateAsc' },
+  ];
+
+  const filterOptions = [
+    { key: 0, text: 'Unsent', value: 'unsent' },
+    { key: 1, text: 'Approved', value: 'approved' },
+    { key: 2, text: 'Queued for Printing', value: 'queued-for-printing' },
+    { key: 3, text: 'Printing', value: 'printing' },
+    { key: 4, text: 'Sending', value: 'sending' },
+    { key: 5, text: 'Complete', value: 'complete' },
+  ];
 
   useEffect(() => {
     !filteredListings?.length && setFilteredListings(mailoutList);
@@ -156,6 +204,22 @@ const PostcardsPage = () => {
   }, [mailoutList]);
 
   useFetching(getMailoutsPending, onboarded, useDispatch());
+
+  const handleFilterOrSort = async (type, value) => {
+    let filter = filterValue;
+    let sort = sortValue;
+    type === 'filter' ? (filter = value) : (sort = value);
+    if (!filter && !sort && !searchValue) {
+      setFilteredListings(mailoutList);
+      setIsFiltered(false);
+      return;
+    }
+    setIsSearching(true);
+    let newListings = await getSearchCampaigns(searchValue, filter, sort, peerId);
+    newListings.length ? setFilteredListings(newListings) : setFilteredListings(null);
+    setIsFiltered(true);
+    setIsSearching(false);
+  };
 
   const boundFetchMoreMailouts = value => dispatch(getMoreMailoutsPending(value));
 
@@ -243,16 +307,49 @@ const PostcardsPage = () => {
     <Page basic>
       <ContentTopHeaderLayout>
         <PageTitleHeader>
-          <Menu borderless fluid secondary>
+          <StyledMenu borderless fluid secondary>
             <Menu.Item>
               <Header as="h1">Postcards</Header>
             </Menu.Item>
             <CampaignSearch
+              filterValue={filterValue}
               mailoutList={mailoutList}
+              peerId={peerId}
               setFilteredListings={setFilteredListings}
               setIsFiltered={setIsFiltered}
               setIsSearching={setIsSearching}
+              setSearchValue={setSearchValue}
+              sortValue={sortValue}
             />
+            <Menu.Item>
+              <StyledDropdown
+                onChange={(e, { value }) => {
+                  setSortValue(value);
+                  handleFilterOrSort('sort', value);
+                }}
+                options={sortOptions}
+                placeholder="Sort By"
+                selection
+                value={sortValue}
+              />
+            </Menu.Item>
+            <Menu.Item>
+              <StyledDropdown
+                button
+                className="icon"
+                clearable
+                floating
+                icon="filter"
+                labeled
+                onChange={(e, { value }) => {
+                  setFilterValue(value);
+                  handleFilterOrSort('filter', value);
+                }}
+                options={filterOptions}
+                selection
+                text={filterValue || 'Filter'}
+              />
+            </Menu.Item>
             <Menu.Item position="right">
               <div className="right menu">
                 {addCampaignMlsNumPendingState && (
@@ -270,7 +367,7 @@ const PostcardsPage = () => {
                 )}
               </div>
             </Menu.Item>
-          </Menu>
+          </StyledMenu>
         </PageTitleHeader>
       </ContentTopHeaderLayout>
 
@@ -372,7 +469,11 @@ const PostcardsPage = () => {
                 </Loader>
               ) : (
                 <Grid.Column width={16}>
-                  <MailoutsList list={filteredListings} searching={isSearching} />
+                  {filteredListings ? (
+                    <MailoutsList list={filteredListings} searching={isSearching} />
+                  ) : (
+                    <div>No Campaigns Found</div>
+                  )}
                 </Grid.Column>
               )}
             </Grid.Row>
