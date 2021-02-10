@@ -199,7 +199,7 @@ const PostcardsPage = () => {
   ];
 
   useEffect(() => {
-    !filteredListings?.length && setFilteredListings(mailoutList);
+    !isFiltered && setFilteredListings(mailoutList);
     // eslint-disable-next-line
   }, [mailoutList]);
 
