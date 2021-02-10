@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import Loading from '../components/Loading';
 import { Header, Menu, Page, Dropdown } from '../components/Base';
-import Styled from 'styled-components';
+import styled from 'styled-components';
 import { Grid, Segment, Button, Popup, List, Icon, Card, Image } from 'semantic-ui-react';
 
 import PageTitleHeader from '../components/PageTitleHeader';
@@ -16,20 +16,19 @@ import api from '../services/api';
 
 import * as brandColors from '../components/utils/brandColors';
 
-export const trimText = (string, length, noDots) => {
-  if (string.length <= length) return string;
-  if (noDots) return string.substring(0, length);
-  if (string.length + 3 < length) return string;
-  return string.substring(0, length) + '...';
-};
+const DotsDropDown = styled(Dropdown)`
+  &&&.ui.button {
+    color: #000000;
+    &:hover {
+      background-color: ${brandColors.darkGreyHover};
+    }
+  }
+`;
 
-const DotsDropDown = Styled(Dropdown)`
-&&&.ui.button{
-color: #000000;
-&:hover{
-  background-color:${brandColors.darkGreyHover}
-}
-}
+const CardTitle = styled(Header)`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType }) => {
@@ -46,11 +45,6 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
       </Grid.Column>
     );
   else {
-    const title = trimText(
-      listingItem.streetAddress,
-      windowSize.width <= 1366 ? 13 : windowSize.width <= 1700 ? 15 : 27,
-      false
-    );
     const subtitle = `${listingItem.city}, ${listingItem.state} ${listingItem.postalCode}`;
     const price = `$${listingItem.price.toLocaleString('en', {
       minimumFractionDigits: 0,
@@ -131,15 +125,15 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
           <div className="listingCardBodyContainer">
             <Grid className="centeredRowGrid noMargin cardTopMarginXS">
               <Grid.Column width={11} className="noPaddingTop noPaddingLeft noPaddingBottom">
-                <Header
+                <CardTitle
                   as="h3"
                   className="cardFont listingCardTitle"
                   onClick={() =>
                     (window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`)
                   }
                 >
-                  {title}
-                </Header>
+                  {listingItem.streetAddress}
+                </CardTitle>
               </Grid.Column>
               <Grid.Column
                 width={5}
@@ -327,7 +321,6 @@ const ListingsPage = () => {
   );
 
   const windowSize = useWindowSize();
-
   useEffect(() => {
     async function fetchData() {
       if (listingDetails) return;
@@ -363,10 +356,19 @@ const ListingsPage = () => {
           activeFilters.includes(listing.standardStatus) || listing.standardStatus === 'Closed'
       );
       setFitleredListings(newFilteredListings);
+    } else if (activeFilters.includes('Active')) {
+      const newFilteredListings = sortedListings?.filter(
+        listing =>
+          activeFilters.includes(listing.standardStatus) ||
+          listing.standardStatus === 'Active Under Contract' ||
+          listing.standardStatus === 'Active With Contingency'
+      );
+      setFitleredListings(newFilteredListings);
     } else {
       const newFilteredListings = sortedListings?.filter(listing =>
         activeFilters.includes(listing.standardStatus)
       );
+
       setFitleredListings(newFilteredListings);
     }
   }, [activeFilters, sortedListings]);
@@ -377,6 +379,7 @@ const ListingsPage = () => {
     } else {
       let temp = [...activeFilters];
       let localFilters = temp.filter(el => el !== 'All');
+
       if (localFilters.find(el => el === val)) {
         if (localFilters.length === 1) {
           setActiveFilters(['All']);
@@ -390,6 +393,7 @@ const ListingsPage = () => {
       }
     }
   };
+
   const getColumns = () => {
     if (windowSize.width >= 3000) {
       return 8;
@@ -414,6 +418,7 @@ const ListingsPage = () => {
     }
     return 4;
   };
+
   return (
     <Page basic>
       <ContentTopHeaderLayout>

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 
 import { Progress } from 'semantic-ui-react';
@@ -14,32 +14,56 @@ import { getMailoutsPending, getMoreMailoutsPending } from '../store/modules/mai
 import { setCompletedDashboardModal } from '../store/modules/onboarded/actions';
 import {
   Button,
+  Dropdown,
   Grid,
   Header,
   Icon,
+  Input,
+  Loader,
   Menu,
   Modal,
   Page,
   Segment,
   Snackbar,
+  StyledMenu,
 } from '../components/Base';
 import IframeGroup from '../components/MailoutListItem/IframeGroup';
 import ListHeader from '../components/MailoutListItem/ListHeader';
 import ItemList from '../components/MailoutListItem/ItemList';
 import PageTitleHeader from '../components/PageTitleHeader';
-import Loading from '../components/Loading';
 import { useIsMobile } from '../components/Hooks/useIsMobile';
-import Styled from 'styled-components';
+import styled from 'styled-components';
+import { debounce } from 'lodash';
+import auth from '../services/auth';
 
-const ModalWelcome = Styled(Modal)`
-&&&{
-  width:70%
-}
-@media only screen and (max-width: 800px) {
-  &&&{
-    width:90%;
+const SearchContainer = styled(Menu.Item)`
+  &&& {
+    flex: 1 0 250px;
+    max-width: 600px;
   }
-}
+`;
+
+const StyledDropdown = styled(Dropdown)`
+  && .visible.menu.transition {
+    min-width: 100% !important;
+    max-height: 50vh;
+  }
+  &&&.button {
+    border-radius: 4px;
+    font-weight: normal;
+    text-transform: capitalize;
+  }
+`;
+
+const ModalWelcome = styled(Modal)`
+  &&& {
+    width: 70%;
+  }
+  @media only screen and (max-width: 800px) {
+    &&& {
+      width: 90%;
+    }
+  }
 `;
 
 const modalHeaderStyles = {
@@ -62,7 +86,69 @@ const useFetching = (getActionCreator, onboarded, dispatch) => {
   }, [getActionCreator, onboarded, dispatch]);
 };
 
-const Dashboard = () => {
+const getSearchCampaigns = async (searchValue, filterValue, sortValue, peerId) => {
+  if (!searchValue && !filterValue && !sortValue) return [];
+  const params = new URLSearchParams();
+  if (searchValue) params.append('text', searchValue);
+  if (filterValue) params.append('filter', filterValue);
+  if (sortValue) params.append('sortBy', sortValue);
+  let path = `/api/user/mailout/search?${params.toString()}`;
+  if (peerId) path = `/api/user/peer/${peerId}/mailout/search?${params.toString()}`;
+  const headers = {};
+  const accessToken = await auth.getAccessToken();
+  headers['authorization'] = `Bearer ${accessToken}`;
+  const searchRes = await fetch(path, { headers, method: 'get', credentials: 'include' });
+  const data = await searchRes.json();
+  return data;
+};
+
+const CampaignSearch = ({
+  filterValue,
+  mailoutList,
+  peerId,
+  setFilteredListings,
+  setIsFiltered,
+  setIsSearching,
+  setSearchValue,
+  sortValue,
+}) => {
+  const [value, setValue] = useState('');
+
+  const handleSearchChange = useCallback(
+    debounce(async (searchValue, filterValue, sortValue, listings) => {
+      setIsSearching(true);
+      setSearchValue(searchValue);
+      if (!searchValue.length) {
+        setFilteredListings(listings);
+        setIsFiltered(false);
+        setIsSearching(false);
+      } else {
+        let newListings = await getSearchCampaigns(searchValue, filterValue, sortValue, peerId);
+        newListings.length ? setFilteredListings(newListings) : setFilteredListings(null);
+        setIsFiltered(true);
+        setIsSearching(false);
+      }
+    }, 500),
+    []
+  );
+
+  return (
+    <SearchContainer>
+      <Input
+        fluid
+        icon="search"
+        placeholder="Search by Name, Address or MLS number"
+        value={value}
+        onChange={e => {
+          setValue(e.target.value);
+          handleSearchChange(e.target.value, filterValue, sortValue, mailoutList);
+        }}
+      />
+    </SearchContainer>
+  );
+};
+
+const PostcardsPage = () => {
   const isMobile = useIsMobile();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -88,8 +174,52 @@ const Dashboard = () => {
   const page = useSelector(store => store.mailouts.page);
   const mailoutList = useSelector(store => store.mailouts.list);
   const error = useSelector(store => store.mailouts.error?.message);
+  const peerId = useSelector(store => store.peer?.peerId);
+  const [filteredListings, setFilteredListings] = useState(mailoutList);
+  const [isSearching, setIsSearching] = useState(false);
+  const [isFiltered, setIsFiltered] = useState(false);
+  const [searchValue, setSearchValue] = useState(null);
+  const [sortValue, setSortValue] = useState(null);
+  const [filterValue, setFilterValue] = useState(null);
+
+  const sortOptions = [
+    { key: 0, text: 'Created (Newest First)', value: 'createdDateDesc' },
+    { key: 1, text: 'Created (Oldest First)', value: 'createdDateAsc' },
+    { key: 2, text: 'Sent (Newest First)', value: 'sendDateDesc' },
+    { key: 3, text: 'Sent (Oldest First)', value: 'sendDateAsc' },
+  ];
+
+  const filterOptions = [
+    { key: 0, text: 'Unsent', value: 'unsent' },
+    { key: 1, text: 'Approved', value: 'approved' },
+    { key: 2, text: 'Queued for Printing', value: 'queued-for-printing' },
+    { key: 3, text: 'Printing', value: 'printing' },
+    { key: 4, text: 'Sending', value: 'sending' },
+    { key: 5, text: 'Complete', value: 'complete' },
+  ];
+
+  useEffect(() => {
+    !filteredListings?.length && setFilteredListings(mailoutList);
+    // eslint-disable-next-line
+  }, [mailoutList]);
 
   useFetching(getMailoutsPending, onboarded, useDispatch());
+
+  const handleFilterOrSort = async (type, value) => {
+    let filter = filterValue;
+    let sort = sortValue;
+    type === 'filter' ? (filter = value) : (sort = value);
+    if (!filter && !sort && !searchValue) {
+      setFilteredListings(mailoutList);
+      setIsFiltered(false);
+      return;
+    }
+    setIsSearching(true);
+    let newListings = await getSearchCampaigns(searchValue, filter, sort, peerId);
+    newListings.length ? setFilteredListings(newListings) : setFilteredListings(null);
+    setIsFiltered(true);
+    setIsSearching(false);
+  };
 
   const boundFetchMoreMailouts = value => dispatch(getMoreMailoutsPending(value));
 
@@ -134,14 +264,14 @@ const Dashboard = () => {
 
     if (mailoutItemElementArray && mailoutItemElementArray.length > 0) {
       mailoutItemElementArray.forEach(mailoutItemElement => {
-        return observer.observe(mailoutItemElement);
+        if (mailoutItemElement instanceof Element) return observer.observe(mailoutItemElement);
       });
     }
   }, [mailoutItemElementArray]);
 
   useEffect(() => {
-    if (mailoutList && mailoutList.length > 0) {
-      mailoutList.map((item, index) => {
+    if (filteredListings && filteredListings.length > 0) {
+      filteredListings.map((item, index) => {
         const mailoutItemElement = document.querySelector(`#mailout-iframe-set-${index}`);
 
         return mailoutItemElementArray.push(mailoutItemElement);
@@ -149,11 +279,11 @@ const Dashboard = () => {
 
       createObserver();
     }
-  }, [mailoutList, mailoutItemElementArray, createObserver]);
+  }, [filteredListings, mailoutList, mailoutItemElementArray, createObserver]);
 
-  const MailoutsList = ({ list }) => {
-    if (list[0].started) return null;
-
+  const MailoutsList = ({ list, searching }) => {
+    if (searching && !list?.length) return <div>No listings match your search criteria</div>;
+    if (!list || list[0]?.started) return null;
     return list.map((item, index) => (
       <ItemLayout fluid key={`${item.userId}-${item._id}-${item.mlsNum}`}>
         <ListHeader data={item} />
@@ -177,9 +307,48 @@ const Dashboard = () => {
     <Page basic>
       <ContentTopHeaderLayout>
         <PageTitleHeader>
-          <Menu borderless fluid secondary>
+          <StyledMenu borderless fluid secondary>
             <Menu.Item>
               <Header as="h1">Postcards</Header>
+            </Menu.Item>
+            <CampaignSearch
+              filterValue={filterValue}
+              mailoutList={mailoutList}
+              peerId={peerId}
+              setFilteredListings={setFilteredListings}
+              setIsFiltered={setIsFiltered}
+              setIsSearching={setIsSearching}
+              setSearchValue={setSearchValue}
+              sortValue={sortValue}
+            />
+            <Menu.Item>
+              <StyledDropdown
+                onChange={(e, { value }) => {
+                  setSortValue(value);
+                  handleFilterOrSort('sort', value);
+                }}
+                options={sortOptions}
+                placeholder="Sort By"
+                selection
+                value={sortValue}
+              />
+            </Menu.Item>
+            <Menu.Item>
+              <StyledDropdown
+                button
+                className="icon"
+                clearable
+                floating
+                icon="filter"
+                labeled
+                onChange={(e, { value }) => {
+                  setFilterValue(value);
+                  handleFilterOrSort('filter', value);
+                }}
+                options={filterOptions}
+                selection
+                text={filterValue || 'Filter'}
+              />
             </Menu.Item>
             <Menu.Item position="right">
               <div className="right menu">
@@ -198,7 +367,7 @@ const Dashboard = () => {
                 )}
               </div>
             </Menu.Item>
-          </Menu>
+          </StyledMenu>
         </PageTitleHeader>
       </ContentTopHeaderLayout>
 
@@ -290,20 +459,26 @@ const Dashboard = () => {
 
           <Grid>
             <Grid.Row>
-              <Grid.Column width={16}>
-                <MailoutsList list={mailoutList} />
-              </Grid.Column>
+              {mailoutsPendingState ||
+              isInitiatingTeam ||
+              isInitiatingUser ||
+              mailoutsPendingState ||
+              isSearching ? (
+                <Loader active inline="centered">
+                  Loading...
+                </Loader>
+              ) : (
+                <Grid.Column width={16}>
+                  {filteredListings ? (
+                    <MailoutsList list={filteredListings} searching={isSearching} />
+                  ) : (
+                    <div>No Campaigns Found</div>
+                  )}
+                </Grid.Column>
+              )}
             </Grid.Row>
 
-            {(isInitiatingTeam || isInitiatingUser || mailoutsPendingState) && (
-              <Grid.Row>
-                <Grid.Column width={16}>
-                  <Loading />
-                </Grid.Column>
-              </Grid.Row>
-            )}
-
-            {canLoadMore && (
+            {canLoadMore && !isFiltered && !isSearching && (
               <Grid.Row>
                 <Grid.Column width={16}>
                   <Grid centered columns={2}>
@@ -323,9 +498,8 @@ const Dashboard = () => {
           </Grid>
         </Segment>
       )}
-      {mailoutsPendingState && !error && <Loading />}
     </Page>
   );
 };
 
-export default Dashboard;
+export default PostcardsPage;
