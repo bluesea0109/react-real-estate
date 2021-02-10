@@ -185,8 +185,8 @@ const PostcardsPage = () => {
   const sortOptions = [
     { key: 0, text: 'Created (Newest First)', value: 'createdDateDesc' },
     { key: 1, text: 'Created (Oldest First)', value: 'createdDateAsc' },
-    { key: 2, text: 'Approved (Newest First)', value: 'approvedDateDesc' },
-    { key: 3, text: 'Approved (Oldest First)', value: 'approvedDateAsc' },
+    { key: 2, text: 'Sent (Newest First)', value: 'sendDateDesc' },
+    { key: 3, text: 'Sent (Oldest First)', value: 'sendDateAsc' },
   ];
 
   const filterOptions = [
