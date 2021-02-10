@@ -84,8 +84,8 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
         );
       } else {
         return (
-          <StatusPill type="solid" color="astral">
-            {status}
+          <StatusPill type="solid" color="astralSold">
+            Sold / {status}
           </StatusPill>
         );
       }
