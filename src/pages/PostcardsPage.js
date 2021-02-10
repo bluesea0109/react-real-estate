@@ -192,10 +192,10 @@ const PostcardsPage = () => {
   const filterOptions = [
     { key: 0, text: 'Unsent', value: 'unsent' },
     { key: 1, text: 'Approved', value: 'approved' },
-    { key: 2, text: 'Queued for Printing', value: 'queued-for-printing' },
-    { key: 3, text: 'Printing', value: 'printing' },
-    { key: 4, text: 'Sending', value: 'sending' },
-    { key: 5, text: 'Complete', value: 'complete' },
+    // { key: 2, text: 'Queued for Printing', value: 'queued-for-printing' },
+    // { key: 3, text: 'Printing', value: 'printing' },
+    // { key: 4, text: 'Sending', value: 'sending' },
+    // { key: 5, text: 'Complete', value: 'complete' },
   ];
 
   useEffect(() => {
