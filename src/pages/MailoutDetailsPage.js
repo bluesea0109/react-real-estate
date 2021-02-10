@@ -839,7 +839,8 @@ const MailoutDetailsPage = () => {
                       </Table.Header>
 
                       <Table.Body>
-                        {renderDestinations()} {TableModal()}
+                        {renderDestinations()}
+                        {TableModal()}
                       </Table.Body>
                     </Table>
                   )}
