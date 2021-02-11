@@ -5,6 +5,7 @@ import api from '../services/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format } from 'date-fns';
+import { TableRow, TableCampaign } from '../components/MailoutDetailsComponents/MailoutTable';
 
 import {
   revertMailoutEditPending,
@@ -31,7 +32,6 @@ import {
   Page,
   Popup,
   Segment,
-  Table,
   Icon,
 } from '../components/Base';
 import PopupContent from '../components/MailoutListItem/PopupContent';
@@ -121,22 +121,7 @@ const ModalPreview = Styled(Modal)`
   }
   @media (max-width: ${props => props.widthsize + 100}px) {
     &&&{
-      width:90%;
-    }
-    .content{
-      justify-content:flex-start;
-    }
-  }
-`;
-
-const ModalTablePreview = Styled(Modal)`
-  width:${props => css`calc(${props.widthsize + 70}px)`};
-  .content{
-    justify-content:center;
-  }
-  @media (max-width: ${props => props.widthsize + 100}px) {
-    &&&{
-      width:90%;
+      width:80%;
     }
     .content{
       justify-content:flex-start;
@@ -208,7 +193,7 @@ const MailoutDetailsPage = () => {
 
   const TableModal = () => {
     return (
-      <ModalTablePreview
+      <ModalPreview
         widthsize={postCardSize.width}
         open={showTableModal}
         onClose={() => {
@@ -227,7 +212,7 @@ const MailoutDetailsPage = () => {
               paddingBottom: '30px',
             }}
           >
-            <ModalTablePreview.Header style={modalHeaderStyles}>
+            <ModalPreview.Header style={modalHeaderStyles}>
               <p>Preview</p>
               <Button
                 style={cancelX}
@@ -238,14 +223,14 @@ const MailoutDetailsPage = () => {
               >
                 <FontAwesomeIcon icon="times" style={{ color: '#B1B1B1', fontSize: '16px' }} />
               </Button>
-            </ModalTablePreview.Header>
-            <ModalTablePreview.Content style={postcardContainer}>
+            </ModalPreview.Header>
+            <ModalPreview.Content style={postcardContainer}>
               <FlipCard isFlipped={isTableFlipped}>
                 <Image src={previewUrl[0]} />
                 <Image src={previewUrl[1]} />
               </FlipCard>
-            </ModalTablePreview.Content>
-            <ModalTablePreview.Content>
+            </ModalPreview.Content>
+            <ModalPreview.Content>
               <div style={flipButtonContainer}>
                 <Button
                   style={{
@@ -266,10 +251,10 @@ const MailoutDetailsPage = () => {
                   Front
                 </Button>
               </div>
-            </ModalTablePreview.Content>
+            </ModalPreview.Content>
           </div>
         )}
-      </ModalTablePreview>
+      </ModalPreview>
     );
   };
 
@@ -404,24 +389,15 @@ const MailoutDetailsPage = () => {
         let status = '-';
         if (dest.status && dest.status !== 'unknown') status = dest.status;
         return (
-          <Table.Row key={dest.id}>
-            <Table.Cell>{dest?.deliveryLine}</Table.Cell>
-            <Table.Cell>{dest?.name}</Table.Cell>
-            <Table.Cell>{dest?.expected_delivery_date}</Table.Cell>
-            <Table.Cell>{status}</Table.Cell>
-            <Table.Cell>{ctaInteractions}</Table.Cell>
-            <Table.Cell>{ctaDate}</Table.Cell>
-            <Table.Cell onClick={() => setShowTableModal(true)}>
-              <Image
-                onClick={() => {
-                  setPreviewUrl([dest?.frontResourceUrl, dest?.backResourceUrl]);
-                  setShowTableModal(true);
-                }}
-                style={{ width: '100%', maxWidth: '60px' }}
-                src={dest?.frontResourceUrl}
-              />
-            </Table.Cell>
-          </Table.Row>
+          <TableRow
+            key={dest.id}
+            dest={dest}
+            setPreviewUrl={setPreviewUrl}
+            setShowTableModal={setShowTableModal}
+            status={status}
+            ctaInteractions={ctaInteractions}
+            ctaDate={ctaDate}
+          />
         );
       })
     );
@@ -809,40 +785,16 @@ const MailoutDetailsPage = () => {
                 {!pendingState && destinationsOptionsMode === 'userUploaded' && (
                   <div>Upload: {details.destinationsOptions?.userUploaded?.filename}</div>
                 )}
-                {/* not sure why there are two download csv buttons? Leaving it in incase its needed. */}
-                {/* {!pendingState &&
-                  !error &&
-                  details &&
-                  resolveMailoutStatus(details.mailoutStatus) === 'Sent' && (
-                    <div id="top-download" style={{ margin: '5px', fontSize: '17px' }}>
-                      <a className="ui secondary button" href={csvURL}>
-                        Download All Recipients as CSV
-                      </a>
-                    </div>
-                  )} */}
+
                 {!pendingState &&
                   !error &&
                   details &&
                   (destinationsOptionsMode === 'userUploaded' ||
                     resolveMailoutStatus(details.mailoutStatus) === 'Sent') && (
-                    <Table className="six wide tablet six wide computer column">
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.HeaderCell>Address</Table.HeaderCell>
-                          <Table.HeaderCell>Name</Table.HeaderCell>
-                          <Table.HeaderCell>Delivery Date</Table.HeaderCell>
-                          <Table.HeaderCell>Status</Table.HeaderCell>
-                          <Table.HeaderCell>CTA count</Table.HeaderCell>
-                          <Table.HeaderCell>CTA date</Table.HeaderCell>
-                          <Table.HeaderCell>Preview</Table.HeaderCell>
-                        </Table.Row>
-                      </Table.Header>
-
-                      <Table.Body>
-                        {renderDestinations()}
-                        {TableModal()}
-                      </Table.Body>
-                    </Table>
+                    <TableCampaign
+                      renderDestinations={renderDestinations}
+                      TableModal={TableModal}
+                    />
                   )}
                 {!pendingState &&
                   !error &&
