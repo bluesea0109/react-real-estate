@@ -282,6 +282,7 @@ export default function mailouts(state = initialState, action) {
       return {
         ...state,
         error: action.error,
+        filteredPending: false,
       };
 
     default:
