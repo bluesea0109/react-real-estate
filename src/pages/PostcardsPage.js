@@ -271,7 +271,6 @@ const PostcardsPage = () => {
             </Menu.Item>
             <CampaignSearch
               filterValue={filterValue}
-              mailoutList={mailoutList}
               setSearchValue={setSearchValue}
               sortValue={sortValue}
             />
@@ -419,7 +418,8 @@ const PostcardsPage = () => {
                 </Loader>
               ) : (
                 <Grid.Column width={16}>
-                  {filteredList?.length || mailoutList?.length ? (
+                  {(searchValue && filteredList?.length) ||
+                  (!searchValue && mailoutList?.length) ? (
                     <MailoutsList
                       list={filteredList?.length ? filteredList : mailoutList}
                       searching={filteredPending}
@@ -431,7 +431,7 @@ const PostcardsPage = () => {
               )}
             </Grid.Row>
 
-            {canLoadMore && !isFiltered && !filteredPending && (
+            {canLoadMore && !isFiltered && !searchValue && !filteredPending && (
               <Grid.Row>
                 <Grid.Column width={16}>
                   <Grid centered columns={2}>
