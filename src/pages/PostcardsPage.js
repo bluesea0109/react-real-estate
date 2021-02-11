@@ -10,7 +10,11 @@ import {
   ItemBodyLayout,
   ItemLayout,
 } from '../layouts';
-import { getMailoutsPending, getMoreMailoutsPending } from '../store/modules/mailouts/actions';
+import {
+  getFilteredMailoutsPending,
+  getMailoutsPending,
+  getMoreMailoutsPending,
+} from '../store/modules/mailouts/actions';
 import { setCompletedDashboardModal } from '../store/modules/onboarded/actions';
 import {
   Button,
@@ -34,7 +38,6 @@ import PageTitleHeader from '../components/PageTitleHeader';
 import { useIsMobile } from '../components/Hooks/useIsMobile';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
-import auth from '../services/auth';
 
 const SearchContainer = styled(Menu.Item)`
   &&& {
@@ -86,48 +89,14 @@ const useFetching = (getActionCreator, onboarded, dispatch) => {
   }, [getActionCreator, onboarded, dispatch]);
 };
 
-const getSearchCampaigns = async (searchValue, filterValue, sortValue, peerId) => {
-  if (!searchValue && !filterValue && !sortValue) return [];
-  const params = new URLSearchParams();
-  if (searchValue) params.append('text', searchValue);
-  if (filterValue) params.append('filter', filterValue);
-  if (sortValue) params.append('sortBy', sortValue);
-  let path = `/api/user/mailout/search?${params.toString()}`;
-  if (peerId) path = `/api/user/peer/${peerId}/mailout/search?${params.toString()}`;
-  const headers = {};
-  const accessToken = await auth.getAccessToken();
-  headers['authorization'] = `Bearer ${accessToken}`;
-  const searchRes = await fetch(path, { headers, method: 'get', credentials: 'include' });
-  const data = await searchRes.json();
-  return data;
-};
-
-const CampaignSearch = ({
-  filterValue,
-  mailoutList,
-  peerId,
-  setFilteredListings,
-  setIsFiltered,
-  setIsSearching,
-  setSearchValue,
-  sortValue,
-}) => {
+const CampaignSearch = ({ filterValue, sortValue, setSearchValue }) => {
+  const dispatch = useDispatch();
   const [value, setValue] = useState('');
 
   const handleSearchChange = useCallback(
-    debounce(async (searchValue, filterValue, sortValue, listings) => {
-      setIsSearching(true);
+    debounce(async (searchValue, filterValue, sortValue) => {
       setSearchValue(searchValue);
-      if (!searchValue.length) {
-        setFilteredListings(listings);
-        setIsFiltered(false);
-        setIsSearching(false);
-      } else {
-        let newListings = await getSearchCampaigns(searchValue, filterValue, sortValue, peerId);
-        newListings.length ? setFilteredListings(newListings) : setFilteredListings(null);
-        setIsFiltered(true);
-        setIsSearching(false);
-      }
+      dispatch(getFilteredMailoutsPending({ searchValue, filterValue, sortValue }));
     }, 500),
     []
   );
@@ -141,7 +110,7 @@ const CampaignSearch = ({
         value={value}
         onChange={e => {
           setValue(e.target.value);
-          handleSearchChange(e.target.value, filterValue, sortValue, mailoutList);
+          handleSearchChange(e.target.value, filterValue, sortValue);
         }}
       />
     </SearchContainer>
@@ -172,12 +141,11 @@ const PostcardsPage = () => {
   );
   const canLoadMore = useSelector(store => store.mailouts.canLoadMore);
   const page = useSelector(store => store.mailouts.page);
-  const mailoutList = useSelector(store => store.mailouts.list);
   const error = useSelector(store => store.mailouts.error?.message);
-  const peerId = useSelector(store => store.peer?.peerId);
-  const [filteredListings, setFilteredListings] = useState(mailoutList);
-  const [isSearching, setIsSearching] = useState(false);
-  const [isFiltered, setIsFiltered] = useState(false);
+  const mailoutList = useSelector(store => store.mailouts?.list);
+  const filteredList = useSelector(store => store.mailouts?.filteredList);
+  const isFiltered = filteredList?.length > 0;
+  const filteredPending = useSelector(store => store.mailouts?.filteredPending);
   const [searchValue, setSearchValue] = useState(null);
   const [sortValue, setSortValue] = useState(null);
   const [filterValue, setFilterValue] = useState(null);
@@ -198,25 +166,13 @@ const PostcardsPage = () => {
     // { key: 5, text: 'Complete', value: 'complete' },
   ];
 
-  useEffect(() => {
-    !isFiltered && setFilteredListings(mailoutList);
-  }, [isFiltered, mailoutList]);
-
   useFetching(getMailoutsPending, onboarded, useDispatch());
 
   const handleFilterOrSort = async (type, value) => {
     let filter = filterValue;
     let sort = sortValue;
     type === 'filter' ? (filter = value) : (sort = value);
-    if (!filter && !sort && !searchValue) {
-      setIsFiltered(false);
-      return;
-    }
-    setIsSearching(true);
-    let newListings = await getSearchCampaigns(searchValue, filter, sort, peerId);
-    newListings.length ? setFilteredListings(newListings) : setFilteredListings(null);
-    setIsFiltered(true);
-    setIsSearching(false);
+    dispatch(getFilteredMailoutsPending({ searchValue, filterValue: filter, sortValue: sort }));
   };
 
   const boundFetchMoreMailouts = value => dispatch(getMoreMailoutsPending(value));
@@ -268,16 +224,20 @@ const PostcardsPage = () => {
   }, [mailoutItemElementArray]);
 
   useEffect(() => {
-    if (filteredListings && filteredListings.length > 0) {
-      filteredListings.map((item, index) => {
+    if (filteredList?.length > 0) {
+      filteredList.map((item, index) => {
         const mailoutItemElement = document.querySelector(`#mailout-iframe-set-${index}`);
-
         return mailoutItemElementArray.push(mailoutItemElement);
       });
-
+      createObserver();
+    } else if (mailoutList?.length > 0) {
+      mailoutList.map((item, index) => {
+        const mailoutItemElement = document.querySelector(`#mailout-iframe-set-${index}`);
+        return mailoutItemElementArray.push(mailoutItemElement);
+      });
       createObserver();
     }
-  }, [filteredListings, mailoutList, mailoutItemElementArray, createObserver]);
+  }, [filteredList, mailoutList, mailoutItemElementArray, createObserver]);
 
   const MailoutsList = ({ list, searching }) => {
     if (searching && !list?.length) return <div>No listings match your search criteria</div>;
@@ -312,10 +272,6 @@ const PostcardsPage = () => {
             <CampaignSearch
               filterValue={filterValue}
               mailoutList={mailoutList}
-              peerId={peerId}
-              setFilteredListings={setFilteredListings}
-              setIsFiltered={setIsFiltered}
-              setIsSearching={setIsSearching}
               setSearchValue={setSearchValue}
               sortValue={sortValue}
             />
@@ -457,18 +413,17 @@ const PostcardsPage = () => {
 
           <Grid>
             <Grid.Row>
-              {mailoutsPendingState ||
-              isInitiatingTeam ||
-              isInitiatingUser ||
-              mailoutsPendingState ||
-              isSearching ? (
+              {mailoutsPendingState || isInitiatingTeam || isInitiatingUser || filteredPending ? (
                 <Loader active inline="centered">
                   Loading...
                 </Loader>
               ) : (
                 <Grid.Column width={16}>
-                  {filteredListings ? (
-                    <MailoutsList list={filteredListings} searching={isSearching} />
+                  {filteredList?.length || mailoutList?.length ? (
+                    <MailoutsList
+                      list={filteredList?.length ? filteredList : mailoutList}
+                      searching={filteredPending}
+                    />
                   ) : (
                     <div>No Campaigns Found</div>
                   )}
@@ -476,7 +431,7 @@ const PostcardsPage = () => {
               )}
             </Grid.Row>
 
-            {canLoadMore && !isFiltered && !isSearching && (
+            {canLoadMore && !isFiltered && !filteredPending && (
               <Grid.Row>
                 <Grid.Column width={16}>
                   <Grid centered columns={2}>

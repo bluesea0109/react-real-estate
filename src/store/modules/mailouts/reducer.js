@@ -27,10 +27,15 @@ import {
   CLEAR_MAILOUTS_ERROR,
   SHOW_ADD_CAMPAIGN_MODAL,
   HIDE_ADD_CAMPAIGN_MODAL,
+  GET_FILTERED_MAILOUTS_PENDING,
+  GET_FILTERED_MAILOUTS_SUCCESS,
+  GET_FILTERED_MAILOUTS_ERROR,
 } from './actions';
 import { ARCHIVE_MAILOUT_SUCCESS, UNDO_ARCHIVE_MAILOUT_SUCCESS } from '../mailout/actions';
 
 const initialState = {
+  filteredPending: false,
+  filteredList: [],
   pending: false,
   pendingArchived: false,
   generatePending: false,
@@ -178,6 +183,7 @@ export default function mailouts(state = initialState, action) {
       return {
         ...state,
         list: state.list.filter(item => item._id !== action.payload._id),
+        filteredList: state.filteredList.filter(item => item._id !== action.payload._id),
       };
     case UNDO_ARCHIVE_MAILOUT_SUCCESS:
       return {
@@ -259,6 +265,23 @@ export default function mailouts(state = initialState, action) {
         ...state,
         showAddCampaignModal: false,
         showChoosePostcardSize: false,
+      };
+    case GET_FILTERED_MAILOUTS_PENDING:
+      return {
+        ...state,
+        filteredPending: true,
+      };
+    case GET_FILTERED_MAILOUTS_SUCCESS:
+      return {
+        ...state,
+        filteredList: action.payload,
+        filteredPending: false,
+        error: null,
+      };
+    case GET_FILTERED_MAILOUTS_ERROR:
+      return {
+        ...state,
+        error: action.error,
       };
 
     default:
