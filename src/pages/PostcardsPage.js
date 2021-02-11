@@ -350,107 +350,103 @@ const PostcardsPage = () => {
         </ContentBottomHeaderLayout>
       )}
 
-      {!isInitiatingTeam &&
-        !isInitiatingUser &&
-        !mailoutsPendingState &&
-        mailoutList &&
-        mailoutList.length === 0 && (
-          <ContentBottomHeaderLayout>
-            <Segment placeholder style={{ marginRight: '-1em' }}>
-              <Header icon>
-                <Icon name="file outline" />
-                No Campaigns found.
-              </Header>
-            </Segment>
-          </ContentBottomHeaderLayout>
-        )}
-
       {error && <Snackbar error>{error}</Snackbar>}
 
-      {mailoutList && mailoutList.length > 0 && (
-        <Segment
-          style={
-            isMobile
-              ? { padding: '0', paddingTop: '4.5em', marginLeft: '-1em', marginRight: '-1em' }
-              : { marginTop: '22px' }
-          }
-        >
-          <ModalWelcome open={!seenDashboardModel} size="small">
-            <ModalWelcome.Header style={modalHeaderStyles}>
-              Welcome to your postcards dashboard!
-            </ModalWelcome.Header>
-            <ModalWelcome.Content
-              style={{ color: '#686868', fontSize: '16px', padding: '30px 0px' }}
-            >
-              <p>
-                We have generated some initial campaigns for you! Please note, when you initially
-                sign up, you may not see all listings due to:
-              </p>
-              <ul style={{ lineHeight: '30px' }}>
-                <li>Listings older than 6 months are not included</li>
-                <li>We only show a maximum of 15 previous listings from the past</li>
-                <li>
-                  For some boards, sold listings wont show up yet. But upcoming sold listings will
-                  create new campaigns
-                </li>
-                <li>
-                  We exclude listing types (e.g. commercial/land) and locations (e.g. rural
-                  locations) that are difficult for our system to target
-                </li>
-                <li>
-                  We find your listings based on the MLS board/agent id in the Profile section of
-                  each user. Modifying agent ids will adjust this list
-                </li>
-              </ul>
-            </ModalWelcome.Content>
-            <ModalWelcome.Actions style={{ borderTop: 'none', padding: '0px' }}>
-              <Button primary onClick={dismissDashboardExplanation}>
-                <Icon name="checkmark" /> Ok
-              </Button>
-            </ModalWelcome.Actions>
-          </ModalWelcome>
+      <Segment
+        style={
+          isMobile
+            ? { padding: '0', paddingTop: '4.5em', marginLeft: '-1em', marginRight: '-1em' }
+            : { marginTop: '22px' }
+        }
+      >
+        <ModalWelcome open={!seenDashboardModel} size="small">
+          <ModalWelcome.Header style={modalHeaderStyles}>
+            Welcome to your postcards dashboard!
+          </ModalWelcome.Header>
+          <ModalWelcome.Content style={{ color: '#686868', fontSize: '16px', padding: '30px 0px' }}>
+            <p>
+              We have generated some initial campaigns for you! Please note, when you initially sign
+              up, you may not see all listings due to:
+            </p>
+            <ul style={{ lineHeight: '30px' }}>
+              <li>Listings older than 6 months are not included</li>
+              <li>We only show a maximum of 15 previous listings from the past</li>
+              <li>
+                For some boards, sold listings wont show up yet. But upcoming sold listings will
+                create new campaigns
+              </li>
+              <li>
+                We exclude listing types (e.g. commercial/land) and locations (e.g. rural locations)
+                that are difficult for our system to target
+              </li>
+              <li>
+                We find your listings based on the MLS board/agent id in the Profile section of each
+                user. Modifying agent ids will adjust this list
+              </li>
+            </ul>
+          </ModalWelcome.Content>
+          <ModalWelcome.Actions style={{ borderTop: 'none', padding: '0px' }}>
+            <Button primary onClick={dismissDashboardExplanation}>
+              <Icon name="checkmark" /> Ok
+            </Button>
+          </ModalWelcome.Actions>
+        </ModalWelcome>
 
-          <Grid>
-            <Grid.Row>
-              {mailoutsPendingState || isInitiatingTeam || isInitiatingUser || filteredPending ? (
-                <Loader active inline="centered">
-                  Loading...
-                </Loader>
+        {(isInitiatingTeam ||
+          isInitiatingUser ||
+          (mailoutsPendingState && !mailoutList.length) ||
+          filteredPending) && (
+          <Loader active inline="centered">
+            Loading...
+          </Loader>
+        )}
+
+        <Grid>
+          <Grid.Row>
+            <Grid.Column width={16}>
+              {(searchValue && filteredList?.length) ||
+              (!searchValue && mailoutList?.length && !filteredPending) ? (
+                <MailoutsList
+                  list={filteredList?.length ? filteredList : mailoutList}
+                  searching={filteredPending}
+                />
               ) : (
-                <Grid.Column width={16}>
-                  {(searchValue && filteredList?.length) ||
-                  (!searchValue && mailoutList?.length) ? (
-                    <MailoutsList
-                      list={filteredList?.length ? filteredList : mailoutList}
-                      searching={filteredPending}
-                    />
-                  ) : (
-                    <div>No Campaigns Found</div>
-                  )}
-                </Grid.Column>
+                !filteredPending &&
+                !mailoutsPendingState && (
+                  <Header icon textAlign="center">
+                    <Icon name="file outline" />
+                    No Campaigns found.
+                  </Header>
+                )
               )}
-            </Grid.Row>
+            </Grid.Column>
+          </Grid.Row>
 
-            {canLoadMore && !isFiltered && !searchValue && !filteredPending && (
-              <Grid.Row>
-                <Grid.Column width={16}>
-                  <Grid centered columns={2}>
-                    <Grid.Column>
-                      <Button
-                        id="loadMoreButton"
-                        attached="bottom"
-                        content="Load More"
-                        onClick={handleClick}
-                        onKeyPress={handleKeyPress}
-                      />
-                    </Grid.Column>
-                  </Grid>
-                </Grid.Column>
-              </Grid.Row>
-            )}
-          </Grid>
-        </Segment>
-      )}
+          {canLoadMore && !isFiltered && !searchValue && !filteredPending && (
+            <Grid.Row>
+              <Grid.Column width={16}>
+                <Grid centered columns={2}>
+                  <Grid.Column>
+                    <Button
+                      id="loadMoreButton"
+                      attached="bottom"
+                      content={
+                        mailoutsPendingState ? (
+                          <Loader active size="tiny" inline="centered" />
+                        ) : (
+                          'Load More'
+                        )
+                      }
+                      onClick={handleClick}
+                      onKeyPress={handleKeyPress}
+                    />
+                  </Grid.Column>
+                </Grid>
+              </Grid.Column>
+            </Grid.Row>
+          )}
+        </Grid>
+      </Segment>
     </Page>
   );
 };
