@@ -70,7 +70,7 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
     };
 
     const renderPill = status => {
-      if (status === 'Active') {
+      if (status.includes('Active')) {
         return (
           <StatusPill type="solid" color="yellow">
             {status}
