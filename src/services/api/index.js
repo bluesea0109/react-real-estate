@@ -191,6 +191,15 @@ const directory = {
       poll: () => ({ path: `/api/user/listing/mailout/initial/poll`, method: 'get' }),
     },
     mailout: {
+      filteredList: (searchValue, filterValue, sortValue, peerId) => {
+        const params = new URLSearchParams();
+        if (searchValue) params.append('text', searchValue);
+        if (filterValue) params.append('filter', filterValue);
+        if (sortValue) params.append('sortBy', sortValue);
+        let path = `/api/user/mailout/search?${params.toString()}`;
+        if (peerId) path = `/api/user/peer/${peerId}/mailout/search?${params.toString()}`;
+        return { path, method: 'get' };
+      },
       list: () => ({ path: `/api/user/mailout`, method: 'get' }),
       get: mailoutId => ({
         path: `/api/user/mailout/${mailoutId}?include_destinations=true`,
