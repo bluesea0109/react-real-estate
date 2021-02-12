@@ -3,20 +3,20 @@ import { Image, Table } from '../Base';
 import styled from 'styled-components';
 
 const Tooltip = styled.div`
-  &[data-position='top center'][data-tooltip]:after {
+  &[data-position='top right'][data-tooltip]:after {
     border-radius: 0px;
     background: #343434;
-    bottom: 55%;
-    left: 50%;
+    bottom: 100%;
+    right: 30%;
   }
 
   &[data-inverted][data-position~='top'][data-tooltip]:before {
     background: #343434;
   }
 
-  &[data-position='top center'][data-tooltip]:before {
-    bottom: 50%;
-    left: 50%;
+  &[data-position='top right'][data-tooltip]:before {
+    bottom: 100%;
+    right: 50%;
   }
   & p {
     width: 256px;
@@ -74,7 +74,6 @@ export const TableRow = ({
         {dest?.frontResourceUrl && (
           <Tooltip data-tooltip="Click to expand" data-position="top right" data-inverted="">
             <Image
-              title="Smiley face"
               onClick={() => {
                 setPreviewUrl([dest?.frontResourceUrl, dest?.backResourceUrl]);
                 setShowTableModal(true);
