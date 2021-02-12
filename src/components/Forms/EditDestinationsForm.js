@@ -22,14 +22,16 @@ import PolygonGoogleMapsCore from './PolygonGoogleMaps/PolygonGoogleMapsCore';
 import { useIsMobile } from '../Hooks/useIsMobile';
 import styled from 'styled-components';
 import * as brandColors from '../utils/brandColors';
+import { getFilteredMailoutsPending } from '../../store/modules/mailouts/actions';
 
 const CopyDestContainer = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 600px;
+  padding-top: 0.5rem;
   & > p {
     color: ${brandColors.grey02};
-    padding: 1rem 0 0.5rem 0;
+    padding: 0.5rem 0;
     font-weight: 600;
   }
 `;
@@ -87,7 +89,11 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const isMobile = useIsMobile();
   const dispatch = useDispatch();
 
-  const campaignOptions = useSelector(store => store.mailouts?.filteredList);
+  const campaignList = useSelector(store => store.mailouts?.filteredList);
+  const [campaignOptions, setCampaignOptions] = useState(null);
+  const [copyCampaign, setCopyCampaign] = useState(null);
+  const [prevCopyCampaign, setPrevCopyCampaign] = useState(null);
+  const campaignsPending = useSelector(store => store.mailouts?.filteredPending);
   const peerId = useSelector(store => store.peer.peerId);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
@@ -144,6 +150,10 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const [searchResults, setSearchResults] = useState(null);
 
   useEffect(() => {
+    if (destinationsOptionsMode === 'copy') {
+      setSaveDetails({ destinationsOptionsMode: 'copy', ready: !!copyCampaign });
+      return;
+    }
     let existingModeAi = true;
     if (mailoutDetails.destinationsOptions?.mode !== 'ai') existingModeAi = false;
     if (!existingModeAi && destinationsOptionsMode === 'ai') {
@@ -158,7 +168,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
         ready: true,
       });
     }
-  }, [destinationsOptionsMode, numberOfDestinations]); // eslint-disable-line
+  }, [destinationsOptionsMode, numberOfDestinations, copyCampaign]); // eslint-disable-line
 
   // ** clear the search results when an existing search is edited
   useEffect(() => {
@@ -179,6 +189,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
 
   // ** only set saveDetails to ready when all the required columns are filled out
   useEffect(() => {
+    if (destinationsOptionsMode !== 'userUploaded') return;
     let ready = true;
     if (deliveryLineColumn === null) ready = false;
     if (cityColumn === null) ready = false;
@@ -186,7 +197,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     if (zipColumn === null) ready = false;
     if (!ready) setSaveDetails({ destinationsOptionsMode: 'userUploaded', ready: false });
     else setSaveDetails({ destinationsOptionsMode: 'userUploaded', ready: true });
-  }, [deliveryLineColumn, cityColumn, stateColumn, zipColumn]);
+  }, [destinationsOptionsMode, deliveryLineColumn, cityColumn, stateColumn, zipColumn]);
 
   useEffect(() => {
     if (typeof firstNameColumn === 'number' || typeof lastNameColumn === 'number') {
@@ -198,10 +209,27 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
 
   // Load the campaign list on page load
   useEffect(() => {
-    // TODO dispatch sags to get campaigns
-    // dispatch();
+    dispatch(getFilteredMailoutsPending({ sortValue: 'createdDateDesc' }));
     // eslint-disable-next-line
   }, []);
+
+  // Set the dropdown options
+  useEffect(() => {
+    const newOptions = [];
+    campaignList.forEach(campaign => {
+      newOptions.push({
+        key: campaign._id,
+        value: campaign._id,
+        text:
+          campaign.name ||
+          `${campaign.details?.displayAddress}${campaign.mlsNum ? ` (${campaign.mlsNum})` : ''}`,
+      });
+    });
+    setCampaignOptions(newOptions);
+    setPrevCopyCampaign(
+      newOptions.find(option => option.key === mailoutDetails?.destinationsOptions?.copy?.mailoutId)
+    );
+  }, [campaignList, mailoutDetails]);
 
   const handleDestinationSearch = async () => {
     if (!polygonCoordinates) return;
@@ -848,13 +876,19 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
           )}
           {destinationsOptionsMode === 'copy' && (
             <CopyDestContainer>
-              <p>Choose a campaign to copy destinations from:</p>
+              {prevCopyCampaign && (
+                <p>{`Destinations last copied from: ${prevCopyCampaign.text}`}</p>
+              )}
+              <p>{`Choose a ${
+                prevCopyCampaign ? 'different' : ''
+              } campaign to copy destinations from:`}</p>
               <CopyDestDropdown
-                // onClick={campaignOptions ? null : dispatch()}
-                options={[{ key: 0, text: 'Loading...' }]}
-                loading
+                onChange={(e, { value }) => setCopyCampaign(value)}
+                options={campaignOptions || [{ key: 0, text: 'Loading...' }]}
+                loading={campaignsPending}
                 search
                 selection
+                clearable
                 placeholder="Search by Name, Address or Mls Number"
               />
             </CopyDestContainer>
