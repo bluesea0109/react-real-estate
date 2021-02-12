@@ -804,10 +804,7 @@ const MailoutDetailsPage = () => {
                   !error &&
                   details &&
                   details.mailoutStatus !== 'created' &&
-                  destinationsOptionsMode !== 'userUploaded' &&
-                  details.destinationsOptions?.copy?.clonedDetails?.mode !== 'userUploaded' && (
-                    <GoogleMapItem data={details} />
-                  )}
+                  destinationsOptionsMode !== 'userUploaded' && <GoogleMapItem data={details} />}
 
                 {!pendingState && destinationsOptionsMode === 'userUploaded' && (
                   <div>Upload: {details.destinationsOptions?.userUploaded?.filename}</div>
