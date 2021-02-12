@@ -3,7 +3,7 @@ import auth from '../../services/auth';
 import api from '../../services/api';
 import { subMonths } from 'date-fns';
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import React, { useState, useEffect, Fragment } from 'react';
 import { Checkbox, Dropdown, Form, Header, Label, List, Message, Select } from 'semantic-ui-react';
 
@@ -20,11 +20,33 @@ import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
 import PolygonGoogleMapsCore from './PolygonGoogleMaps/PolygonGoogleMapsCore';
 import { useIsMobile } from '../Hooks/useIsMobile';
+import styled from 'styled-components';
+import * as brandColors from '../utils/brandColors';
+
+const CopyDestContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  & > p {
+    color: ${brandColors.grey02};
+    padding: 1rem 0 0.5rem 0;
+    font-weight: 600;
+  }
+`;
+
+const CopyDestDropdown = styled(Dropdown)`
+  &&& {
+    min-width: 300px;
+  }
+  && .visible.menu.transition {
+    min-width: 100% !important;
+    max-height: 50vh;
+  }
+`;
 
 const propertyTypeOptions = [
   { text: 'Single-Family', key: 'Single-Family', value: 'Single-Family' },
   { text: 'Condo', key: 'Condo', value: 'Condo' },
-
   { text: 'Apartment', key: 'Apartment', value: 'Apartment' },
   { text: 'Cooperative (Co-op)', key: 'Cooperative (Co-op)', value: 'Cooperative (Co-op)' },
   { text: 'Duplex', key: 'Duplex', value: 'Duplex' },
@@ -63,7 +85,9 @@ const saleDateOptions = [
 
 const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleBackClick }) => {
   const isMobile = useIsMobile();
+  const dispatch = useDispatch();
 
+  const campaignOptions = useSelector(store => store.mailouts?.filteredList);
   const peerId = useSelector(store => store.peer.peerId);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
@@ -76,7 +100,9 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const isCalculationDeferred = mailoutDetails?.mailoutStatus === 'calculation-deferred';
 
   const [destinationsOptionsMode, setDestinationsOptionsMode] = useState(
-    (mailoutDetails.destinationsOptions?.mode || isCampaign) && !isGeneralCampaign
+    mailoutDetails?.destinationsOptions?.copy?.mailoutId
+      ? 'copy'
+      : (mailoutDetails.destinationsOptions?.mode || isCampaign) && !isGeneralCampaign
       ? 'manual'
       : isGeneralCampaign
       ? 'userUploaded'
@@ -169,6 +195,13 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
       setCurrentResident(true);
     }
   }, [firstNameColumn, lastNameColumn]);
+
+  // Load the campaign list on page load
+  useEffect(() => {
+    // TODO dispatch sags to get campaigns
+    // dispatch();
+    // eslint-disable-next-line
+  }, []);
 
   const handleDestinationSearch = async () => {
     if (!polygonCoordinates) return;
@@ -490,6 +523,18 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                 }}
               />
             </List.Item>
+            <List.Item>
+              <Checkbox
+                radio
+                label="Copy a previous campaign"
+                name="checkboxRadioGroup"
+                value="that"
+                checked={destinationsOptionsMode === 'copy'}
+                onClick={() => {
+                  setDestinationsOptionsMode('copy');
+                }}
+              />
+            </List.Item>
           </List>
           {destinationsOptionsMode === 'ai' && (
             <Form.Field
@@ -800,6 +845,19 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                 </div>
               )}
             </div>
+          )}
+          {destinationsOptionsMode === 'copy' && (
+            <CopyDestContainer>
+              <p>Choose a campaign to copy destinations from:</p>
+              <CopyDestDropdown
+                // onClick={campaignOptions ? null : dispatch()}
+                options={[{ key: 0, text: 'Loading...' }]}
+                loading
+                search
+                selection
+                placeholder="Search by Name, Address or Mls Number"
+              />
+            </CopyDestContainer>
           )}
         </Form>
       </Segment>
