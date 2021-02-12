@@ -82,6 +82,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
       ? 'userUploaded'
       : 'ai'
   );
+
   const [saveDetails, setSaveDetails] = useState(
     mailoutDetails.destinationsOptions?.mode || isCampaign
       ? { destinationsOptionsMode: 'manual', ready: false }
