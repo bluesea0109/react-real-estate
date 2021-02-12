@@ -123,9 +123,9 @@ const ModalPreview = Styled(Modal)`
   .content{
     justify-content:center;
   }
-  @media (max-width: ${props => props.widthsize + 100}px) {
+  @media (max-width: ${props => props.widthsize + 200}px) {
     &&&{
-      width:80%;
+      width:90%;
     }
     .content{
       justify-content:flex-start;
