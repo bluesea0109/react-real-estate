@@ -1,5 +1,37 @@
 import React from 'react';
 import { Image, Table } from '../Base';
+import styled from 'styled-components';
+
+const Tooltip = styled.div`
+  &[data-position='top center'][data-tooltip]:after {
+    border-radius: 0px;
+    background: #343434;
+    bottom: 55%;
+    left: 50%;
+  }
+
+  &[data-inverted][data-position~='top'][data-tooltip]:before {
+    background: #343434;
+  }
+
+  &[data-position='top center'][data-tooltip]:before {
+    bottom: 50%;
+    left: 50%;
+  }
+  & p {
+    width: 256px;
+    padding-top: 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+`;
+
+const ImageStyles = {
+  width: '100%',
+  maxWidth: '60px',
+  cursor: 'pointer',
+};
 
 export const TableCampaign = ({ renderDestinations, TableModal }) => (
   <Table className="six wide tablet six wide computer column">
@@ -40,14 +72,17 @@ export const TableRow = ({
       <Table.Cell>{ctaDate}</Table.Cell>
       <Table.Cell>
         {dest?.frontResourceUrl && (
-          <Image
-            onClick={() => {
-              setPreviewUrl([dest?.frontResourceUrl, dest?.backResourceUrl]);
-              setShowTableModal(true);
-            }}
-            style={{ width: '100%', maxWidth: '60px' }}
-            src={dest?.frontResourceUrl}
-          />
+          <Tooltip data-tooltip="Click to expand" data-position="top right" data-inverted="">
+            <Image
+              title="Smiley face"
+              onClick={() => {
+                setPreviewUrl([dest?.frontResourceUrl, dest?.backResourceUrl]);
+                setShowTableModal(true);
+              }}
+              style={ImageStyles}
+              src={dest?.frontResourceUrl}
+            />
+          </Tooltip>
         )}
       </Table.Cell>
     </Table.Row>

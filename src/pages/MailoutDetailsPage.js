@@ -114,6 +114,10 @@ const postcardContainer = {
   display: 'flex',
 };
 
+const ModalImage = {
+  border: '1px solid #dadada',
+};
+
 const ModalPreview = Styled(Modal)`
   width:${props => css`calc(${props.widthsize + 70}px)`};
   .content{
@@ -226,8 +230,8 @@ const MailoutDetailsPage = () => {
             </ModalPreview.Header>
             <ModalPreview.Content style={postcardContainer}>
               <FlipCard isFlipped={isTableFlipped}>
-                <Image src={previewUrl[0]} />
-                <Image src={previewUrl[1]} />
+                <Image style={ModalImage} src={previewUrl[0]} />
+                <Image style={ModalImage} src={previewUrl[1]} />
               </FlipCard>
             </ModalPreview.Content>
             <ModalPreview.Content>
