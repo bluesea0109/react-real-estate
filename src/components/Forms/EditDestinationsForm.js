@@ -85,7 +85,7 @@ const saleDateOptions = [
   { text: '35 years ago', value: 420 },
 ];
 
-const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleBackClick }) => {
+const EditDestinationsForm = ({ mailoutDetails, handleBackClick }) => {
   const isMobile = useIsMobile();
   const dispatch = useDispatch();
 
@@ -310,6 +310,23 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
       return;
     }
     try {
+      if (saveDetails.destinationsOptionsMode === 'copy') {
+        if (!copyCampaign) throw new Error({ message: 'No campaign selected' });
+        let path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/copy`;
+        if (peerId)
+          path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/destinationOptions/copy`;
+        const body = JSON.stringify({ mailoutId: copyCampaign });
+        const headers = {};
+        const accessToken = await auth.getAccessToken();
+        headers['authorization'] = `Bearer ${accessToken}`;
+        const response = await fetch(path, {
+          headers,
+          method: 'post',
+          body,
+          credentials: 'include',
+        });
+        await api.handleResponse(response);
+      }
       if (saveDetails.destinationsOptionsMode === 'ai') {
         let path = `/api/user/mailout/${mailoutDetails._id}/edit/mailoutSize`;
         if (peerId)
@@ -370,7 +387,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
       }
       handleBackClick();
     } catch (e) {
-      console.log(e);
+      console.error(e);
       setSaving(false);
       setError(e.message);
     }
