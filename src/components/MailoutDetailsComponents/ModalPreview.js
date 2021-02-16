@@ -5,6 +5,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import FlipCard from '../FlipCard';
 import { calculateCost } from '../MailoutListItem/utils/helpers';
 import { submitMailoutPending } from '../../store/modules/mailout/actions';
+import {
+  modalHeaderStyles,
+  cancelX,
+  postcardContainer,
+  flipButtonContainer,
+  flipButtonStyles,
+  rightMargin,
+  highlightButton,
+} from './ModalStyles';
 
 const ModalPreviewStyled = styled(Modal)`
   width: ${props => css`calc(${props.widthsize + 70}px)`};
@@ -21,57 +30,11 @@ const ModalPreviewStyled = styled(Modal)`
   }
 `;
 
-const modalHeaderStyles = {
-  padding: '4px 0px 16px 0px',
-  display: 'flex',
-  fontSize: '29px',
-  color: '#59c4c4',
-  justifyContent: 'space-between',
-};
-
-const cancelX = {
-  backgroundColor: '#EDEDED',
-  borderRadius: '50px',
-  height: '30px',
-  width: '30px',
-  padding: '0px',
-  marginTop: '9px',
-  marginRight: '0px',
-};
-
 const cancelButton = {
   borderRadius: '50px',
   textTransform: 'uppercase',
   color: '#666666',
   fontWeight: 'bold',
-};
-
-const postcardContainer = {
-  display: 'flex',
-};
-
-const flipButtonContainer = {
-  height: '30px',
-  display: 'flex',
-  justifyContent: 'center',
-  paddingTop: '8px',
-};
-
-const flipButtonStyles = {
-  background: 'none',
-  color: '#59c4c4',
-  textTransform: 'uppercase',
-  fontSize: '15px',
-  borderRadius: '0px',
-  padding: '7px 0px 18px 0px',
-};
-
-const rightMargin = {
-  marginRight: '60px',
-};
-
-const highlightButton = {
-  borderBottom: '3px solid #59c4c4',
 };
 
 const ModalPreview = ({

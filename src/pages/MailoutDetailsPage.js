@@ -7,11 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format } from 'date-fns';
 import { TableRow, TableCampaign } from '../components/MailoutDetailsComponents/MailoutTable';
 import ModalPreview from '../components/MailoutDetailsComponents/ModalPreview';
-import {
-  revertMailoutEditPending,
-  stopMailoutPending,
-  submitMailoutPending,
-} from '../store/modules/mailout/actions';
+import TableModal from '../components/MailoutDetailsComponents/TableModal';
+import { revertMailoutEditPending, stopMailoutPending } from '../store/modules/mailout/actions';
 import {
   calculateCost,
   formatDate,
@@ -28,7 +25,6 @@ import {
   List,
   Menu,
   Message,
-  Modal,
   Page,
   Popup,
   Segment,
@@ -53,85 +49,12 @@ import {
 } from '../layouts';
 import { useIsMobile } from '../components/Hooks/useIsMobile';
 import { useWindowSize } from '../components/Hooks/useWindowSize';
-import Styled, { css } from 'styled-components';
 
 const changeButtonStyles = {
   marginLeft: '10px',
   minWidth: '5em',
   textTransform: 'none',
 };
-
-// const modalHeaderStyles = {
-//   padding: '4px 0px 16px 0px',
-//   display: 'flex',
-//   fontSize: '29px',
-//   color: '#59c4c4',
-//   justifyContent: 'space-between',
-// };
-
-// const cancelButton = {
-//   borderRadius: '50px',
-//   textTransform: 'uppercase',
-//   color: '#666666',
-//   fontWeight: 'bold',
-// };
-
-const flipButtonContainer = {
-  height: '30px',
-  display: 'flex',
-  justifyContent: 'center',
-  paddingTop: '8px',
-};
-
-// const flipButtonStyles = {
-//   background: 'none',
-//   color: '#59c4c4',
-//   textTransform: 'uppercase',
-//   fontSize: '15px',
-//   borderRadius: '0px',
-//   padding: '7px 0px 18px 0px',
-// };
-
-// const rightMargin = {
-//   marginRight: '60px',
-// };
-
-// const highlightButton = {
-//   borderBottom: '3px solid #59c4c4',
-// };
-
-// const cancelX = {
-//   backgroundColor: '#EDEDED',
-//   borderRadius: '50px',
-//   height: '30px',
-//   width: '30px',
-//   padding: '0px',
-//   marginTop: '9px',
-//   marginRight: '0px',
-// };
-
-// const postcardContainer = {
-//   display: 'flex',
-// };
-
-const ModalImage = {
-  border: '1px solid #dadada',
-};
-
-// const ModalPreview = Styled(Modal)`
-//   width:${props => css`calc(${props.widthsize + 70}px)`};
-//   .content{
-//     justify-content:center;
-//   }
-//   @media (max-width: ${props => props.widthsize + 200}px) {
-//     &&&{
-//       width:90%;
-//     }
-//     .content{
-//       justify-content:flex-start;
-//     }
-//   }
-// `;
 
 const useFetching = (getActionCreator, dispatch, mailoutId) => {
   useEffect(() => {
@@ -194,73 +117,6 @@ const MailoutDetailsPage = () => {
     : `/api/user/${details?.userId}/mailout/${details?._id}/csv`;
 
   const [previewUrl, setPreviewUrl] = useState([]);
-
-  // const TableModal = () => {
-  //   return (
-  //     <ModalPreview
-  //       widthsize={postCardSize.width}
-  //       open={showTableModal}
-  //       onClose={() => {
-  //         setShowTableModal(false);
-  //         setIsTableFlipped(false);
-  //       }}
-  //       size="small"
-  //     >
-  //       {details && (
-  //         <div
-  //           style={{
-  //             maxWidth: '100%',
-  //             margin: 'auto',
-  //             width: `calc(${postCardSize.width}px + 70px)`,
-  //             height: '100%',
-  //             paddingBottom: '30px',
-  //           }}
-  //         >
-  //           <ModalPreview.Header style={modalHeaderStyles}>
-  //             <p>Preview</p>
-  //             <Button
-  //               style={cancelX}
-  //               onClick={() => {
-  //                 setShowTableModal(false);
-  //                 setIsTableFlipped(false);
-  //               }}
-  //             >
-  //               <FontAwesomeIcon icon="times" style={{ color: '#B1B1B1', fontSize: '16px' }} />
-  //             </Button>
-  //           </ModalPreview.Header>
-  //           <ModalPreview.Content style={postcardContainer}>
-  //             <FlipCard isFlipped={isTableFlipped}>
-  //               <Image style={ModalImage} src={previewUrl[0]} />
-  //               <Image style={ModalImage} src={previewUrl[1]} />
-  //             </FlipCard>
-  //           </ModalPreview.Content>
-  //           <ModalPreview.Content>
-  //             <div style={flipButtonContainer}>
-  //               <Button
-  //                 style={{
-  //                   ...flipButtonStyles,
-  //                   ...rightMargin,
-  //                   ...(isTableFlipped ? highlightButton : {}),
-  //                 }}
-  //                 floated="right"
-  //                 onClick={() => setIsTableFlipped(true)}
-  //               >
-  //                 Back
-  //               </Button>
-  //               <Button
-  //                 style={{ ...flipButtonStyles, ...(!isTableFlipped ? highlightButton : {}) }}
-  //                 floated="right"
-  //                 onClick={() => setIsTableFlipped(false)}
-  //               >
-  //                 Front
-  //               </Button>
-  //             </div>
-  //           </ModalPreview.Content>
-  //         </div>
-  //       )}
-  //     </ModalPreview>
-  //   );
-  // };
 
   const handleOnload = useCallback(
     event => {
@@ -561,96 +417,12 @@ const MailoutDetailsPage = () => {
         open={showConsentModal}
         setShowConsentModal={setShowConsentModal}
         details={details}
-        setShowConsentModal={setShowConsentModal}
         currentNumberOfRecipients={currentNumberOfRecipients}
-        setShowConsentModal={setShowConsentModal}
         mailoutId={mailoutId}
         dispatch={dispatch}
         frontCard={<FrontIframe />}
         backCard={<BackIframe />}
       />
-      {/* <ModalPreview
-        widthsize={postCardSize.width}
-        open={showConsentModal}
-        onClose={() => setShowConsentModal(false)}
-        size="small"
-      >
-        {details && (
-          <div
-            style={{
-              maxWidth: '100%',
-              margin: 'auto',
-              width: `calc(${postCardSize.width}px + 70px)`,
-              height: `calc(${postCardSize.height}px + 300px)`,
-            }}
-          >
-            <ModalPreview.Header style={modalHeaderStyles}>
-              <p>Send Campaign</p>
-              <Button style={cancelX} onClick={() => setShowConsentModal(false)}>
-                <FontAwesomeIcon icon="times" style={{ color: '#B1B1B1', fontSize: '16px' }} />
-              </Button>
-            </ModalPreview.Header>
-            <ModalPreview.Content style={postcardContainer}>
-              <FlipCard isFlipped={isFlipped}>
-                <FrontIframe />
-                <BackIframe />
-              </FlipCard>
-            </ModalPreview.Content>
-            <ModalPreview.Content>
-              <div style={flipButtonContainer}>
-                <Button
-                  style={{
-                    ...flipButtonStyles,
-                    ...rightMargin,
-                    ...(isFlipped ? highlightButton : {}),
-                  }}
-                  floated="right"
-                  onClick={() => setIsFlipped(true)}
-                >
-                  Back
-                </Button>
-                <Button
-                  style={{ ...flipButtonStyles, ...(!isFlipped ? highlightButton : {}) }}
-                  floated="right"
-                  onClick={() => setIsFlipped(false)}
-                >
-                  Front
-                </Button>
-              </div>
-              <ModalPreview.Description style={{ textAlign: 'center', marginTop: '40px' }}>
-                <p style={{ margin: 0 }}>I agree to be immediately charged</p>
-                <b style={{ fontSize: '32px', lineHeight: '50px' }}>
-                  {calculateCost(
-                    details && details.recipientCount,
-                    details && details.postcardSize ? details.postcardSize : '4x6'
-                  )}
-                </b>
-                <br />
-                <p>
-                  {calculateCost(1, details && details.postcardSize ? details.postcardSize : '4x6')}{' '}
-                  x {currentNumberOfRecipients}
-                </p>
-              </ModalPreview.Description>
-            </ModalPreview.Content>
-            <ModalPreview.Actions
-              style={{ display: 'flex', justifyContent: 'space-between', marginTop: '30px' }}
-            >
-              <Button style={cancelButton} onClick={() => setShowConsentModal(false)}>
-                Cancel
-              </Button>
-              <Button
-                primary
-                onClick={() => [
-                  dispatch(submitMailoutPending(mailoutId)),
-                  setShowConsentModal(false),
-                ]}
-              >
-                Agree
-              </Button>
-            </ModalPreview.Actions>
-          </div>
-        )}
-      </ModalPreview> */}
 
       {!DestinationCalculation && (
         <Segment style={{ margin: '20px 0' }}>
@@ -809,7 +581,17 @@ const MailoutDetailsPage = () => {
                     resolveMailoutStatus(details.mailoutStatus) === 'Sent') && (
                     <TableCampaign
                       renderDestinations={renderDestinations}
-                      // TableModal={TableModal}
+                      TableModal={
+                        <TableModal
+                          postCardSize={postCardSize}
+                          open={showTableModal}
+                          setShowTableModal={setShowTableModal}
+                          setIsTableFlipped={setIsTableFlipped}
+                          details={details}
+                          isTableFlipped={isTableFlipped}
+                          previewUrl={previewUrl}
+                        />
+                      }
                     />
                   )}
                 {!pendingState &&
