@@ -70,13 +70,19 @@ const ToggleContainer = styled.div`
     font-weight: 600;
     background-color: ${brandColors.primaryLight} !important;
     .iconWithStyle {
-      margin: 0em 1em 0em 0.35em;
-    }
-    .facebookIconWithStyle {
-      margin: 0em 1.3em 0em 0.57em;
+      margin: 0 1.2rem 0 0.35rem;
+      width: 1.25rem;
     }
     .archvieIconWithStyle {
-      margin: 0em 1.2em 0em 0.35em;
+      margin: 0 1.5rem 0 0.35rem;
+      width: 1.25rem;
+    }
+    .imageIconWithStyle {
+      margin: 0 1.3rem 0 0.55rem;
+      width: 1.25rem;
+    }
+    .facebookIconWithStyle {
+      margin-left: 0.57em;
     }
     .cogIconStyle {
       margin-left: 8px;

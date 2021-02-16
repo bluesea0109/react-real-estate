@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 import { resetMailout } from '../store/modules/mailout/actions';
 import { faFacebookF } from '@fortawesome/free-brands-svg-icons';
 
-import { StepLayout, StepsLayout, MobileDisabledLayout, NavigationLayout } from '../layouts';
+import { StepLayout, StepsLayout, NavigationLayout } from '../layouts';
 import { Dimmer, Menu, Initials, Icon, Step } from './Base';
 import { useIsMobile } from './Hooks/useIsMobile.js';
 
@@ -76,11 +76,15 @@ const StyledIcon = styled(FontAwesomeIcon)`
 `;
 
 const ArchiveStyledIcon = styled(FontAwesomeIcon)`
-  margin: 0em 1.2em 0em 0.65em;
+  margin: 0em 1.3em 0em 0.65em;
 `;
 
 const FacebookStyledIcon = styled(FontAwesomeIcon)`
   margin: 0em 1.3em 0em 0.86em;
+`;
+
+const ImageStyledIcon = styled(FontAwesomeIcon)`
+  margin: 0 1.3rem 0 0.85rem;
 `;
 
 export default () => {
@@ -341,9 +345,7 @@ export default () => {
             style={menuItemStyles}
             onClick={mobileCollapse}
           >
-            <MobileDisabledLayout>
-              <StyledIcon icon="tachometer-alt" className="iconWithStyle" /> Dashboard
-            </MobileDisabledLayout>
+            <StyledIcon icon="tachometer-alt" className="iconWithStyle" /> Dashboard
           </Menu.Item>
 
           <Menu.Item
@@ -354,9 +356,7 @@ export default () => {
             style={menuItemStyles}
             onClick={mobileCollapse}
           >
-            <MobileDisabledLayout>
-              <StyledIcon icon="home" className="iconWithStyle" /> Listings
-            </MobileDisabledLayout>
+            <StyledIcon icon="home" className="iconWithStyle" /> Listings
           </Menu.Item>
 
           <Menu.Item
@@ -367,9 +367,7 @@ export default () => {
             style={menuItemStyles}
             onClick={mobileCollapse}
           >
-            <MobileDisabledLayout>
-              <StyledIcon icon={faImage} className="iconWithStyle" /> Postcards
-            </MobileDisabledLayout>
+            <ImageStyledIcon icon={faImage} className="imageIconWithStyle" /> Postcards
           </Menu.Item>
 
           {adProduct && multiUser && (
@@ -381,9 +379,7 @@ export default () => {
               style={menuItemStyles}
               onClick={mobileCollapse}
             >
-              <MobileDisabledLayout>
-                <FacebookStyledIcon icon={faFacebookF} className="facebookIconWithStyle" /> Paid Ads
-              </MobileDisabledLayout>
+              <FacebookStyledIcon icon={faFacebookF} className="facebookIconWithStyle" /> Paid Ads
             </Menu.Item>
           )}
           <Menu.Item
@@ -394,9 +390,7 @@ export default () => {
             style={menuItemStyles}
             onClick={mobileCollapse}
           >
-            <MobileDisabledLayout>
-              <ArchiveStyledIcon icon="archive" className="archvieIconWithStyle" /> Archive
-            </MobileDisabledLayout>
+            <ArchiveStyledIcon icon="archive" className="archvieIconWithStyle" /> Archive
           </Menu.Item>
 
           <Menu.Item
@@ -415,12 +409,10 @@ export default () => {
             onMouseEnter={() => setSvgHover('svgHover')}
             onMouseLeave={() => setSvgHover('')}
           >
-            <MobileDisabledLayout>
-              <span style={{ display: 'flex' }}>
-                <StyledCog className={`cogIconStyle ${svgHover}`} />
-                <span style={menuP}>Settings</span>
-              </span>
-            </MobileDisabledLayout>
+            <span style={{ display: 'flex' }}>
+              <StyledCog className={`cogIconStyle ${svgHover}`} />
+              <span style={menuP}>Settings</span>
+            </span>
           </Menu.Item>
 
           <div className={isMobile ? 'accordionDrop' : `noDropdown ${dropdown}`}>
@@ -434,7 +426,7 @@ export default () => {
                   style={subMenuItemStyles}
                   onClick={mobileCollapse}
                 >
-                  <MobileDisabledLayout>Team Customization</MobileDisabledLayout>
+                  <span>Team Customization</span>
                 </Menu.Item>
               )}
               <Menu.Item
@@ -445,7 +437,7 @@ export default () => {
                 style={subMenuItemStyles}
                 onClick={mobileCollapse}
               >
-                <MobileDisabledLayout>Personal Customization</MobileDisabledLayout>
+                <span>Personal Customization</span>
               </Menu.Item>
 
               <Menu.Item
@@ -456,7 +448,7 @@ export default () => {
                 style={subMenuItemStyles}
                 onClick={mobileCollapse}
               >
-                <MobileDisabledLayout>Profile</MobileDisabledLayout>
+                <span>Profile</span>
               </Menu.Item>
 
               {!selectedPeerId && (
@@ -472,7 +464,7 @@ export default () => {
                     }
                   }}
                 >
-                  <MobileDisabledLayout>Billing</MobileDisabledLayout>
+                  <span>Billing</span>
                 </Menu.Item>
               )}
             </Menu.Menu>
