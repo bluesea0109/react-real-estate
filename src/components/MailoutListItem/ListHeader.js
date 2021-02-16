@@ -2,14 +2,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import React, { Fragment, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import {
-  MobileDisabledLayout,
-  MobileEnabledLayout,
-  ItemHeaderLayout,
-  ItemHeaderMenuLayout,
-} from '../../layouts';
+import { ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import {
   canSend,
   canPickDestinations,
@@ -76,12 +70,7 @@ const ApproveAndSendButton = ({
         {canSend(data.mailoutStatus) && (
           <Link to={`dashboard/${data._id}`}>
             <Button primary>
-              <MobileDisabledLayout>
-                <Fragment>Review & Send</Fragment>
-              </MobileDisabledLayout>
-              <MobileEnabledLayout>
-                <FontAwesomeIcon icon="thumbs-up" />
-              </MobileEnabledLayout>
+              <span>Review & Send</span>
             </Button>
           </Link>
         )}
@@ -104,12 +93,7 @@ const ApproveAndSendButton = ({
 
             <Link to={`dashboard/edit/${data._id}/destinations`}>
               <Button primary>
-                <MobileDisabledLayout>
-                  <Fragment>Choose Destinations</Fragment>
-                </MobileDisabledLayout>
-                <MobileEnabledLayout>
-                  <FontAwesomeIcon icon="thumbs-up" />
-                </MobileEnabledLayout>
+                <span>Choose Destinations</span>
               </Button>
             </Link>
           </>
@@ -127,12 +111,7 @@ const ApproveAndSendButton = ({
           disabled={lockControls}
           loading={lockControls}
         >
-          <MobileDisabledLayout>
-            <Fragment>Approve & Send</Fragment>
-          </MobileDisabledLayout>
-          <MobileEnabledLayout>
-            <FontAwesomeIcon icon="thumbs-up" />
-          </MobileEnabledLayout>
+          <span>Approve & Send</span>
         </Button>
       )}
     </Fragment>
