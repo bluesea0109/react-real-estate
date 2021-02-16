@@ -38,6 +38,7 @@ import PageTitleHeader from '../components/PageTitleHeader';
 import { useIsMobile } from '../components/Hooks/useIsMobile';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
+import { resetMailout } from '../store/modules/mailout/actions';
 
 const SearchContainer = styled(Menu.Item)`
   &&& {
@@ -149,6 +150,11 @@ const PostcardsPage = () => {
   const [searchValue, setSearchValue] = useState(null);
   const [sortValue, setSortValue] = useState(null);
   const [filterValue, setFilterValue] = useState(null);
+
+  useEffect(() => {
+    dispatch(resetMailout());
+    // eslint-disable-next-line
+  }, []);
 
   const sortOptions = [
     { key: 0, text: 'Created (Newest First)', value: 'createdDateDesc' },
