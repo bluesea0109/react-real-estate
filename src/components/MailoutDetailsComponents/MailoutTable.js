@@ -49,7 +49,7 @@ export const TableCampaign = ({ renderDestinations, TableModal }) => (
 
     <Table.Body>
       {renderDestinations()}
-      {TableModal()}
+      {/* {TableModal()} */}
     </Table.Body>
   </Table>
 );
