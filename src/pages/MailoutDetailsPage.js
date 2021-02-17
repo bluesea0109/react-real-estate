@@ -37,7 +37,6 @@ import ListHeader from '../components/MailoutListItem/ListHeader';
 import PageTitleHeader from '../components/PageTitleHeader';
 import { postcardDimensionsDisplayed, iframeDimensions } from '../components/utils/utils';
 import GoogleMapItem from '../components/Forms/PolygonGoogleMaps/GoogleMapItem';
-// import FlipCard from '../components/FlipCard';
 import Loading from '../components/Loading';
 import {
   ContentBottomHeaderLayout,
@@ -75,7 +74,6 @@ const MailoutDetailsPage = () => {
 
   const [frontLoaded, setFrontLoaded] = useState(false);
   const [backLoaded, setBackLoaded] = useState(false);
-  // const [isFlipped, setIsFlipped] = useState(false);
   const [isTableFlipped, setIsTableFlipped] = useState(false);
   const [working, setWorking] = useState(false);
   const [DestinationCalculation, setDestinationCalculation] = useState(false);
@@ -377,9 +375,6 @@ const MailoutDetailsPage = () => {
       />
     </Segment>
   );
-
-  // width: details && `calc(${iframeDimensions(details.postcardSize).width}px + 70px)`,
-  // height: details && `calc(${iframeDimensions(details.postcardSize).height}px + 300px)`,
 
   const postCardSize = {
     width: details && iframeDimensions(details.postcardSize).width,
