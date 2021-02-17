@@ -5,12 +5,10 @@ import api from '../services/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format } from 'date-fns';
-
-import {
-  revertMailoutEditPending,
-  stopMailoutPending,
-  submitMailoutPending,
-} from '../store/modules/mailout/actions';
+import { TableRow, TableCampaign } from '../components/MailoutDetailsComponents/MailoutTable';
+import ModalPreview from '../components/MailoutDetailsComponents/ModalPreview';
+import TableModal from '../components/MailoutDetailsComponents/TableModal';
+import { revertMailoutEditPending, stopMailoutPending } from '../store/modules/mailout/actions';
 import {
   calculateCost,
   formatDate,
@@ -27,11 +25,9 @@ import {
   List,
   Menu,
   Message,
-  Modal,
   Page,
   Popup,
   Segment,
-  Table,
   Icon,
 } from '../components/Base';
 import PopupContent from '../components/MailoutListItem/PopupContent';
@@ -41,7 +37,6 @@ import ListHeader from '../components/MailoutListItem/ListHeader';
 import PageTitleHeader from '../components/PageTitleHeader';
 import { postcardDimensionsDisplayed, iframeDimensions } from '../components/utils/utils';
 import GoogleMapItem from '../components/Forms/PolygonGoogleMaps/GoogleMapItem';
-import FlipCard from '../components/FlipCard';
 import Loading from '../components/Loading';
 import {
   ContentBottomHeaderLayout,
@@ -53,96 +48,12 @@ import {
 } from '../layouts';
 import { useIsMobile } from '../components/Hooks/useIsMobile';
 import { useWindowSize } from '../components/Hooks/useWindowSize';
-import Styled, { css } from 'styled-components';
 
 const changeButtonStyles = {
   marginLeft: '10px',
   minWidth: '5em',
   textTransform: 'none',
 };
-
-const modalHeaderStyles = {
-  padding: '4px 0px 16px 0px',
-  display: 'flex',
-  fontSize: '29px',
-  color: '#59c4c4',
-  justifyContent: 'space-between',
-};
-
-const cancelButton = {
-  borderRadius: '50px',
-  textTransform: 'uppercase',
-  color: '#666666',
-  fontWeight: 'bold',
-};
-
-const flipButtonContainer = {
-  height: '30px',
-  display: 'flex',
-  justifyContent: 'center',
-  paddingTop: '8px',
-};
-
-const flipButtonStyles = {
-  background: 'none',
-  color: '#59c4c4',
-  textTransform: 'uppercase',
-  fontSize: '15px',
-  borderRadius: '0px',
-  padding: '7px 0px 18px 0px',
-};
-
-const rightMargin = {
-  marginRight: '60px',
-};
-
-const highlightButton = {
-  borderBottom: '3px solid #59c4c4',
-};
-
-const cancelX = {
-  backgroundColor: '#EDEDED',
-  borderRadius: '50px',
-  height: '30px',
-  width: '30px',
-  padding: '0px',
-  marginTop: '9px',
-  marginRight: '0px',
-};
-
-const postcardContainer = {
-  display: 'flex',
-};
-
-const ModalPreview = Styled(Modal)`
-  width:${props => css`calc(${props.widthsize + 70}px)`};
-  .content{
-    justify-content:center;
-  }
-  @media (max-width: ${props => props.widthsize + 100}px) {
-    &&&{
-      width:90%;
-    }
-    .content{
-      justify-content:flex-start;
-    }
-  }
-`;
-
-const ModalTablePreview = Styled(Modal)`
-  width:${props => css`calc(${props.widthsize + 70}px)`};
-  .content{
-    justify-content:center;
-  }
-  @media (max-width: ${props => props.widthsize + 100}px) {
-    &&&{
-      width:90%;
-    }
-    .content{
-      justify-content:flex-start;
-    }
-  }
-`;
 
 const useFetching = (getActionCreator, dispatch, mailoutId) => {
   useEffect(() => {
@@ -163,7 +74,6 @@ const MailoutDetailsPage = () => {
 
   const [frontLoaded, setFrontLoaded] = useState(false);
   const [backLoaded, setBackLoaded] = useState(false);
-  const [isFlipped, setIsFlipped] = useState(false);
   const [isTableFlipped, setIsTableFlipped] = useState(false);
   const [working, setWorking] = useState(false);
   const [DestinationCalculation, setDestinationCalculation] = useState(false);
@@ -205,73 +115,6 @@ const MailoutDetailsPage = () => {
     : `/api/user/${details?.userId}/mailout/${details?._id}/csv`;
 
   const [previewUrl, setPreviewUrl] = useState([]);
-
-  const TableModal = () => {
-    return (
-      <ModalTablePreview
-        widthsize={postCardSize.width}
-        open={showTableModal}
-        onClose={() => {
-          setShowTableModal(false);
-          setIsTableFlipped(false);
-        }}
-        size="small"
-      >
-        {details && (
-          <div
-            style={{
-              maxWidth: '100%',
-              margin: 'auto',
-              width: `calc(${postCardSize.width}px + 70px)`,
-              height: '100%',
-              paddingBottom: '30px',
-            }}
-          >
-            <ModalTablePreview.Header style={modalHeaderStyles}>
-              <p>Preview</p>
-              <Button
-                style={cancelX}
-                onClick={() => {
-                  setShowTableModal(false);
-                  setIsTableFlipped(false);
-                }}
-              >
-                <FontAwesomeIcon icon="times" style={{ color: '#B1B1B1', fontSize: '16px' }} />
-              </Button>
-            </ModalTablePreview.Header>
-            <ModalTablePreview.Content style={postcardContainer}>
-              <FlipCard isFlipped={isTableFlipped}>
-                <Image src={previewUrl[0]} />
-                <Image src={previewUrl[1]} />
-              </FlipCard>
-            </ModalTablePreview.Content>
-            <ModalTablePreview.Content>
-              <div style={flipButtonContainer}>
-                <Button
-                  style={{
-                    ...flipButtonStyles,
-                    ...rightMargin,
-                    ...(isTableFlipped ? highlightButton : {}),
-                  }}
-                  floated="right"
-                  onClick={() => setIsTableFlipped(true)}
-                >
-                  Back
-                </Button>
-                <Button
-                  style={{ ...flipButtonStyles, ...(!isTableFlipped ? highlightButton : {}) }}
-                  floated="right"
-                  onClick={() => setIsTableFlipped(false)}
-                >
-                  Front
-                </Button>
-              </div>
-            </ModalTablePreview.Content>
-          </div>
-        )}
-      </ModalTablePreview>
-    );
-  };
 
   const handleOnload = useCallback(
     event => {
@@ -404,24 +247,15 @@ const MailoutDetailsPage = () => {
         let status = '-';
         if (dest.status && dest.status !== 'unknown') status = dest.status;
         return (
-          <Table.Row key={dest.id}>
-            <Table.Cell>{dest?.deliveryLine}</Table.Cell>
-            <Table.Cell>{dest?.name}</Table.Cell>
-            <Table.Cell>{dest?.expected_delivery_date}</Table.Cell>
-            <Table.Cell>{status}</Table.Cell>
-            <Table.Cell>{ctaInteractions}</Table.Cell>
-            <Table.Cell>{ctaDate}</Table.Cell>
-            <Table.Cell onClick={() => setShowTableModal(true)}>
-              <Image
-                onClick={() => {
-                  setPreviewUrl([dest?.frontResourceUrl, dest?.backResourceUrl]);
-                  setShowTableModal(true);
-                }}
-                style={{ width: '100%', maxWidth: '60px' }}
-                src={dest?.frontResourceUrl}
-              />
-            </Table.Cell>
-          </Table.Row>
+          <TableRow
+            key={dest.id}
+            dest={dest}
+            setPreviewUrl={setPreviewUrl}
+            setShowTableModal={setShowTableModal}
+            status={status}
+            ctaInteractions={ctaInteractions}
+            ctaDate={ctaDate}
+          />
         );
       })
     );
@@ -542,9 +376,6 @@ const MailoutDetailsPage = () => {
     </Segment>
   );
 
-  // width: details && `calc(${iframeDimensions(details.postcardSize).width}px + 70px)`,
-  // height: details && `calc(${iframeDimensions(details.postcardSize).height}px + 300px)`,
-
   const postCardSize = {
     width: details && iframeDimensions(details.postcardSize).width,
     height: details && iframeDimensions(details.postcardSize).height,
@@ -576,89 +407,17 @@ const MailoutDetailsPage = () => {
         </PageTitleHeader>
         {pendingState && !error && <Loading />}
       </ContentTopHeaderLayout>
-
       <ModalPreview
-        widthsize={postCardSize.width}
+        postCardSize={postCardSize}
         open={showConsentModal}
-        onClose={() => setShowConsentModal(false)}
-        size="small"
-      >
-        {details && (
-          <div
-            style={{
-              maxWidth: '100%',
-              margin: 'auto',
-              width: `calc(${postCardSize.width}px + 70px)`,
-              height: `calc(${postCardSize.height}px + 300px)`,
-            }}
-          >
-            <ModalPreview.Header style={modalHeaderStyles}>
-              <p>Send Campaign</p>
-              <Button style={cancelX} onClick={() => setShowConsentModal(false)}>
-                <FontAwesomeIcon icon="times" style={{ color: '#B1B1B1', fontSize: '16px' }} />
-              </Button>
-            </ModalPreview.Header>
-            <ModalPreview.Content style={postcardContainer}>
-              <FlipCard isFlipped={isFlipped}>
-                <FrontIframe />
-                <BackIframe />
-              </FlipCard>
-            </ModalPreview.Content>
-            <ModalPreview.Content>
-              <div style={flipButtonContainer}>
-                <Button
-                  style={{
-                    ...flipButtonStyles,
-                    ...rightMargin,
-                    ...(isFlipped ? highlightButton : {}),
-                  }}
-                  floated="right"
-                  onClick={() => setIsFlipped(true)}
-                >
-                  Back
-                </Button>
-                <Button
-                  style={{ ...flipButtonStyles, ...(!isFlipped ? highlightButton : {}) }}
-                  floated="right"
-                  onClick={() => setIsFlipped(false)}
-                >
-                  Front
-                </Button>
-              </div>
-              <ModalPreview.Description style={{ textAlign: 'center', marginTop: '40px' }}>
-                <p style={{ margin: 0 }}>I agree to be immediately charged</p>
-                <b style={{ fontSize: '32px', lineHeight: '50px' }}>
-                  {calculateCost(
-                    details && details.recipientCount,
-                    details && details.postcardSize ? details.postcardSize : '4x6'
-                  )}
-                </b>
-                <br />
-                <p>
-                  {calculateCost(1, details && details.postcardSize ? details.postcardSize : '4x6')}{' '}
-                  x {currentNumberOfRecipients}
-                </p>
-              </ModalPreview.Description>
-            </ModalPreview.Content>
-            <ModalPreview.Actions
-              style={{ display: 'flex', justifyContent: 'space-between', marginTop: '30px' }}
-            >
-              <Button style={cancelButton} onClick={() => setShowConsentModal(false)}>
-                Cancel
-              </Button>
-              <Button
-                primary
-                onClick={() => [
-                  dispatch(submitMailoutPending(mailoutId)),
-                  setShowConsentModal(false),
-                ]}
-              >
-                Agree
-              </Button>
-            </ModalPreview.Actions>
-          </div>
-        )}
-      </ModalPreview>
+        setShowConsentModal={setShowConsentModal}
+        details={details}
+        currentNumberOfRecipients={currentNumberOfRecipients}
+        mailoutId={mailoutId}
+        dispatch={dispatch}
+        frontCard={<FrontIframe />}
+        backCard={<BackIframe />}
+      />
 
       {!DestinationCalculation && (
         <Segment style={{ margin: '20px 0' }}>
@@ -809,40 +568,26 @@ const MailoutDetailsPage = () => {
                 {!pendingState && destinationsOptionsMode === 'userUploaded' && (
                   <div>Upload: {details.destinationsOptions?.userUploaded?.filename}</div>
                 )}
-                {/* not sure why there are two download csv buttons? Leaving it in incase its needed. */}
-                {/* {!pendingState &&
-                  !error &&
-                  details &&
-                  resolveMailoutStatus(details.mailoutStatus) === 'Sent' && (
-                    <div id="top-download" style={{ margin: '5px', fontSize: '17px' }}>
-                      <a className="ui secondary button" href={csvURL}>
-                        Download All Recipients as CSV
-                      </a>
-                    </div>
-                  )} */}
+
                 {!pendingState &&
                   !error &&
                   details &&
                   (destinationsOptionsMode === 'userUploaded' ||
                     resolveMailoutStatus(details.mailoutStatus) === 'Sent') && (
-                    <Table className="six wide tablet six wide computer column">
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.HeaderCell>Address</Table.HeaderCell>
-                          <Table.HeaderCell>Name</Table.HeaderCell>
-                          <Table.HeaderCell>Delivery Date</Table.HeaderCell>
-                          <Table.HeaderCell>Status</Table.HeaderCell>
-                          <Table.HeaderCell>CTA count</Table.HeaderCell>
-                          <Table.HeaderCell>CTA date</Table.HeaderCell>
-                          <Table.HeaderCell>Preview</Table.HeaderCell>
-                        </Table.Row>
-                      </Table.Header>
-
-                      <Table.Body>
-                        {renderDestinations()}
-                        {TableModal()}
-                      </Table.Body>
-                    </Table>
+                    <TableCampaign
+                      renderDestinations={renderDestinations}
+                      TableModal={
+                        <TableModal
+                          postCardSize={postCardSize}
+                          open={showTableModal}
+                          setShowTableModal={setShowTableModal}
+                          setIsTableFlipped={setIsTableFlipped}
+                          details={details}
+                          isTableFlipped={isTableFlipped}
+                          previewUrl={previewUrl}
+                        />
+                      }
+                    />
                   )}
                 {!pendingState &&
                   !error &&
