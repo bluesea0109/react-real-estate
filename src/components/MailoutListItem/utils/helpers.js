@@ -1,5 +1,6 @@
 import Dinero from 'dinero.js/build/esm/dinero.js';
 import { format } from 'date-fns';
+import * as brandColors from '../../utils/brandColors';
 
 export const calculateCost = (recipientCount, size = '4x6') => {
   if (!recipientCount || typeof recipientCount !== 'number') return '-';
@@ -36,6 +37,11 @@ export const resolveMailoutStatusIcon = mailoutStatus => {
   if (mailoutStatus === 'errored') return 'exclamation-triangle';
   if (mailoutStatus === 'cancelled') return 'times';
 
+  if (mailoutStatus === 'queued-for-printing') return 'hourglass-half';
+  if (mailoutStatus === 'printing') return 'print';
+  if (mailoutStatus === 'mailing') return 'mail-bulk';
+  if (mailoutStatus === 'complete') return 'check';
+
   return 'check';
 };
 
@@ -44,7 +50,6 @@ export const resolveMailoutStatus = mailoutStatus => {
   if (mailoutStatus === 'calculation-deferred') return 'Created';
   if (mailoutStatus === 'calculated') return 'Awaiting Approval';
   if (mailoutStatus === 'submitted') return 'Processing';
-  // if (mailoutStatus === 'scheduled') return 'Awaiting Approval' // this has been sent to lob
   if (mailoutStatus === 'hide') return 'Excluded';
   if (mailoutStatus === 'archived') return 'Archived';
   if (mailoutStatus === 'errored') return 'Errored';
@@ -53,19 +58,40 @@ export const resolveMailoutStatus = mailoutStatus => {
   return 'Sent';
 };
 
-export const resolveMailoutStatusColor = mailoutStatus => {
-  if (mailoutStatus === 'created') return '#666666';
-  if (mailoutStatus === 'calculation-deferred') return '#666666';
-  if (mailoutStatus === 'calculated') return '#000000';
-  if (mailoutStatus === 'submitted') return '#666666';
-  // if (mailoutStatus === 'scheduled') return '#000000' // this has been sent to lob
-  if (mailoutStatus === 'excluded') return '#555555';
-  if (mailoutStatus === 'errored') return '#f2714d';
-  if (mailoutStatus === 'cancelled') return '#f2714d';
-  if (mailoutStatus === 'hide') return '#555555';
-  if (mailoutStatus === 'archived') return 'grey';
+export const resolveMailoutStatusUI = mailoutStatus => {
+  if (mailoutStatus === 'created') return 'Created';
+  if (mailoutStatus === 'calculation-deferred') return 'Created';
+  if (mailoutStatus === 'calculated') return 'Awaiting Approval';
+  if (mailoutStatus === 'submitted') return 'Processing';
+  if (mailoutStatus === 'hide') return 'Excluded';
+  if (mailoutStatus === 'archived') return 'Archived';
+  if (mailoutStatus === 'errored') return 'Errored';
+  if (mailoutStatus === 'cancelled') return 'Canceled';
 
-  return '#59c4c4';
+  if (mailoutStatus === 'queued-for-printing') return 'Queued for Printing';
+  if (mailoutStatus === 'printing') return 'Printing';
+  if (mailoutStatus === 'mailing') return 'Mailing';
+  if (mailoutStatus === 'complete') return 'Complete';
+
+  return 'Sent';
+};
+
+export const resolveMailoutStatusColor = mailoutStatus => {
+  if (mailoutStatus === 'created') return brandColors.grey03;
+  if (mailoutStatus === 'calculation-deferred') return brandColors.grey03;
+  if (mailoutStatus === 'calculated') return brandColors.grey03;
+  if (mailoutStatus === 'submitted') return brandColors.grey03;
+  if (mailoutStatus === 'errored') return brandColors.error;
+  if (mailoutStatus === 'cancelled') return brandColors.grey05;
+  if (mailoutStatus === 'hide') return brandColors.grey05;
+  if (mailoutStatus === 'archived') return brandColors.grey04;
+
+  if (mailoutStatus === 'queued-for-printing') return brandColors.grey03;
+  if (mailoutStatus === 'printing') return brandColors.grey03;
+  if (mailoutStatus === 'mailing') return brandColors.grey03;
+  if (mailoutStatus === 'complete') return brandColors.primary;
+
+  return brandColors.primary;
 };
 
 export const resolveLabelStatus = (listingStatus, mailoutStatus) => {
