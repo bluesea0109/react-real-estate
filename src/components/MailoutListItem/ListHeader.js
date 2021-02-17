@@ -298,11 +298,14 @@ const ListHeader = ({
             className="icon"
           >
             <Dropdown.Menu>
-              <Dropdown.Item onClick={runArchive}>
-                <Icon name="archive" /> Archive
-              </Dropdown.Item>
               <Dropdown.Item onClick={() => handleEditClickFromDropdown(data._id)}>
                 <Icon name="edit" /> Edit
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <Icon name="fa-clone" /> Duplicate
+              </Dropdown.Item>
+              <Dropdown.Item onClick={runArchive}>
+                <Icon name="archive" /> Archive
               </Dropdown.Item>
             </Dropdown.Menu>
           </StyledDropdown>
