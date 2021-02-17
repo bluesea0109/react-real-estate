@@ -2,9 +2,6 @@ import { Menu } from 'semantic-ui-react';
 import styled from 'styled-components';
 
 export default styled(Menu)`
-  display: grid !important;
-  grid-template-rows: repeat(5, 1fr);
-  grid-template-columns: 1fr;
   width: 225px;
 
   @media (max-width: 768px) {

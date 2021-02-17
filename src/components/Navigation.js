@@ -35,21 +35,6 @@ const menuItemStyles = {
   padding: '0.5em',
 };
 
-const subMenuItemStyles = {
-  lineHeight: 1,
-  fontSize: '14px',
-  paddingLeft: '40px',
-  paddingTop: '4px',
-  paddingBottom: '10px',
-};
-
-const subMenuItemBillingStyle = {
-  lineHeight: 1,
-  fontSize: '14px',
-  paddingLeft: '40px',
-  paddingBottom: '18px',
-};
-
 const StyledHeader = styled(Header)`
   min-width: max-content !important;
   display: inline-block;
@@ -68,15 +53,10 @@ const StyledCog = styled(Cog)`
   width: 15px;
   height: 20px;
   margin-left: 14px;
-  margin-top: 17px;
 `;
 
 const StyledIcon = styled(FontAwesomeIcon)`
   margin: 0em 1em 0em 0.65em;
-`;
-
-const ArchiveStyledIcon = styled(FontAwesomeIcon)`
-  margin: 0em 1.3em 0em 0.65em;
 `;
 
 const FacebookStyledIcon = styled(FontAwesomeIcon)`
@@ -93,8 +73,9 @@ export default () => {
   const location = useLocation();
   const [activeItem, setActiveItem] = useState('');
   const [appIsBusy, setAppIsBusy] = useState(false);
-  const [dropdown, setDropdown] = useState('');
-  const [toggle, setToggle] = useState('');
+  const [postcardDropdown, setPostcardDropdown] = useState(false);
+  const [settingsDropdown, setSettingsDropdown] = useState(false);
+  const [toggle, setToggle] = useState(null);
   const [moblileVisible, setMobileVisible] = React.useState(false);
   const [svgHover, setSvgHover] = useState('');
 
@@ -194,7 +175,10 @@ export default () => {
   }
 
   useEffect(() => {
-    toggle ? setDropdown('accordionDrop') : setDropdown('');
+    if (!toggle) {
+      setPostcardDropdown(false);
+      setSettingsDropdown(false);
+    }
 
     const busyState =
       mailoutPendingState ||
@@ -325,6 +309,7 @@ export default () => {
 
         <NavigationLayout
           text
+          vertical={!isMobile}
           style={
             isMobile
               ? {
@@ -359,17 +344,111 @@ export default () => {
             <StyledIcon icon="home" className="iconWithStyle" /> Listings
           </Menu.Item>
 
-          <Menu.Item
-            as={Link}
-            name="postcards"
-            active={activeItem === '/postcards'}
-            to="/postcards"
-            style={menuItemStyles}
-            onClick={mobileCollapse}
-          >
-            <ImageStyledIcon icon={faImage} className="imageIconWithStyle" /> Postcards
-          </Menu.Item>
+          {isMobile && (
+            <Menu.Item
+              name="postcards"
+              as={Link}
+              to={'/postcards'}
+              active={activeItem === '/postcards' || activeItem === '/create-postcard'}
+              style={menuItemStyles}
+              onClick={mobileCollapse}
+            >
+              <ImageStyledIcon icon={faImage} className="imageIconWithStyle" />
+              <span>Postcards</span>
+            </Menu.Item>
+          )}
 
+          {!isMobile && (
+            <>
+              <Menu.Item
+                name="postcards"
+                active={
+                  activeItem === '/postcards' ||
+                  activeItem === '/create-postcard' ||
+                  activeItem === '/postcards/archived' ||
+                  activeItem === '/dashboard/archived'
+                }
+                style={menuItemStyles}
+                onClick={() =>
+                  postcardDropdown ? setPostcardDropdown(false) : setPostcardDropdown(true)
+                }
+              >
+                <ImageStyledIcon icon={faImage} className="imageIconWithStyle" />
+                <span>Postcards</span>
+                <Icon name={postcardDropdown === 'postcards' ? 'angle up' : 'angle down'} />
+              </Menu.Item>
+              <div className={`${postcardDropdown ? 'accordionDrop' : 'noDropdown'}`}>
+                {activeItem !== '/postcards' && (
+                  <Link name="archived-campaigns" to="/postcards" onClick={() => setToggle(false)}>
+                    <span>View All Campaigns</span>
+                  </Link>
+                )}
+                {activeItem !== '/postcards/archived' && activeItem !== '/dashboard/archived' && (
+                  <Link
+                    name="view-campaigns"
+                    to="/postcards/archived"
+                    onClick={() => setToggle(false)}
+                  >
+                    <span>Archived Campaigns</span>
+                  </Link>
+                )}
+                {activeItem !== '/create-postcard' && (
+                  <>
+                    <Link
+                      name="create-postcard-listed"
+                      to={{
+                        pathname: '/create-postcard',
+                        state: { filter: 'listed' },
+                      }}
+                      onClick={() => setToggle(false)}
+                    >
+                      <span>New Listed Campaign</span>
+                    </Link>
+                    <Link
+                      name="create-postcard-sold"
+                      to={{
+                        pathname: '/create-postcard',
+                        state: { filter: 'sold' },
+                      }}
+                      onClick={() => setToggle(false)}
+                    >
+                      <span>New Sold Campaign</span>
+                    </Link>
+                    <Link
+                      name="create-postcard-handwritten"
+                      to={{
+                        pathname: '/create-postcard',
+                        state: { filter: 'handwritten' },
+                      }}
+                      onClick={() => setToggle(false)}
+                    >
+                      <span>New Handwritten Campaign</span>
+                    </Link>
+                    <Link
+                      name="create-postcard-holiday"
+                      to={{
+                        pathname: '/create-postcard',
+                        state: { filter: 'holiday' },
+                      }}
+                      onClick={() => setToggle(false)}
+                    >
+                      <span>New Holiday Campaign</span>
+                    </Link>
+                    <Link
+                      name="create-postcard-custom"
+                      to={{
+                        pathname: '/create-postcard',
+                        state: { filter: 'custom' },
+                      }}
+                      onClick={() => setToggle(false)}
+                    >
+                      <span>New Custom Campaign</span>
+                    </Link>
+                  </>
+                )}
+              </div>
+            </>
+          )}
           {adProduct && multiUser && (
             <Menu.Item
               as={Link}
@@ -382,19 +461,8 @@ export default () => {
               <FacebookStyledIcon icon={faFacebookF} className="facebookIconWithStyle" /> Paid Ads
             </Menu.Item>
           )}
-          <Menu.Item
-            as={Link}
-            name="archived"
-            active={activeItem === '/dashboard/archived'}
-            to="/dashboard/archived"
-            style={menuItemStyles}
-            onClick={mobileCollapse}
-          >
-            <ArchiveStyledIcon icon="archive" className="archvieIconWithStyle" /> Archive
-          </Menu.Item>
 
           <Menu.Item
-            as={Link}
             name="settings"
             active={
               activeItem === '/settings' ||
@@ -403,61 +471,69 @@ export default () => {
               activeItem === '/profile' ||
               activeItem === '/billing'
             }
-            to="/settings"
             style={menuItemStyles}
-            onClick={mobileCollapse}
+            onClick={() =>
+              isMobile
+                ? mobileCollapse()
+                : settingsDropdown
+                ? setSettingsDropdown(false)
+                : setSettingsDropdown(true)
+            }
             onMouseEnter={() => setSvgHover('svgHover')}
             onMouseLeave={() => setSvgHover('')}
           >
-            <span style={{ display: 'flex' }}>
-              <StyledCog className={`cogIconStyle ${svgHover}`} />
-              <span style={menuP}>Settings</span>
-            </span>
+            <StyledCog className={`cogIconStyle ${svgHover}`} />
+            <span style={menuP}>Settings</span>
+            {!isMobile && <Icon name={settingsDropdown ? 'angle up' : 'angle down'} />}
           </Menu.Item>
 
-          <div className={isMobile ? 'accordionDrop' : `noDropdown ${dropdown}`}>
-            <Menu.Menu>
+          {(isMobile || settingsDropdown) && (
+            <div
+              className={
+                isMobile ? 'accordionDrop' : `${settingsDropdown ? 'accordionDrop' : 'noDropdown'}`
+              }
+            >
+              <Link
+                name="settings"
+                className={activeItem === '/settings' ? 'active' : ''}
+                to="/settings"
+                onClick={mobileCollapse}
+              >
+                <span>General Settings</span>
+              </Link>
               {multiUser && isAdmin && !selectedPeerId && (
-                <Menu.Item
-                  as={Link}
+                <Link
                   name="customization/team"
-                  active={activeItem === '/customization/team'}
+                  className={activeItem === '/customization/team' ? 'active' : ''}
                   to="/customization/team"
-                  style={subMenuItemStyles}
                   onClick={mobileCollapse}
                 >
                   <span>Team Customization</span>
-                </Menu.Item>
+                </Link>
               )}
-              <Menu.Item
-                as={Link}
+              <Link
                 name="customization"
-                active={activeItem === '/customization'}
+                className={activeItem === '/customization' ? 'active' : ''}
                 to="/customization"
-                style={subMenuItemStyles}
                 onClick={mobileCollapse}
               >
                 <span>Personal Customization</span>
-              </Menu.Item>
+              </Link>
 
-              <Menu.Item
-                as={Link}
+              <Link
                 name="profile"
-                active={activeItem === '/profile'}
+                className={activeItem === '/profile' ? 'active' : ''}
                 to="/profile"
-                style={subMenuItemStyles}
                 onClick={mobileCollapse}
               >
                 <span>Profile</span>
-              </Menu.Item>
+              </Link>
 
               {!selectedPeerId && (
-                <Menu.Item
-                  as={Link}
+                <Link
                   name="billing"
-                  active={activeItem === '/billing'}
+                  className={activeItem === '/billing' ? 'active' : ''}
                   to="/billing"
-                  style={subMenuItemBillingStyle}
                   onClick={() => {
                     if (moblileVisible) {
                       setMobileVisible(false);
@@ -465,10 +541,10 @@ export default () => {
                   }}
                 >
                   <span>Billing</span>
-                </Menu.Item>
+                </Link>
               )}
-            </Menu.Menu>
-          </div>
+            </div>
+          )}
         </NavigationLayout>
       </Dimmer.Dimmable>
     </SideNavToggle>

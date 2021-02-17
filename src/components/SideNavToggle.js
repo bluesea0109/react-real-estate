@@ -54,8 +54,8 @@ const ToggleContainer = styled.div`
   transition: 0.4s;
   background-color: white;
   height: 100vh;
-  overflow: hidden;
-  position: absolute;
+  overflow: auto;
+  position: hidden;
   z-index: 99999999999999;
   margin-top: 2px;
   .svgHover {
@@ -70,10 +70,6 @@ const ToggleContainer = styled.div`
     font-weight: 600;
     background-color: ${brandColors.primaryLight} !important;
     .iconWithStyle {
-      margin: 0 1.2rem 0 0.35rem;
-      width: 1.25rem;
-    }
-    .archvieIconWithStyle {
       margin: 0 1.5rem 0 0.35rem;
       width: 1.25rem;
     }
@@ -99,22 +95,20 @@ const ToggleContainer = styled.div`
       font-size: 17px;
     }
   }
-  & .noDropdown.accordionDrop {
-    .menu {
-      padding-top: 11px;
-      border-bottom: 1px solid #eaedf0;
-    }
+  & .accordionDrop {
+    padding: 4px 4px 4px 16px;
+    border-bottom: 1px solid #eaedf0;
     a {
+      padding: 6px;
       color: #3b3b3b !important;
       border-bottom: none !important;
+      &:hover {
+        color: ${brandColors.primary} !important;
+      }
     }
-    .active.item {
-      border-color: ${brandColors.primary} !important;
+    .active {
       color: ${brandColors.primary} !important;
-      border-left: none !important;
-      border-bottom: 1px solid white !important;
       font-weight: 600 !important;
-      background-color: #ffffff !important;
     }
   }
   .ui.vertical.steps {
@@ -148,7 +142,7 @@ const ToggleContainer = styled.div`
       font-weight: 600;
       background-color: ${brandColors.primaryLight} !important;
       svg {
-        margin-left: 3px;
+        margin-left: 5px;
       }
       #step1Path,
       #step2Path,
@@ -175,14 +169,33 @@ const ToggleContainer = styled.div`
   }
   & .accordionDrop,
   & .accordionDropCustom {
-    height: 60px;
+    /* height: 60px; */
     width: 100%;
     overflow: visible;
+    display: flex;
+    height: auto;
+    flex-direction: column;
   }
-  & .ui.text.menu {
+  & .ui.vertical.text.menu {
+    width: 225px;
     margin: 0em -1.25em;
-    display: block !important;
+    display: flex;
+    flex-direction: column;
     margin-left: 0px;
+    & .item {
+      margin: 0;
+      align-self: flex-start;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      & span {
+        flex: 1;
+      }
+      & .icon {
+        align-self: flex-end;
+        height: 100%;
+      }
+    }
     .item:hover {
       color: ${brandColors.primary} !important;
     }
@@ -231,13 +244,13 @@ const SidebarSlider = ({ children, moblileVisible, setMobileVisible, toggle, set
           <ToggleContainer
             className={`toggle-container ${toggle}`}
             onMouseOver={() => {
-              if (!toggle.length) {
+              if (!toggle) {
                 setToggle('expand');
               }
             }}
             onMouseLeave={() => {
               if (toggle.length) {
-                setToggle('');
+                setToggle(false);
               }
             }}
           >
