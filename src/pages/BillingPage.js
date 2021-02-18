@@ -5,7 +5,6 @@ import Loading from '../components/Loading';
 import { Header, Menu, Page, Segment, Image, Card } from '../components/Base';
 import { Table } from 'semantic-ui-react';
 import { format } from 'date-fns';
-import { Grid } from '../components/Base';
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
 import auth from '../services/auth';
@@ -140,28 +139,24 @@ const BillingPage = () => {
         <div style={{ margin: '20px 0' }}>
           <Segment>
             <ContentBottomHeaderLayout style={{ minHeight: 0 }}>
-              <Grid stackable columns={determineColumns()}>
-                <Grid.Column>
-                  <p>
-                    <span style={{ fontWeight: 'bold' }}>Credit Balance: </span> $
-                    {billingDetails.credits}
-                  </p>
-                </Grid.Column>
-                <Grid.Column>
-                  <p>
-                    <span style={{ fontWeight: 'bold' }}>Team Billing Reference Id: </span>
-                    {teamBillingId}
-                  </p>
-                </Grid.Column>
+              <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                <p style={{ marginRight: '40px' }}>
+                  <span style={{ fontWeight: 'bold' }}>Credit Balance: </span> $
+                  {billingDetails.credits}
+                </p>
+
+                <p style={{ marginRight: '40px' }}>
+                  <span style={{ fontWeight: 'bold' }}>Team Billing Reference ID: </span>
+                  {teamBillingId}
+                </p>
+
                 {personalBillingId && (
-                  <Grid.Column>
-                    <p>
-                      <span style={{ fontWeight: 'bold' }}>Personal Billing Id: </span>
-                      {personalBillingId}
-                    </p>
-                  </Grid.Column>
+                  <p>
+                    <span style={{ fontWeight: 'bold' }}>Personal Billing ID: </span>
+                    {personalBillingId}
+                  </p>
                 )}
-              </Grid>
+              </div>
             </ContentBottomHeaderLayout>
           </Segment>
         </div>
