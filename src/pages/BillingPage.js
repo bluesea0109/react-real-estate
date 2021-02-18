@@ -5,7 +5,6 @@ import Loading from '../components/Loading';
 import { Header, Menu, Page, Segment, Image, Card } from '../components/Base';
 import { Table } from 'semantic-ui-react';
 import { format } from 'date-fns';
-
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
 import auth from '../services/auth';
@@ -14,6 +13,12 @@ import { postcardDimensionsDisplayed } from '../components/utils/utils';
 
 const BillingPage = () => {
   const isAdmin = useSelector(store => store.onLogin?.permissions?.teamAdmin);
+  const teamBillingId = useSelector(
+    store => store.onLogin?.teamProfile.brivitySync.billing_reference
+  );
+  const personalBillingId = useSelector(
+    store => store.onLogin?.userProfile.brivitySync.billing_reference
+  );
   const [billingDetails, setBillingDetails] = useState(null);
 
   useEffect(() => {
@@ -126,10 +131,24 @@ const BillingPage = () => {
         <div style={{ margin: '20px 0' }}>
           <Segment>
             <ContentBottomHeaderLayout style={{ minHeight: 0 }}>
-              <p>
-                <span style={{ fontWeight: 'bold' }}>Credit Balance: </span> $
-                {billingDetails.credits}
-              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                <p style={{ marginRight: '40px' }}>
+                  <span style={{ fontWeight: 'bold' }}>Credit Balance: </span> $
+                  {billingDetails.credits}
+                </p>
+
+                <p style={{ marginRight: '40px' }}>
+                  <span style={{ fontWeight: 'bold' }}>Team Billing Reference ID: </span>
+                  {teamBillingId}
+                </p>
+
+                {personalBillingId && (
+                  <p>
+                    <span style={{ fontWeight: 'bold' }}>Personal Billing ID: </span>
+                    {personalBillingId}
+                  </p>
+                )}
+              </div>
             </ContentBottomHeaderLayout>
           </Segment>
         </div>
