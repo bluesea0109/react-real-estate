@@ -15,6 +15,7 @@ import {
   resolveMailoutStatus,
   resolveMailoutStatusColor,
   resolveMailoutStatusIcon,
+  resolveMailoutStatusUI,
 } from '../components/MailoutListItem/utils/helpers';
 import {
   Button,
@@ -515,7 +516,7 @@ const MailoutDetailsPage = () => {
                               icon={resolveMailoutStatusIcon(details.mailoutStatus)}
                               style={{ marginRight: '.5em' }}
                             />
-                            {resolveMailoutStatus(details.mailoutStatus)}
+                            {resolveMailoutStatusUI(details.mailoutStatus)}
                           </List.Description>
                         </List.Content>
                       </List.Item>
