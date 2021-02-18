@@ -5,7 +5,7 @@ import Loading from '../components/Loading';
 import { Header, Menu, Page, Segment, Image, Card } from '../components/Base';
 import { Table } from 'semantic-ui-react';
 import { format } from 'date-fns';
-import { Grid } from 'semantic-ui-react';
+import { Grid } from '../components/Base';
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
 import auth from '../services/auth';
@@ -14,10 +14,21 @@ import { postcardDimensionsDisplayed } from '../components/utils/utils';
 
 const BillingPage = () => {
   const isAdmin = useSelector(store => store.onLogin?.permissions?.teamAdmin);
-  const billingReference = useSelector(
+  const teamBillingId = useSelector(
     store => store.onLogin?.teamProfile.brivitySync.billing_reference
   );
+  const personalBillingId = useSelector(
+    store => store.onLogin?.userProfile.brivitySync.billing_reference
+  );
   const [billingDetails, setBillingDetails] = useState(null);
+
+  const determineColumns = () => {
+    let columns = 2;
+    if (personalBillingId) {
+      columns = 3;
+    }
+    return columns;
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -129,21 +140,27 @@ const BillingPage = () => {
         <div style={{ margin: '20px 0' }}>
           <Segment>
             <ContentBottomHeaderLayout style={{ minHeight: 0 }}>
-              <Grid>
-                <Grid.Row columns={2}>
-                  <Grid.Column>
-                    <p style={{ marginRight: '20px' }}>
-                      <span style={{ fontWeight: 'bold' }}>Credit Balance: </span> $
-                      {billingDetails.credits}
-                    </p>
-                  </Grid.Column>
+              <Grid stackable columns={determineColumns()}>
+                <Grid.Column>
+                  <p>
+                    <span style={{ fontWeight: 'bold' }}>Credit Balance: </span> $
+                    {billingDetails.credits}
+                  </p>
+                </Grid.Column>
+                <Grid.Column>
+                  <p>
+                    <span style={{ fontWeight: 'bold' }}>Billing Reference Id: </span>
+                    {teamBillingId}
+                  </p>
+                </Grid.Column>
+                {personalBillingId && (
                   <Grid.Column>
                     <p>
                       <span style={{ fontWeight: 'bold' }}>Billing Reference Id: </span>
-                      {billingReference}
+                      {personalBillingId}
                     </p>
                   </Grid.Column>
-                </Grid.Row>
+                )}
               </Grid>
             </ContentBottomHeaderLayout>
           </Segment>
