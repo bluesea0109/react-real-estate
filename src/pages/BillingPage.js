@@ -5,7 +5,7 @@ import Loading from '../components/Loading';
 import { Header, Menu, Page, Segment, Image, Card } from '../components/Base';
 import { Table } from 'semantic-ui-react';
 import { format } from 'date-fns';
-
+import { Grid } from 'semantic-ui-react';
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
 import auth from '../services/auth';
@@ -14,6 +14,9 @@ import { postcardDimensionsDisplayed } from '../components/utils/utils';
 
 const BillingPage = () => {
   const isAdmin = useSelector(store => store.onLogin?.permissions?.teamAdmin);
+  const billingReference = useSelector(
+    store => store.onLogin?.teamProfile.brivitySync.billing_reference
+  );
   const [billingDetails, setBillingDetails] = useState(null);
 
   useEffect(() => {
@@ -126,10 +129,22 @@ const BillingPage = () => {
         <div style={{ margin: '20px 0' }}>
           <Segment>
             <ContentBottomHeaderLayout style={{ minHeight: 0 }}>
-              <p>
-                <span style={{ fontWeight: 'bold' }}>Credit Balance: </span> $
-                {billingDetails.credits}
-              </p>
+              <Grid>
+                <Grid.Row columns={2}>
+                  <Grid.Column>
+                    <p style={{ marginRight: '20px' }}>
+                      <span style={{ fontWeight: 'bold' }}>Credit Balance: </span> $
+                      {billingDetails.credits}
+                    </p>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <p>
+                      <span style={{ fontWeight: 'bold' }}>Billing Reference Id: </span>
+                      {billingReference}
+                    </p>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
             </ContentBottomHeaderLayout>
           </Segment>
         </div>
