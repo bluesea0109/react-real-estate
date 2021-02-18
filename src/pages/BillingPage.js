@@ -149,14 +149,14 @@ const BillingPage = () => {
                 </Grid.Column>
                 <Grid.Column>
                   <p>
-                    <span style={{ fontWeight: 'bold' }}>Billing Reference Id: </span>
+                    <span style={{ fontWeight: 'bold' }}>Team Billing Reference Id: </span>
                     {teamBillingId}
                   </p>
                 </Grid.Column>
                 {personalBillingId && (
                   <Grid.Column>
                     <p>
-                      <span style={{ fontWeight: 'bold' }}>Billing Reference Id: </span>
+                      <span style={{ fontWeight: 'bold' }}>Personal Billing Id: </span>
                       {personalBillingId}
                     </p>
                   </Grid.Column>
