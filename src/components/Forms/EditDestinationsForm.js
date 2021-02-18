@@ -3,7 +3,7 @@ import auth from '../../services/auth';
 import api from '../../services/api';
 import { subMonths } from 'date-fns';
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import React, { useState, useEffect, Fragment } from 'react';
 import { Checkbox, Dropdown, Form, Header, Label, List, Message, Select } from 'semantic-ui-react';
 
@@ -20,11 +20,36 @@ import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
 import PolygonGoogleMapsCore from './PolygonGoogleMaps/PolygonGoogleMapsCore';
 import { useIsMobile } from '../Hooks/useIsMobile';
+import styled from 'styled-components';
+import * as brandColors from '../utils/brandColors';
+import { getFilteredMailoutsPending } from '../../store/modules/mailouts/actions';
+import { getMailoutSuccess } from '../../store/modules/mailout/actions';
+
+const CopyDestContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  padding-top: 0.5rem;
+  & > p {
+    color: ${brandColors.grey02};
+    padding: 0.5rem 0;
+    font-weight: 600;
+  }
+`;
+
+const CopyDestDropdown = styled(Dropdown)`
+  &&& {
+    min-width: 300px;
+  }
+  && .visible.menu.transition {
+    min-width: 100% !important;
+    max-height: 50vh;
+  }
+`;
 
 const propertyTypeOptions = [
   { text: 'Single-Family', key: 'Single-Family', value: 'Single-Family' },
   { text: 'Condo', key: 'Condo', value: 'Condo' },
-
   { text: 'Apartment', key: 'Apartment', value: 'Apartment' },
   { text: 'Cooperative (Co-op)', key: 'Cooperative (Co-op)', value: 'Cooperative (Co-op)' },
   { text: 'Duplex', key: 'Duplex', value: 'Duplex' },
@@ -61,9 +86,15 @@ const saleDateOptions = [
   { text: '35 years ago', value: 420 },
 ];
 
-const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleBackClick }) => {
+const EditDestinationsForm = ({ mailoutDetails, handleBackClick }) => {
   const isMobile = useIsMobile();
+  const dispatch = useDispatch();
 
+  const campaignList = useSelector(store => store.mailouts?.filteredList);
+  const [campaignOptions, setCampaignOptions] = useState(null);
+  const [copyCampaign, setCopyCampaign] = useState(null);
+  const [prevCopyCampaign, setPrevCopyCampaign] = useState(null);
+  const campaignsPending = useSelector(store => store.mailouts?.filteredPending);
   const peerId = useSelector(store => store.peer.peerId);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
@@ -76,12 +107,15 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const isCalculationDeferred = mailoutDetails?.mailoutStatus === 'calculation-deferred';
 
   const [destinationsOptionsMode, setDestinationsOptionsMode] = useState(
-    (mailoutDetails.destinationsOptions?.mode || isCampaign) && !isGeneralCampaign
+    mailoutDetails?.destinationsOptions?.copy?.mailoutId
+      ? 'copy'
+      : (mailoutDetails.destinationsOptions?.mode || isCampaign) && !isGeneralCampaign
       ? 'manual'
       : isGeneralCampaign
       ? 'userUploaded'
       : 'ai'
   );
+
   const [saveDetails, setSaveDetails] = useState(
     mailoutDetails.destinationsOptions?.mode || isCampaign
       ? { destinationsOptionsMode: 'manual', ready: false }
@@ -117,6 +151,10 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
   const [searchResults, setSearchResults] = useState(null);
 
   useEffect(() => {
+    if (destinationsOptionsMode === 'copy') {
+      setSaveDetails({ destinationsOptionsMode: 'copy', ready: !!copyCampaign });
+      return;
+    }
     let existingModeAi = true;
     if (mailoutDetails.destinationsOptions?.mode !== 'ai') existingModeAi = false;
     if (!existingModeAi && destinationsOptionsMode === 'ai') {
@@ -131,7 +169,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
         ready: true,
       });
     }
-  }, [destinationsOptionsMode, numberOfDestinations]); // eslint-disable-line
+  }, [destinationsOptionsMode, numberOfDestinations, copyCampaign]); // eslint-disable-line
 
   // ** clear the search results when an existing search is edited
   useEffect(() => {
@@ -152,6 +190,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
 
   // ** only set saveDetails to ready when all the required columns are filled out
   useEffect(() => {
+    if (destinationsOptionsMode !== 'userUploaded') return;
     let ready = true;
     if (deliveryLineColumn === null) ready = false;
     if (cityColumn === null) ready = false;
@@ -159,7 +198,7 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
     if (zipColumn === null) ready = false;
     if (!ready) setSaveDetails({ destinationsOptionsMode: 'userUploaded', ready: false });
     else setSaveDetails({ destinationsOptionsMode: 'userUploaded', ready: true });
-  }, [deliveryLineColumn, cityColumn, stateColumn, zipColumn]);
+  }, [destinationsOptionsMode, deliveryLineColumn, cityColumn, stateColumn, zipColumn]);
 
   useEffect(() => {
     if (typeof firstNameColumn === 'number' || typeof lastNameColumn === 'number') {
@@ -168,6 +207,30 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
       setCurrentResident(true);
     }
   }, [firstNameColumn, lastNameColumn]);
+
+  // Load the campaign list on page load
+  useEffect(() => {
+    dispatch(getFilteredMailoutsPending({ sortValue: 'createdDateDesc' }));
+    // eslint-disable-next-line
+  }, []);
+
+  // Set the dropdown options
+  useEffect(() => {
+    const newOptions = [];
+    campaignList.forEach(campaign => {
+      newOptions.push({
+        key: campaign._id,
+        value: campaign._id,
+        text:
+          campaign.name ||
+          `${campaign.details?.displayAddress}${campaign.mlsNum ? ` (${campaign.mlsNum})` : ''}`,
+      });
+    });
+    setCampaignOptions(newOptions);
+    setPrevCopyCampaign(
+      newOptions.find(option => option.key === mailoutDetails?.destinationsOptions?.copy?.mailoutId)
+    );
+  }, [campaignList, mailoutDetails]);
 
   const handleDestinationSearch = async () => {
     if (!polygonCoordinates) return;
@@ -248,6 +311,23 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
       return;
     }
     try {
+      if (saveDetails.destinationsOptionsMode === 'copy') {
+        if (!copyCampaign) throw new Error({ message: 'No campaign selected' });
+        let path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/copy`;
+        if (peerId)
+          path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/destinationOptions/copy`;
+        const body = JSON.stringify({ mailoutId: copyCampaign });
+        const headers = {};
+        const accessToken = await auth.getAccessToken();
+        headers['authorization'] = `Bearer ${accessToken}`;
+        const response = await fetch(path, {
+          headers,
+          method: 'post',
+          body,
+          credentials: 'include',
+        });
+        await api.handleResponse(response);
+      }
       if (saveDetails.destinationsOptionsMode === 'ai') {
         let path = `/api/user/mailout/${mailoutDetails._id}/edit/mailoutSize`;
         if (peerId)
@@ -304,11 +384,12 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
           body: formData,
           credentials: 'include',
         });
-        await api.handleResponse(response);
+        const data = await api.handleResponse(response);
+        dispatch(getMailoutSuccess(data?.mailout));
       }
       handleBackClick();
     } catch (e) {
-      console.log(e);
+      console.error(e);
       setSaving(false);
       setError(e.message);
     }
@@ -486,6 +567,18 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                 checked={destinationsOptionsMode === 'userUploaded'}
                 onClick={() => {
                   setDestinationsOptionsMode('userUploaded');
+                }}
+              />
+            </List.Item>
+            <List.Item>
+              <Checkbox
+                radio
+                label="Copy a previous campaign"
+                name="checkboxRadioGroup"
+                value="that"
+                checked={destinationsOptionsMode === 'copy'}
+                onClick={() => {
+                  setDestinationsOptionsMode('copy');
                 }}
               />
             </List.Item>
@@ -799,6 +892,25 @@ const EditDestinationsForm = ({ mailoutDetails, mailoutDestinationsEdit, handleB
                 </div>
               )}
             </div>
+          )}
+          {destinationsOptionsMode === 'copy' && (
+            <CopyDestContainer>
+              {prevCopyCampaign && (
+                <p>{`Destinations last copied from: ${prevCopyCampaign.text}`}</p>
+              )}
+              <p>{`Choose a ${
+                prevCopyCampaign ? 'different' : ''
+              } campaign to copy destinations from:`}</p>
+              <CopyDestDropdown
+                onChange={(e, { value }) => setCopyCampaign(value)}
+                options={campaignOptions || [{ key: 0, text: 'Loading...' }]}
+                loading={campaignsPending}
+                search
+                selection
+                clearable
+                placeholder="Search by Name, Address or Mls Number"
+              />
+            </CopyDestContainer>
           )}
         </Form>
       </Segment>

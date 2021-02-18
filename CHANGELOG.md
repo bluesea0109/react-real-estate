@@ -1,3 +1,14 @@
+## Release 6.6.0 https://gitlab.rmcloud.com/groups/gabby/-/milestones/7
+Changes
+ - Add search, filter and sort functionality on the postcards page
+ - Updates to postcard templates to better use free space
+ - Users can now view the actual postcards sent to each address
+ - Update the postcard campaign statuses to better reflect the current status of a campaign
+ - Add ability to search when selecting agents for a campaign
+ - When selecting destinations users can now use the same destinations as a prior campaign
+ - Automatically login users from Brivity CRM
+ - Other bug fixes
+
 ## Release 6.0 https://gitlab.rmcloud.com/groups/gabby/-/milestones/5
 Changes
  - ads released, but only available by turning on permissions to the product for a user

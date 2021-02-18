@@ -5,9 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   calculateCost,
   formatDate,
-  resolveMailoutStatus,
   resolveMailoutStatusColor,
   resolveMailoutStatusIcon,
+  resolveMailoutStatusUI,
 } from './utils/helpers';
 import { ItemBodyDataLayout } from '../../layouts';
 import PopupContent from './PopupContent';
@@ -85,7 +85,7 @@ const ItemList = ({ data }) => {
                 icon={resolveMailoutStatusIcon(data.mailoutStatus)}
                 style={{ marginRight: '.5em' }}
               />
-              {resolveMailoutStatus(data.mailoutStatus)}
+              {resolveMailoutStatusUI(data.mailoutStatus)}
             </List.Description>
           </List.Content>
         </List.Item>

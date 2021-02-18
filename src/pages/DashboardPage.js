@@ -203,27 +203,27 @@ const Dashboard = ({ className }) => {
         <SectionGrid>
           <DashboardItem
             name="business card"
-            linkTo="https://agentstore.com/product-category/business-cards/"
+            linkTo="https://agentstore.com/product-category/business-cards/?utm_source=brivity?utm_medium=Dashobard?utm_campaign=Brivity_Marketer?utm_term=addproductnamehere"
             external
           ></DashboardItem>
           <DashboardItem
             name="kwkly sign"
-            linkTo="https://agentstore.com/kwkly"
+            linkTo="https://agentstore.com/kwkly/?utm_source=brivity?utm_medium=Dashobard?utm_campaign=Brivity_Marketer?utm_term=addproductnamehere"
             external
           ></DashboardItem>
           <DashboardItem
             name="listing sign"
-            linkTo="https://agentstore.com/product-category/signs/"
+            linkTo="https://agentstore.com/product-category/signs/?utm_source=brivity?utm_medium=Dashobard?utm_campaign=Brivity_Marketer?utm_term=addproductnamehere"
             external
           ></DashboardItem>
           <DashboardItem
             name="sign rider"
-            linkTo="https://agentstore.com/product/3mm-pvc-sign-riders-18-x-6-3-pack/"
+            linkTo="https://agentstore.com/product/3mm-pvc-sign-riders-18-x-6-3-pack/?utm_source=brivity?utm_medium=Dashobard?utm_campaign=Brivity_Marketer?utm_term=addproductnamehere"
             external
           ></DashboardItem>
           <DashboardItem
             name="name tag"
-            linkTo="https://agentstore.com/product-category/name-tags/"
+            linkTo="https://agentstore.com/product-category/name-tags/?utm_source=brivity?utm_medium=Dashobard?utm_campaign=Brivity_Marketer?utm_term=addproductnamehere"
             external
           ></DashboardItem>
         </SectionGrid>

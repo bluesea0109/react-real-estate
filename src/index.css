@@ -704,6 +704,9 @@ h1 {
 .astralPillSolid {
   background-color: #336e7b;
 }
+.pillOffMarket {
+  font-size: 9px;
+}
 .listingStatusPillAlignment {
   text-align: right !important;
   text-align: -webkit-right !important;
