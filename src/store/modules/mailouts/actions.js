@@ -37,6 +37,10 @@ export const CLEAR_MAILOUTS_ERROR = 'CLEAR_MAILOUT_ERROR';
 export const SHOW_ADD_CAMPAIGN_MODAL = 'SHOW_ADD_CAMPAIGN_MODAL';
 export const HIDE_ADD_CAMPAIGN_MODAL = 'HIDE_ADD_CAMPAIGN_MODAL';
 
+export const GET_FILTERED_MAILOUTS_SUCCESS = 'GET_FILTERED_MAILOUTS_SUCCESS';
+export const GET_FILTERED_MAILOUTS_PENDING = 'GET_FILTERED_MAILOUTS_PENDING';
+export const GET_FILTERED_MAILOUTS_ERROR = 'GET_FILTERED_MAILOUTS_ERROR';
+
 export function getMailoutsPending() {
   return createAction(GET_MAILOUTS_PENDING);
 }
@@ -147,4 +151,16 @@ export function showAddCampaignModal() {
 
 export function hideAddCampaignModal() {
   return createAction(HIDE_ADD_CAMPAIGN_MODAL);
+}
+
+export function getFilteredMailoutsSuccess(payload) {
+  return createAction(GET_FILTERED_MAILOUTS_SUCCESS, payload);
+}
+
+export function getFilteredMailoutsPending(payload) {
+  return createAction(GET_FILTERED_MAILOUTS_PENDING, payload);
+}
+
+export function getFilteredMailoutsError(error) {
+  return createAction(GET_FILTERED_MAILOUTS_ERROR, error);
 }
