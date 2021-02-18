@@ -21,14 +21,6 @@ const BillingPage = () => {
   );
   const [billingDetails, setBillingDetails] = useState(null);
 
-  const determineColumns = () => {
-    let columns = 2;
-    if (personalBillingId) {
-      columns = 3;
-    }
-    return columns;
-  };
-
   useEffect(() => {
     async function fetchData() {
       if (billingDetails) return;
