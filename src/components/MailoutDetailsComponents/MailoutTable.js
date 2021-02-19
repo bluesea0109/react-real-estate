@@ -1,6 +1,8 @@
 import React from 'react';
-import { Image, Table } from '../Base';
+import { Table } from '../Base';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as brandColors from '../utils/brandColors';
 
 const Tooltip = styled.div`
   &[data-position='top right'][data-tooltip]:after {
@@ -29,12 +31,13 @@ const Tooltip = styled.div`
 
 const ImageStyles = {
   width: '100%',
-  maxWidth: '60px',
   cursor: 'pointer',
+  fontSize: '20px',
+  color: `${brandColors.brivityBlue}`,
 };
 
 export const TableCampaign = ({ renderDestinations, TableModal }) => (
-  <Table className="six wide tablet six wide computer column">
+  <Table className="seven wide tablet seven wide computer column">
     <Table.Header>
       <Table.Row>
         <Table.HeaderCell>Address</Table.HeaderCell>
@@ -43,7 +46,7 @@ export const TableCampaign = ({ renderDestinations, TableModal }) => (
         <Table.HeaderCell>Status</Table.HeaderCell>
         <Table.HeaderCell>CTA count</Table.HeaderCell>
         <Table.HeaderCell>CTA date</Table.HeaderCell>
-        <Table.HeaderCell>Preview</Table.HeaderCell>
+        <Table.HeaderCell style={{ textAlign: 'center' }}>View Postcard</Table.HeaderCell>
       </Table.Row>
     </Table.Header>
 
@@ -71,18 +74,16 @@ export const TableRow = ({
       <Table.Cell>{ctaInteractions}</Table.Cell>
       <Table.Cell>{ctaDate}</Table.Cell>
       <Table.Cell>
-        {dest?.frontResourceUrl && (
-          <Tooltip data-tooltip="Click to expand" data-position="top right" data-inverted="">
-            <Image
-              onClick={() => {
-                setPreviewUrl([dest?.frontResourceUrl, dest?.backResourceUrl]);
-                setShowTableModal(true);
-              }}
-              style={ImageStyles}
-              src={dest?.frontResourceUrl}
-            />
-          </Tooltip>
-        )}
+        <Tooltip data-tooltip="Click to expand" data-position="top right" data-inverted="">
+          <FontAwesomeIcon
+            icon="eye"
+            style={ImageStyles}
+            onClick={() => {
+              setPreviewUrl([dest?.frontResourceUrl, dest?.backResourceUrl]);
+              setShowTableModal(true);
+            }}
+          ></FontAwesomeIcon>
+        </Tooltip>
       </Table.Cell>
     </Table.Row>
   );

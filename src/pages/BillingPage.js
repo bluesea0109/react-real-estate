@@ -36,6 +36,8 @@ const BillingPage = () => {
     fetchData();
   }, [billingDetails, isAdmin]);
 
+  console.log('billingDetails', billingDetails);
+
   const tableBody = () => {
     return billingDetails.billings.map((item, index) => (
       <Table.Row key={item.id}>
