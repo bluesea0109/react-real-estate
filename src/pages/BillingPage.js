@@ -11,6 +11,19 @@ import auth from '../services/auth';
 import api from '../services/api';
 import { postcardDimensionsDisplayed } from '../components/utils/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import visa from '../assets/visa.jpg';
+import americanExpress from '../assets/american-express.jpg';
+import discover from '../assets/discover.jpg';
+import mastercard from '../assets/mastercard.jpg';
+
+const cardStyles = {
+  width: '33px',
+  marginTop: '4px',
+  marginRight: '10px',
+};
+
+const defaultCardStyles = { marginRight: '10px', marginTop: '6px', marginLeft: '3px' };
+const cardDetailsDivs = { marginRight: '120px', marginTop: '20px' };
 
 const BillingPage = () => {
   const isAdmin = useSelector(store => store.onLogin?.permissions?.teamAdmin);
@@ -29,6 +42,7 @@ const BillingPage = () => {
   let maskedCardXCount = null;
   let maskedCardNumbers = null;
   let displayCard = null;
+  let cardLogo = null;
   if (billingDetails && billingDetails.chargify.paymentProfile) {
     const {
       first_name,
@@ -38,8 +52,25 @@ const BillingPage = () => {
       billing_city,
       billing_state,
       billing_zip,
+      card_type,
     } = billingDetails.chargify?.paymentProfile;
 
+    switch (card_type) {
+      case 'visa':
+        cardLogo = <img style={cardStyles} src={visa} alt="visa" />;
+        break;
+      case 'discover':
+        cardLogo = <img style={cardStyles} src={discover} alt="visa" />;
+        break;
+      case 'mastercard':
+        cardLogo = <img style={cardStyles} src={mastercard} alt="visa" />;
+        break;
+      case 'american':
+        cardLogo = <img style={cardStyles} src={americanExpress} alt="visa" />;
+        break;
+      default:
+        cardLogo = <FontAwesomeIcon icon="credit-card" style={defaultCardStyles} />;
+    }
     maskedCardXCount = masked_card_number.match(/X/g);
     maskedCardNumbers = masked_card_number.match(/\d+/g).map(Number);
 
@@ -53,19 +84,22 @@ const BillingPage = () => {
         {first_name} {last_name}
       </span>
     );
-
+    billingAddress1 = billing_address;
     billingAddress2 = (
       <span>
         {billing_city} {billing_state} {billing_zip}
       </span>
     );
-    billingAddress1 = billing_address;
   }
   if (billingDetails && billingDetails.chargify.hasOwnProperty('error')) {
     BillingInfo = (
       <span>
         Your credit card is not configured.{' '}
-        <a href="https://help.chargify.com/settings/self-service-page-urls.html" target="_blank">
+        <a
+          href="https://help.chargify.com/settings/self-service-page-urls.html"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
           Please contact support to set this up.
         </a>
       </span>
@@ -139,30 +173,26 @@ const BillingPage = () => {
             <Header as="h2">Card Details</Header>
             {billingDetails && billingDetails.chargify.paymentProfile ? (
               <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                <div style={{ marginRight: '120px', marginTop: '20px' }}>
+                <div style={cardDetailsDivs}>
                   <p>
                     <span style={{ fontWeight: 'bold' }}>Card holder Name </span>
                   </p>
                   <p style={{ marginTop: '15px' }}>{billingName}</p>
                 </div>
-                <div style={{ marginRight: '120px', marginTop: '20px' }}>
+                <div style={cardDetailsDivs}>
                   <p style={{ marginBottom: '11px' }}>
                     <span style={{ fontWeight: 'bold' }}>Card Number </span>
                   </p>
-                  <div style={{ float: 'left' }}>
-                    <FontAwesomeIcon
-                      icon="credit-card"
-                      style={{ marginRight: '10px', marginTop: '6px', marginLeft: '3px' }}
-                    />
-                  </div>
-                  <div style={{ float: 'left' }}>
-                    {/* have to put this code above and then insert */}
-                    <p style={{ fontSize: '20px' }}>{displayCard}</p>
-                  </div>
-                  <div style={{ float: 'left', paddingTop: '5px' }}>
-                    <p style={{ fontSize: '12px' }}>
-                      <span>{maskedCardNumbers}</span>
-                    </p>
+                  <div style={{ display: 'flex' }}>
+                    <div>{cardLogo}</div>
+                    <div>
+                      <p style={{ fontSize: '20px' }}>{displayCard}</p>
+                    </div>
+                    <div style={{ paddingTop: '5px' }}>
+                      <p style={{ fontSize: '12px' }}>
+                        <span>{maskedCardNumbers}</span>
+                      </p>
+                    </div>
                   </div>
                 </div>
                 <div style={{ marginRight: '120px', marginTop: '20px' }}>
