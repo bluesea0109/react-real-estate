@@ -23,6 +23,7 @@ import { useIsMobile } from '../Hooks/useIsMobile';
 import styled from 'styled-components';
 import * as brandColors from '../utils/brandColors';
 import { getFilteredMailoutsPending } from '../../store/modules/mailouts/actions';
+import { getMailoutSuccess } from '../../store/modules/mailout/actions';
 
 const CopyDestContainer = styled.div`
   display: flex;
@@ -383,7 +384,8 @@ const EditDestinationsForm = ({ mailoutDetails, handleBackClick }) => {
           body: formData,
           credentials: 'include',
         });
-        await api.handleResponse(response);
+        const data = await api.handleResponse(response);
+        dispatch(getMailoutSuccess(data?.mailout));
       }
       handleBackClick();
     } catch (e) {

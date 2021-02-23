@@ -101,7 +101,7 @@ const Dashboard = ({ className }) => {
   const isInitiatingTeam = useSelector(store => store.teamInitialize.polling);
   const initiatingTeamState = useSelector(store => store.teamInitialize.available);
   const contentList = useSelector(store => store.content.list);
-  const readyMadeContent = contentList.filter(item => item.formats.includes('square'));
+  const readyMadeContent = contentList.filter(item => item.formats.includes('rectangle'));
   const currentTeamUserTotal = initiatingTeamState && initiatingTeamState.currentUserTotal;
   const currentTeamUserCompleted = initiatingTeamState && initiatingTeamState.currentUserCompleted;
   const isInitiatingUser = useSelector(store => store.initialize.polling);
@@ -203,27 +203,27 @@ const Dashboard = ({ className }) => {
         <SectionGrid>
           <DashboardItem
             name="business card"
-            linkTo="https://agentstore.com/product-category/business-cards/"
+            linkTo="https://agentstore.com/product-category/business-cards/?utm_source=brivity?utm_medium=Dashobard?utm_campaign=Brivity_Marketer?utm_term=addproductnamehere"
             external
           ></DashboardItem>
           <DashboardItem
             name="kwkly sign"
-            linkTo="https://agentstore.com/kwkly"
+            linkTo="https://agentstore.com/kwkly/?utm_source=brivity?utm_medium=Dashobard?utm_campaign=Brivity_Marketer?utm_term=addproductnamehere"
             external
           ></DashboardItem>
           <DashboardItem
             name="listing sign"
-            linkTo="https://agentstore.com/product-category/signs/"
+            linkTo="https://agentstore.com/product-category/signs/?utm_source=brivity?utm_medium=Dashobard?utm_campaign=Brivity_Marketer?utm_term=addproductnamehere"
             external
           ></DashboardItem>
           <DashboardItem
             name="sign rider"
-            linkTo="https://agentstore.com/product/3mm-pvc-sign-riders-18-x-6-3-pack/"
+            linkTo="https://agentstore.com/product/3mm-pvc-sign-riders-18-x-6-3-pack/?utm_source=brivity?utm_medium=Dashobard?utm_campaign=Brivity_Marketer?utm_term=addproductnamehere"
             external
           ></DashboardItem>
           <DashboardItem
             name="name tag"
-            linkTo="https://agentstore.com/product-category/name-tags/"
+            linkTo="https://agentstore.com/product-category/name-tags/?utm_source=brivity?utm_medium=Dashobard?utm_campaign=Brivity_Marketer?utm_term=addproductnamehere"
             external
           ></DashboardItem>
         </SectionGrid>
@@ -240,7 +240,7 @@ const Dashboard = ({ className }) => {
           windowSize.width <= 1320 ? (
             <SectionGrid>
               {readyMadeContent.slice(0, 8).map(contentItem => (
-                <DashboardItemContainer key={contentItem.id} className={className}>
+                <DashboardItemContainer key={contentItem.id} className={className} content={true}>
                   <Link to={{ pathname: '/ready-made-designs', state: { item: contentItem } }}>
                     <img src={contentItem.thumbnail} alt="content item" />
                     <span className="item-name">{contentItem.name.split(':')[0]}</span>
@@ -255,7 +255,7 @@ const Dashboard = ({ className }) => {
           <div>
             <SectionGrid>
               {readyMadeContent.map(contentItem => (
-                <DashboardItemContainer key={contentItem.id} className={className}>
+                <DashboardItemContainer key={contentItem.id} className={className} content={true}>
                   <Link to={{ pathname: '/ready-made-designs', state: { item: contentItem } }}>
                     <img src={contentItem.thumbnail} alt="content item" />
                     <span className="item-name">{contentItem.name.split(':')[0]}</span>

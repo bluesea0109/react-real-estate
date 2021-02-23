@@ -92,6 +92,7 @@ class AuthService extends EventEmitter {
 
   signOut = () => {
     localStorage.removeItem(localStorageKey);
+    localStorage.removeItem('localToken');
 
     this.idToken = null;
     this.idTokenPayload = null;
