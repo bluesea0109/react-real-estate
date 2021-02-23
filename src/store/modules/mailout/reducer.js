@@ -37,6 +37,9 @@ import {
   UNDO_ARCHIVE_MAILOUT_PENDING,
   UNDO_ARCHIVE_MAILOUT_SUCCESS,
   UNDO_ARCHIVE_MAILOUT_ERROR,
+  DUPLICATE_MAILOUT_PENDING,
+  DUPLICATE_MAILOUT_ERROR,
+  DUPLICATE_MAILOUT_SUCCESS,
   SET_MAILOUT_ERROR,
   CLEAR_MAILOUT_ERROR,
   SET_ADD_MAILOUT_ERROR,
@@ -393,6 +396,30 @@ export default function mailout(state = initialState, action) {
         archiveId: null,
         archiveError: action.error,
       };
+
+    case DUPLICATE_MAILOUT_PENDING:
+      return {
+        ...state,
+        pending: true,
+        mailoutId: action.payload,
+        error: null,
+      };
+
+    case DUPLICATE_MAILOUT_SUCCESS:
+      return {
+        ...state,
+        pending: false,
+        details: action.payload,
+        error: null,
+      };
+
+    case DUPLICATE_MAILOUT_ERROR:
+      return {
+        ...state,
+        pending: false,
+        error: action.error,
+      };
+
     case SET_MAILOUT_ERROR:
       return {
         ...state,

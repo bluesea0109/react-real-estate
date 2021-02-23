@@ -52,6 +52,10 @@ export const UNDO_ARCHIVE_MAILOUT_PENDING = 'UNDO_ARCHIVE_MAILOUT_PENDING';
 export const UNDO_ARCHIVE_MAILOUT_SUCCESS = 'UNDO_ARCHIVE_MAILOUT_SUCCESS';
 export const UNDO_ARCHIVE_MAILOUT_ERROR = 'UNDO_ARCHIVE_MAILOUT_ERROR';
 
+export const DUPLICATE_MAILOUT_PENDING = 'DUPLICATE_MAILOUT_PENDING';
+export const DUPLICATE_MAILOUT_SUCCESS = 'DUPLICATE_MAILOUT_SUCCESS';
+export const DUPLICATE_MAILOUT_ERROR = 'DUPLICATE_MAILOUT_ERROR';
+
 export const SET_MAILOUT_ERROR = 'SET_MAILOUT_ERROR';
 export const CLEAR_MAILOUT_ERROR = 'CLEAR_MAILOUT_ERROR';
 
@@ -208,6 +212,18 @@ export function undoArchiveMailoutSuccess(payload) {
 
 export function undoArchiveMailoutError(error) {
   return createErrorAction(UNDO_ARCHIVE_MAILOUT_ERROR, error);
+}
+
+export function duplicateMailoutPending(payload) {
+  return createAction(DUPLICATE_MAILOUT_PENDING, payload);
+}
+
+export function duplicateMailoutSuccess(payload) {
+  return createAction(DUPLICATE_MAILOUT_SUCCESS, payload);
+}
+
+export function duplicateMailoutError(error) {
+  return createErrorAction(DUPLICATE_MAILOUT_ERROR, error);
 }
 
 export function setMailoutError(error) {

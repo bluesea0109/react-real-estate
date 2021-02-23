@@ -24,6 +24,7 @@ import {
   undoArchiveMailoutPending,
   updateMailoutNamePending,
   resetMailout,
+  duplicateMailoutPending,
 } from '../../store/modules/mailout/actions';
 import styled from 'styled-components';
 import * as brandColors from '../utils/brandColors';
@@ -184,6 +185,10 @@ const ListHeader = ({
     history.push(`/dashboard/edit/${id}`);
   };
 
+  const duplicateCampaign = id => {
+    dispatch(duplicateMailoutPending(id));
+  };
+
   return (
     <ItemHeaderLayout attached="top" block>
       <span style={{ gridArea: 'label' }}>
@@ -301,8 +306,8 @@ const ListHeader = ({
               <Dropdown.Item onClick={() => handleEditClickFromDropdown(data._id)}>
                 <Icon name="edit" /> Edit
               </Dropdown.Item>
-              <Dropdown.Item>
-                <Icon name="fa-clone" /> Duplicate
+              <Dropdown.Item onClick={() => duplicateCampaign(data._id)}>
+                <Icon name="clone" /> Duplicate
               </Dropdown.Item>
               <Dropdown.Item onClick={runArchive}>
                 <Icon name="archive" /> Archive

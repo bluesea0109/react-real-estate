@@ -244,6 +244,10 @@ const directory = {
       ignored: () => ({ path: `/api/user/mailout/ignored`, method: 'get' }),
       archive: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/archive`, method: 'post' }),
       unarchive: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/archive`, method: 'del' }),
+      clone: mailoutId => ({
+        path: `/api/mailout/clone/${mailoutId}`,
+        method: 'post',
+      }),
     },
     customization: {
       get: () => ({ path: `/api/user/settings/branding`, method: 'get' }),
@@ -379,6 +383,10 @@ const directory = {
       unarchive: (mailoutId, peerId) => ({
         path: `/api/user/peer/${peerId}/mailout/${mailoutId}/archive`,
         method: 'del',
+      }),
+      clone: (mailoutId, peerId) => ({
+        path: `/api/peer/${peerId}/mailout/clone/${mailoutId}`,
+        method: 'post',
       }),
     },
     customization: {
