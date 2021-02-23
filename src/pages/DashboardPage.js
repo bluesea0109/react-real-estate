@@ -101,7 +101,7 @@ const Dashboard = ({ className }) => {
   const isInitiatingTeam = useSelector(store => store.teamInitialize.polling);
   const initiatingTeamState = useSelector(store => store.teamInitialize.available);
   const contentList = useSelector(store => store.content.list);
-  const readyMadeContent = contentList.filter(item => item.formats.includes('square'));
+  const readyMadeContent = contentList.filter(item => item.formats.includes('rectangle'));
   const currentTeamUserTotal = initiatingTeamState && initiatingTeamState.currentUserTotal;
   const currentTeamUserCompleted = initiatingTeamState && initiatingTeamState.currentUserCompleted;
   const isInitiatingUser = useSelector(store => store.initialize.polling);
@@ -240,7 +240,7 @@ const Dashboard = ({ className }) => {
           windowSize.width <= 1320 ? (
             <SectionGrid>
               {readyMadeContent.slice(0, 8).map(contentItem => (
-                <DashboardItemContainer key={contentItem.id} className={className}>
+                <DashboardItemContainer key={contentItem.id} className={className} content={true}>
                   <Link to={{ pathname: '/ready-made-designs', state: { item: contentItem } }}>
                     <img src={contentItem.thumbnail} alt="content item" />
                     <span className="item-name">{contentItem.name.split(':')[0]}</span>
@@ -255,7 +255,7 @@ const Dashboard = ({ className }) => {
           <div>
             <SectionGrid>
               {readyMadeContent.map(contentItem => (
-                <DashboardItemContainer key={contentItem.id} className={className}>
+                <DashboardItemContainer key={contentItem.id} className={className} content={true}>
                   <Link to={{ pathname: '/ready-made-designs', state: { item: contentItem } }}>
                     <img src={contentItem.thumbnail} alt="content item" />
                     <span className="item-name">{contentItem.name.split(':')[0]}</span>
