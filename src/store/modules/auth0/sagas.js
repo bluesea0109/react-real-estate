@@ -15,9 +15,13 @@ export const getSelectedPeerId = state => state.peer.peerId;
 
 export function* parseHash() {
   try {
-    const auth0 = yield call(AuthService.handleAuthentication);
-
-    yield put(authenticationSuccess(auth0));
+    const localToken = localStorage.getItem('localToken');
+    if (localToken) {
+      yield put(authenticationSuccess(localToken));
+    } else {
+      const auth0 = yield call(AuthService.handleAuthentication);
+      yield put(authenticationSuccess(auth0));
+    }
   } catch (err) {
     yield put(authenticationError(err));
   }
