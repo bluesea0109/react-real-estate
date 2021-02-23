@@ -10,11 +10,11 @@ export const DashboardItemContainer = styled.div`
   & img {
     width: 220px;
     height: 160px;
-    object-fit: ${props => (props.content ? 'contain' : 'cover')};
+    object-fit: ${props => (props.type === 'content' ? 'contain' : 'cover')};
     border-radius: 6px;
     margin-bottom: 0.25rem;
     box-shadow: 0 3px 8px 0 rgba(201, 201, 201, 0.4);
-    ${props => (props.content ? 'padding: 0.5rem;' : null)}
+    ${props => (props.type === 'content' ? 'padding: 0.5rem;' : null)}
   }
   & .item-name {
     color: ${brandColors.grey04};

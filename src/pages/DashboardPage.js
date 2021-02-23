@@ -240,7 +240,7 @@ const Dashboard = ({ className }) => {
           windowSize.width <= 1320 ? (
             <SectionGrid>
               {readyMadeContent.slice(0, 8).map(contentItem => (
-                <DashboardItemContainer key={contentItem.id} className={className} content={true}>
+                <DashboardItemContainer key={contentItem.id} className={className} type={'content'}>
                   <Link to={{ pathname: '/ready-made-designs', state: { item: contentItem } }}>
                     <img src={contentItem.thumbnail} alt="content item" />
                     <span className="item-name">{contentItem.name.split(':')[0]}</span>
@@ -255,7 +255,7 @@ const Dashboard = ({ className }) => {
           <div>
             <SectionGrid>
               {readyMadeContent.map(contentItem => (
-                <DashboardItemContainer key={contentItem.id} className={className} content={true}>
+                <DashboardItemContainer key={contentItem.id} className={className} type={'content'}>
                   <Link to={{ pathname: '/ready-made-designs', state: { item: contentItem } }}>
                     <img src={contentItem.thumbnail} alt="content item" />
                     <span className="item-name">{contentItem.name.split(':')[0]}</span>

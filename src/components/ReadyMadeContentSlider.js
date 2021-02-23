@@ -63,7 +63,7 @@ export default function ReadyMadeContentSlider({ className, contentList }) {
   return (
     <StyledSlider {...sliderSettings} showArrow={showArrow}>
       {contentList.slice(0, 10).map(contentItem => (
-        <DashboardItemContainer key={contentItem.id} className={className} content={true}>
+        <DashboardItemContainer key={contentItem.id} className={className} type="content">
           <Link to={{ pathname: '/ready-made-designs', state: { item: contentItem } }}>
             <img src={contentItem.thumbnail} alt="content item" />
             <span className="item-name">{contentItem.name.split(':')[0]}</span>
