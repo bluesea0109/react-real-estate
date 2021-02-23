@@ -15,6 +15,7 @@ import visa from '../assets/visa.jpg';
 import americanExpress from '../assets/american-express.jpg';
 import discover from '../assets/discover.jpg';
 import mastercard from '../assets/mastercard.jpg';
+import styled from 'styled-components';
 
 const cardStyles = {
   width: '33px',
@@ -23,8 +24,71 @@ const cardStyles = {
 };
 
 const defaultCardStyles = { marginRight: '10px', marginTop: '6px', marginLeft: '3px' };
-const cardDetailsDivs = { marginRight: '120px', marginTop: '20px' };
 
+const BillingDetailsWrapper = styled.div`
+  margin: 20px 0;
+  .flexWrap {
+    display: flex;
+    flex-wrap: wrap;
+    .cardDetails {
+      margin-right: 120px;
+      margin-top: 20px;
+      .cardNumber {
+        margin-bottom: 11px;
+      }
+      .flex {
+        display: flex;
+        .displayCard {
+          font-size: 20px;
+        }
+        .maskedCardWrapper {
+          padding-top: 5px;
+          .cardNumber {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+
+    .billingName {
+      margin-top: 15px;
+    }
+
+    .address {
+      margin-right: 120px;
+      margin-top: 20px;
+
+      .billingAddress {
+        margin-top: 15px;
+      }
+    }
+  }
+
+  .bold {
+    font-weight: bold;
+  }
+  .errorWrapper {
+    margin-right: 120px;
+    margin-top: 20px;
+  }
+`;
+
+const CreditBalanceWrapper = styled.div`
+  margin: 20px 0;
+  .flexWrap {
+    display: flex;
+    flex-wrap: wrap;
+    .creditBalance {
+      margin-right: 100px;
+    }
+    .teamBilling {
+      margin-right: 40px;
+    }
+  }
+  .bold {
+    font-weight: bold;
+  }
+`;
 const BillingPage = () => {
   const isAdmin = useSelector(store => store.onLogin?.permissions?.teamAdmin);
   const teamBillingId = useSelector(
@@ -168,38 +232,38 @@ const BillingPage = () => {
             </p>
           )}
         </PageTitleHeader>
-        <div style={{ margin: '20px 0' }}>
+        <BillingDetailsWrapper>
           <Segment style={{ padding: '20px' }}>
             <Header as="h2">Card Details</Header>
             {billingDetails && billingDetails.chargify.paymentProfile ? (
-              <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                <div style={cardDetailsDivs}>
+              <div className="flexWrap">
+                <div className="cardDetails">
                   <p>
-                    <span style={{ fontWeight: 'bold' }}>Card holder Name </span>
+                    <span className="bold">Card holder Name </span>
                   </p>
-                  <p style={{ marginTop: '15px' }}>{billingName}</p>
+                  <p className="billingName">{billingName}</p>
                 </div>
-                <div style={cardDetailsDivs}>
-                  <p style={{ marginBottom: '11px' }}>
-                    <span style={{ fontWeight: 'bold' }}>Card Number </span>
+                <div className="cardDetails">
+                  <p className="cardNumber">
+                    <span className="bold">Card Number </span>
                   </p>
-                  <div style={{ display: 'flex' }}>
+                  <div className="flex">
                     <div>{cardLogo}</div>
                     <div>
-                      <p style={{ fontSize: '20px' }}>{displayCard}</p>
+                      <p classname="displayCard">{displayCard}</p>
                     </div>
-                    <div style={{ paddingTop: '5px' }}>
-                      <p style={{ fontSize: '12px' }}>
+                    <div className="maskedCardWrapper">
+                      <p className="cardNumber">
                         <span>{maskedCardNumbers}</span>
                       </p>
                     </div>
                   </div>
                 </div>
-                <div style={{ marginRight: '120px', marginTop: '20px' }}>
+                <div className="address">
                   <p>
-                    <span style={{ fontWeight: 'bold' }}>Address </span>
+                    <span className="bold">Address </span>
                   </p>
-                  <p style={{ marginTop: '15px' }}>
+                  <p className="billingAddress">
                     {billingAddress1}
                     <br />
                     {billingAddress2}
@@ -207,14 +271,14 @@ const BillingPage = () => {
                 </div>
               </div>
             ) : (
-              <div style={{ marginRight: '120px', marginTop: '20px' }}>
+              <div className="errorWrapper">
                 <p>
-                  <span style={{ fontWeight: 'bold' }}>{BillingInfo}</span>
+                  <span className="bold">{BillingInfo}</span>
                 </p>
               </div>
             )}
           </Segment>
-        </div>
+        </BillingDetailsWrapper>
       </ContentTopHeaderLayout>
       <div style={{ margin: '20px 0' }}>
         <Segment>
@@ -260,30 +324,29 @@ const BillingPage = () => {
       </div>
 
       {billingDetails && billingDetails.credits && (
-        <div style={{ margin: '20px 0' }}>
+        <CreditBalanceWrapper>
           <Segment>
             <ContentBottomHeaderLayout style={{ minHeight: 0 }}>
-              <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                <p style={{ marginRight: '100px' }}>
-                  <span style={{ fontWeight: 'bold' }}>Credit Balance: </span> $
-                  {billingDetails.credits}
+              <div className="flexWrap">
+                <p className="creditBalance">
+                  <span className="bold">Credit Balance: </span> ${billingDetails.credits}
                 </p>
 
-                <p style={{ marginRight: '40px' }}>
-                  <span style={{ fontWeight: 'bold' }}>Team Billing Reference ID: </span>
+                <p className="teamBilling">
+                  <span className="bold">Team Billing Reference ID: </span>
                   {teamBillingId}
                 </p>
 
                 {personalBillingId && (
                   <p>
-                    <span style={{ fontWeight: 'bold' }}>Personal Billing ID: </span>
+                    <span className="bold">Personal Billing ID: </span>
                     {personalBillingId}
                   </p>
                 )}
               </div>
             </ContentBottomHeaderLayout>
           </Segment>
-        </div>
+        </CreditBalanceWrapper>
       )}
     </Page>
   );
