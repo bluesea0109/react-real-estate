@@ -21,6 +21,9 @@ import {
   ADD_HOLIDAY_CAMPAIGN_START,
   addHolidayCampaignError,
   addHolidayCampaignSuccess,
+  getFilteredMailoutsError,
+  getFilteredMailoutsSuccess,
+  GET_FILTERED_MAILOUTS_PENDING,
 } from './actions';
 import ApiService from '../../../services/api/index';
 import { SELECT_PEER_ID, DESELECT_PEER_ID } from '../peer/actions';
@@ -208,6 +211,26 @@ export function* addHolidayCampaignSaga() {
   }
 }
 
+export function* getFilteredMailouts({ payload }) {
+  const peerId = yield select(getSelectedPeerId);
+  const { searchValue, filterValue, sortValue } = payload;
+  if (!searchValue && !filterValue && !sortValue) yield put(getFilteredMailoutsSuccess([]));
+  else {
+    try {
+      const { path, method } = ApiService.directory.user.mailout.filteredList(
+        searchValue,
+        filterValue,
+        sortValue,
+        peerId
+      );
+      const response = yield call(ApiService[method], path);
+      yield put(getFilteredMailoutsSuccess(response));
+    } catch (err) {
+      yield put(getFilteredMailoutsError(err));
+    }
+  }
+}
+
 export default function*() {
   yield takeLatest(GET_MAILOUTS_PENDING, checkIfPeerSelectedGetMailout);
   yield takeLatest(GET_MORE_MAILOUTS_PENDING, checkIfPeerSelectedGetMoreMailout);
@@ -217,4 +240,5 @@ export default function*() {
   yield takeLatest(DESELECT_PEER_ID, resetAndGetMailoutSaga);
   yield takeLatest(ADD_CAMPAIGN_START, addCampaignStartSaga);
   yield takeLatest(ADD_HOLIDAY_CAMPAIGN_START, addHolidayCampaignSaga);
+  yield takeLatest(GET_FILTERED_MAILOUTS_PENDING, getFilteredMailouts);
 }

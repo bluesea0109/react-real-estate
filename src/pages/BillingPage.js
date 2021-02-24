@@ -5,16 +5,170 @@ import Loading from '../components/Loading';
 import { Header, Menu, Page, Segment, Image, Card } from '../components/Base';
 import { Table } from 'semantic-ui-react';
 import { format } from 'date-fns';
-
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
 import auth from '../services/auth';
 import api from '../services/api';
 import { postcardDimensionsDisplayed } from '../components/utils/utils';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import visa from '../assets/visa.jpg';
+import americanExpress from '../assets/american-express.jpg';
+import discover from '../assets/discover.jpg';
+import mastercard from '../assets/mastercard.jpg';
+import styled from 'styled-components';
 
+const cardStyles = {
+  width: '33px',
+  marginTop: '4px',
+  marginRight: '10px',
+};
+
+const defaultCardStyles = { marginRight: '10px', marginTop: '6px', marginLeft: '3px' };
+
+const BillingDetailsWrapper = styled.div`
+  margin: 20px 0;
+  .flexWrap {
+    display: flex;
+    flex-wrap: wrap;
+    .cardDetails {
+      margin-right: 120px;
+      margin-top: 20px;
+      .cardNumber {
+        margin-bottom: 11px;
+      }
+      .flex {
+        display: flex;
+        .displayCard {
+          font-size: 20px;
+        }
+        .maskedCardWrapper {
+          padding-top: 5px;
+          .cardNumber {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+
+    .billingName {
+      margin-top: 15px;
+    }
+
+    .address {
+      margin-right: 120px;
+      margin-top: 20px;
+
+      .billingAddress {
+        margin-top: 15px;
+      }
+    }
+  }
+
+  .bold {
+    font-weight: bold;
+  }
+  .errorWrapper {
+    margin-right: 120px;
+    margin-top: 20px;
+  }
+`;
+
+const CreditBalanceWrapper = styled.div`
+  margin: 20px 0;
+  .flexWrap {
+    display: flex;
+    flex-wrap: wrap;
+    .creditBalance {
+      margin-right: 100px;
+    }
+    .teamBilling {
+      margin-right: 40px;
+    }
+  }
+  .bold {
+    font-weight: bold;
+  }
+`;
 const BillingPage = () => {
   const isAdmin = useSelector(store => store.onLogin?.permissions?.teamAdmin);
+  const teamBillingId = useSelector(
+    store => store.onLogin?.teamProfile.brivitySync.billing_reference
+  );
+  const personalBillingId = useSelector(
+    store => store.onLogin?.userProfile.brivitySync.billing_reference
+  );
   const [billingDetails, setBillingDetails] = useState(null);
+
+  let BillingInfo = null;
+  let billingName = null;
+  let billingAddress1 = null;
+  let billingAddress2 = null;
+  let maskedCardXCount = null;
+  let maskedCardNumbers = null;
+  let displayCard = null;
+  let cardLogo = null;
+  if (billingDetails && billingDetails.chargify.paymentProfile) {
+    const {
+      first_name,
+      last_name,
+      masked_card_number,
+      billing_address,
+      billing_city,
+      billing_state,
+      billing_zip,
+      card_type,
+    } = billingDetails.chargify?.paymentProfile;
+
+    switch (card_type) {
+      case 'visa':
+        cardLogo = <img style={cardStyles} src={visa} alt="visa" />;
+        break;
+      case 'discover':
+        cardLogo = <img style={cardStyles} src={discover} alt="visa" />;
+        break;
+      case 'mastercard':
+        cardLogo = <img style={cardStyles} src={mastercard} alt="visa" />;
+        break;
+      case 'american':
+        cardLogo = <img style={cardStyles} src={americanExpress} alt="visa" />;
+        break;
+      default:
+        cardLogo = <FontAwesomeIcon icon="credit-card" style={defaultCardStyles} />;
+    }
+    maskedCardXCount = masked_card_number.match(/X/g);
+    maskedCardNumbers = masked_card_number.match(/\d+/g).map(Number);
+
+    displayCard = maskedCardXCount.map((x, index) => {
+      if ((index + 1) % 4 !== 0) return <span key={index}>&middot;</span>;
+      else return <span key={index}>&middot; &nbsp;</span>;
+    });
+
+    billingName = (
+      <span>
+        {first_name} {last_name}
+      </span>
+    );
+    billingAddress1 = billing_address;
+    billingAddress2 = (
+      <span>
+        {billing_city} {billing_state} {billing_zip}
+      </span>
+    );
+  }
+  if (billingDetails && billingDetails.chargify.hasOwnProperty('error')) {
+    BillingInfo = (
+      <span>
+        Your credit card is not configured.{' '}
+        <a
+          href="https://help.chargify.com/settings/self-service-page-urls.html"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Please contact support to set this up.
+        </a>
+      </span>
+    );
+  }
 
   useEffect(() => {
     async function fetchData() {
@@ -78,6 +232,53 @@ const BillingPage = () => {
             </p>
           )}
         </PageTitleHeader>
+        <BillingDetailsWrapper>
+          <Segment style={{ padding: '20px' }}>
+            <Header as="h2">Card Details</Header>
+            {billingDetails && billingDetails.chargify.paymentProfile ? (
+              <div className="flexWrap">
+                <div className="cardDetails">
+                  <p>
+                    <span className="bold">Card holder Name </span>
+                  </p>
+                  <p className="billingName">{billingName}</p>
+                </div>
+                <div className="cardDetails">
+                  <p className="cardNumber">
+                    <span className="bold">Card Number </span>
+                  </p>
+                  <div className="flex">
+                    <div>{cardLogo}</div>
+                    <div>
+                      <p classname="displayCard">{displayCard}</p>
+                    </div>
+                    <div className="maskedCardWrapper">
+                      <p className="cardNumber">
+                        <span>{maskedCardNumbers}</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="address">
+                  <p>
+                    <span className="bold">Address </span>
+                  </p>
+                  <p className="billingAddress">
+                    {billingAddress1}
+                    <br />
+                    {billingAddress2}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="errorWrapper">
+                <p>
+                  <span className="bold">{BillingInfo}</span>
+                </p>
+              </div>
+            )}
+          </Segment>
+        </BillingDetailsWrapper>
       </ContentTopHeaderLayout>
       <div style={{ margin: '20px 0' }}>
         <Segment>
@@ -123,16 +324,29 @@ const BillingPage = () => {
       </div>
 
       {billingDetails && billingDetails.credits && (
-        <div style={{ margin: '20px 0' }}>
+        <CreditBalanceWrapper>
           <Segment>
             <ContentBottomHeaderLayout style={{ minHeight: 0 }}>
-              <p>
-                <span style={{ fontWeight: 'bold' }}>Credit Balance: </span> $
-                {billingDetails.credits}
-              </p>
+              <div className="flexWrap">
+                <p className="creditBalance">
+                  <span className="bold">Credit Balance: </span> ${billingDetails.credits}
+                </p>
+
+                <p className="teamBilling">
+                  <span className="bold">Team Billing Reference ID: </span>
+                  {teamBillingId}
+                </p>
+
+                {personalBillingId && (
+                  <p>
+                    <span className="bold">Personal Billing ID: </span>
+                    {personalBillingId}
+                  </p>
+                )}
+              </div>
             </ContentBottomHeaderLayout>
           </Segment>
-        </div>
+        </CreditBalanceWrapper>
       )}
     </Page>
   );

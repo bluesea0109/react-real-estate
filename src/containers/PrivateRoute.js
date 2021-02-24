@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import React, { useEffect } from 'react';
 import { Route, useHistory } from 'react-router-dom';
 
 import Loading from '../components/Loading';
 import { ContentTopHeaderLayout } from '../layouts';
 import { Message, Page, Segment } from '../components/Base';
+import AuthService from '../services/auth';
+import { authenticate } from '../store/modules/auth0/actions';
 
 const PrivateRoute = ({
   component: Component,
@@ -18,6 +20,7 @@ const PrivateRoute = ({
   ...rest
 }) => {
   let history = useHistory();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fn = async () => {
@@ -26,11 +29,14 @@ const PrivateRoute = ({
         history.location.pathname !== '/dashboard' &&
         history.location.pathname !== '/'
       ) {
-        await localStorage.setItem('routerDestination', history.location.pathname);
+        localStorage.setItem('routerDestination', history.location.pathname);
       }
-
-      if (!auth0.authenticated && !auth0.error) {
-        await history.push('/');
+      const localToken = localStorage.getItem('localToken');
+      if (!auth0.authenticated && !auth0.error && !localToken) {
+        history.push('/');
+      } else if (localToken && !auth0.authenticated) {
+        AuthService.cookieLogin(localToken);
+        dispatch(authenticate());
       } else {
         if (!onLogin.pending && !onLogin.error) {
           if (
@@ -47,13 +53,13 @@ const PrivateRoute = ({
 
         if (localStorage.getItem('routerDestination')) {
           const routerDestination = await localStorage.getItem('routerDestination');
-          await localStorage.removeItem('routerDestination');
-          await history.push(routerDestination);
+          localStorage.removeItem('routerDestination');
+          history.push(routerDestination);
         }
       }
     };
     fn();
-  }, [auth0, history, onLogin]);
+  }, [auth0, history, onLogin, dispatch]);
 
   const render = props => {
     const isReady =
