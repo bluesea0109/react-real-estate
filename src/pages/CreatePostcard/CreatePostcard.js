@@ -186,32 +186,37 @@ export default function CreatePostcard({ location }) {
     if (createDisabled) return;
     const size = postcardDimensions(selectedSize);
     if (activeIndex === 1) {
-      if (!customImageFile) {
-        setImageError('There was an error uploading your file.');
-        return;
-      }
-      setCreatingCampaign(true);
-      const imageURL = await getCustomImageURL(customImageFile);
-      let path = `/api/user/mailout/withCover`;
-      if (peerId) path = `/api/user/peer/${peerId}/mailout/withCover`;
+      cropper.getCroppedCanvas().toBlob(async blob => {
+        setCreatingCampaign(true);
+        const imageURL = await getCustomImageURL(blob);
+        if (!imageURL) {
+          setCreatingCampaign(false);
+          setImageError('There was an error uploading your file.');
+          return;
+        }
+        // const imageURL = await getCustomImageURL(croppedImage);
+        let path = `/api/user/mailout/withCover`;
+        if (peerId) path = `/api/user/peer/${peerId}/mailout/withCover`;
 
-      const headers = {};
-      const accessToken = await auth.getAccessToken();
-      headers['authorization'] = `Bearer ${accessToken}`;
-      const formData = new FormData();
-      formData.append('createdBy', 'user');
-      formData.append('skipEmailNotification', true);
-      formData.append('frontResourceUrl', imageURL);
-      formData.append('name', customName || 'Custom Campaign');
-      formData.append('postcardSize', size);
-      const response = await fetch(path, {
-        headers,
-        method: 'post',
-        body: formData,
-        credentials: 'include',
+        const headers = {};
+        const accessToken = await auth.getAccessToken();
+        headers['authorization'] = `Bearer ${accessToken}`;
+        const formData = new FormData();
+        formData.append('createdBy', 'user');
+        formData.append('skipEmailNotification', true);
+        formData.append('frontResourceUrl', imageURL);
+        formData.append('name', customName || 'Custom Campaign');
+        formData.append('postcardSize', size);
+        const response = await fetch(path, {
+          headers,
+          method: 'post',
+          body: formData,
+          credentials: 'include',
+        });
+        let doc = await api.handleResponse(response);
+        return history.push(`/dashboard/edit/${doc._id}/destinations`);
       });
-      let doc = await api.handleResponse(response);
-      return history.push(`/dashboard/edit/${doc._id}/destinations`);
+      return;
     }
     if (selectedTemplate?.activities.includes('listingMarketing')) {
       if (location?.state?.mlsNum) {
