@@ -64,7 +64,6 @@ export default function CreatePostcard({ location }) {
     initialFilter && initialFilter !== 'custom' ? initialFilter : 'All Templates'
   );
   const [currentItem, setCurrentItem] = useState(null);
-  const [customImageFile, setCustomImageFile] = useState(null);
   const [customName, setCustomName] = useState('');
   const [filteredTemplates, setFilteredTemplates] = useState([]);
   const [imageError, setImageError] = useState(null);
@@ -111,10 +110,10 @@ export default function CreatePostcard({ location }) {
   }, [addCampaignResponse, history, dispatch]);
 
   useEffect(() => {
-    if (activeIndex === 1 && !uploadedImage) setCreateDisabled(true);
+    if (activeIndex === 1 && (!uploadedImage || !cropper)) setCreateDisabled(true);
     else if (activeIndex === 0 && !selectedTemplate) setCreateDisabled(true);
     else setCreateDisabled(false);
-  }, [activeIndex, createDisabled, uploadedImage, selectedTemplate]);
+  }, [activeIndex, createDisabled, cropper, uploadedImage, selectedTemplate]);
 
   const prevImg = () => {
     let newImgIndex = currentItem - 1;
@@ -146,7 +145,6 @@ export default function CreatePostcard({ location }) {
     reader.onload = e => {
       setUploadedImage(e.target.result);
       setUploadedImageName(file.name);
-      setCustomImageFile(file);
     };
     reader.readAsDataURL(file);
   };
