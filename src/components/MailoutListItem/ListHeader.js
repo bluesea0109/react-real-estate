@@ -189,6 +189,7 @@ const ListHeader = ({
     dispatch(duplicateMailoutPending(id));
   };
 
+  console.log('mailoutStatus', data.mailoutStatus);
   return (
     <ItemHeaderLayout attached="top" block>
       <span style={{ gridArea: 'label' }}>
@@ -306,9 +307,11 @@ const ListHeader = ({
               <Dropdown.Item onClick={() => handleEditClickFromDropdown(data._id)}>
                 <Icon name="edit" /> Edit
               </Dropdown.Item>
-              <Dropdown.Item onClick={() => duplicateCampaign(data._id)}>
-                <Icon name="clone" /> Duplicate
-              </Dropdown.Item>
+              {data.mailoutStatus === 'calculated' && (
+                <Dropdown.Item onClick={() => duplicateCampaign(data._id)}>
+                  <Icon name="clone" /> Duplicate
+                </Dropdown.Item>
+              )}
               <Dropdown.Item onClick={runArchive}>
                 <Icon name="archive" /> Archive
               </Dropdown.Item>

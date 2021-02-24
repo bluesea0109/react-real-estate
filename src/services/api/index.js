@@ -245,7 +245,7 @@ const directory = {
       archive: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/archive`, method: 'post' }),
       unarchive: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/archive`, method: 'del' }),
       clone: mailoutId => ({
-        path: `/api/mailout/clone/${mailoutId}`,
+        path: `/api/user/mailout/clone/${mailoutId}`,
         method: 'post',
       }),
     },
@@ -385,7 +385,7 @@ const directory = {
         method: 'del',
       }),
       clone: (mailoutId, peerId) => ({
-        path: `/api/peer/${peerId}/mailout/clone/${mailoutId}`,
+        path: `/api/user/peer/${peerId}/mailout/clone/${mailoutId}`,
         method: 'post',
       }),
     },

@@ -229,6 +229,7 @@ const PostcardsPage = () => {
     }
   }, [mailoutItemElementArray]);
 
+  console.log('mailoutList', mailoutList);
   useEffect(() => {
     if (filteredList?.length > 0) {
       filteredList.map((item, index) => {

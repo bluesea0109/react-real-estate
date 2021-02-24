@@ -406,6 +406,8 @@ export default function mailout(state = initialState, action) {
       };
 
     case DUPLICATE_MAILOUT_SUCCESS:
+      console.log('success payload', action.payload);
+      console.log('success payload with state ', state);
       return {
         ...state,
         pending: false,
@@ -414,6 +416,7 @@ export default function mailout(state = initialState, action) {
       };
 
     case DUPLICATE_MAILOUT_ERROR:
+      console.log('state', state);
       return {
         ...state,
         pending: false,
