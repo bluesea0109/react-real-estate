@@ -192,7 +192,6 @@ export default function CreatePostcard({ location }) {
           setImageError('There was an error uploading your file.');
           return;
         }
-        // const imageURL = await getCustomImageURL(croppedImage);
         let path = `/api/user/mailout/withCover`;
         if (peerId) path = `/api/user/peer/${peerId}/mailout/withCover`;
 
