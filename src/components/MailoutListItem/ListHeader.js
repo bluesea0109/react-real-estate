@@ -293,30 +293,33 @@ const ListHeader = ({
             <Icon name="archive" /> Unarchive
           </Button>
         )}
-        {!isArchived && !mailoutDetailPage && canSend(data.mailoutStatus) && (
-          <StyledDropdown
-            loading={data._id === archiveId && archivePending}
-            disabled={data._id === archiveId && archivePending}
-            icon="ellipsis horizontal"
-            direction="left"
-            button
-            className="icon"
-          >
-            <Dropdown.Menu>
-              <Dropdown.Item onClick={() => handleEditClickFromDropdown(data._id)}>
-                <Icon name="edit" /> Edit
-              </Dropdown.Item>
-              {data.mailoutStatus === 'calculated' && (
+        {!isArchived &&
+          !mailoutDetailPage &&
+          (data.mailoutStatus === 'sent' || data.mailoutStatus === 'calculated') && (
+            <StyledDropdown
+              loading={data._id === archiveId && archivePending}
+              disabled={data._id === archiveId && archivePending}
+              icon="ellipsis horizontal"
+              direction="left"
+              button
+              className="icon"
+            >
+              <Dropdown.Menu>
+                {data.mailoutStatus !== 'sent' && (
+                  <Dropdown.Item onClick={() => handleEditClickFromDropdown(data._id)}>
+                    <Icon name="edit" /> Edit
+                  </Dropdown.Item>
+                )}
                 <Dropdown.Item onClick={() => duplicateCampaign(data._id)}>
                   <Icon name="clone" /> Duplicate
                 </Dropdown.Item>
-              )}
-              <Dropdown.Item onClick={runArchive}>
-                <Icon name="archive" /> Archive
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </StyledDropdown>
-        )}
+
+                <Dropdown.Item onClick={runArchive}>
+                  <Icon name="archive" /> Archive
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </StyledDropdown>
+          )}
         <span>
           <ApproveAndSendButton
             data={data}
