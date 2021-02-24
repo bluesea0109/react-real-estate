@@ -107,6 +107,9 @@
   "jest": {
     "transformIgnorePatterns": [
       "node_modules/(?!(dinero.js)/)"
-    ]
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less)$": "<rootDir>/src/__mocks__/styleMock.js"
+    }
   }
 }
