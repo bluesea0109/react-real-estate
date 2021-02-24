@@ -189,7 +189,6 @@ const ListHeader = ({
     dispatch(duplicateMailoutPending(id));
   };
 
-  console.log('mailoutStatus', data.mailoutStatus);
   return (
     <ItemHeaderLayout attached="top" block>
       <span style={{ gridArea: 'label' }}>

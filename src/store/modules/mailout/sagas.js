@@ -42,6 +42,7 @@ import {
   undoArchiveMailoutError,
 } from './actions';
 import ApiService from '../../../services/api/index';
+import { getMailoutsPending } from '../mailouts/actions';
 
 export const getSelectedPeerId = state => state.peer.peerId;
 export const getMailoutId = state => state.mailout.mailoutId;
@@ -73,6 +74,7 @@ export function* getDuplicateSaga({ peerId = null }) {
     const response = yield call(ApiService[method], path);
 
     yield put(duplicateMailoutSuccess(response));
+    yield put(getMailoutsPending());
   } catch (err) {
     yield put(duplicateMailoutError(err));
   }
