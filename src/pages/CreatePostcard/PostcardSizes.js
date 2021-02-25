@@ -1,6 +1,5 @@
 import React from 'react';
-import { GridItem, GridItemContainer } from './GridItem';
-import GridLayout from './GridLayout';
+import { getAspectRatio, GridItem, GridItemContainer, GridLayout } from '.';
 import styled from 'styled-components';
 import * as brandColors from '../../components/utils/brandColors';
 import { calculateCost } from '../../components/MailoutListItem/utils/helpers';
@@ -45,9 +44,7 @@ export default function PostcardSizes({ cropper, sizes, selectedSize, setSelecte
               onClick={() => {
                 setSelectedSize(size);
                 if (cropper) {
-                  cropper.setAspectRatio(
-                    size === '6x11' ? 11.25 / 6.25 : size === '6x9' ? 9.25 / 6.25 : 6.25 / 4.25
-                  );
+                  cropper.setAspectRatio(getAspectRatio(size));
                 }
               }}
               selected={size === selectedSize}

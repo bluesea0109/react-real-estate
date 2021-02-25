@@ -2,6 +2,7 @@ import React from 'react';
 import Cropper from 'react-cropper';
 import { Button, ButtonOutline, Icon, Message } from '../../components/Base';
 import {
+  getAspectRatio,
   getUploadSizes,
   GridItem,
   GridItemContainer,
@@ -67,7 +68,7 @@ export default function CustomTab({
             Adjust the crop area to fit the selected postcard size
           </StyledHeading>
           <Cropper
-            aspectRatio={6.25 / 4.25}
+            aspectRatio={getAspectRatio(selectedSize)}
             autoCropArea={1}
             preview=".image-preview"
             onInitialized={instance => {
