@@ -34,11 +34,15 @@ import {
   ARCHIVE_MAILOUT_PENDING,
   archiveMailoutSuccess,
   archiveMailoutError,
+  DUPLICATE_MAILOUT_PENDING,
   UNDO_ARCHIVE_MAILOUT_PENDING,
+  duplicateMailoutSuccess,
+  duplicateMailoutError,
   undoArchiveMailoutSuccess,
   undoArchiveMailoutError,
 } from './actions';
 import ApiService from '../../../services/api/index';
+import { getMailoutsPending } from '../mailouts/actions';
 
 export const getSelectedPeerId = state => state.peer.peerId;
 export const getMailoutId = state => state.mailout.mailoutId;
@@ -58,6 +62,21 @@ export function* getMailoutSaga({ peerId = null }) {
     yield put(getMailoutSuccess(response));
   } catch (err) {
     yield put(getMailoutError(err));
+  }
+}
+
+export function* getDuplicateSaga({ peerId = null }) {
+  try {
+    const mailoutId = yield select(getMailoutId);
+    const { path, method } = peerId
+      ? ApiService.directory.peer.mailout.clone(mailoutId, peerId)
+      : ApiService.directory.user.mailout.clone(mailoutId);
+    const response = yield call(ApiService[method], path);
+
+    yield put(duplicateMailoutSuccess(response));
+    yield put(getMailoutsPending());
+  } catch (err) {
+    yield put(duplicateMailoutError(err));
   }
 }
 
@@ -257,6 +276,16 @@ export function* checkIfPeerSelectedGetMailoutSaga() {
   }
 }
 
+export function* checkIfPeerSelectedDuplicateSaga() {
+  const peerId = yield select(getSelectedPeerId);
+
+  if (peerId) {
+    yield getDuplicateSaga({ peerId });
+  } else {
+    yield getDuplicateSaga({});
+  }
+}
+
 export function* checkIfPeerSelectedSubmitMailoutSaga() {
   const peerId = yield select(getSelectedPeerId);
 
@@ -385,5 +414,6 @@ export default function*() {
   );
   yield takeLatest(REVERT_MAILOUT_EDIT_PENDING, checkIfPeerSelectedRevertMailoutEditSaga);
   yield takeLatest(ARCHIVE_MAILOUT_PENDING, checkIfPeerSelectedArchiveMailoutSaga);
+  yield takeLatest(DUPLICATE_MAILOUT_PENDING, checkIfPeerSelectedDuplicateSaga);
   yield takeLatest(UNDO_ARCHIVE_MAILOUT_PENDING, checkIfPeerSelectedUndoArchiveMailoutSaga);
 }
