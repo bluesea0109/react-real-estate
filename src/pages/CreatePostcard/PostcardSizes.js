@@ -34,14 +34,24 @@ const labelText = size => {
   }
 };
 
-export default function PostcardSizes({ sizes, selectedSize, setSelectedSize }) {
+export default function PostcardSizes({ cropper, sizes, selectedSize, setSelectedSize }) {
   return (
     <GridLayout>
       {sizes.map(size => {
         const [height, width] = size.split('x');
         return (
           <GridItemContainer key={size} type="size" selected={size === selectedSize}>
-            <GridItem onClick={() => setSelectedSize(size)} selected={size === selectedSize}>
+            <GridItem
+              onClick={() => {
+                setSelectedSize(size);
+                if (cropper) {
+                  cropper.setAspectRatio(
+                    size === '6x11' ? 11.25 / 6.25 : size === '6x9' ? 9.25 / 6.25 : 6.25 / 4.25
+                  );
+                }
+              }}
+              selected={size === selectedSize}
+            >
               <PostcardImg height={height} width={width} selected={size === selectedSize}>
                 <span>{size}"</span>
               </PostcardImg>
