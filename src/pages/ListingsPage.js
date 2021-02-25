@@ -65,7 +65,7 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
       params.mls = item.blueroofMlsId;
 
       return Object.keys(params)
-        .map(param => `${param}=${params[param]}`)
+        .map(param => `${param}=${params[param.replace('#', '%23')]}`)
         .join('&');
     };
 
