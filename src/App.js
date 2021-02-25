@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import { MainLayout, HeaderLayout, SidebarLayout, ContentLayout } from './layouts';
 import TopBarContainer from './containers/TopBarContainer';
-import Navigation from './components/Navigation';
+import { Navigation } from './components/Navigation/index';
 import Router from './Router';
 import { useLocation } from 'react-router';
 
