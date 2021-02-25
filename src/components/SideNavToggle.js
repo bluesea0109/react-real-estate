@@ -33,6 +33,21 @@ const MobileMenu = styled.div`
     overflow-x: visible;
     .sidebar {
       overflow-y: visible !important;
+      & .accordionDrop,
+      & .accordionDropCustom {
+        /* height: 60px; */
+        width: 100%;
+        overflow: visible;
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        text-align: left;
+        margin-left: 1rem;
+        & > a {
+          color: ${brandColors.grey03};
+          margin: 8px;
+        }
+      }
     }
     .ui.text.menu {
       display: block !important;
