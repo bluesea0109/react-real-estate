@@ -263,7 +263,7 @@ const BillingPage = () => {
               <div className="flexWrap">
                 <div className="cardDetails">
                   <p>
-                    <span className="bold">Card holder Name </span>
+                    <span className="bold">Cardholder Name </span>
                   </p>
                   <p className="billingName">{billingName}</p>
                 </div>
