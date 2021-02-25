@@ -160,7 +160,7 @@ const BillingPage = () => {
       <span>
         Your credit card is not configured.{' '}
         <a
-          href="https://help.chargify.com/settings/self-service-page-urls.html"
+          href="https://info.brivity.com/knowledge/kb-tickets/new"
           rel="noopener noreferrer"
           target="_blank"
         >
