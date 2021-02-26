@@ -443,7 +443,7 @@ export default function Navigation() {
               >
                 <ImageStyledIcon icon={faImage} className="imageIconWithStyle" />
                 <span>Postcards</span>
-                <Icon name={postcardDropdown === 'postcards' ? 'angle up' : 'angle down'} />
+                <Icon name={postcardDropdown ? 'angle up' : 'angle down'} />
               </MenuItem>
               {postcardDropdown && (
                 <SubMenuContainer>
