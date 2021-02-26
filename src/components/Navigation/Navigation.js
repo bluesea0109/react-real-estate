@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Header, Popup } from 'semantic-ui-react';
 import React, { createRef, useEffect, useState } from 'react';
@@ -20,7 +20,7 @@ import { ReactComponent as Icon2 } from '../../assets/2-icon.svg';
 import { ReactComponent as Icon3 } from '../../assets/3-icon.svg';
 import { ReactComponent as Icon4 } from '../../assets/4-icon.svg';
 import * as brandColors from '../utils/brandColors';
-import { faArchive } from '@fortawesome/free-solid-svg-icons';
+import { faArchive, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 const sidebarTextStyle = {
   fontSize: '16px',
@@ -40,12 +40,16 @@ const menuP = {
 
 const StyledMenuItem = styled(Menu.Item)`
   &&&&&& {
+    width: 100%;
     line-height: 2.6;
     font-size: 16px;
     height: 56px;
     padding: 0.5rem;
     border-bottom: 1px solid #eaedf0;
     color: ${brandColors.grey03};
+    :hover {
+      color: ${brandColors.primary} !important;
+    }
     &.active {
       color: ${brandColors.primary};
       border-left: 5px solid ${brandColors.primary};
@@ -53,12 +57,10 @@ const StyledMenuItem = styled(Menu.Item)`
       font-weight: 600;
       background-color: ${brandColors.primaryLight} !important;
       .iconWithStyle {
-        margin: 0 1.5rem 0 0.35rem;
-        width: 1.25rem;
+        margin: 0 1.3rem 0 0.35rem;
       }
       .imageIconWithStyle {
         margin: 0 1.3rem 0 0.55rem;
-        width: 1.25rem;
       }
       .facebookIconWithStyle {
         margin-left: 0.57em;
@@ -72,7 +74,7 @@ const StyledMenuItem = styled(Menu.Item)`
         }
       }
     }
-    svg {
+    & svg {
       font-size: 17px;
     }
   }
@@ -98,6 +100,9 @@ const StyledSubMenuItem = styled(Menu.Item)`
     &.active {
       color: ${brandColors.primary};
       font-weight: 600;
+    }
+    :hover {
+      color: ${brandColors.primary} !important;
     }
   }
 `;
@@ -126,13 +131,14 @@ const FacebookStyledIcon = styled(FontAwesomeIcon)`
 `;
 
 const ImageStyledIcon = styled(FontAwesomeIcon)`
-  margin: 0 1.3rem 0 0.85rem;
+  margin: 0 1.6rem 0 0.85rem;
 `;
 
 export default function Navigation() {
   const isMobile = useIsMobile();
   const dispatch = useDispatch();
   const location = useLocation();
+  const history = useHistory();
   const [activeItem, setActiveItem] = useState('');
   const [appIsBusy, setAppIsBusy] = useState(false);
   const [postcardDropdown, setPostcardDropdown] = useState(false);
@@ -270,6 +276,11 @@ export default function Navigation() {
   const onProfileSingleUser = !completedProfile;
   const onCustomizationSingleUser = !completedCustomization && completedProfile;
 
+  const mobileSettingsClick = () => {
+    mobileCollapse();
+    history.push('/settings');
+  };
+
   if (!loadingCompleted) return null;
 
   if (loadingCompleted && !onboarded) {
@@ -371,7 +382,6 @@ export default function Navigation() {
 
         <NavigationLayout
           text
-          vertical={!isMobile}
           style={
             isMobile
               ? {
@@ -455,78 +465,17 @@ export default function Navigation() {
                     <ImageStyledIcon icon={faArchive} className="imageIconWithStyle" />
                     <span>Archived Campaigns</span>
                   </SubMenuItem>
+                  <SubMenuItem
+                    name="new-campaign"
+                    as={Link}
+                    to="/create-postcard"
+                    active={activeItem === '/create-postcard'}
+                  >
+                    <ImageStyledIcon icon={faPlusCircle} className="imageIconWithStyle" />
+                    <span>New Campaign</span>
+                  </SubMenuItem>
                 </SubMenuContainer>
               )}
-              {/* <div className={`${postcardDropdown ? 'accordionDrop' : 'noDropdown'}`}>
-                {activeItem !== '/postcards' && (
-                  <Link name="archived-campaigns" to="/postcards" onClick={() => setToggle(false)}>
-                    <span>View All Campaigns</span>
-                  </Link>
-                )}
-                {activeItem !== '/postcards/archived' && activeItem !== '/dashboard/archived' && (
-                  <Link
-                    name="view-campaigns"
-                    to="/postcards/archived"
-                    onClick={() => setToggle(false)}
-                  >
-                    <span>Archived Campaigns</span>
-                  </Link>
-                )}
-                {activeItem !== '/create-postcard' && (
-                  <>
-                    <Link
-                      name="create-postcard-listed"
-                      to={{
-                        pathname: '/create-postcard',
-                        state: { filter: 'listed' },
-                      }}
-                      onClick={() => setToggle(false)}
-                    >
-                      <span>New Listed Campaign</span>
-                    </Link>
-                    <Link
-                      name="create-postcard-sold"
-                      to={{
-                        pathname: '/create-postcard',
-                        state: { filter: 'sold' },
-                      }}
-                      onClick={() => setToggle(false)}
-                    >
-                      <span>New Sold Campaign</span>
-                    </Link>
-                    <Link
-                      name="create-postcard-handwritten"
-                      to={{
-                        pathname: '/create-postcard',
-                        state: { filter: 'handwritten' },
-                      }}
-                      onClick={() => setToggle(false)}
-                    >
-                      <span>New Handwritten Campaign</span>
-                    </Link>
-                    <Link
-                      name="create-postcard-holiday"
-                      to={{
-                        pathname: '/create-postcard',
-                        state: { filter: 'holiday' },
-                      }}
-                      onClick={() => setToggle(false)}
-                    >
-                      <span>New Holiday Campaign</span>
-                    </Link>
-                    <Link
-                      name="create-postcard-custom"
-                      to={{
-                        pathname: '/create-postcard',
-                        state: { filter: 'custom' },
-                      }}
-                      onClick={() => setToggle(false)}
-                    >
-                      <span>New Custom Campaign</span>
-                    </Link>
-                  </>
-                )}
-              </div> */}
             </>
           )}
           {adProduct && multiUser && (
@@ -552,7 +501,7 @@ export default function Navigation() {
             }
             onClick={() =>
               isMobile
-                ? mobileCollapse()
+                ? mobileSettingsClick()
                 : settingsDropdown
                 ? setSettingsDropdown(false)
                 : setSettingsDropdown(true)

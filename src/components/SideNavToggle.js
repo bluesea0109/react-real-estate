@@ -35,7 +35,6 @@ const MobileMenu = styled.div`
       overflow-y: visible !important;
       & .accordionDrop,
       & .accordionDropCustom {
-        /* height: 60px; */
         width: 100%;
         overflow: visible;
         display: flex;
@@ -50,13 +49,15 @@ const MobileMenu = styled.div`
       }
     }
     .ui.text.menu {
-      display: block !important;
+      display: flex;
+      flex-direction: column;
+      width: 225px;
       margin-left: 0px;
     }
-    .item {
+    a {
       text-align: left !important;
     }
-    .active.item {
+    .active {
       border-color: ${brandColors.primary} !important;
       color: ${brandColors.primary} !important;
     }
@@ -159,8 +160,7 @@ const ToggleContainer = styled.div`
     height: auto;
     flex-direction: column;
   }
-  & .ui.vertical.text.menu {
-    width: 225px;
+  & .ui.text.menu {
     margin: 0em -1.25em;
     display: flex;
     flex-direction: column;
