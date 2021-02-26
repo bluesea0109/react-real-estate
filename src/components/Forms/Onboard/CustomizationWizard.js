@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Button, Menu, Segment } from '../../Base';
+import { ButtonNoStyle, Menu, Segment } from '../../Base';
 import { Form } from '../Base';
 
 const Wizard = ({
@@ -62,13 +62,14 @@ const Wizard = ({
             <Segment style={{ marginTop: '22px' }}>
               <Menu pointing secondary>
                 <Menu.Item
+                  as={ButtonNoStyle}
                   name="newListing"
                   active={page === 0}
                   disabled={page === 0}
                   onClick={previous}
                 />
                 <Menu.Item
-                  as={Button}
+                  as={ButtonNoStyle}
                   type="submit"
                   name="soldListing"
                   active={page === 1}

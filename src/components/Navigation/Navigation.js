@@ -6,39 +6,21 @@ import React, { createRef, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage } from '@fortawesome/free-regular-svg-icons';
 import { useDispatch } from 'react-redux';
-import { resetMailout } from '../store/modules/mailout/actions';
+import { resetMailout } from '../../store/modules/mailout/actions';
 import { faFacebookF } from '@fortawesome/free-brands-svg-icons';
 
-import { StepLayout, StepsLayout, NavigationLayout } from '../layouts';
-import { Dimmer, Menu, Initials, Icon, Step } from './Base';
-import { useIsMobile } from './Hooks/useIsMobile.js';
+import { Dimmer, Initials, Icon } from '../Base';
+import { useIsMobile } from '../Hooks/useIsMobile.js';
 
-import SideNavToggle from './SideNavToggle';
-import { ReactComponent as Cog } from '../assets/cog.svg';
-import { ReactComponent as Icon1 } from '../assets/1-icon.svg';
-import { ReactComponent as Icon2 } from '../assets/2-icon.svg';
-import { ReactComponent as Icon3 } from '../assets/3-icon.svg';
-import { ReactComponent as Icon4 } from '../assets/4-icon.svg';
-
-const sidebarTextStyle = {
-  fontSize: '16px',
-  width: '100%',
-  marginLeft: '16px',
-  marginTop: '-3px',
-};
-
-const menuItemStyles = {
-  lineHeight: 2.6,
-  fontSize: '16px',
-  height: '56px',
-  borderBottom: '1px solid #eaedf0 !important',
-  padding: '0.5em',
-};
-
-const StyledHeader = styled(Header)`
-  min-width: max-content !important;
-  display: inline-block;
-`;
+import { ReactComponent as Cog } from '../../assets/cog.svg';
+import { faArchive } from '@fortawesome/free-solid-svg-icons';
+import {
+  MenuItem,
+  NavigationLayout,
+  OnboardSteps,
+  OnboardStepsAdmin,
+  SideNavToggle,
+} from './index';
 
 const menuP = {
   lineHeight: '2.6',
@@ -49,6 +31,11 @@ const menuP = {
   marginTop: '-2px',
 };
 
+const StyledHeader = styled(Header)`
+  min-width: max-content !important;
+  display: inline-block;
+`;
+
 const StyledCog = styled(Cog)`
   width: 15px;
   height: 20px;
@@ -56,27 +43,25 @@ const StyledCog = styled(Cog)`
 `;
 
 const StyledIcon = styled(FontAwesomeIcon)`
-  margin: 0em 1em 0em 0.65em;
+  margin: 0em 1.4em 0em 0.65em;
 `;
 
 const FacebookStyledIcon = styled(FontAwesomeIcon)`
-  margin: 0em 1.3em 0em 0.86em;
+  margin: 0em 1.7em 0em 0.86em;
 `;
 
 const ImageStyledIcon = styled(FontAwesomeIcon)`
-  margin: 0 1.3rem 0 0.85rem;
+  margin: 0 1.4em 0 0.75em;
 `;
 
-export default () => {
+export default function Navigation() {
   const isMobile = useIsMobile();
   const dispatch = useDispatch();
   const location = useLocation();
   const [activeItem, setActiveItem] = useState('');
   const [appIsBusy, setAppIsBusy] = useState(false);
-  const [postcardDropdown, setPostcardDropdown] = useState(false);
-  const [settingsDropdown, setSettingsDropdown] = useState(false);
   const [toggle, setToggle] = useState(null);
-  const [moblileVisible, setMobileVisible] = React.useState(false);
+  const [moblileVisible, setMobileVisible] = useState(false);
   const [svgHover, setSvgHover] = useState('');
 
   const isAuthenticated = useSelector(store => store.auth0.authenticated);
@@ -104,7 +89,6 @@ export default () => {
 
   const onLoginMode = useSelector(store => store.onLogin.mode);
   const multiUser = onLoginMode === 'multiuser';
-  // const singleUser = onLoginMode === 'singleuser';
 
   const isAdmin = useSelector(
     store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin
@@ -127,8 +111,6 @@ export default () => {
   const profiles = [];
 
   useEffect(() => {
-    // TODO: Add google page tracking
-    // ga.send(["pageview", location.pathname]);
     setActiveItem(location.pathname);
   }, [location]);
 
@@ -136,8 +118,6 @@ export default () => {
     teammates.map((profile, index) => {
       const setupComplete = profile.doc.setupComplete;
       const currentUser = profile.userId === loggedInUser._id;
-      // const userEmail = profile.doc.email;
-
       const contextRef = createRef();
       const currentUserIconWithPopup = (
         <Popup
@@ -175,11 +155,6 @@ export default () => {
   }
 
   useEffect(() => {
-    if (!toggle) {
-      setPostcardDropdown(false);
-      setSettingsDropdown(false);
-    }
-
     const busyState =
       mailoutPendingState ||
       updateMailoutEditPendingState ||
@@ -219,43 +194,17 @@ export default () => {
           toggle={toggle}
           setToggle={setToggle}
         >
-          <StepsLayout vertical={!isMobile}>
-            <StepLayout active={onProfile} completed={completedProfile}>
-              <Icon1 />
-              {isMobile ? null : (
-                <Step.Content>
-                  <Step.Title style={sidebarTextStyle}>Profile</Step.Title>
-                </Step.Content>
-              )}
-            </StepLayout>
-
-            <StepLayout active={onTeamCustomization} completed={completedTeamCustomization}>
-              <Icon2 />
-              {isMobile ? null : (
-                <Step.Content>
-                  <Step.Title style={sidebarTextStyle}>Customize Team</Step.Title>
-                </Step.Content>
-              )}
-            </StepLayout>
-
-            <StepLayout active={onCustomization} completed={completedCustomization}>
-              <Icon3 />
-              {isMobile ? null : (
-                <Step.Content>
-                  <Step.Title style={sidebarTextStyle}>Customize</Step.Title>
-                </Step.Content>
-              )}
-            </StepLayout>
-
-            <StepLayout active={onInviteTeammates} completed={completedInviteTeammates}>
-              <Icon4 />
-              {isMobile ? null : (
-                <Step.Content>
-                  <Step.Title style={sidebarTextStyle}>Invite Teammates</Step.Title>
-                </Step.Content>
-              )}
-            </StepLayout>
-          </StepsLayout>
+          <OnboardStepsAdmin
+            completedCustomization={completedCustomization}
+            completedInviteTeammates={completedInviteTeammates}
+            completedProfile={completedProfile}
+            completedTeamCustomization={completedTeamCustomization}
+            isMobile={isMobile}
+            onCustomization={onCustomization}
+            onInviteTeammates={onInviteTeammates}
+            onProfile={onProfile}
+            onTeamCustomization={onTeamCustomization}
+          />
         </SideNavToggle>
       );
     } else {
@@ -266,25 +215,13 @@ export default () => {
           toggle={toggle}
           setToggle={setToggle}
         >
-          <StepsLayout vertical={!isMobile}>
-            <StepLayout active={onProfileSingleUser} completed={completedProfile}>
-              <Icon name="user" />
-              {isMobile ? null : (
-                <Step.Content>
-                  <Step.Title style={sidebarTextStyle}>Profile</Step.Title>
-                </Step.Content>
-              )}
-            </StepLayout>
-
-            <StepLayout active={onCustomizationSingleUser} completed={completedCustomization}>
-              <Icon name="paint brush" />
-              {isMobile ? null : (
-                <Step.Content>
-                  <Step.Title style={sidebarTextStyle}>Customize</Step.Title>
-                </Step.Content>
-              )}
-            </StepLayout>
-          </StepsLayout>
+          <OnboardSteps
+            completedCustomization={completedCustomization}
+            completedProfile={completedProfile}
+            isMobile={isMobile}
+            onCustomizationSingleUser={onCustomizationSingleUser}
+            onProfileSingleUser={onProfileSingleUser}
+          />
         </SideNavToggle>
       );
     }
@@ -307,163 +244,65 @@ export default () => {
       <Dimmer.Dimmable blurring dimmed={appIsBusy}>
         <Dimmer active={appIsBusy} inverted />
 
-        <NavigationLayout
-          text
-          vertical={!isMobile}
-          style={
-            isMobile
-              ? {
-                  WebkitBoxShadow: '2px 2px 6px 0px rgba(50, 50, 50, 0.14)',
-                  MozBoxShadow: '2px 2px 6px 0px rgba(50, 50, 50, 0.14)',
-                  BoxShadow: '2px 2px 6px 0px rgba(50, 50, 50, 0.14)',
-                  backgroundColor: 'white',
-                  height: '100vh',
-                }
-              : {}
-          }
-        >
-          <Menu.Item
+        <NavigationLayout text>
+          <MenuItem
             as={Link}
             name="dashboard"
             active={activeItem === '/dashboard'}
             to="/dashboard"
-            style={menuItemStyles}
             onClick={mobileCollapse}
           >
             <StyledIcon icon="tachometer-alt" className="iconWithStyle" /> Dashboard
-          </Menu.Item>
+          </MenuItem>
 
-          <Menu.Item
+          <MenuItem
             as={Link}
             name="listings"
             active={activeItem === '/listings'}
             to="/listings"
-            style={menuItemStyles}
             onClick={mobileCollapse}
           >
             <StyledIcon icon="home" className="iconWithStyle" /> Listings
-          </Menu.Item>
+          </MenuItem>
 
-          {isMobile && (
-            <Menu.Item
-              name="postcards"
-              as={Link}
-              to={'/postcards'}
-              active={activeItem === '/postcards' || activeItem === '/create-postcard'}
-              style={menuItemStyles}
-              onClick={mobileCollapse}
-            >
-              <ImageStyledIcon icon={faImage} className="imageIconWithStyle" />
-              <span>Postcards</span>
-            </Menu.Item>
-          )}
+          <MenuItem
+            name="postcards"
+            as={Link}
+            to={'/postcards'}
+            active={activeItem === '/postcards' || activeItem === '/create-postcard'}
+            onClick={mobileCollapse}
+          >
+            <ImageStyledIcon icon={faImage} className="imageIconWithStyle" />
+            <span>Postcards</span>
+          </MenuItem>
 
-          {!isMobile && (
-            <>
-              <Menu.Item
-                name="postcards"
-                active={
-                  activeItem === '/postcards' ||
-                  activeItem === '/create-postcard' ||
-                  activeItem === '/postcards/archived' ||
-                  activeItem === '/dashboard/archived'
-                }
-                style={menuItemStyles}
-                onClick={() =>
-                  postcardDropdown ? setPostcardDropdown(false) : setPostcardDropdown(true)
-                }
-              >
-                <ImageStyledIcon icon={faImage} className="imageIconWithStyle" />
-                <span>Postcards</span>
-                <Icon name={postcardDropdown === 'postcards' ? 'angle up' : 'angle down'} />
-              </Menu.Item>
-              <div className={`${postcardDropdown ? 'accordionDrop' : 'noDropdown'}`}>
-                {activeItem !== '/postcards' && (
-                  <Link name="archived-campaigns" to="/postcards" onClick={() => setToggle(false)}>
-                    <span>View All Campaigns</span>
-                  </Link>
-                )}
-                {activeItem !== '/postcards/archived' && activeItem !== '/dashboard/archived' && (
-                  <Link
-                    name="view-campaigns"
-                    to="/postcards/archived"
-                    onClick={() => setToggle(false)}
-                  >
-                    <span>Archived Campaigns</span>
-                  </Link>
-                )}
-                {activeItem !== '/create-postcard' && (
-                  <>
-                    <Link
-                      name="create-postcard-listed"
-                      to={{
-                        pathname: '/create-postcard',
-                        state: { filter: 'listed' },
-                      }}
-                      onClick={() => setToggle(false)}
-                    >
-                      <span>New Listed Campaign</span>
-                    </Link>
-                    <Link
-                      name="create-postcard-sold"
-                      to={{
-                        pathname: '/create-postcard',
-                        state: { filter: 'sold' },
-                      }}
-                      onClick={() => setToggle(false)}
-                    >
-                      <span>New Sold Campaign</span>
-                    </Link>
-                    <Link
-                      name="create-postcard-handwritten"
-                      to={{
-                        pathname: '/create-postcard',
-                        state: { filter: 'handwritten' },
-                      }}
-                      onClick={() => setToggle(false)}
-                    >
-                      <span>New Handwritten Campaign</span>
-                    </Link>
-                    <Link
-                      name="create-postcard-holiday"
-                      to={{
-                        pathname: '/create-postcard',
-                        state: { filter: 'holiday' },
-                      }}
-                      onClick={() => setToggle(false)}
-                    >
-                      <span>New Holiday Campaign</span>
-                    </Link>
-                    <Link
-                      name="create-postcard-custom"
-                      to={{
-                        pathname: '/create-postcard',
-                        state: { filter: 'custom' },
-                      }}
-                      onClick={() => setToggle(false)}
-                    >
-                      <span>New Custom Campaign</span>
-                    </Link>
-                  </>
-                )}
-              </div>
-            </>
-          )}
+          <MenuItem
+            name="archive"
+            as={Link}
+            to={'/postcards/archived'}
+            active={activeItem === '//postcards/archived'}
+            onClick={mobileCollapse}
+          >
+            <ImageStyledIcon icon={faArchive} className="imageIconWithStyle" />
+            <span>Archive</span>
+          </MenuItem>
+
           {adProduct && multiUser && (
-            <Menu.Item
+            <MenuItem
               as={Link}
               name="ads"
               active={activeItem === '/ads'}
               to="/ads"
-              style={menuItemStyles}
               onClick={mobileCollapse}
             >
               <FacebookStyledIcon icon={faFacebookF} className="facebookIconWithStyle" /> Paid Ads
-            </Menu.Item>
+            </MenuItem>
           )}
 
-          <Menu.Item
+          <MenuItem
             name="settings"
+            as={Link}
+            to={'/settings'}
             active={
               activeItem === '/settings' ||
               activeItem === '/customization/team' ||
@@ -471,28 +310,16 @@ export default () => {
               activeItem === '/profile' ||
               activeItem === '/billing'
             }
-            style={menuItemStyles}
-            onClick={() =>
-              isMobile
-                ? mobileCollapse()
-                : settingsDropdown
-                ? setSettingsDropdown(false)
-                : setSettingsDropdown(true)
-            }
+            onClick={mobileCollapse}
             onMouseEnter={() => setSvgHover('svgHover')}
             onMouseLeave={() => setSvgHover('')}
           >
             <StyledCog className={`cogIconStyle ${svgHover}`} />
             <span style={menuP}>Settings</span>
-            {!isMobile && <Icon name={settingsDropdown ? 'angle up' : 'angle down'} />}
-          </Menu.Item>
+          </MenuItem>
 
-          {(isMobile || settingsDropdown) && (
-            <div
-              className={
-                isMobile ? 'accordionDrop' : `${settingsDropdown ? 'accordionDrop' : 'noDropdown'}`
-              }
-            >
+          {(isMobile || toggle) && (
+            <div className={'accordionDrop'}>
               <Link
                 name="settings"
                 className={activeItem === '/settings' ? 'active' : ''}
@@ -549,4 +376,4 @@ export default () => {
       </Dimmer.Dimmable>
     </SideNavToggle>
   );
-};
+}

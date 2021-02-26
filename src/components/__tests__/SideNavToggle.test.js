@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import SideNavToggle from '../SideNavToggle';
+import SideNavToggle from '../Navigation/SideNavToggle';
 import 'jest-styled-components';
 
 it('renders correctly', () => {
