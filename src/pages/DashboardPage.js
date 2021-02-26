@@ -186,7 +186,7 @@ const Dashboard = ({ className }) => {
         <SectionGrid>
           <DashboardItem
             name="just listed ad"
-            linkTo={{ pathname: 'listings', state: { filters: ['Active'] } }}
+            linkTo={{ pathname: 'listings', state: { filters: ['Active'], adsModal: true } }}
           ></DashboardItem>
           <DashboardItem
             name="just sold ad"

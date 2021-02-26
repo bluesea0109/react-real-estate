@@ -6,6 +6,7 @@ import { Header, Menu, Page, Dropdown } from '../components/Base';
 import styled from 'styled-components';
 import { Grid, Segment, Button, Popup, List, Icon, Card, Image } from 'semantic-ui-react';
 
+import CreateAdModal from '../components/CreateAdModal';
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
 import { useWindowSize } from '../components/Hooks/useWindowSize';
@@ -310,7 +311,8 @@ const ListingsPage = () => {
   const [filteredListings, setFitleredListings] = useState(null);
   const [activeFilters, setActiveFilters] = useState(location?.state?.filters || 'All');
   const [userType, setUserType] = useState('loggedIn');
-
+  const [showAdsModal, setShowAdsModal] = useState(location?.state?.adsModal);
+  const [selectedListing, setSelectedListing] = useState(false);
   const peerId = useSelector(store => store.peer.peerId);
   const userProfile = useSelector(store => store.onLogin?.userProfile);
   const userProfileImgResized = useSelector(store => store.onLogin?.realtorPhoto?.resized);
@@ -319,7 +321,7 @@ const ListingsPage = () => {
   const peerUser = useSelector(
     store => store.team?.profiles.filter(profile => profile.userId === peerId)[0]
   );
-
+  console.log('activeFilters', activeFilters);
   const windowSize = useWindowSize();
   useEffect(() => {
     async function fetchData() {
@@ -502,6 +504,14 @@ const ListingsPage = () => {
           </Segment>
         )}
       </div>
+      <CreateAdModal
+        open={showAdsModal}
+        setOpen={setShowAdsModal}
+        selectedListing={selectedListing}
+        // selectedSize={selectedSize}
+        // selectedTemplate={selectedTemplate}
+        setSelectedListing={setSelectedListing}
+      />
     </Page>
   );
 };
