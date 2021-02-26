@@ -50,7 +50,8 @@ const PrivateRoute = ({
           ) {
             return history.push('/onboard');
           }
-        } else if (localStorage.getItem('routerDestination')) {
+        }
+        if (localStorage.getItem('routerDestination')) {
           const routerDestination = await localStorage.getItem('routerDestination');
           localStorage.removeItem('routerDestination');
           return history.push(routerDestination);
