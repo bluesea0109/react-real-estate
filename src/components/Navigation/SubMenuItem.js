@@ -14,6 +14,7 @@ const StyledSubMenuItem = styled.a`
     font-size: 14px;
     height: 40px;
     padding: 0.5rem;
+    margin-left: 0.5rem;
     color: ${brandColors.grey03};
     &.active {
       color: ${brandColors.primary};

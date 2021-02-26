@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Header, Popup } from 'semantic-ui-react';
 import React, { createRef, useEffect, useState } from 'react';
@@ -13,15 +13,13 @@ import { Dimmer, Initials, Icon } from '../Base';
 import { useIsMobile } from '../Hooks/useIsMobile.js';
 
 import { ReactComponent as Cog } from '../../assets/cog.svg';
-import { faArchive, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { faArchive } from '@fortawesome/free-solid-svg-icons';
 import {
   MenuItem,
   NavigationLayout,
   OnboardSteps,
   OnboardStepsAdmin,
   SideNavToggle,
-  SubMenuContainer,
-  SubMenuItem,
 } from './index';
 
 const menuP = {
@@ -60,11 +58,8 @@ export default function Navigation() {
   const isMobile = useIsMobile();
   const dispatch = useDispatch();
   const location = useLocation();
-  const history = useHistory();
   const [activeItem, setActiveItem] = useState('');
   const [appIsBusy, setAppIsBusy] = useState(false);
-  const [postcardDropdown, setPostcardDropdown] = useState(false);
-  const [settingsDropdown, setSettingsDropdown] = useState(false);
   const [toggle, setToggle] = useState(null);
   const [moblileVisible, setMobileVisible] = useState(false);
   const [svgHover, setSvgHover] = useState('');
@@ -94,7 +89,6 @@ export default function Navigation() {
 
   const onLoginMode = useSelector(store => store.onLogin.mode);
   const multiUser = onLoginMode === 'multiuser';
-  // const singleUser = onLoginMode === 'singleuser';
 
   const isAdmin = useSelector(
     store => store.onLogin.permissions && store.onLogin.permissions.teamAdmin
@@ -117,8 +111,6 @@ export default function Navigation() {
   const profiles = [];
 
   useEffect(() => {
-    // TODO: Add google page tracking
-    // ga.send(["pageview", location.pathname]);
     setActiveItem(location.pathname);
   }, [location]);
 
@@ -126,8 +118,6 @@ export default function Navigation() {
     teammates.map((profile, index) => {
       const setupComplete = profile.doc.setupComplete;
       const currentUser = profile.userId === loggedInUser._id;
-      // const userEmail = profile.doc.email;
-
       const contextRef = createRef();
       const currentUserIconWithPopup = (
         <Popup
@@ -165,11 +155,6 @@ export default function Navigation() {
   }
 
   useEffect(() => {
-    if (!toggle) {
-      setPostcardDropdown(false);
-      setSettingsDropdown(false);
-    }
-
     const busyState =
       mailoutPendingState ||
       updateMailoutEditPendingState ||
@@ -197,11 +182,6 @@ export default function Navigation() {
 
   const onProfileSingleUser = !completedProfile;
   const onCustomizationSingleUser = !completedCustomization && completedProfile;
-
-  const mobileSettingsClick = () => {
-    mobileCollapse();
-    history.push('/settings');
-  };
 
   if (!loadingCompleted) return null;
 
@@ -264,18 +244,7 @@ export default function Navigation() {
       <Dimmer.Dimmable blurring dimmed={appIsBusy}>
         <Dimmer active={appIsBusy} inverted />
 
-        <NavigationLayout
-          text
-          style={
-            isMobile
-              ? {
-                  BoxShadow: '2px 2px 6px 0px rgba(50, 50, 50, 0.14)',
-                  backgroundColor: 'white',
-                  height: '100vh',
-                }
-              : {}
-          }
-        >
+        <NavigationLayout text>
           <MenuItem
             as={Link}
             name="dashboard"
@@ -296,70 +265,28 @@ export default function Navigation() {
             <StyledIcon icon="home" className="iconWithStyle" /> Listings
           </MenuItem>
 
-          {isMobile && (
-            <MenuItem
-              name="postcards"
-              as={Link}
-              to={'/postcards'}
-              active={activeItem === '/postcards' || activeItem === '/create-postcard'}
-              onClick={mobileCollapse}
-            >
-              <ImageStyledIcon icon={faImage} className="imageIconWithStyle" />
-              <span>Postcards</span>
-            </MenuItem>
-          )}
+          <MenuItem
+            name="postcards"
+            as={Link}
+            to={'/postcards'}
+            active={activeItem === '/postcards' || activeItem === '/create-postcard'}
+            onClick={mobileCollapse}
+          >
+            <ImageStyledIcon icon={faImage} className="imageIconWithStyle" />
+            <span>Postcards</span>
+          </MenuItem>
 
-          {!isMobile && (
-            <>
-              <MenuItem
-                name="postcards"
-                active={
-                  activeItem === '/postcards' ||
-                  activeItem === '/create-postcard' ||
-                  activeItem === '/postcards/archived' ||
-                  activeItem === '/dashboard/archived'
-                }
-                onClick={() =>
-                  postcardDropdown ? setPostcardDropdown(false) : setPostcardDropdown(true)
-                }
-              >
-                <ImageStyledIcon icon={faImage} className="imageIconWithStyle" />
-                <span>Postcards</span>
-                <Icon name={postcardDropdown ? 'angle up' : 'angle down'} />
-              </MenuItem>
-              {postcardDropdown && (
-                <SubMenuContainer>
-                  <SubMenuItem
-                    name="all-campaigns"
-                    as={Link}
-                    to="/postcards"
-                    active={activeItem === '/postcards'}
-                  >
-                    <ImageStyledIcon icon={faImage} className="imageIconWithStyle" />
-                    <span>All Campaigns</span>
-                  </SubMenuItem>
-                  <SubMenuItem
-                    name="archived-campaigns"
-                    as={Link}
-                    to="/postcards/archived"
-                    active={activeItem === '/postcards/archived'}
-                  >
-                    <ImageStyledIcon icon={faArchive} className="imageIconWithStyle" />
-                    <span>Archived Campaigns</span>
-                  </SubMenuItem>
-                  <SubMenuItem
-                    name="new-campaign"
-                    as={Link}
-                    to="/create-postcard"
-                    active={activeItem === '/create-postcard'}
-                  >
-                    <ImageStyledIcon icon={faPlusCircle} className="imageIconWithStyle" />
-                    <span>New Campaign</span>
-                  </SubMenuItem>
-                </SubMenuContainer>
-              )}
-            </>
-          )}
+          <MenuItem
+            name="archive"
+            as={Link}
+            to={'/postcards/archived'}
+            active={activeItem === '//postcards/archived'}
+            onClick={mobileCollapse}
+          >
+            <ImageStyledIcon icon={faArchive} className="imageIconWithStyle" />
+            <span>Archive</span>
+          </MenuItem>
+
           {adProduct && multiUser && (
             <MenuItem
               as={Link}
@@ -374,6 +301,8 @@ export default function Navigation() {
 
           <MenuItem
             name="settings"
+            as={Link}
+            to={'/settings'}
             active={
               activeItem === '/settings' ||
               activeItem === '/customization/team' ||
@@ -381,27 +310,16 @@ export default function Navigation() {
               activeItem === '/profile' ||
               activeItem === '/billing'
             }
-            onClick={() =>
-              isMobile
-                ? mobileSettingsClick()
-                : settingsDropdown
-                ? setSettingsDropdown(false)
-                : setSettingsDropdown(true)
-            }
+            onClick={mobileCollapse}
             onMouseEnter={() => setSvgHover('svgHover')}
             onMouseLeave={() => setSvgHover('')}
           >
             <StyledCog className={`cogIconStyle ${svgHover}`} />
             <span style={menuP}>Settings</span>
-            {!isMobile && <Icon name={settingsDropdown ? 'angle up' : 'angle down'} />}
           </MenuItem>
 
-          {(isMobile || settingsDropdown) && (
-            <div
-              className={
-                isMobile ? 'accordionDrop' : `${settingsDropdown ? 'accordionDrop' : 'noDropdown'}`
-              }
-            >
+          {(isMobile || toggle) && (
+            <div className={'accordionDrop'}>
               <Link
                 name="settings"
                 className={activeItem === '/settings' ? 'active' : ''}
