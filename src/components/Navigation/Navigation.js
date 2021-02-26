@@ -19,20 +19,14 @@ import { ReactComponent as Icon1 } from '../../assets/1-icon.svg';
 import { ReactComponent as Icon2 } from '../../assets/2-icon.svg';
 import { ReactComponent as Icon3 } from '../../assets/3-icon.svg';
 import { ReactComponent as Icon4 } from '../../assets/4-icon.svg';
+import * as brandColors from '../utils/brandColors';
+import { faArchive } from '@fortawesome/free-solid-svg-icons';
 
 const sidebarTextStyle = {
   fontSize: '16px',
   width: '100%',
   marginLeft: '16px',
   marginTop: '-3px',
-};
-
-const menuItemStyles = {
-  lineHeight: 2.6,
-  fontSize: '16px',
-  height: '56px',
-  borderBottom: '1px solid #eaedf0 !important',
-  padding: '0.5em',
 };
 
 const menuP = {
@@ -43,6 +37,74 @@ const menuP = {
   marginLeft: '16px',
   marginTop: '-2px',
 };
+
+const StyledMenuItem = styled(Menu.Item)`
+  &&&&&& {
+    line-height: 2.6;
+    font-size: 16px;
+    height: 56px;
+    padding: 0.5rem;
+    border-bottom: 1px solid #eaedf0;
+    color: ${brandColors.grey03};
+    &.active {
+      color: ${brandColors.primary};
+      border-left: 5px solid ${brandColors.primary};
+      border-bottom: none !important;
+      font-weight: 600;
+      background-color: ${brandColors.primaryLight} !important;
+      .iconWithStyle {
+        margin: 0 1.5rem 0 0.35rem;
+        width: 1.25rem;
+      }
+      .imageIconWithStyle {
+        margin: 0 1.3rem 0 0.55rem;
+        width: 1.25rem;
+      }
+      .facebookIconWithStyle {
+        margin-left: 0.57em;
+      }
+      .cogIconStyle {
+        margin-left: 8px;
+      }
+      svg {
+        path {
+          fill: ${brandColors.primary};
+        }
+      }
+    }
+    svg {
+      font-size: 17px;
+    }
+  }
+`;
+
+const MenuItem = ({ active, ...props }) => (
+  <StyledMenuItem {...props} className={active ? 'active' : undefined} />
+);
+
+const SubMenuContainer = styled.div`
+  border-bottom: 1px solid #eaedf0;
+  display: flex;
+  flex-direction: column;
+`;
+
+const StyledSubMenuItem = styled(Menu.Item)`
+  &&&&&& {
+    line-height: 2;
+    font-size: 14px;
+    height: 40px;
+    padding: 0.5rem;
+    color: ${brandColors.grey03};
+    &.active {
+      color: ${brandColors.primary};
+      font-weight: 600;
+    }
+  }
+`;
+
+const SubMenuItem = ({ active, ...props }) => (
+  <StyledSubMenuItem {...props} className={active ? 'active' : undefined} />
+);
 
 const StyledHeader = styled(Header)`
   min-width: max-content !important;
@@ -322,45 +384,42 @@ export default function Navigation() {
               : {}
           }
         >
-          <Menu.Item
+          <MenuItem
             as={Link}
             name="dashboard"
             active={activeItem === '/dashboard'}
             to="/dashboard"
-            style={menuItemStyles}
             onClick={mobileCollapse}
           >
             <StyledIcon icon="tachometer-alt" className="iconWithStyle" /> Dashboard
-          </Menu.Item>
+          </MenuItem>
 
-          <Menu.Item
+          <MenuItem
             as={Link}
             name="listings"
             active={activeItem === '/listings'}
             to="/listings"
-            style={menuItemStyles}
             onClick={mobileCollapse}
           >
             <StyledIcon icon="home" className="iconWithStyle" /> Listings
-          </Menu.Item>
+          </MenuItem>
 
           {isMobile && (
-            <Menu.Item
+            <MenuItem
               name="postcards"
               as={Link}
               to={'/postcards'}
               active={activeItem === '/postcards' || activeItem === '/create-postcard'}
-              style={menuItemStyles}
               onClick={mobileCollapse}
             >
               <ImageStyledIcon icon={faImage} className="imageIconWithStyle" />
               <span>Postcards</span>
-            </Menu.Item>
+            </MenuItem>
           )}
 
           {!isMobile && (
             <>
-              <Menu.Item
+              <MenuItem
                 name="postcards"
                 active={
                   activeItem === '/postcards' ||
@@ -368,7 +427,6 @@ export default function Navigation() {
                   activeItem === '/postcards/archived' ||
                   activeItem === '/dashboard/archived'
                 }
-                style={menuItemStyles}
                 onClick={() =>
                   postcardDropdown ? setPostcardDropdown(false) : setPostcardDropdown(true)
                 }
@@ -376,8 +434,30 @@ export default function Navigation() {
                 <ImageStyledIcon icon={faImage} className="imageIconWithStyle" />
                 <span>Postcards</span>
                 <Icon name={postcardDropdown === 'postcards' ? 'angle up' : 'angle down'} />
-              </Menu.Item>
-              <div className={`${postcardDropdown ? 'accordionDrop' : 'noDropdown'}`}>
+              </MenuItem>
+              {postcardDropdown && (
+                <SubMenuContainer>
+                  <SubMenuItem
+                    name="all-campaigns"
+                    as={Link}
+                    to="/postcards"
+                    active={activeItem === '/postcards'}
+                  >
+                    <ImageStyledIcon icon={faImage} className="imageIconWithStyle" />
+                    <span>All Campaigns</span>
+                  </SubMenuItem>
+                  <SubMenuItem
+                    name="archived-campaigns"
+                    as={Link}
+                    to="/postcards/archived"
+                    active={activeItem === '/postcards/archived'}
+                  >
+                    <ImageStyledIcon icon={faArchive} className="imageIconWithStyle" />
+                    <span>Archived Campaigns</span>
+                  </SubMenuItem>
+                </SubMenuContainer>
+              )}
+              {/* <div className={`${postcardDropdown ? 'accordionDrop' : 'noDropdown'}`}>
                 {activeItem !== '/postcards' && (
                   <Link name="archived-campaigns" to="/postcards" onClick={() => setToggle(false)}>
                     <span>View All Campaigns</span>
@@ -446,23 +526,22 @@ export default function Navigation() {
                     </Link>
                   </>
                 )}
-              </div>
+              </div> */}
             </>
           )}
           {adProduct && multiUser && (
-            <Menu.Item
+            <MenuItem
               as={Link}
               name="ads"
               active={activeItem === '/ads'}
               to="/ads"
-              style={menuItemStyles}
               onClick={mobileCollapse}
             >
               <FacebookStyledIcon icon={faFacebookF} className="facebookIconWithStyle" /> Paid Ads
-            </Menu.Item>
+            </MenuItem>
           )}
 
-          <Menu.Item
+          <MenuItem
             name="settings"
             active={
               activeItem === '/settings' ||
@@ -471,7 +550,6 @@ export default function Navigation() {
               activeItem === '/profile' ||
               activeItem === '/billing'
             }
-            style={menuItemStyles}
             onClick={() =>
               isMobile
                 ? mobileCollapse()
@@ -485,7 +563,7 @@ export default function Navigation() {
             <StyledCog className={`cogIconStyle ${svgHover}`} />
             <span style={menuP}>Settings</span>
             {!isMobile && <Icon name={settingsDropdown ? 'angle up' : 'angle down'} />}
-          </Menu.Item>
+          </MenuItem>
 
           {(isMobile || settingsDropdown) && (
             <div

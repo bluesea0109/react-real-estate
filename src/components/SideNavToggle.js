@@ -78,38 +78,6 @@ const ToggleContainer = styled.div`
       fill: ${brandColors.primary};
     }
   }
-  &&& .active.item {
-    color: ${brandColors.primary};
-    border-left: 5px solid ${brandColors.primary};
-    border-bottom: none !important;
-    font-weight: 600;
-    background-color: ${brandColors.primaryLight} !important;
-    .iconWithStyle {
-      margin: 0 1.5rem 0 0.35rem;
-      width: 1.25rem;
-    }
-    .imageIconWithStyle {
-      margin: 0 1.3rem 0 0.55rem;
-      width: 1.25rem;
-    }
-    .facebookIconWithStyle {
-      margin-left: 0.57em;
-    }
-    .cogIconStyle {
-      margin-left: 8px;
-    }
-    svg {
-      path {
-        fill: ${brandColors.primary};
-      }
-    }
-  }
-  & a {
-    border-bottom: 1px solid #eaedf0 !important;
-    svg {
-      font-size: 17px;
-    }
-  }
   & .accordionDrop {
     padding: 4px 4px 4px 16px;
     border-bottom: 1px solid #eaedf0;
