@@ -1,32 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import * as brandColors from './utils/brandColors';
+import * as brandColors from '../utils/brandColors';
 import { Grid, Menu, Segment, Sidebar } from 'semantic-ui-react';
 import styled from 'styled-components';
-
-function useWindowSize() {
-  const [windowSize, setWindowSize] = useState({
-    width: undefined,
-    height: undefined,
-  });
-  useEffect(() => {
-    // Handler to call on window resize
-    function handleResize() {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    }
-
-    window.addEventListener('resize', handleResize);
-
-    handleResize();
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  return windowSize;
-}
+import { useWindowSize } from '../Hooks/useWindowSize';
 
 const MobileMenu = styled.div`
   .pushable {
@@ -45,21 +22,14 @@ const MobileMenu = styled.div`
         & > a {
           color: ${brandColors.grey03};
           margin: 8px;
+          &.active {
+            color: ${brandColors.primary};
+          }
         }
       }
     }
-    .ui.text.menu {
-      display: flex;
-      flex-direction: column;
-      width: 225px;
-      margin-left: 0px;
-    }
     a {
-      text-align: left !important;
-    }
-    .active {
-      border-color: ${brandColors.primary} !important;
-      color: ${brandColors.primary} !important;
+      text-align: left;
     }
   }
 `;
@@ -95,54 +65,6 @@ const ToggleContainer = styled.div`
       font-weight: 600 !important;
     }
   }
-  .ui.vertical.steps {
-    width: 240px;
-    padding: 0px;
-    margin-left: -1px;
-    margin-top: -1px;
-    .step:after {
-      display: none;
-    }
-    .step {
-      height: 56px;
-      padding: 0px;
-      border-bottom: 1px solid #eaedf0;
-      svg {
-        margin-left: 8px;
-      }
-      .title {
-        font-weight: 400;
-        font-family: 'Open Sans', sans-serif;
-        color: rgba(0, 0, 0, 0.6);
-      }
-    }
-
-    .active {
-      border-radius: 0px;
-      padding: 0px;
-      color: ${brandColors.primary};
-      border-left: 5px solid ${brandColors.primary} !important;
-      border-bottom: 1px solid #eaedf0 !important;
-      font-weight: 600;
-      background-color: ${brandColors.primaryLight} !important;
-      svg {
-        margin-left: 5px;
-      }
-      #step1Path,
-      #step2Path,
-      #step3Path,
-      #step4Path {
-        fill: ${brandColors.primary};
-      }
-      .title {
-        font-weight: 600;
-        color: ${brandColors.primary};
-      }
-      .content {
-        margin-left: -5px;
-      }
-    }
-  }
   &.expand {
     width: 225px;
   }
@@ -160,37 +82,14 @@ const ToggleContainer = styled.div`
     height: auto;
     flex-direction: column;
   }
-  & .ui.text.menu {
-    margin: 0em -1.25em;
-    display: flex;
-    flex-direction: column;
-    margin-left: 0px;
-    & .item {
-      margin: 0;
-      align-self: flex-start;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      & span {
-        flex: 1;
-      }
-      & .icon {
-        align-self: flex-end;
-        height: 100%;
-      }
-    }
-    .item:hover {
-      color: ${brandColors.primary} !important;
-    }
-  }
 `;
 
 const SidebarSlider = ({ children, moblileVisible, setMobileVisible, toggle, setToggle }) => {
-  const [isMobile, setIsMobile] = useState(window.matchMedia('(max-width: 768px)').matches);
+  const [isMobile, setIsMobile] = useState(window.matchMedia('(max-width: 599px)').matches);
   const size = useWindowSize();
 
   useEffect(() => {
-    setIsMobile(window.matchMedia('(max-width: 599px)').matches);
+    setIsMobile(size.width < 600);
   }, [size]);
 
   return (

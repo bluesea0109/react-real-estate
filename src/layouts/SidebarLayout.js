@@ -6,13 +6,13 @@ export default styled.div`
   top: 61px;
   z-index: 20;
 
-  @media (min-width: 770px) {
+  @media (min-width: 600px) {
     border-right: 1px solid lightgrey;
     min-height: 100vh !important;
     min-width: 56px;
   }
 
-  @media (max-width: 769px) {
+  @media (max-width: 599px) {
     min-width: 100%;
     background: #ffffff;
   }

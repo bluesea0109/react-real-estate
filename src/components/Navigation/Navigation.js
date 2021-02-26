@@ -9,25 +9,20 @@ import { useDispatch } from 'react-redux';
 import { resetMailout } from '../../store/modules/mailout/actions';
 import { faFacebookF } from '@fortawesome/free-brands-svg-icons';
 
-import { StepLayout, StepsLayout, NavigationLayout } from '../../layouts';
-import { Dimmer, Menu, Initials, Icon, Step } from '../Base';
+import { Dimmer, Initials, Icon } from '../Base';
 import { useIsMobile } from '../Hooks/useIsMobile.js';
 
-import SideNavToggle from '../SideNavToggle';
 import { ReactComponent as Cog } from '../../assets/cog.svg';
-import { ReactComponent as Icon1 } from '../../assets/1-icon.svg';
-import { ReactComponent as Icon2 } from '../../assets/2-icon.svg';
-import { ReactComponent as Icon3 } from '../../assets/3-icon.svg';
-import { ReactComponent as Icon4 } from '../../assets/4-icon.svg';
-import * as brandColors from '../utils/brandColors';
 import { faArchive, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
-
-const sidebarTextStyle = {
-  fontSize: '16px',
-  width: '100%',
-  marginLeft: '16px',
-  marginTop: '-3px',
-};
+import {
+  MenuItem,
+  NavigationLayout,
+  OnboardSteps,
+  OnboardStepsAdmin,
+  SideNavToggle,
+  SubMenuContainer,
+  SubMenuItem,
+} from './index';
 
 const menuP = {
   lineHeight: '2.6',
@@ -37,79 +32,6 @@ const menuP = {
   marginLeft: '16px',
   marginTop: '-2px',
 };
-
-const StyledMenuItem = styled(Menu.Item)`
-  &&&&&& {
-    width: 100%;
-    line-height: 2.6;
-    font-size: 16px;
-    height: 56px;
-    padding: 0.5rem;
-    border-bottom: 1px solid #eaedf0;
-    color: ${brandColors.grey03};
-    :hover {
-      color: ${brandColors.primary} !important;
-    }
-    &.active {
-      color: ${brandColors.primary};
-      border-left: 5px solid ${brandColors.primary};
-      border-bottom: none !important;
-      font-weight: 600;
-      background-color: ${brandColors.primaryLight} !important;
-      .iconWithStyle {
-        margin: 0 1.3rem 0 0.35rem;
-      }
-      .imageIconWithStyle {
-        margin: 0 1.3rem 0 0.55rem;
-      }
-      .facebookIconWithStyle {
-        margin-left: 0.57em;
-      }
-      .cogIconStyle {
-        margin-left: 8px;
-      }
-      svg {
-        path {
-          fill: ${brandColors.primary};
-        }
-      }
-    }
-    & svg {
-      font-size: 17px;
-    }
-  }
-`;
-
-const MenuItem = ({ active, ...props }) => (
-  <StyledMenuItem {...props} className={active ? 'active' : undefined} />
-);
-
-const SubMenuContainer = styled.div`
-  border-bottom: 1px solid #eaedf0;
-  display: flex;
-  flex-direction: column;
-`;
-
-const StyledSubMenuItem = styled(Menu.Item)`
-  &&&&&& {
-    line-height: 2;
-    font-size: 14px;
-    height: 40px;
-    padding: 0.5rem;
-    color: ${brandColors.grey03};
-    &.active {
-      color: ${brandColors.primary};
-      font-weight: 600;
-    }
-    :hover {
-      color: ${brandColors.primary} !important;
-    }
-  }
-`;
-
-const SubMenuItem = ({ active, ...props }) => (
-  <StyledSubMenuItem {...props} className={active ? 'active' : undefined} />
-);
 
 const StyledHeader = styled(Header)`
   min-width: max-content !important;
@@ -123,15 +45,15 @@ const StyledCog = styled(Cog)`
 `;
 
 const StyledIcon = styled(FontAwesomeIcon)`
-  margin: 0em 1em 0em 0.65em;
+  margin: 0em 1.4em 0em 0.65em;
 `;
 
 const FacebookStyledIcon = styled(FontAwesomeIcon)`
-  margin: 0em 1.3em 0em 0.86em;
+  margin: 0em 1.7em 0em 0.86em;
 `;
 
 const ImageStyledIcon = styled(FontAwesomeIcon)`
-  margin: 0 1.6rem 0 0.85rem;
+  margin: 0 1.4em 0 0.75em;
 `;
 
 export default function Navigation() {
@@ -144,7 +66,7 @@ export default function Navigation() {
   const [postcardDropdown, setPostcardDropdown] = useState(false);
   const [settingsDropdown, setSettingsDropdown] = useState(false);
   const [toggle, setToggle] = useState(null);
-  const [moblileVisible, setMobileVisible] = React.useState(false);
+  const [moblileVisible, setMobileVisible] = useState(false);
   const [svgHover, setSvgHover] = useState('');
 
   const isAuthenticated = useSelector(store => store.auth0.authenticated);
@@ -292,43 +214,17 @@ export default function Navigation() {
           toggle={toggle}
           setToggle={setToggle}
         >
-          <StepsLayout vertical={!isMobile}>
-            <StepLayout active={onProfile} completed={completedProfile}>
-              <Icon1 />
-              {isMobile ? null : (
-                <Step.Content>
-                  <Step.Title style={sidebarTextStyle}>Profile</Step.Title>
-                </Step.Content>
-              )}
-            </StepLayout>
-
-            <StepLayout active={onTeamCustomization} completed={completedTeamCustomization}>
-              <Icon2 />
-              {isMobile ? null : (
-                <Step.Content>
-                  <Step.Title style={sidebarTextStyle}>Customize Team</Step.Title>
-                </Step.Content>
-              )}
-            </StepLayout>
-
-            <StepLayout active={onCustomization} completed={completedCustomization}>
-              <Icon3 />
-              {isMobile ? null : (
-                <Step.Content>
-                  <Step.Title style={sidebarTextStyle}>Customize</Step.Title>
-                </Step.Content>
-              )}
-            </StepLayout>
-
-            <StepLayout active={onInviteTeammates} completed={completedInviteTeammates}>
-              <Icon4 />
-              {isMobile ? null : (
-                <Step.Content>
-                  <Step.Title style={sidebarTextStyle}>Invite Teammates</Step.Title>
-                </Step.Content>
-              )}
-            </StepLayout>
-          </StepsLayout>
+          <OnboardStepsAdmin
+            completedCustomization={completedCustomization}
+            completedInviteTeammates={completedInviteTeammates}
+            completedProfile={completedProfile}
+            completedTeamCustomization={completedTeamCustomization}
+            isMobile={isMobile}
+            onCustomization={onCustomization}
+            onInviteTeammates={onInviteTeammates}
+            onProfile={onProfile}
+            onTeamCustomization={onTeamCustomization}
+          />
         </SideNavToggle>
       );
     } else {
@@ -339,25 +235,13 @@ export default function Navigation() {
           toggle={toggle}
           setToggle={setToggle}
         >
-          <StepsLayout vertical={!isMobile}>
-            <StepLayout active={onProfileSingleUser} completed={completedProfile}>
-              <Icon name="user" />
-              {isMobile ? null : (
-                <Step.Content>
-                  <Step.Title style={sidebarTextStyle}>Profile</Step.Title>
-                </Step.Content>
-              )}
-            </StepLayout>
-
-            <StepLayout active={onCustomizationSingleUser} completed={completedCustomization}>
-              <Icon name="paint brush" />
-              {isMobile ? null : (
-                <Step.Content>
-                  <Step.Title style={sidebarTextStyle}>Customize</Step.Title>
-                </Step.Content>
-              )}
-            </StepLayout>
-          </StepsLayout>
+          <OnboardSteps
+            completedCustomization={completedCustomization}
+            completedProfile={completedProfile}
+            isMobile={isMobile}
+            onCustomizationSingleUser={onCustomizationSingleUser}
+            onProfileSingleUser={onProfileSingleUser}
+          />
         </SideNavToggle>
       );
     }
@@ -385,8 +269,6 @@ export default function Navigation() {
           style={
             isMobile
               ? {
-                  WebkitBoxShadow: '2px 2px 6px 0px rgba(50, 50, 50, 0.14)',
-                  MozBoxShadow: '2px 2px 6px 0px rgba(50, 50, 50, 0.14)',
                   BoxShadow: '2px 2px 6px 0px rgba(50, 50, 50, 0.14)',
                   backgroundColor: 'white',
                   height: '100vh',
