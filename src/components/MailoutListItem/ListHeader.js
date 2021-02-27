@@ -250,17 +250,28 @@ const ListHeader = ({
           </span>
         )}
         {mailoutDetailPage && enableEdit && (
-          <span>
+          <>
             <Button
-              primary
-              inverted
-              onClick={onClickEdit}
               disabled={lockControls}
+              inverted
               loading={lockControls}
+              onClick={() => history.push(`/postcards/editor/${data._id}`)}
+              primary
             >
-              Edit
+              Editor
             </Button>
-          </span>
+            <span>
+              <Button
+                primary
+                inverted
+                onClick={onClickEdit}
+                disabled={lockControls}
+                loading={lockControls}
+              >
+                Edit
+              </Button>
+            </span>
+          </>
         )}
         {data.mailoutStatus === 'archived' && (
           <Button
