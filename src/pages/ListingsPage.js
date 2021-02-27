@@ -421,6 +421,7 @@ const ListingsPage = () => {
     return 4;
   };
 
+  console.log('selectedListing', selectedListing);
   return (
     <Page basic>
       <ContentTopHeaderLayout>

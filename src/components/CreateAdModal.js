@@ -6,9 +6,8 @@ import * as brandColors from './utils/brandColors';
 import { debounce } from 'lodash';
 import auth from '../services/auth';
 import ListingPreviewCard from './ListingPreviewCard';
-import { addCampaignStart } from '../store/modules/mailouts/actions';
+import { getAdsTool } from '../store/modules/ads/actions';
 import { useDispatch } from 'react-redux';
-import { postcardDimensions } from './utils/utils';
 
 const StyledModal = styled(Modal)`
   &&&& {
@@ -123,11 +122,12 @@ const ListingModal = ({ open, setOpen, selectedListing, setSelectedListing }) =>
     setSelectedListing(results.find(result => result.text === e.target.innerHTML));
   };
 
-  const createMLSCampaign = () => {
-    //   const mlsNum = selectedListing?.listing?.mlsNum;
-    //   const publishedTags = selectedTemplate?.intentPath?.split('|');
+  const launchAdTool = ({ selectedListing }) => {
+    const mls = selectedListing?.listing?.blueroofMlsId;
+    const listing = selectedListing?.listing?.mlsNum;
+    //const publishedTags = selectedTemplate?.intentPath?.split('|');
     //   if (!mlsNum || !frontTemplateUuid) return;
-    // dispatch(addCampaignStart({ mlsNum,  frontTemplateUuid, publishedTags }));
+    dispatch(getAdsTool());
     setOpen(false);
   };
 
@@ -156,7 +156,7 @@ const ListingModal = ({ open, setOpen, selectedListing, setSelectedListing }) =>
               onResultSelect={handleListingSelect}
             />
           )}
-          <CreateButton primary disabled={!selectedListing} onClick={createMLSCampaign}>
+          <CreateButton primary disabled={!selectedListing} onClick={launchAdTool}>
             Create Ad
           </CreateButton>
         </div>

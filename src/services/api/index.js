@@ -248,6 +248,10 @@ const directory = {
         path: `/api/user/mailout/clone/${mailoutId}`,
         method: 'post',
       }),
+      createAd: () => ({
+        path: `/api/user/ads/forge`,
+        method: 'post',
+      }),
     },
     customization: {
       get: () => ({ path: `/api/user/settings/branding`, method: 'get' }),
@@ -386,6 +390,10 @@ const directory = {
       }),
       clone: (mailoutId, peerId) => ({
         path: `/api/user/peer/${peerId}/mailout/clone/${mailoutId}`,
+        method: 'post',
+      }),
+      createAd: peerId => ({
+        path: `/api/user/peer/${peerId}/ads/forge`,
         method: 'post',
       }),
     },
