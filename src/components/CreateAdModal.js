@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Search } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { Button, Icon, Modal } from './Base';
@@ -84,12 +85,15 @@ const CreateButton = styled(Button)`
   }
 `;
 
-const ListingModal = ({ open, setOpen, selectedListing, setSelectedListing }) => {
+const ListingModal = ({ open, setOpen, selectedListing, setSelectedListing, adType }) => {
   const dispatch = useDispatch();
   const [searchValue, setSearchValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState([]);
   const [filteredResults, setFilteredResults] = useState([]);
+  const token = useSelector(store => store.ads?.adsTool?.adProduct.qs.token);
+  const userId = useSelector(store => store.ads?.adsTool?.adProduct.qs.userId);
+  const adstoolQS = useSelector(store => store.ads?.adsTool?.adProduct.qs);
 
   useEffect(() => {
     const newFilteredResults = results?.map(res => {
@@ -122,13 +126,35 @@ const ListingModal = ({ open, setOpen, selectedListing, setSelectedListing }) =>
     setSelectedListing(results.find(result => result.text === e.target.innerHTML));
   };
 
-  const launchAdTool = ({ selectedListing }) => {
+  let createQS = item => {
+    return Object.keys(item)
+      .map(param => `${param}=${item[param]}`)
+      .join('&');
+  };
+
+  let adResponseQS = null;
+
+  if (adstoolQS) {
+    adResponseQS = createQS(adstoolQS);
+  }
+
+  const adToolQS = () => {
+    const url = 'https://listings.ui.staging.brivitymarketer.com/marketer/?';
     const mls = selectedListing?.listing?.blueroofMlsId;
     const listing = selectedListing?.listing?.mlsNum;
-    //const publishedTags = selectedTemplate?.intentPath?.split('|');
-    //   if (!mlsNum || !frontTemplateUuid) return;
+    const finalUrl = url.concat(
+      `mls=${mls}&listing=${listing}&adType=${adType}&userId=${userId}&token=${token}&${adResponseQS}`
+    );
+
+    finalUrl.replace(/ /g, '%20');
+    finalUrl.replace(/#/g, '%23');
+    return finalUrl;
+  };
+
+  const launchAdTool = () => {
     dispatch(getAdsTool());
     setOpen(false);
+    window.location = adToolQS();
   };
 
   return (

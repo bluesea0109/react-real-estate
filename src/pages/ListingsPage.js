@@ -321,7 +321,7 @@ const ListingsPage = () => {
   const peerUser = useSelector(
     store => store.team?.profiles.filter(profile => profile.userId === peerId)[0]
   );
-  console.log('activeFilters', activeFilters);
+
   const windowSize = useWindowSize();
   useEffect(() => {
     async function fetchData() {
@@ -421,7 +421,6 @@ const ListingsPage = () => {
     return 4;
   };
 
-  console.log('selectedListing', selectedListing);
   return (
     <Page basic>
       <ContentTopHeaderLayout>
@@ -509,6 +508,7 @@ const ListingsPage = () => {
         open={showAdsModal}
         setOpen={setShowAdsModal}
         selectedListing={selectedListing}
+        adType={location?.state?.adType}
         // selectedSize={selectedSize}
         // selectedTemplate={selectedTemplate}
         setSelectedListing={setSelectedListing}
