@@ -25,7 +25,7 @@ function App() {
           <Navigation />
         </SidebarLayout>
       )}
-      <ContentLayout style={{ transition: '1s', marginTop: '0px' }}>
+      <ContentLayout showSidebar={showSidebar} style={{ marginTop: '0px' }}>
         <Router />
       </ContentLayout>
     </MainLayout>
