@@ -46,7 +46,12 @@ const EditorToolbar = styled.div`
 
 const EditorPreview = styled.div`
   overflow: auto;
-  padding: 1rem;
+  padding: 2rem;
+  display: grid;
+  gap: 2em;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  justify-items: center;
 `;
 
 export default function Editor() {
@@ -139,7 +144,6 @@ export default function Editor() {
         </EditorToolbar>
         {details && (
           <EditorPreview>
-            <h4>Mailout: {details?._id}</h4>
             <FrontIframe
               details={details}
               frontLoaded={frontLoaded}
