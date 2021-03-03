@@ -1,113 +1,117 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
 import styled from 'styled-components';
 import { getMailoutPending } from '../../store/modules/mailout/actions';
 import * as brandColors from '../../components/utils/brandColors';
 import { Button, ButtonNoStyle, Icon } from '../../components/Base';
+import EditorHeader from './EditorHeader';
+import EditorNav, { NavButton } from './EditorNav';
+import { BackIframe, FrontIframe } from '../MailoutDetailsPage';
 
 const EditorLayout = styled.div`
   display: grid;
-  grid-template-rows: [header] 54px [body] 1fr;
-  grid-template-columns: [nav] 56px [sidebar] 300px [content] 1fr;
+  grid-template-rows: [header] minmax(54px, auto) [body] minmax(10px, 1fr);
+  grid-template-columns: [nav] 56px [sidebar] 300px [content] minmax(10px, 1fr);
   background-color: white;
-`;
-
-const EditorHeader = styled.div`
-  z-index: 30;
-  grid-column: span 3;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid ${brandColors.grey08};
-  padding: 4px 1em 4px 0;
+  max-height: calc(100% - 60px);
+  min-width: 100%;
+  position: fixed;
   & i {
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  & > .header-left {
-    display: flex;
-    align-items: center;
-    & h1 {
-      font-weight: 600;
-      color: ${brandColors.grey01};
-    }
-    & i {
-      height: 40px;
-      font-size: 1.2em;
-      color: ${brandColors.primary};
-      margin: 0 12px;
-      &.back-btn {
-        margin: 0 8px 0 0;
-      }
-    }
-  }
-  & > .header-right {
-    color: ${brandColors.grey03};
-    display: flex;
-    align-items: center;
-    & > i {
-      height: 36px;
-      font-size: 1.25em;
-      margin-right: 1em;
-    }
-    & .overflow-menu {
-      color: ${brandColors.grey03};
-      background-color: ${brandColors.grey09};
-      &:hover {
-        background-color: ${brandColors.lightGreyHover};
-      }
-      width: 36px;
-      height: 36px;
-      border-radius: 36px;
-      & i {
-        width: 100%;
-        height: 100%;
-        transform: translateY(1px);
-      }
-    }
-  }
-`;
-
-const EditorNav = styled.nav`
-  z-index: 20;
-  border-right: 1px solid ${brandColors.grey08};
-  box-shadow: ${brandColors.navBoxShadow};
 `;
 
 const EditorSidebar = styled.div`
+  padding: 1rem;
   z-index: 10;
   box-shadow: 2px 0 6px -2px rgba(128, 128, 128, 0.5);
 `;
 
 const EditorContent = styled.div`
   background-color: ${brandColors.grey09};
+  display: grid;
+  grid-template-columns: minmax(auto, 100%);
+  grid-template-rows: minmax(46px, auto) 1fr;
+`;
+
+const EditorToolbar = styled.div`
+  padding: 0.5rem 1rem;
+  background-color: white;
+  display: flex;
+  align-items: center;
+`;
+
+const EditorPreview = styled.div`
+  overflow: auto;
+  padding: 1rem;
 `;
 
 export default function Editor() {
   const dispatch = useDispatch();
   const history = useHistory();
   const mailoutId = useParams().mailoutId;
-  const mailoutDetails = useSelector(store => store.mailout?.details);
+  const details = useSelector(store => store.mailout?.details);
+  const peerId = useSelector(store => store.peer.peerId);
+  const [activeNavItem, setActiveNavItem] = useState(0);
+  const [frontLoaded, setFrontLoaded] = useState(false);
+  const [backLoaded, setBackLoaded] = useState(false);
 
   useEffect(() => {
     dispatch(getMailoutPending(mailoutId));
   }, [dispatch, mailoutId]);
 
+  const handleOnload = useCallback(
+    event => {
+      const {
+        name,
+        document: { body },
+      } = event.target.contentWindow;
+
+      body.style.overflow = 'hidden';
+      body.style['pointer-events'] = 'none';
+
+      if (name === 'front') {
+        setFrontLoaded(true);
+      }
+
+      if (name === 'back') {
+        setBackLoaded(true);
+      }
+    },
+    [setFrontLoaded, setBackLoaded]
+  );
+
+  const navItems = [
+    { name: 'Templates', iconName: 'picture' },
+    { name: 'Editor', iconName: 'edit outline' },
+    { name: 'Uploads', iconName: 'cloud upload' },
+    { name: 'Import', iconName: 'bolt' },
+  ];
+
+  const frontURL = peerId
+    ? `/api/user/${details?.userId}/peer/${peerId}/mailout/${details?._id}/render/preview/html/front?showBleed=true`
+    : `/api/user/${details?.userId}/mailout/${details?._id}/render/preview/html/front?showBleed=true`;
+
+  const backURL = peerId
+    ? `/api/user/${details?.userId}/peer/${peerId}/mailout/${details?._id}/render/preview/html/back?showBleed=true`
+    : `/api/user/${details?.userId}/mailout/${details?._id}/render/preview/html/back?showBleed=true`;
+
   return (
     <EditorLayout>
       <EditorHeader>
         <div className="header-left">
-          <ButtonNoStyle onClick={() => history.push(`/postcards/${mailoutDetails?._id}`)}>
+          <ButtonNoStyle onClick={() => history.push(`/postcards/${details?._id}`)}>
             <Icon className="back-btn" name="chevron left" />
           </ButtonNoStyle>
-          <h1>{mailoutDetails?.name}</h1>
+          <h1>{details?.name}</h1>
           <Icon name="pencil" />
         </div>
         <div className="header-right">
           <Icon name="undo" />
-          <span>all changed saved</span>
+          <span>all changes saved</span>
           <ButtonNoStyle>
             <div className="overflow-menu">
               <Icon name="ellipsis horizontal" />
@@ -116,10 +120,40 @@ export default function Editor() {
           <Button primary>Next</Button>
         </div>
       </EditorHeader>
-      <EditorNav></EditorNav>
-      <EditorSidebar></EditorSidebar>
+      <EditorNav>
+        {navItems.map((item, ind) => (
+          <NavButton
+            key={item.name}
+            className={`${ind === activeNavItem ? 'active' : null}`}
+            iconName={item.iconName}
+            onClick={() => setActiveNavItem(ind)}
+          />
+        ))}
+      </EditorNav>
+      <EditorSidebar>
+        <h3>{navItems[activeNavItem].name}</h3>
+      </EditorSidebar>
       <EditorContent>
-        <p>{mailoutDetails?._id}</p>
+        <EditorToolbar>
+          <p>Toolbar Content</p>
+        </EditorToolbar>
+        {details && (
+          <EditorPreview>
+            <h4>Mailout: {details?._id}</h4>
+            <FrontIframe
+              details={details}
+              frontLoaded={frontLoaded}
+              frontURL={frontURL}
+              handleOnload={handleOnload}
+            />
+            <BackIframe
+              backLoaded={backLoaded}
+              backURL={backURL}
+              details={details}
+              handleOnload={handleOnload}
+            />
+          </EditorPreview>
+        )}
       </EditorContent>
     </EditorLayout>
   );
