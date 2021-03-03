@@ -16,7 +16,6 @@ export default function mailout(state = initialState, action) {
       };
 
     case GET_ADS_TOOL_SUCCESS:
-      console.log('succcccccces', action.payload);
       return {
         ...state,
         pending: false,

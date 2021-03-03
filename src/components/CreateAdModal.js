@@ -148,6 +148,7 @@ const ListingModal = ({ open, setOpen, selectedListing, setSelectedListing, adTy
 
     finalUrl.replace(/ /g, '%20');
     finalUrl.replace(/#/g, '%23');
+
     return finalUrl;
   };
 
