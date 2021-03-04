@@ -73,8 +73,9 @@ export default function Editor() {
   const [templateTheme, setTemplateTheme] = useState(null);
   const [fields, setFields] = useState(null);
   const [brandColor, setBrandColor] = useState(null);
-  const [frontImgUrl, setFrontImgUrl] = useState(null);
   const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(null);
+  const [frontImgUrl, setFrontImgUrl] = useState(null);
+  const [ctas, setCtas] = useState(null);
 
   useEffect(() => {
     dispatch(getMailoutPending(mailoutId));
@@ -89,6 +90,7 @@ export default function Editor() {
       setBrandColor(mailoutEdit.brandColor);
       setFrontImgUrl(mailoutEdit.frontImgUrl || '');
       setMailoutDisplayAgent(mailoutEdit.mailoutDisplayAgent);
+      setCtas(mailoutEdit.ctas);
     }
   }, [mailoutEdit]);
 
@@ -181,6 +183,7 @@ export default function Editor() {
       { mailoutDisplayAgent }
     );
     if (frontImgUrl) newData.frontImgUrl = frontImgUrl;
+    if (ctas) newData.ctas = ctas;
     dispatch(updateMailoutEditPending(newData));
   };
 
