@@ -150,6 +150,7 @@ const PostcardsPage = () => {
   const [searchValue, setSearchValue] = useState(null);
   const [sortValue, setSortValue] = useState(null);
   const [filterValue, setFilterValue] = useState(null);
+  const [filterText, setFilterText] = useState(null);
 
   useEffect(() => {
     dispatch(resetMailout());
@@ -165,11 +166,11 @@ const PostcardsPage = () => {
 
   const filterOptions = [
     { key: 0, text: 'Unsent', value: 'unsent' },
-    { key: 1, text: 'Approved', value: 'approved' },
-    // { key: 2, text: 'Queued for Printing', value: 'queued-for-printing' },
-    // { key: 3, text: 'Printing', value: 'printing' },
-    // { key: 4, text: 'Sending', value: 'sending' },
-    // { key: 5, text: 'Complete', value: 'complete' },
+    { key: 1, text: 'Sent (All sent statuses)', value: 'approved' },
+    { key: 2, text: 'Sent (Queued for printing)', value: 'queued-for-printing' },
+    { key: 3, text: 'Sent (Printing)', value: 'printing' },
+    { key: 4, text: 'Sent (Mailing)', value: 'mailing' },
+    { key: 5, text: 'Sent (Complete)', value: 'complete' },
   ];
 
   useFetching(getMailoutsPending, onboarded, useDispatch());
@@ -301,12 +302,16 @@ const PostcardsPage = () => {
                 icon="filter"
                 labeled
                 onChange={(e, { value }) => {
+                  console.log(value);
                   setFilterValue(value);
                   handleFilterOrSort('filter', value);
+                  filterOptions.forEach(option => {
+                    if (option.value === value) setFilterText(option.text);
+                  });
                 }}
                 options={filterOptions}
                 selection
-                text={filterValue || 'Filter'}
+                text={filterText || 'Filter'}
               />
             </Menu.Item>
             <Menu.Item position="right">
