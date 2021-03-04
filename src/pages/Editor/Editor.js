@@ -2,7 +2,11 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
 import styled from 'styled-components';
-import { getMailoutEditPending, getMailoutPending } from '../../store/modules/mailout/actions';
+import {
+  getMailoutEditPending,
+  getMailoutPending,
+  updateMailoutEditPending,
+} from '../../store/modules/mailout/actions';
 import * as brandColors from '../../components/utils/brandColors';
 import { Button, ButtonNoStyle, Icon } from '../../components/Base';
 import EditorHeader from './EditorHeader';
@@ -61,15 +65,32 @@ export default function Editor() {
   const details = useSelector(store => store.mailout?.details);
   const mailoutEdit = useSelector(state => state.mailout.mailoutEdit);
   const peerId = useSelector(store => store.peer.peerId);
+  const updatePending = useSelector(state => state.mailout.updateMailoutEditPending);
   const [activeNavItem, setActiveNavItem] = useState(0);
   const [frontLoaded, setFrontLoaded] = useState(false);
   const [backLoaded, setBackLoaded] = useState(false);
-  const [edited, setEdited] = useState(null);
+  const [postcardSize, setPostcardSize] = useState(null);
+  const [templateTheme, setTemplateTheme] = useState(null);
+  const [fields, setFields] = useState(null);
+  const [brandColor, setBrandColor] = useState(null);
+  const [frontImgUrl, setFrontImgUrl] = useState(null);
+  const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(null);
 
   useEffect(() => {
     dispatch(getMailoutPending(mailoutId));
     dispatch(getMailoutEditPending(mailoutId));
   }, [dispatch, mailoutId]);
+
+  useEffect(() => {
+    if (mailoutEdit) {
+      setPostcardSize(mailoutEdit.postcardSize);
+      setTemplateTheme(mailoutEdit.templateTheme);
+      setFields(mailoutEdit.fields);
+      setBrandColor(mailoutEdit.brandColor);
+      setFrontImgUrl(mailoutEdit.frontImgUrl || '');
+      setMailoutDisplayAgent(mailoutEdit.mailoutDisplayAgent);
+    }
+  }, [mailoutEdit]);
 
   const [frontIframeRef, setFrontIframeRef] = useState(null);
   const [backIframeRef, setBackIframeRef] = useState(null);
@@ -105,6 +126,21 @@ export default function Editor() {
     if (backLoaded) sendInitMessage('back');
   }, [backLoaded, sendInitMessage]);
 
+  const handlePostMessage = useCallback(
+    e => {
+      if (e.source?.frameElement?.title?.includes('bm-iframe')) {
+        const side = e.source?.name;
+        console.log(side);
+        console.dir(e.data);
+        if (e.data.name) {
+          const changedInd = fields.findIndex(el => el.name === e.data.name);
+          fields[changedInd].value = e.data.value;
+        }
+      }
+    },
+    [fields]
+  );
+
   useEffect(() => {
     console.log('Listening for messages');
     window.addEventListener('message', handlePostMessage);
@@ -112,22 +148,7 @@ export default function Editor() {
       console.log('Stopped listening for messages');
       window.removeEventListener('message', handlePostMessage);
     };
-    // eslint-disable-next-line
-  }, []);
-
-  const handlePostMessage = e => {
-    if (e.source?.frameElement?.title?.includes('bm-iframe')) {
-      const side = e.source?.name;
-      console.log(side);
-      console.dir(e.data);
-      if (e.data.name) {
-        let newData = edited;
-        newData = newData || { fields: [] };
-        newData.fields.push(e.data);
-        setEdited(newData);
-      }
-    }
-  };
+  }, [handlePostMessage]);
 
   const handleOnload = useCallback(
     event => {
@@ -149,6 +170,19 @@ export default function Editor() {
     },
     [setFrontLoaded, setBackLoaded]
   );
+
+  const handleSave = () => {
+    let newData = Object.assign(
+      {},
+      { postcardSize },
+      { templateTheme },
+      { fields },
+      { brandColor },
+      { mailoutDisplayAgent }
+    );
+    if (frontImgUrl) newData.frontImgUrl = frontImgUrl;
+    dispatch(updateMailoutEditPending(newData));
+  };
 
   const navItems = [
     { name: 'Templates', iconName: 'picture' },
@@ -186,11 +220,7 @@ export default function Editor() {
               <Icon name="ellipsis horizontal" />
             </div>
           </ButtonNoStyle>
-          <Button
-            primary
-            disabled={edited === null}
-            onClick={() => console.log('TODO Save Changes')}
-          >
+          <Button primary disabled={updatePending} onClick={handleSave}>
             Save
           </Button>
         </div>
