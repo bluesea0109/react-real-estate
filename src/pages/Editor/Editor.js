@@ -63,6 +63,7 @@ export default function Editor() {
   const [activeNavItem, setActiveNavItem] = useState(0);
   const [frontLoaded, setFrontLoaded] = useState(false);
   const [backLoaded, setBackLoaded] = useState(false);
+  const [contentChanged, setContentChanged] = useState(false);
 
   useEffect(() => {
     dispatch(getMailoutPending(mailoutId));
@@ -164,13 +165,20 @@ export default function Editor() {
         </div>
         <div className="header-right">
           <Icon name="undo" />
-          <span>all changes saved</span>
+          {/* Save status when ready */}
+          {/* <span>all changes saved</span> */}
           <ButtonNoStyle>
             <div className="overflow-menu">
               <Icon name="ellipsis horizontal" />
             </div>
           </ButtonNoStyle>
-          <Button primary>Next</Button>
+          <Button
+            primary
+            disabled={!contentChanged}
+            onClick={() => console.log('TODO Save Changes')}
+          >
+            Save
+          </Button>
         </div>
       </EditorHeader>
       <EditorNav>
