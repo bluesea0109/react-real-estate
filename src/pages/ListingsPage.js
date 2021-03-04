@@ -509,8 +509,6 @@ const ListingsPage = () => {
         setOpen={setShowAdsModal}
         selectedListing={selectedListing}
         adType={location?.state?.adType}
-        // selectedSize={selectedSize}
-        // selectedTemplate={selectedTemplate}
         setSelectedListing={setSelectedListing}
       />
     </Page>

@@ -139,11 +139,11 @@ const ListingModal = ({ open, setOpen, selectedListing, setSelectedListing, adTy
   }
 
   const adToolQS = () => {
-    const url = 'https://listings.ui.staging.brivitymarketer.com/marketer/?';
+    const url = 'https://listings.ui.staging.brivitymarketer.com/marketer?';
     const mls = selectedListing?.listing?.blueroofMlsId;
     const listing = selectedListing?.listing?.mlsNum;
     const finalUrl = url.concat(
-      `mls=${mls}&listing=${listing}&adType=${adType}&userId=${userId}&token=${token}&${adResponseQS}`
+      `mls=${mls}&listing=${listing}&adType=${adType}&token=${token}&${adResponseQS}`
     );
 
     finalUrl.replace(/ /g, '%20');
