@@ -249,6 +249,23 @@ const ListHeader = ({
             </Button>
           </span>
         )}
+
+        {mailoutDetailPage &&
+          enableEdit &&
+          ((!isArchived && data.mailoutStatus === 'sent') ||
+            data.mailoutStatus === 'calculated') && (
+            <Button
+              primary
+              inverted
+              onClick={() => {
+                duplicateCampaign(data._id);
+                window.location = '/postcards';
+              }}
+            >
+              Duplicate
+            </Button>
+          )}
+
         {mailoutDetailPage && enableEdit && (
           <span>
             <Button
