@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
 import styled from 'styled-components';
-import { getMailoutPending } from '../../store/modules/mailout/actions';
+import { getMailoutEditPending, getMailoutPending } from '../../store/modules/mailout/actions';
 import * as brandColors from '../../components/utils/brandColors';
 import { Button, ButtonNoStyle, Icon } from '../../components/Base';
 import EditorHeader from './EditorHeader';
@@ -59,14 +59,16 @@ export default function Editor() {
   const history = useHistory();
   const mailoutId = useParams().mailoutId;
   const details = useSelector(store => store.mailout?.details);
+  const mailoutEdit = useSelector(state => state.mailout.mailoutEdit);
   const peerId = useSelector(store => store.peer.peerId);
   const [activeNavItem, setActiveNavItem] = useState(0);
   const [frontLoaded, setFrontLoaded] = useState(false);
   const [backLoaded, setBackLoaded] = useState(false);
-  const [contentChanged, setContentChanged] = useState(false);
+  const [edited, setEdited] = useState(null);
 
   useEffect(() => {
     dispatch(getMailoutPending(mailoutId));
+    dispatch(getMailoutEditPending(mailoutId));
   }, [dispatch, mailoutId]);
 
   const [frontIframeRef, setFrontIframeRef] = useState(null);
@@ -104,16 +106,28 @@ export default function Editor() {
   }, [backLoaded, sendInitMessage]);
 
   useEffect(() => {
-    const logEvent = e => {
-      if (e.source?.frameElement?.title?.includes('bm-iframe')) console.dir(e.data);
-    };
     console.log('Listening for messages');
-    window.addEventListener('message', logEvent);
+    window.addEventListener('message', handlePostMessage);
     return () => {
       console.log('Stopped listening for messages');
-      window.removeEventListener('message', logEvent);
+      window.removeEventListener('message', handlePostMessage);
     };
+    // eslint-disable-next-line
   }, []);
+
+  const handlePostMessage = e => {
+    if (e.source?.frameElement?.title?.includes('bm-iframe')) {
+      const side = e.source?.name;
+      console.log(side);
+      console.dir(e.data);
+      if (e.data.name) {
+        let newData = edited;
+        newData = newData || { fields: [] };
+        newData.fields.push(e.data);
+        setEdited(newData);
+      }
+    }
+  };
 
   const handleOnload = useCallback(
     event => {
@@ -174,7 +188,7 @@ export default function Editor() {
           </ButtonNoStyle>
           <Button
             primary
-            disabled={!contentChanged}
+            disabled={edited === null}
             onClick={() => console.log('TODO Save Changes')}
           >
             Save
