@@ -302,7 +302,6 @@ const PostcardsPage = () => {
                 icon="filter"
                 labeled
                 onChange={(e, { value }) => {
-                  console.log(value);
                   setFilterValue(value);
                   handleFilterOrSort('filter', value);
                   filterOptions.forEach(option => {
