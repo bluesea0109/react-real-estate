@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { IFrameSegStyle } from '.';
 import { Segment } from '../../components/Base';
 import { iframeDimensions } from '../../components/utils/utils';
 
-export default function BackIframe({ backLoaded, backURL, details, handleOnload }) {
+const BackIframe = forwardRef(({ backLoaded, backURL, details, handleOnload }, ref) => {
   return (
     <Segment
       compact
@@ -23,7 +23,10 @@ export default function BackIframe({ backLoaded, backURL, details, handleOnload 
         onLoad={handleOnload}
         className="image-frame-border"
         style={{ visibility: !details?._id || !backLoaded ? 'hidden' : 'visible' }}
+        ref={ref}
       />
     </Segment>
   );
-}
+});
+
+export default BackIframe;

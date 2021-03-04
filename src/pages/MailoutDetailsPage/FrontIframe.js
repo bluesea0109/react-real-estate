@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { IFrameSegStyle } from '.';
 import { Image, Segment } from '../../components/Base';
 import { iframeDimensions } from '../../components/utils/utils';
 
-export default function FrontIframe({ details, frontLoaded, frontURL, handleOnload }) {
+const FrontIframe = forwardRef(({ details, frontLoaded, frontURL, handleOnload }, ref) => {
   return (
     <div
       style={{
@@ -83,9 +83,12 @@ export default function FrontIframe({ details, frontLoaded, frontURL, handleOnlo
             onLoad={handleOnload}
             className="image-frame-border"
             style={{ visibility: !details?._id || !frontLoaded ? 'hidden' : 'visible' }}
+            ref={ref}
           />
         </Segment>
       )}
     </div>
   );
-}
+});
+
+export default FrontIframe;

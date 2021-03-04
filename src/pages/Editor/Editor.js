@@ -68,6 +68,52 @@ export default function Editor() {
     dispatch(getMailoutPending(mailoutId));
   }, [dispatch, mailoutId]);
 
+  const [frontIframeRef, setFrontIframeRef] = useState(null);
+  const [backIframeRef, setBackIframeRef] = useState(null);
+
+  const onFrontChange = useCallback(node => {
+    setFrontIframeRef(node);
+  }, []);
+  const onBackChange = useCallback(node => {
+    setBackIframeRef(node);
+  }, []);
+
+  const sendInitMessage = useCallback(
+    async side => {
+      if (side === 'front')
+        await frontIframeRef?.contentWindow?.postMessage(
+          'getAllEditiableFieldsAsMergeVariables',
+          'http://localhost:8082/'
+        );
+      else if (side === 'back')
+        await backIframeRef?.contentWindow?.postMessage(
+          'getAllEditiableFieldsAsMergeVariables',
+          'http://localhost:8082/'
+        );
+    },
+    [frontIframeRef, backIframeRef]
+  );
+
+  useEffect(() => {
+    if (frontLoaded) sendInitMessage('front');
+  }, [frontLoaded, sendInitMessage]);
+
+  useEffect(() => {
+    if (backLoaded) sendInitMessage('back');
+  }, [backLoaded, sendInitMessage]);
+
+  useEffect(() => {
+    const logEvent = e => {
+      if (e.source?.frameElement?.title?.includes('bm-iframe')) console.dir(e.data);
+    };
+    console.log('Listening for messages');
+    window.addEventListener('message', logEvent);
+    return () => {
+      console.log('Stopped listening for messages');
+      window.removeEventListener('message', logEvent);
+    };
+  }, []);
+
   const handleOnload = useCallback(
     event => {
       const {
@@ -97,12 +143,12 @@ export default function Editor() {
   ];
 
   const frontURL = peerId
-    ? `/api/user/${details?.userId}/peer/${peerId}/mailout/${details?._id}/render/preview/html/front?showBleed=true`
-    : `/api/user/${details?.userId}/mailout/${details?._id}/render/preview/html/front?showBleed=true`;
+    ? `/api/user/${details?.userId}/peer/${peerId}/mailout/${details?._id}/render/preview/html/front/edit?edit=true&showBleed=true`
+    : `/api/user/${details?.userId}/mailout/${details?._id}/render/preview/html/front/edit?edit=true&showBleed=true`;
 
   const backURL = peerId
-    ? `/api/user/${details?.userId}/peer/${peerId}/mailout/${details?._id}/render/preview/html/back?showBleed=true`
-    : `/api/user/${details?.userId}/mailout/${details?._id}/render/preview/html/back?showBleed=true`;
+    ? `/api/user/${details?.userId}/peer/${peerId}/mailout/${details?._id}/render/preview/html/back/edit?edit=true&showBleed=true`
+    : `/api/user/${details?.userId}/mailout/${details?._id}/render/preview/html/back/edit?edit=true&showBleed=true`;
 
   return (
     <EditorLayout>
@@ -112,7 +158,9 @@ export default function Editor() {
             <Icon className="back-btn" name="chevron left" />
           </ButtonNoStyle>
           <h1>{details?.name}</h1>
-          <Icon name="pencil" />
+          <ButtonNoStyle onClick={() => console.log('TODO Edit Name')}>
+            <Icon name="pencil" />
+          </ButtonNoStyle>
         </div>
         <div className="header-right">
           <Icon name="undo" />
@@ -149,12 +197,14 @@ export default function Editor() {
               frontLoaded={frontLoaded}
               frontURL={frontURL}
               handleOnload={handleOnload}
+              ref={onFrontChange}
             />
             <BackIframe
               backLoaded={backLoaded}
               backURL={backURL}
               details={details}
               handleOnload={handleOnload}
+              ref={onBackChange}
             />
           </EditorPreview>
         )}
