@@ -186,18 +186,39 @@ const Dashboard = ({ className }) => {
         <SectionGrid>
           <DashboardItem
             name="just listed ad"
-            linkTo={{ pathname: 'listings', state: { filters: ['Active'] } }}
+            linkTo={{
+              pathname: 'listings',
+              state: { filters: ['Active'], adsModal: true, adType: 'listed' },
+            }}
           ></DashboardItem>
           <DashboardItem
             name="just sold ad"
-            linkTo={{ pathname: 'listings', state: { filters: ['Sold'] } }}
+            linkTo={{
+              pathname: 'listings',
+              state: { filters: ['Sold'], adsModal: true, adType: 'sold' },
+            }}
           ></DashboardItem>
           <DashboardItem
             name="open house ad"
-            linkTo={{ pathname: 'listings', state: { filters: ['Active', 'Pending'] } }}
+            linkTo={{
+              pathname: 'listings',
+              state: { filters: ['Active', 'Pending'], adsModal: true, adType: 'openHouse' },
+            }}
           ></DashboardItem>
-          <DashboardItem name="home value ad" linkTo="" soon></DashboardItem>
-          <DashboardItem name="buyer search ad" linkTo="" soon></DashboardItem>
+          <DashboardItem
+            name="home value ad"
+            linkTo={{
+              pathname: 'listings',
+              state: { filters: ['Active', 'Pending'], adsModal: true, adType: 'homeValue' },
+            }}
+          ></DashboardItem>
+          <DashboardItem
+            name="buyer search ad"
+            linkTo={{
+              pathname: 'listings',
+              state: { filters: ['Active', 'Pending'], adsModal: true, adType: 'buyerSearch' },
+            }}
+          ></DashboardItem>
         </SectionGrid>
         <SectionHeader>Marketing Materials</SectionHeader>
         <SectionGrid>
