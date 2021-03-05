@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import styled from 'styled-components';
 import {
   getMailoutEditPending,
@@ -12,6 +12,7 @@ import { Button, ButtonNoStyle, Icon } from '../../components/Base';
 import EditorHeader from './EditorHeader';
 import EditorNav, { NavButton } from './EditorNav';
 import { BackIframe, FrontIframe } from '../MailoutDetailsPage';
+import { Link } from 'react-router-dom';
 
 const EditorLayout = styled.div`
   display: grid;
@@ -60,7 +61,6 @@ const EditorPreview = styled.div`
 
 export default function Editor() {
   const dispatch = useDispatch();
-  const history = useHistory();
   const mailoutId = useParams().mailoutId;
   const details = useSelector(store => store.mailout?.details);
   const mailoutEdit = useSelector(state => state.mailout.mailoutEdit);
@@ -206,10 +206,10 @@ export default function Editor() {
     <EditorLayout>
       <EditorHeader>
         <div className="header-left">
-          <ButtonNoStyle onClick={() => history.push(`/postcards/${details?._id}`)}>
+          <ButtonNoStyle as={Link} to={`/postcards/${details?._id}`}>
             <Icon className="back-btn" name="chevron left" />
           </ButtonNoStyle>
-          <h1>{details?.name}</h1>
+          <h1>{details?.name || details?.details?.displayAddress}</h1>
           <ButtonNoStyle onClick={() => console.log('TODO Edit Name')}>
             <Icon name="pencil" />
           </ButtonNoStyle>
