@@ -57,6 +57,9 @@ const StyledDropdown = styled(Dropdown)`
     font-weight: normal;
     text-transform: capitalize;
   }
+  &&&.ui.selection.dropdown {
+    min-width: 15em !important;
+  }
 `;
 
 const ModalWelcome = styled(Modal)`
