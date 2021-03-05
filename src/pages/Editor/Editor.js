@@ -160,7 +160,6 @@ export default function Editor() {
       } = event.target.contentWindow;
 
       body.style.overflow = 'hidden';
-      body.style['pointer-events'] = 'none';
 
       if (name === 'front') {
         setFrontLoaded(true);
