@@ -92,6 +92,7 @@ const ListingModal = ({ open, setOpen, selectedListing, setSelectedListing, adTy
   const [results, setResults] = useState([]);
   const [filteredResults, setFilteredResults] = useState([]);
   const adstoolQS = useSelector(store => store.ads?.adsTool?.adProduct.qs);
+  const adsToolUrl = useSelector(store => store.ads?.adsTool?.adProduct.url);
 
   useEffect(() => {
     const newFilteredResults = results?.map(res => {
@@ -134,16 +135,17 @@ const ListingModal = ({ open, setOpen, selectedListing, setSelectedListing, adTy
     if (adstoolQS) {
       const adsQS = createQS(adstoolQS);
 
-      const url = 'https://listings.ui.staging.brivitymarketer.com/marketer?';
       const mls = selectedListing?.listing?.blueroofMlsId;
       const listing = selectedListing?.listing?.mlsNum;
-      const finalUrl = url.concat(`mls=${mls}&listing=${listing}&adType=${adType}&${adsQS}`);
+      const finalUrl = adsToolUrl.concat(
+        `?mls=${mls}&listing=${listing}&adType=${adType}&${adsQS}`
+      );
 
       finalUrl.replace(/ /g, '%20');
       finalUrl.replace(/#/g, '%23');
       window.location = finalUrl;
     }
-  }, [adstoolQS, adType, selectedListing]);
+  }, [adstoolQS, adsToolUrl, adType, selectedListing]);
 
   const launchAdTool = () => {
     dispatch(getAdsTool());
