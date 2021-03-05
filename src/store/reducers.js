@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 
+import ads from './modules/ads/reducer';
 import auth0 from './modules/auth0/reducer';
 import boards from './modules/boards/reducer';
 import content from './modules/content/reducer';
@@ -24,6 +25,7 @@ import templates from './modules/templates/reducer';
 import ui from './modules/ui/reducer';
 
 const reducers = {
+  ads,
   auth0,
   boards,
   content,
