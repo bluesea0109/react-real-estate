@@ -5,6 +5,7 @@ import Card from './Card';
 import Checkbox from './Checkbox';
 import Container from './Container';
 import Dropdown from './Dropdown';
+import DropdownCard from './DropdownCard';
 import Dimmer from './Dimmer';
 import Divider from './Divider';
 import Form from './Form';
@@ -43,6 +44,7 @@ export {
   Checkbox,
   Container,
   Dropdown,
+  DropdownCard,
   Dimmer,
   Divider,
   Form,

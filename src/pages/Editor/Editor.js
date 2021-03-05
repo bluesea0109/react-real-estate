@@ -15,6 +15,7 @@ import { BackIframe, FrontIframe } from '../MailoutDetailsPage';
 import { Link } from 'react-router-dom';
 // eslint-disable-next-line
 import jsText from 'raw-loader!./iframeScript.js';
+import EditorSidebar from './EditorSidebar';
 
 const EditorLayout = styled.div`
   display: grid;
@@ -29,12 +30,6 @@ const EditorLayout = styled.div`
     align-items: center;
     justify-content: center;
   }
-`;
-
-const EditorSidebar = styled.div`
-  padding: 1rem;
-  z-index: 10;
-  box-shadow: 2px 0 6px -2px rgba(128, 128, 128, 0.5);
 `;
 
 const EditorContent = styled.div`
@@ -203,7 +198,7 @@ export default function Editor() {
   };
 
   const navItems = [
-    { name: 'Templates', iconName: 'picture' },
+    { name: 'Select Templates', iconName: 'picture' },
     { name: 'Editor', iconName: 'edit outline' },
     { name: 'Uploads', iconName: 'cloud upload' },
     { name: 'Import', iconName: 'bolt' },
@@ -253,9 +248,7 @@ export default function Editor() {
           />
         ))}
       </EditorNav>
-      <EditorSidebar>
-        <h3>{navItems[activeNavItem].name}</h3>
-      </EditorSidebar>
+      <EditorSidebar activeTab={navItems[activeNavItem].name} />
       <EditorContent>
         <EditorToolbar>
           <p>Toolbar Content</p>
