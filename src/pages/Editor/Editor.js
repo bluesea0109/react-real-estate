@@ -13,6 +13,8 @@ import EditorHeader from './EditorHeader';
 import EditorNav, { NavButton } from './EditorNav';
 import { BackIframe, FrontIframe } from '../MailoutDetailsPage';
 import { Link } from 'react-router-dom';
+// eslint-disable-next-line
+import jsText from 'raw-loader!./iframeScript.js';
 
 const EditorLayout = styled.div`
   display: grid;
@@ -108,12 +110,12 @@ export default function Editor() {
     async side => {
       if (side === 'front')
         await frontIframeRef?.contentWindow?.postMessage(
-          'getAllEditiableFieldsAsMergeVariables',
+          'getAllEditableFieldsAsMergeVariables',
           'http://localhost:8082/'
         );
       else if (side === 'back')
         await backIframeRef?.contentWindow?.postMessage(
-          'getAllEditiableFieldsAsMergeVariables',
+          'getAllEditableFieldsAsMergeVariables',
           'http://localhost:8082/'
         );
     },
@@ -153,14 +155,17 @@ export default function Editor() {
   }, [handlePostMessage]);
 
   const handleOnload = useCallback(
-    event => {
+    async event => {
+      const frame = event.target.contentWindow;
       const {
         name,
         document: { body },
-      } = event.target.contentWindow;
-
+      } = frame;
       body.style.overflow = 'hidden';
-
+      let scriptElement = document.createElement('script');
+      scriptElement.type = 'text/javascript';
+      scriptElement.innerHTML = jsText;
+      await frame.document.head.append(scriptElement);
       if (name === 'front') {
         setFrontLoaded(true);
       }
