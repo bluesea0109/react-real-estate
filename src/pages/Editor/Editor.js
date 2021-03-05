@@ -138,6 +138,17 @@ export default function Editor() {
         console.dir(e.data);
         if (e.data.name) {
           const changedInd = fields.findIndex(el => el.name === e.data.name);
+          if (changedInd === -1) {
+            console.log('Cannot find field: ' + e.data.name);
+            if (e.data.name === 'agentFullName') {
+              fields.push({
+                name: e.data.name,
+                sides: [side],
+                value: e.data.value,
+              });
+            }
+            return;
+          }
           fields[changedInd].value = e.data.value;
         }
       }
