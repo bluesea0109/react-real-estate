@@ -58,7 +58,7 @@ const StyledDropdown = styled(Dropdown)`
     text-transform: capitalize;
   }
   &&&.ui.selection.dropdown {
-    min-width: 15em !important;
+    min-width: 15em;
   }
 `;
 
