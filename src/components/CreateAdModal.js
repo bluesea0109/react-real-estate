@@ -91,8 +91,6 @@ const ListingModal = ({ open, setOpen, selectedListing, setSelectedListing, adTy
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState([]);
   const [filteredResults, setFilteredResults] = useState([]);
-  const token = useSelector(store => store.ads?.adsTool?.adProduct.qs.token);
-  const userId = useSelector(store => store.ads?.adsTool?.adProduct.qs.userId);
   const adstoolQS = useSelector(store => store.ads?.adsTool?.adProduct.qs);
 
   useEffect(() => {
@@ -132,30 +130,24 @@ const ListingModal = ({ open, setOpen, selectedListing, setSelectedListing, adTy
       .join('&');
   };
 
-  let adResponseQS = null;
+  useEffect(() => {
+    if (adstoolQS) {
+      const adsQS = createQS(adstoolQS);
 
-  if (adstoolQS) {
-    adResponseQS = createQS(adstoolQS);
-  }
+      const url = 'https://listings.ui.staging.brivitymarketer.com/marketer?';
+      const mls = selectedListing?.listing?.blueroofMlsId;
+      const listing = selectedListing?.listing?.mlsNum;
+      const finalUrl = url.concat(`mls=${mls}&listing=${listing}&adType=${adType}&${adsQS}`);
 
-  const adToolQS = () => {
-    const url = 'https://listings.ui.staging.brivitymarketer.com/marketer?';
-    const mls = selectedListing?.listing?.blueroofMlsId;
-    const listing = selectedListing?.listing?.mlsNum;
-    const finalUrl = url.concat(
-      `mls=${mls}&listing=${listing}&adType=${adType}&token=${token}&${adResponseQS}`
-    );
-
-    finalUrl.replace(/ /g, '%20');
-    finalUrl.replace(/#/g, '%23');
-
-    return finalUrl;
-  };
+      finalUrl.replace(/ /g, '%20');
+      finalUrl.replace(/#/g, '%23');
+      window.location = finalUrl;
+    }
+  }, [adstoolQS, adType, selectedListing]);
 
   const launchAdTool = () => {
     dispatch(getAdsTool());
     setOpen(false);
-    window.location = adToolQS();
   };
 
   return (
