@@ -73,6 +73,11 @@ export default function Editor() {
   const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(null);
   const [frontImgUrl, setFrontImgUrl] = useState(null);
   const [ctas, setCtas] = useState(null);
+  const [colorPickerVal, setColorPickerVal] = useState(brandColor);
+
+  useEffect(() => {
+    setBrandColor(colorPickerVal?.hex);
+  }, [colorPickerVal]);
 
   useEffect(() => {
     dispatch(getMailoutPending(mailoutId));
@@ -248,7 +253,11 @@ export default function Editor() {
           />
         ))}
       </EditorNav>
-      <EditorSidebar activeTab={navItems[activeNavItem].name} />
+      <EditorSidebar
+        activeTab={navItems[activeNavItem].name}
+        colorPickerVal={colorPickerVal}
+        setColorPickerVal={setColorPickerVal}
+      />
       <EditorContent>
         <EditorToolbar>
           <p>Toolbar Content</p>
