@@ -8,7 +8,7 @@ import {
   updateMailoutEditPending,
 } from '../../store/modules/mailout/actions';
 import * as brandColors from '../../components/utils/brandColors';
-import { Button, ButtonNoStyle, Icon } from '../../components/Base';
+import { Button, ButtonNoStyle, Icon, Loader } from '../../components/Base';
 import EditorHeader from './EditorHeader';
 import EditorNav, { NavButton } from './EditorNav';
 import { BackIframe, FrontIframe } from '../MailoutDetailsPage';
@@ -150,8 +150,6 @@ export default function Editor() {
     e => {
       if (e.source?.frameElement?.title?.includes('bm-iframe')) {
         const side = e.source?.name;
-        console.log(side);
-        console.dir(e.data);
         if (e.data.name) {
           const changedInd = fields.findIndex(el => el.name === e.data.name);
           if (changedInd === -1) {
@@ -173,10 +171,8 @@ export default function Editor() {
   );
 
   useEffect(() => {
-    console.log('Listening for messages');
     window.addEventListener('message', handlePostMessage);
     return () => {
-      console.log('Stopped listening for messages');
       window.removeEventListener('message', handlePostMessage);
     };
   }, [handlePostMessage]);
@@ -234,69 +230,75 @@ export default function Editor() {
     : `/api/user/${details?.userId}/mailout/${details?._id}/render/preview/html/back/edit?edit=true&showBleed=true`;
 
   return (
-    <EditorLayout>
-      <EditorHeader>
-        <div className="header-left">
-          <ButtonNoStyle as={Link} to={`/postcards/${details?._id}`}>
-            <Icon className="back-btn" name="chevron left" />
-          </ButtonNoStyle>
-          <h1>{details?.name || details?.details?.displayAddress}</h1>
-          <ButtonNoStyle onClick={() => console.log('TODO Edit Name')}>
-            <Icon name="pencil" />
-          </ButtonNoStyle>
-        </div>
-        <div className="header-right">
-          <Icon name="undo" />
-          {/* Save status when ready */}
-          {/* <span>all changes saved</span> */}
-          <ButtonNoStyle>
-            <div className="overflow-menu">
-              <Icon name="ellipsis horizontal" />
+    <>
+      {details ? (
+        <EditorLayout>
+          <EditorHeader>
+            <div className="header-left">
+              <ButtonNoStyle as={Link} to={`/postcards/${details?._id}`}>
+                <Icon className="back-btn" name="chevron left" />
+              </ButtonNoStyle>
+              <h1>{details?.name || details?.details?.displayAddress}</h1>
+              <ButtonNoStyle onClick={() => console.log('TODO Edit Name')}>
+                <Icon name="pencil" />
+              </ButtonNoStyle>
             </div>
-          </ButtonNoStyle>
-          <Button primary disabled={updatePending} onClick={handleSave}>
-            Save
-          </Button>
-        </div>
-      </EditorHeader>
-      <EditorNav>
-        {navItems.map((item, ind) => (
-          <NavButton
-            key={item.name}
-            className={`${ind === activeNavItem ? 'active' : null}`}
-            iconName={item.iconName}
-            onClick={() => setActiveNavItem(ind)}
+            <div className="header-right">
+              <Icon name="undo" />
+              {/* Save status when ready */}
+              {/* <span>all changes saved</span> */}
+              <ButtonNoStyle>
+                <div className="overflow-menu">
+                  <Icon name="ellipsis horizontal" />
+                </div>
+              </ButtonNoStyle>
+              <Button primary disabled={updatePending} onClick={handleSave}>
+                Save
+              </Button>
+            </div>
+          </EditorHeader>
+          <EditorNav>
+            {navItems.map((item, ind) => (
+              <NavButton
+                key={item.name}
+                className={`${ind === activeNavItem ? 'active' : null}`}
+                iconName={item.iconName}
+                onClick={() => setActiveNavItem(ind)}
+              />
+            ))}
+          </EditorNav>
+          <EditorSidebar
+            activeTab={navItems[activeNavItem].name}
+            colorPickerVal={colorPickerVal}
+            setColorPickerVal={setColorPickerVal}
           />
-        ))}
-      </EditorNav>
-      <EditorSidebar
-        activeTab={navItems[activeNavItem].name}
-        colorPickerVal={colorPickerVal}
-        setColorPickerVal={setColorPickerVal}
-      />
-      <EditorContent>
-        <EditorToolbar>
-          <p>Toolbar Content</p>
-        </EditorToolbar>
-        {details && (
-          <EditorPreview>
-            <FrontIframe
-              details={details}
-              frontLoaded={frontLoaded}
-              frontURL={frontURL}
-              handleOnload={handleOnload}
-              ref={onFrontChange}
-            />
-            <BackIframe
-              backLoaded={backLoaded}
-              backURL={backURL}
-              details={details}
-              handleOnload={handleOnload}
-              ref={onBackChange}
-            />
-          </EditorPreview>
-        )}
-      </EditorContent>
-    </EditorLayout>
+          <EditorContent>
+            <EditorToolbar>
+              <p>Toolbar Content</p>
+            </EditorToolbar>
+            {details && (
+              <EditorPreview>
+                <FrontIframe
+                  details={details}
+                  frontLoaded={frontLoaded}
+                  frontURL={frontURL}
+                  handleOnload={handleOnload}
+                  ref={onFrontChange}
+                />
+                <BackIframe
+                  backLoaded={backLoaded}
+                  backURL={backURL}
+                  details={details}
+                  handleOnload={handleOnload}
+                  ref={onBackChange}
+                />
+              </EditorPreview>
+            )}
+          </EditorContent>
+        </EditorLayout>
+      ) : (
+        <Loader active />
+      )}
+    </>
   );
 }
