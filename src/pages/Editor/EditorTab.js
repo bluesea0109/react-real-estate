@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { SketchPicker } from 'react-color';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { DropdownCard } from '../../components/Base';
 
@@ -44,8 +45,9 @@ const presetColors = [
 ];
 
 export default function EditorTab({ colorPickerVal, setColorPickerVal }) {
-  const [openCard, setOpenCard] = useState('');
+  const [openCard, setOpenCard] = useState('Brand Color');
   const onColorChange = color => setColorPickerVal(color);
+  const brandColor = useSelector(state => state.mailout?.mailoutEdit?.brandColor);
   return (
     <>
       <DropdownCard
@@ -55,7 +57,7 @@ export default function EditorTab({ colorPickerVal, setColorPickerVal }) {
         setOpenCard={setOpenCard}
       >
         <ColorPicker
-          color={colorPickerVal?.hex}
+          color={colorPickerVal?.hex || brandColor}
           onChange={onColorChange}
           disableAlpha
           presetColors={presetColors}

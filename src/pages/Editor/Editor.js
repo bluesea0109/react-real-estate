@@ -74,10 +74,38 @@ export default function Editor() {
   const [frontImgUrl, setFrontImgUrl] = useState(null);
   const [ctas, setCtas] = useState(null);
   const [colorPickerVal, setColorPickerVal] = useState(brandColor);
+  const [frontIframeRef, setFrontIframeRef] = useState(null);
+  const [backIframeRef, setBackIframeRef] = useState(null);
+
+  const sendPostMessage = useCallback(
+    async (side, data) => {
+      if (side === 'front')
+        return frontIframeRef?.contentWindow?.postMessage(data, 'http://localhost:8082/');
+      else if (side === 'back')
+        return backIframeRef?.contentWindow?.postMessage(data, 'http://localhost:8082/');
+    },
+    [frontIframeRef, backIframeRef]
+  );
+
+  const updateIframeColor = useCallback(
+    (side, colorHex) => {
+      sendPostMessage(side, {
+        type: 'updateBrandColor',
+        value: colorHex,
+      });
+    },
+    [sendPostMessage]
+  );
 
   useEffect(() => {
     setBrandColor(colorPickerVal?.hex);
-  }, [colorPickerVal]);
+    if (frontIframeRef) {
+      updateIframeColor('front', colorPickerVal?.hex);
+    }
+    if (backIframeRef) {
+      updateIframeColor('back', colorPickerVal?.hex);
+    }
+  }, [colorPickerVal, frontIframeRef, backIframeRef, updateIframeColor]);
 
   useEffect(() => {
     dispatch(getMailoutPending(mailoutId));
@@ -96,9 +124,6 @@ export default function Editor() {
     }
   }, [mailoutEdit]);
 
-  const [frontIframeRef, setFrontIframeRef] = useState(null);
-  const [backIframeRef, setBackIframeRef] = useState(null);
-
   const onFrontChange = useCallback(node => {
     setFrontIframeRef(node);
   }, []);
@@ -108,18 +133,9 @@ export default function Editor() {
 
   const sendInitMessage = useCallback(
     async side => {
-      if (side === 'front')
-        await frontIframeRef?.contentWindow?.postMessage(
-          'getAllEditableFieldsAsMergeVariables',
-          'http://localhost:8082/'
-        );
-      else if (side === 'back')
-        await backIframeRef?.contentWindow?.postMessage(
-          'getAllEditableFieldsAsMergeVariables',
-          'http://localhost:8082/'
-        );
+      await sendPostMessage(side, 'getAllEditableFieldsAsMergeVariables');
     },
-    [frontIframeRef, backIframeRef]
+    [sendPostMessage]
   );
 
   useEffect(() => {

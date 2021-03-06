@@ -4,10 +4,13 @@ const domLoaded = () => {
   function receiver(e) {
     __parentWindow = e.source;
     __parentOrigin = e.origin;
+    let root = document.documentElement;
     if (Array.isArray(e.data)) window.setAllEditableFieldsAsMergeVariables(e.data);
     else if (e.data === 'getAllEditableFieldsAsMergeVariables')
       e.source.postMessage(window.getAllEditableFieldsAsMergeVariables(), e.origin);
-    else console.log(JSON.stringify(e.data));
+    else if (e.data.type === 'updateBrandColor') {
+      root.style.setProperty('--brand-color', e.data.value);
+    } else console.log(JSON.stringify(e.data));
   }
 
   window.addEventListener('message', receiver, false);
