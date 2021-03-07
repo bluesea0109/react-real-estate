@@ -45,7 +45,9 @@ const presetColors = [
 ];
 
 export default function EditorTab({ colorPickerVal, setColorPickerVal }) {
-  const [openCard, setOpenCard] = useState('Brand Color');
+  const [brandColorOpen, setBrandColorOpen] = useState(true);
+  const [photosOpen, setPhotosOpen] = useState(false);
+  const [agentOpen, setAgentOpen] = useState(false);
   const onColorChange = color => setColorPickerVal(color);
   const brandColor = useSelector(state => state.mailout?.mailoutEdit?.brandColor);
   return (
@@ -53,8 +55,8 @@ export default function EditorTab({ colorPickerVal, setColorPickerVal }) {
       <DropdownCard
         title="Brand Color"
         iconName="eye dropper"
-        openCard={openCard}
-        setOpenCard={setOpenCard}
+        isOpen={brandColorOpen}
+        setIsOpen={setBrandColorOpen}
       >
         <ColorPicker
           color={colorPickerVal?.hex || brandColor}
@@ -63,14 +65,14 @@ export default function EditorTab({ colorPickerVal, setColorPickerVal }) {
           presetColors={presetColors}
         />
       </DropdownCard>
-      <DropdownCard title="Photos" iconName="picture" openCard={openCard} setOpenCard={setOpenCard}>
+      <DropdownCard title="Photos" iconName="picture" isOpen={photosOpen} setIsOpen={setPhotosOpen}>
         <div>Photos</div>
       </DropdownCard>
       <DropdownCard
         title="Display Agent"
         iconName="user outline"
-        openCard={openCard}
-        setOpenCard={setOpenCard}
+        isOpen={agentOpen}
+        setIsOpen={setAgentOpen}
       >
         <div>Display Agent</div>
       </DropdownCard>

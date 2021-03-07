@@ -2,19 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 import { Icon } from '.';
 
-const DropdownCard = ({ children, className, openCard, setOpenCard, iconName, title }) => {
+const DropdownCard = ({ children, className, isOpen, setIsOpen, iconName, title }) => {
   return (
-    <div className={className}>
-      <div
-        className="card-title"
-        onClick={() => (openCard === title ? setOpenCard('') : setOpenCard(title))}
-      >
-        <Icon name={iconName} />
-        <h4>{title}</h4>
-        <Icon className="arrow" name={openCard === title ? 'chevron up' : 'chevron right'}></Icon>
+    <>
+      <div className={className}>
+        <div className="card-title" onClick={() => (isOpen ? setIsOpen(false) : setIsOpen(true))}>
+          <Icon name={iconName} />
+          <h4>{title}</h4>
+          <Icon className="arrow" name={isOpen ? 'chevron up' : 'chevron right'}></Icon>
+        </div>
+        {isOpen && <div className="content">{children}</div>}
       </div>
-      {openCard === title && <div className="content">{children}</div>}
-    </div>
+    </>
   );
 };
 
@@ -39,7 +38,6 @@ const StyledDropdownCard = styled(DropdownCard)`
   }
   & > .content {
     margin-top: 0.5rem;
-    transition: 1s;
   }
 `;
 
