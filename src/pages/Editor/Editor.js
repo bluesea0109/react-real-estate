@@ -207,7 +207,6 @@ export default function Editor() {
   );
 
   const handleSave = async postcardSize => {
-    // debugger;
     if (!postcardSize) postcardSize = mailoutEdit?.postcardSize;
     else dispatch(setReloadIframesPending(true));
     const {
