@@ -78,9 +78,15 @@ export default function EditorTab({ colorPickerVal, setColorPickerVal, handleSav
         setIsOpen={setPostcardSizeOpen}
       >
         <div>
-          <Button onClick={() => changeSize('6x4')}>6x4</Button>
-          <Button onClick={() => changeSize('9x6')}>6x9</Button>
-          <Button onClick={() => changeSize('11x6')}>6x11</Button>
+          <Button primary onClick={() => changeSize('6x4')}>
+            6x4
+          </Button>
+          <Button primary onClick={() => changeSize('9x6')}>
+            6x9
+          </Button>
+          <Button primary onClick={() => changeSize('11x6')}>
+            6x11
+          </Button>
         </div>
       </DropdownCard>
       <DropdownCard title="Photos" iconName="images" isOpen={photosOpen} setIsOpen={setPhotosOpen}>
