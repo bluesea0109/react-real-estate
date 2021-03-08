@@ -299,7 +299,7 @@ export default function Editor() {
                 <FrontIframe
                   campaignId={details?._id}
                   frontLoaded={frontLoaded}
-                  frontResourceUrl={details?.frontResourceURL || null}
+                  frontResourceUrl={details?.frontResourceUrl || null}
                   frontURL={frontURL}
                   handleOnload={handleOnload}
                   postcardSize={details?.postcardSize}
