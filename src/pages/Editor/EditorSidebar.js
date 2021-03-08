@@ -3,12 +3,16 @@ import styled from 'styled-components';
 import EditorTab from './EditorTab';
 import * as brandColors from '../../components/utils/brandColors';
 
-function SidebarContent({ className, activeTab, colorPickerVal, setColorPickerVal }) {
+function SidebarContent({ className, activeTab, colorPickerVal, handleSave, setColorPickerVal }) {
   return (
     <div className={className}>
       <h3 className="title">{activeTab}</h3>
       {activeTab === 'Editor' && (
-        <EditorTab colorPickerVal={colorPickerVal} setColorPickerVal={setColorPickerVal} />
+        <EditorTab
+          colorPickerVal={colorPickerVal}
+          handleSave={handleSave}
+          setColorPickerVal={setColorPickerVal}
+        />
       )}
     </div>
   );

@@ -215,18 +215,21 @@ const MailoutDetailsPage = () => {
         dispatch={dispatch}
         frontCard={
           <FrontIframe
-            details={details}
+            campaignId={details?._id}
             frontLoaded={frontLoaded}
+            frontResourceUrl={details?.frontResourceUrl}
             frontURL={frontURL}
             handleOnload={handleOnload}
+            postcardSize={details?.postcardSize}
           />
         }
         backCard={
           <BackIframe
+            campaignId={details?._id}
             backLoaded={backLoaded}
             backURL={backURL}
-            details={details}
             handleOnload={handleOnload}
+            postcardSize={details?.postcardSize}
           />
         }
       />
@@ -273,17 +276,20 @@ const MailoutDetailsPage = () => {
                           }}
                         >
                           <FrontIframe
-                            details={details}
+                            campaignId={details?._id}
                             frontLoaded={frontLoaded}
+                            frontResourceUrl={details?.frontResourceUrl}
                             frontURL={frontURL}
                             handleOnload={handleOnload}
+                            postcardSize={details?.postcardSize}
                           />
                           <div style={{ padding: '16px' }}>
                             <BackIframe
+                              campaignId={details?._id}
                               backLoaded={backLoaded}
                               backURL={backURL}
-                              details={details}
                               handleOnload={handleOnload}
+                              postcardSize={details?.postcardSize}
                             />
                           </div>
                         </div>

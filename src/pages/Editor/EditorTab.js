@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { SketchPicker } from 'react-color';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { DropdownCard } from '../../components/Base';
+import { Button, DropdownCard } from '../../components/Base';
 
 const ColorPicker = styled(SketchPicker)`
   box-shadow: none !important;
@@ -44,12 +44,18 @@ const presetColors = [
   '#808080',
 ];
 
-export default function EditorTab({ colorPickerVal, setColorPickerVal }) {
+export default function EditorTab({ colorPickerVal, setColorPickerVal, handleSave }) {
   const [brandColorOpen, setBrandColorOpen] = useState(true);
+  const [postcardSizeOpen, setPostcardSizeOpen] = useState(false);
   const [photosOpen, setPhotosOpen] = useState(false);
   const [agentOpen, setAgentOpen] = useState(false);
   const onColorChange = color => setColorPickerVal(color);
   const brandColor = useSelector(state => state.mailout?.mailoutEdit?.brandColor);
+
+  const changeSize = newSize => {
+    handleSave(newSize);
+  };
+
   return (
     <>
       <DropdownCard
@@ -65,7 +71,19 @@ export default function EditorTab({ colorPickerVal, setColorPickerVal }) {
           presetColors={presetColors}
         />
       </DropdownCard>
-      <DropdownCard title="Photos" iconName="picture" isOpen={photosOpen} setIsOpen={setPhotosOpen}>
+      <DropdownCard
+        title="Postcard Size"
+        iconName="image outline"
+        isOpen={postcardSizeOpen}
+        setIsOpen={setPostcardSizeOpen}
+      >
+        <div>
+          <Button onClick={() => changeSize('6x4')}>6x4</Button>
+          <Button onClick={() => changeSize('9x6')}>6x9</Button>
+          <Button onClick={() => changeSize('11x6')}>6x11</Button>
+        </div>
+      </DropdownCard>
+      <DropdownCard title="Photos" iconName="images" isOpen={photosOpen} setIsOpen={setPhotosOpen}>
         <div>Photos</div>
       </DropdownCard>
       <DropdownCard

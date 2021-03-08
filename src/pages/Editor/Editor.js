@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import {
   getMailoutEditPending,
   getMailoutPending,
+  setEditBrandColor,
+  setEditFields,
   updateMailoutEditPending,
 } from '../../store/modules/mailout/actions';
 import * as brandColors from '../../components/utils/brandColors';
@@ -16,13 +18,14 @@ import { Link } from 'react-router-dom';
 // eslint-disable-next-line
 import jsText from 'raw-loader!./iframeScript.js';
 import EditorSidebar from './EditorSidebar';
+import { setReloadIframes, setReloadIframesPending } from '../../store/modules/liveEditor/actions';
 
 const EditorLayout = styled.div`
   display: grid;
   grid-template-rows: [header] minmax(54px, auto) [body] minmax(10px, 1fr);
   grid-template-columns: [nav] 56px [sidebar] 300px [content] minmax(10px, 1fr);
   background-color: white;
-  max-height: calc(100% - 60px);
+  height: calc(100% - 60px);
   min-width: 100%;
   position: fixed;
   & i {
@@ -63,19 +66,34 @@ export default function Editor() {
   const mailoutEdit = useSelector(state => state.mailout?.mailoutEdit);
   const peerId = useSelector(store => store.peer?.peerId);
   const updatePending = useSelector(state => state.mailout?.updateMailoutEditPending);
-  const [activeNavItem, setActiveNavItem] = useState(0);
+  const reloadIframes = useSelector(state => state.liveEditor?.reloadIframes);
+  const reloadIframesPending = useSelector(state => state.liveEditor?.reloadIframesPending);
+  const [activeNavItem, setActiveNavItem] = useState(1); // 0 default - 1 for testing
   const [frontLoaded, setFrontLoaded] = useState(false);
   const [backLoaded, setBackLoaded] = useState(false);
-  const [postcardSize, setPostcardSize] = useState(null);
-  const [templateTheme, setTemplateTheme] = useState(null);
-  const [fields, setFields] = useState(null);
-  const [brandColor, setBrandColor] = useState(null);
-  const [mailoutDisplayAgent, setMailoutDisplayAgent] = useState(null);
-  const [frontImgUrl, setFrontImgUrl] = useState(null);
-  const [ctas, setCtas] = useState(null);
-  const [colorPickerVal, setColorPickerVal] = useState(brandColor);
+  const [colorPickerVal, setColorPickerVal] = useState(mailoutEdit?.brandColor);
   const [frontIframeRef, setFrontIframeRef] = useState(null);
   const [backIframeRef, setBackIframeRef] = useState(null);
+
+  useEffect(() => {
+    if (!reloadIframes) return;
+    if (
+      (reloadIframes === 'front' || reloadIframes === true) &&
+      frontIframeRef?.contentWindow?.location
+    ) {
+      setFrontLoaded(false);
+      frontIframeRef.contentWindow.location.reload();
+    }
+    if (
+      (reloadIframes === 'back' || reloadIframes === true) &&
+      backIframeRef?.contentWindow?.location
+    ) {
+      setBackLoaded(false);
+      backIframeRef.contentWindow.location.reload();
+    }
+    dispatch(setReloadIframes(false));
+    dispatch(setReloadIframesPending(false));
+  }, [backIframeRef, dispatch, frontIframeRef, reloadIframes]);
 
   const sendPostMessage = useCallback(
     async (side, data) => {
@@ -98,31 +116,19 @@ export default function Editor() {
   );
 
   useEffect(() => {
-    setBrandColor(colorPickerVal?.hex);
+    dispatch(setEditBrandColor(colorPickerVal?.hex));
     if (frontIframeRef) {
       updateIframeColor('front', colorPickerVal?.hex);
     }
     if (backIframeRef) {
       updateIframeColor('back', colorPickerVal?.hex);
     }
-  }, [colorPickerVal, frontIframeRef, backIframeRef, updateIframeColor]);
+  }, [colorPickerVal, dispatch, frontIframeRef, backIframeRef, updateIframeColor]);
 
   useEffect(() => {
     dispatch(getMailoutPending(mailoutId));
     dispatch(getMailoutEditPending(mailoutId));
   }, [dispatch, mailoutId]);
-
-  useEffect(() => {
-    if (mailoutEdit) {
-      setPostcardSize(mailoutEdit.postcardSize);
-      setTemplateTheme(mailoutEdit.templateTheme);
-      setFields(mailoutEdit.fields);
-      setBrandColor(mailoutEdit.brandColor);
-      setFrontImgUrl(mailoutEdit.frontImgUrl || '');
-      setMailoutDisplayAgent(mailoutEdit.mailoutDisplayAgent);
-      setCtas(mailoutEdit.ctas);
-    }
-  }, [mailoutEdit]);
 
   const onFrontChange = useCallback(node => {
     setFrontIframeRef(node);
@@ -150,24 +156,24 @@ export default function Editor() {
     e => {
       if (e.source?.frameElement?.title?.includes('bm-iframe')) {
         const side = e.source?.name;
+        const newFields = [...mailoutEdit?.fields];
         if (e.data.name) {
-          const changedInd = fields.findIndex(el => el.name === e.data.name);
+          const changedInd = newFields.findIndex(el => el.name === e.data.name);
           if (changedInd === -1) {
             console.log('Cannot find field: ' + e.data.name);
             if (e.data.name === 'agentFullName') {
-              fields.push({
+              newFields.push({
                 name: e.data.name,
                 sides: [side],
                 value: e.data.value,
               });
             }
-            return;
-          }
-          fields[changedInd].value = e.data.value;
+          } else newFields[changedInd].value = e.data.value;
+          dispatch(setEditFields(newFields));
         }
       }
     },
-    [fields]
+    [dispatch, mailoutEdit]
   );
 
   useEffect(() => {
@@ -200,7 +206,18 @@ export default function Editor() {
     [setFrontLoaded, setBackLoaded]
   );
 
-  const handleSave = () => {
+  const handleSave = async postcardSize => {
+    // debugger;
+    if (!postcardSize) postcardSize = mailoutEdit?.postcardSize;
+    else dispatch(setReloadIframesPending(true));
+    const {
+      templateTheme,
+      fields,
+      brandColor,
+      mailoutDisplayAgent,
+      frontImgUrl,
+      ctas,
+    } = mailoutEdit;
     let newData = Object.assign(
       {},
       { postcardSize },
@@ -252,7 +269,7 @@ export default function Editor() {
                   <Icon name="ellipsis horizontal" />
                 </div>
               </ButtonNoStyle>
-              <Button primary disabled={updatePending} onClick={handleSave}>
+              <Button primary disabled={updatePending} onClick={() => handleSave()}>
                 Save
               </Button>
             </div>
@@ -271,6 +288,7 @@ export default function Editor() {
             activeTab={navItems[activeNavItem].name}
             colorPickerVal={colorPickerVal}
             setColorPickerVal={setColorPickerVal}
+            handleSave={handleSave}
           />
           <EditorContent>
             <EditorToolbar>
@@ -279,18 +297,23 @@ export default function Editor() {
             {details && (
               <EditorPreview>
                 <FrontIframe
-                  details={details}
+                  campaignId={details?._id}
                   frontLoaded={frontLoaded}
+                  frontResourceUrl={details?.frontResourceURL || null}
                   frontURL={frontURL}
                   handleOnload={handleOnload}
+                  postcardSize={details?.postcardSize}
                   ref={onFrontChange}
+                  reloadPending={reloadIframesPending}
                 />
                 <BackIframe
+                  campaignId={details?._id}
                   backLoaded={backLoaded}
                   backURL={backURL}
-                  details={details}
                   handleOnload={handleOnload}
+                  postcardSize={details?.postcardSize}
                   ref={onBackChange}
+                  reloadPending={reloadIframesPending}
                 />
               </EditorPreview>
             )}
