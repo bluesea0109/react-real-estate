@@ -92,9 +92,9 @@ export default function DisplayAgent({ handleSave }) {
 
   const handleAgentChange = (e, input) => {
     const selectedAgent = input.options.filter(o => o.value === input.value)[0];
-    const { first, last, value } = selectedAgent;
-    setSelectedDisplayAgent({ userId: value, first, last });
-    handleSave({ mailoutDisplayAgent: { userId: value, first, last } });
+    const { first, last, value: userId } = selectedAgent;
+    setSelectedDisplayAgent({ userId, first, last });
+    handleSave({ mailoutDisplayAgent: { userId, first, last } });
   };
 
   const dropdownItems = [];
@@ -162,11 +162,8 @@ export default function DisplayAgent({ handleSave }) {
       {mailoutEdit.mailoutDisplayAgent && (
         <AgentCard>
           <img
-            src={`${
-              mailoutEdit.mailoutDisplayAgent.realtorPhoto
-                ? mailoutEdit.mailoutDisplayAgent.realtorPhoto
-                : 'https://react.semantic-ui.com/images/avatar/large/patrick.png'
-            }`}
+            src={`${currentProfile?.realtorPhoto ||
+              'https://react.semantic-ui.com/images/avatar/large/patrick.png'}`}
             alt="profile"
           />
           <div className="agent-details">

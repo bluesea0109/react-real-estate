@@ -46,10 +46,10 @@ const presetColors = [
 ];
 
 export default function EditorTab({ colorPickerVal, setColorPickerVal, handleSave }) {
-  const [brandColorOpen, setBrandColorOpen] = useState(false);
+  const [brandColorOpen, setBrandColorOpen] = useState(true);
   const [postcardSizeOpen, setPostcardSizeOpen] = useState(false);
   const [photosOpen, setPhotosOpen] = useState(false);
-  const [agentOpen, setAgentOpen] = useState(true);
+  const [agentOpen, setAgentOpen] = useState(false);
   const onColorChange = color => setColorPickerVal(color);
   const brandColor = useSelector(state => state.mailout?.mailoutEdit?.brandColor);
 
