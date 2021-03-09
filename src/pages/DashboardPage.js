@@ -194,7 +194,26 @@ const Dashboard = ({ className }) => {
           ></DashboardItem>
           <DashboardItem
             name="open house ad"
-            linkTo={{ pathname: 'listings', state: { filters: ['Active', 'Pending'] } }}
+            linkTo={{
+              pathname: 'listings',
+              state: { filters: ['Active', 'Pending'], adsModal: true, adType: 'openHouse' },
+            }}
+          ></DashboardItem>
+          <DashboardItem
+            name="home value ad"
+            soon
+            // linkTo={{
+            //   pathname: 'listings',
+            //   state: { filters: ['Active', 'Pending'], adsModal: true, adType: 'homeValue' },
+            // }}
+          ></DashboardItem>
+          <DashboardItem
+            name="buyer search ad"
+            soon
+            // linkTo={{
+            //   pathname: 'listings',
+            //   state: { filters: ['Active', 'Pending'], adsModal: true, adType: 'buyerSearch' },
+            // }}
           ></DashboardItem>
           <DashboardItem name="home value ad" linkTo="" soon></DashboardItem>
           <DashboardItem name="buyer search ad" linkTo="" soon></DashboardItem>
