@@ -209,17 +209,11 @@ export default function Editor() {
     [setFrontLoaded, setBackLoaded]
   );
 
-  const handleSave = async postcardSize => {
+  const handleSave = async ({ postcardSize, mailoutDisplayAgent }) => {
     if (!postcardSize) postcardSize = mailoutEdit?.postcardSize;
-    else dispatch(setReloadIframesPending(true));
-    const {
-      templateTheme,
-      fields,
-      brandColor,
-      mailoutDisplayAgent,
-      frontImgUrl,
-      ctas,
-    } = mailoutEdit;
+    if (!mailoutDisplayAgent) mailoutDisplayAgent = mailoutEdit?.mailoutDisplayAgent;
+    if (postcardSize || mailoutDisplayAgent) dispatch(setReloadIframesPending(true));
+    const { templateTheme, fields, brandColor, frontImgUrl, ctas } = mailoutEdit;
     let newData = Object.assign(
       {},
       { postcardSize },

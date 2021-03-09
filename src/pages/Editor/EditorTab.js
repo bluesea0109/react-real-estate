@@ -54,7 +54,7 @@ export default function EditorTab({ colorPickerVal, setColorPickerVal, handleSav
   const brandColor = useSelector(state => state.mailout?.mailoutEdit?.brandColor);
 
   const changeSize = newSize => {
-    handleSave(newSize);
+    handleSave({ postcardSize: newSize });
   };
 
   return (
@@ -99,7 +99,7 @@ export default function EditorTab({ colorPickerVal, setColorPickerVal, handleSav
         isOpen={agentOpen}
         setIsOpen={setAgentOpen}
       >
-        <DisplayAgent />
+        <DisplayAgent handleSave={handleSave} />
       </DropdownCard>
     </>
   );

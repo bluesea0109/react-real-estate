@@ -29,6 +29,14 @@ const StyledDropdown = styled(Dropdown)`
       top: 1em;
       padding: 8px;
     }
+    & > .visible.menu {
+      min-width: 200px !important;
+      border: none;
+      max-height: 20rem;
+      ::-webkit-scrollbar {
+        width: 0;
+      }
+    }
   }
 `;
 
@@ -70,7 +78,7 @@ const AgentCard = styled.div`
   }
 `;
 
-export default function DisplayAgent() {
+export default function DisplayAgent({ handleSave }) {
   const mailoutEdit = useSelector(state => state.mailout?.mailoutEdit);
   const profiles = useSelector(state => state.team?.profiles);
   const teamName = useSelector(state => state.teamProfile?.available?.teamName);
@@ -84,8 +92,9 @@ export default function DisplayAgent() {
 
   const handleAgentChange = (e, input) => {
     const selectedAgent = input.options.filter(o => o.value === input.value)[0];
-    const { first, last, value, profileimg } = selectedAgent;
-    setSelectedDisplayAgent({ userId: value, first, last, realtorPhoto: profileimg });
+    const { first, last, value } = selectedAgent;
+    setSelectedDisplayAgent({ userId: value, first, last });
+    handleSave({ mailoutDisplayAgent: { userId: value, first, last } });
   };
 
   const dropdownItems = [];
@@ -115,7 +124,6 @@ export default function DisplayAgent() {
         key: ind,
         first: profile.first,
         last: profile.last,
-        profileimg: profile.realtorPhoto || '',
         text: fullName,
         value: profile.userId,
         content: (
