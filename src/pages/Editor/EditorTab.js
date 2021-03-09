@@ -82,7 +82,8 @@ export default function EditorTab({ colorPickerVal, setColorPickerVal, handleSav
   const [photosOpen, setPhotosOpen] = useState(false);
   const [agentOpen, setAgentOpen] = useState(false);
   const onColorChange = color => setColorPickerVal(color);
-  const { brandColor, postcardSize } = useSelector(state => state.mailout?.mailoutEdit);
+  const brandColor = useSelector(store => store.mailout?.mailoutEdit?.brandColor);
+  const postcardSize = useSelector(store => store.mailout?.mailoutEdit?.postcardSize);
   const is6x4 = postcardSize === '6x4';
   const is9x6 = postcardSize === '9x6';
   const is11x6 = postcardSize === '11x6';
