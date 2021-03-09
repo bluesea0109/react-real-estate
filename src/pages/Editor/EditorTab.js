@@ -49,13 +49,14 @@ const SizeButtons = styled.div`
     }
     :not(:disabled) {
       cursor: pointer;
-      :hover {
+      :hover,
+      :focus {
         border-color: ${brandColors.primary};
+        outline: none;
+      }
+      :hover {
         color: ${brandColors.primary};
       }
-    }
-    :focus {
-      outline: none;
     }
   }
 `;
