@@ -18,7 +18,6 @@ const EditorHeader = styled.div`
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      height: 32px;
     }
     & i {
       height: 40px;

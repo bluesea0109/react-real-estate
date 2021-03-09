@@ -2,14 +2,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import styled from 'styled-components';
-import { Popup } from 'semantic-ui-react';
 import {
   getMailoutEditPending,
   getMailoutPending,
   setEditBrandColor,
   setEditFields,
   updateMailoutEditPending,
-  updateMailoutNamePending,
 } from '../../store/modules/mailout/actions';
 import * as brandColors from '../../components/utils/brandColors';
 import { Button, ButtonNoStyle, Icon, Loader, Input } from '../../components/Base';
@@ -62,10 +60,10 @@ const EditorPreview = styled.div`
 `;
 
 const CampaignNameDiv = styled.div`
-  width: 300px;
   display: flex;
   align-items: center;
   & .input {
+    width: 360px;
     flex: 1 0 0px;
     height: 32px;
   }
@@ -87,9 +85,11 @@ export default function Editor() {
   const [frontIframeRef, setFrontIframeRef] = useState(null);
   const [backIframeRef, setBackIframeRef] = useState(null);
   const [editingName, setEditingName] = useState(false);
-  const [newCampaignName, setNewCampaignName] = useState(
-    details?.name || details?.details?.displayAddress
-  );
+  const [newCampaignName, setNewCampaignName] = useState('');
+
+  useEffect(() => {
+    setNewCampaignName(details?.name || details?.details?.displayAddress);
+  }, [details]);
 
   useEffect(() => {
     if (!reloadIframes) return;
@@ -238,7 +238,7 @@ export default function Editor() {
     );
     if (frontImgUrl) newData.frontImgUrl = frontImgUrl;
     if (ctas) newData.ctas = ctas;
-    dispatch(updateMailoutNamePending({ name: newCampaignName, mailoutId: details._id }));
+    // TODO Add the name update to the save data when API is updated
     dispatch(updateMailoutEditPending(newData));
     setEditingName(false);
   };
@@ -280,16 +280,8 @@ export default function Editor() {
                   </>
                 ) : (
                   <>
-                    <Popup
-                      content={details?.name || details?.details?.displayAddress}
-                      trigger={<h1>{details?.name || details?.details?.displayAddress}</h1>}
-                    />
-                    <ButtonNoStyle
-                      onClick={_ => {
-                        setEditingName(true);
-                        setNewCampaignName(details?.name || details?.details?.displayAddress);
-                      }}
-                    >
+                    <h1>{newCampaignName}</h1>
+                    <ButtonNoStyle onClick={_ => setEditingName(true)}>
                       <Icon name="pencil" />
                     </ButtonNoStyle>
                   </>
