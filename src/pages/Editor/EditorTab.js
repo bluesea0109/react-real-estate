@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { SketchPicker } from 'react-color';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { DropdownCard } from '../../components/Base';
+import { Button, DropdownCard, Input } from '../../components/Base';
 import DisplayAgent from './DisplayAgent';
 import * as brandColors from '../../components/utils/brandColors';
 
@@ -78,9 +78,10 @@ const presetColors = [
 
 export default function EditorTab({ colorPickerVal, setColorPickerVal, handleSave }) {
   const [brandColorOpen, setBrandColorOpen] = useState(false);
-  const [postcardSizeOpen, setPostcardSizeOpen] = useState(true);
+  const [postcardSizeOpen, setPostcardSizeOpen] = useState(false);
   const [photosOpen, setPhotosOpen] = useState(false);
   const [agentOpen, setAgentOpen] = useState(false);
+  const [customCtaOpen, setCustomCtaOpen] = useState(true);
   const onColorChange = color => setColorPickerVal(color);
   const brandColor = useSelector(store => store.mailout?.mailoutEdit?.brandColor);
   const postcardSize = useSelector(store => store.mailout?.mailoutEdit?.postcardSize);
@@ -108,7 +109,7 @@ export default function EditorTab({ colorPickerVal, setColorPickerVal, handleSav
       </DropdownCard>
       <DropdownCard
         title="Postcard Size"
-        iconName="image outline"
+        iconName="expand"
         isOpen={postcardSizeOpen}
         setIsOpen={setPostcardSizeOpen}
       >
@@ -146,6 +147,22 @@ export default function EditorTab({ colorPickerVal, setColorPickerVal, handleSav
         setIsOpen={setAgentOpen}
       >
         <DisplayAgent handleSave={handleSave} />
+      </DropdownCard>
+      <DropdownCard
+        title="Custom CTA"
+        iconName="edit"
+        isOpen={customCtaOpen}
+        setIsOpen={setCustomCtaOpen}
+      >
+        <p>Custom CTA Here</p>
+        <Input id="cta-input" type="url" required />
+        <Button
+          onClick={() => {
+            console.log(document.getElementById('cta-input').checkValidity());
+          }}
+        >
+          Check!
+        </Button>
       </DropdownCard>
     </>
   );
