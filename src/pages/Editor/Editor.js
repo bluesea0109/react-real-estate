@@ -157,9 +157,7 @@ export default function Editor() {
       if (e.source?.frameElement?.title?.includes('bm-iframe')) {
         const side = e.source?.name;
         let newFields = [];
-        if (mailoutEdit.fields === Array) {
-          newFields = [...mailoutEdit?.fields];
-        }
+        newFields = [...mailoutEdit?.fields];
         if (e.data.name) {
           const changedInd = newFields.findIndex(el => el.name === e.data.name);
           if (changedInd === -1) {
@@ -210,9 +208,9 @@ export default function Editor() {
   );
 
   const handleSave = async ({ postcardSize, mailoutDisplayAgent }) => {
+    if (postcardSize || mailoutDisplayAgent) dispatch(setReloadIframesPending(true));
     if (!postcardSize) postcardSize = mailoutEdit?.postcardSize;
     if (!mailoutDisplayAgent) mailoutDisplayAgent = mailoutEdit?.mailoutDisplayAgent;
-    if (postcardSize || mailoutDisplayAgent) dispatch(setReloadIframesPending(true));
     const { templateTheme, fields, brandColor, frontImgUrl, ctas } = mailoutEdit;
     let newData = Object.assign(
       {},
@@ -265,7 +263,7 @@ export default function Editor() {
                   <Icon name="ellipsis horizontal" />
                 </div>
               </ButtonNoStyle>
-              <Button primary disabled={updatePending} onClick={() => handleSave()}>
+              <Button primary disabled={updatePending} onClick={() => handleSave({})}>
                 Save
               </Button>
             </div>
