@@ -3,6 +3,7 @@ import { SketchPicker } from 'react-color';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Button, DropdownCard } from '../../components/Base';
+import DisplayAgent from './DisplayAgent';
 
 const ColorPicker = styled(SketchPicker)`
   box-shadow: none !important;
@@ -45,10 +46,10 @@ const presetColors = [
 ];
 
 export default function EditorTab({ colorPickerVal, setColorPickerVal, handleSave }) {
-  const [brandColorOpen, setBrandColorOpen] = useState(true);
+  const [brandColorOpen, setBrandColorOpen] = useState(false);
   const [postcardSizeOpen, setPostcardSizeOpen] = useState(false);
   const [photosOpen, setPhotosOpen] = useState(false);
-  const [agentOpen, setAgentOpen] = useState(false);
+  const [agentOpen, setAgentOpen] = useState(true);
   const onColorChange = color => setColorPickerVal(color);
   const brandColor = useSelector(state => state.mailout?.mailoutEdit?.brandColor);
 
@@ -94,11 +95,11 @@ export default function EditorTab({ colorPickerVal, setColorPickerVal, handleSav
       </DropdownCard>
       <DropdownCard
         title="Display Agent"
-        iconName="user outline"
+        iconName="user circle"
         isOpen={agentOpen}
         setIsOpen={setAgentOpen}
       >
-        <div>Display Agent</div>
+        <DisplayAgent />
       </DropdownCard>
     </>
   );
