@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import styled from 'styled-components';
+import { Popup } from 'semantic-ui-react';
 import {
   getMailoutEditPending,
   getMailoutPending,
@@ -61,10 +62,12 @@ const EditorPreview = styled.div`
 `;
 
 const CampaignNameDiv = styled.div`
+  width: 300px;
   display: flex;
   align-items: center;
   & .input {
     flex: 1 0 0px;
+    height: 32px;
   }
 `;
 
@@ -277,7 +280,10 @@ export default function Editor() {
                   </>
                 ) : (
                   <>
-                    <h1>{details?.name || details?.details?.displayAddress}</h1>
+                    <Popup
+                      content={details?.name || details?.details?.displayAddress}
+                      trigger={<h1>{details?.name || details?.details?.displayAddress}</h1>}
+                    />
                     <ButtonNoStyle
                       onClick={_ => {
                         setEditingName(true);
