@@ -23,7 +23,7 @@ import { setReloadIframes, setReloadIframesPending } from '../../store/modules/l
 const EditorLayout = styled.div`
   display: grid;
   grid-template-rows: [header] minmax(54px, auto) [body] minmax(10px, 1fr);
-  grid-template-columns: [nav] 56px [sidebar] 300px [content] minmax(10px, 1fr);
+  grid-template-columns: [nav] 56px [sidebar] 330px [content] minmax(10px, 1fr);
   background-color: white;
   height: calc(100% - 60px);
   min-width: 100%;
@@ -156,7 +156,10 @@ export default function Editor() {
     e => {
       if (e.source?.frameElement?.title?.includes('bm-iframe')) {
         const side = e.source?.name;
-        const newFields = [...mailoutEdit?.fields];
+        let newFields = [];
+        if (mailoutEdit.fields === Array) {
+          newFields = [...mailoutEdit?.fields];
+        }
         if (e.data.name) {
           const changedInd = newFields.findIndex(el => el.name === e.data.name);
           if (changedInd === -1) {
@@ -206,17 +209,11 @@ export default function Editor() {
     [setFrontLoaded, setBackLoaded]
   );
 
-  const handleSave = async postcardSize => {
+  const handleSave = async ({ postcardSize, mailoutDisplayAgent }) => {
     if (!postcardSize) postcardSize = mailoutEdit?.postcardSize;
-    else dispatch(setReloadIframesPending(true));
-    const {
-      templateTheme,
-      fields,
-      brandColor,
-      mailoutDisplayAgent,
-      frontImgUrl,
-      ctas,
-    } = mailoutEdit;
+    if (!mailoutDisplayAgent) mailoutDisplayAgent = mailoutEdit?.mailoutDisplayAgent;
+    if (postcardSize || mailoutDisplayAgent) dispatch(setReloadIframesPending(true));
+    const { templateTheme, fields, brandColor, frontImgUrl, ctas } = mailoutEdit;
     let newData = Object.assign(
       {},
       { postcardSize },
