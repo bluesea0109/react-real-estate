@@ -62,7 +62,7 @@ const EditorPreview = styled.div`
 
 const CampaignNameDiv = styled.div`
   display: flex;
-  align-items: baseline;
+  align-items: center;
   & .input {
     flex: 1 0 0px;
   }
@@ -84,7 +84,9 @@ export default function Editor() {
   const [frontIframeRef, setFrontIframeRef] = useState(null);
   const [backIframeRef, setBackIframeRef] = useState(null);
   const [editingName, setEditingName] = useState(false);
-  const [newCampaignName, setNewCampaignName] = useState(details?.name);
+  const [newCampaignName, setNewCampaignName] = useState(
+    details?.name || details?.details?.displayAddress
+  );
 
   useEffect(() => {
     if (!reloadIframes) return;
@@ -264,14 +266,24 @@ export default function Editor() {
               </ButtonNoStyle>
               <CampaignNameDiv>
                 {editingName ? (
-                  <Input
-                    value={newCampaignName}
-                    onChange={e => setNewCampaignName(e.target.value)}
-                  ></Input>
+                  <>
+                    <Input
+                      value={newCampaignName}
+                      onChange={e => setNewCampaignName(e.target.value)}
+                    ></Input>
+                    <ButtonNoStyle onClick={_ => setEditingName(false)}>
+                      <Icon name="close" />
+                    </ButtonNoStyle>
+                  </>
                 ) : (
                   <>
                     <h1>{details?.name || details?.details?.displayAddress}</h1>
-                    <ButtonNoStyle onClick={_ => setEditingName(true)}>
+                    <ButtonNoStyle
+                      onClick={_ => {
+                        setEditingName(true);
+                        setNewCampaignName(details?.name || details?.details?.displayAddress);
+                      }}
+                    >
                       <Icon name="pencil" />
                     </ButtonNoStyle>
                   </>
