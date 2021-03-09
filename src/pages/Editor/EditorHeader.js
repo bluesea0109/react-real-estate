@@ -15,6 +15,10 @@ const EditorHeader = styled.div`
     & h1 {
       font-weight: 600;
       color: ${brandColors.grey01};
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      height: 32px;
     }
     & i {
       height: 40px;

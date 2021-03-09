@@ -2,15 +2,17 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import styled from 'styled-components';
+import { Popup } from 'semantic-ui-react';
 import {
   getMailoutEditPending,
   getMailoutPending,
   setEditBrandColor,
   setEditFields,
   updateMailoutEditPending,
+  updateMailoutNamePending,
 } from '../../store/modules/mailout/actions';
 import * as brandColors from '../../components/utils/brandColors';
-import { Button, ButtonNoStyle, Icon, Loader } from '../../components/Base';
+import { Button, ButtonNoStyle, Icon, Loader, Input } from '../../components/Base';
 import EditorHeader from './EditorHeader';
 import EditorNav, { NavButton } from './EditorNav';
 import { BackIframe, FrontIframe } from '../MailoutDetailsPage';
@@ -59,6 +61,16 @@ const EditorPreview = styled.div`
   justify-items: center;
 `;
 
+const CampaignNameDiv = styled.div`
+  width: 300px;
+  display: flex;
+  align-items: center;
+  & .input {
+    flex: 1 0 0px;
+    height: 32px;
+  }
+`;
+
 export default function Editor() {
   const dispatch = useDispatch();
   const mailoutId = useParams().mailoutId;
@@ -74,6 +86,10 @@ export default function Editor() {
   const [colorPickerVal, setColorPickerVal] = useState(mailoutEdit?.brandColor);
   const [frontIframeRef, setFrontIframeRef] = useState(null);
   const [backIframeRef, setBackIframeRef] = useState(null);
+  const [editingName, setEditingName] = useState(false);
+  const [newCampaignName, setNewCampaignName] = useState(
+    details?.name || details?.details?.displayAddress
+  );
 
   useEffect(() => {
     if (!reloadIframes) return;
@@ -222,7 +238,9 @@ export default function Editor() {
     );
     if (frontImgUrl) newData.frontImgUrl = frontImgUrl;
     if (ctas) newData.ctas = ctas;
+    dispatch(updateMailoutNamePending({ name: newCampaignName, mailoutId: details._id }));
     dispatch(updateMailoutEditPending(newData));
+    setEditingName(false);
   };
 
   const navItems = [
@@ -249,10 +267,34 @@ export default function Editor() {
               <ButtonNoStyle as={Link} to={`/postcards/${details?._id}`}>
                 <Icon className="back-btn" name="chevron left" />
               </ButtonNoStyle>
-              <h1>{details?.name || details?.details?.displayAddress}</h1>
-              <ButtonNoStyle onClick={() => console.log('TODO Edit Name')}>
-                <Icon name="pencil" />
-              </ButtonNoStyle>
+              <CampaignNameDiv>
+                {editingName ? (
+                  <>
+                    <Input
+                      value={newCampaignName}
+                      onChange={e => setNewCampaignName(e.target.value)}
+                    ></Input>
+                    <ButtonNoStyle onClick={_ => setEditingName(false)}>
+                      <Icon name="close" />
+                    </ButtonNoStyle>
+                  </>
+                ) : (
+                  <>
+                    <Popup
+                      content={details?.name || details?.details?.displayAddress}
+                      trigger={<h1>{details?.name || details?.details?.displayAddress}</h1>}
+                    />
+                    <ButtonNoStyle
+                      onClick={_ => {
+                        setEditingName(true);
+                        setNewCampaignName(details?.name || details?.details?.displayAddress);
+                      }}
+                    >
+                      <Icon name="pencil" />
+                    </ButtonNoStyle>
+                  </>
+                )}
+              </CampaignNameDiv>
             </div>
             <div className="header-right">
               <Icon name="undo" />
