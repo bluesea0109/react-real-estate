@@ -39,6 +39,8 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
   const onLoginMode = useSelector(store => store.onLogin.mode);
   const multiUser = onLoginMode === 'multiuser';
 
+  console.log('listingItem', listingItem);
+
   if (!listingItem)
     return (
       <Grid.Column>

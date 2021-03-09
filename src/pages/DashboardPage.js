@@ -207,17 +207,19 @@ const Dashboard = ({ className }) => {
           ></DashboardItem>
           <DashboardItem
             name="home value ad"
-            linkTo={{
-              pathname: 'listings',
-              state: { filters: ['Active', 'Pending'], adsModal: true, adType: 'homeValue' },
-            }}
+            soon
+            // linkTo={{
+            //   pathname: 'listings',
+            //   state: { filters: ['Active', 'Pending'], adsModal: true, adType: 'homeValue' },
+            // }}
           ></DashboardItem>
           <DashboardItem
             name="buyer search ad"
-            linkTo={{
-              pathname: 'listings',
-              state: { filters: ['Active', 'Pending'], adsModal: true, adType: 'buyerSearch' },
-            }}
+            soon
+            // linkTo={{
+            //   pathname: 'listings',
+            //   state: { filters: ['Active', 'Pending'], adsModal: true, adType: 'buyerSearch' },
+            // }}
           ></DashboardItem>
         </SectionGrid>
         <SectionHeader>Marketing Materials</SectionHeader>
