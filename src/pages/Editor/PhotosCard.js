@@ -12,7 +12,7 @@ const PhotoContainer = styled.div`
 const ImageOption = styled.img`
   box-shadow: 1px 1px 4px ${brandColors.grey08};
   border-radius: 4px;
-  ${props => (props.current ? `border: 2px solid ${brandColors.primary};` : null)}
+  ${props => (props.current ? `border: 2px solid ${brandColors.primary}; padding: 0.25rem;` : null)}
   ${props => (!props.current ? `cursor: pointer;` : null)}
 `;
 
