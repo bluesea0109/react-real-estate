@@ -13,6 +13,7 @@ import {
   setPhotosOpen,
   setPostcardSizeOpen,
 } from '../../store/modules/liveEditor/actions';
+import PhotosCard from './PhotosCard';
 
 const ColorPicker = styled(SketchPicker)`
   box-shadow: none !important;
@@ -157,12 +158,12 @@ export default function EditorTab({
         </SizeButtons>
       </DropdownCard>
       <DropdownCard
-        title="Photos"
+        title="Cover Photo"
         iconName="images"
         isOpen={photosOpen}
         toggleOpen={() => dispatch(setPhotosOpen(!photosOpen))}
       >
-        <div>Photos</div>
+        <PhotosCard handleSave={handleSave} />
       </DropdownCard>
       <DropdownCard
         title="Display Agent"

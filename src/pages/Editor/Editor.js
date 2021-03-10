@@ -246,19 +246,18 @@ export default function Editor() {
     [setFrontLoaded, setBackLoaded]
   );
 
-  const handleSave = async ({ postcardSize, mailoutDisplayAgent, templateTheme }) => {
+  const handleSave = async ({ postcardSize, mailoutDisplayAgent, templateTheme, frontImgUrl }) => {
     if (customizeCTA && invalidCTA) {
       setActiveNavItem(1);
       dispatch(setCustomCtaOpen(true));
       return;
     }
-    if (postcardSize || mailoutDisplayAgent || templateTheme)
+    if (postcardSize || mailoutDisplayAgent || templateTheme || frontImgUrl)
       dispatch(setReloadIframesPending(true));
     if (!postcardSize) postcardSize = mailoutEdit?.postcardSize;
     if (!mailoutDisplayAgent) mailoutDisplayAgent = mailoutEdit?.mailoutDisplayAgent;
     if (!templateTheme) templateTheme = mailoutEdit?.templateTheme;
-
-    const { fields, brandColor, frontImgUrl } = mailoutEdit;
+    const { fields, brandColor } = mailoutEdit;
     let newData = Object.assign(
       {},
       { postcardSize },
@@ -271,7 +270,6 @@ export default function Editor() {
     if (frontImgUrl) newData.frontImgUrl = frontImgUrl;
     if (customizeCTA) newData.ctas = { cta: newCTA, shortenCTA: true };
     else newData.ctas = { dontOverride: true };
-    // TODO Add the name update to the save data when API is updated
     dispatch(updateMailoutEditPending(newData));
     setEditingName(false);
   };
