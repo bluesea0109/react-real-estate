@@ -11,9 +11,9 @@ import {
 const initialState = {
   reloadIframes: false,
   reloadIframesPending: false,
-  brandColorOpen: false,
+  brandColorOpen: true,
   postcardSizeOpen: false,
-  photosOpen: true,
+  photosOpen: false,
   agentOpen: false,
   customCtaOpen: false,
 };
