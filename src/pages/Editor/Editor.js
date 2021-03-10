@@ -223,11 +223,13 @@ export default function Editor() {
     [setFrontLoaded, setBackLoaded]
   );
 
-  const handleSave = async ({ postcardSize, mailoutDisplayAgent }) => {
-    if (postcardSize || mailoutDisplayAgent) dispatch(setReloadIframesPending(true));
+  const handleSave = async ({ postcardSize, mailoutDisplayAgent, templateTheme }) => {
+    if (postcardSize || mailoutDisplayAgent || templateTheme)
+      dispatch(setReloadIframesPending(true));
     if (!postcardSize) postcardSize = mailoutEdit?.postcardSize;
     if (!mailoutDisplayAgent) mailoutDisplayAgent = mailoutEdit?.mailoutDisplayAgent;
-    const { templateTheme, fields, brandColor, frontImgUrl, ctas } = mailoutEdit;
+    if (!templateTheme) templateTheme = mailoutEdit?.templateTheme;
+    const { fields, brandColor, frontImgUrl, ctas } = mailoutEdit;
     let newData = Object.assign(
       {},
       { postcardSize },
@@ -317,6 +319,7 @@ export default function Editor() {
             colorPickerVal={colorPickerVal}
             setColorPickerVal={setColorPickerVal}
             handleSave={handleSave}
+            mailoutDetails={details}
           />
           <EditorContent>
             <EditorToolbar>

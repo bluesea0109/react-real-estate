@@ -1,9 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 import EditorTab from './EditorTab';
+import TemplatesTab from './TemplatesTab';
 import * as brandColors from '../../components/utils/brandColors';
 
-function SidebarContent({ className, activeTab, colorPickerVal, handleSave, setColorPickerVal }) {
+function SidebarContent({
+  className,
+  activeTab,
+  colorPickerVal,
+  handleSave,
+  setColorPickerVal,
+  mailoutDetails,
+}) {
   return (
     <div className={className}>
       <h3 className="title">{activeTab}</h3>
@@ -13,6 +21,9 @@ function SidebarContent({ className, activeTab, colorPickerVal, handleSave, setC
           handleSave={handleSave}
           setColorPickerVal={setColorPickerVal}
         />
+      )}
+      {activeTab === 'Select Templates' && (
+        <TemplatesTab handleSave={handleSave} mailoutDetails={mailoutDetails} />
       )}
     </div>
   );
