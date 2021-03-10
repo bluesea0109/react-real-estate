@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import EditorTab from './EditorTab';
+import TemplatesTab from './TemplatesTab';
 import * as brandColors from '../../components/utils/brandColors';
 
 function SidebarContent({
@@ -16,6 +17,7 @@ function SidebarContent({
   setCustomizeCTA,
   setInvalidCTA,
   setNewCTA,
+  mailoutDetails,
 }) {
   return (
     <div className={className}>
@@ -33,6 +35,9 @@ function SidebarContent({
           setInvalidCTA={setInvalidCTA}
           setNewCTA={setNewCTA}
         />
+      )}
+      {activeTab === 'Select Templates' && (
+        <TemplatesTab handleSave={handleSave} mailoutDetails={mailoutDetails} />
       )}
     </div>
   );
