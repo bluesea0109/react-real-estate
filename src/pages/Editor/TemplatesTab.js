@@ -82,7 +82,7 @@ export default function TemplatesTab({ mailoutDetails, handleSave }) {
 
   return (
     <>
-      {filteredStencils &&
+      {filteredStencils?.length ? (
         filteredStencils.map((stencil, index) =>
           renderTemplatePicture(
             index,
@@ -91,7 +91,10 @@ export default function TemplatesTab({ mailoutDetails, handleSave }) {
             stencil.thumbnail,
             stencil.new
           )
-        )}
+        )
+      ) : (
+        <p>Switching templates is not supported for this campaign type.</p>
+      )}
     </>
   );
 }
