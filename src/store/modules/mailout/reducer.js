@@ -47,6 +47,7 @@ import {
   SET_EDIT_BRAND_COLOR,
   SET_EDIT_FIELDS,
   SET_EDIT_POSTCARD_SIZE,
+  SET_EDIT_CTAS,
 } from './actions';
 
 const initialState = {
@@ -468,6 +469,14 @@ export default function mailout(state = initialState, action) {
         mailoutEdit: {
           ...state.mailoutEdit,
           fields: action.payload,
+        },
+      };
+    case SET_EDIT_CTAS:
+      return {
+        ...state,
+        mailoutEdit: {
+          ...state.mailoutEdit,
+          ctas: action.payload,
         },
       };
     default:

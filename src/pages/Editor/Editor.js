@@ -18,7 +18,11 @@ import { Link } from 'react-router-dom';
 // eslint-disable-next-line
 import jsText from 'raw-loader!./iframeScript.js';
 import EditorSidebar from './EditorSidebar';
-import { setReloadIframes, setReloadIframesPending } from '../../store/modules/liveEditor/actions';
+import {
+  setCustomCtaOpen,
+  setReloadIframes,
+  setReloadIframesPending,
+} from '../../store/modules/liveEditor/actions';
 
 const EditorLayout = styled.div`
   display: grid;
@@ -86,6 +90,24 @@ export default function Editor() {
   const [backIframeRef, setBackIframeRef] = useState(null);
   const [editingName, setEditingName] = useState(false);
   const [newCampaignName, setNewCampaignName] = useState('');
+  const customCTA = useSelector(state => state.mailout?.details?.cta);
+  const currentListingStatus = details?.listingStatus;
+  const defaultCTA = useSelector(store => {
+    let bestCta = details?.cta;
+    if (!bestCta) bestCta = store.onLogin?.userBranding?.[currentListingStatus]?.cta;
+    if (!bestCta) bestCta = store.onLogin?.teamBranding?.[currentListingStatus]?.cta;
+    if (!bestCta) bestCta = store.onLogin?.teamProfile?.website;
+    if (!bestCta) return 'https://www.google.com';
+    return bestCta;
+  });
+  const [customizeCTA, setCustomizeCTA] = useState(false);
+  const [newCTA, setNewCTA] = useState(defaultCTA);
+  const [invalidCTA, setInvalidCTA] = useState(false);
+
+  useEffect(() => {
+    setNewCTA(customCTA || defaultCTA);
+    setCustomizeCTA(customCTA?.length > 0);
+  }, [customCTA, defaultCTA]);
 
   useEffect(() => {
     setNewCampaignName(details?.name || details?.details?.displayAddress);
@@ -170,6 +192,7 @@ export default function Editor() {
 
   const handlePostMessage = useCallback(
     e => {
+      if (mailoutEdit?.fields !== Array) return;
       if (e.source?.frameElement?.title?.includes('bm-iframe')) {
         const side = e.source?.name;
         let newFields = [];
@@ -224,10 +247,15 @@ export default function Editor() {
   );
 
   const handleSave = async ({ postcardSize, mailoutDisplayAgent }) => {
+    if (customizeCTA && invalidCTA) {
+      setActiveNavItem(1);
+      dispatch(setCustomCtaOpen(true));
+      return;
+    }
     if (postcardSize || mailoutDisplayAgent) dispatch(setReloadIframesPending(true));
     if (!postcardSize) postcardSize = mailoutEdit?.postcardSize;
     if (!mailoutDisplayAgent) mailoutDisplayAgent = mailoutEdit?.mailoutDisplayAgent;
-    const { templateTheme, fields, brandColor, frontImgUrl, ctas } = mailoutEdit;
+    const { templateTheme, fields, brandColor, frontImgUrl } = mailoutEdit;
     let newData = Object.assign(
       {},
       { postcardSize },
@@ -237,7 +265,8 @@ export default function Editor() {
       { mailoutDisplayAgent }
     );
     if (frontImgUrl) newData.frontImgUrl = frontImgUrl;
-    if (ctas) newData.ctas = ctas;
+    if (customizeCTA) newData.ctas = { cta: newCTA, shortenCTA: true };
+    else newData.ctas = { dontOverride: true };
     // TODO Add the name update to the save data when API is updated
     dispatch(updateMailoutEditPending(newData));
     setEditingName(false);
@@ -315,6 +344,13 @@ export default function Editor() {
           <EditorSidebar
             activeTab={navItems[activeNavItem].name}
             colorPickerVal={colorPickerVal}
+            customCTA={customCTA}
+            customizeCTA={customizeCTA}
+            invalidCTA={invalidCTA}
+            newCTA={newCTA}
+            setCustomizeCTA={setCustomizeCTA}
+            setInvalidCTA={setInvalidCTA}
+            setNewCTA={setNewCTA}
             setColorPickerVal={setColorPickerVal}
             handleSave={handleSave}
           />

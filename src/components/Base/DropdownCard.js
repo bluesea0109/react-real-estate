@@ -2,11 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import { Icon } from '.';
 
-const DropdownCard = ({ children, className, isOpen, setIsOpen, iconName, title }) => {
+const DropdownCard = ({ children, className, isOpen, toggleOpen, iconName, title }) => {
   return (
     <>
       <div className={className}>
-        <div className="card-title" onClick={() => (isOpen ? setIsOpen(false) : setIsOpen(true))}>
+        <div className="card-title" onClick={toggleOpen}>
           <Icon name={iconName} />
           <h4>{title}</h4>
           <Icon className="arrow" name={isOpen ? 'chevron up' : 'chevron right'}></Icon>
