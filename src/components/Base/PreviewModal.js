@@ -24,7 +24,10 @@ export const ModalClose = styled.div`
 `;
 
 export const PreviewImage = styled.img`
-  width: 800px;
+  &&& {
+    width: 800px;
+    border-radius: 0;
+  }
 `;
 
 export const ModalActions = styled.div`

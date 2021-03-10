@@ -1,6 +1,5 @@
 import React from 'react';
-import { GridItem, GridItemContainer } from './GridItem';
-import GridLayout from './GridLayout';
+import { getAspectRatio, GridItem, GridItemContainer, GridLayout } from '.';
 import styled from 'styled-components';
 import * as brandColors from '../../components/utils/brandColors';
 import { calculateCost } from '../../components/MailoutListItem/utils/helpers';
@@ -34,14 +33,22 @@ const labelText = size => {
   }
 };
 
-export default function PostcardSizes({ sizes, selectedSize, setSelectedSize }) {
+export default function PostcardSizes({ cropper, sizes, selectedSize, setSelectedSize }) {
   return (
     <GridLayout>
       {sizes.map(size => {
         const [height, width] = size.split('x');
         return (
           <GridItemContainer key={size} type="size" selected={size === selectedSize}>
-            <GridItem onClick={() => setSelectedSize(size)} selected={size === selectedSize}>
+            <GridItem
+              onClick={() => {
+                setSelectedSize(size);
+                if (cropper) {
+                  cropper.setAspectRatio(getAspectRatio(size));
+                }
+              }}
+              selected={size === selectedSize}
+            >
               <PostcardImg height={height} width={width} selected={size === selectedSize}>
                 <span>{size}"</span>
               </PostcardImg>

@@ -9,7 +9,7 @@ import { Divider, Header, Icon, Image, Menu, Page, Segment, Snackbar } from '../
 import { saveTeamProfilePending } from '../../store/modules/teamProfile/actions';
 import { saveProfilePending } from '../../store/modules/profile/actions';
 import { Button, Dropdown, FileUpload, Form, Input } from './Base';
-import { phoneRegExp, popup, tag } from '../utils/utils';
+import { phoneRegExp, urlRegExp, popup, tag } from '../utils/utils';
 import { ContentTopHeaderLayout } from '../../layouts';
 import PageTitleHeader from '../PageTitleHeader';
 import Loading from '../Loading';
@@ -94,7 +94,7 @@ const BusinessForm = styled.div`
     'OfficePhone OfficePhone TeamLogo BrokerageLogo'
     'AddressCity AddressCity AddressCity AddressCity'
     'StateZipCode StateZipCode StateZipCode StateZipCode'
-    'BusinessNotificationEmail BusinessNotificationEmail BusinessWebsite BusinessWebsite';
+    'BusinessNotificationEmailWebsite BusinessNotificationEmailWebsite BusinessNotificationEmailWebsite BusinessNotificationEmailWebsite';
   column-gap: 2em;
   row-gap: 0.5rem;
 
@@ -109,7 +109,8 @@ const BusinessForm = styled.div`
       'BrokerageName BrokerageName OfficePhone OfficePhone'
       'AddressCity AddressCity AddressCity AddressCity'
       'StateZipCode StateZipCode StateZipCode StateZipCode'
-      'BusinessNotificationEmail BusinessNotificationEmail BusinessWebsite BusinessWebsite';
+      'BusinessNotificationEmailWebsite BusinessNotificationEmailWebsite BusinessNotificationEmailWebsite BusinessNotificationEmailWebsite'
+      'BusinessNotificationEmailWebsite BusinessNotificationEmailWebsite BusinessNotificationEmailWebsite BusinessNotificationEmailWebsite';
     column-gap: 2em;
     row-gap: 0.5rem;
   }
@@ -127,7 +128,8 @@ const BusinessForm = styled.div`
       'AddressCity AddressCity AddressCity AddressCity'
       'StateZipCode StateZipCode StateZipCode StateZipCode'
       'StateZipCode StateZipCode StateZipCode StateZipCode'
-      'BusinessNotificationEmail BusinessNotificationEmail BusinessWebsite BusinessWebsite';
+      'BusinessNotificationEmailWebsite BusinessNotificationEmailWebsite BusinessNotificationEmailWebsite BusinessNotificationEmailWebsite'
+      'BusinessNotificationEmailWebsite BusinessNotificationEmailWebsite BusinessNotificationEmailWebsite BusinessNotificationEmailWebsite';
     column-gap: 2em;
     row-gap: 0.5rem;
   }
@@ -314,6 +316,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
           personalNotificationEmail: '',
           boards: formValues.userProfile.boards,
           teamName: formValues.businessProfile.teamName,
+          website: formValues.businessProfile.website,
           brokerageName: formValues.businessProfile.brokerageName,
           businessPhone: formValues.businessProfile.phone,
           teamLogo: '',
@@ -429,6 +432,9 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
           businessNotificationEmail: Yup.string()
             .email('Invalid email')
             .required('Required'),
+          website: Yup.string()
+            .matches(urlRegExp, 'Website url is not valid')
+            .required('Required!'),
         })}
         onSubmit={_handleSubmit}
         render={({ isSubmitting, values, errors }) => (
@@ -758,13 +764,20 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                     />
                   </Form.Group>
 
-                  <div style={{ gridArea: 'BusinessNotificationEmail' }}>
+                  <Form.Group widths="2" style={{ gridArea: 'BusinessNotificationEmailWebsite' }}>
                     <Input
                       label="Business Notification Email"
                       name="businessNotificationEmail"
                       tag={tag('Required')}
                     />
-                  </div>
+
+                    <Input
+                      label="Website"
+                      name="website"
+                      disabled={multiUser}
+                      tag={multiUser ? popup(changeMsg) : tag('Required')}
+                    />
+                  </Form.Group>
                 </BusinessForm>
               </Segment>
             )}

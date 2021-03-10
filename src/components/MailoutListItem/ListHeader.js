@@ -2,14 +2,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import React, { Fragment, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import {
-  MobileDisabledLayout,
-  MobileEnabledLayout,
-  ItemHeaderLayout,
-  ItemHeaderMenuLayout,
-} from '../../layouts';
+import { ItemHeaderLayout, ItemHeaderMenuLayout } from '../../layouts';
 import {
   canSend,
   canPickDestinations,
@@ -24,6 +18,7 @@ import {
   undoArchiveMailoutPending,
   updateMailoutNamePending,
   resetMailout,
+  duplicateMailoutPending,
 } from '../../store/modules/mailout/actions';
 import styled from 'styled-components';
 import * as brandColors from '../utils/brandColors';
@@ -75,12 +70,7 @@ const ApproveAndSendButton = ({
         {canSend(data.mailoutStatus) && (
           <Link to={`dashboard/${data._id}`}>
             <Button primary>
-              <MobileDisabledLayout>
-                <Fragment>Review & Send</Fragment>
-              </MobileDisabledLayout>
-              <MobileEnabledLayout>
-                <FontAwesomeIcon icon="thumbs-up" />
-              </MobileEnabledLayout>
+              <span>Review & Send</span>
             </Button>
           </Link>
         )}
@@ -103,12 +93,7 @@ const ApproveAndSendButton = ({
 
             <Link to={`dashboard/edit/${data._id}/destinations`}>
               <Button primary>
-                <MobileDisabledLayout>
-                  <Fragment>Choose Destinations</Fragment>
-                </MobileDisabledLayout>
-                <MobileEnabledLayout>
-                  <FontAwesomeIcon icon="thumbs-up" />
-                </MobileEnabledLayout>
+                <span>Choose Destinations</span>
               </Button>
             </Link>
           </>
@@ -126,12 +111,7 @@ const ApproveAndSendButton = ({
           disabled={lockControls}
           loading={lockControls}
         >
-          <MobileDisabledLayout>
-            <Fragment>Approve & Send</Fragment>
-          </MobileDisabledLayout>
-          <MobileEnabledLayout>
-            <FontAwesomeIcon icon="thumbs-up" />
-          </MobileEnabledLayout>
+          <span>Approve & Send</span>
         </Button>
       )}
     </Fragment>
@@ -182,6 +162,10 @@ const ListHeader = ({
   const handleEditClickFromDropdown = id => {
     dispatch(resetMailout());
     history.push(`/dashboard/edit/${id}`);
+  };
+
+  const duplicateCampaign = id => {
+    dispatch(duplicateMailoutPending(id));
   };
 
   return (
@@ -265,6 +249,23 @@ const ListHeader = ({
             </Button>
           </span>
         )}
+
+        {mailoutDetailPage &&
+          enableEdit &&
+          ((!isArchived && data.mailoutStatus === 'sent') ||
+            data.mailoutStatus === 'calculated') && (
+            <Button
+              primary
+              inverted
+              onClick={() => {
+                duplicateCampaign(data._id);
+                window.location = '/postcards';
+              }}
+            >
+              Duplicate
+            </Button>
+          )}
+
         {mailoutDetailPage && enableEdit && (
           <span>
             <Button
@@ -288,25 +289,33 @@ const ListHeader = ({
             <Icon name="archive" /> Unarchive
           </Button>
         )}
-        {!isArchived && !mailoutDetailPage && canSend(data.mailoutStatus) && (
-          <StyledDropdown
-            loading={data._id === archiveId && archivePending}
-            disabled={data._id === archiveId && archivePending}
-            icon="ellipsis horizontal"
-            direction="left"
-            button
-            className="icon"
-          >
-            <Dropdown.Menu>
-              <Dropdown.Item onClick={runArchive}>
-                <Icon name="archive" /> Archive
-              </Dropdown.Item>
-              <Dropdown.Item onClick={() => handleEditClickFromDropdown(data._id)}>
-                <Icon name="edit" /> Edit
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </StyledDropdown>
-        )}
+        {!isArchived &&
+          !mailoutDetailPage &&
+          (data.mailoutStatus === 'sent' || data.mailoutStatus === 'calculated') && (
+            <StyledDropdown
+              loading={data._id === archiveId && archivePending}
+              disabled={data._id === archiveId && archivePending}
+              icon="ellipsis horizontal"
+              direction="left"
+              button
+              className="icon"
+            >
+              <Dropdown.Menu>
+                {data.mailoutStatus !== 'sent' && (
+                  <Dropdown.Item onClick={() => handleEditClickFromDropdown(data._id)}>
+                    <Icon name="edit" /> Edit
+                  </Dropdown.Item>
+                )}
+                <Dropdown.Item onClick={() => duplicateCampaign(data._id)}>
+                  <Icon name="clone" /> Duplicate
+                </Dropdown.Item>
+
+                <Dropdown.Item onClick={runArchive}>
+                  <Icon name="archive" /> Archive
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </StyledDropdown>
+          )}
         <span>
           <ApproveAndSendButton
             data={data}

@@ -27,6 +27,7 @@ const PrivateRoute = ({
       if (
         history.location.pathname !== '/callback' &&
         history.location.pathname !== '/dashboard' &&
+        history.location.pathname !== '/onboard' &&
         history.location.pathname !== '/'
       ) {
         localStorage.setItem('routerDestination', history.location.pathname);
@@ -47,14 +48,13 @@ const PrivateRoute = ({
             (onLogin.userProfile && !onLogin.userProfile.setupComplete) ||
             (onLogin.userBranding && !onLogin.userBranding.onboardingComplete)
           ) {
-            history.push('/onboard');
+            return history.push('/onboard');
           }
         }
-
         if (localStorage.getItem('routerDestination')) {
           const routerDestination = await localStorage.getItem('routerDestination');
           localStorage.removeItem('routerDestination');
-          history.push(routerDestination);
+          return history.push(routerDestination);
         }
       }
     };

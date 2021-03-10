@@ -1,5 +1,6 @@
 import { all, fork } from 'redux-saga/effects';
 
+import ads from './modules/ads/sagas';
 import auth0 from './modules/auth0/sagas';
 import boards from './modules/boards/sagas';
 import content from './modules/content/sagas';
@@ -22,6 +23,7 @@ import teamShortcode from './modules/teamShortcode/sagas';
 import templates from './modules/templates/sagas';
 
 const sagas = {
+  ads,
   auth0,
   boards,
   content,

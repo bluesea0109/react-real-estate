@@ -48,6 +48,12 @@ const BillingDetailsWrapper = styled.div`
           }
         }
       }
+      .expiry {
+        font-size: 11px;
+      }
+      .expired {
+        color: red;
+      }
     }
 
     .billingName {
@@ -107,6 +113,11 @@ const BillingPage = () => {
   let maskedCardNumbers = null;
   let displayCard = null;
   let cardLogo = null;
+  let cardExpiration = null;
+  let expired = null;
+  var date = new Date();
+  var currentMonth = date.getMonth() + 1;
+  var currentYear = date.getFullYear();
   if (billingDetails && billingDetails.chargify.paymentProfile) {
     const {
       first_name,
@@ -117,6 +128,8 @@ const BillingPage = () => {
       billing_state,
       billing_zip,
       card_type,
+      expiration_month,
+      expiration_year,
     } = billingDetails.chargify?.paymentProfile;
 
     switch (card_type) {
@@ -154,13 +167,24 @@ const BillingPage = () => {
         {billing_city} {billing_state} {billing_zip}
       </span>
     );
+    cardExpiration = (
+      <span>
+        {expiration_month}/{expiration_year}
+      </span>
+    );
+    if (
+      expiration_year < currentYear ||
+      (expiration_year <= currentYear && expiration_month < currentMonth)
+    ) {
+      expired = 'expired';
+    }
   }
   if (billingDetails && billingDetails.chargify.hasOwnProperty('error')) {
     BillingInfo = (
       <span>
         Your credit card is not configured.{' '}
         <a
-          href="https://help.chargify.com/settings/self-service-page-urls.html"
+          href="https://info.brivity.com/knowledge/kb-tickets/new"
           rel="noopener noreferrer"
           target="_blank"
         >
@@ -239,7 +263,7 @@ const BillingPage = () => {
               <div className="flexWrap">
                 <div className="cardDetails">
                   <p>
-                    <span className="bold">Card holder Name </span>
+                    <span className="bold">Cardholder Name </span>
                   </p>
                   <p className="billingName">{billingName}</p>
                 </div>
@@ -250,13 +274,18 @@ const BillingPage = () => {
                   <div className="flex">
                     <div>{cardLogo}</div>
                     <div>
-                      <p classname="displayCard">{displayCard}</p>
+                      <p className="displayCard">{displayCard}</p>
                     </div>
                     <div className="maskedCardWrapper">
                       <p className="cardNumber">
                         <span>{maskedCardNumbers}</span>
                       </p>
                     </div>
+                  </div>
+                  <div>
+                    <p className={`expiry ${expired}`}>
+                      <span className="bold">Expiry</span> {cardExpiration}
+                    </p>
                   </div>
                 </div>
                 <div className="address">

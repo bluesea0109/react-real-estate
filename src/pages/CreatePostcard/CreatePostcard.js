@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import { startCase } from 'lodash';
+import {
+  addCampaignStart,
+  addHolidayCampaignStart,
+  addCampaignReset,
+} from '../../store/modules/mailouts/actions';
+import { setAddMailoutError } from '../../store/modules/mailout/actions';
+import '../../../node_modules/cropperjs/dist/cropper.min.css';
 import {
   Button,
-  ButtonNoStyle,
-  ButtonOutline,
   Dimmer,
-  Dropdown,
   Header,
   Icon,
-  Input,
   Loader,
   Menu,
-  Message,
   Page,
   Segment,
   Snackbar,
@@ -28,296 +30,11 @@ import {
 } from '../../components/Base/PreviewModal';
 import PageTitleHeader from '../../components/PageTitleHeader';
 import { ContentTopHeaderLayout } from '../../layouts';
-import { GridItem, GridItemContainer } from './GridItem';
-import GridLayout from './GridLayout';
-import PostcardSizes from './PostcardSizes';
-import TemplatesGrid from './TemplatesGrid';
-import * as brandColors from '../../components/utils/brandColors';
-import { useHistory } from 'react-router-dom';
 import ListingModal from '../../components/ListingModal';
-import {
-  addCampaignStart,
-  addHolidayCampaignStart,
-  addCampaignReset,
-} from '../../store/modules/mailouts/actions';
 import { postcardDimensions } from '../../components/utils/utils';
 import auth from '../../services/auth';
 import api from '../../services/api';
-import { setAddMailoutError } from '../../store/modules/mailout/actions';
-
-const ItemContent = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const StyledHeading = styled.div`
-  padding: 0.5rem 0;
-  font-size: 17px;
-  font-weight: 600;
-  & .ui.dropdown > .text {
-    padding: 4px 0;
-  }
-  &&& .loader {
-    margin-left: 1rem;
-  }
-`;
-
-const UploadImage = styled.div`
-  position: relative;
-  height: 100%;
-  width: 100%;
-  border: 1px dashed #d3d3d3;
-  display: grid;
-  justify-items: center;
-  align-items: center;
-  grid-template-rows: 1fr minmax(0, 1.25rem);
-  & img {
-    object-fit: contain;
-    max-width: 100%;
-    max-height: 100%;
-    grid-row: span 2;
-  }
-  &:hover {
-    & .overlay {
-      opacity: 1;
-    }
-    color: white;
-  }
-  & .overlay {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: grid;
-    display: grid;
-    justify-items: center;
-    align-items: center;
-    grid-template-rows: 1fr 1.25rem;
-    opacity: 0;
-  }
-  & i {
-    color: ${brandColors.grey05};
-    font-size: 40px;
-    line-height: 50px;
-    vertical-align: bottom;
-    margin: 0;
-    width: 50px;
-    height: 50px;
-  }
-  & .upload-directions {
-    font-size: 12px;
-    z-index: 10;
-    padding-bottom: 4px;
-  }
-`;
-
-const UploadTextContainer = styled.div`
-  grid-column: span 2;
-  align-self: center;
-  margin: 1rem;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border-radius: 5px;
-  background-color: ${brandColors.grey02};
-  color: white;
-  position: relative;
-  & .upload-text-title {
-    font-weight: 600;
-  }
-  @media (min-width: 1094px) {
-    &:after {
-      position: absolute;
-      content: '';
-      width: 0;
-      height: 0;
-      border-top: 20px solid transparent;
-      border-bottom: 20px solid transparent;
-      border-right: 20px solid ${brandColors.grey02};
-      left: -20px;
-    }
-  }
-`;
-
-const ViewButton = styled(ButtonNoStyle)`
-  color: ${brandColors.grey04};
-`;
-
-const NameInput = styled(Input)`
-  margin: 1rem 1.5rem;
-  max-width: 900px;
-`;
-
-const postcardSizes = ['4x6', '6x9', '6x11'];
-
-const getUploadSizes = size => {
-  switch (size) {
-    case '6x9':
-    case '9x6':
-      return '6.25"x9.25"';
-    case '6x11':
-    case '11x6':
-      return '6.25"x11.25"';
-    default:
-      return '4.25"x6.25"';
-  }
-};
-
-const TemplatesTab = ({
-  availableFilters,
-  currentFilter,
-  filteredTemplates,
-  templatesLoading,
-  selectedSize,
-  selectedTemplate,
-  setCurrentFilter,
-  setCurrentItem,
-  setPreviewImage,
-  setSelectedSize,
-  setSelectedTemplate,
-  setShowImageModal,
-}) => {
-  return (
-    <>
-      <StyledHeading>
-        <p>Select a size</p>
-      </StyledHeading>
-      <PostcardSizes
-        sizes={postcardSizes}
-        selectedSize={selectedSize}
-        setSelectedSize={setSelectedSize}
-      />
-      <StyledHeading>
-        <Dropdown text={startCase(currentFilter)}>
-          <Dropdown.Menu>
-            {availableFilters.map(filter => (
-              <Dropdown.Item key={filter} onClick={() => setCurrentFilter(filter)}>
-                <ItemContent>
-                  <span>{startCase(filter)}</span>
-                </ItemContent>
-              </Dropdown.Item>
-            ))}
-            <Dropdown.Header />
-          </Dropdown.Menu>
-        </Dropdown>
-        <Loader active={templatesLoading} inline size="small" />
-      </StyledHeading>
-      <TemplatesGrid
-        templates={filteredTemplates}
-        selectedSize={selectedSize}
-        selectedTemplate={selectedTemplate}
-        setCurrentItem={setCurrentItem}
-        setPreviewImage={setPreviewImage}
-        setSelectedTemplate={setSelectedTemplate}
-        setShowImageModal={setShowImageModal}
-      />
-    </>
-  );
-};
-
-const CustomTab = ({
-  customName,
-  handleFileChange,
-  imageError,
-  selectedSize,
-  setCustomName,
-  setImageError,
-  setPreviewImage,
-  setSelectedSize,
-  setShowImageModal,
-  uploadedImage,
-  uploadedImageName,
-}) => {
-  return (
-    <>
-      <StyledHeading>
-        <p>Select a size</p>
-      </StyledHeading>
-      <PostcardSizes
-        sizes={postcardSizes}
-        selectedSize={selectedSize}
-        setSelectedSize={setSelectedSize}
-      />
-      <StyledHeading>
-        <p>Campaign Name</p>
-      </StyledHeading>
-      <NameInput
-        type="text"
-        fluid
-        placeholder="Custom Campaign"
-        value={customName}
-        onChange={e => setCustomName(e.target.value)}
-      />
-      <StyledHeading>
-        <p>Card Front</p>
-      </StyledHeading>
-      {imageError && (
-        <Message error>
-          <Icon name="times circle" />
-          <span>{imageError}</span>
-          <Icon name="close" onClick={() => setImageError(null)} />
-        </Message>
-      )}
-      <GridLayout>
-        <GridItemContainer selected={uploadedImageName}>
-          <GridItem selected={uploadedImageName} error={imageError}>
-            <UploadImage>
-              <div className="overlay">
-                <ButtonOutline
-                  onClick={() => {
-                    document.getElementById('custom-upload-input').click();
-                  }}
-                >
-                  UPLOAD
-                </ButtonOutline>
-              </div>
-              {uploadedImage ? (
-                <img src={uploadedImage} alt="custom-front"></img>
-              ) : (
-                <>
-                  <Icon name="upload" />
-                  <span className="upload-directions">{`(${getUploadSizes(
-                    selectedSize
-                  )} PNG or JPEG = max 5MB)`}</span>
-                </>
-              )}
-              <input
-                id="custom-upload-input"
-                style={{ display: 'none' }}
-                name="postcardcover"
-                type="file"
-                accept="image/png, image/jpeg"
-                onChange={handleFileChange}
-              ></input>
-            </UploadImage>
-          </GridItem>
-          <div className="label-text">
-            {uploadedImageName ? `${uploadedImageName}` : 'Upload your own design'}
-            {uploadedImage && (
-              <ViewButton
-                onClick={() => {
-                  setPreviewImage(uploadedImage);
-                  setShowImageModal(true);
-                }}
-              >
-                <Icon name="eye" />
-                VIEW
-              </ViewButton>
-            )}
-          </div>
-        </GridItemContainer>
-        <UploadTextContainer>
-          <p className="upload-text-title">Include a safe zone of 1/2" inch!</p>
-          <p>
-            Make sure no critical elements are within 1/2" from the edge of the image. It risks
-            being cropped during the postcard production.
-          </p>
-        </UploadTextContainer>
-      </GridLayout>
-    </>
-  );
-};
+import { CustomTab, TemplatesTab } from '.';
 
 const StyledTab = styled(Tab)`
   &&&& {
@@ -347,7 +64,6 @@ export default function CreatePostcard({ location }) {
     initialFilter && initialFilter !== 'custom' ? initialFilter : 'All Templates'
   );
   const [currentItem, setCurrentItem] = useState(null);
-  const [customImageFile, setCustomImageFile] = useState(null);
   const [customName, setCustomName] = useState('');
   const [filteredTemplates, setFilteredTemplates] = useState([]);
   const [imageError, setImageError] = useState(null);
@@ -359,6 +75,8 @@ export default function CreatePostcard({ location }) {
   const [showListingModal, setShowListingModal] = useState(false);
   const [uploadedImage, setUploadedImage] = useState(null);
   const [uploadedImageName, setUploadedImageName] = useState('');
+
+  const [cropper, setCropper] = useState(null);
 
   useEffect(() => {
     const newFilters = availableTemplates.reduce(
@@ -392,10 +110,10 @@ export default function CreatePostcard({ location }) {
   }, [addCampaignResponse, history, dispatch]);
 
   useEffect(() => {
-    if (activeIndex === 1 && !uploadedImage) setCreateDisabled(true);
+    if (activeIndex === 1 && (!uploadedImage || !cropper)) setCreateDisabled(true);
     else if (activeIndex === 0 && !selectedTemplate) setCreateDisabled(true);
     else setCreateDisabled(false);
-  }, [activeIndex, createDisabled, uploadedImage, selectedTemplate]);
+  }, [activeIndex, createDisabled, cropper, uploadedImage, selectedTemplate]);
 
   const prevImg = () => {
     let newImgIndex = currentItem - 1;
@@ -414,6 +132,7 @@ export default function CreatePostcard({ location }) {
   const handleFileChange = e => {
     setImageError(null);
     const file = e.target.files[0];
+    if (!file) return;
     if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
       setImageError('Warning! File upload failed. Your design is not a supported file type.');
       return;
@@ -426,7 +145,6 @@ export default function CreatePostcard({ location }) {
     reader.onload = e => {
       setUploadedImage(e.target.result);
       setUploadedImageName(file.name);
-      setCustomImageFile(file);
     };
     reader.readAsDataURL(file);
   };
@@ -466,32 +184,36 @@ export default function CreatePostcard({ location }) {
     if (createDisabled) return;
     const size = postcardDimensions(selectedSize);
     if (activeIndex === 1) {
-      if (!customImageFile) {
-        setImageError('There was an error uploading your file.');
-        return;
-      }
-      setCreatingCampaign(true);
-      const imageURL = await getCustomImageURL(customImageFile);
-      let path = `/api/user/mailout/withCover`;
-      if (peerId) path = `/api/user/peer/${peerId}/mailout/withCover`;
+      cropper.getCroppedCanvas().toBlob(async blob => {
+        setCreatingCampaign(true);
+        const imageURL = await getCustomImageURL(blob);
+        if (!imageURL) {
+          setCreatingCampaign(false);
+          setImageError('There was an error uploading your file.');
+          return;
+        }
+        let path = `/api/user/mailout/withCover`;
+        if (peerId) path = `/api/user/peer/${peerId}/mailout/withCover`;
 
-      const headers = {};
-      const accessToken = await auth.getAccessToken();
-      headers['authorization'] = `Bearer ${accessToken}`;
-      const formData = new FormData();
-      formData.append('createdBy', 'user');
-      formData.append('skipEmailNotification', true);
-      formData.append('frontResourceUrl', imageURL);
-      formData.append('name', customName || 'Custom Campaign');
-      formData.append('postcardSize', size);
-      const response = await fetch(path, {
-        headers,
-        method: 'post',
-        body: formData,
-        credentials: 'include',
+        const headers = {};
+        const accessToken = await auth.getAccessToken();
+        headers['authorization'] = `Bearer ${accessToken}`;
+        const formData = new FormData();
+        formData.append('createdBy', 'user');
+        formData.append('skipEmailNotification', true);
+        formData.append('frontResourceUrl', imageURL);
+        formData.append('name', customName || 'Custom Campaign');
+        formData.append('postcardSize', size);
+        const response = await fetch(path, {
+          headers,
+          method: 'post',
+          body: formData,
+          credentials: 'include',
+        });
+        let doc = await api.handleResponse(response);
+        return history.push(`/dashboard/edit/${doc._id}/destinations`);
       });
-      let doc = await api.handleResponse(response);
-      return history.push(`/dashboard/edit/${doc._id}/destinations`);
+      return;
     }
     if (selectedTemplate?.activities.includes('listingMarketing')) {
       if (location?.state?.mlsNum) {
@@ -555,10 +277,12 @@ export default function CreatePostcard({ location }) {
       render: () => (
         <Tab.Pane as="div">
           <CustomTab
+            cropper={cropper}
             customName={customName}
             handleFileChange={handleFileChange}
             imageError={imageError}
             selectedSize={selectedSize}
+            setCropper={setCropper}
             setCustomName={setCustomName}
             setImageError={setImageError}
             setPreviewImage={setPreviewImage}
@@ -618,7 +342,7 @@ export default function CreatePostcard({ location }) {
           <ModalClose onClick={() => setShowImageModal(false)}>
             <Icon name="close" color="grey" size="large" />
           </ModalClose>
-          <PreviewImage src={previewImage} alt="download preview" />
+          <PreviewImage src={previewImage} alt="preview" />
           {activeIndex === 0 && (
             <ModalActions>
               <div className="arrow" onClick={prevImg}>

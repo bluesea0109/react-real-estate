@@ -12,7 +12,8 @@ import DashboardPage from './pages/DashboardPage';
 import ListingsPage from './pages/ListingsPage';
 import PostcardsPage from './pages/PostcardsPage';
 import AdsPage from './pages/AdsPage';
-import MailoutDetailsPage from './pages/MailoutDetailsPage';
+import Editor from './pages/Editor/Editor';
+import MailoutDetailsPage from './pages/MailoutDetailsPage/MailoutDetailsPage';
 import MailoutEditPage from './pages/MailoutEditPage';
 import MailoutDestinationsPage from './pages/MailoutDestinationsPage';
 import CustomizationPage from './pages/CustomizationPage';
@@ -41,6 +42,7 @@ export default () => {
       <PrivateRoute exact path="/postcards/archived" component={ArchivedPage} />
       <PrivateRoute exact path="/postcards/:mailoutId" component={MailoutDetailsPage} />
       <PrivateRoute exact path="/postcards/edit/:mailoutId" component={MailoutEditPage} />
+      <PrivateRoute exact path="/postcards/editor/:mailoutId" component={Editor} />
       <PrivateRoute
         exact
         path="/postcards/edit/:mailoutId/destinations"

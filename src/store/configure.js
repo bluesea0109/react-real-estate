@@ -10,6 +10,7 @@ const configureStore = ({ initialState, AuthService }) => {
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
         // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
+        trace: process.env.NODE_ENV === 'development' ? true : false,
       })
     : compose;
 
