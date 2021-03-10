@@ -59,7 +59,6 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
       : '-';
 
     let userObj = userType === 'loggedIn' ? userInfo : userType === 'peer' && peerUser;
-
     let createQS = item => {
       let params = { ...listingDetails.adProduct.qs };
       params.listing = item.mlsNum;
