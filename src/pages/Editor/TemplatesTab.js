@@ -45,15 +45,6 @@ export default function TemplatesTab({ mailoutDetails, handleSave }) {
 
   const updateMailoutTemplateTheme = async (templateTheme, intentPath) => {
     handleSave({ templateTheme });
-
-    await sleep(1000);
-
-    dispatch(
-      updateMailoutTemplateThemePending({
-        templateUuid: templateTheme,
-        intentPath: intentPath,
-      })
-    );
   };
 
   const renderTemplatePicture = (index, intentPath, templateTheme, src, isNew = false) => {
