@@ -60,7 +60,11 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
     let userObj = userType === 'loggedIn' ? userInfo : userType === 'peer' && peerUser;
 
     let createQS = item => {
-      let params = { ...listingDetails.adProduct.qs };
+      let adType = null;
+      listingItem.standardStatus === 'Closed'
+        ? (adType = { adType: 'sold' })
+        : (adType = { adType: 'listed' });
+      let params = { ...listingDetails.adProduct.qs, ...adType };
       params.listing = item.mlsNum;
       params.mls = item.blueroofMlsId;
 
