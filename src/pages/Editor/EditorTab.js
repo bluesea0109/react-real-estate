@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { SketchPicker } from 'react-color';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { Button, DropdownCard, Input } from '../../components/Base';
+import { DropdownCard } from '../../components/Base';
 import DisplayAgent from './DisplayAgent';
 import * as brandColors from '../../components/utils/brandColors';
+import CustomCTA from './CustomCTA';
+import {
+  setAgentOpen,
+  setBrandColorOpen,
+  setCustomCtaOpen,
+  setPhotosOpen,
+  setPostcardSizeOpen,
+} from '../../store/modules/liveEditor/actions';
 
 const ColorPicker = styled(SketchPicker)`
   box-shadow: none !important;
@@ -76,15 +84,26 @@ const presetColors = [
   '#808080',
 ];
 
-export default function EditorTab({ colorPickerVal, setColorPickerVal, handleSave }) {
-  const [brandColorOpen, setBrandColorOpen] = useState(false);
-  const [postcardSizeOpen, setPostcardSizeOpen] = useState(false);
-  const [photosOpen, setPhotosOpen] = useState(false);
-  const [agentOpen, setAgentOpen] = useState(false);
-  const [customCtaOpen, setCustomCtaOpen] = useState(true);
+export default function EditorTab({
+  colorPickerVal,
+  customizeCTA,
+  handleSave,
+  invalidCTA,
+  newCTA,
+  setColorPickerVal,
+  setCustomizeCTA,
+  setInvalidCTA,
+  setNewCTA,
+}) {
+  const dispatch = useDispatch();
+  const brandColorOpen = useSelector(state => state.liveEditor?.brandColorOpen);
+  const postcardSizeOpen = useSelector(state => state.liveEditor?.postcardSizeOpen);
+  const photosOpen = useSelector(state => state.liveEditor?.photosOpen);
+  const agentOpen = useSelector(state => state.liveEditor?.agentOpen);
+  const customCtaOpen = useSelector(state => state.liveEditor?.customCtaOpen);
   const onColorChange = color => setColorPickerVal(color);
-  const brandColor = useSelector(store => store.mailout?.mailoutEdit?.brandColor);
-  const postcardSize = useSelector(store => store.mailout?.mailoutEdit?.postcardSize);
+  const brandColor = useSelector(state => state.mailout?.mailoutEdit?.brandColor);
+  const postcardSize = useSelector(state => state.mailout?.mailoutEdit?.postcardSize);
   const is6x4 = postcardSize === '6x4';
   const is9x6 = postcardSize === '9x6';
   const is11x6 = postcardSize === '11x6';
@@ -98,7 +117,7 @@ export default function EditorTab({ colorPickerVal, setColorPickerVal, handleSav
         title="Brand Color"
         iconName="eye dropper"
         isOpen={brandColorOpen}
-        setIsOpen={setBrandColorOpen}
+        toggleOpen={() => dispatch(setBrandColorOpen(!brandColorOpen))}
       >
         <ColorPicker
           color={colorPickerVal?.hex || brandColor}
@@ -111,7 +130,7 @@ export default function EditorTab({ colorPickerVal, setColorPickerVal, handleSav
         title="Postcard Size"
         iconName="expand"
         isOpen={postcardSizeOpen}
-        setIsOpen={setPostcardSizeOpen}
+        toggleOpen={() => dispatch(setPostcardSizeOpen(!postcardSizeOpen))}
       >
         <SizeButtons>
           <button
@@ -137,14 +156,19 @@ export default function EditorTab({ colorPickerVal, setColorPickerVal, handleSav
           </button>
         </SizeButtons>
       </DropdownCard>
-      <DropdownCard title="Photos" iconName="images" isOpen={photosOpen} setIsOpen={setPhotosOpen}>
+      <DropdownCard
+        title="Photos"
+        iconName="images"
+        isOpen={photosOpen}
+        toggleOpen={() => dispatch(setPhotosOpen(!photosOpen))}
+      >
         <div>Photos</div>
       </DropdownCard>
       <DropdownCard
         title="Display Agent"
         iconName="user circle"
         isOpen={agentOpen}
-        setIsOpen={setAgentOpen}
+        toggleOpen={() => dispatch(setAgentOpen(!agentOpen))}
       >
         <DisplayAgent handleSave={handleSave} />
       </DropdownCard>
@@ -152,17 +176,16 @@ export default function EditorTab({ colorPickerVal, setColorPickerVal, handleSav
         title="Custom CTA"
         iconName="edit"
         isOpen={customCtaOpen}
-        setIsOpen={setCustomCtaOpen}
+        toggleOpen={() => dispatch(setCustomCtaOpen(!customCtaOpen))}
       >
-        <p>Custom CTA Here</p>
-        <Input id="cta-input" type="url" required />
-        <Button
-          onClick={() => {
-            console.log(document.getElementById('cta-input').checkValidity());
-          }}
-        >
-          Check!
-        </Button>
+        <CustomCTA
+          customizeCTA={customizeCTA}
+          setCustomizeCTA={setCustomizeCTA}
+          newCTA={newCTA}
+          invalidCTA={invalidCTA}
+          setInvalidCTA={setInvalidCTA}
+          setNewCTA={setNewCTA}
+        />
       </DropdownCard>
     </>
   );

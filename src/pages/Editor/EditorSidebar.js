@@ -3,15 +3,35 @@ import styled from 'styled-components';
 import EditorTab from './EditorTab';
 import * as brandColors from '../../components/utils/brandColors';
 
-function SidebarContent({ className, activeTab, colorPickerVal, handleSave, setColorPickerVal }) {
+function SidebarContent({
+  activeTab,
+  className,
+  colorPickerVal,
+  customCTA,
+  customizeCTA,
+  handleSave,
+  invalidCTA,
+  newCTA,
+  setColorPickerVal,
+  setCustomizeCTA,
+  setInvalidCTA,
+  setNewCTA,
+}) {
   return (
     <div className={className}>
       <h3 className="title">{activeTab}</h3>
       {activeTab === 'Editor' && (
         <EditorTab
           colorPickerVal={colorPickerVal}
+          customCTA={customCTA}
+          customizeCTA={customizeCTA}
           handleSave={handleSave}
+          invalidCTA={invalidCTA}
+          newCTA={newCTA}
           setColorPickerVal={setColorPickerVal}
+          setCustomizeCTA={setCustomizeCTA}
+          setInvalidCTA={setInvalidCTA}
+          setNewCTA={setNewCTA}
         />
       )}
     </div>
