@@ -11,11 +11,11 @@ import {
 const initialState = {
   reloadIframes: false,
   reloadIframesPending: false,
-  brandColorOpen: false,
+  brandColorOpen: true,
   postcardSizeOpen: false,
   photosOpen: false,
   agentOpen: false,
-  customCtaOpen: true,
+  customCtaOpen: false,
 };
 
 export default function liveEditor(state = initialState, action) {
