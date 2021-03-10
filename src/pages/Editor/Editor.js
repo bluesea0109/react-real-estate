@@ -257,6 +257,7 @@ export default function Editor() {
     if (!postcardSize) postcardSize = mailoutEdit?.postcardSize;
     if (!mailoutDisplayAgent) mailoutDisplayAgent = mailoutEdit?.mailoutDisplayAgent;
     if (!templateTheme) templateTheme = mailoutEdit?.templateTheme;
+    if (!frontImgUrl) frontImgUrl = mailoutEdit?.frontImgUrl;
     const { fields, brandColor } = mailoutEdit;
     let newData = Object.assign(
       {},
