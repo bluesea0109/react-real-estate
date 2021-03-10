@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { NewLabel } from '../../components/Forms/Base/Carousel';
 import * as brandColors from '../../components/utils/brandColors';
-import { updateMailoutTemplateThemePending } from '../../store/modules/mailout/actions';
-import { sleep } from '../../components/utils/utils';
 
 export default function TemplatesTab({ mailoutDetails, handleSave }) {
-  const dispatch = useDispatch();
-
   const [filteredStencils, setFilteredStencils] = useState([]);
 
   const stencilsAvailable = useSelector(store => store.templates?.available?.byIntent);

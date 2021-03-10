@@ -265,7 +265,8 @@ export default function Editor() {
       { templateTheme },
       { fields },
       { brandColor },
-      { mailoutDisplayAgent }
+      { mailoutDisplayAgent },
+      { name: newCampaignName }
     );
     if (frontImgUrl) newData.frontImgUrl = frontImgUrl;
     if (customizeCTA) newData.ctas = { cta: newCTA, shortenCTA: true };
