@@ -1,8 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import styled from 'styled-components';
 
 import { NewLabel } from '../../components/Forms/Base/Carousel';
 import * as brandColors from '../../components/utils/brandColors';
+
+const TemplateImage = styled.div`
+  ${props =>
+    props.selected
+      ? `
+    border: 2px solid ${brandColors.primary};
+    padding: 0.5rem;
+    margin: 0.5rem auto;
+    border-radius: 5px;
+  `
+      : `
+    padding: 0.5rem;
+    margin: 0.5rem;
+  `}
+  & > img {
+    ${props => (props.selected ? null : 'cursor: pointer;')}
+    width: 100%;
+    border: 1px solid lightgrey;
+    box-shadow: '1px 1px 4px lightgrey';
+    z-index: 10;
+  }
+`;
 
 export default function TemplatesTab({ mailoutDetails, handleSave }) {
   const [filteredStencils, setFilteredStencils] = useState([]);
@@ -39,38 +62,17 @@ export default function TemplatesTab({ mailoutDetails, handleSave }) {
     setFilteredStencils(newFilteredStencils);
   }, [stencilsAvailable, mailoutDetails.created, editIntentPath, publishedTags]);
 
-  const updateMailoutTemplateTheme = async (templateTheme, intentPath) => {
+  const updateMailoutTemplateTheme = async templateTheme => {
+    if (editTemplateTheme === templateTheme) return;
     handleSave({ templateTheme });
   };
 
   const renderTemplatePicture = (index, intentPath, templateTheme, src, isNew = false) => {
     return (
-      <div key={index} onClick={() => updateMailoutTemplateTheme(templateTheme, intentPath)}>
-        <div
-          style={
-            editTemplateTheme === templateTheme
-              ? {
-                  border: `2px solid ${brandColors.primary}`,
-                  padding: '0.5em',
-                  margin: '0.5rem auto',
-                  borderRadius: '5px',
-                  maxWidth: 500,
-                }
-              : { padding: '0.5em', margin: '0.5rem' }
-          }
-        >
-          <img
-            src={src}
-            alt={intentPath}
-            style={{
-              cursor: 'pointer',
-              width: '100%',
-              border: '1px solid lightgrey',
-              boxShadow: '1px 1px 4px lightgrey',
-              zIndex: 10,
-            }}
-          />
-        </div>
+      <div key={index} onClick={() => updateMailoutTemplateTheme(templateTheme)}>
+        <TemplateImage selected={editTemplateTheme === templateTheme}>
+          <img src={src} alt={intentPath} />
+        </TemplateImage>
         {isNew && (
           <NewLabel>
             <span className="label">New</span>
