@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import {
   getMailoutEditPending,
   getMailoutPending,
+  resetMailoutEditSuccess,
   setEditBrandColor,
   setEditFields,
   updateMailoutEditPending,
@@ -23,6 +24,7 @@ import {
   setReloadIframes,
   setReloadIframesPending,
 } from '../../store/modules/liveEditor/actions';
+import { sleep } from '../../components/utils/utils';
 
 const EditorLayout = styled.div`
   display: grid;
@@ -79,7 +81,8 @@ export default function Editor() {
   const details = useSelector(store => store.mailout?.details);
   const mailoutEdit = useSelector(state => state.mailout?.mailoutEdit);
   const peerId = useSelector(store => store.peer?.peerId);
-  const updatePending = useSelector(state => state.mailout?.updateMailoutEditPending);
+  const savePending = useSelector(state => state.mailout?.updateMailoutEditPending);
+  const saveSuccess = useSelector(state => state.mailout?.updateMailoutEditSuccess);
   const reloadIframes = useSelector(state => state.liveEditor?.reloadIframes);
   const reloadIframesPending = useSelector(state => state.liveEditor?.reloadIframesPending);
   const [activeNavItem, setActiveNavItem] = useState(1); // 0 default - 1 for testing
@@ -112,6 +115,16 @@ export default function Editor() {
   useEffect(() => {
     setNewCampaignName(details?.name || details?.details?.displayAddress);
   }, [details]);
+
+  useEffect(() => {
+    const showSaveStatus = async () => {
+      await sleep(2500);
+      dispatch(resetMailoutEditSuccess());
+    };
+    if (saveSuccess) {
+      showSaveStatus();
+    }
+  }, [dispatch, saveSuccess]);
 
   useEffect(() => {
     if (!reloadIframes) return;
@@ -321,15 +334,26 @@ export default function Editor() {
               </CampaignNameDiv>
             </div>
             <div className="header-right">
+              <div id="save-status">
+                {savePending ? (
+                  <>
+                    <Icon name="cloud upload" />
+                    <span>Saving changes</span>
+                  </>
+                ) : saveSuccess ? (
+                  <>
+                    <Icon name="checkmark" />
+                    <span>Changes Saved</span>
+                  </>
+                ) : null}
+              </div>
               <Icon name="undo" />
-              {/* Save status when ready */}
-              {/* <span>all changes saved</span> */}
               <ButtonNoStyle>
                 <div className="overflow-menu">
                   <Icon name="ellipsis horizontal" />
                 </div>
               </ButtonNoStyle>
-              <Button primary disabled={updatePending} onClick={() => handleSave({})}>
+              <Button primary disabled={savePending} onClick={() => handleSave({})}>
                 Save
               </Button>
             </div>

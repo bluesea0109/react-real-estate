@@ -33,10 +33,17 @@ const EditorHeader = styled.div`
     color: ${brandColors.grey03};
     display: flex;
     align-items: center;
+    & > #save-status {
+      display: flex;
+      align-items: center;
+      width: 140px;
+      margin: 0 0.5rem;
+      font-weight: 600;
+    }
     & > i {
       height: 36px;
       font-size: 1.25em;
-      margin-right: 1em;
+      margin: 0 0.5em;
     }
     & .overflow-menu {
       color: ${brandColors.grey03};
