@@ -140,7 +140,7 @@ export default function EditorTab({
             disabled={is6x4}
             onClick={() => changeSize('6x4')}
           >
-            6" x 4"
+            4" x 6"
           </button>
           <button
             className={`${is9x6 ? 'selected' : ''}`}
