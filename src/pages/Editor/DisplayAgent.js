@@ -86,7 +86,7 @@ export default function DisplayAgent({ handleSave }) {
   const [selectedDisplayAgent, setSelectedDisplayAgent] = useState(null);
 
   const currentProfile = profiles.find(
-    agent => agent.userId === mailoutEdit.mailoutDisplayAgent?.userId
+    agent => agent.userId === mailoutEdit?.mailoutDisplayAgent?.userId
   );
   const isAdmin = currentProfile?.permissions?.teamAdmin;
 

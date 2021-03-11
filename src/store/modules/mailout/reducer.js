@@ -24,6 +24,7 @@ import {
   UPDATE_MAILOUT_EDIT_PENDING,
   UPDATE_MAILOUT_EDIT_SUCCESS,
   UPDATE_MAILOUT_EDIT_ERROR,
+  RESET_MAILOUT_EDIT_SUCCESS,
   UPDATE_MAILOUT_TEMPLATE_THEME_PENDING,
   UPDATE_MAILOUT_TEMPLATE_THEME_SUCCESS,
   UPDATE_MAILOUT_TEMPLATE_THEME_ERROR,
@@ -59,6 +60,7 @@ const initialState = {
   changeDisplayAgentPending: false,
   getMailoutEditPending: false,
   updateMailoutEditPending: false,
+  updateMailoutEditSuccess: null,
   updateMailoutTemplateThemePending: false,
   revertMailoutEditPending: false,
   archivePending: false,
@@ -289,6 +291,13 @@ export default function mailout(state = initialState, action) {
         ...state,
         details: action.payload,
         updateMailoutEditPending: false,
+        updateMailoutEditSuccess: true,
+      };
+
+    case RESET_MAILOUT_EDIT_SUCCESS:
+      return {
+        ...state,
+        updateMailoutEditSuccess: null,
       };
 
     case UPDATE_MAILOUT_EDIT_ERROR:

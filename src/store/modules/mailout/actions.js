@@ -33,6 +33,7 @@ export const GET_MAILOUT_EDIT_ERROR = 'GET_MAILOUT_EDIT_ERROR';
 export const UPDATE_MAILOUT_EDIT_PENDING = 'UPDATE_MAILOUT_EDIT_PENDING';
 export const UPDATE_MAILOUT_EDIT_SUCCESS = 'UPDATE_MAILOUT_EDIT_SUCCESS';
 export const UPDATE_MAILOUT_EDIT_ERROR = 'UPDATE_MAILOUT_EDIT_ERROR';
+export const RESET_MAILOUT_EDIT_SUCCESS = 'RESET_MAILOUT_EDIT_SUCCESS';
 
 export const UPDATE_MAILOUT_TEMPLATE_THEME_PENDING = 'UPDATE_MAILOUT_TEMPLATE_THEME_PENDING';
 export const UPDATE_MAILOUT_TEMPLATE_THEME_SUCCESS = 'UPDATE_MAILOUT_TEMPLATE_THEME_SUCCESS';
@@ -161,6 +162,10 @@ export function updateMailoutEditPending(payload) {
 
 export function updateMailoutEditSuccess(payload) {
   return createAction(UPDATE_MAILOUT_EDIT_SUCCESS, payload);
+}
+
+export function resetMailoutEditSuccess() {
+  return createAction(RESET_MAILOUT_EDIT_SUCCESS);
 }
 
 export function updateMailoutEditError(error) {

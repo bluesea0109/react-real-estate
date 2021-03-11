@@ -13,6 +13,7 @@ import {
   setPhotosOpen,
   setPostcardSizeOpen,
 } from '../../store/modules/liveEditor/actions';
+import PhotosCard from './PhotosCard';
 
 const ColorPicker = styled(SketchPicker)`
   box-shadow: none !important;
@@ -96,6 +97,7 @@ export default function EditorTab({
   setNewCTA,
 }) {
   const dispatch = useDispatch();
+  const details = useSelector(state => state.mailout?.details);
   const brandColorOpen = useSelector(state => state.liveEditor?.brandColorOpen);
   const postcardSizeOpen = useSelector(state => state.liveEditor?.postcardSizeOpen);
   const photosOpen = useSelector(state => state.liveEditor?.photosOpen);
@@ -138,7 +140,7 @@ export default function EditorTab({
             disabled={is6x4}
             onClick={() => changeSize('6x4')}
           >
-            6" x 4"
+            4" x 6"
           </button>
           <button
             className={`${is9x6 ? 'selected' : ''}`}
@@ -156,14 +158,16 @@ export default function EditorTab({
           </button>
         </SizeButtons>
       </DropdownCard>
-      <DropdownCard
-        title="Photos"
-        iconName="images"
-        isOpen={photosOpen}
-        toggleOpen={() => dispatch(setPhotosOpen(!photosOpen))}
-      >
-        <div>Photos</div>
-      </DropdownCard>
+      {details?.raw?.photos?.length && (
+        <DropdownCard
+          title="Cover Photo"
+          iconName="images"
+          isOpen={photosOpen}
+          toggleOpen={() => dispatch(setPhotosOpen(!photosOpen))}
+        >
+          <PhotosCard handleSave={handleSave} />
+        </DropdownCard>
+      )}
       <DropdownCard
         title="Display Agent"
         iconName="user circle"
