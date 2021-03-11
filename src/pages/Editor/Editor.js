@@ -149,9 +149,9 @@ export default function Editor() {
   const sendPostMessage = useCallback(
     async (side, data) => {
       if (side === 'front')
-        return frontIframeRef?.contentWindow?.postMessage(data, 'http://localhost:8082/');
+        return frontIframeRef?.contentWindow?.postMessage(data, window.location.origin);
       else if (side === 'back')
-        return backIframeRef?.contentWindow?.postMessage(data, 'http://localhost:8082/');
+        return backIframeRef?.contentWindow?.postMessage(data, window.location.origin);
     },
     [frontIframeRef, backIframeRef]
   );
