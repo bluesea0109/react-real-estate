@@ -192,8 +192,8 @@ export default function Editor() {
 
   const handlePostMessage = useCallback(
     e => {
-      if (mailoutEdit?.fields !== Array) return;
       if (e.source?.frameElement?.title?.includes('bm-iframe')) {
+        if (!Array.isArray(mailoutEdit?.fields)) return;
         const side = e.source?.name;
         let newFields = [];
         newFields = [...mailoutEdit?.fields];
