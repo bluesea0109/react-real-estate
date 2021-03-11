@@ -331,7 +331,7 @@ const EmptyPage = () => {
           <Table.Cell className="marketerGrey alignCenter defaultCursor" collapsing>
             {item.details.status === 'ACTIVE' ? (
               <StatusPill type="solid" color="green">
-                Active
+                Complete
               </StatusPill>
             ) : item.details.status === 'PAUSED' ||
               item.details.status === 'CAMPAIGN_PAUSED' ||
