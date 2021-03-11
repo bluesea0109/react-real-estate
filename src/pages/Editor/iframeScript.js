@@ -31,13 +31,17 @@ const domLoaded = () => {
       if (!__parentOrigin) return;
       __parentWindow.postMessage({ name, value: newValue }, __parentOrigin);
     };
-    el.addEventListener('input', listener);
+    const updateAndNotify = () => {
+      listener();
+      notifier();
+    };
+    el.addEventListener('input', updateAndNotify);
     el.addEventListener('blur', notifier);
-    el.addEventListener('keyup', listener);
-    el.addEventListener('paste', listener);
+    el.addEventListener('keyup', updateAndNotify);
+    el.addEventListener('paste', updateAndNotify);
     el.addEventListener('copy', listener);
-    el.addEventListener('cut', listener);
-    el.addEventListener('delete', listener);
+    el.addEventListener('cut', updateAndNotify);
+    el.addEventListener('delete', updateAndNotify);
     el.addEventListener('mouseup', listener);
   });
 };
