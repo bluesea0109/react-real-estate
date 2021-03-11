@@ -43,6 +43,7 @@ import {
 } from './actions';
 import ApiService from '../../../services/api/index';
 import { getMailoutsPending } from '../mailouts/actions';
+import { setReloadIframes } from '../liveEditor/actions';
 
 export const getSelectedPeerId = state => state.peer.peerId;
 export const getMailoutId = state => state.mailout.mailoutId;
@@ -50,6 +51,7 @@ export const getMailoutSize = state => state.mailout.mailoutSize;
 export const getMailoutName = state => state.mailout.details.name;
 export const getMailoutEdit = state => state.mailout.mailoutEdit;
 export const getMailoutDisplayAgent = state => state.mailout.mailoutDisplayAgent;
+export const getReloadIframesPending = state => state.liveEditor.reloadIframesPending;
 
 export function* getMailoutSaga({ peerId = null }) {
   try {
@@ -194,12 +196,14 @@ export function* updateMailoutEditSaga({ peerId = null }) {
   try {
     const mailoutId = yield select(getMailoutId);
     const mailoutEdit = yield select(getMailoutEdit);
+    const reloadIframesPending = yield select(getReloadIframesPending);
     const { path, method } = peerId
       ? ApiService.directory.peer.mailout.edit.update(mailoutId, peerId)
       : ApiService.directory.user.mailout.edit.update(mailoutId);
-
     const response = yield call(ApiService[method], path, mailoutEdit);
-
+    if (reloadIframesPending) {
+      yield put(setReloadIframes(true));
+    }
     yield put(updateMailoutEditSuccess(response));
   } catch (err) {
     yield put(updateMailoutEditError(err));

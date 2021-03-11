@@ -44,6 +44,10 @@ import {
   CLEAR_MAILOUT_ERROR,
   SET_ADD_MAILOUT_ERROR,
   CLEAR_ADD_MAILOUT_ERROR,
+  SET_EDIT_BRAND_COLOR,
+  SET_EDIT_FIELDS,
+  SET_EDIT_POSTCARD_SIZE,
+  SET_EDIT_CTAS,
 } from './actions';
 
 const initialState = {
@@ -285,7 +289,6 @@ export default function mailout(state = initialState, action) {
         ...state,
         details: action.payload,
         updateMailoutEditPending: false,
-        mailoutEdit: null,
       };
 
     case UPDATE_MAILOUT_EDIT_ERROR:
@@ -443,6 +446,38 @@ export default function mailout(state = initialState, action) {
       return {
         ...state,
         addMailoutError: null,
+      };
+    case SET_EDIT_BRAND_COLOR:
+      return {
+        ...state,
+        mailoutEdit: {
+          ...state.mailoutEdit,
+          brandColor: action.payload,
+        },
+      };
+    case SET_EDIT_POSTCARD_SIZE:
+      return {
+        ...state,
+        mailoutEdit: {
+          ...state.mailoutEdit,
+          postcardSize: action.payload,
+        },
+      };
+    case SET_EDIT_FIELDS:
+      return {
+        ...state,
+        mailoutEdit: {
+          ...state.mailoutEdit,
+          fields: action.payload,
+        },
+      };
+    case SET_EDIT_CTAS:
+      return {
+        ...state,
+        mailoutEdit: {
+          ...state.mailoutEdit,
+          ctas: action.payload,
+        },
       };
     default:
       return state;

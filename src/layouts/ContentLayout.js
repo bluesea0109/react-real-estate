@@ -6,5 +6,5 @@ export default styled.div`
   display: grid;
   grid-template-rows: minmax(0, 1fr);
   grid-template-columns: minmax(0, 1fr);
-  padding: 1rem 0.5rem 0.5rem 0.5rem;
+  ${props => (props.showSidebar ? 'padding: 1rem 0.5rem 0.5rem 0.5rem;' : null)}
 `;
