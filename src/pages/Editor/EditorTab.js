@@ -97,6 +97,7 @@ export default function EditorTab({
   setNewCTA,
 }) {
   const dispatch = useDispatch();
+  const details = useSelector(state => state.mailout?.details);
   const brandColorOpen = useSelector(state => state.liveEditor?.brandColorOpen);
   const postcardSizeOpen = useSelector(state => state.liveEditor?.postcardSizeOpen);
   const photosOpen = useSelector(state => state.liveEditor?.photosOpen);
@@ -157,14 +158,16 @@ export default function EditorTab({
           </button>
         </SizeButtons>
       </DropdownCard>
-      <DropdownCard
-        title="Cover Photo"
-        iconName="images"
-        isOpen={photosOpen}
-        toggleOpen={() => dispatch(setPhotosOpen(!photosOpen))}
-      >
-        <PhotosCard handleSave={handleSave} />
-      </DropdownCard>
+      {details?.raw?.photos?.length && (
+        <DropdownCard
+          title="Cover Photo"
+          iconName="images"
+          isOpen={photosOpen}
+          toggleOpen={() => dispatch(setPhotosOpen(!photosOpen))}
+        >
+          <PhotosCard handleSave={handleSave} />
+        </DropdownCard>
+      )}
       <DropdownCard
         title="Display Agent"
         iconName="user circle"
