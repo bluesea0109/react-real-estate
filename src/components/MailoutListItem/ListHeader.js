@@ -91,7 +91,7 @@ const ApproveAndSendButton = ({
               </Dropdown.Menu>
             </StyledDropdown>
 
-            <Link to={`dashboard/edit/${data._id}/destinations`}>
+            <Link to={`postcards/edit/${data._id}/destinations`}>
               <Button primary>
                 <span>Choose Destinations</span>
               </Button>
@@ -161,7 +161,7 @@ const ListHeader = ({
   // Redirect the user to the edit page from the dashboard
   const handleEditClickFromDropdown = id => {
     dispatch(resetMailout());
-    history.push(`/dashboard/edit/${id}`);
+    history.push(`/postcards/edit/${id}`);
   };
 
   const duplicateCampaign = id => {
@@ -268,15 +268,6 @@ const ListHeader = ({
 
         {mailoutDetailPage && enableEdit && (
           <>
-            <Button
-              disabled={lockControls}
-              inverted
-              loading={lockControls}
-              onClick={() => history.push(`/postcards/editor/${data._id}`)}
-              primary
-            >
-              Editor
-            </Button>
             <span>
               <Button
                 primary

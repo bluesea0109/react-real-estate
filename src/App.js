@@ -8,11 +8,19 @@ import { useLocation } from 'react-router';
 
 function App() {
   const location = useLocation();
-  const [showSidebar, setShowSidebar] = useState(!location.pathname.includes('/postcards/editor/'));
+  const [showSidebar, setShowSidebar] = useState(
+    (!location.pathname.includes('/postcards/edit/') &&
+      !location?.pathname?.includes('/dashboard/edit/')) ||
+      location?.pathname?.includes('destinations')
+  );
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    setShowSidebar(!location.pathname.includes('/postcards/editor/'));
+    setShowSidebar(
+      (!location.pathname.includes('/postcards/edit/') &&
+        !location?.pathname?.includes('/dashboard/edit/')) ||
+        location?.pathname?.includes('destinations')
+    );
   }, [location]);
 
   return (
