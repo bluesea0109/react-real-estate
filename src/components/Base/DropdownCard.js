@@ -32,6 +32,7 @@ const StyledDropdownCard = styled(DropdownCard)`
     cursor: pointer;
     padding: 0.5rem 0;
     & > h4 {
+      white-space: nowrap;
       margin-left: 0.5rem;
       flex: 1;
     }

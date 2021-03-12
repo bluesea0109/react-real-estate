@@ -23,6 +23,7 @@ import {
   setLiveEditFields,
   setReloadIframes,
   setReloadIframesPending,
+  setSidebarOpen,
 } from '../../store/modules/liveEditor/actions';
 import { sleep } from '../../components/utils/utils';
 
@@ -86,6 +87,7 @@ export default function Editor() {
   const reloadIframes = useSelector(state => state.liveEditor?.reloadIframes);
   const reloadIframesPending = useSelector(state => state.liveEditor?.reloadIframesPending);
   const liveEditorChanges = useSelector(state => state.liveEditor?.edits);
+  const sidebarOpen = useSelector(state => state.liveEditor?.sidebarOpen);
   const [activeNavItem, setActiveNavItem] = useState(1); // 0 default - 1 for testing
   const [frontLoaded, setFrontLoaded] = useState(false);
   const [backLoaded, setBackLoaded] = useState(false);
@@ -301,7 +303,7 @@ export default function Editor() {
   return (
     <>
       {details ? (
-        <EditorLayout>
+        <EditorLayout sidebarOpen={sidebarOpen}>
           <EditorHeader>
             <div className="header-left">
               <ButtonNoStyle as={Link} to={`/postcards/${details?._id}`}>
@@ -359,7 +361,10 @@ export default function Editor() {
                 key={item.name}
                 className={`${ind === activeNavItem ? 'active' : null}`}
                 iconName={item.iconName}
-                onClick={() => setActiveNavItem(ind)}
+                onClick={() => {
+                  setActiveNavItem(ind);
+                  dispatch(setSidebarOpen(true));
+                }}
               />
             ))}
           </EditorNav>
