@@ -211,7 +211,7 @@ export default function CreatePostcard({ location }) {
           credentials: 'include',
         });
         let doc = await api.handleResponse(response);
-        return history.push(`/dashboard/edit/${doc._id}/destinations`);
+        return history.push(`/postcards/edit/${doc._id}/destinations`);
       });
       return;
     }

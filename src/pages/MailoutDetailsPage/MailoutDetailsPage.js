@@ -166,7 +166,7 @@ const MailoutDetailsPage = () => {
   };
 
   const handleEditMailoutDetailsClick = () => {
-    history.push(`/dashboard/edit/${details._id}`);
+    history.push(`/postcards/edit/${details._id}`);
   };
 
   const renderDestinations = () => {
