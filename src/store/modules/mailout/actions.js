@@ -63,10 +63,7 @@ export const CLEAR_MAILOUT_ERROR = 'CLEAR_MAILOUT_ERROR';
 export const SET_ADD_MAILOUT_ERROR = 'SET_ADD_MAILOUT_ERROR';
 export const CLEAR_ADD_MAILOUT_ERROR = 'CLEAR_ADD_MAILOUT_ERROR';
 
-export const SET_EDIT_BRAND_COLOR = 'SET_EDIT_BRAND_COLOR';
-export const SET_EDIT_FIELDS = 'SET_EDIT_FIELDS';
-export const SET_EDIT_POSTCARD_SIZE = 'SET_EDIT_POSTCARD_SIZE';
-export const SET_EDIT_CTAS = 'SET_EDIT_CTAS';
+export const UPDATE_MAILOUT_EDIT_VALUES = 'UPDATE_MAILOUT_EDIT_VALUES';
 
 export function getMailoutPending(payload) {
   return createAction(GET_MAILOUT_PENDING, payload);
@@ -252,18 +249,6 @@ export function clearAddMailoutError() {
   return createAction(CLEAR_ADD_MAILOUT_ERROR);
 }
 
-export function setEditBrandColor(payload) {
-  return createAction(SET_EDIT_BRAND_COLOR, payload);
-}
-
-export function setEditPostcardSize(payload) {
-  return createAction(SET_EDIT_POSTCARD_SIZE, payload);
-}
-
-export function setEditFields(payload) {
-  return createAction(SET_EDIT_FIELDS, payload);
-}
-
-export function setEditCTAS(payload) {
-  return createAction(SET_EDIT_CTAS, payload);
+export function updateMailoutEditValues(payload) {
+  return createAction(UPDATE_MAILOUT_EDIT_VALUES, payload);
 }

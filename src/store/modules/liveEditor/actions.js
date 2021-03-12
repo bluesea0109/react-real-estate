@@ -7,6 +7,9 @@ export const SET_POSTCARD_SIZE_OPEN = 'SET_POSTCARD_SIZE_OPEN';
 export const SET_PHOTOS_OPEN = 'SET_PHOTOS_OPEN';
 export const SET_AGENT_OPEN = 'SET_AGENT_OPEN';
 export const SET_CUSTOM_CTA_OPEN = 'SET_CUSTOM_CTA_OPEN';
+export const SET_CUSTOM_UPLOAD_URL = 'SET_CUSTOM_UPLOAD_URL';
+export const SET_LIVE_EDIT_FIELDS = 'SET_LIVE_EDIT_FIELDS';
+export const SET_LIVE_EDIT_BRAND_COLOR = 'SET_LIVE_EDIT_BRAND_COLOR';
 
 export function setReloadIframes(payload) {
   return createAction(SET_RELOAD_IFRAMES, payload);
@@ -34,4 +37,16 @@ export function setAgentOpen(payload) {
 
 export function setCustomCtaOpen(payload) {
   return createAction(SET_CUSTOM_CTA_OPEN, payload);
+}
+
+export function setCustomUploadURL(payload) {
+  return createAction(SET_CUSTOM_UPLOAD_URL, payload);
+}
+
+export function setLiveEditFields(payload) {
+  return createAction(SET_LIVE_EDIT_FIELDS, payload);
+}
+
+export function setLiveEditBrandColor(payload) {
+  return createAction(SET_LIVE_EDIT_BRAND_COLOR, payload);
 }

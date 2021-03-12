@@ -6,8 +6,6 @@ import {
   getMailoutEditPending,
   getMailoutPending,
   resetMailoutEditSuccess,
-  setEditBrandColor,
-  setEditFields,
   updateMailoutEditPending,
 } from '../../store/modules/mailout/actions';
 import * as brandColors from '../../components/utils/brandColors';
@@ -21,6 +19,8 @@ import jsText from 'raw-loader!./iframeScript.js';
 import EditorSidebar from './EditorSidebar';
 import {
   setCustomCtaOpen,
+  setLiveEditBrandColor,
+  setLiveEditFields,
   setReloadIframes,
   setReloadIframesPending,
 } from '../../store/modules/liveEditor/actions';
@@ -85,6 +85,7 @@ export default function Editor() {
   const saveSuccess = useSelector(state => state.mailout?.updateMailoutEditSuccess);
   const reloadIframes = useSelector(state => state.liveEditor?.reloadIframes);
   const reloadIframesPending = useSelector(state => state.liveEditor?.reloadIframesPending);
+  const liveEditorChanges = useSelector(state => state.liveEditor?.edits);
   const [activeNavItem, setActiveNavItem] = useState(1); // 0 default - 1 for testing
   const [frontLoaded, setFrontLoaded] = useState(false);
   const [backLoaded, setBackLoaded] = useState(false);
@@ -167,7 +168,7 @@ export default function Editor() {
   );
 
   useEffect(() => {
-    dispatch(setEditBrandColor(colorPickerVal?.hex));
+    dispatch(setLiveEditBrandColor(colorPickerVal?.hex || ''));
     if (frontIframeRef) {
       updateIframeColor('front', colorPickerVal?.hex);
     }
@@ -222,7 +223,7 @@ export default function Editor() {
               });
             }
           } else newFields[changedInd].value = e.data.value;
-          dispatch(setEditFields(newFields));
+          dispatch(setLiveEditFields(newFields));
         }
       }
     },
@@ -267,21 +268,15 @@ export default function Editor() {
     }
     if (postcardSize || mailoutDisplayAgent || templateTheme || frontImgUrl)
       dispatch(setReloadIframesPending(true));
-    if (!postcardSize) postcardSize = mailoutEdit?.postcardSize;
-    if (!mailoutDisplayAgent) mailoutDisplayAgent = mailoutEdit?.mailoutDisplayAgent;
-    if (!templateTheme) templateTheme = mailoutEdit?.templateTheme;
-    if (!frontImgUrl) frontImgUrl = mailoutEdit?.frontImgUrl;
-    const { fields, brandColor } = mailoutEdit;
-    let newData = Object.assign(
-      {},
-      { postcardSize },
-      { templateTheme },
-      { fields },
-      { brandColor },
-      { mailoutDisplayAgent },
-      { name: newCampaignName }
-    );
+    const newData = {};
+    if (postcardSize) newData.postcardSize = postcardSize;
+    if (mailoutDisplayAgent) newData.mailoutDisplayAgent = mailoutDisplayAgent;
+    if (templateTheme) newData.templateTheme = templateTheme;
     if (frontImgUrl) newData.frontImgUrl = frontImgUrl;
+    if (newCampaignName) newData.name = newCampaignName;
+    const { fields, brandColor } = liveEditorChanges;
+    if (fields) newData.fields = fields;
+    if (brandColor) newData.brandColor = brandColor;
     if (customizeCTA) newData.ctas = { cta: newCTA, shortenCTA: true };
     else newData.ctas = { dontOverride: true };
     dispatch(updateMailoutEditPending(newData));
