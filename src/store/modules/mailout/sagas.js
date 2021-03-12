@@ -40,10 +40,11 @@ import {
   duplicateMailoutError,
   undoArchiveMailoutSuccess,
   undoArchiveMailoutError,
+  updateMailoutEditValues,
 } from './actions';
 import ApiService from '../../../services/api/index';
 import { getMailoutsPending } from '../mailouts/actions';
-import { setReloadIframes } from '../liveEditor/actions';
+import { setReloadIframes, setReloadIframesPending } from '../liveEditor/actions';
 
 export const getSelectedPeerId = state => state.peer.peerId;
 export const getMailoutId = state => state.mailout.mailoutId;
@@ -192,21 +193,35 @@ export function* getMailoutEditSaga({ peerId = null }) {
   }
 }
 
-export function* updateMailoutEditSaga({ peerId = null }) {
+export function* updateMailoutEditSaga({ peerId = null }, action) {
   try {
     const mailoutId = yield select(getMailoutId);
     const mailoutEdit = yield select(getMailoutEdit);
+    const newData = action.payload;
+    let apiData = {
+      postcardSize: mailoutEdit.postcardSize,
+      templateTheme: mailoutEdit.templateTheme,
+      fields: mailoutEdit.fields,
+      ctas: mailoutEdit.ctas,
+      mailoutDisplayAgent: mailoutEdit.mailoutDisplayAgent,
+      frontImgUrl: mailoutEdit.frontImgUrl,
+      brandColor: mailoutEdit.brandColor,
+      name: mailoutEdit.name,
+    };
+    apiData = { ...apiData, ...newData };
     const reloadIframesPending = yield select(getReloadIframesPending);
     const { path, method } = peerId
       ? ApiService.directory.peer.mailout.edit.update(mailoutId, peerId)
       : ApiService.directory.user.mailout.edit.update(mailoutId);
-    const response = yield call(ApiService[method], path, mailoutEdit);
+    const response = yield call(ApiService[method], path, apiData);
+    yield put(updateMailoutEditValues(apiData));
     if (reloadIframesPending) {
       yield put(setReloadIframes(true));
     }
     yield put(updateMailoutEditSuccess(response));
   } catch (err) {
     yield put(updateMailoutEditError(err));
+    yield put(setReloadIframesPending(false));
   }
 }
 
@@ -350,13 +365,12 @@ export function* checkIfPeerSelectedGetMailoutEditSaga() {
   }
 }
 
-export function* checkIfPeerSelectedUpdateMailoutEditSaga() {
+export function* checkIfPeerSelectedUpdateMailoutEditSaga(action) {
   const peerId = yield select(getSelectedPeerId);
-
   if (peerId) {
-    yield updateMailoutEditSaga({ peerId });
+    yield updateMailoutEditSaga({ peerId }, action);
   } else {
-    yield updateMailoutEditSaga({});
+    yield updateMailoutEditSaga({}, action);
   }
 }
 

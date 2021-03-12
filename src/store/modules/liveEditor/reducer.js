@@ -6,16 +6,24 @@ import {
   SET_POSTCARD_SIZE_OPEN,
   SET_RELOAD_IFRAMES,
   SET_RELOAD_IFRAMES_PENDING,
+  SET_CUSTOM_UPLOAD_URL,
+  SET_LIVE_EDIT_FIELDS,
+  SET_LIVE_EDIT_BRAND_COLOR,
 } from './actions';
 
 const initialState = {
   reloadIframes: false,
   reloadIframesPending: false,
-  brandColorOpen: true,
+  brandColorOpen: false,
   postcardSizeOpen: false,
-  photosOpen: false,
+  photosOpen: true,
   agentOpen: false,
   customCtaOpen: false,
+  customUploadURL: '',
+  edits: {
+    fields: null,
+    brandColor: '',
+  },
 };
 
 export default function liveEditor(state = initialState, action) {
@@ -54,6 +62,27 @@ export default function liveEditor(state = initialState, action) {
       return {
         ...state,
         customCtaOpen: action.payload,
+      };
+    case SET_CUSTOM_UPLOAD_URL:
+      return {
+        ...state,
+        customUploadURL: action.payload,
+      };
+    case SET_LIVE_EDIT_FIELDS:
+      return {
+        ...state,
+        edits: {
+          ...state.edits,
+          fields: action.payload,
+        },
+      };
+    case SET_LIVE_EDIT_BRAND_COLOR:
+      return {
+        ...state,
+        edits: {
+          ...state.edits,
+          brandColor: action.payload,
+        },
       };
     default:
       return state;
