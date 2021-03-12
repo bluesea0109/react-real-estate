@@ -8,6 +8,7 @@ export const SET_PHOTOS_OPEN = 'SET_PHOTOS_OPEN';
 export const SET_AGENT_OPEN = 'SET_AGENT_OPEN';
 export const SET_CUSTOM_CTA_OPEN = 'SET_CUSTOM_CTA_OPEN';
 export const SET_CUSTOM_UPLOAD_URL = 'SET_CUSTOM_UPLOAD_URL';
+export const SET_SIDEBAR_OPEN = 'SET_SIDEBAR_OPEN';
 export const SET_LIVE_EDIT_FIELDS = 'SET_LIVE_EDIT_FIELDS';
 export const SET_LIVE_EDIT_BRAND_COLOR = 'SET_LIVE_EDIT_BRAND_COLOR';
 
@@ -41,6 +42,10 @@ export function setCustomCtaOpen(payload) {
 
 export function setCustomUploadURL(payload) {
   return createAction(SET_CUSTOM_UPLOAD_URL, payload);
+}
+
+export function setSidebarOpen(payload) {
+  return createAction(SET_SIDEBAR_OPEN, payload);
 }
 
 export function setLiveEditFields(payload) {

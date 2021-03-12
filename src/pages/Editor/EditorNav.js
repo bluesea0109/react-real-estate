@@ -9,6 +9,7 @@ const EditorNav = styled.nav`
   box-shadow: ${brandColors.navBoxShadow};
   display: flex;
   flex-direction: column;
+  background-color: white;
 `;
 
 const StyledNavButton = styled(ButtonNoStyle)`

@@ -7,6 +7,7 @@ import {
   SET_RELOAD_IFRAMES,
   SET_RELOAD_IFRAMES_PENDING,
   SET_CUSTOM_UPLOAD_URL,
+  SET_SIDEBAR_OPEN,
   SET_LIVE_EDIT_FIELDS,
   SET_LIVE_EDIT_BRAND_COLOR,
 } from './actions';
@@ -19,6 +20,7 @@ const initialState = {
   photosOpen: true,
   agentOpen: false,
   customCtaOpen: false,
+  sidebarOpen: true,
   customUploadURL: '',
   edits: {
     fields: null,
@@ -62,6 +64,11 @@ export default function liveEditor(state = initialState, action) {
       return {
         ...state,
         customCtaOpen: action.payload,
+      };
+    case SET_SIDEBAR_OPEN:
+      return {
+        ...state,
+        sidebarOpen: action.payload,
       };
     case SET_CUSTOM_UPLOAD_URL:
       return {
