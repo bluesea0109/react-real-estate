@@ -29,7 +29,7 @@ import { sleep } from '../../components/utils/utils';
 const EditorLayout = styled.div`
   display: grid;
   grid-template-rows: [header] minmax(54px, auto) [body] minmax(10px, 1fr);
-  grid-template-columns: [nav] 56px [sidebar] 330px [content] minmax(10px, 1fr);
+  grid-template-columns: [nav] 56px [sidebar] auto [content] minmax(10px, 1fr);
   background-color: white;
   height: calc(100% - 60px);
   min-width: 100%;

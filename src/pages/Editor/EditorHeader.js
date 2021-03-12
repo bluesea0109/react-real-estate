@@ -5,6 +5,7 @@ const EditorHeader = styled.div`
   z-index: 30;
   grid-column: span 3;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid ${brandColors.grey08};
@@ -32,7 +33,9 @@ const EditorHeader = styled.div`
   & > .header-right {
     color: ${brandColors.grey03};
     display: flex;
+    flex: 1;
     align-items: center;
+    justify-content: flex-end;
     & > #save-status {
       display: flex;
       align-items: center;
