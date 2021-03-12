@@ -128,36 +128,38 @@ export default function EditorTab({
           presetColors={presetColors}
         />
       </DropdownCard>
-      <DropdownCard
-        title="Postcard Size"
-        iconName="expand"
-        isOpen={postcardSizeOpen}
-        toggleOpen={() => dispatch(setPostcardSizeOpen(!postcardSizeOpen))}
-      >
-        <SizeButtons>
-          <button
-            className={`${is6x4 ? 'selected' : ''}`}
-            disabled={is6x4}
-            onClick={() => changeSize('6x4')}
-          >
-            4" x 6"
-          </button>
-          <button
-            className={`${is9x6 ? 'selected' : ''}`}
-            disabled={is9x6}
-            onClick={() => changeSize('9x6')}
-          >
-            6" x 9"
-          </button>
-          <button
-            className={`${is11x6 ? 'selected' : ''}`}
-            disabled={is11x6}
-            onClick={() => changeSize('11x6')}
-          >
-            6" x 11"
-          </button>
-        </SizeButtons>
-      </DropdownCard>
+      {!details?.frontResourceUrl && (
+        <DropdownCard
+          title="Postcard Size"
+          iconName="expand"
+          isOpen={postcardSizeOpen}
+          toggleOpen={() => dispatch(setPostcardSizeOpen(!postcardSizeOpen))}
+        >
+          <SizeButtons>
+            <button
+              className={`${is6x4 ? 'selected' : ''}`}
+              disabled={is6x4}
+              onClick={() => changeSize('6x4')}
+            >
+              4" x 6"
+            </button>
+            <button
+              className={`${is9x6 ? 'selected' : ''}`}
+              disabled={is9x6}
+              onClick={() => changeSize('9x6')}
+            >
+              6" x 9"
+            </button>
+            <button
+              className={`${is11x6 ? 'selected' : ''}`}
+              disabled={is11x6}
+              onClick={() => changeSize('11x6')}
+            >
+              6" x 11"
+            </button>
+          </SizeButtons>
+        </DropdownCard>
+      )}
       {details?.raw?.photos?.length && (
         <DropdownCard
           title="Cover Photo"
