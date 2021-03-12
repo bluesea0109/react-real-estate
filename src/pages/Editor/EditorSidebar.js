@@ -42,7 +42,6 @@ const SidebarContent = styled.div`
 
 function EditorSidebar({
   activeTab,
-  className,
   colorPickerVal,
   customCTA,
   customizeCTA,
