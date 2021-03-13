@@ -432,9 +432,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
           businessNotificationEmail: Yup.string()
             .email('Invalid email')
             .required('Required'),
-          website: Yup.string()
-            .matches(urlRegExp, 'Website url is not valid')
-            .required('Required!'),
+          website: Yup.string().matches(urlRegExp, 'Website url is not valid'),
         })}
         onSubmit={_handleSubmit}
         render={({ isSubmitting, values, errors }) => (
@@ -771,12 +769,7 @@ const ProfileForm = ({ profileAvailable, teamProfileAvailable }) => {
                       tag={tag('Required')}
                     />
 
-                    <Input
-                      label="Website"
-                      name="website"
-                      disabled={multiUser}
-                      tag={multiUser ? popup(changeMsg) : tag('Required')}
-                    />
+                    <Input label="Website" name="website" />
                   </Form.Group>
                 </BusinessForm>
               </Segment>
