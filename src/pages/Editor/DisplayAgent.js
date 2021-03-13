@@ -159,7 +159,7 @@ export default function DisplayAgent({ handleSave }) {
         value={selectedDisplayAgent?.userId}
         onChange={handleAgentChange}
       />
-      {mailoutEdit.mailoutDisplayAgent && (
+      {mailoutEdit?.mailoutDisplayAgent && (
         <AgentCard>
           <img
             src={`${currentProfile?.realtorPhoto ||
@@ -167,7 +167,7 @@ export default function DisplayAgent({ handleSave }) {
             alt="profile"
           />
           <div className="agent-details">
-            <div className="name">{`${mailoutEdit.mailoutDisplayAgent.first} ${mailoutEdit.mailoutDisplayAgent.last}`}</div>
+            <div className="name">{`${mailoutEdit?.mailoutDisplayAgent?.first} ${mailoutEdit?.mailoutDisplayAgent?.last}`}</div>
             <div className="details">{`${isAdmin ? 'Admin' : 'Realtor'} | ${teamName}`}</div>
           </div>
         </AgentCard>
