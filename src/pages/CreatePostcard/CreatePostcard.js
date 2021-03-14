@@ -46,6 +46,16 @@ const StyledTab = styled(Tab)`
 `;
 
 export default function CreatePostcard({ location }) {
+  if (localStorage.getItem('filter') || localStorage.getItem('mlsNum')) {
+    location.state = {
+      filter: localStorage.getItem('filter'),
+      mlsNum: localStorage.getItem('mlsNum'),
+    };
+
+    localStorage.removeItem('filter');
+    localStorage.removeItem('mlsNum');
+  }
+
   const dispatch = useDispatch();
   const history = useHistory();
   const addCampaignError = useSelector(store => store.mailouts.error?.message);
