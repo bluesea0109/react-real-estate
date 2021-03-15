@@ -224,13 +224,20 @@ export default function Editor() {
       dispatch(setCustomCtaOpen(true));
       return;
     }
-    if (postcardSize || mailoutDisplayAgent || templateTheme || frontImgUrl)
+    if (postcardSize || mailoutDisplayAgent || templateTheme)
       dispatch(setReloadIframesPending(true));
     const newData = {};
     if (postcardSize) newData.postcardSize = postcardSize;
     if (mailoutDisplayAgent) newData.mailoutDisplayAgent = mailoutDisplayAgent;
     if (templateTheme) newData.templateTheme = templateTheme;
-    if (frontImgUrl) newData.frontImgUrl = frontImgUrl;
+    if (frontImgUrl) {
+      sendPostMessage('front', {
+        type: 'switchImageUrl',
+        imageTitle: 'frontImgUrl',
+        newUrl: frontImgUrl,
+      });
+      newData.frontImgUrl = frontImgUrl;
+    }
     if (newCampaignName) newData.name = newCampaignName;
     const { fields, brandColor } = liveEditorChanges;
     if (fields) newData.fields = fields;
