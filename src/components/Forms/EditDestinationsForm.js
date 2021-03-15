@@ -47,6 +47,10 @@ const CopyDestDropdown = styled(Dropdown)`
   }
 `;
 
+const SendToSourceAddress = styled.div`
+  padding-bottom: 10px;
+`;
+
 const propertyTypeOptions = [
   { text: 'Single-Family', key: 'Single-Family', value: 'Single-Family' },
   { text: 'Condo', key: 'Condo', value: 'Condo' },
@@ -149,6 +153,7 @@ const EditDestinationsForm = ({ mailoutDetails, handleBackClick }) => {
   const [searchSalePriceMax, setSearchSalePriceMax] = useState('');
   const [runningSearch, setRunningSearch] = useState(false);
   const [searchResults, setSearchResults] = useState(null);
+  const [sendToSourceAddresses, setSendToSourceAddresses] = useState(false);
 
   useEffect(() => {
     if (destinationsOptionsMode === 'copy') {
@@ -382,6 +387,7 @@ const EditDestinationsForm = ({ mailoutDetails, handleBackClick }) => {
           headers,
           method: 'post',
           body: formData,
+          query: { sendToSourceAddresses },
           credentials: 'include',
         });
         const data = await api.handleResponse(response);
@@ -583,6 +589,16 @@ const EditDestinationsForm = ({ mailoutDetails, handleBackClick }) => {
               />
             </List.Item>
           </List>
+          <SendToSourceAddress>
+            <Checkbox
+              label="Send to source address(es)"
+              name="sendToSourceAddresses"
+              checked={sendToSourceAddresses}
+              onClick={() => {
+                setSendToSourceAddresses(!sendToSourceAddresses);
+              }}
+            />
+          </SendToSourceAddress>
           {destinationsOptionsMode === 'ai' && (
             <Form.Field
               label="Number of destinations"
