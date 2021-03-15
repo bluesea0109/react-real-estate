@@ -1,3 +1,30 @@
+const getAllEditableFieldsAsMergeVariables = function() {
+  let mergeVariables = [];
+  const elements = document.querySelectorAll('[contenteditable=true]');
+  Array.prototype.forEach.call(elements, function(el, i) {
+    const name = el.getAttribute('title');
+    const value = el.innerHTML;
+    mergeVariables.push({ name: name, value: value });
+  });
+  return mergeVariables;
+};
+
+const setAllEditableFieldsAsMergeVariables = function(mergeVariables) {
+  mergeVariables.forEach(function(item) {
+    const name = item.name;
+    const value = item.value;
+    const selector = 'span[title=' + name + ']';
+    const el = document.querySelector(selector);
+    if (!el) return;
+    el.innerHTML = value;
+  });
+};
+
+const switchImageUrl = function(imageTitle, newUrl) {
+  let imageNode = document.querySelector(`img[title="${imageTitle}"]`);
+  imageNode.src = newUrl;
+};
+
 const domLoaded = () => {
   let __parentWindow;
   let __parentOrigin;
@@ -5,11 +32,14 @@ const domLoaded = () => {
     __parentWindow = e.source;
     __parentOrigin = e.origin;
     let root = document.documentElement;
-    if (Array.isArray(e.data)) window.setAllEditableFieldsAsMergeVariables(e.data);
+    if (Array.isArray(e.data)) setAllEditableFieldsAsMergeVariables(e.data);
     else if (e.data === 'getAllEditableFieldsAsMergeVariables')
-      e.source.postMessage(window.getAllEditableFieldsAsMergeVariables(), e.origin);
+      e.source.postMessage(getAllEditableFieldsAsMergeVariables(), e.origin);
     else if (e.data.type === 'updateBrandColor') {
       root.style.setProperty('--brand-color', e.data.value);
+    } else if (e.data.type === 'switchImageUrl') {
+      const { imageTitle, newUrl } = e.data;
+      switchImageUrl(imageTitle, newUrl);
     } else console.log(JSON.stringify(e.data));
   }
 
@@ -43,28 +73,6 @@ const domLoaded = () => {
     el.addEventListener('cut', updateAndNotify);
     el.addEventListener('delete', updateAndNotify);
     el.addEventListener('mouseup', listener);
-  });
-};
-
-window.getAllEditableFieldsAsMergeVariables = function() {
-  let mergeVariables = [];
-  const elements = document.querySelectorAll('[contenteditable=true]');
-  Array.prototype.forEach.call(elements, function(el, i) {
-    const name = el.getAttribute('title');
-    const value = el.innerHTML;
-    mergeVariables.push({ name: name, value: value });
-  });
-  return mergeVariables;
-};
-
-window.setAllEditableFieldsAsMergeVariables = function(mergeVariables) {
-  mergeVariables.forEach(function(item) {
-    const name = item.name;
-    const value = item.value;
-    const selector = 'span[title=' + name + ']';
-    const el = document.querySelector(selector);
-    if (!el) return;
-    el.innerHTML = value;
   });
 };
 

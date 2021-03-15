@@ -43,7 +43,6 @@ const ImageUpload = styled.div`
   background-color: ${brandColors.grey08};
   text-align: center;
   font-weight: bold;
-  /* ${props => (props.dragging ? 'opacity: 0.6;' : null)} */
   & i {
     margin-bottom: 0.5rem;
   }
@@ -65,6 +64,7 @@ export default function PhotosCard({ handleSave }) {
   const peerId = useSelector(state => state.peerId);
   const currentPhoto = useSelector(state => state.mailout?.mailoutEdit?.frontImgUrl);
   const customUploadURL = useSelector(state => state.liveEditor?.customUploadURL);
+  const [selectedPhoto, setSelectedPhoto] = useState(currentPhoto);
   const [uploadDragOver, setUploadDragOver] = useState(false);
   const [imageError, setImageError] = useState('');
   const [imageUploading, setImageUploading] = useState(false);
@@ -73,12 +73,19 @@ export default function PhotosCard({ handleSave }) {
   const isCustomPhoto = photoList.length && !photoList.find(image => image.url === currentPhoto);
 
   useEffect(() => {
+    setSelectedPhoto(currentPhoto);
+  }, [currentPhoto]);
+
+  useEffect(() => {
     if (isCustomPhoto && !customUploadURL) dispatch(setCustomUploadURL(currentPhoto));
   }, [isCustomPhoto, customUploadURL, dispatch, currentPhoto]);
 
-  const saveImage = selectedPhoto => {
-    if (selectedPhoto === currentPhoto) return;
-    else handleSave({ frontImgUrl: selectedPhoto });
+  const saveImage = newPhoto => {
+    if (newPhoto === currentPhoto) return;
+    else {
+      setSelectedPhoto(newPhoto);
+      handleSave({ frontImgUrl: newPhoto });
+    }
   };
 
   const handleFileDrop = async fileList => {
@@ -135,7 +142,7 @@ export default function PhotosCard({ handleSave }) {
       {photoList?.length ? (
         <PhotoContainer>
           <DropTarget setDragging={setUploadDragOver} handleFileDrop={handleFileDrop}>
-            <ImageUpload dragging={uploadDragOver}>
+            <ImageUpload>
               <>
                 <Dimmer inverted active={uploadDragOver} />
                 <Icon name="cloud upload" size="big" />
@@ -157,7 +164,7 @@ export default function PhotosCard({ handleSave }) {
               <p className="section-title">Custom Cover Photo</p>
               <ImageOption
                 src={isCustomPhoto ? currentPhoto : localImageURL || customUploadURL}
-                current={isCustomPhoto || customUploadURL === currentPhoto}
+                current={isCustomPhoto || customUploadURL === selectedPhoto}
                 alt="custom upload"
                 onClick={() => {
                   if (isCustomPhoto || imageUploading || localImageURL) return;
@@ -170,7 +177,7 @@ export default function PhotosCard({ handleSave }) {
           {photoList.map(photo => (
             <ImageOption
               key={photo.url}
-              current={photo.url === currentPhoto}
+              current={photo.url === selectedPhoto}
               src={photo.url}
               alt="cover option"
               onClick={() => saveImage(photo.url)}
