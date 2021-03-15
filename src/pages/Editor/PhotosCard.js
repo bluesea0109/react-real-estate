@@ -43,7 +43,6 @@ const ImageUpload = styled.div`
   background-color: ${brandColors.grey08};
   text-align: center;
   font-weight: bold;
-  /* ${props => (props.dragging ? 'opacity: 0.6;' : null)} */
   & i {
     margin-bottom: 0.5rem;
   }
@@ -143,7 +142,7 @@ export default function PhotosCard({ handleSave }) {
       {photoList?.length ? (
         <PhotoContainer>
           <DropTarget setDragging={setUploadDragOver} handleFileDrop={handleFileDrop}>
-            <ImageUpload dragging={uploadDragOver}>
+            <ImageUpload>
               <>
                 <Dimmer inverted active={uploadDragOver} />
                 <Icon name="cloud upload" size="big" />
