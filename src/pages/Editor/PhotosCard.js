@@ -1,68 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
 import { Dimmer, Icon, Loader } from '../../components/Base';
 import DropTarget from '../../components/Base/DropTarget';
 import { useClickOutside } from '../../components/Hooks/useClickOutside';
-import * as brandColors from '../../components/utils/brandColors';
 import api from '../../services/api';
 import auth from '../../services/auth';
-import { setCustomUploadURL } from '../../store/modules/liveEditor/actions';
-
-const PhotoContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.5rem;
-  & .images {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
-  }
-  & .section-title {
-    margin: 0.25rem 0;
-    font-weight: bold;
-  }
-`;
-
-const CustomImage = styled.div`
-  position: relative;
-`;
-
-const ImageOption = styled.img`
-  box-shadow: 1px 1px 4px ${brandColors.grey08};
-  border-radius: 4px;
-  ${props => (props.current ? `border: 2px solid ${brandColors.primary}; padding: 0.25rem;` : null)}
-  ${props => (!props.current ? `cursor: pointer;` : null)}
-`;
-
-const ImageUpload = styled.div`
-  position: relative;
-  width: 100%auto;
-  height: 160px;
-  border-radius: 4px;
-  border: 2px dashed ${brandColors.grey05};
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: ${brandColors.grey08};
-  text-align: center;
-  font-weight: bold;
-  & i {
-    margin-bottom: 0.5rem;
-  }
-  & .error {
-    display: flex;
-    align-items: center;
-    margin-top: 0.5rem;
-    color: ${brandColors.error};
-    & i {
-      margin: 0;
-      margin-right: 0.25rem;
-    }
-  }
-`;
+import { setCustomUploadURL, setSelectedPhoto } from '../../store/modules/liveEditor/actions';
+import { CustomImage, ImageOption, ImageUpload, PhotoContainer } from './StyledComponents';
 
 export default function PhotosCard({ handleSave }) {
   const dispatch = useDispatch();
@@ -70,7 +14,7 @@ export default function PhotosCard({ handleSave }) {
   const peerId = useSelector(state => state.peerId);
   const currentPhoto = useSelector(state => state.mailout?.mailoutEdit?.frontImgUrl);
   const customUploadURL = useSelector(state => state.liveEditor?.customUploadURL);
-  const [selectedPhoto, setSelectedPhoto] = useState(currentPhoto);
+  const selectedPhoto = useSelector(state => state.liveEditor?.selectedPhoto);
   const [uploadDragOver, setUploadDragOver] = useState(false);
   const [imageError, setImageError] = useState('');
   const [imageUploading, setImageUploading] = useState(false);
@@ -81,7 +25,7 @@ export default function PhotosCard({ handleSave }) {
   const ImageOptionsWrapper = ({ children }) => {
     const wrapperRef = useRef(null);
     useClickOutside(wrapperRef, () => {
-      setSelectedPhoto('');
+      dispatch(setSelectedPhoto(''));
     });
     return (
       <div className="images" ref={wrapperRef}>
@@ -91,17 +35,13 @@ export default function PhotosCard({ handleSave }) {
   };
 
   useEffect(() => {
-    setSelectedPhoto(currentPhoto);
-  }, [currentPhoto]);
-
-  useEffect(() => {
     if (isCustomPhoto && !customUploadURL) dispatch(setCustomUploadURL(currentPhoto));
   }, [isCustomPhoto, customUploadURL, dispatch, currentPhoto]);
 
   const saveImage = newPhoto => {
     if (newPhoto === currentPhoto) return;
     else {
-      setSelectedPhoto(newPhoto);
+      dispatch(setSelectedPhoto(newPhoto));
       handleSave({ frontImgUrl: newPhoto });
     }
   };
@@ -184,11 +124,7 @@ export default function PhotosCard({ handleSave }) {
                   src={isCustomPhoto ? currentPhoto : localImageURL || customUploadURL}
                   current={isCustomPhoto || customUploadURL === selectedPhoto}
                   alt="custom upload"
-                  onClick={e => {
-                    if (isCustomPhoto || imageUploading || localImageURL) return;
-                    // send a postmessage to all iframes
-                    setSelectedPhoto(e.target.src);
-                  }}
+                  onClick={e => dispatch(setSelectedPhoto(e.target.src))}
                   onDragStart={e => {
                     e.dataTransfer.setData('text', e.target.src);
                   }}
@@ -202,7 +138,7 @@ export default function PhotosCard({ handleSave }) {
                 current={photo.url === selectedPhoto}
                 src={photo.url}
                 alt="cover option"
-                onClick={() => setSelectedPhoto(photo.url)}
+                onClick={() => dispatch(setSelectedPhoto(photo.url))}
                 onDragStart={e => {
                   e.dataTransfer.setData('text', e.target.src);
                 }}

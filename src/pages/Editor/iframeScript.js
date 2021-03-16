@@ -21,8 +21,12 @@ const setAllEditableFieldsAsMergeVariables = function(mergeVariables) {
 };
 
 const domLoaded = () => {
+  const elements = document.querySelectorAll('[contenteditable=true]');
+
   let __parentWindow;
   let __parentOrigin;
+  let imageElements = [];
+  let newImgSrc = '';
 
   const switchImageUrl = function(imageTitle, newUrl) {
     let imageNode = document.querySelector(`img[title="${imageTitle}"]`);
@@ -47,6 +51,24 @@ const domLoaded = () => {
     e.target.style.border = '';
   };
 
+  const handleImgSwitchClick = e => {
+    const name = e.target.getAttribute('title');
+    __parentWindow.postMessage({ name, value: newImgSrc }, __parentOrigin);
+    e.target.src = newImgSrc;
+  };
+
+  const setImagesSelectable = isSelectable => {
+    imageElements.forEach(img => {
+      if (isSelectable) {
+        img.classList.add('can-select');
+        img.addEventListener('click', handleImgSwitchClick);
+      } else {
+        img.classList.remove('can-select');
+        img.removeEventListener('click', handleImgSwitchClick);
+      }
+    });
+  };
+
   function receiver(e) {
     __parentWindow = e.source;
     __parentOrigin = e.origin;
@@ -54,17 +76,19 @@ const domLoaded = () => {
     if (Array.isArray(e.data)) setAllEditableFieldsAsMergeVariables(e.data);
     else if (e.data === 'getAllEditableFieldsAsMergeVariables')
       e.source.postMessage(getAllEditableFieldsAsMergeVariables(), e.origin);
-    else if (e.data.type === 'updateBrandColor') {
+    else if (e.data?.type === 'updateBrandColor')
       root.style.setProperty('--brand-color', e.data.value);
-    } else if (e.data.type === 'switchImageUrl') {
+    else if (e.data?.type === 'switchImageUrl') {
       const { imageTitle, newUrl } = e.data;
       switchImageUrl(imageTitle, newUrl);
+    } else if (e.data?.type === 'imageSelected') {
+      newImgSrc = e.data?.imgSrc;
+      e.data?.imgSrc ? setImagesSelectable(true) : setImagesSelectable(false);
     } else console.log(JSON.stringify(e.data));
   }
 
   window.addEventListener('message', receiver, false);
 
-  const elements = document.querySelectorAll('[contenteditable=true]');
   Array.prototype.forEach.call(elements, function(el, i) {
     const name = el.getAttribute('title');
     const value = el.innerHTML;
@@ -85,6 +109,7 @@ const domLoaded = () => {
       notifier();
     };
     if (el.nodeName === 'IMG') {
+      imageElements.push(el);
       el.draggable = false;
       el.addEventListener('drop', e => handleImgDrop(e, name));
       el.addEventListener('dragenter', handleDragEnter);

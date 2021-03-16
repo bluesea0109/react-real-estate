@@ -14,6 +14,8 @@ import { BackIframe, FrontIframe } from '../MailoutDetailsPage';
 import { Link } from 'react-router-dom';
 // eslint-disable-next-line
 import jsText from 'raw-loader!./iframeScript.js';
+// eslint-disable-next-line
+import cssText from '!!raw-loader!./iframeStyles.css';
 import EditorSidebar from './EditorSidebar';
 import {
   setCustomCtaOpen,
@@ -44,6 +46,7 @@ export default function Editor() {
   const reloadIframesPending = useSelector(state => state.liveEditor?.reloadIframesPending);
   const liveEditorChanges = useSelector(state => state.liveEditor?.edits);
   const sidebarOpen = useSelector(state => state.liveEditor?.sidebarOpen);
+  const selectedPhoto = useSelector(state => state.liveEditor?.selectedPhoto);
   const [activeNavItem, setActiveNavItem] = useState(1); // 0 default - 1 for testing
   const [frontLoaded, setFrontLoaded] = useState(false);
   const [backLoaded, setBackLoaded] = useState(false);
@@ -125,6 +128,14 @@ export default function Editor() {
     },
     [frontIframeRef, backIframeRef]
   );
+
+  // send a postMessage to the iframe when the selected photo changes
+  useEffect(() => {
+    if (selectedPhoto) {
+      sendPostMessage('front', { type: 'imageSelected', imgSrc: selectedPhoto });
+      sendPostMessage('back', { type: 'imageSelected', imgSrc: selectedPhoto });
+    }
+  }, [selectedPhoto, sendPostMessage]);
 
   const updateIframeColor = useCallback(
     (side, colorHex) => {
@@ -219,6 +230,9 @@ export default function Editor() {
       scriptElement.type = 'text/javascript';
       scriptElement.innerHTML = jsText;
       await frame.document.head.append(scriptElement);
+      let styleElement = document.createElement('style');
+      styleElement.innerHTML = cssText;
+      await frame.document.head.append(styleElement);
       if (name === 'front') {
         setFrontLoaded(true);
       }
