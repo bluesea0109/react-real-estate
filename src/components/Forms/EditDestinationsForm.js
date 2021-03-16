@@ -321,6 +321,7 @@ const EditDestinationsForm = ({ mailoutDetails, handleBackClick }) => {
         let path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/copy`;
         if (peerId)
           path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/destinationOptions/copy`;
+        path += `?sendToSourceAddresses=${sendToSourceAddresses}`;
         const body = JSON.stringify({ mailoutId: copyCampaign });
         const headers = {};
         const accessToken = await auth.getAccessToken();
@@ -337,6 +338,7 @@ const EditDestinationsForm = ({ mailoutDetails, handleBackClick }) => {
         let path = `/api/user/mailout/${mailoutDetails._id}/edit/mailoutSize`;
         if (peerId)
           path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/mailoutSize`;
+        path += `?sendToSourceAddresses=${sendToSourceAddresses}`;
         const body = JSON.stringify({ mailoutSize: numberOfDestinations });
         const headers = {};
         const accessToken = await auth.getAccessToken();
@@ -355,6 +357,7 @@ const EditDestinationsForm = ({ mailoutDetails, handleBackClick }) => {
         let path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/search/${searchTimestampId}/use`;
         if (peerId)
           path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/destinationOptions/search/${searchTimestampId}/use`;
+        path += `?sendToSourceAddresses=${sendToSourceAddresses}`;
         const headers = {};
         const accessToken = await auth.getAccessToken();
         headers['authorization'] = `Bearer ${accessToken}`;
@@ -366,6 +369,7 @@ const EditDestinationsForm = ({ mailoutDetails, handleBackClick }) => {
         let path = `/api/user/mailout/${mailoutDetails._id}/edit/destinationOptions/csv`;
         if (peerId)
           path = `/api/user/peer/${peerId}/mailout/${mailoutDetails._id}/edit/destinationOptions/csv`;
+        path += `?sendToSourceAddresses=${sendToSourceAddresses}`;
         const formData = new FormData();
         formData.append('destinations', csvFile);
         if (!isCsvBrivityFormat) {
@@ -387,7 +391,6 @@ const EditDestinationsForm = ({ mailoutDetails, handleBackClick }) => {
           headers,
           method: 'post',
           body: formData,
-          query: { sendToSourceAddresses },
           credentials: 'include',
         });
         const data = await api.handleResponse(response);
