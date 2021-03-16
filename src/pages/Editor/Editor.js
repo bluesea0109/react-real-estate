@@ -279,9 +279,6 @@ export default function Editor() {
                       value={newCampaignName}
                       onChange={e => setNewCampaignName(e.target.value)}
                     ></Input>
-                    <ButtonNoStyle onClick={_ => setEditingName(false)}>
-                      <Icon name="close" />
-                    </ButtonNoStyle>
                   </>
                 ) : (
                   <>
