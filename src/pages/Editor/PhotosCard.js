@@ -169,6 +169,9 @@ export default function PhotosCard({ handleSave }) {
                   if (isCustomPhoto || imageUploading || localImageURL) return;
                   saveImage(customUploadURL);
                 }}
+                onDragStart={e => {
+                  e.dataTransfer.setData('text', e.target.src);
+                }}
               />
             </CustomImage>
           )}
@@ -180,6 +183,9 @@ export default function PhotosCard({ handleSave }) {
               src={photo.url}
               alt="cover option"
               onClick={() => saveImage(photo.url)}
+              onDragStart={e => {
+                e.dataTransfer.setData('text', e.target.src);
+              }}
             />
           ))}
         </PhotoContainer>

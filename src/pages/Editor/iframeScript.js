@@ -20,14 +20,33 @@ const setAllEditableFieldsAsMergeVariables = function(mergeVariables) {
   });
 };
 
-const switchImageUrl = function(imageTitle, newUrl) {
-  let imageNode = document.querySelector(`img[title="${imageTitle}"]`);
-  imageNode.src = newUrl;
-};
-
 const domLoaded = () => {
   let __parentWindow;
   let __parentOrigin;
+
+  const switchImageUrl = function(imageTitle, newUrl) {
+    let imageNode = document.querySelector(`img[title="${imageTitle}"]`);
+    imageNode.src = newUrl;
+  };
+
+  const handleImgDrop = (e, name) => {
+    const newSrc = e.dataTransfer.getData('text');
+    __parentWindow.postMessage({ name, value: newSrc }, __parentOrigin);
+    e.target.src = newSrc;
+    e.target.style.opacity = '';
+    e.target.style.border = '';
+  };
+
+  const handleDragEnter = e => {
+    e.target.style.opacity = 0.5;
+    e.target.style.border = 'solid 2px green';
+  };
+
+  const handleDragLeave = e => {
+    e.target.style.opacity = '';
+    e.target.style.border = '';
+  };
+
   function receiver(e) {
     __parentWindow = e.source;
     __parentOrigin = e.origin;
@@ -65,14 +84,24 @@ const domLoaded = () => {
       listener();
       notifier();
     };
-    el.addEventListener('input', updateAndNotify);
-    el.addEventListener('blur', notifier);
-    el.addEventListener('keyup', updateAndNotify);
-    el.addEventListener('paste', updateAndNotify);
-    el.addEventListener('copy', listener);
-    el.addEventListener('cut', updateAndNotify);
-    el.addEventListener('delete', updateAndNotify);
-    el.addEventListener('mouseup', listener);
+    if (el.nodeName === 'IMG') {
+      el.draggable = false;
+      el.addEventListener('drop', e => handleImgDrop(e, name));
+      el.addEventListener('dragenter', handleDragEnter);
+      el.addEventListener('dragleave', handleDragLeave);
+    } else {
+      el.addEventListener('drop', e => {
+        e.preventDefault();
+      });
+      el.addEventListener('input', updateAndNotify);
+      el.addEventListener('blur', notifier);
+      el.addEventListener('keyup', updateAndNotify);
+      el.addEventListener('paste', updateAndNotify);
+      el.addEventListener('copy', listener);
+      el.addEventListener('cut', updateAndNotify);
+      el.addEventListener('delete', updateAndNotify);
+      el.addEventListener('mouseup', listener);
+    }
   });
 };
 

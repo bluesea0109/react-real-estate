@@ -183,14 +183,12 @@ export default function Editor() {
         if (e.data.name) {
           const changedInd = newFields.findIndex(el => el.name === e.data.name);
           if (changedInd === -1) {
-            console.log('Cannot find field: ' + e.data.name);
-            if (e.data.name === 'agentFullName') {
-              newFields.push({
-                name: e.data.name,
-                sides: [side],
-                value: e.data.value,
-              });
-            }
+            console.log('Adding new field: ' + e.data.name);
+            newFields.push({
+              name: e.data.name,
+              sides: [side],
+              value: e.data.value,
+            });
           } else newFields[changedInd].value = e.data.value;
           dispatch(setLiveEditFields(newFields));
         }
