@@ -156,6 +156,10 @@ const EditDestinationsForm = ({ mailoutDetails, handleBackClick }) => {
   const [sendToSourceAddresses, setSendToSourceAddresses] = useState(false);
 
   useEffect(() => {
+    setSendToSourceAddresses(mailoutDetails.destinationsOptions.sendToSourceAddresses);
+  }, [mailoutDetails, destinationsOptionsMode]);
+
+  useEffect(() => {
     if (destinationsOptionsMode === 'copy') {
       setSaveDetails({ destinationsOptionsMode: 'copy', ready: !!copyCampaign });
       return;
