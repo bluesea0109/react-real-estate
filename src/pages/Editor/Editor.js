@@ -176,10 +176,13 @@ export default function Editor() {
   const handlePostMessage = useCallback(
     e => {
       if (e.source?.frameElement?.title?.includes('bm-iframe')) {
-        if (!Array.isArray(mailoutEdit?.fields)) return;
-        const side = e.source?.name;
         let newFields = [];
-        newFields = [...mailoutEdit?.fields];
+        if (!liveEditorChanges.fields && Array.isArray(mailoutEdit?.fields)) {
+          newFields = [...mailoutEdit?.fields];
+        } else if (Array.isArray(liveEditorChanges?.fields))
+          newFields = [...liveEditorChanges?.fields];
+        if (!newFields) return;
+        const side = e.source?.name;
         if (e.data.name) {
           const changedInd = newFields.findIndex(el => el.name === e.data.name);
           if (changedInd === -1) {
@@ -194,7 +197,7 @@ export default function Editor() {
         }
       }
     },
-    [dispatch, mailoutEdit]
+    [dispatch, mailoutEdit, liveEditorChanges]
   );
 
   useEffect(() => {
