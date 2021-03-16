@@ -89,7 +89,6 @@ export default function PhotosCard({ handleSave }) {
   };
 
   const handleFileDrop = async fileList => {
-    console.dir(fileList);
     const file = fileList[0];
     if (!file) {
       setImageError('No File Found');

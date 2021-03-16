@@ -107,10 +107,21 @@ export default function Editor() {
 
   const sendPostMessage = useCallback(
     async (side, data) => {
-      if (side === 'front')
+      if (side === 'front') {
+        if (!frontIframeRef) {
+          return document
+            .getElementById('bm-iframe-front')
+            ?.contentWindow?.postMessage(data, window.location.origin);
+        }
         return frontIframeRef?.contentWindow?.postMessage(data, window.location.origin);
-      else if (side === 'back')
+      } else if (side === 'back') {
+        if (!backIframeRef) {
+          return document
+            .getElementById('bm-iframe-back')
+            ?.contentWindow?.postMessage(data, window.location.origin);
+        }
         return backIframeRef?.contentWindow?.postMessage(data, window.location.origin);
+      }
     },
     [frontIframeRef, backIframeRef]
   );
