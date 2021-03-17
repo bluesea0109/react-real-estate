@@ -65,6 +65,7 @@ export default function Editor() {
   const [customizeCTA, setCustomizeCTA] = useState(false);
   const [newCTA, setNewCTA] = useState(defaultCTA);
   const [invalidCTA, setInvalidCTA] = useState(false);
+  const [hideCTA, setHideCTA] = useState(false);
 
   useEffect(() => {
     setNewCTA(customCTA || defaultCTA);
@@ -253,8 +254,10 @@ export default function Editor() {
     const { fields, brandColor } = liveEditorChanges;
     if (fields) newData.fields = fields;
     if (brandColor) newData.brandColor = brandColor;
-    if (customizeCTA) newData.ctas = { cta: newCTA, shortenCTA: true };
-    else newData.ctas = { dontOverride: true };
+    if (customizeCTA) newData.ctas = { cta: newCTA, shortenCTA: true, hideCTA: false };
+    if (hideCTA) newData.ctas = { cta: newCTA, hideCTA: true };
+    else newData.ctas = { dontOverride: true, hideCTA: false };
+    console.log('newData', newData);
     dispatch(updateMailoutEditPending(newData));
     setEditingName(false);
   };
@@ -344,9 +347,11 @@ export default function Editor() {
             colorPickerVal={colorPickerVal}
             customCTA={customCTA}
             customizeCTA={customizeCTA}
+            hideCTA={hideCTA}
             invalidCTA={invalidCTA}
             newCTA={newCTA}
             setCustomizeCTA={setCustomizeCTA}
+            setHideCTA={setHideCTA}
             setInvalidCTA={setInvalidCTA}
             setNewCTA={setNewCTA}
             setColorPickerVal={setColorPickerVal}

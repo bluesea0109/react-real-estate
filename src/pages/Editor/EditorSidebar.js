@@ -45,6 +45,7 @@ function EditorSidebar({
   colorPickerVal,
   customCTA,
   customizeCTA,
+  hideCTA,
   handleSave,
   invalidCTA,
   newCTA,
@@ -52,6 +53,7 @@ function EditorSidebar({
   setCustomizeCTA,
   setInvalidCTA,
   setNewCTA,
+  setHideCTA,
   mailoutDetails,
 }) {
   const dispatch = useDispatch();
@@ -68,11 +70,13 @@ function EditorSidebar({
             colorPickerVal={colorPickerVal}
             customCTA={customCTA}
             customizeCTA={customizeCTA}
+            hideCTA={hideCTA}
             handleSave={handleSave}
             invalidCTA={invalidCTA}
             newCTA={newCTA}
             setColorPickerVal={setColorPickerVal}
             setCustomizeCTA={setCustomizeCTA}
+            setHideCTA={setHideCTA}
             setInvalidCTA={setInvalidCTA}
             setNewCTA={setNewCTA}
           />
