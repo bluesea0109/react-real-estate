@@ -35,7 +35,7 @@ const domLoaded = () => {
 
   const handleImgDrop = (e, name) => {
     const newSrc = e.dataTransfer.getData('text');
-    __parentWindow.postMessage({ name, value: newSrc }, __parentOrigin);
+    __parentWindow.postMessage({ name, value: newSrc, resetSelectedPhoto: true }, __parentOrigin);
     e.target.src = newSrc;
     e.target.style.opacity = '';
     e.target.style.border = '';

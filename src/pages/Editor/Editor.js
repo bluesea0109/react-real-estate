@@ -71,6 +71,16 @@ export default function Editor() {
   const [invalidCTA, setInvalidCTA] = useState(false);
 
   useEffect(() => {
+    const deselectPhoto = e => {
+      if (e.key === 'Escape') dispatch(setSelectedPhoto(''));
+    };
+    document.addEventListener('keyup', deselectPhoto);
+    return () => {
+      document.removeEventListener('keyup', deselectPhoto);
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
     setNewCTA(customCTA || defaultCTA);
     setCustomizeCTA(customCTA?.length > 0);
   }, [customCTA, defaultCTA]);
