@@ -174,6 +174,11 @@ export default function Editor() {
     if (backLoaded) sendInitMessage('back');
   }, [backLoaded, sendInitMessage]);
 
+  useEffect(() => {
+    sendPostMessage('front', { type: 'hideCTA', hideCTA: hideCTA });
+    sendPostMessage('back', { type: 'hideCTA', hideCTA: hideCTA });
+  }, [hideCTA, sendPostMessage]);
+
   const handlePostMessage = useCallback(
     e => {
       if (e.source?.frameElement?.title?.includes('bm-iframe')) {
@@ -256,7 +261,7 @@ export default function Editor() {
     if (brandColor) newData.brandColor = brandColor;
     if (customizeCTA) newData.ctas = { cta: newCTA, shortenCTA: true, hideCTA: false };
     if (hideCTA) newData.ctas = { cta: newCTA, hideCTA: true };
-    else newData.ctas = { dontOverride: true, hideCTA: false };
+    else newData.ctas = { cta: newCTA, hideCTA: false };
     console.log('newData', newData);
     dispatch(updateMailoutEditPending(newData));
     setEditingName(false);
