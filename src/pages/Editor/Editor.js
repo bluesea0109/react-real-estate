@@ -35,6 +35,8 @@ export default function Editor() {
   const mailoutId = useParams().mailoutId;
   const details = useSelector(store => store.mailout?.details);
   const mailoutEdit = useSelector(state => state.mailout?.mailoutEdit);
+  // console.log('+++++++detials+++++++', details);
+  // console.log('+++++++mailoutEdit+++++++', mailoutEdit);
   const peerId = useSelector(store => store.peer?.peerId);
   const savePending = useSelector(state => state.mailout?.updateMailoutEditPending);
   const saveSuccess = useSelector(state => state.mailout?.updateMailoutEditSuccess);
@@ -250,30 +252,46 @@ export default function Editor() {
     [setFrontLoaded, setBackLoaded]
   );
 
-  const handleSave = async ({ postcardSize, mailoutDisplayAgent, templateTheme }) => {
+  const handleSave = async ({
+    postcardSize,
+    mailoutDisplayAgent,
+    templateTheme,
+    frontImgUrl,
+    frontResourceUrl,
+  }) => {
     if (customizeCTA && invalidCTA) {
       setActiveNavItem(1);
       dispatch(setCustomCtaOpen(true));
       return;
     }
-    if (postcardSize || mailoutDisplayAgent || templateTheme)
+    if (postcardSize || mailoutDisplayAgent || templateTheme || frontResourceUrl)
       dispatch(setReloadIframesPending(true));
     const newData = {};
     if (postcardSize) newData.postcardSize = postcardSize;
     if (mailoutDisplayAgent) newData.mailoutDisplayAgent = mailoutDisplayAgent;
     if (templateTheme) newData.templateTheme = templateTheme;
+    if (frontImgUrl) {
+      sendPostMessage('front', {
+        type: 'switchImageUrl',
+        imageTitle: 'frontImgUrl',
+        newUrl: frontImgUrl,
+      });
+      newData.frontImgUrl = frontImgUrl;
+    }
+    if (frontResourceUrl) newData.frontResourceUrl = frontResourceUrl;
     if (newCampaignName) newData.name = newCampaignName;
     const { fields, brandColor } = liveEditorChanges;
     if (fields) newData.fields = fields;
     if (brandColor) newData.brandColor = brandColor;
     if (customizeCTA) newData.ctas = { cta: newCTA, shortenCTA: true };
     else newData.ctas = { dontOverride: true };
+    console.log('++++++++newData++++++++', newData);
     dispatch(updateMailoutEditPending(newData));
     setEditingName(false);
   };
 
   const navItems = [
-    { name: 'Select Templates', iconName: 'picture' },
+    { name: 'Pages', iconName: 'picture' },
     { name: 'Editor', iconName: 'edit outline' },
     { name: 'Uploads', iconName: 'cloud upload' },
     { name: 'Import', iconName: 'bolt' },

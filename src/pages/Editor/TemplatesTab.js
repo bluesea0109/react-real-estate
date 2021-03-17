@@ -3,7 +3,9 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import { NewLabel } from '../../components/Forms/Base/Carousel';
+import { DropdownCard } from '../../components/Base';
 import * as brandColors from '../../components/utils/brandColors';
+import CustomPhoto from './CustomPhoto';
 
 const TemplateImage = styled.div`
   ${props =>
@@ -29,6 +31,8 @@ const TemplateImage = styled.div`
 
 export default function TemplatesTab({ mailoutDetails, handleSave }) {
   const [filteredStencils, setFilteredStencils] = useState([]);
+  const [frontOpen, setFrontOpen] = useState(false);
+  const [backOpen, setBackOpen] = useState(false);
 
   const stencilsAvailable = useSelector(store => store.templates?.available?.byIntent);
   const editIntentPath = useSelector(store => store.mailout?.mailoutEdit?.intentPath);
@@ -63,6 +67,7 @@ export default function TemplatesTab({ mailoutDetails, handleSave }) {
   }, [stencilsAvailable, mailoutDetails.created, editIntentPath, publishedTags]);
 
   const updateMailoutTemplateTheme = async templateTheme => {
+    console.log('+++++++++++++++++++++', templateTheme);
     if (editTemplateTheme === templateTheme) return;
     handleSave({ templateTheme });
   };
@@ -84,19 +89,36 @@ export default function TemplatesTab({ mailoutDetails, handleSave }) {
 
   return (
     <>
-      {filteredStencils?.length ? (
-        filteredStencils.map((stencil, index) =>
-          renderTemplatePicture(
-            index,
-            stencil.intentPath,
-            stencil.templateUuid,
-            stencil.thumbnail,
-            stencil.new
+      <DropdownCard
+        title="Card Front"
+        iconName="images"
+        isOpen={frontOpen}
+        toggleOpen={() => setFrontOpen(!frontOpen)}
+      >
+        {filteredStencils?.length ? (
+          filteredStencils.map((stencil, index) =>
+            renderTemplatePicture(
+              index,
+              stencil.intentPath,
+              stencil.templateUuid,
+              stencil.thumbnail,
+              stencil.new
+            )
           )
-        )
-      ) : (
-        <p>Switching templates is not supported for this campaign type.</p>
-      )}
+        ) : (
+          <p>Switching templates is not supported for this campaign type.</p>
+        )}
+        <CustomPhoto handleSave={handleSave} />
+      </DropdownCard>
+
+      <DropdownCard
+        title="Card Back"
+        iconName="images"
+        isOpen={backOpen}
+        toggleOpen={() => setBackOpen(!backOpen)}
+      >
+        Back
+      </DropdownCard>
     </>
   );
 }
