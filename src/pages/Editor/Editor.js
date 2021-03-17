@@ -27,13 +27,8 @@ import {
   setSidebarOpen,
 } from '../../store/modules/liveEditor/actions';
 import { sleep } from '../../components/utils/utils';
-import {
-  CampaignNameDiv,
-  EditorContent,
-  EditorLayout,
-  EditorPreview,
-  EditorToolbar,
-} from './StyledComponents';
+import { CampaignNameDiv, EditorContent, EditorLayout, EditorPreview } from './StyledComponents';
+import EditorToolbar from './EditorToolbar';
 
 export default function Editor() {
   const dispatch = useDispatch();
@@ -48,6 +43,7 @@ export default function Editor() {
   const liveEditorChanges = useSelector(state => state.liveEditor?.edits);
   const sidebarOpen = useSelector(state => state.liveEditor?.sidebarOpen);
   const selectedPhoto = useSelector(state => state.liveEditor?.selectedPhoto);
+  const zoomValue = useSelector(state => state.liveEditor?.zoomValue);
   const [activeNavItem, setActiveNavItem] = useState(1); // 0 default - 1 for testing
   const [frontLoaded, setFrontLoaded] = useState(false);
   const [backLoaded, setBackLoaded] = useState(false);
@@ -371,9 +367,7 @@ export default function Editor() {
             mailoutDetails={details}
           />
           <EditorContent>
-            <EditorToolbar>
-              <p>Toolbar Content</p>
-            </EditorToolbar>
+            <EditorToolbar />
             {details && (
               <EditorPreview>
                 <FrontIframe
@@ -385,6 +379,7 @@ export default function Editor() {
                   postcardSize={details?.postcardSize}
                   ref={onFrontChange}
                   reloadPending={reloadIframesPending}
+                  scale={zoomValue}
                 />
                 <BackIframe
                   campaignId={details?._id}
@@ -394,6 +389,7 @@ export default function Editor() {
                   postcardSize={details?.postcardSize}
                   ref={onBackChange}
                   reloadPending={reloadIframesPending}
+                  scale={zoomValue}
                 />
               </EditorPreview>
             )}

@@ -23,13 +23,6 @@ export const EditorContent = styled.div`
   grid-template-rows: minmax(46px, auto) 1fr;
 `;
 
-export const EditorToolbar = styled.div`
-  padding: 0.5rem 1rem;
-  background-color: white;
-  display: flex;
-  align-items: center;
-`;
-
 export const EditorPreview = styled.div`
   overflow: auto;
   padding: 2rem;

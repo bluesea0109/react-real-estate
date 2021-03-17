@@ -9,5 +9,4 @@ export const IFrameSegStyle = {
   border: 'none',
   boxShadow: 'none',
   padding: '0',
-  margin: 'auto',
 };
