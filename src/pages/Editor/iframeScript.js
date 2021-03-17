@@ -28,11 +28,6 @@ const domLoaded = () => {
   let imageElements = [];
   let newImgSrc = '';
 
-  const switchImageUrl = function(imageTitle, newUrl) {
-    let imageNode = document.querySelector(`img[title="${imageTitle}"]`);
-    imageNode.src = newUrl;
-  };
-
   const handleImgDrop = (e, name) => {
     const newSrc = e.dataTransfer.getData('text');
     __parentWindow.postMessage({ name, value: newSrc, resetSelectedPhoto: true }, __parentOrigin);
@@ -81,12 +76,9 @@ const domLoaded = () => {
       e.source.postMessage(getAllEditableFieldsAsMergeVariables(), e.origin);
     else if (e.data?.type === 'updateBrandColor')
       root.style.setProperty('--brand-color', e.data.value);
-    else if (e.data?.type === 'switchImageUrl') {
-      const { imageTitle, newUrl } = e.data;
-      switchImageUrl(imageTitle, newUrl);
-    } else if (e.data?.type === 'imageSelected') {
+    else if (e.data?.type === 'imageSelected') {
       newImgSrc = e.data?.imgSrc;
-      e.data?.imgSrc ? setImagesSelectable(true) : setImagesSelectable(false);
+      setImagesSelectable(e.data?.imgSrc ? true : false);
     } else console.log(JSON.stringify(e.data));
   }
 

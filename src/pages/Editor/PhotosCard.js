@@ -8,11 +8,10 @@ import auth from '../../services/auth';
 import { setCustomUploadURL, setSelectedPhoto } from '../../store/modules/liveEditor/actions';
 import { CustomImage, ImageOption, ImageUpload, PhotoContainer } from './StyledComponents';
 
-export default function PhotosCard({ handleSave }) {
+export default function PhotosCard() {
   const dispatch = useDispatch();
   const details = useSelector(state => state.mailout?.details);
   const peerId = useSelector(state => state.peerId);
-  const currentPhoto = useSelector(state => state.mailout?.mailoutEdit?.frontImgUrl);
   const customUploadURL = useSelector(state => state.liveEditor?.customUploadURL);
   const selectedPhoto = useSelector(state => state.liveEditor?.selectedPhoto);
   const [uploadDragOver, setUploadDragOver] = useState(false);
@@ -20,8 +19,6 @@ export default function PhotosCard({ handleSave }) {
   const [imageUploading, setImageUploading] = useState(false);
   const [localImageURL, setLocalImageURL] = useState('');
   const photoList = details?.raw?.photos;
-  const isCustomPhoto =
-    photoList?.length && !photoList.find(image => currentPhoto?.includes(image.url));
 
   const ImageOptionsWrapper = ({ children }) => {
     const wrapperRef = useRef(null);
@@ -36,16 +33,8 @@ export default function PhotosCard({ handleSave }) {
   };
 
   useEffect(() => {
-    if (isCustomPhoto && !customUploadURL) dispatch(setCustomUploadURL(currentPhoto));
-  }, [isCustomPhoto, customUploadURL, dispatch, currentPhoto]);
-
-  const saveImage = newPhoto => {
-    if (newPhoto === currentPhoto) return;
-    else {
-      dispatch(setSelectedPhoto(newPhoto));
-      handleSave({ frontImgUrl: newPhoto });
-    }
-  };
+    if (!customUploadURL) dispatch(setCustomUploadURL(localImageURL));
+  }, [customUploadURL, dispatch, localImageURL]);
 
   const handleFileDrop = async fileList => {
     const file = fileList[0];
@@ -85,7 +74,6 @@ export default function PhotosCard({ handleSave }) {
       });
       let { imageUrl } = await api.handleResponse(response);
       dispatch(setCustomUploadURL(imageUrl));
-      saveImage(imageUrl);
       setLocalImageURL('');
       setImageUploading(false);
     } catch (e) {
@@ -115,14 +103,14 @@ export default function PhotosCard({ handleSave }) {
             </ImageUpload>
           </DropTarget>
           <ImageOptionsWrapper>
-            {(customUploadURL || localImageURL || isCustomPhoto) && photoList?.length && (
+            {(customUploadURL || localImageURL) && (
               <CustomImage>
                 <Dimmer inverted active={imageUploading}>
                   <Loader>Saving</Loader>
                 </Dimmer>
                 <p className="section-title">Custom Cover Photo</p>
                 <ImageOption
-                  src={isCustomPhoto ? currentPhoto : localImageURL || customUploadURL}
+                  src={localImageURL || customUploadURL}
                   current={customUploadURL === selectedPhoto}
                   alt="custom upload"
                   onClick={e => dispatch(setSelectedPhoto(e.target.src))}

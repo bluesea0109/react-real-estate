@@ -254,7 +254,7 @@ export default function Editor() {
     [setFrontLoaded, setBackLoaded]
   );
 
-  const handleSave = async ({ postcardSize, mailoutDisplayAgent, templateTheme, frontImgUrl }) => {
+  const handleSave = async ({ postcardSize, mailoutDisplayAgent, templateTheme }) => {
     if (customizeCTA && invalidCTA) {
       setActiveNavItem(1);
       dispatch(setCustomCtaOpen(true));
@@ -266,14 +266,6 @@ export default function Editor() {
     if (postcardSize) newData.postcardSize = postcardSize;
     if (mailoutDisplayAgent) newData.mailoutDisplayAgent = mailoutDisplayAgent;
     if (templateTheme) newData.templateTheme = templateTheme;
-    if (frontImgUrl) {
-      sendPostMessage('front', {
-        type: 'switchImageUrl',
-        imageTitle: 'frontImgUrl',
-        newUrl: frontImgUrl,
-      });
-      newData.frontImgUrl = frontImgUrl;
-    }
     if (newCampaignName) newData.name = newCampaignName;
     const { fields, brandColor } = liveEditorChanges;
     if (fields) newData.fields = fields;
