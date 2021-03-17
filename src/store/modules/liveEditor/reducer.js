@@ -10,6 +10,7 @@ import {
   SET_SIDEBAR_OPEN,
   SET_LIVE_EDIT_FIELDS,
   SET_LIVE_EDIT_BRAND_COLOR,
+  SET_SELECTED_PHOTO,
 } from './actions';
 
 const initialState = {
@@ -17,11 +18,12 @@ const initialState = {
   reloadIframesPending: false,
   brandColorOpen: false,
   postcardSizeOpen: false,
-  photosOpen: true,
+  photosOpen: false,
   agentOpen: false,
   customCtaOpen: false,
   sidebarOpen: true,
   customUploadURL: '',
+  selectedPhoto: '',
   edits: {
     fields: null,
     brandColor: '',
@@ -90,6 +92,11 @@ export default function liveEditor(state = initialState, action) {
           ...state.edits,
           brandColor: action.payload,
         },
+      };
+    case SET_SELECTED_PHOTO:
+      return {
+        ...state,
+        selectedPhoto: action.payload,
       };
     default:
       return state;

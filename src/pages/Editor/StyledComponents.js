@@ -49,3 +49,58 @@ export const CampaignNameDiv = styled.div`
     height: 32px;
   }
 `;
+
+export const PhotoContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  & .images {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  & .section-title {
+    margin: 0.25rem 0;
+    font-weight: bold;
+  }
+`;
+
+export const CustomImage = styled.div`
+  position: relative;
+`;
+
+export const ImageOption = styled.img`
+  box-shadow: 1px 1px 4px ${brandColors.grey08};
+  border-radius: 4px;
+  ${props => (props.current ? `border: 2px solid ${brandColors.primary}; padding: 0.25rem;` : null)}
+  ${props => (!props.current ? `cursor: pointer;` : null)}
+`;
+
+export const ImageUpload = styled.div`
+  position: relative;
+  width: 100%auto;
+  height: 160px;
+  border-radius: 4px;
+  border: 2px dashed ${brandColors.grey05};
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: ${brandColors.grey08};
+  text-align: center;
+  font-weight: bold;
+  & i {
+    margin-bottom: 0.5rem;
+  }
+  & .error {
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+    color: ${brandColors.error};
+    & i {
+      margin: 0;
+      margin-right: 0.25rem;
+    }
+  }
+`;

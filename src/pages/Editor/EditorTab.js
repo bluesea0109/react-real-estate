@@ -162,7 +162,7 @@ export default function EditorTab({
           </SizeButtons>
         </DropdownCard>
       )}
-      {details?.raw?.photos?.length && (
+      {details?.raw?.photos?.length && !details?.frontResourceUrl && (
         <DropdownCard
           title="Cover Photo"
           iconName="images"
