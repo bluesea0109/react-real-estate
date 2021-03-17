@@ -1,92 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
 import { Dimmer, Icon, Loader } from '../../components/Base';
 import DropTarget from '../../components/Base/DropTarget';
-import * as brandColors from '../../components/utils/brandColors';
+import { useClickOutside } from '../../components/Hooks/useClickOutside';
 import api from '../../services/api';
 import auth from '../../services/auth';
-import { setCustomUploadURL } from '../../store/modules/liveEditor/actions';
+import { setCustomUploadURL, setSelectedPhoto } from '../../store/modules/liveEditor/actions';
+import { CustomImage, ImageOption, ImageUpload, PhotoContainer } from './StyledComponents';
 
-const PhotoContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.5rem;
-  & .section-title {
-    margin: 0.25rem 0;
-    font-weight: bold;
-  }
-`;
-
-const CustomImage = styled.div`
-  position: relative;
-`;
-
-const ImageOption = styled.img`
-  box-shadow: 1px 1px 4px ${brandColors.grey08};
-  border-radius: 4px;
-  ${props => (props.current ? `border: 2px solid ${brandColors.primary}; padding: 0.25rem;` : null)}
-  ${props => (!props.current ? `cursor: pointer;` : null)}
-`;
-
-const ImageUpload = styled.div`
-  position: relative;
-  width: 100%auto;
-  height: 160px;
-  border-radius: 4px;
-  border: 2px dashed ${brandColors.grey05};
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: ${brandColors.grey08};
-  text-align: center;
-  font-weight: bold;
-  & i {
-    margin-bottom: 0.5rem;
-  }
-  & .error {
-    display: flex;
-    align-items: center;
-    margin-top: 0.5rem;
-    color: ${brandColors.error};
-    & i {
-      margin: 0;
-      margin-right: 0.25rem;
-    }
-  }
-`;
-
-export default function PhotosCard({ handleSave }) {
+export default function PhotosCard() {
   const dispatch = useDispatch();
   const details = useSelector(state => state.mailout?.details);
   const peerId = useSelector(state => state.peerId);
-  const currentPhoto = useSelector(state => state.mailout?.mailoutEdit?.frontImgUrl);
   const customUploadURL = useSelector(state => state.liveEditor?.customUploadURL);
-  const [selectedPhoto, setSelectedPhoto] = useState(currentPhoto);
+  const selectedPhoto = useSelector(state => state.liveEditor?.selectedPhoto);
   const [uploadDragOver, setUploadDragOver] = useState(false);
   const [imageError, setImageError] = useState('');
   const [imageUploading, setImageUploading] = useState(false);
   const [localImageURL, setLocalImageURL] = useState('');
   const photoList = details?.raw?.photos;
-  const isCustomPhoto = photoList.length && !photoList.find(image => image.url === currentPhoto);
 
-  useEffect(() => {
-    setSelectedPhoto(currentPhoto);
-  }, [currentPhoto]);
-
-  useEffect(() => {
-    if (isCustomPhoto && !customUploadURL) dispatch(setCustomUploadURL(currentPhoto));
-  }, [isCustomPhoto, customUploadURL, dispatch, currentPhoto]);
-
-  const saveImage = newPhoto => {
-    if (newPhoto === currentPhoto) return;
-    else {
-      setSelectedPhoto(newPhoto);
-      handleSave({ frontImgUrl: newPhoto });
-    }
+  const ImageOptionsWrapper = ({ children }) => {
+    const wrapperRef = useRef(null);
+    useClickOutside(wrapperRef, () => {
+      dispatch(setSelectedPhoto(''));
+    });
+    return (
+      <div className="images" ref={wrapperRef}>
+        {children}
+      </div>
+    );
   };
+
+  useEffect(() => {
+    if (!customUploadURL) dispatch(setCustomUploadURL(localImageURL));
+  }, [customUploadURL, dispatch, localImageURL]);
 
   const handleFileDrop = async fileList => {
     const file = fileList[0];
@@ -126,7 +74,6 @@ export default function PhotosCard({ handleSave }) {
       });
       let { imageUrl } = await api.handleResponse(response);
       dispatch(setCustomUploadURL(imageUrl));
-      saveImage(imageUrl);
       setLocalImageURL('');
       setImageUploading(false);
     } catch (e) {
@@ -155,33 +102,38 @@ export default function PhotosCard({ handleSave }) {
               </>
             </ImageUpload>
           </DropTarget>
-          {(customUploadURL || localImageURL || isCustomPhoto) && (
-            <CustomImage>
-              <Dimmer inverted active={imageUploading}>
-                <Loader>Saving</Loader>
-              </Dimmer>
-              <p className="section-title">Custom Cover Photo</p>
+          <ImageOptionsWrapper>
+            {(customUploadURL || localImageURL) && (
+              <CustomImage>
+                <Dimmer inverted active={imageUploading}>
+                  <Loader>Saving</Loader>
+                </Dimmer>
+                <p className="section-title">Custom Cover Photo</p>
+                <ImageOption
+                  src={localImageURL || customUploadURL}
+                  current={customUploadURL === selectedPhoto}
+                  alt="custom upload"
+                  onClick={e => dispatch(setSelectedPhoto(e.target.src))}
+                  onDragStart={e => {
+                    e.dataTransfer.setData('text', e.target.src);
+                  }}
+                />
+              </CustomImage>
+            )}
+            {photoList.length > 0 && <p className="section-title">MLS Photos</p>}
+            {photoList.map(photo => (
               <ImageOption
-                src={isCustomPhoto ? currentPhoto : localImageURL || customUploadURL}
-                current={isCustomPhoto || customUploadURL === selectedPhoto}
-                alt="custom upload"
-                onClick={() => {
-                  if (isCustomPhoto || imageUploading || localImageURL) return;
-                  saveImage(customUploadURL);
+                key={photo.url}
+                current={photo.url === selectedPhoto}
+                src={photo.url}
+                alt="cover option"
+                onClick={() => dispatch(setSelectedPhoto(photo.url))}
+                onDragStart={e => {
+                  e.dataTransfer.setData('text', e.target.src);
                 }}
               />
-            </CustomImage>
-          )}
-          {photoList.length > 0 && <p className="section-title">MLS Photos</p>}
-          {photoList.map(photo => (
-            <ImageOption
-              key={photo.url}
-              current={photo.url === selectedPhoto}
-              src={photo.url}
-              alt="cover option"
-              onClick={() => saveImage(photo.url)}
-            />
-          ))}
+            ))}
+          </ImageOptionsWrapper>
         </PhotoContainer>
       ) : (
         <div>Switching the cover photo is not currently supported for this campaign type.</div>

@@ -46,13 +46,14 @@ import ApiService from '../../../services/api/index';
 import { getMailoutsPending } from '../mailouts/actions';
 import { setReloadIframes, setReloadIframesPending } from '../liveEditor/actions';
 
-export const getSelectedPeerId = state => state.peer.peerId;
-export const getMailoutId = state => state.mailout.mailoutId;
-export const getMailoutSize = state => state.mailout.mailoutSize;
-export const getMailoutName = state => state.mailout.details.name;
-export const getMailoutEdit = state => state.mailout.mailoutEdit;
-export const getMailoutDisplayAgent = state => state.mailout.mailoutDisplayAgent;
-export const getReloadIframesPending = state => state.liveEditor.reloadIframesPending;
+export const getSelectedPeerId = state => state.peer?.peerId;
+export const getMailoutId = state => state.mailout?.mailoutId;
+export const getMailoutSize = state => state.mailout?.mailoutSize;
+export const getMailoutName = state => state.mailout?.details.name;
+export const getMailoutEdit = state => state.mailout?.mailoutEdit;
+export const getMailoutDisplayAgent = state => state.mailout?.mailoutDisplayAgent;
+export const getReloadIframesPending = state => state.liveEditor?.reloadIframesPending;
+export const getEditorFields = state => state.liveEditor?.edits?.fields;
 
 export function* getMailoutSaga({ peerId = null }) {
   try {
@@ -197,14 +198,14 @@ export function* updateMailoutEditSaga({ peerId = null }, action) {
   try {
     const mailoutId = yield select(getMailoutId);
     const mailoutEdit = yield select(getMailoutEdit);
+    const editorFields = yield select(getEditorFields);
     const newData = action.payload;
     let apiData = {
       postcardSize: mailoutEdit.postcardSize,
       templateTheme: mailoutEdit.templateTheme,
-      fields: mailoutEdit.fields,
+      fields: editorFields || mailoutEdit.fields,
       ctas: mailoutEdit.ctas,
       mailoutDisplayAgent: mailoutEdit.mailoutDisplayAgent,
-      frontImgUrl: mailoutEdit.frontImgUrl,
       brandColor: mailoutEdit.brandColor,
       name: mailoutEdit.name,
     };

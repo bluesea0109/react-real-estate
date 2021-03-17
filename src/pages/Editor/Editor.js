@@ -14,6 +14,8 @@ import { BackIframe, FrontIframe } from '../MailoutDetailsPage';
 import { Link } from 'react-router-dom';
 // eslint-disable-next-line
 import jsText from 'raw-loader!./iframeScript.js';
+// eslint-disable-next-line
+import cssText from '!!raw-loader!./iframeStyles.css';
 import EditorSidebar from './EditorSidebar';
 import {
   setCustomCtaOpen,
@@ -21,6 +23,7 @@ import {
   setLiveEditFields,
   setReloadIframes,
   setReloadIframesPending,
+  setSelectedPhoto,
   setSidebarOpen,
 } from '../../store/modules/liveEditor/actions';
 import { sleep } from '../../components/utils/utils';
@@ -44,6 +47,7 @@ export default function Editor() {
   const reloadIframesPending = useSelector(state => state.liveEditor?.reloadIframesPending);
   const liveEditorChanges = useSelector(state => state.liveEditor?.edits);
   const sidebarOpen = useSelector(state => state.liveEditor?.sidebarOpen);
+  const selectedPhoto = useSelector(state => state.liveEditor?.selectedPhoto);
   const [activeNavItem, setActiveNavItem] = useState(1); // 0 default - 1 for testing
   const [frontLoaded, setFrontLoaded] = useState(false);
   const [backLoaded, setBackLoaded] = useState(false);
@@ -65,6 +69,16 @@ export default function Editor() {
   const [customizeCTA, setCustomizeCTA] = useState(false);
   const [newCTA, setNewCTA] = useState(defaultCTA);
   const [invalidCTA, setInvalidCTA] = useState(false);
+
+  useEffect(() => {
+    const deselectPhoto = e => {
+      if (e.key === 'Escape') dispatch(setSelectedPhoto(''));
+    };
+    document.addEventListener('keyup', deselectPhoto);
+    return () => {
+      document.removeEventListener('keyup', deselectPhoto);
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     setNewCTA(customCTA || defaultCTA);
@@ -126,6 +140,12 @@ export default function Editor() {
     [frontIframeRef, backIframeRef]
   );
 
+  // send a postMessage to the iframe when the selected photo changes
+  useEffect(() => {
+    sendPostMessage('front', { type: 'imageSelected', imgSrc: selectedPhoto });
+    sendPostMessage('back', { type: 'imageSelected', imgSrc: selectedPhoto });
+  }, [selectedPhoto, sendPostMessage]);
+
   const updateIframeColor = useCallback(
     (side, colorHex) => {
       sendPostMessage(side, {
@@ -175,28 +195,30 @@ export default function Editor() {
 
   const handlePostMessage = useCallback(
     e => {
+      if (e.data?.resetSelectedPhoto) dispatch(setSelectedPhoto(''));
       if (e.source?.frameElement?.title?.includes('bm-iframe')) {
-        if (!Array.isArray(mailoutEdit?.fields)) return;
-        const side = e.source?.name;
         let newFields = [];
-        newFields = [...mailoutEdit?.fields];
+        if (!liveEditorChanges.fields && Array.isArray(mailoutEdit?.fields)) {
+          newFields = [...mailoutEdit?.fields];
+        } else if (Array.isArray(liveEditorChanges?.fields))
+          newFields = [...liveEditorChanges?.fields];
+        if (!newFields) return;
+        const side = e.source?.name;
         if (e.data.name) {
           const changedInd = newFields.findIndex(el => el.name === e.data.name);
           if (changedInd === -1) {
-            console.log('Cannot find field: ' + e.data.name);
-            if (e.data.name === 'agentFullName') {
-              newFields.push({
-                name: e.data.name,
-                sides: [side],
-                value: e.data.value,
-              });
-            }
+            console.log('Adding new field: ' + e.data.name);
+            newFields.push({
+              name: e.data.name,
+              sides: [side],
+              value: e.data.value,
+            });
           } else newFields[changedInd].value = e.data.value;
           dispatch(setLiveEditFields(newFields));
         }
       }
     },
-    [dispatch, mailoutEdit]
+    [dispatch, mailoutEdit, liveEditorChanges]
   );
 
   useEffect(() => {
@@ -218,6 +240,9 @@ export default function Editor() {
       scriptElement.type = 'text/javascript';
       scriptElement.innerHTML = jsText;
       await frame.document.head.append(scriptElement);
+      let styleElement = document.createElement('style');
+      styleElement.innerHTML = cssText;
+      await frame.document.head.append(styleElement);
       if (name === 'front') {
         setFrontLoaded(true);
       }
@@ -229,7 +254,7 @@ export default function Editor() {
     [setFrontLoaded, setBackLoaded]
   );
 
-  const handleSave = async ({ postcardSize, mailoutDisplayAgent, templateTheme, frontImgUrl }) => {
+  const handleSave = async ({ postcardSize, mailoutDisplayAgent, templateTheme }) => {
     if (customizeCTA && invalidCTA) {
       setActiveNavItem(1);
       dispatch(setCustomCtaOpen(true));
@@ -241,14 +266,6 @@ export default function Editor() {
     if (postcardSize) newData.postcardSize = postcardSize;
     if (mailoutDisplayAgent) newData.mailoutDisplayAgent = mailoutDisplayAgent;
     if (templateTheme) newData.templateTheme = templateTheme;
-    if (frontImgUrl) {
-      sendPostMessage('front', {
-        type: 'switchImageUrl',
-        imageTitle: 'frontImgUrl',
-        newUrl: frontImgUrl,
-      });
-      newData.frontImgUrl = frontImgUrl;
-    }
     if (newCampaignName) newData.name = newCampaignName;
     const { fields, brandColor } = liveEditorChanges;
     if (fields) newData.fields = fields;
