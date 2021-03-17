@@ -23,6 +23,7 @@ import {
   setLiveEditFields,
   setReloadIframes,
   setReloadIframesPending,
+  setSelectedPhoto,
   setSidebarOpen,
 } from '../../store/modules/liveEditor/actions';
 import { sleep } from '../../components/utils/utils';
@@ -131,10 +132,8 @@ export default function Editor() {
 
   // send a postMessage to the iframe when the selected photo changes
   useEffect(() => {
-    if (selectedPhoto) {
-      sendPostMessage('front', { type: 'imageSelected', imgSrc: selectedPhoto });
-      sendPostMessage('back', { type: 'imageSelected', imgSrc: selectedPhoto });
-    }
+    sendPostMessage('front', { type: 'imageSelected', imgSrc: selectedPhoto });
+    sendPostMessage('back', { type: 'imageSelected', imgSrc: selectedPhoto });
   }, [selectedPhoto, sendPostMessage]);
 
   const updateIframeColor = useCallback(
@@ -186,6 +185,7 @@ export default function Editor() {
 
   const handlePostMessage = useCallback(
     e => {
+      if (e.data?.resetSelectedPhoto) dispatch(setSelectedPhoto(''));
       if (e.source?.frameElement?.title?.includes('bm-iframe')) {
         let newFields = [];
         if (!liveEditorChanges.fields && Array.isArray(mailoutEdit?.fields)) {

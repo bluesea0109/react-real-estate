@@ -53,7 +53,10 @@ const domLoaded = () => {
 
   const handleImgSwitchClick = e => {
     const name = e.target.getAttribute('title');
-    __parentWindow.postMessage({ name, value: newImgSrc }, __parentOrigin);
+    __parentWindow.postMessage(
+      { name, value: newImgSrc, resetSelectedPhoto: true },
+      __parentOrigin
+    );
     e.target.src = newImgSrc;
   };
 

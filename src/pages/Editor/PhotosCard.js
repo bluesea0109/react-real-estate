@@ -20,7 +20,8 @@ export default function PhotosCard({ handleSave }) {
   const [imageUploading, setImageUploading] = useState(false);
   const [localImageURL, setLocalImageURL] = useState('');
   const photoList = details?.raw?.photos;
-  const isCustomPhoto = photoList.length && !photoList.find(image => image.url === currentPhoto);
+  const isCustomPhoto =
+    photoList?.length && !photoList.find(image => currentPhoto?.includes(image.url));
 
   const ImageOptionsWrapper = ({ children }) => {
     const wrapperRef = useRef(null);
@@ -114,7 +115,7 @@ export default function PhotosCard({ handleSave }) {
             </ImageUpload>
           </DropTarget>
           <ImageOptionsWrapper>
-            {(customUploadURL || localImageURL || isCustomPhoto) && (
+            {(customUploadURL || localImageURL || isCustomPhoto) && photoList?.length && (
               <CustomImage>
                 <Dimmer inverted active={imageUploading}>
                   <Loader>Saving</Loader>
@@ -122,7 +123,7 @@ export default function PhotosCard({ handleSave }) {
                 <p className="section-title">Custom Cover Photo</p>
                 <ImageOption
                   src={isCustomPhoto ? currentPhoto : localImageURL || customUploadURL}
-                  current={isCustomPhoto || customUploadURL === selectedPhoto}
+                  current={customUploadURL === selectedPhoto}
                   alt="custom upload"
                   onClick={e => dispatch(setSelectedPhoto(e.target.src))}
                   onDragStart={e => {
