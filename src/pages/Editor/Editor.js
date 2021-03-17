@@ -279,7 +279,7 @@ export default function Editor() {
     if (customizeCTA) newData.ctas = { cta: newCTA, shortenCTA: true, hideCTA: false };
     if (hideCTA) newData.ctas = { cta: newCTA, hideCTA: true };
     else newData.ctas = { cta: newCTA, hideCTA: false };
-    console.log('newData', newData);
+
     dispatch(updateMailoutEditPending(newData));
     setEditingName(false);
   };
