@@ -30,6 +30,7 @@ export default function CustomCTA({
   setInvalidCTA,
   setNewCTA,
   setHideCTA,
+  handleSave,
 }) {
   const ctaInputRef = useRef(null);
   const handleCTAChange = e => {
@@ -49,6 +50,7 @@ export default function CustomCTA({
           onClick={() => {
             setHideCTA(false);
             setCustomizeCTA(false);
+            handleSave({});
           }}
         />
         <Checkbox
@@ -60,6 +62,7 @@ export default function CustomCTA({
           onClick={() => {
             setHideCTA(false);
             setCustomizeCTA(true);
+            handleSave({});
           }}
         />
         <Checkbox

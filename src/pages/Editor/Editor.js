@@ -266,7 +266,7 @@ export default function Editor() {
       dispatch(setCustomCtaOpen(true));
       return;
     }
-    if (postcardSize || mailoutDisplayAgent || templateTheme)
+    if (postcardSize || mailoutDisplayAgent || templateTheme || !hideCTA)
       dispatch(setReloadIframesPending(true));
     const newData = {};
     if (postcardSize) newData.postcardSize = postcardSize;

@@ -189,6 +189,7 @@ export default function EditorTab({
         <CustomCTA
           customizeCTA={customizeCTA}
           hideCTA={hideCTA}
+          handleSave={handleSave}
           setCustomizeCTA={setCustomizeCTA}
           newCTA={newCTA}
           invalidCTA={invalidCTA}
