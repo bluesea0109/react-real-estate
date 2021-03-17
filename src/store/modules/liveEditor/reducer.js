@@ -18,7 +18,7 @@ const initialState = {
   reloadIframesPending: false,
   brandColorOpen: false,
   postcardSizeOpen: false,
-  photosOpen: true,
+  photosOpen: false,
   agentOpen: false,
   customCtaOpen: false,
   sidebarOpen: true,
