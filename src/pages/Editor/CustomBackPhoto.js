@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Cropper from 'react-cropper';
 import styled from 'styled-components';
 import { Dimmer, Icon, Loader, Modal, Header, Button } from '../../components/Base';
@@ -8,6 +8,7 @@ import * as brandColors from '../../components/utils/brandColors';
 import auth from '../../services/auth';
 import api from '../../services/api';
 import { setAddMailoutError } from '../../store/modules/mailout/actions';
+// import { setSelectedTemplate } from '../../store/modules/liveEditor/actions';
 
 const ImageUpload = styled.div`
   position: relative;
@@ -64,13 +65,12 @@ const ImageOption = styled.img`
 const CustomPhoto = ({ handleSave }) => {
   const dispatch = useDispatch();
   const peerId = useSelector(store => store.peer.peerId);
-  const currentPhoto = useSelector(state => state.mailout?.mailoutEdit?.frontResourceUrl);
+  const currentPhoto = useSelector(state => state.mailout?.mailoutEdit?.backResourceUrl);
 
   const [uploadDragOver, setUploadDragOver] = useState(false);
   const [imageError, setImageError] = useState(null);
   const [uploadedImage, setUploadedImage] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [customImageURL, setCustomImageURL] = useState(null);
   const [imageUploading, setImageUploading] = useState(false);
   const [cropper, setCropper] = useState(null);
 
@@ -137,8 +137,7 @@ const CustomPhoto = ({ handleSave }) => {
 
       setModalOpen(false);
       setImageUploading(false);
-      setCustomImageURL(imageURL);
-      handleSave({ frontResourceUrl: imageURL });
+      handleSave({ backResourceUrl: imageURL });
     });
   };
 
@@ -177,7 +176,7 @@ const CustomPhoto = ({ handleSave }) => {
           </Button>
         </Modal.Actions>
       </Modal>
-      {(customImageURL || currentPhoto) && (
+      {currentPhoto && (
         <CustomImage>
           <Dimmer inverted active={imageUploading}>
             <Loader>Saving</Loader>
@@ -185,10 +184,10 @@ const CustomPhoto = ({ handleSave }) => {
           <p className="section-title">Custom Cover Photo</p>
           <ImageOption
             src={currentPhoto}
-            current={true}
+            current={currentPhoto}
             alt="custom upload"
             onClick={() => {
-              saveImage(customImageURL);
+              handleSave({ backResourceUrl: currentPhoto });
             }}
           />
         </CustomImage>

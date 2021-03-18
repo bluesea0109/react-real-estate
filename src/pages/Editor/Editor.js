@@ -35,8 +35,6 @@ export default function Editor() {
   const mailoutId = useParams().mailoutId;
   const details = useSelector(store => store.mailout?.details);
   const mailoutEdit = useSelector(state => state.mailout?.mailoutEdit);
-  // console.log('+++++++detials+++++++', details);
-  // console.log('+++++++mailoutEdit+++++++', mailoutEdit);
   const peerId = useSelector(store => store.peer?.peerId);
   const savePending = useSelector(state => state.mailout?.updateMailoutEditPending);
   const saveSuccess = useSelector(state => state.mailout?.updateMailoutEditSuccess);
@@ -258,13 +256,14 @@ export default function Editor() {
     templateTheme,
     frontImgUrl,
     frontResourceUrl,
+    backResourceUrl,
   }) => {
     if (customizeCTA && invalidCTA) {
       setActiveNavItem(1);
       dispatch(setCustomCtaOpen(true));
       return;
     }
-    if (postcardSize || mailoutDisplayAgent || templateTheme || frontResourceUrl)
+    if (postcardSize || mailoutDisplayAgent || templateTheme || frontResourceUrl || backResourceUrl)
       dispatch(setReloadIframesPending(true));
     const newData = {};
     if (postcardSize) newData.postcardSize = postcardSize;
@@ -279,13 +278,13 @@ export default function Editor() {
       newData.frontImgUrl = frontImgUrl;
     }
     if (frontResourceUrl) newData.frontResourceUrl = frontResourceUrl;
+    if (backResourceUrl) newData.backResourceUrl = backResourceUrl;
     if (newCampaignName) newData.name = newCampaignName;
     const { fields, brandColor } = liveEditorChanges;
     if (fields) newData.fields = fields;
     if (brandColor) newData.brandColor = brandColor;
     if (customizeCTA) newData.ctas = { cta: newCTA, shortenCTA: true };
     else newData.ctas = { dontOverride: true };
-    console.log('++++++++newData++++++++', newData);
     dispatch(updateMailoutEditPending(newData));
     setEditingName(false);
   };
@@ -402,6 +401,7 @@ export default function Editor() {
                 <BackIframe
                   campaignId={details?._id}
                   backLoaded={backLoaded}
+                  backResourceUrl={details?.backResourceUrl || null}
                   backURL={backURL}
                   handleOnload={handleOnload}
                   postcardSize={details?.postcardSize}
