@@ -53,11 +53,12 @@ const FrontIframe = forwardRef(
                   position: 'absolute',
                   color: 'red',
                   zIndex: 100,
-                  left: 'calc(50% - 100px)',
+                  left: `calc(${iframeDimensions(postcardSize).width / 2 - 100}px)`,
                   top: 0,
                   fontSize: '10px',
                   fontWeight: 'bold',
                   lineHeight: '1em',
+                  whiteSpace: 'nowrap',
                 }}
               >
                 Safe Zone - All text should be inside this area
@@ -66,9 +67,11 @@ const FrontIframe = forwardRef(
                 src={frontResourceUrl}
                 className="image-frame-border"
                 style={{
-                  height: '100%',
-                  width: '100%',
+                  minWidth: `${iframeDimensions(postcardSize).width}px`,
+                  maxWidth: `${iframeDimensions(postcardSize).width}px`,
+                  height: `${iframeDimensions(postcardSize).height}px`,
                   boxSizing: 'border-box',
+                  margin: 0,
                 }}
               />
             </>
