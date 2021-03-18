@@ -72,7 +72,7 @@ export default function TemplatesTab({ mailoutDetails, handleSave }) {
   }, [stencilsAvailable, mailoutDetails.created, editIntentPath, publishedTags]);
 
   const updateMailoutTemplateTheme = async templateTheme => {
-    if (editTemplateTheme === templateTheme) return;
+    if (editTemplateTheme === templateTheme && selectedTemplate) return;
 
     handleSave({ templateTheme });
     await sleep(2500);
