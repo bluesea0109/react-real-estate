@@ -57,7 +57,7 @@ export default function Editor() {
   const [editingName, setEditingName] = useState(false);
   const [newCampaignName, setNewCampaignName] = useState('');
   const customCTA = useSelector(state => state.mailout?.details?.cta);
-  // const isCTAHidden = useSelector(state => state.mailout?.mailoutEdit?.ctas?.hideCTA);
+  const isCTAHidden = useSelector(state => state.mailout?.mailoutEdit?.ctas?.hideCTA);
   const currentListingStatus = details?.listingStatus;
   const defaultCTA = useSelector(store => {
     let bestCta = details?.cta;
@@ -100,6 +100,11 @@ export default function Editor() {
       showSaveStatus();
     }
   }, [dispatch, saveSuccess]);
+  useEffect(() => {
+    if (isCTAHidden) {
+      setHideCTA(true);
+    }
+  }, [isCTAHidden]);
 
   useEffect(() => {
     if (!reloadIframes) return;
