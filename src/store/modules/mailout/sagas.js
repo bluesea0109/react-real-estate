@@ -212,7 +212,9 @@ export function* updateMailoutEditSaga({ peerId = null }, action) {
     if (
       !newData.hasOwnProperty('frontResourceUrl') &&
       !newData.hasOwnProperty('backResourceUrl') &&
-      !newData.hasOwnProperty('templateTheme')
+      !newData.hasOwnProperty('templateTheme') &&
+      !mailoutEdit.hasOwnProperty('frontResourceUrl') &&
+      !mailoutEdit.hasOwnProperty('backResourceUrl')
     ) {
       apiData = { ...apiData, templateTheme: mailoutEdit.templateTheme };
     }
