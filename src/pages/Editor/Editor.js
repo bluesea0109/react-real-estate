@@ -57,6 +57,7 @@ export default function Editor() {
   const [editingName, setEditingName] = useState(false);
   const [newCampaignName, setNewCampaignName] = useState('');
   const customCTA = useSelector(state => state.mailout?.details?.cta);
+  // const isCTAHidden = useSelector(state => state.mailout?.mailoutEdit?.ctas?.hideCTA);
   const currentListingStatus = details?.listingStatus;
   const defaultCTA = useSelector(store => {
     let bestCta = details?.cta;
@@ -197,7 +198,16 @@ export default function Editor() {
   useEffect(() => {
     sendPostMessage('front', { type: 'hideCTA', hideCTA: hideCTA });
     sendPostMessage('back', { type: 'hideCTA', hideCTA: hideCTA });
+    // if (!hideCTA) {
+    //   sendPostMessage('front', { type: 'cta', CTA: 'briv.it/123' });
+    //   sendPostMessage('back', { type: 'cta', CTA: 'briv.it/123' });
+    // }
   }, [hideCTA, sendPostMessage]);
+
+  const showCTA = () => {
+    sendPostMessage('front', { type: 'cta', CTA: 'briv.it/123' });
+    sendPostMessage('back', { type: 'cta', CTA: 'briv.it/123' });
+  };
 
   const handlePostMessage = useCallback(
     e => {
@@ -379,6 +389,7 @@ export default function Editor() {
             setColorPickerVal={setColorPickerVal}
             handleSave={handleSave}
             mailoutDetails={details}
+            showCTA={showCTA}
           />
           <EditorContent>
             <EditorToolbar>

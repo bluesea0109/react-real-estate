@@ -55,6 +55,7 @@ function EditorSidebar({
   setNewCTA,
   setHideCTA,
   mailoutDetails,
+  showCTA,
 }) {
   const dispatch = useDispatch();
   const sidebarOpen = useSelector(state => state.liveEditor?.sidebarOpen);
@@ -79,6 +80,7 @@ function EditorSidebar({
             setHideCTA={setHideCTA}
             setInvalidCTA={setInvalidCTA}
             setNewCTA={setNewCTA}
+            showCTA={showCTA}
           />
         )}
         {activeTab === 'Select Templates' && (

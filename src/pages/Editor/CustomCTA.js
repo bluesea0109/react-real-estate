@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { useSelector } from 'react-redux';
 import { Checkbox } from 'semantic-ui-react';
 import styled from 'styled-components';
 import * as brandColors from '../../components/utils/brandColors';
@@ -30,13 +31,15 @@ export default function CustomCTA({
   setInvalidCTA,
   setNewCTA,
   setHideCTA,
-  handleSave,
+  showCTA,
 }) {
   const ctaInputRef = useRef(null);
   const handleCTAChange = e => {
     setInvalidCTA(!ctaInputRef?.current?.checkValidity());
     setNewCTA(e.target.value);
   };
+  const isCTAHidden = useSelector(state => state.mailout?.mailoutEdit?.ctas?.hideCTA);
+  console.log('isCTAHidden', isCTAHidden);
   return (
     <CTAContent>
       <p>Customize the call to action URL for this campaign?</p>
@@ -50,7 +53,7 @@ export default function CustomCTA({
           onClick={() => {
             setHideCTA(false);
             setCustomizeCTA(false);
-            handleSave({});
+            showCTA();
           }}
         />
         <Checkbox
@@ -62,7 +65,7 @@ export default function CustomCTA({
           onClick={() => {
             setHideCTA(false);
             setCustomizeCTA(true);
-            handleSave({});
+            showCTA();
           }}
         />
         <Checkbox
@@ -70,7 +73,7 @@ export default function CustomCTA({
           label="Hide call to action"
           name="checkboxRadioGroup"
           value="hide"
-          checked={hideCTA}
+          checked={isCTAHidden}
           onClick={() => {
             setHideCTA(true);
             setCustomizeCTA(false);

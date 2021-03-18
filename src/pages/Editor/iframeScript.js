@@ -76,6 +76,11 @@ const domLoaded = () => {
     }
   };
 
+  const insertCTA = cta => {
+    let ctaElem = document.getElementById('cta');
+    ctaElem.innerHTML = cta;
+  };
+
   function receiver(e) {
     __parentWindow = e.source;
     __parentOrigin = e.origin;
@@ -91,6 +96,9 @@ const domLoaded = () => {
     } else if (e.data?.type === 'hideCTA') {
       const { hideCTA } = e.data;
       hideCallToAction(hideCTA);
+    } else if (e.data?.type === 'cta') {
+      const { CTA } = e.data;
+      insertCTA(CTA);
     } else console.log(JSON.stringify(e.data));
   }
 
