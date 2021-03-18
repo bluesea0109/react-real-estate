@@ -9,6 +9,7 @@ import auth from '../../services/auth';
 import api from '../../services/api';
 import { setAddMailoutError } from '../../store/modules/mailout/actions';
 import { setSelectedTemplate } from '../../store/modules/liveEditor/actions';
+import { getAspectRatio } from '../Utils/getAspectRatio';
 
 const ImageUpload = styled.div`
   position: relative;
@@ -147,19 +148,6 @@ const CustomPhoto = ({ handleSave, mailoutDetails }) => {
       dispatch(setSelectedTemplate(false));
       handleSave({ frontResourceUrl: imageURL });
     });
-  };
-
-  const getAspectRatio = size => {
-    switch (size) {
-      case '9x6':
-      case '6x9':
-        return 9.25 / 6.25;
-      case '11x6':
-      case '6x11':
-        return 11.25 / 6.25;
-      default:
-        return 6.25 / 4.25;
-    }
   };
 
   return (
