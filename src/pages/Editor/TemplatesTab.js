@@ -116,7 +116,7 @@ export default function TemplatesTab({ mailoutDetails, handleSave }) {
         ) : (
           <p>Switching templates is not supported for this campaign type.</p>
         )}
-        <CustomFrontPhoto handleSave={handleSave} />
+        <CustomFrontPhoto handleSave={handleSave} mailoutDetails={mailoutDetails} />
       </DropdownCard>
 
       <DropdownCard
@@ -125,7 +125,7 @@ export default function TemplatesTab({ mailoutDetails, handleSave }) {
         isOpen={backOpen}
         toggleOpen={() => setBackOpen(!backOpen)}
       >
-        <CustomBackPhoto handleSave={handleSave} />
+        <CustomBackPhoto handleSave={handleSave} mailoutDetails={mailoutDetails} />
       </DropdownCard>
     </>
   );

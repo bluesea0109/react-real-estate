@@ -62,7 +62,7 @@ const ImageOption = styled.img`
   ${props => (!props.current ? `cursor: pointer;` : null)}
 `;
 
-const CustomPhoto = ({ handleSave }) => {
+const CustomPhoto = ({ handleSave, mailoutDetails }) => {
   const dispatch = useDispatch();
   const peerId = useSelector(store => store.peer.peerId);
   const currentPhoto = useSelector(state => state.mailout?.mailoutEdit?.backResourceUrl);
@@ -141,6 +141,19 @@ const CustomPhoto = ({ handleSave }) => {
     });
   };
 
+  const getAspectRatio = size => {
+    switch (size) {
+      case '9x6':
+      case '6x9':
+        return 9.25 / 6.25;
+      case '11x6':
+      case '6x11':
+        return 11.25 / 6.25;
+      default:
+        return 6.25 / 4.25;
+    }
+  };
+
   return (
     <>
       <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
@@ -156,7 +169,7 @@ const CustomPhoto = ({ handleSave }) => {
           </Modal.Description>
 
           <Cropper
-            aspectRatio={6.25 / 4.25}
+            aspectRatio={getAspectRatio(mailoutDetails?.postcardSize || '4x6')}
             autoCropArea={1}
             preview=".image-preview"
             onInitialized={instance => {
