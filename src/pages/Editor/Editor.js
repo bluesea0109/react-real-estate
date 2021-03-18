@@ -250,18 +250,35 @@ export default function Editor() {
     [setFrontLoaded, setBackLoaded]
   );
 
-  const handleSave = async ({ postcardSize, mailoutDisplayAgent, templateTheme }) => {
+  const handleSave = async ({
+    postcardSize,
+    mailoutDisplayAgent,
+    templateTheme,
+    frontImgUrl,
+    frontResourceUrl,
+    backResourceUrl,
+  }) => {
     if (customizeCTA && invalidCTA) {
       setActiveNavItem(1);
       dispatch(setCustomCtaOpen(true));
       return;
     }
-    if (postcardSize || mailoutDisplayAgent || templateTheme)
+    if (postcardSize || mailoutDisplayAgent || templateTheme || frontResourceUrl || backResourceUrl)
       dispatch(setReloadIframesPending(true));
     const newData = {};
     if (postcardSize) newData.postcardSize = postcardSize;
     if (mailoutDisplayAgent) newData.mailoutDisplayAgent = mailoutDisplayAgent;
     if (templateTheme) newData.templateTheme = templateTheme;
+    if (frontImgUrl) {
+      sendPostMessage('front', {
+        type: 'switchImageUrl',
+        imageTitle: 'frontImgUrl',
+        newUrl: frontImgUrl,
+      });
+      newData.frontImgUrl = frontImgUrl;
+    }
+    if (frontResourceUrl) newData.frontResourceUrl = frontResourceUrl;
+    if (backResourceUrl) newData.backResourceUrl = backResourceUrl;
     if (newCampaignName) newData.name = newCampaignName;
     const { fields, brandColor } = liveEditorChanges;
     if (fields) newData.fields = fields;
@@ -273,7 +290,7 @@ export default function Editor() {
   };
 
   const navItems = [
-    { name: 'Select Templates', iconName: 'picture' },
+    { name: 'Pages', iconName: 'picture' },
     { name: 'Editor', iconName: 'edit outline' },
     { name: 'Uploads', iconName: 'cloud upload' },
     { name: 'Import', iconName: 'bolt' },
@@ -384,6 +401,7 @@ export default function Editor() {
                 <BackIframe
                   campaignId={details?._id}
                   backLoaded={backLoaded}
+                  backResourceUrl={details?.backResourceUrl || null}
                   backURL={backURL}
                   handleOnload={handleOnload}
                   postcardSize={details?.postcardSize}

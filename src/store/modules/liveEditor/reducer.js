@@ -12,6 +12,7 @@ import {
   SET_LIVE_EDIT_BRAND_COLOR,
   SET_SELECTED_PHOTO,
   SET_ZOOM_VALUE,
+  SET_SELECTED_TEMPLATE,
 } from './actions';
 
 const initialState = {
@@ -26,6 +27,7 @@ const initialState = {
   customUploadURL: '',
   selectedPhoto: '',
   zoomValue: 1,
+  selectedTemplate: true,
   edits: {
     fields: null,
     brandColor: '',
@@ -104,6 +106,11 @@ export default function liveEditor(state = initialState, action) {
       return {
         ...state,
         zoomValue: action.payload,
+      };
+    case SET_SELECTED_TEMPLATE:
+      return {
+        ...state,
+        selectedTemplate: action.payload,
       };
     default:
       return state;

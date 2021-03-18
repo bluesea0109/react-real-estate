@@ -202,7 +202,6 @@ export function* updateMailoutEditSaga({ peerId = null }, action) {
     const newData = action.payload;
     let apiData = {
       postcardSize: mailoutEdit.postcardSize,
-      templateTheme: mailoutEdit.templateTheme,
       fields: editorFields || mailoutEdit.fields,
       ctas: mailoutEdit.ctas,
       mailoutDisplayAgent: mailoutEdit.mailoutDisplayAgent,
@@ -210,6 +209,15 @@ export function* updateMailoutEditSaga({ peerId = null }, action) {
       name: mailoutEdit.name,
     };
     apiData = { ...apiData, ...newData };
+    if (
+      !newData.hasOwnProperty('frontResourceUrl') &&
+      !newData.hasOwnProperty('backResourceUrl') &&
+      !newData.hasOwnProperty('templateTheme') &&
+      !mailoutEdit.hasOwnProperty('frontResourceUrl') &&
+      !mailoutEdit.hasOwnProperty('backResourceUrl')
+    ) {
+      apiData = { ...apiData, templateTheme: mailoutEdit.templateTheme };
+    }
     const reloadIframesPending = yield select(getReloadIframesPending);
     const { path, method } = peerId
       ? ApiService.directory.peer.mailout.edit.update(mailoutId, peerId)

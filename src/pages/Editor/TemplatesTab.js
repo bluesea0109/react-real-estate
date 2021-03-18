@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import { NewLabel } from '../../components/Forms/Base/Carousel';
+import { DropdownCard } from '../../components/Base';
 import * as brandColors from '../../components/utils/brandColors';
+import CustomFrontPhoto from './CustomFrontPhoto';
+import CustomBackPhoto from './CustomBackPhoto';
+import { sleep } from '../../components/utils/utils';
+import { setSelectedTemplate } from '../../store/modules/liveEditor/actions';
 
 const TemplateImage = styled.div`
   ${props =>
@@ -28,12 +33,16 @@ const TemplateImage = styled.div`
 `;
 
 export default function TemplatesTab({ mailoutDetails, handleSave }) {
+  const dispatch = useDispatch();
   const [filteredStencils, setFilteredStencils] = useState([]);
+  const [frontOpen, setFrontOpen] = useState(false);
+  const [backOpen, setBackOpen] = useState(false);
 
   const stencilsAvailable = useSelector(store => store.templates?.available?.byIntent);
   const editIntentPath = useSelector(store => store.mailout?.mailoutEdit?.intentPath);
   const publishedTags = mailoutDetails?.publishedTags;
   const editTemplateTheme = useSelector(store => store.mailout?.mailoutEdit?.templateTheme);
+  const selectedTemplate = useSelector(state => state.liveEditor?.selectedTemplate);
 
   useEffect(() => {
     let newFilteredStencils = stencilsAvailable?.filter(stencil => {
@@ -63,14 +72,18 @@ export default function TemplatesTab({ mailoutDetails, handleSave }) {
   }, [stencilsAvailable, mailoutDetails.created, editIntentPath, publishedTags]);
 
   const updateMailoutTemplateTheme = async templateTheme => {
-    if (editTemplateTheme === templateTheme) return;
+    if (editTemplateTheme === templateTheme && selectedTemplate) return;
+
     handleSave({ templateTheme });
+    await sleep(2500);
+
+    dispatch(setSelectedTemplate(true));
   };
 
   const renderTemplatePicture = (index, intentPath, templateTheme, src, isNew = false) => {
     return (
       <div key={index} onClick={() => updateMailoutTemplateTheme(templateTheme)}>
-        <TemplateImage selected={editTemplateTheme === templateTheme}>
+        <TemplateImage selected={editTemplateTheme === templateTheme && selectedTemplate}>
           <img src={src} alt={intentPath} />
         </TemplateImage>
         {isNew && (
@@ -84,19 +97,36 @@ export default function TemplatesTab({ mailoutDetails, handleSave }) {
 
   return (
     <>
-      {filteredStencils?.length ? (
-        filteredStencils.map((stencil, index) =>
-          renderTemplatePicture(
-            index,
-            stencil.intentPath,
-            stencil.templateUuid,
-            stencil.thumbnail,
-            stencil.new
+      <DropdownCard
+        title="Card Front"
+        iconName="images"
+        isOpen={frontOpen}
+        toggleOpen={() => setFrontOpen(!frontOpen)}
+      >
+        {filteredStencils?.length ? (
+          filteredStencils.map((stencil, index) =>
+            renderTemplatePicture(
+              index,
+              stencil.intentPath,
+              stencil.templateUuid,
+              stencil.thumbnail,
+              stencil.new
+            )
           )
-        )
-      ) : (
-        <p>Switching templates is not supported for this campaign type.</p>
-      )}
+        ) : (
+          <p>Switching templates is not supported for this campaign type.</p>
+        )}
+        <CustomFrontPhoto handleSave={handleSave} mailoutDetails={mailoutDetails} />
+      </DropdownCard>
+
+      <DropdownCard
+        title="Card Back"
+        iconName="images"
+        isOpen={backOpen}
+        toggleOpen={() => setBackOpen(!backOpen)}
+      >
+        <CustomBackPhoto handleSave={handleSave} mailoutDetails={mailoutDetails} />
+      </DropdownCard>
     </>
   );
 }
