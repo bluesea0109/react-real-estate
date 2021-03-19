@@ -111,26 +111,40 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
           </Segment>
         )}
 
-        <Segment textAlign="center" loading={!item?._id || !backLoaded} style={IFrameStyles}>
-          <div
-            style={{ width: '300px', height: '204px', overflow: 'hidden' }}
-            className="bm-transform-effect image-frame-border"
-          >
-            <iframe
-              id="bm-iframe-back"
-              title={backURL + '?dashboard=true'}
-              name="back"
-              src={null}
-              width="300"
-              height="204"
-              frameBorder="none"
-              sandbox="allow-same-origin allow-scripts"
-              onLoad={handleOnload}
-              style={{ visibility: !item?._id || !backLoaded ? 'hidden' : 'visible' }}
-            />
-            <Link to={linkTo} style={iframeLinkStyle} />
-          </div>
-        </Segment>
+        {item.backResourceUrl && (
+          <Segment textAlign="center" style={{ border: 'none' }}>
+            <Link to={linkTo}>
+              <Image
+                src={item.backResourceUrl}
+                style={imgStyles}
+                className="bm-transform-effect image-frame-border"
+              />
+            </Link>
+          </Segment>
+        )}
+
+        {!item.backResourceUrl && (
+          <Segment textAlign="center" loading={!item?._id || !backLoaded} style={IFrameStyles}>
+            <div
+              style={{ width: '300px', height: '204px', overflow: 'hidden' }}
+              className="bm-transform-effect image-frame-border"
+            >
+              <iframe
+                id="bm-iframe-back"
+                title={backURL + '?dashboard=true'}
+                name="back"
+                src={null}
+                width="300"
+                height="204"
+                frameBorder="none"
+                sandbox="allow-same-origin allow-scripts"
+                onLoad={handleOnload}
+                style={{ visibility: !item?._id || !backLoaded ? 'hidden' : 'visible' }}
+              />
+              <Link to={linkTo} style={iframeLinkStyle} />
+            </div>
+          </Segment>
+        )}
       </ItemBodyIframeLayout>
     );
   } else {
@@ -166,25 +180,37 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
             </div>
           </Segment>
         )}
-        <Segment textAlign="center" loading={!item?._id || !backLoaded} style={IFrameStyles}>
-          <div
-            style={{ width: '300px', height: '204px', overflow: 'hidden' }}
-            className="image-frame-border"
-          >
-            <iframe
-              id="bm-iframe-back"
-              title={backURL + '?dashboard=true'}
-              name="back"
-              src={null}
-              width="300"
-              height="204"
-              frameBorder="none"
-              sandbox="allow-same-origin allow-scripts"
-              onLoad={handleOnload}
-              style={{ visibility: !item?._id || !backLoaded ? 'hidden' : 'visible' }}
+
+        {item.backResourceUrl && (
+          <Segment textAlign="center" style={{ border: 'none' }}>
+            <Image
+              src={item.backResourceUrl}
+              style={imgStyles}
+              className="bm-transform-effect image-frame-border"
             />
-          </div>
-        </Segment>
+          </Segment>
+        )}
+        {!item.backResourceUrl && (
+          <Segment textAlign="center" loading={!item?._id || !backLoaded} style={IFrameStyles}>
+            <div
+              style={{ width: '300px', height: '204px', overflow: 'hidden' }}
+              className="image-frame-border"
+            >
+              <iframe
+                id="bm-iframe-back"
+                title={backURL + '?dashboard=true'}
+                name="back"
+                src={null}
+                width="300"
+                height="204"
+                frameBorder="none"
+                sandbox="allow-same-origin allow-scripts"
+                onLoad={handleOnload}
+                style={{ visibility: !item?._id || !backLoaded ? 'hidden' : 'visible' }}
+              />
+            </div>
+          </Segment>
+        )}
       </ItemBodyIframeLayout>
     );
   }
