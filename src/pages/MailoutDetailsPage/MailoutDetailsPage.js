@@ -227,6 +227,7 @@ const MailoutDetailsPage = () => {
           <BackIframe
             campaignId={details?._id}
             backLoaded={backLoaded}
+            backResourceUrl={details?.backResourceUrl}
             backURL={backURL}
             handleOnload={handleOnload}
             postcardSize={details?.postcardSize}
@@ -287,6 +288,7 @@ const MailoutDetailsPage = () => {
                             <BackIframe
                               campaignId={details?._id}
                               backLoaded={backLoaded}
+                              backResourceUrl={details?.backResourceUrl}
                               backURL={backURL}
                               handleOnload={handleOnload}
                               postcardSize={details?.postcardSize}
