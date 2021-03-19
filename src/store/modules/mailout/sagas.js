@@ -222,7 +222,7 @@ export function* updateMailoutEditSaga({ peerId = null }, action) {
     const { path, method } = peerId
       ? ApiService.directory.peer.mailout.edit.update(mailoutId, peerId)
       : ApiService.directory.user.mailout.edit.update(mailoutId);
-    yield call(ApiService[method], path, apiData);
+    const apiResponse = yield call(ApiService[method], path, apiData);
     let agentResponse = null;
     if (mailoutDisplayAgent) {
       const { path: agentPath, method: agentMethod } = peerId
@@ -233,7 +233,7 @@ export function* updateMailoutEditSaga({ peerId = null }, action) {
     if (reloadIframesPending) {
       yield put(setReloadIframes(true));
     }
-    yield put(updateMailoutEditSuccess(agentResponse));
+    yield put(updateMailoutEditSuccess(agentResponse || apiResponse));
   } catch (err) {
     yield put(updateMailoutEditError(err));
     yield put(setReloadIframesPending(false));
