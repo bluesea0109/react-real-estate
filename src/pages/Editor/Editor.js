@@ -267,7 +267,6 @@ export default function Editor() {
       dispatch(setReloadIframesPending(true));
     const newData = {};
     if (postcardSize) newData.postcardSize = postcardSize;
-    if (mailoutDisplayAgent) newData.mailoutDisplayAgent = mailoutDisplayAgent;
     if (templateTheme) newData.templateTheme = templateTheme;
     if (frontImgUrl) {
       sendPostMessage('front', {
@@ -285,7 +284,7 @@ export default function Editor() {
     if (brandColor) newData.brandColor = brandColor;
     if (customizeCTA) newData.ctas = { cta: newCTA, shortenCTA: true };
     else newData.ctas = { dontOverride: true };
-    dispatch(updateMailoutEditPending(newData));
+    dispatch(updateMailoutEditPending({ newData, mailoutDisplayAgent }));
     setEditingName(false);
   };
 

@@ -199,12 +199,12 @@ export function* updateMailoutEditSaga({ peerId = null }, action) {
     const mailoutId = yield select(getMailoutId);
     const mailoutEdit = yield select(getMailoutEdit);
     const editorFields = yield select(getEditorFields);
-    const newData = action.payload;
+    const { newData, mailoutDisplayAgent } = action.payload;
+    debugger;
     let apiData = {
       postcardSize: mailoutEdit.postcardSize,
       fields: editorFields || mailoutEdit.fields,
       ctas: mailoutEdit.ctas,
-      mailoutDisplayAgent: mailoutEdit.mailoutDisplayAgent,
       brandColor: mailoutEdit.brandColor,
       name: mailoutEdit.name,
     };
@@ -219,15 +219,21 @@ export function* updateMailoutEditSaga({ peerId = null }, action) {
       apiData = { ...apiData, templateTheme: mailoutEdit.templateTheme };
     }
     const reloadIframesPending = yield select(getReloadIframesPending);
+    if (mailoutDisplayAgent) {
+      const { path: agentPath, method: agentMethod } = peerId
+        ? ApiService.directory.peer.mailout.edit.updateDisplayAgent(mailoutId, peerId)
+        : ApiService.directory.user.mailout.edit.updateDisplayAgent(mailoutId);
+      const agentResponse = yield call(ApiService[agentMethod], agentPath, { mailoutDisplayAgent });
+    }
     const { path, method } = peerId
       ? ApiService.directory.peer.mailout.edit.update(mailoutId, peerId)
       : ApiService.directory.user.mailout.edit.update(mailoutId);
-    const response = yield call(ApiService[method], path, apiData);
+    const EditResponse = yield call(ApiService[method], path, apiData);
     yield put(updateMailoutEditValues(apiData));
     if (reloadIframesPending) {
       yield put(setReloadIframes(true));
     }
-    yield put(updateMailoutEditSuccess(response));
+    yield put(updateMailoutEditSuccess(EditResponse));
   } catch (err) {
     yield put(updateMailoutEditError(err));
     yield put(setReloadIframesPending(false));

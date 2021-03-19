@@ -216,6 +216,10 @@ const directory = {
         get: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'get' }),
         update: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'put' }),
         revert: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'del' }),
+        updateDisplayAgent: mailoutId => ({
+          path: `/api/user/mailout/${mailoutId}/edit/mailoutDisplayAgent`,
+          method: 'put',
+        }),
       },
       mailoutSize: mailoutId => ({
         path: `/api/user/mailout/${mailoutId}/edit/mailoutSize`,
@@ -347,6 +351,10 @@ const directory = {
         revert: (mailoutId, peerId) => ({
           path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit`,
           method: 'del',
+        }),
+        updateDisplayAgent: (mailoutId, peerId) => ({
+          path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit/mailoutDisplayAgent`,
+          method: 'put',
         }),
       },
       mailoutSize: (mailoutId, peerId) => ({
