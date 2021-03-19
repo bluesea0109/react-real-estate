@@ -82,10 +82,14 @@ export default function Editor() {
     };
   }, [dispatch]);
 
-  useEffect(() => {
-    setNewCTA(customCTA || defaultCTA);
-    setCustomizeCTA(customCTA?.length > 0);
-  }, [customCTA, defaultCTA]);
+  useEffect(
+    () => {
+      setNewCTA(customCTA || defaultCTA);
+      setCustomizeCTA(customCTA?.length > 0);
+    },
+    [customCTA, defaultCTA],
+    mailoutEdit
+  );
 
   useEffect(() => {
     setNewCampaignName(details?.name || details?.details?.displayAddress);
@@ -288,7 +292,7 @@ export default function Editor() {
     if (fields) newData.fields = fields;
     if (brandColor) newData.brandColor = brandColor;
     if (customizeCTA) newData.ctas = { cta: newCTA, shortenCTA: true, hideCTA: false };
-    if (hideCTA) newData.ctas = { cta: newCTA, hideCTA: true };
+    else if (hideCTA) newData.ctas = { cta: newCTA, hideCTA: true };
     else newData.ctas = { dontOverride: true };
 
     dispatch(updateMailoutEditPending(newData));
