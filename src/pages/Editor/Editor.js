@@ -203,10 +203,6 @@ export default function Editor() {
   useEffect(() => {
     sendPostMessage('front', { type: 'hideCTA', hideCTA: hideCTA });
     sendPostMessage('back', { type: 'hideCTA', hideCTA: hideCTA });
-    // if (!hideCTA) {
-    //   sendPostMessage('front', { type: 'cta', CTA: 'briv.it/123' });
-    //   sendPostMessage('back', { type: 'cta', CTA: 'briv.it/123' });
-    // }
   }, [hideCTA, sendPostMessage]);
 
   const showCTA = () => {
@@ -281,7 +277,7 @@ export default function Editor() {
       dispatch(setCustomCtaOpen(true));
       return;
     }
-    if (postcardSize || mailoutDisplayAgent || templateTheme || !hideCTA)
+    if (postcardSize || mailoutDisplayAgent || templateTheme)
       dispatch(setReloadIframesPending(true));
     const newData = {};
     if (postcardSize) newData.postcardSize = postcardSize;
