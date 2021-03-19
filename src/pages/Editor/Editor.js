@@ -293,7 +293,7 @@ export default function Editor() {
     if (brandColor) newData.brandColor = brandColor;
     if (customizeCTA) newData.ctas = { cta: newCTA, shortenCTA: true, hideCTA: false };
     if (hideCTA) newData.ctas = { cta: newCTA, hideCTA: true };
-    else newData.ctas = { cta: newCTA, hideCTA: false };
+    else newData.ctas = { dontOverride: true };
 
     dispatch(updateMailoutEditPending(newData));
     setEditingName(false);
