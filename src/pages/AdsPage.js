@@ -203,7 +203,7 @@ const EmptyPage = () => {
 
   const tableBody = (viewMore, adTextLength, toggleAdTextLength) => {
     return adDetails.map((item, index) =>
-      item.pending ? (
+      item.pending === true && Date.now() - item.created <= 600000 ? (
         <Table.Row key={index}>
           <Table.Cell className="marketerGrey adTableItemCampaignCell">
             <b>{item.details.campaignName}</b>
@@ -225,162 +225,215 @@ const EmptyPage = () => {
           <Table.Cell />
           <Table.Cell />
         </Table.Row>
-      ) : (
+      ) : item.pending === true && Date.now() - item.created > 600000 ? (
         <Table.Row key={index}>
-          <Table.Cell className="marketerGrey adTableItemCampaignCell defaultCursor">
-            <span className="adTableCampaignName">{item.details.campaignName}</span>
-            <span hidden>{item._id}</span>
+          <Table.Cell className="marketerGrey adTableItemCampaignCell">
+            <b>{item.details.campaignName}</b>
           </Table.Cell>
-          <Table.Cell>
-            {item.details.status === 'WITH_ISSUES' ? (
-              <div className="adTableItemPreviewContainer">
-                <div
-                  className="adTableItemPreview"
-                  style={{
-                    backgroundImage: `url(${
-                      item.details.previewUrl
-                        ? item.details.previewUrl
-                        : 'https://reactnativecode.com/wp-content/uploads/2018/02/Default_Image_Thumbnail.png'
-                    })`,
-                  }}
-                />
-              </div>
-            ) : (
-              <Popup
-                content={
-                  <AdPreview
-                    ad={item}
-                    website={
-                      listingDetails?.adProduct?.qs?.website
-                        ? listingDetails.adProduct.qs.website
-                        : false
-                    }
-                    viewMore={viewMore}
-                    adTextLength={adTextLength}
-                    toggleAdTextLength={toggleAdTextLength}
+          <Table.Cell textAlign="center">
+            <span>--</span>
+          </Table.Cell>
+          <Table.Cell textAlign="center">
+            <span>--</span>
+          </Table.Cell>
+          <Table.Cell textAlign="center">
+            <span>--</span>
+          </Table.Cell>
+          <Table.Cell textAlign="center">
+            <span>--</span>
+          </Table.Cell>
+          <Table.Cell textAlign="center">
+            <span>--</span>
+          </Table.Cell>
+          <Table.Cell textAlign="center">
+            <span>--</span>
+          </Table.Cell>
+          <Table.Cell textAlign="center">
+            <span>--</span>
+          </Table.Cell>
+          <Table.Cell textAlign="center">
+            <span>--</span>
+          </Table.Cell>
+          <Table.Cell textAlign="center">
+            <span>--</span>
+          </Table.Cell>
+          <Table.Cell textAlign="center">
+            <span>--</span>
+          </Table.Cell>
+          <Table.Cell className="marketerGrey alignCenter defaultCursor" collapsing>
+            <Popup
+              trigger={
+                <div>
+                  <StatusPill type="solid" color="red">
+                    Error
+                  </StatusPill>
+                </div>
+              }
+              content={item.details.error_message ? item.details.error_message : 'Facebook Error'}
+              position="top right"
+            />
+          </Table.Cell>
+        </Table.Row>
+      ) : (
+        item.pending === false && (
+          <Table.Row key={index}>
+            <Table.Cell className="marketerGrey adTableItemCampaignCell defaultCursor">
+              <span className="adTableCampaignName">{item.details.campaignName}</span>
+              <span hidden>{item._id}</span>
+            </Table.Cell>
+            <Table.Cell>
+              {item.details.status === 'WITH_ISSUES' ? (
+                <div className="adTableItemPreviewContainer">
+                  <div
+                    className="adTableItemPreview"
+                    style={{
+                      backgroundImage: `url(${
+                        item.details.previewUrl
+                          ? item.details.previewUrl
+                          : 'https://reactnativecode.com/wp-content/uploads/2018/02/Default_Image_Thumbnail.png'
+                      })`,
+                    }}
                   />
-                }
-                trigger={
-                  <div className="adTableItemPreviewContainer">
-                    <div
-                      className="adTableItemPreview"
-                      style={{
-                        backgroundImage: `url(${
-                          item.details.previewUrl
-                            ? item.details.previewUrl
-                            : 'https://reactnativecode.com/wp-content/uploads/2018/02/Default_Image_Thumbnail.png'
-                        })`,
-                      }}
+                </div>
+              ) : (
+                <Popup
+                  content={
+                    <AdPreview
+                      ad={item}
+                      website={
+                        listingDetails?.adProduct?.qs?.website
+                          ? listingDetails.adProduct.qs.website
+                          : false
+                      }
+                      viewMore={viewMore}
+                      adTextLength={adTextLength}
+                      toggleAdTextLength={toggleAdTextLength}
                     />
-                  </div>
-                }
-                on={['hover', 'focus']}
-                position="right center"
-                hideOnScroll={false}
-                hoverable
-              />
-            )}
-          </Table.Cell>
-          <Table.Cell className="adTableDurationContentColumn marketerGrey defaultCursor">
-            {item.details.startDate && item.details.endDate ? (
-              <Header as="h5" sub className="noMarginBottom">{`${daysTimeDiff(
-                item.details.startDate,
-                item.details.endDate
-              )}`}</Header>
-            ) : (
-              '-'
-            )}
-            {item.details.startDate && item.details.endDate && (
-              <span>{`${getDateFromStr(item.details.startDate)} - ${getDateFromStr(
-                item.details.endDate
-              )}`}</span>
-            )}
-          </Table.Cell>
-          <Table.Cell className="marketerGrey alignCenter defaultCursor">
-            {item.details.budget ? `$${Math.trunc(Number(item.details.budget))}` : '-'}
-          </Table.Cell>
-          {/* <Table.Cell className="marketerGrey alignCenter defaultCursor">
+                  }
+                  trigger={
+                    <div className="adTableItemPreviewContainer">
+                      <div
+                        className="adTableItemPreview"
+                        style={{
+                          backgroundImage: `url(${
+                            item.details.previewUrl
+                              ? item.details.previewUrl
+                              : 'https://reactnativecode.com/wp-content/uploads/2018/02/Default_Image_Thumbnail.png'
+                          })`,
+                        }}
+                      />
+                    </div>
+                  }
+                  on={['hover', 'focus']}
+                  position="right center"
+                  hideOnScroll={false}
+                  hoverable
+                />
+              )}
+            </Table.Cell>
+            <Table.Cell className="adTableDurationContentColumn marketerGrey defaultCursor">
+              {item.details.startDate && item.details.endDate ? (
+                <Header as="h5" sub className="noMarginBottom">{`${daysTimeDiff(
+                  item.details.startDate,
+                  item.details.endDate
+                )}`}</Header>
+              ) : (
+                '-'
+              )}
+              {item.details.startDate && item.details.endDate && (
+                <span>{`${getDateFromStr(item.details.startDate)} - ${getDateFromStr(
+                  item.details.endDate
+                )}`}</span>
+              )}
+            </Table.Cell>
+            <Table.Cell className="marketerGrey alignCenter defaultCursor">
+              {item.details.budget ? `$${Math.trunc(Number(item.details.budget))}` : '-'}
+            </Table.Cell>
+            {/* <Table.Cell className="marketerGrey alignCenter defaultCursor">
             {item.details.spend && item.details.budget
               ? `${Math.floor(
                   (item.details.spend / (item.details.budget - item.details.budget * 0.2)) * 100
                 )}%`
               : '-'}
           </Table.Cell> */}
-          <Table.Cell className="marketerGrey alignCenter defaultCursor">
-            <div>
-              <Icon name="facebook" size="large" className="adTableItemFacebookLogo" />
-              <Icon name="instagram" size="large" className="adTableItemInstagramLogo" />
-            </div>
-          </Table.Cell>
-          <Table.Cell className="marketerGrey alignCenter defaultCursor">
-            {item.details.impressions ? item.details.impressions : 0}
-          </Table.Cell>
-          <Table.Cell className="marketerGrey alignCenter defaultCursor">
-            {item.details.leads ? item.details.leads : 0}
-          </Table.Cell>
-          <Table.Cell className="marketerGrey alignCenter defaultCursor">
-            {item.details.ctr ? `${Math.floor(item.details.ctr)}%` : '-'}
-          </Table.Cell>
-          <Table.Cell className="marketerGrey alignCenter defaultCursor">
-            {item.details.clicks ? Math.floor(item.details.clicks) : '-'}
-          </Table.Cell>
-          <Table.Cell className="marketerGrey alignCenter defaultCursor">
-            {item.details.cpc ? `$${Number(item.details.cpc).toFixed(2)}` : '-'}
-          </Table.Cell>
-          <Table.Cell className="marketerGrey alignCenter defaultCursor">Leads</Table.Cell>
-          <Table.Cell className="marketerGrey alignCenter defaultCursor" collapsing>
-            {item.details.status === 'ACTIVE' ? (
-              <StatusPill type="solid" color="green">
-                Complete
-              </StatusPill>
-            ) : item.details.status === 'PAUSED' ||
-              item.details.status === 'CAMPAIGN_PAUSED' ||
-              item.details.status === 'ADSET_PAUSED' ? (
-              <StatusPill type="solid" color="yellow">
-                Paused
-              </StatusPill>
-            ) : item.details.status === 'DELETED' ? (
-              <StatusPill type="solid" color="grey">
-                Deleted
-              </StatusPill>
-            ) : item.details.status === 'PENDING_REVIEW' ||
-              item.details.status === 'PENDING_BILLING_INFO' ||
-              item.details.status === 'IN_PROCESS' ||
-              item.details.status === 'PREAPPROVED' ? (
-              <StatusPill type="solid" color="lightBlue">
-                Pending
-              </StatusPill>
-            ) : item.details.status === 'ARCHIVED' ? (
-              <StatusPill type="solid" color="grey">
-                Archived
-              </StatusPill>
-            ) : item.details.status === 'DISAPPROVED' ? (
-              <StatusPill type="solid" color="astral">
-                Disapproved
-              </StatusPill>
-            ) : item.details.status === 'WITH_ISSUES' ? (
-              <Popup
-                trigger={
-                  <div>
-                    <StatusPill type="solid" color="red">
-                      Error
-                    </StatusPill>
-                  </div>
-                }
-                content={item.details.error_message ? item.details.error_message : 'Facebook Error'}
-                position="top right"
-              />
-            ) : item.details.status === 'DELETED' ? (
-              <StatusPill type="solid" color="grey">
-                Deleted
-              </StatusPill>
-            ) : (
-              <StatusPill type="solid" color="astral">
-                Other
-              </StatusPill>
-            )}
-          </Table.Cell>
-        </Table.Row>
+            <Table.Cell className="marketerGrey alignCenter defaultCursor">
+              <div>
+                <Icon name="facebook" size="large" className="adTableItemFacebookLogo" />
+                <Icon name="instagram" size="large" className="adTableItemInstagramLogo" />
+              </div>
+            </Table.Cell>
+            <Table.Cell className="marketerGrey alignCenter defaultCursor">
+              {item.details.impressions ? item.details.impressions : 0}
+            </Table.Cell>
+            <Table.Cell className="marketerGrey alignCenter defaultCursor">
+              {item.details.leads ? item.details.leads : 0}
+            </Table.Cell>
+            <Table.Cell className="marketerGrey alignCenter defaultCursor">
+              {item.details.ctr ? `${Math.floor(item.details.ctr)}%` : '-'}
+            </Table.Cell>
+            <Table.Cell className="marketerGrey alignCenter defaultCursor">
+              {item.details.clicks ? Math.floor(item.details.clicks) : '-'}
+            </Table.Cell>
+            <Table.Cell className="marketerGrey alignCenter defaultCursor">
+              {item.details.cpc ? `$${Number(item.details.cpc).toFixed(2)}` : '-'}
+            </Table.Cell>
+            <Table.Cell className="marketerGrey alignCenter defaultCursor">Leads</Table.Cell>
+            <Table.Cell className="marketerGrey alignCenter defaultCursor" collapsing>
+              {item.details.status === 'ACTIVE' ? (
+                <StatusPill type="solid" color="green">
+                  Complete
+                </StatusPill>
+              ) : item.details.status === 'PAUSED' ||
+                item.details.status === 'CAMPAIGN_PAUSED' ||
+                item.details.status === 'ADSET_PAUSED' ? (
+                <StatusPill type="solid" color="yellow">
+                  Paused
+                </StatusPill>
+              ) : item.details.status === 'DELETED' ? (
+                <StatusPill type="solid" color="grey">
+                  Deleted
+                </StatusPill>
+              ) : item.details.status === 'PENDING_REVIEW' ||
+                item.details.status === 'PENDING_BILLING_INFO' ||
+                item.details.status === 'IN_PROCESS' ||
+                item.details.status === 'PREAPPROVED' ? (
+                <StatusPill type="solid" color="lightBlue">
+                  Pending
+                </StatusPill>
+              ) : item.details.status === 'ARCHIVED' ? (
+                <StatusPill type="solid" color="grey">
+                  Archived
+                </StatusPill>
+              ) : item.details.status === 'DISAPPROVED' ? (
+                <StatusPill type="solid" color="astral">
+                  Disapproved
+                </StatusPill>
+              ) : item.details.status === 'WITH_ISSUES' ? (
+                <Popup
+                  trigger={
+                    <div>
+                      <StatusPill type="solid" color="red">
+                        Error
+                      </StatusPill>
+                    </div>
+                  }
+                  content={
+                    item.details.error_message ? item.details.error_message : 'Facebook Error'
+                  }
+                  position="top right"
+                />
+              ) : item.details.status === 'DELETED' ? (
+                <StatusPill type="solid" color="grey">
+                  Deleted
+                </StatusPill>
+              ) : (
+                <StatusPill type="solid" color="astral">
+                  Other
+                </StatusPill>
+              )}
+            </Table.Cell>
+          </Table.Row>
+        )
       )
     );
   };
