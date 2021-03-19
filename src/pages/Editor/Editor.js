@@ -82,14 +82,10 @@ export default function Editor() {
     };
   }, [dispatch]);
 
-  useEffect(
-    () => {
-      setNewCTA(customCTA || defaultCTA);
-      setCustomizeCTA(customCTA?.length > 0);
-    },
-    [customCTA, defaultCTA],
-    mailoutEdit
-  );
+  useEffect(() => {
+    setNewCTA(customCTA || defaultCTA);
+    setCustomizeCTA(customCTA?.length > 0);
+  }, [customCTA, defaultCTA]);
 
   useEffect(() => {
     setNewCampaignName(details?.name || details?.details?.displayAddress);
