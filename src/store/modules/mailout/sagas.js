@@ -200,7 +200,6 @@ export function* updateMailoutEditSaga({ peerId = null }, action) {
     const mailoutEdit = yield select(getMailoutEdit);
     const editorFields = yield select(getEditorFields);
     const { newData, mailoutDisplayAgent } = action.payload;
-    debugger;
     let apiData = {
       postcardSize: mailoutEdit.postcardSize,
       fields: editorFields || mailoutEdit.fields,
@@ -219,21 +218,22 @@ export function* updateMailoutEditSaga({ peerId = null }, action) {
       apiData = { ...apiData, templateTheme: mailoutEdit.templateTheme };
     }
     const reloadIframesPending = yield select(getReloadIframesPending);
+    yield put(updateMailoutEditValues({ ...apiData, mailoutDisplayAgent }));
+    const { path, method } = peerId
+      ? ApiService.directory.peer.mailout.edit.update(mailoutId, peerId)
+      : ApiService.directory.user.mailout.edit.update(mailoutId);
+    yield call(ApiService[method], path, apiData);
+    let agentResponse = null;
     if (mailoutDisplayAgent) {
       const { path: agentPath, method: agentMethod } = peerId
         ? ApiService.directory.peer.mailout.edit.updateDisplayAgent(mailoutId, peerId)
         : ApiService.directory.user.mailout.edit.updateDisplayAgent(mailoutId);
-      const agentResponse = yield call(ApiService[agentMethod], agentPath, { mailoutDisplayAgent });
+      agentResponse = yield call(ApiService[agentMethod], agentPath, { mailoutDisplayAgent });
     }
-    const { path, method } = peerId
-      ? ApiService.directory.peer.mailout.edit.update(mailoutId, peerId)
-      : ApiService.directory.user.mailout.edit.update(mailoutId);
-    const EditResponse = yield call(ApiService[method], path, apiData);
-    yield put(updateMailoutEditValues(apiData));
     if (reloadIframesPending) {
       yield put(setReloadIframes(true));
     }
-    yield put(updateMailoutEditSuccess(EditResponse));
+    yield put(updateMailoutEditSuccess(agentResponse));
   } catch (err) {
     yield put(updateMailoutEditError(err));
     yield put(setReloadIframesPending(false));
