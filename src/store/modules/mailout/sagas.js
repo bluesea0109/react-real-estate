@@ -199,12 +199,11 @@ export function* updateMailoutEditSaga({ peerId = null }, action) {
     const mailoutId = yield select(getMailoutId);
     const mailoutEdit = yield select(getMailoutEdit);
     const editorFields = yield select(getEditorFields);
-    const newData = action.payload;
+    const { newData, mailoutDisplayAgent } = action.payload;
     let apiData = {
       postcardSize: mailoutEdit.postcardSize,
       fields: editorFields || mailoutEdit.fields,
       ctas: mailoutEdit.ctas,
-      mailoutDisplayAgent: mailoutEdit.mailoutDisplayAgent,
       brandColor: mailoutEdit.brandColor,
       name: mailoutEdit.name,
     };
@@ -219,15 +218,22 @@ export function* updateMailoutEditSaga({ peerId = null }, action) {
       apiData = { ...apiData, templateTheme: mailoutEdit.templateTheme };
     }
     const reloadIframesPending = yield select(getReloadIframesPending);
+    yield put(updateMailoutEditValues({ ...apiData, mailoutDisplayAgent }));
     const { path, method } = peerId
       ? ApiService.directory.peer.mailout.edit.update(mailoutId, peerId)
       : ApiService.directory.user.mailout.edit.update(mailoutId);
-    const response = yield call(ApiService[method], path, apiData);
-    yield put(updateMailoutEditValues(apiData));
+    const apiResponse = yield call(ApiService[method], path, apiData);
+    let agentResponse = null;
+    if (mailoutDisplayAgent) {
+      const { path: agentPath, method: agentMethod } = peerId
+        ? ApiService.directory.peer.mailout.edit.updateDisplayAgent(mailoutId, peerId)
+        : ApiService.directory.user.mailout.edit.updateDisplayAgent(mailoutId);
+      agentResponse = yield call(ApiService[agentMethod], agentPath, { mailoutDisplayAgent });
+    }
     if (reloadIframesPending) {
       yield put(setReloadIframes(true));
     }
-    yield put(updateMailoutEditSuccess(response));
+    yield put(updateMailoutEditSuccess(agentResponse || apiResponse));
   } catch (err) {
     yield put(updateMailoutEditError(err));
     yield put(setReloadIframesPending(false));
