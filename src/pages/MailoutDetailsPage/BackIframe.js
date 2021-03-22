@@ -2,7 +2,9 @@ import React, { forwardRef } from 'react';
 import { IFrameSegStyle } from '.';
 import { Image, Segment } from '../../components/Base';
 import { iframeDimensions } from '../../components/utils/utils';
+import { getLargerSize } from '../Utils/getLargerSize';
 import { StyledFrame } from './StyledComponents';
+import './BackIframe.css';
 
 const BackIframe = forwardRef(
   (
@@ -63,17 +65,29 @@ const BackIframe = forwardRef(
               >
                 Safe Zone - All text should be inside this area
               </div>
-              <Image
-                src={backResourceUrl}
-                className="image-frame-border"
+              <div
                 style={{
+                  position: 'relative',
                   minWidth: `${iframeDimensions(postcardSize).width}px`,
                   maxWidth: `${iframeDimensions(postcardSize).width}px`,
                   height: `${iframeDimensions(postcardSize).height}px`,
                   boxSizing: 'border-box',
                   margin: 0,
                 }}
-              />
+              >
+                <Image src={backResourceUrl} className="image-frame-border" />
+                <div id="ink-free-area" style={{ width: getLargerSize(postcardSize) && '4in' }}>
+                  <div id="postage">
+                    POSTAGE
+                    <br />
+                    INDICIA
+                  </div>
+                  <div id="cust-address">
+                    Recipient name and full address will be printed in this space.
+                  </div>
+                  <span id="ink-free-text">This area is reserved for postage details</span>
+                </div>
+              </div>
             </>
           )}
           {!backResourceUrl && (

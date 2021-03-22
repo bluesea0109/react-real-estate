@@ -34,6 +34,7 @@ export default function Editor() {
   const dispatch = useDispatch();
   const mailoutId = useParams().mailoutId;
   const details = useSelector(store => store.mailout?.details);
+
   const mailoutEdit = useSelector(state => state.mailout?.mailoutEdit);
   const peerId = useSelector(store => store.peer?.peerId);
   const savePending = useSelector(state => state.mailout?.updateMailoutEditPending);

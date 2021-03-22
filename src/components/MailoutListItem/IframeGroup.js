@@ -9,6 +9,8 @@ import { ItemBodyIframeLayout } from '../../layouts';
 import ApiService from '../../services/api/index';
 import { Image } from '../Base';
 
+import './IframeGroup.css';
+
 const IframeGroup = ({ index, item, linkTo = null }) => {
   const peerId = useSelector(store => store.peer.peerId);
 
@@ -59,7 +61,6 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
     maxWidth: '300px',
     minWidth: '290px',
     height: '204px',
-    overflow: 'hidden',
   };
 
   const IFrameBodyStyles = {
@@ -112,13 +113,31 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
         )}
 
         {item.backResourceUrl && (
-          <Segment textAlign="center" style={{ border: 'none' }}>
+          <Segment
+            textAlign="center"
+            style={{ border: 'none', display: 'flex', justifyContent: 'center' }}
+            className="bm-transform-effect image-frame-border"
+          >
             <Link to={linkTo}>
-              <Image
-                src={item.backResourceUrl}
-                style={imgStyles}
-                className="bm-transform-effect image-frame-border"
-              />
+              <div
+                style={{
+                  position: 'relative',
+                  ...imgStyles,
+                }}
+              >
+                <Image src={item.backResourceUrl} />
+                <div id="ink-free-area-small">
+                  <div id="postage-small">
+                    POSTAGE
+                    <br />
+                    INDICIA
+                  </div>
+                  <div id="cust-address-small">
+                    Recipient name and full address will be printed in this space.
+                  </div>
+                  <span id="ink-free-text-small">This area is reserved for postage details</span>
+                </div>
+              </div>
             </Link>
           </Segment>
         )}

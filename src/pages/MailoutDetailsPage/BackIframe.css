@@ -1,0 +1,47 @@
+#cust-address {
+  position: absolute;
+  top: 110px;
+  left: 50px;
+  width: 140px;
+  height: 70px;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+#ink-free-area {
+  border: 1px solid red;
+  background-color: white;
+  position: absolute;
+  width: 3.2835in;
+  height: 2.375in;
+  right: 0.275in;
+  bottom: 0.25in;
+}
+#ink-free-text {
+  position: absolute;
+  bottom: 4px;
+  font-size: 10px;
+  text-transform: uppercase;
+  width: 100%;
+  text-align: center;
+  color: darkred;
+}
+#postage {
+  border: 1px solid #262626;
+  width: 75px;
+  height: 62px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 12px;
+  position: absolute;
+  top: 0.175in;
+  right: 0.3in;
+}
