@@ -152,7 +152,6 @@ export default function Editor() {
   // replace the field data without reload when true in redux store
   useEffect(() => {
     if (replaceFieldData) {
-      console.log('Replace fields in the iframe');
       sendPostMessage('front', { type: 'updateAllFields', replaceFieldData });
       sendPostMessage('back', { type: 'updateAllFields', replaceFieldData });
       dispatch(setReplaceFieldData(false));
