@@ -69,6 +69,7 @@ const domLoaded = () => {
 
   const hideCallToAction = hide => {
     let ctaElem = document.getElementById('cta');
+    if (ctaElem === null) return;
     if (hide === true) {
       ctaElem.style.display = 'none';
     } else {
@@ -76,8 +77,9 @@ const domLoaded = () => {
     }
   };
 
-  const insertCTA = cta => {
+  const insertCallToAction = cta => {
     let ctaElem = document.getElementById('cta');
+    if (ctaElem === null) return;
     ctaElem.innerHTML = cta;
   };
 
@@ -98,7 +100,7 @@ const domLoaded = () => {
       hideCallToAction(hideCTA);
     } else if (e.data?.type === 'cta') {
       const { CTA } = e.data;
-      insertCTA(CTA);
+      insertCallToAction(CTA);
     } else console.log(JSON.stringify(e.data));
   }
 
