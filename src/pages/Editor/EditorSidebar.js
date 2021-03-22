@@ -83,7 +83,7 @@ function EditorSidebar({
             showCTA={showCTA}
           />
         )}
-        {activeTab === 'Select Templates' && (
+        {activeTab === 'Pages' && (
           <TemplatesTab handleSave={handleSave} mailoutDetails={mailoutDetails} />
         )}
       </SidebarContent>

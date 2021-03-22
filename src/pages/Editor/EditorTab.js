@@ -131,7 +131,7 @@ export default function EditorTab({
           presetColors={presetColors}
         />
       </DropdownCard>
-      {!details?.frontResourceUrl && (
+      {!details?.frontResourceUrl && !details?.backResourceUrl && (
         <DropdownCard
           title="Postcard Size"
           iconName="expand"

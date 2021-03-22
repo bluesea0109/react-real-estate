@@ -27,13 +27,8 @@ import {
   setSidebarOpen,
 } from '../../store/modules/liveEditor/actions';
 import { sleep } from '../../components/utils/utils';
-import {
-  CampaignNameDiv,
-  EditorContent,
-  EditorLayout,
-  EditorPreview,
-  EditorToolbar,
-} from './StyledComponents';
+import { CampaignNameDiv, EditorContent, EditorLayout, EditorPreview } from './StyledComponents';
+import EditorToolbar from './EditorToolbar';
 
 export default function Editor() {
   const dispatch = useDispatch();
@@ -48,6 +43,7 @@ export default function Editor() {
   const liveEditorChanges = useSelector(state => state.liveEditor?.edits);
   const sidebarOpen = useSelector(state => state.liveEditor?.sidebarOpen);
   const selectedPhoto = useSelector(state => state.liveEditor?.selectedPhoto);
+  const zoomValue = useSelector(state => state.liveEditor?.zoomValue);
   const [activeNavItem, setActiveNavItem] = useState(1); // 0 default - 1 for testing
   const [frontLoaded, setFrontLoaded] = useState(false);
   const [backLoaded, setBackLoaded] = useState(false);
@@ -271,18 +267,34 @@ export default function Editor() {
     [setFrontLoaded, setBackLoaded]
   );
 
-  const handleSave = async ({ postcardSize, mailoutDisplayAgent, templateTheme }) => {
+  const handleSave = async ({
+    postcardSize,
+    mailoutDisplayAgent,
+    templateTheme,
+    frontImgUrl,
+    frontResourceUrl,
+    backResourceUrl,
+  }) => {
     if (customizeCTA && invalidCTA) {
       setActiveNavItem(1);
       dispatch(setCustomCtaOpen(true));
       return;
     }
-    if (postcardSize || mailoutDisplayAgent || templateTheme)
+    if (postcardSize || mailoutDisplayAgent || templateTheme || frontResourceUrl || backResourceUrl)
       dispatch(setReloadIframesPending(true));
     const newData = {};
     if (postcardSize) newData.postcardSize = postcardSize;
-    if (mailoutDisplayAgent) newData.mailoutDisplayAgent = mailoutDisplayAgent;
     if (templateTheme) newData.templateTheme = templateTheme;
+    if (frontImgUrl) {
+      sendPostMessage('front', {
+        type: 'switchImageUrl',
+        imageTitle: 'frontImgUrl',
+        newUrl: frontImgUrl,
+      });
+      newData.frontImgUrl = frontImgUrl;
+    }
+    if (frontResourceUrl) newData.frontResourceUrl = frontResourceUrl;
+    if (backResourceUrl) newData.backResourceUrl = backResourceUrl;
     if (newCampaignName) newData.name = newCampaignName;
     const { fields, brandColor } = liveEditorChanges;
     if (fields) newData.fields = fields;
@@ -290,13 +302,12 @@ export default function Editor() {
     if (customizeCTA) newData.ctas = { cta: newCTA, shortenCTA: true, hideCTA: false };
     else if (hideCTA) newData.ctas = { cta: newCTA, hideCTA: true };
     else newData.ctas = { dontOverride: true };
-
-    dispatch(updateMailoutEditPending(newData));
+    dispatch(updateMailoutEditPending({ newData, mailoutDisplayAgent }));
     setEditingName(false);
   };
 
   const navItems = [
-    { name: 'Select Templates', iconName: 'picture' },
+    { name: 'Pages', iconName: 'picture' },
     { name: 'Editor', iconName: 'edit outline' },
     { name: 'Uploads', iconName: 'cloud upload' },
     { name: 'Import', iconName: 'bolt' },
@@ -393,9 +404,7 @@ export default function Editor() {
             showCTA={showCTA}
           />
           <EditorContent>
-            <EditorToolbar>
-              <p>Toolbar Content</p>
-            </EditorToolbar>
+            <EditorToolbar />
             {details && (
               <EditorPreview>
                 <FrontIframe
@@ -407,15 +416,18 @@ export default function Editor() {
                   postcardSize={details?.postcardSize}
                   ref={onFrontChange}
                   reloadPending={reloadIframesPending}
+                  scale={zoomValue}
                 />
                 <BackIframe
                   campaignId={details?._id}
                   backLoaded={backLoaded}
+                  backResourceUrl={details?.backResourceUrl || null}
                   backURL={backURL}
                   handleOnload={handleOnload}
                   postcardSize={details?.postcardSize}
                   ref={onBackChange}
                   reloadPending={reloadIframesPending}
+                  scale={zoomValue}
                 />
               </EditorPreview>
             )}

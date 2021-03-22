@@ -26,6 +26,7 @@ import Modal from './Modal';
 import Page from './Page';
 import Pagination from './Pagination';
 import Popup from './Popup';
+import RangeInput from './RangeInput';
 import Responsive from './Responsive';
 import SectionHeader from './SectionHeader';
 import Segment from './Segment';
@@ -65,6 +66,7 @@ export {
   Page,
   Pagination,
   Popup,
+  RangeInput,
   Responsive,
   Snackbar,
   SectionHeader,

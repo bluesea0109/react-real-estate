@@ -12,6 +12,8 @@ export const SET_SIDEBAR_OPEN = 'SET_SIDEBAR_OPEN';
 export const SET_LIVE_EDIT_FIELDS = 'SET_LIVE_EDIT_FIELDS';
 export const SET_LIVE_EDIT_BRAND_COLOR = 'SET_LIVE_EDIT_BRAND_COLOR';
 export const SET_SELECTED_PHOTO = 'SET_SELECTED_PHOTO';
+export const SET_ZOOM_VALUE = 'SET_ZOOM_VALUE';
+export const SET_SELECTED_TEMPLATE = 'SET_SELECTED_TEMPLATE';
 
 export function setReloadIframes(payload) {
   return createAction(SET_RELOAD_IFRAMES, payload);
@@ -59,4 +61,11 @@ export function setLiveEditBrandColor(payload) {
 
 export function setSelectedPhoto(payload) {
   return createAction(SET_SELECTED_PHOTO, payload);
+}
+
+export function setZoomValue(payload) {
+  return createAction(SET_ZOOM_VALUE, payload);
+}
+export function setSelectedTemplate(payload) {
+  return createAction(SET_SELECTED_TEMPLATE, payload);
 }
