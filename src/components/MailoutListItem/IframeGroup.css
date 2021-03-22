@@ -1,0 +1,49 @@
+#cust-address-small {
+  position: absolute;
+  top: 59.45px;
+  left: 26.5px;
+  width: 75.67px;
+  height: 37.83px;
+  font-size: 7.57px;
+  text-transform: uppercase;
+  text-align: left;
+}
+
+#ink-free-area-small {
+  border: 1px solid red;
+  background-color: white;
+  position: absolute;
+  width: 1.7835in;
+  height: 1.3035in;
+  right: 0.05in;
+  bottom: 0.05in;
+}
+#ink-free-text-small {
+  position: absolute;
+  bottom: 2.16px;
+  right: 0.4px;
+  font-size: 5.4px;
+  text-transform: uppercase;
+  width: 100%;
+  text-align: center;
+  color: darkred;
+}
+#postage-small {
+  border: 1px solid #262626;
+  width: 40.54px;
+  height: 33.5px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 6.48px;
+  position: absolute;
+  top: 0.125in;
+  right: 0.2in;
+}
