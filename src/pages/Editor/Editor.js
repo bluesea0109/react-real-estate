@@ -104,7 +104,7 @@ export default function Editor() {
     }
   }, [isCTAHidden]);
 
-  // reload the iframes based when true in redux store
+  // reload the iframes when true in redux store
   useEffect(() => {
     if (!reloadIframes) return;
     let frontIframe = frontIframeRef || document.getElementById('bm-iframe-front');
