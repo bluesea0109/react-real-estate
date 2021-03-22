@@ -236,8 +236,7 @@ export function* updateMailoutEditSaga({ peerId = null }, action) {
       agentResponse = yield call(ApiService[agentMethod], agentPath, { mailoutDisplayAgent });
       yield put(updateMailoutEditValues(agentResponse));
       yield put(setReplaceFieldData(agentResponse?.fields));
-    }
-    if (reloadIframesPending) {
+    } else if (reloadIframesPending) {
       yield put(setReloadIframes(true));
     }
     yield put(updateMailoutEditSuccess(apiResponse));

@@ -155,6 +155,7 @@ export default function Editor() {
       sendPostMessage('front', { type: 'updateAllFields', replaceFieldData });
       sendPostMessage('back', { type: 'updateAllFields', replaceFieldData });
       dispatch(setReplaceFieldData(false));
+      dispatch(setReloadIframesPending(false));
     }
   }, [dispatch, replaceFieldData, mailoutEdit, sendPostMessage]);
 
@@ -295,7 +296,7 @@ export default function Editor() {
       dispatch(setCustomCtaOpen(true));
       return;
     }
-    if (postcardSize || templateTheme || frontResourceUrl || backResourceUrl)
+    if (postcardSize || mailoutDisplayAgent || templateTheme || frontResourceUrl || backResourceUrl)
       dispatch(setReloadIframesPending(true));
     const newData = {};
     if (postcardSize) newData.postcardSize = postcardSize;
