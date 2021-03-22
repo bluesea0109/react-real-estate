@@ -218,7 +218,8 @@ export function* updateMailoutEditSaga({ peerId = null }, action) {
       apiData = { ...apiData, templateTheme: mailoutEdit.templateTheme };
     }
     const reloadIframesPending = yield select(getReloadIframesPending);
-    yield put(updateMailoutEditValues({ ...apiData, mailoutDisplayAgent }));
+    let updateEditValues = mailoutDisplayAgent ? { ...apiData, mailoutDisplayAgent } : apiData;
+    yield put(updateMailoutEditValues(updateEditValues));
     const { path, method } = peerId
       ? ApiService.directory.peer.mailout.edit.update(mailoutId, peerId)
       : ApiService.directory.user.mailout.edit.update(mailoutId);

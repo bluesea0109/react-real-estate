@@ -104,19 +104,21 @@ export default function Editor() {
 
   useEffect(() => {
     if (!reloadIframes) return;
+    let frontIframe = frontIframeRef || document.getElementById('bm-iframe-front');
+    let backIframe = backIframeRef || document.getElementById('bm-iframe-back');
     if (
       (reloadIframes === 'front' || reloadIframes === true) &&
-      frontIframeRef?.contentWindow?.location
+      frontIframe?.contentWindow?.location
     ) {
       setFrontLoaded(false);
-      frontIframeRef.contentWindow.location.reload();
+      frontIframe.contentWindow.location.reload();
     }
     if (
       (reloadIframes === 'back' || reloadIframes === true) &&
-      backIframeRef?.contentWindow?.location
+      backIframe?.contentWindow?.location
     ) {
       setBackLoaded(false);
-      backIframeRef.contentWindow.location.reload();
+      backIframe.contentWindow.location.reload();
     }
     dispatch(setReloadIframes(false));
     dispatch(setReloadIframesPending(false));
