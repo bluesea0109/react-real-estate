@@ -88,6 +88,7 @@ const presetColors = [
 export default function EditorTab({
   colorPickerVal,
   customizeCTA,
+  hideCTA,
   handleSave,
   invalidCTA,
   newCTA,
@@ -95,6 +96,8 @@ export default function EditorTab({
   setCustomizeCTA,
   setInvalidCTA,
   setNewCTA,
+  setHideCTA,
+  showCTA,
 }) {
   const dispatch = useDispatch();
   const details = useSelector(state => state.mailout?.details);
@@ -186,11 +189,15 @@ export default function EditorTab({
       >
         <CustomCTA
           customizeCTA={customizeCTA}
+          hideCTA={hideCTA}
+          handleSave={handleSave}
           setCustomizeCTA={setCustomizeCTA}
           newCTA={newCTA}
           invalidCTA={invalidCTA}
+          setHideCTA={setHideCTA}
           setInvalidCTA={setInvalidCTA}
           setNewCTA={setNewCTA}
+          showCTA={showCTA}
         />
       </DropdownCard>
     </>

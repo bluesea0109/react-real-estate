@@ -53,6 +53,7 @@ export default function Editor() {
   const [editingName, setEditingName] = useState(false);
   const [newCampaignName, setNewCampaignName] = useState('');
   const customCTA = useSelector(state => state.mailout?.details?.cta);
+  const isCTAHidden = useSelector(state => state.mailout?.mailoutEdit?.ctas?.hideCTA);
   const currentListingStatus = details?.listingStatus;
   const defaultCTA = useSelector(store => {
     let bestCta = details?.cta;
@@ -65,6 +66,7 @@ export default function Editor() {
   const [customizeCTA, setCustomizeCTA] = useState(false);
   const [newCTA, setNewCTA] = useState(defaultCTA);
   const [invalidCTA, setInvalidCTA] = useState(false);
+  const [hideCTA, setHideCTA] = useState(false);
 
   useEffect(() => {
     const deselectPhoto = e => {
@@ -94,6 +96,11 @@ export default function Editor() {
       showSaveStatus();
     }
   }, [dispatch, saveSuccess]);
+  useEffect(() => {
+    if (isCTAHidden) {
+      setHideCTA(true);
+    }
+  }, [isCTAHidden]);
 
   useEffect(() => {
     if (!reloadIframes) return;
@@ -189,6 +196,16 @@ export default function Editor() {
     if (backLoaded) sendInitMessage('back');
   }, [backLoaded, sendInitMessage]);
 
+  useEffect(() => {
+    sendPostMessage('front', { type: 'hideCTA', hideCTA: hideCTA });
+    sendPostMessage('back', { type: 'hideCTA', hideCTA: hideCTA });
+  }, [hideCTA, sendPostMessage]);
+
+  const showCTA = () => {
+    sendPostMessage('front', { type: 'cta', CTA: 'briv.it/123' });
+    sendPostMessage('back', { type: 'cta', CTA: 'briv.it/123' });
+  };
+
   const handlePostMessage = useCallback(
     e => {
       if (e.data?.resetSelectedPhoto) dispatch(setSelectedPhoto(''));
@@ -282,7 +299,8 @@ export default function Editor() {
     const { fields, brandColor } = liveEditorChanges;
     if (fields) newData.fields = fields;
     if (brandColor) newData.brandColor = brandColor;
-    if (customizeCTA) newData.ctas = { cta: newCTA, shortenCTA: true };
+    if (customizeCTA) newData.ctas = { cta: newCTA, shortenCTA: true, hideCTA: false };
+    else if (hideCTA) newData.ctas = { cta: newCTA, hideCTA: true };
     else newData.ctas = { dontOverride: true };
     dispatch(updateMailoutEditPending({ newData, mailoutDisplayAgent }));
     setEditingName(false);
@@ -373,14 +391,17 @@ export default function Editor() {
             colorPickerVal={colorPickerVal}
             customCTA={customCTA}
             customizeCTA={customizeCTA}
+            hideCTA={hideCTA}
             invalidCTA={invalidCTA}
             newCTA={newCTA}
             setCustomizeCTA={setCustomizeCTA}
+            setHideCTA={setHideCTA}
             setInvalidCTA={setInvalidCTA}
             setNewCTA={setNewCTA}
             setColorPickerVal={setColorPickerVal}
             handleSave={handleSave}
             mailoutDetails={details}
+            showCTA={showCTA}
           />
           <EditorContent>
             <EditorToolbar />

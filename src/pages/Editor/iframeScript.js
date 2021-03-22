@@ -67,6 +67,22 @@ const domLoaded = () => {
     });
   };
 
+  const hideCallToAction = hide => {
+    let ctaElem = document.getElementById('cta');
+    if (ctaElem === null) return;
+    if (hide === true) {
+      ctaElem.style.display = 'none';
+    } else {
+      ctaElem.style.display = 'block';
+    }
+  };
+
+  const insertCallToAction = cta => {
+    let ctaElem = document.getElementById('cta');
+    if (ctaElem === null) return;
+    ctaElem.innerHTML = cta;
+  };
+
   function receiver(e) {
     __parentWindow = e.source;
     __parentOrigin = e.origin;
@@ -79,6 +95,12 @@ const domLoaded = () => {
     else if (e.data?.type === 'imageSelected') {
       newImgSrc = e.data?.imgSrc;
       setImagesSelectable(e.data?.imgSrc ? true : false);
+    } else if (e.data?.type === 'hideCTA') {
+      const { hideCTA } = e.data;
+      hideCallToAction(hideCTA);
+    } else if (e.data?.type === 'cta') {
+      const { CTA } = e.data;
+      insertCallToAction(CTA);
     } else console.log(JSON.stringify(e.data));
   }
 

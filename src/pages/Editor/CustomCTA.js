@@ -23,17 +23,21 @@ const CTAContent = styled.div`
 
 export default function CustomCTA({
   customizeCTA,
+  hideCTA,
   setCustomizeCTA,
   newCTA,
   invalidCTA,
   setInvalidCTA,
   setNewCTA,
+  setHideCTA,
+  showCTA,
 }) {
   const ctaInputRef = useRef(null);
   const handleCTAChange = e => {
     setInvalidCTA(!ctaInputRef?.current?.checkValidity());
     setNewCTA(e.target.value);
   };
+
   return (
     <CTAContent>
       <p>Customize the call to action URL for this campaign?</p>
@@ -43,16 +47,35 @@ export default function CustomCTA({
           label="Don't Customize - use default"
           name="checkboxRadioGroup"
           value="not-customized"
-          checked={!customizeCTA}
-          onClick={() => setCustomizeCTA(false)}
+          checked={hideCTA ? false : !customizeCTA}
+          onClick={() => {
+            setHideCTA(false);
+            setCustomizeCTA(false);
+            showCTA();
+          }}
         />
         <Checkbox
           radio
           label="Customize call to action URL - URL will be shortened and lead tracking enabled"
           name="checkboxRadioGroup"
           value="customized"
-          checked={customizeCTA}
-          onClick={() => setCustomizeCTA(true)}
+          checked={hideCTA ? false : customizeCTA}
+          onClick={() => {
+            setHideCTA(false);
+            setCustomizeCTA(true);
+            showCTA();
+          }}
+        />
+        <Checkbox
+          radio
+          label="Hide call to action"
+          name="checkboxRadioGroup"
+          value="hide"
+          checked={hideCTA}
+          onClick={() => {
+            setHideCTA(true);
+            setCustomizeCTA(false);
+          }}
         />
       </div>
       {customizeCTA && (
