@@ -1,66 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Cropper from 'react-cropper';
-import styled from 'styled-components';
 import { Dimmer, Icon, Loader, Modal, Header, Button } from '../../components/Base';
 import DropTarget from '../../components/Base/DropTarget';
-import * as brandColors from '../../components/utils/brandColors';
 import auth from '../../services/auth';
 import api from '../../services/api';
 import { setAddMailoutError } from '../../store/modules/mailout/actions';
 import { getAspectRatio } from '../Utils/getAspectRatio';
-
-const ImageUpload = styled.div`
-  position: relative;
-  width: 100%auto;
-  height: 160px;
-  border-radius: 4px;
-  border: 2px dashed ${brandColors.grey05};
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: ${brandColors.grey08};
-  text-align: center;
-  font-weight: bold;
-  & i {
-    margin-bottom: 0.5rem;
-  }
-  & .error {
-    display: flex;
-    align-items: center;
-    margin-top: 0.5rem;
-    color: ${brandColors.error};
-    & i {
-      margin: 0;
-      margin-right: 0.25rem;
-    }
-  }
-`;
-
-const StyledHeading = styled.div`
-  margin: 0.5rem 0;
-  font-size: ${props => (props.type === 'secondary' ? '16px' : '17px')};
-  font-weight: ${props => (props.type === 'secondary' ? '400' : '600')};
-  & .ui.dropdown > .text {
-    padding: 4px 0;
-  }
-  &&& .loader {
-    margin-left: 1rem;
-  }
-`;
-
-const CustomImage = styled.div`
-  position: relative;
-`;
-
-const ImageOption = styled.img`
-  box-shadow: 1px 1px 4px ${brandColors.grey08};
-  border-radius: 4px;
-  ${props => (props.current ? `border: 2px solid ${brandColors.primary}; padding: 0.25rem;` : null)}
-  ${props => (!props.current ? `cursor: pointer;` : null)}
-`;
+import { CustomImage, ImageOption, ImageUpload, StyledHeading } from './StyledComponents';
 
 const CustomPhoto = ({ handleSave, mailoutDetails }) => {
   const dispatch = useDispatch();

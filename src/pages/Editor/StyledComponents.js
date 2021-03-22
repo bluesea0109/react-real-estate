@@ -97,3 +97,15 @@ export const ImageUpload = styled.div`
     }
   }
 `;
+
+export const StyledHeading = styled.div`
+  margin: 0.5rem 0;
+  font-size: ${props => (props.type === 'secondary' ? '16px' : '17px')};
+  font-weight: ${props => (props.type === 'secondary' ? '400' : '600')};
+  & .ui.dropdown > .text {
+    padding: 4px 0;
+  }
+  &&& .loader {
+    margin-left: 1rem;
+  }
+`;
