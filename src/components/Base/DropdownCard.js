@@ -39,6 +39,9 @@ const StyledDropdownCard = styled(DropdownCard)`
   }
   & > .content {
     margin-top: 0.5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
 `;
 
