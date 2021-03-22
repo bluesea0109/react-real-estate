@@ -6,6 +6,7 @@ import {
   SET_POSTCARD_SIZE_OPEN,
   SET_RELOAD_IFRAMES,
   SET_RELOAD_IFRAMES_PENDING,
+  SET_REPLACE_FIELD_DATA,
   SET_CUSTOM_UPLOAD_URL,
   SET_SIDEBAR_OPEN,
   SET_LIVE_EDIT_FIELDS,
@@ -18,6 +19,7 @@ import {
 const initialState = {
   reloadIframes: false,
   reloadIframesPending: false,
+  replaceFieldData: false,
   brandColorOpen: false,
   postcardSizeOpen: false,
   photosOpen: false,
@@ -45,6 +47,11 @@ export default function liveEditor(state = initialState, action) {
       return {
         ...state,
         reloadIframesPending: action.payload,
+      };
+    case SET_REPLACE_FIELD_DATA:
+      return {
+        ...state,
+        replaceFieldData: action.payload,
       };
     case SET_BRAND_COLOR_OPEN:
       return {

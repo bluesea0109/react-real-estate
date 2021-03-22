@@ -44,7 +44,11 @@ import {
 } from './actions';
 import ApiService from '../../../services/api/index';
 import { getMailoutsPending } from '../mailouts/actions';
-import { setReloadIframes, setReloadIframesPending } from '../liveEditor/actions';
+import {
+  setReloadIframes,
+  setReloadIframesPending,
+  setReplaceFieldData,
+} from '../liveEditor/actions';
 
 export const getSelectedPeerId = state => state.peer?.peerId;
 export const getMailoutId = state => state.mailout?.mailoutId;
@@ -218,7 +222,8 @@ export function* updateMailoutEditSaga({ peerId = null }, action) {
       apiData = { ...apiData, templateTheme: mailoutEdit.templateTheme };
     }
     const reloadIframesPending = yield select(getReloadIframesPending);
-    yield put(updateMailoutEditValues({ ...apiData, mailoutDisplayAgent }));
+    let updateEditValues = mailoutDisplayAgent ? { ...apiData, mailoutDisplayAgent } : apiData;
+    yield put(updateMailoutEditValues(updateEditValues));
     const { path, method } = peerId
       ? ApiService.directory.peer.mailout.edit.update(mailoutId, peerId)
       : ApiService.directory.user.mailout.edit.update(mailoutId);
@@ -229,11 +234,12 @@ export function* updateMailoutEditSaga({ peerId = null }, action) {
         ? ApiService.directory.peer.mailout.edit.updateDisplayAgent(mailoutId, peerId)
         : ApiService.directory.user.mailout.edit.updateDisplayAgent(mailoutId);
       agentResponse = yield call(ApiService[agentMethod], agentPath, { mailoutDisplayAgent });
-    }
-    if (reloadIframesPending) {
+      yield put(updateMailoutEditValues(agentResponse));
+      yield put(setReplaceFieldData(agentResponse?.fields));
+    } else if (reloadIframesPending) {
       yield put(setReloadIframes(true));
     }
-    yield put(updateMailoutEditSuccess(agentResponse || apiResponse));
+    yield put(updateMailoutEditSuccess(apiResponse));
   } catch (err) {
     yield put(updateMailoutEditError(err));
     yield put(setReloadIframesPending(false));

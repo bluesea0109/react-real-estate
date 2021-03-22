@@ -83,6 +83,14 @@ const domLoaded = () => {
     ctaElem.innerHTML = cta;
   };
 
+  const updateAllFields = newData => {
+    newData.forEach(field => {
+      let node = document.querySelector(`[title="${field.name}"]`);
+      if (node?.nodeName === 'IMG') node.src = field.value;
+      else if (node) node.innerHTML = field.value;
+    });
+  };
+
   function receiver(e) {
     __parentWindow = e.source;
     __parentOrigin = e.origin;
@@ -101,6 +109,8 @@ const domLoaded = () => {
     } else if (e.data?.type === 'cta') {
       const { CTA } = e.data;
       insertCallToAction(CTA);
+    } else if (e.data?.type === 'updateAllFields') {
+      updateAllFields(e.data?.replaceFieldData);
     } else console.log(JSON.stringify(e.data));
   }
 
