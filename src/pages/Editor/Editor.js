@@ -23,6 +23,7 @@ import {
   setLiveEditFields,
   setReloadIframes,
   setReloadIframesPending,
+  setReplaceFieldData,
   setSelectedPhoto,
   setSidebarOpen,
 } from '../../store/modules/liveEditor/actions';
@@ -40,6 +41,7 @@ export default function Editor() {
   const saveSuccess = useSelector(state => state.mailout?.updateMailoutEditSuccess);
   const reloadIframes = useSelector(state => state.liveEditor?.reloadIframes);
   const reloadIframesPending = useSelector(state => state.liveEditor?.reloadIframesPending);
+  const replaceFieldData = useSelector(state => state.liveEditor?.replaceFieldData);
   const liveEditorChanges = useSelector(state => state.liveEditor?.edits);
   const sidebarOpen = useSelector(state => state.liveEditor?.sidebarOpen);
   const selectedPhoto = useSelector(state => state.liveEditor?.selectedPhoto);
@@ -102,6 +104,7 @@ export default function Editor() {
     }
   }, [isCTAHidden]);
 
+  // reload the iframes based when true in redux store
   useEffect(() => {
     if (!reloadIframes) return;
     let frontIframe = frontIframeRef || document.getElementById('bm-iframe-front');
@@ -144,6 +147,16 @@ export default function Editor() {
     },
     [frontIframeRef, backIframeRef]
   );
+
+  // replace the field data without reload when true in redux store
+  useEffect(() => {
+    if (replaceFieldData) {
+      console.log('Replace fields in the iframe');
+      sendPostMessage('front', { type: 'updateAllFields', replaceFieldData });
+      sendPostMessage('back', { type: 'updateAllFields', replaceFieldData });
+      dispatch(setReplaceFieldData(false));
+    }
+  }, [dispatch, replaceFieldData, mailoutEdit, sendPostMessage]);
 
   // send a postMessage to the iframe when the selected photo changes
   useEffect(() => {
@@ -282,7 +295,7 @@ export default function Editor() {
       dispatch(setCustomCtaOpen(true));
       return;
     }
-    if (postcardSize || mailoutDisplayAgent || templateTheme || frontResourceUrl || backResourceUrl)
+    if (postcardSize || templateTheme || frontResourceUrl || backResourceUrl)
       dispatch(setReloadIframesPending(true));
     const newData = {};
     if (postcardSize) newData.postcardSize = postcardSize;

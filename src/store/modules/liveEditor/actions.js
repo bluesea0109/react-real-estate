@@ -2,6 +2,7 @@ import { createAction } from '../../utils/helpers';
 
 export const SET_RELOAD_IFRAMES = 'SET_RELOAD_IFRAMES';
 export const SET_RELOAD_IFRAMES_PENDING = 'SET_RELOAD_IFRAMES_PENDING';
+export const SET_REPLACE_FIELD_DATA = 'SET_REPLACE_FIELD_DATA';
 export const SET_BRAND_COLOR_OPEN = 'SET_BRAND_COLOR_OPEN';
 export const SET_POSTCARD_SIZE_OPEN = 'SET_POSTCARD_SIZE_OPEN';
 export const SET_PHOTOS_OPEN = 'SET_PHOTOS_OPEN';
@@ -21,6 +22,10 @@ export function setReloadIframes(payload) {
 
 export function setReloadIframesPending(payload) {
   return createAction(SET_RELOAD_IFRAMES_PENDING, payload);
+}
+
+export function setReplaceFieldData(payload) {
+  return createAction(SET_REPLACE_FIELD_DATA, payload);
 }
 
 export function setBrandColorOpen(payload) {
