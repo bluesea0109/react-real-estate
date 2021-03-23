@@ -88,10 +88,14 @@ const CustomPhoto = ({ handleSave, mailoutDetails }) => {
   };
 
   const saveImage = () => {
-    if (!cropperRef.current?.cropper) {
+    const cropper = cropperRef.current?.cropper;
+    if (!cropper) {
       setImageError('There was an error saving your file');
       return;
     }
+    const cropData = cropper.getData();
+    if (cropData.width < minImageSize.width) cropper.setData({ width: minImageSize.width });
+    if (cropData.height < minImageSize.height) cropper.setData({ height: minImageSize.height });
     cropperRef.current.cropper.getCroppedCanvas().toBlob(async blob => {
       const imageURL = await getCustomImageURL(blob);
       if (!imageURL) {
@@ -104,7 +108,7 @@ const CustomPhoto = ({ handleSave, mailoutDetails }) => {
     });
   };
 
-  const onCropMove = function(e) {
+  const onCropMove = function() {
     // Stop cropper from making image too small
     const cropper = cropperRef?.current?.cropper;
     const minPercentageWidth = minImageSize?.width / uploadedImageSize?.width;
@@ -136,6 +140,7 @@ const CustomPhoto = ({ handleSave, mailoutDetails }) => {
           zoomable={false}
           cropmove={onCropMove}
           responsive
+          viewMode={1}
         />
         <div className="modal-buttons">
           <Button onClick={() => setModalOpen(false)}>
