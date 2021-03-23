@@ -114,7 +114,13 @@ const domLoaded = () => {
     } else console.log(JSON.stringify(e.data));
   }
 
+  function preventDefault(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
   window.addEventListener('message', receiver, false);
+  document.addEventListener('drop', preventDefault);
 
   Array.prototype.forEach.call(elements, function(el, i) {
     const name = el.getAttribute('title');
