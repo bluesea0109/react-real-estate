@@ -9,6 +9,7 @@ import { setAddMailoutError } from '../../store/modules/mailout/actions';
 import { setSelectedTemplate } from '../../store/modules/liveEditor/actions';
 import { getAspectRatio } from '../Utils/getAspectRatio';
 import { CropModal, CustomImage, ImageOption, ImageUpload } from './StyledComponents';
+import { getMinImageSize, validateFile, verifyImageSize } from './utils/utils';
 
 const CustomPhoto = ({ handleSave, mailoutDetails }) => {
   const dispatch = useDispatch();
@@ -41,49 +42,12 @@ const CustomPhoto = ({ handleSave, mailoutDetails }) => {
     }
   }, [currentPhoto, dispatch]);
 
-  const verifyImageSize = (image, size) => {
-    const { width, height } = image;
-    switch (size) {
-      case '6x11':
-      case '11x6':
-        if (width < 3375 || height < 1875) return false;
-        else return true;
-      case '6x9':
-      case '9x6':
-        if (width < 2775 || height < 1875) return false;
-        else return true;
-      default:
-        if (width < 1875 || height < 1275) return false;
-        else return true;
-    }
-  };
-
-  const getMinImageSize = size => {
-    switch (size) {
-      case '6x11':
-      case '11x6':
-        return { width: 3375, height: 1875 };
-      case '6x9':
-      case '9x6':
-        return { width: 2775, height: 1875 };
-      default:
-        return { width: 1875, height: 1275 };
-    }
-  };
-
   const handleFileChange = fileList => {
     setImageError(null);
     const file = fileList[0];
-    if (!file) {
-      setImageError('No File Found');
-      return;
-    }
-    if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
-      setImageError('Warning! File upload failed. Your design is not a supported file type.');
-      return;
-    }
-    if (file.size > 5000000) {
-      setImageError('Warning! File upload failed. Your design exceeded the 5MB size limit.');
+    const fileError = validateFile(file);
+    if (fileError) {
+      setImageError(fileError);
       return;
     }
     const reader = new FileReader();
@@ -92,7 +56,6 @@ const CustomPhoto = ({ handleSave, mailoutDetails }) => {
       image.src = e.target.result;
       image.onload = () => {
         const isValidSize = verifyImageSize(image, mailoutDetails.postcardSize);
-        console.log(isValidSize);
         if (isValidSize) {
           setUploadedImage(e.target.result);
           setUploadedImageSize({ width: image.width, height: image.height });
@@ -133,6 +96,10 @@ const CustomPhoto = ({ handleSave, mailoutDetails }) => {
   };
 
   const saveImage = () => {
+    if (!cropperRef.current?.cropper) {
+      setImageError('There was an error saving your file');
+      return;
+    }
     cropperRef.current.cropper.getCroppedCanvas().toBlob(async blob => {
       const imageURL = await getCustomImageURL(blob);
       if (!imageURL) {
