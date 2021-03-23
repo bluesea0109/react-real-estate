@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Cropper from 'react-cropper';
-import { Dimmer, Icon, Loader, Modal, Header, Button } from '../../components/Base';
+import { Dimmer, Icon, Loader, Button } from '../../components/Base';
 import DropTarget from '../../components/Base/DropTarget';
 import auth from '../../services/auth';
 import api from '../../services/api';
 import { setAddMailoutError } from '../../store/modules/mailout/actions';
 import { setSelectedTemplate } from '../../store/modules/liveEditor/actions';
 import { getAspectRatio } from '../Utils/getAspectRatio';
-import { CustomImage, ImageOption, ImageUpload, StyledHeading } from './StyledComponents';
+import { CropModal, CustomImage, ImageOption, ImageUpload } from './StyledComponents';
 
 const CustomPhoto = ({ handleSave, mailoutDetails }) => {
   const dispatch = useDispatch();
@@ -19,9 +19,15 @@ const CustomPhoto = ({ handleSave, mailoutDetails }) => {
   const [uploadDragOver, setUploadDragOver] = useState(false);
   const [imageError, setImageError] = useState(null);
   const [uploadedImage, setUploadedImage] = useState(null);
+  const [uploadedImageSize, setUploadedImageSize] = useState(null);
+  const [minImageSize, setMinImageSize] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [imageUploading, setImageUploading] = useState(false);
-  const [cropper, setCropper] = useState(null);
+  const cropperRef = useRef(null);
+
+  useEffect(() => {
+    setMinImageSize(getMinImageSize(mailoutDetails.postcardSize));
+  }, [mailoutDetails]);
 
   useEffect(() => {
     if (uploadedImage) {
@@ -34,6 +40,36 @@ const CustomPhoto = ({ handleSave, mailoutDetails }) => {
       dispatch(setSelectedTemplate(false));
     }
   }, [currentPhoto, dispatch]);
+
+  const verifyImageSize = (image, size) => {
+    const { width, height } = image;
+    switch (size) {
+      case '6x11':
+      case '11x6':
+        if (width < 3375 || height < 1875) return false;
+        else return true;
+      case '6x9':
+      case '9x6':
+        if (width < 2775 || height < 1875) return false;
+        else return true;
+      default:
+        if (width < 1875 || height < 1275) return false;
+        else return true;
+    }
+  };
+
+  const getMinImageSize = size => {
+    switch (size) {
+      case '6x11':
+      case '11x6':
+        return { width: 3375, height: 1875 };
+      case '6x9':
+      case '9x6':
+        return { width: 2775, height: 1875 };
+      default:
+        return { width: 1875, height: 1275 };
+    }
+  };
 
   const handleFileChange = fileList => {
     setImageError(null);
@@ -52,7 +88,21 @@ const CustomPhoto = ({ handleSave, mailoutDetails }) => {
     }
     const reader = new FileReader();
     reader.onload = e => {
-      setUploadedImage(e.target.result);
+      let image = new Image();
+      image.src = e.target.result;
+      image.onload = () => {
+        const isValidSize = verifyImageSize(image, mailoutDetails.postcardSize);
+        console.log(isValidSize);
+        if (isValidSize) {
+          setUploadedImage(e.target.result);
+          setUploadedImageSize({ width: image.width, height: image.height });
+        } else {
+          const minSize = getMinImageSize(mailoutDetails.postcardSize);
+          setImageError(
+            `Minimum image size is: Width - ${minSize?.width}, Height - ${minSize.height}`
+          );
+        }
+      };
     };
     reader.readAsDataURL(file);
   };
@@ -83,13 +133,12 @@ const CustomPhoto = ({ handleSave, mailoutDetails }) => {
   };
 
   const saveImage = () => {
-    cropper.getCroppedCanvas().toBlob(async blob => {
+    cropperRef.current.cropper.getCroppedCanvas().toBlob(async blob => {
       const imageURL = await getCustomImageURL(blob);
       if (!imageURL) {
         setImageError('There was an error uploading your file.');
         return;
       }
-
       setModalOpen(false);
       setImageUploading(false);
       dispatch(setSelectedTemplate(false));
@@ -97,41 +146,52 @@ const CustomPhoto = ({ handleSave, mailoutDetails }) => {
     });
   };
 
+  const onCropMove = function(e) {
+    // Stop cropper from making image too small
+    const cropper = cropperRef?.current?.cropper;
+    const minPercentageWidth = minImageSize?.width / uploadedImageSize?.width;
+    const minPercentageHeight = minImageSize?.height / uploadedImageSize?.height;
+    const minCropBoxWidth = Math.ceil(cropper?.containerData?.width * minPercentageWidth);
+    const minCropBoxHeight = Math.ceil(cropper?.containerData?.height * minPercentageHeight);
+    console.log(cropper?.cropBoxData);
+    console.log({ minCropBoxWidth });
+    console.log(cropper?.containerData);
+    console.log({ minCropBoxHeight });
+    if (cropper.cropBoxData?.width < minCropBoxWidth)
+      cropper.setCropBoxData({ width: minCropBoxWidth });
+    if (cropper.cropBoxData?.height < minCropBoxHeight)
+      cropper.setCropBoxData({ height: minCropBoxHeight });
+  };
+
   return (
     <>
-      <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
-        <Header icon="exclamation" content="Crop Image" />
-        <Modal.Content>
-          <Dimmer inverted active={imageUploading}>
-            <Loader>Saving</Loader>
-          </Dimmer>
-          <Modal.Description style={{ margin: 'auto' }}>
-            <StyledHeading type="secondary">
-              Adjust the crop area to fit the selected postcard size
-            </StyledHeading>
-          </Modal.Description>
-
-          <Cropper
-            aspectRatio={getAspectRatio(mailoutDetails?.postcardSize || '4x6')}
-            autoCropArea={1}
-            preview=".image-preview"
-            onInitialized={instance => {
-              setCropper(instance);
-            }}
-            src={uploadedImage}
-            style={{ margin: '0 1rem 1rem 1rem', maxWidth: '900px' }}
-            zoomable={false}
-          />
-        </Modal.Content>
-        <Modal.Actions>
-          <Button color="red" type="button" inverted onClick={() => setModalOpen(false)}>
+      <CropModal open={modalOpen} onClose={() => setModalOpen(false)}>
+        <Dimmer inverted active={imageUploading}>
+          <Loader>Saving</Loader>
+        </Dimmer>
+        <p className="direction">
+          Adjust the crop area to fit the selected postcard size. The minimum crop area is limited
+          to maintain print quality.
+        </p>
+        <Cropper
+          aspectRatio={getAspectRatio(mailoutDetails?.postcardSize || '4x6')}
+          autoCropArea={1}
+          ref={cropperRef}
+          src={uploadedImage}
+          style={{ maxWidth: '900px' }}
+          zoomable={false}
+          cropmove={onCropMove}
+          responsive
+        />
+        <div className="modal-buttons">
+          <Button onClick={() => setModalOpen(false)}>
             <Icon name="remove" /> Cancel
           </Button>
-          <Button color="green" type="button" inverted onClick={() => saveImage()}>
+          <Button primary onClick={() => saveImage()}>
             <Icon name="checkmark" /> Save
           </Button>
-        </Modal.Actions>
-      </Modal>
+        </div>
+      </CropModal>
       {currentPhoto && (
         <CustomImage>
           <Dimmer inverted active={imageUploading}>
