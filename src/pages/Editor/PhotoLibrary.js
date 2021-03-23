@@ -70,11 +70,10 @@ export default function PhotoLibrary({ handleSave }) {
                   key={img.id}
                   current={renderThumbnail(img) === selectedPhoto}
                   src={renderThumbnail(img)}
-                  bigImage={img.original}
                   alt="cover option"
                   onClick={() => dispatch(setSelectedPhoto(renderThumbnail(img)))}
                   onDragStart={e => {
-                    e.dataTransfer.setData('text', e.target.bigImage);
+                    e.dataTransfer.setData('text', img.original);
                   }}
                 />
               )
@@ -94,11 +93,10 @@ export default function PhotoLibrary({ handleSave }) {
               key={index}
               current={renderThumbnail(img) === selectedPhoto}
               src={renderThumbnail(img)}
-              bigImage={img.original}
               alt="cover option"
               onClick={() => dispatch(setSelectedPhoto(renderThumbnail(img)))}
               onDragStart={e => {
-                e.dataTransfer.setData('text', e.target.bigImage);
+                e.dataTransfer.setData('text', img.original);
               }}
             />
           ))
