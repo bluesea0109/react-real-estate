@@ -99,10 +99,11 @@ const AdPreview = ({ ad, website, viewMore, adTextLength, toggleAdTextLength }) 
               <Header as="h3" className="adPreviewTitle">
                 {ad.details.campaignName}
               </Header>
-              <Header
-                as="h5"
-                className="adPreviewSubtitle"
-              >{`${beds} beds | ${baths} baths | ${sqft} sqft`}</Header>
+              <Header as="h5" className="adPreviewSubtitle">
+                {ad.details.adType === 'homeValue'
+                  ? `Enter your address and get instant access to your home’s value.`
+                  : `${beds} beds | ${baths} baths | ${sqft} sqft`}
+              </Header>
             </Grid.Column>
             <Grid.Column width={6}>
               <div
