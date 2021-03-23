@@ -112,9 +112,6 @@ export function* getPhotoLibrary({ peerId = null }) {
       ? ApiService.directory.peer.photos.realtorPhoto.get(peerId)
       : ApiService.directory.user.photos.photoLibrary.get();
 
-    console.log('path', path);
-    console.log('method', method);
-
     const response = yield call(ApiService[method], path);
 
     yield put(getPhotoLibrarySuccess(response));
