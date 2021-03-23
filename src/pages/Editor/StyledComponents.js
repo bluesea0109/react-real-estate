@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Modal } from '../../components/Base';
 import * as brandColors from '../../components/utils/brandColors';
 
 export const EditorLayout = styled.div`
@@ -60,6 +61,9 @@ export const PhotoContainer = styled.div`
 
 export const CustomImage = styled.div`
   position: relative;
+  & > p {
+    margin: 0.5rem 0;
+  }
 `;
 
 export const ImageOption = styled.img`
@@ -83,6 +87,7 @@ export const ImageUpload = styled.div`
   background-color: ${brandColors.grey08};
   text-align: center;
   font-weight: bold;
+  padding: 0.5rem;
   & i {
     margin-bottom: 0.5rem;
   }
@@ -95,5 +100,30 @@ export const ImageUpload = styled.div`
       margin: 0;
       margin-right: 0.25rem;
     }
+  }
+`;
+
+export const StyledHeading = styled.div`
+  margin: 0.5rem 0;
+  font-size: ${props => (props.type === 'secondary' ? '16px' : '17px')};
+  font-weight: ${props => (props.type === 'secondary' ? '400' : '600')};
+  & .ui.dropdown > .text {
+    padding: 4px 0;
+  }
+  &&& .loader {
+    margin-left: 1rem;
+  }
+`;
+
+export const CropModal = styled(Modal)`
+  color: ${brandColors.grey03};
+  .direction {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+  .modal-buttons {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
   }
 `;

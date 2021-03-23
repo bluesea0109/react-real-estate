@@ -47,7 +47,7 @@ export default function Editor() {
   const sidebarOpen = useSelector(state => state.liveEditor?.sidebarOpen);
   const selectedPhoto = useSelector(state => state.liveEditor?.selectedPhoto);
   const zoomValue = useSelector(state => state.liveEditor?.zoomValue);
-  const [activeNavItem, setActiveNavItem] = useState(1); // 0 default - 1 for testing
+  const [activeNavItem, setActiveNavItem] = useState(1);
   const [frontLoaded, setFrontLoaded] = useState(false);
   const [backLoaded, setBackLoaded] = useState(false);
   const [colorPickerVal, setColorPickerVal] = useState(mailoutEdit?.brandColor);
@@ -152,7 +152,6 @@ export default function Editor() {
   // replace the field data without reload when true in redux store
   useEffect(() => {
     if (replaceFieldData) {
-      console.log('Replace fields in the iframe');
       sendPostMessage('front', { type: 'updateAllFields', replaceFieldData });
       sendPostMessage('back', { type: 'updateAllFields', replaceFieldData });
       dispatch(setReplaceFieldData(false));
