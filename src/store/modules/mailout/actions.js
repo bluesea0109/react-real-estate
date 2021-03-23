@@ -33,6 +33,7 @@ export const GET_MAILOUT_EDIT_ERROR = 'GET_MAILOUT_EDIT_ERROR';
 export const UPDATE_MAILOUT_EDIT_PENDING = 'UPDATE_MAILOUT_EDIT_PENDING';
 export const UPDATE_MAILOUT_EDIT_SUCCESS = 'UPDATE_MAILOUT_EDIT_SUCCESS';
 export const UPDATE_MAILOUT_EDIT_ERROR = 'UPDATE_MAILOUT_EDIT_ERROR';
+export const RESET_MAILOUT_EDIT_SUCCESS = 'RESET_MAILOUT_EDIT_SUCCESS';
 
 export const UPDATE_MAILOUT_TEMPLATE_THEME_PENDING = 'UPDATE_MAILOUT_TEMPLATE_THEME_PENDING';
 export const UPDATE_MAILOUT_TEMPLATE_THEME_SUCCESS = 'UPDATE_MAILOUT_TEMPLATE_THEME_SUCCESS';
@@ -61,6 +62,8 @@ export const CLEAR_MAILOUT_ERROR = 'CLEAR_MAILOUT_ERROR';
 
 export const SET_ADD_MAILOUT_ERROR = 'SET_ADD_MAILOUT_ERROR';
 export const CLEAR_ADD_MAILOUT_ERROR = 'CLEAR_ADD_MAILOUT_ERROR';
+
+export const UPDATE_MAILOUT_EDIT_VALUES = 'UPDATE_MAILOUT_EDIT_VALUES';
 
 export function getMailoutPending(payload) {
   return createAction(GET_MAILOUT_PENDING, payload);
@@ -158,6 +161,10 @@ export function updateMailoutEditSuccess(payload) {
   return createAction(UPDATE_MAILOUT_EDIT_SUCCESS, payload);
 }
 
+export function resetMailoutEditSuccess() {
+  return createAction(RESET_MAILOUT_EDIT_SUCCESS);
+}
+
 export function updateMailoutEditError(error) {
   return createErrorAction(UPDATE_MAILOUT_EDIT_ERROR, error);
 }
@@ -240,4 +247,8 @@ export function setAddMailoutError(error) {
 
 export function clearAddMailoutError() {
   return createAction(CLEAR_ADD_MAILOUT_ERROR);
+}
+
+export function updateMailoutEditValues(payload) {
+  return createAction(UPDATE_MAILOUT_EDIT_VALUES, payload);
 }

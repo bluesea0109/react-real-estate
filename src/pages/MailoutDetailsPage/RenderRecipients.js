@@ -16,7 +16,7 @@ export default function RenderRecipients({ currentNumberOfRecipients, details })
     store => store.mailout.updateMailoutSizePending
   );
   const handleEditDestinationsClick = () => {
-    history.push(`/dashboard/edit/${details._id}/destinations`);
+    history.push(`/postcards/edit/${details._id}/destinations`);
   };
   const enableEditRecipients =
     resolveMailoutStatus(details.mailoutStatus) !== 'Sent' &&

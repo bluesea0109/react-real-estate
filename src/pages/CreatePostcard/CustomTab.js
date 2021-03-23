@@ -2,7 +2,6 @@ import React from 'react';
 import Cropper from 'react-cropper';
 import { Button, ButtonOutline, Icon, Message } from '../../components/Base';
 import {
-  getAspectRatio,
   getUploadSizes,
   GridItem,
   GridItemContainer,
@@ -15,6 +14,8 @@ import {
   UploadTextContainer,
   ViewButton,
 } from '.';
+
+import { getAspectRatio } from '../Utils/getAspectRatio';
 
 export default function CustomTab({
   cropper,

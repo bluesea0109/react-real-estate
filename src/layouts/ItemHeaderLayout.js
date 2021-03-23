@@ -8,7 +8,7 @@ export default styled(Header)`
 
   display: grid !important;
   grid-template-rows: 1fr;
-  grid-template-columns: [label] 75px [address] 6fr auto [menu] 4fr;
+  grid-template-columns: [label] 75px [address] auto [menu] auto;
   grid-template-areas: 'label address . menu';
 
   @media (max-width: 768px) {

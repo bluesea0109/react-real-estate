@@ -166,7 +166,7 @@ const MailoutDetailsPage = () => {
   };
 
   const handleEditMailoutDetailsClick = () => {
-    history.push(`/dashboard/edit/${details._id}`);
+    history.push(`/postcards/edit/${details._id}`);
   };
 
   const renderDestinations = () => {
@@ -215,18 +215,22 @@ const MailoutDetailsPage = () => {
         dispatch={dispatch}
         frontCard={
           <FrontIframe
-            details={details}
+            campaignId={details?._id}
             frontLoaded={frontLoaded}
+            frontResourceUrl={details?.frontResourceUrl}
             frontURL={frontURL}
             handleOnload={handleOnload}
+            postcardSize={details?.postcardSize}
           />
         }
         backCard={
           <BackIframe
+            campaignId={details?._id}
             backLoaded={backLoaded}
+            backResourceUrl={details?.backResourceUrl}
             backURL={backURL}
-            details={details}
             handleOnload={handleOnload}
+            postcardSize={details?.postcardSize}
           />
         }
       />
@@ -273,17 +277,21 @@ const MailoutDetailsPage = () => {
                           }}
                         >
                           <FrontIframe
-                            details={details}
+                            campaignId={details?._id}
                             frontLoaded={frontLoaded}
+                            frontResourceUrl={details?.frontResourceUrl}
                             frontURL={frontURL}
                             handleOnload={handleOnload}
+                            postcardSize={details?.postcardSize}
                           />
                           <div style={{ padding: '16px' }}>
                             <BackIframe
+                              campaignId={details?._id}
                               backLoaded={backLoaded}
+                              backResourceUrl={details?.backResourceUrl}
                               backURL={backURL}
-                              details={details}
                               handleOnload={handleOnload}
+                              postcardSize={details?.postcardSize}
                             />
                           </div>
                         </div>
