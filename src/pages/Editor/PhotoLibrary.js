@@ -26,7 +26,7 @@ const GridContainer = styled.div`
   }
 `;
 
-export default function PhotoLibrary({ handleSave }) {
+export default function PhotoLibrary() {
   const dispatch = useDispatch();
   const libraryPhotos = useSelector(store => store.pictures.photoLibrary);
   const selectedPhoto = useSelector(state => state.liveEditor?.selectedPhoto);

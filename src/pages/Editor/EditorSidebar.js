@@ -81,7 +81,7 @@ function EditorSidebar({
         {activeTab === 'Pages' && (
           <TemplatesTab handleSave={handleSave} mailoutDetails={mailoutDetails} />
         )}
-        {activeTab === 'Uploads' && <PhotoLibrary handleSave={handleSave} />}
+        {activeTab === 'Uploads' && <PhotoLibrary />}
       </SidebarContent>
     </SidebarWrapper>
   );
