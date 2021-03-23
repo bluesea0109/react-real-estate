@@ -1,19 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Cropper from 'react-cropper';
-import { Dimmer, Icon, Loader, Modal, Header, Button } from '../../components/Base';
+import { Dimmer, Icon, Loader, Button } from '../../components/Base';
 import DropTarget from '../../components/Base/DropTarget';
 import auth from '../../services/auth';
 import api from '../../services/api';
 import { setAddMailoutError } from '../../store/modules/mailout/actions';
 import { getAspectRatio } from '../Utils/getAspectRatio';
-import {
-  CropModal,
-  CustomImage,
-  ImageOption,
-  ImageUpload,
-  StyledHeading,
-} from './StyledComponents';
+import { CropModal, CustomImage, ImageOption, ImageUpload } from './StyledComponents';
 import { getMinImageSize, validateFile, verifyImageSize } from './utils/utils';
 
 const CustomPhoto = ({ handleSave, mailoutDetails }) => {
@@ -117,10 +111,6 @@ const CustomPhoto = ({ handleSave, mailoutDetails }) => {
     const minPercentageHeight = minImageSize?.height / uploadedImageSize?.height;
     const minCropBoxWidth = Math.ceil(cropper?.containerData?.width * minPercentageWidth);
     const minCropBoxHeight = Math.ceil(cropper?.containerData?.height * minPercentageHeight);
-    console.log(cropper?.cropBoxData);
-    console.log({ minCropBoxWidth });
-    console.log(cropper?.containerData);
-    console.log({ minCropBoxHeight });
     if (cropper.cropBoxData?.width < minCropBoxWidth)
       cropper.setCropBoxData({ width: minCropBoxWidth });
     if (cropper.cropBoxData?.height < minCropBoxHeight)

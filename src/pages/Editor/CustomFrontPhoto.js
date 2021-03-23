@@ -120,10 +120,6 @@ const CustomPhoto = ({ handleSave, mailoutDetails }) => {
     const minPercentageHeight = minImageSize?.height / uploadedImageSize?.height;
     const minCropBoxWidth = Math.ceil(cropper?.containerData?.width * minPercentageWidth);
     const minCropBoxHeight = Math.ceil(cropper?.containerData?.height * minPercentageHeight);
-    console.log(cropper?.cropBoxData);
-    console.log({ minCropBoxWidth });
-    console.log(cropper?.containerData);
-    console.log({ minCropBoxHeight });
     if (cropper.cropBoxData?.width < minCropBoxWidth)
       cropper.setCropBoxData({ width: minCropBoxWidth });
     if (cropper.cropBoxData?.height < minCropBoxHeight)
