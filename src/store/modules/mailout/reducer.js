@@ -29,9 +29,6 @@ import {
   UPDATE_MAILOUT_TEMPLATE_THEME_SUCCESS,
   UPDATE_MAILOUT_TEMPLATE_THEME_ERROR,
   UPDATE_MAILOUT_EDIT_POLYGON_COORDINATES,
-  REVERT_MAILOUT_EDIT_PENDING,
-  REVERT_MAILOUT_EDIT_SUCCESS,
-  REVERT_MAILOUT_EDIT_ERROR,
   ARCHIVE_MAILOUT_PENDING,
   ARCHIVE_MAILOUT_ERROR,
   ARCHIVE_MAILOUT_SUCCESS,
@@ -59,7 +56,6 @@ const initialState = {
   updateMailoutEditPending: false,
   updateMailoutEditSuccess: null,
   updateMailoutTemplateThemePending: false,
-  revertMailoutEditPending: false,
   archivePending: false,
 
   mailoutPolygonCoordinates: null,
@@ -81,7 +77,6 @@ const initialState = {
   getMailoutEditError: null,
   updateMailoutEditError: null,
   updateMailoutTemplateThemeError: null,
-  revertMailoutEditError: null,
   archiveError: null,
 };
 
@@ -341,29 +336,6 @@ export default function mailout(state = initialState, action) {
       return {
         ...state,
         mailoutPolygonCoordinates: action.payload,
-      };
-
-    case REVERT_MAILOUT_EDIT_PENDING:
-      return {
-        ...state,
-        revertMailoutEditPending: true,
-        revertMailoutEditError: null,
-      };
-
-    case REVERT_MAILOUT_EDIT_SUCCESS:
-      return {
-        ...state,
-        revertMailoutEditPending: false,
-        details: action.payload,
-        mailoutEdit: null,
-        revertMailoutEditError: null,
-      };
-
-    case REVERT_MAILOUT_EDIT_ERROR:
-      return {
-        ...state,
-        revertMailoutEditPending: false,
-        revertMailoutEditError: action.error,
       };
 
     case ARCHIVE_MAILOUT_PENDING:

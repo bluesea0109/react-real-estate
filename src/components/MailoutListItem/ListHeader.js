@@ -125,7 +125,6 @@ const ListHeader = ({
   onClickApproveAndSend,
   onClickDelete,
   lockControls = false,
-  onClickRevertEdit,
 }) => {
   const dispatch = useDispatch();
   const archivePending = useSelector(state => state.mailout.archivePending);
@@ -155,7 +154,6 @@ const ListHeader = ({
     resolveMailoutStatus(data.mailoutStatus) !== 'Processing';
   const enableDelete = resolveMailoutStatus(data.mailoutStatus) === 'Sent';
   const activeWhen = new Date(Date.now()).toISOString().split('T')[0] < data.send_date;
-  const enableRevertEdit = data.edited;
   const isArchived = data.mailoutStatus === 'hide' || data.mailoutStatus === 'archived';
 
   // Redirect the user to the edit page from the dashboard
@@ -236,20 +234,6 @@ const ListHeader = ({
         )}
       </span>
       <ItemHeaderMenuLayout>
-        {canSend(data.mailoutStatus) && mailoutDetailPage && enableRevertEdit && (
-          <span>
-            <Button
-              secondary
-              inverted
-              onClick={onClickRevertEdit}
-              disabled={lockControls}
-              loading={lockControls}
-            >
-              Revert & Unlock
-            </Button>
-          </span>
-        )}
-
         {mailoutDetailPage &&
           enableEdit &&
           ((!isArchived && data.mailoutStatus === 'sent') ||
