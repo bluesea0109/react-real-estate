@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import Loading from '../../components/Loading';
+import Loader from '../../components/Base/Loader';
+
 import { getPhotoLibraryPending } from '../../store/modules/pictures/actions';
 import { setSelectedPhoto } from '../../store/modules/liveEditor/actions';
 import { ImageOption } from './StyledComponents';
@@ -30,6 +32,7 @@ export default function PhotoLibrary() {
   const dispatch = useDispatch();
   const libraryPhotos = useSelector(store => store.pictures.photoLibrary);
   const selectedPhoto = useSelector(state => state.liveEditor?.selectedPhoto);
+  const photoLibraryPending = useSelector(state => state.pictures.photoLibraryPending);
 
   useEffect(() => {
     dispatch(getPhotoLibraryPending());
@@ -67,9 +70,11 @@ export default function PhotoLibrary() {
               }}
             />
           ))
-        ) : (
-          <Loading minWidth="0px" margin="0px" message="Loading Team Images ..." />
-        )}
+        ) : photoLibraryPending ? (
+          <Loader active inline="centered">
+            Loading Team Images...
+          </Loader>
+        ) : null}
       </GridContainer>
       <GridContainer>
         <h4 style={{ marginTop: '30px' }}>
@@ -99,9 +104,11 @@ export default function PhotoLibrary() {
                 />
               )
           )
-        ) : (
-          <Loading minWidth="0px" margin="0px" message="Loading Global Images ..." />
-        )}
+        ) : photoLibraryPending ? (
+          <Loader active inline="centered">
+            Loading Global Images...
+          </Loader>
+        ) : null}
       </GridContainer>
     </>
   );
