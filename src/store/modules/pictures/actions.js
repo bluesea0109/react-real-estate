@@ -12,6 +12,10 @@ export const DELETE_PHOTO_PENDING = 'DELETE_PHOTO_PENDING';
 export const DELETE_PHOTO_SUCCESS = 'DELETE_PHOTO_SUCCESS';
 export const DELETE_PHOTO_ERROR = 'DELETE_PHOTO_ERROR';
 
+export const GET_PHOTO_LIBRARY_PENDING = 'GET_PHOTO_LIBRARY_PENDING';
+export const GET_PHOTO_LIBRARY_SUCCESS = 'GET_PHOTO_LIBRARY_SUCCESS';
+export const GET_PHOTO_LIBRARY_ERROR = 'GET_PHOTO_LIBRARY_ERROR';
+
 export function getPhotoPending() {
   return createAction(GET_PHOTO_PENDING);
 }
@@ -46,4 +50,16 @@ export function deletePhotoSuccess(payload) {
 
 export function deletePhotoError(error) {
   return createErrorAction(DELETE_PHOTO_ERROR, error);
+}
+
+export function getPhotoLibraryPending() {
+  return createAction(GET_PHOTO_LIBRARY_PENDING);
+}
+
+export function getPhotoLibrarySuccess(payload) {
+  return createAction(GET_PHOTO_LIBRARY_SUCCESS, payload);
+}
+
+export function getPhotoLibraryError(error) {
+  return createErrorAction(GET_PHOTO_LIBRARY_ERROR, error);
 }

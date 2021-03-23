@@ -6,6 +6,7 @@ import * as brandColors from '../../components/utils/brandColors';
 import { Icon } from '../../components/Base';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSidebarOpen } from '../../store/modules/liveEditor/actions';
+import PhotoLibrary from './PhotoLibrary';
 
 const SidebarWrapper = styled.div`
   width: ${props => (props.sidebarOpen ? '330px' : '0px')};
@@ -80,6 +81,7 @@ function EditorSidebar({
         {activeTab === 'Pages' && (
           <TemplatesTab handleSave={handleSave} mailoutDetails={mailoutDetails} />
         )}
+        {activeTab === 'Uploads' && <PhotoLibrary handleSave={handleSave} />}
       </SidebarContent>
     </SidebarWrapper>
   );

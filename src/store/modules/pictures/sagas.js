@@ -10,6 +10,9 @@ import {
   DELETE_PHOTO_PENDING,
   deletePhotoSuccess,
   deletePhotoError,
+  GET_PHOTO_LIBRARY_PENDING,
+  getPhotoLibrarySuccess,
+  getPhotoLibraryError,
 } from './actions';
 import { GET_ON_LOGIN_SUCCESS } from '../onLogin/actions';
 import { DESELECT_PEER_ID, SELECT_PEER_ID } from '../peer/actions';
@@ -103,10 +106,28 @@ export function* checkIfPeerSelectedUploadPhotoSaga() {
   }
 }
 
+export function* getPhotoLibrary({ peerId = null }) {
+  try {
+    const { path, method } = peerId
+      ? ApiService.directory.peer.photos.realtorPhoto.get(peerId)
+      : ApiService.directory.user.photos.photoLibrary.get();
+
+    console.log('path', path);
+    console.log('method', method);
+
+    const response = yield call(ApiService[method], path);
+
+    yield put(getPhotoLibrarySuccess(response));
+  } catch (err) {
+    yield put(getPhotoLibraryError(err));
+  }
+}
+
 export default function*() {
   yield takeLatest(GET_ON_LOGIN_SUCCESS, checkIfPeerSelectedGetPhotoSaga);
   yield takeLatest(DESELECT_PEER_ID, checkIfPeerSelectedGetPhotoSaga);
   yield takeLatest(SELECT_PEER_ID, checkIfPeerSelectedGetPhotoSaga);
   yield takeLatest(UPLOAD_PHOTO_PENDING, checkIfPeerSelectedUploadPhotoSaga);
   yield takeLatest(DELETE_PHOTO_PENDING, deletePhotoSaga);
+  yield takeLatest(GET_PHOTO_LIBRARY_PENDING, getPhotoLibrary);
 }
