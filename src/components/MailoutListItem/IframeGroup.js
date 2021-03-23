@@ -9,6 +9,8 @@ import { ItemBodyIframeLayout } from '../../layouts';
 import ApiService from '../../services/api/index';
 import { Image } from '../Base';
 
+import './IframeGroup.css';
+
 const IframeGroup = ({ index, item, linkTo = null }) => {
   const peerId = useSelector(store => store.peer.peerId);
 
@@ -59,7 +61,6 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
     maxWidth: '300px',
     minWidth: '290px',
     height: '204px',
-    overflow: 'hidden',
   };
 
   const IFrameBodyStyles = {
@@ -111,26 +112,58 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
           </Segment>
         )}
 
-        <Segment textAlign="center" loading={!item?._id || !backLoaded} style={IFrameStyles}>
-          <div
-            style={{ width: '300px', height: '204px', overflow: 'hidden' }}
+        {item.backResourceUrl && (
+          <Segment
+            textAlign="center"
+            style={{ border: 'none', display: 'flex', justifyContent: 'center' }}
             className="bm-transform-effect image-frame-border"
           >
-            <iframe
-              id="bm-iframe-back"
-              title={backURL + '?dashboard=true'}
-              name="back"
-              src={null}
-              width="300"
-              height="204"
-              frameBorder="none"
-              sandbox="allow-same-origin allow-scripts"
-              onLoad={handleOnload}
-              style={{ visibility: !item?._id || !backLoaded ? 'hidden' : 'visible' }}
-            />
-            <Link to={linkTo} style={iframeLinkStyle} />
-          </div>
-        </Segment>
+            <Link to={linkTo}>
+              <div
+                style={{
+                  position: 'relative',
+                  ...imgStyles,
+                }}
+              >
+                <Image src={item.backResourceUrl} />
+                <div id="ink-free-area-small">
+                  <div id="postage-small">
+                    POSTAGE
+                    <br />
+                    INDICIA
+                  </div>
+                  <div id="cust-address-small">
+                    Recipient name and full address will be printed in this space.
+                  </div>
+                  <span id="ink-free-text-small">This area is reserved for postage details</span>
+                </div>
+              </div>
+            </Link>
+          </Segment>
+        )}
+
+        {!item.backResourceUrl && (
+          <Segment textAlign="center" loading={!item?._id || !backLoaded} style={IFrameStyles}>
+            <div
+              style={{ width: '300px', height: '204px', overflow: 'hidden' }}
+              className="bm-transform-effect image-frame-border"
+            >
+              <iframe
+                id="bm-iframe-back"
+                title={backURL + '?dashboard=true'}
+                name="back"
+                src={null}
+                width="300"
+                height="204"
+                frameBorder="none"
+                sandbox="allow-same-origin allow-scripts"
+                onLoad={handleOnload}
+                style={{ visibility: !item?._id || !backLoaded ? 'hidden' : 'visible' }}
+              />
+              <Link to={linkTo} style={iframeLinkStyle} />
+            </div>
+          </Segment>
+        )}
       </ItemBodyIframeLayout>
     );
   } else {
@@ -166,25 +199,37 @@ const IframeGroup = ({ index, item, linkTo = null }) => {
             </div>
           </Segment>
         )}
-        <Segment textAlign="center" loading={!item?._id || !backLoaded} style={IFrameStyles}>
-          <div
-            style={{ width: '300px', height: '204px', overflow: 'hidden' }}
-            className="image-frame-border"
-          >
-            <iframe
-              id="bm-iframe-back"
-              title={backURL + '?dashboard=true'}
-              name="back"
-              src={null}
-              width="300"
-              height="204"
-              frameBorder="none"
-              sandbox="allow-same-origin allow-scripts"
-              onLoad={handleOnload}
-              style={{ visibility: !item?._id || !backLoaded ? 'hidden' : 'visible' }}
+
+        {item.backResourceUrl && (
+          <Segment textAlign="center" style={{ border: 'none' }}>
+            <Image
+              src={item.backResourceUrl}
+              style={imgStyles}
+              className="bm-transform-effect image-frame-border"
             />
-          </div>
-        </Segment>
+          </Segment>
+        )}
+        {!item.backResourceUrl && (
+          <Segment textAlign="center" loading={!item?._id || !backLoaded} style={IFrameStyles}>
+            <div
+              style={{ width: '300px', height: '204px', overflow: 'hidden' }}
+              className="image-frame-border"
+            >
+              <iframe
+                id="bm-iframe-back"
+                title={backURL + '?dashboard=true'}
+                name="back"
+                src={null}
+                width="300"
+                height="204"
+                frameBorder="none"
+                sandbox="allow-same-origin allow-scripts"
+                onLoad={handleOnload}
+                style={{ visibility: !item?._id || !backLoaded ? 'hidden' : 'visible' }}
+              />
+            </div>
+          </Segment>
+        )}
       </ItemBodyIframeLayout>
     );
   }

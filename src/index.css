@@ -15,19 +15,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-/*
- primary: #59C4C4
- secondary: #F2714D
-
- primaryBorder: #336E7B
- secondaryBorder: #BC340E
-*/
-
 /* Overrides Start */
 
 h1 {
   font-size: 28px !important;
-  line-height: 1em !important;
 }
 
 .sub.header {
