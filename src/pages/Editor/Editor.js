@@ -378,12 +378,12 @@ export default function Editor() {
                   </>
                 ) : null}
               </div>
-              <Icon name="undo" />
+              {/* <Icon name="undo" />
               <ButtonNoStyle>
                 <div className="overflow-menu">
                   <Icon name="ellipsis horizontal" />
                 </div>
-              </ButtonNoStyle>
+              </ButtonNoStyle> */}
               <Button primary disabled={savePending} onClick={() => handleSave({})}>
                 Save
               </Button>
