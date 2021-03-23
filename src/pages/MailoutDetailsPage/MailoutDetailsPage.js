@@ -7,7 +7,7 @@ import { format } from 'date-fns';
 import { TableRow, TableCampaign } from '../../components/MailoutDetailsComponents/MailoutTable';
 import ModalPreview from '../../components/MailoutDetailsComponents/ModalPreview';
 import TableModal from '../../components/MailoutDetailsComponents/TableModal';
-import { revertMailoutEditPending, stopMailoutPending } from '../../store/modules/mailout/actions';
+import { stopMailoutPending } from '../../store/modules/mailout/actions';
 import { resolveMailoutStatus } from '../../components/MailoutListItem/utils/helpers';
 import { Grid, Message, Page, Segment } from '../../components/Base';
 import { getMailoutPending } from '../../store/modules/mailout/actions';
@@ -161,10 +161,6 @@ const MailoutDetailsPage = () => {
     dispatch(stopMailoutPending(mailoutId));
   };
 
-  const handleRevertEditedMailoutClick = () => {
-    dispatch(revertMailoutEditPending());
-  };
-
   const handleEditMailoutDetailsClick = () => {
     history.push(`/postcards/edit/${details._id}`);
   };
@@ -255,7 +251,6 @@ const MailoutDetailsPage = () => {
                           onClickApproveAndSend={handleApproveAndSendMailoutDetailsClick}
                           onClickDelete={handleDeleteMailoutDetailsClick}
                           lockControls={working}
-                          onClickRevertEdit={handleRevertEditedMailoutClick}
                         />
                       }
                     </ContentBottomHeaderLayout>

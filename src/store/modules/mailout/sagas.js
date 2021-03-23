@@ -28,9 +28,6 @@ import {
   UPDATE_MAILOUT_TEMPLATE_THEME_PENDING,
   updateMailoutTemplateThemeSuccess,
   updateMailoutTemplateThemeError,
-  REVERT_MAILOUT_EDIT_PENDING,
-  revertMailoutEditSuccess,
-  revertMailoutEditError,
   ARCHIVE_MAILOUT_PENDING,
   archiveMailoutSuccess,
   archiveMailoutError,
@@ -263,21 +260,6 @@ export function* updateMailoutTemplateThemeSaga() {
   }
 }
 
-export function* revertMailoutEditSaga({ peerId = null }) {
-  try {
-    const mailoutId = yield select(getMailoutId);
-    const { path, method } = peerId
-      ? ApiService.directory.peer.mailout.edit.revert(mailoutId, peerId)
-      : ApiService.directory.user.mailout.edit.revert(mailoutId);
-
-    const response = yield call(ApiService[method], path);
-
-    yield put(revertMailoutEditSuccess(response));
-  } catch (err) {
-    yield put(revertMailoutEditError(err));
-  }
-}
-
 export function* archiveMailoutSaga({ peerId = null }, action) {
   try {
     const mailoutId = yield action.payload;
@@ -405,16 +387,6 @@ export function* checkIfPeerSelectedUpdateMailoutTemplateThemeSaga() {
   }
 }
 
-export function* checkIfPeerSelectedRevertMailoutEditSaga() {
-  const peerId = yield select(getSelectedPeerId);
-
-  if (peerId) {
-    yield revertMailoutEditSaga({ peerId });
-  } else {
-    yield revertMailoutEditSaga({});
-  }
-}
-
 export function* checkIfPeerSelectedArchiveMailoutSaga(action) {
   const peerId = yield select(getSelectedPeerId);
 
@@ -451,7 +423,6 @@ export default function*() {
     UPDATE_MAILOUT_TEMPLATE_THEME_PENDING,
     checkIfPeerSelectedUpdateMailoutTemplateThemeSaga
   );
-  yield takeLatest(REVERT_MAILOUT_EDIT_PENDING, checkIfPeerSelectedRevertMailoutEditSaga);
   yield takeLatest(ARCHIVE_MAILOUT_PENDING, checkIfPeerSelectedArchiveMailoutSaga);
   yield takeLatest(DUPLICATE_MAILOUT_PENDING, checkIfPeerSelectedDuplicateSaga);
   yield takeLatest(UNDO_ARCHIVE_MAILOUT_PENDING, checkIfPeerSelectedUndoArchiveMailoutSaga);

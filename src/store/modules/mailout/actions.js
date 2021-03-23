@@ -41,10 +41,6 @@ export const UPDATE_MAILOUT_TEMPLATE_THEME_ERROR = 'UPDATE_MAILOUT_TEMPLATE_THEM
 
 export const UPDATE_MAILOUT_EDIT_POLYGON_COORDINATES = 'UPDATE_MAILOUT_EDIT_POLYGON_COORDINATES';
 
-export const REVERT_MAILOUT_EDIT_PENDING = 'REVERT_MAILOUT_EDIT_PENDING';
-export const REVERT_MAILOUT_EDIT_SUCCESS = 'REVERT_MAILOUT_EDIT_SUCCESS';
-export const REVERT_MAILOUT_EDIT_ERROR = 'REVERT_MAILOUT_EDIT_ERROR';
-
 export const ARCHIVE_MAILOUT_PENDING = 'ARCHIVE_MAILOUT_PENDING';
 export const ARCHIVE_MAILOUT_SUCCESS = 'ARCHIVE_MAILOUT_SUCCESS';
 export const ARCHIVE_MAILOUT_ERROR = 'ARCHIVE_MAILOUT_ERROR';
@@ -183,18 +179,6 @@ export function updateMailoutTemplateThemeError(error) {
 
 export function updateMailoutEditPolygonCoordinates(payload) {
   return createAction(UPDATE_MAILOUT_EDIT_POLYGON_COORDINATES, payload);
-}
-
-export function revertMailoutEditPending() {
-  return createAction(REVERT_MAILOUT_EDIT_PENDING);
-}
-
-export function revertMailoutEditSuccess(payload) {
-  return createAction(REVERT_MAILOUT_EDIT_SUCCESS, payload);
-}
-
-export function revertMailoutEditError(error) {
-  return createErrorAction(REVERT_MAILOUT_EDIT_ERROR, error);
 }
 
 export function archiveMailoutPending(payload) {
