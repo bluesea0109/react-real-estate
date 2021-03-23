@@ -52,6 +52,27 @@ export default function PhotoLibrary() {
     <>
       <GridContainer>
         <h4>
+          Team Picture Library <span>| {libraryPhotos?.team.length} Photos</span>
+        </h4>
+        {libraryPhotos?.team ? (
+          libraryPhotos.team.map((img, index) => (
+            <ImageOption
+              key={index}
+              current={renderThumbnail(img) === selectedPhoto}
+              src={renderThumbnail(img)}
+              alt="cover option"
+              onClick={() => dispatch(setSelectedPhoto(renderThumbnail(img)))}
+              onDragStart={e => {
+                e.dataTransfer.setData('text', img.original);
+              }}
+            />
+          ))
+        ) : (
+          <Loading minWidth="0px" margin="0px" message="Loading Team Images ..." />
+        )}
+      </GridContainer>
+      <GridContainer>
+        <h4 style={{ marginTop: '30px' }}>
           Global Picture Library{' '}
           <span>
             |{' '}
@@ -80,28 +101,6 @@ export default function PhotoLibrary() {
           )
         ) : (
           <Loading minWidth="0px" margin="0px" message="Loading Global Images ..." />
-        )}
-      </GridContainer>
-
-      <GridContainer>
-        <h4 style={{ marginTop: '30px' }}>
-          Team Picture Library <span>| {libraryPhotos?.team.length} Photos</span>
-        </h4>
-        {libraryPhotos?.team ? (
-          libraryPhotos.team.map((img, index) => (
-            <ImageOption
-              key={index}
-              current={renderThumbnail(img) === selectedPhoto}
-              src={renderThumbnail(img)}
-              alt="cover option"
-              onClick={() => dispatch(setSelectedPhoto(renderThumbnail(img)))}
-              onDragStart={e => {
-                e.dataTransfer.setData('text', img.original);
-              }}
-            />
-          ))
-        ) : (
-          <Loading minWidth="0px" margin="0px" message="Loading Team Images ..." />
         )}
       </GridContainer>
     </>
