@@ -156,12 +156,7 @@ const EditDestinationsForm = ({ mailoutDetails, handleBackClick }) => {
   const [sendToSourceAddresses, setSendToSourceAddresses] = useState(false);
 
   useEffect(() => {
-    if (
-      mailoutDetails?.destinationsOptions?.sendToSourceAddresses !== undefined &&
-      mailoutDetails?.destinationsOptions?.sendToSourceAddresses !== null
-    ) {
-      setSendToSourceAddresses(mailoutDetails?.destinationsOptions?.sendToSourceAddresses);
-    }
+    setSendToSourceAddresses(mailoutDetails?.destinationsOptions?.sendToSourceAddresses || false);
   }, [mailoutDetails, destinationsOptionsMode]);
 
   useEffect(() => {
