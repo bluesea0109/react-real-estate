@@ -1,3 +1,26 @@
+## Release 7.0.0 https://gitlab.rmcloud.com/groups/gabby/-/milestones/6
+Changes
+ - Editing a postcard is now done via a 'Live Edit' which is a what you see is what you get (wysiwyg) mode
+ - Text that is editable can be clicked, and changed in place to show exactly how it will look.
+ - Selecting different templates for the postcard can be seen and edited immediately
+ - You can now upload a custom back design for the postcard.
+ - Custom uploaded back designs show an overlay of the address zone is
+ - Uploading custom front and back designs now lets you crop the upload to help you get the right image size.
+ - Custom uploaded front and back designs are ensured the right size and aspect ratio for postcard printing.
+ - Photos can now be changed by drag and drop. This allows you to change all photos, not just the cover photo, and in multi-image designs easier.
+ - Brand color changes are displayed in real time as you choose the color.
+ - Postcard size can be adjusted and seen right away.
+ - Changing display agent will update details, and then text and agent photos can be further edited inline.
+ - We've added 'Hide Call To Action' as an option as been requested by some users. Creative editing now will allow new CTA options, like campaign level KWKLY codes.
+ - A new photo library allows you to add images to the postcard from your teams photos, and a growing global picture library, to help you in your design.
+ - Campaign name can be changed in the live editor.
+ - When selecting destinations, if the checkbox 'send to source addresses' is selected, the featured property will receive a postcard to help you show off your marketing work to sellers.
+ - WalkMe has been enabled in the product to allow our team to have helpful info for users.
+ - Users can now duplicate an entire campaign, not just addresses.
+ - The profile screen now will show the website url to help the ads process.
+ - The postcards page filter is renamed from 'Approved' to 'Sent'
+ - Ad campaigns and Postcard campaigns are all billed to a single Brivity Marketer subscription in chargify
+
 ## Release 6.6.0 https://gitlab.rmcloud.com/groups/gabby/-/milestones/7
 Changes
  - Add search, filter and sort functionality on the postcards page
