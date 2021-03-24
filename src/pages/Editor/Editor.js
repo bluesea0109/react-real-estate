@@ -26,6 +26,7 @@ import {
   setReplaceFieldData,
   setSelectedPhoto,
   setSidebarOpen,
+  setBigPhoto,
 } from '../../store/modules/liveEditor/actions';
 import { sleep } from '../../components/utils/utils';
 import { CampaignNameDiv, EditorContent, EditorLayout, EditorPreview } from './StyledComponents';
@@ -74,7 +75,10 @@ export default function Editor() {
 
   useEffect(() => {
     const deselectPhoto = e => {
-      if (e.key === 'Escape') dispatch(setSelectedPhoto(''));
+      if (e.key === 'Escape') {
+        dispatch(setSelectedPhoto(''));
+        dispatch(setBigPhoto(''));
+      }
     };
     document.addEventListener('keyup', deselectPhoto);
     return () => {

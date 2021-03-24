@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import Loader from '../../components/Base/Loader';
 import { getPhotoLibraryPending } from '../../store/modules/pictures/actions';
 import { setSelectedPhoto, setBigPhoto } from '../../store/modules/liveEditor/actions';
 import { ImageOption } from './StyledComponents';
+import { useClickOutside } from '../../components/Hooks/useClickOutside';
 
 const GridContainer = styled.div`
   display: flex;
@@ -16,7 +17,7 @@ const GridContainer = styled.div`
   }
   & > img {
     width: 48%;
-    border: 1px solid lightgrey;
+
     margin: 3px;
     object-fit: contain;
   }
@@ -37,6 +38,18 @@ export default function PhotoLibrary() {
   const libraryPhotos = useSelector(store => store.pictures.photoLibrary);
   const selectedPhoto = useSelector(state => state.liveEditor?.selectedPhoto);
   const photoLibraryPending = useSelector(state => state.pictures.photoLibraryPending);
+
+  const ImageOptionsWrapper = ({ children }) => {
+    const wrapperRef = useRef(null);
+    useClickOutside(wrapperRef, () => {
+      dispatch(setSelectedPhoto(''));
+    });
+    return (
+      <div className="images" ref={wrapperRef}>
+        {children}
+      </div>
+    );
+  };
 
   useEffect(() => {
     dispatch(getPhotoLibraryPending());
@@ -59,7 +72,7 @@ export default function PhotoLibrary() {
   };
 
   return (
-    <>
+    <ImageOptionsWrapper>
       <GridContainer>
         <div>
           <h4>Team Picture Library </h4>
@@ -123,6 +136,6 @@ export default function PhotoLibrary() {
           </Loader>
         ) : null}
       </GridContainer>
-    </>
+    </ImageOptionsWrapper>
   );
 }
