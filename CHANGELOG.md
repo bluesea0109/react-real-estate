@@ -4,10 +4,10 @@ Changes
  - Text that is editable can be clicked, and changed in place to show exactly how it will look.
  - Selecting different templates for the postcard can be seen and edited immediately
  - You can now upload a custom back design for the postcard.
- - Custom uploaded back designs show an overlay of the address zone is
+ - Custom uploaded back designs now show an overlay of where the address zone is
  - Uploading custom front and back designs now lets you crop the upload to help you get the right image size.
- - Custom uploaded front and back designs are ensured the right size and aspect ratio for postcard printing.
- - Photos can now be changed by drag and drop. This allows you to change all photos, not just the cover photo, and in multi-image designs easier.
+ - Custom uploaded front and back designs are verified to be the right size and aspect ratio for postcard printing.
+ - Photos can now be changed by drag and drop. This allows you to change all photos, not just the cover photo, and makes editing multi-image designs easier.
  - Brand color changes are displayed in real time as you choose the color.
  - Postcard size can be adjusted and seen right away.
  - Changing display agent will update details, and then text and agent photos can be further edited inline.
