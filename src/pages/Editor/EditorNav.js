@@ -42,11 +42,41 @@ const StyledNavButton = styled(ButtonNoStyle)`
   }
 `;
 
-export const NavButton = ({ className, iconName, onClick }) => {
+const Tooltip = styled.div`
+  &[data-position='top left'][data-tooltip]:after {
+    border-radius: 5px;
+    background: #616161;
+    top: 11px;
+    left: 72px;
+    bottom: 2px;
+    height: auto;
+    padding: 8px;
+  }
+
+  &[data-inverted][data-position~='top'][data-tooltip]:before {
+    background: #616161;
+  }
+
+  &[data-position='top left'][data-tooltip]:before {
+    bottom: 19px;
+    left: 72px;
+  }
+  & p {
+    width: 256px;
+    padding-top: 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+`;
+
+export const NavButton = ({ className, iconName, onClick, tooltip }) => {
   return (
-    <StyledNavButton className={className} onClick={onClick}>
-      <Icon name={iconName} />
-    </StyledNavButton>
+    <Tooltip data-tooltip={tooltip} data-position="top left" data-inverted="">
+      <StyledNavButton className={className} onClick={onClick}>
+        <Icon name={iconName} />
+      </StyledNavButton>
+    </Tooltip>
   );
 };
 
