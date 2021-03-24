@@ -18,11 +18,17 @@ const GridContainer = styled.div`
     width: 48%;
     border: 1px solid lightgrey;
     margin: 3px;
-    object-fit: cover;
+    object-fit: contain;
+  }
+  div {
+    display: flex;
   }
 
   span {
     font-weight: 300;
+  }
+  .global-header {
+    margin-top: 20px;
   }
 `;
 
@@ -52,9 +58,10 @@ export default function PhotoLibrary() {
   return (
     <>
       <GridContainer>
-        <h4>
-          Team Picture Library <span>| {libraryPhotos?.team.length} Photos</span>
-        </h4>
+        <div>
+          <h4>Team Picture Library </h4>
+          {libraryPhotos?.team && <span>{` | ${libraryPhotos?.team.length} Photos`}</span>}
+        </div>
         {libraryPhotos?.team ? (
           libraryPhotos.team.map((img, index) => (
             <ImageOption
@@ -75,15 +82,16 @@ export default function PhotoLibrary() {
         ) : null}
       </GridContainer>
       <GridContainer>
-        <h4 style={{ marginTop: '30px' }}>
-          Global Picture Library{' '}
-          <span>
-            |{' '}
-            {libraryPhotos?.global &&
-              libraryPhotos?.global.filter(img => !img.formats.includes('story')).length}{' '}
-            Photos
-          </span>
-        </h4>
+        <div className="global-header">
+          <h4>Global Picture Library </h4>
+          {libraryPhotos?.global && (
+            <span>
+              {` | ${
+                libraryPhotos?.global.filter(img => !img.formats.includes('story')).length
+              } Photos`}
+            </span>
+          )}
+        </div>
         {libraryPhotos?.global ? (
           libraryPhotos.global.map(
             img =>
