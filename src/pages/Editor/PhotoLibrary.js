@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import Loader from '../../components/Base/Loader';
 import { getPhotoLibraryPending } from '../../store/modules/pictures/actions';
-import { setSelectedPhoto } from '../../store/modules/liveEditor/actions';
+import { setSelectedPhoto, setBigPhoto } from '../../store/modules/liveEditor/actions';
 import { ImageOption } from './StyledComponents';
 
 const GridContainer = styled.div`
@@ -69,7 +69,10 @@ export default function PhotoLibrary() {
               current={renderThumbnail(img) === selectedPhoto}
               src={renderThumbnail(img)}
               alt="cover option"
-              onClick={() => dispatch(setSelectedPhoto(renderThumbnail(img)))}
+              onClick={() => {
+                dispatch(setSelectedPhoto(renderThumbnail(img)));
+                dispatch(setBigPhoto(img.original));
+              }}
               onDragStart={e => {
                 e.dataTransfer.setData('text', img.original);
               }}
@@ -101,7 +104,10 @@ export default function PhotoLibrary() {
                   current={renderThumbnail(img) === selectedPhoto}
                   src={renderThumbnail(img)}
                   alt="cover option"
-                  onClick={() => dispatch(setSelectedPhoto(renderThumbnail(img)))}
+                  onClick={() => {
+                    dispatch(setSelectedPhoto(renderThumbnail(img)));
+                    dispatch(setBigPhoto(img.original));
+                  }}
                   onDragStart={e => {
                     e.dataTransfer.setData('text', img.original);
                   }}

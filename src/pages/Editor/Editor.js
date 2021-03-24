@@ -46,6 +46,7 @@ export default function Editor() {
   const liveEditorChanges = useSelector(state => state.liveEditor?.edits);
   const sidebarOpen = useSelector(state => state.liveEditor?.sidebarOpen);
   const selectedPhoto = useSelector(state => state.liveEditor?.selectedPhoto);
+  const bigPhoto = useSelector(state => state.liveEditor?.bigPhoto);
   const zoomValue = useSelector(state => state.liveEditor?.zoomValue);
   const [activeNavItem, setActiveNavItem] = useState(1);
   const [frontLoaded, setFrontLoaded] = useState(false);
@@ -161,9 +162,11 @@ export default function Editor() {
 
   // send a postMessage to the iframe when the selected photo changes
   useEffect(() => {
-    sendPostMessage('front', { type: 'imageSelected', imgSrc: selectedPhoto });
-    sendPostMessage('back', { type: 'imageSelected', imgSrc: selectedPhoto });
-  }, [selectedPhoto, sendPostMessage]);
+    let photo = '';
+    bigPhoto ? (photo = bigPhoto) : (photo = selectedPhoto);
+    sendPostMessage('front', { type: 'imageSelected', imgSrc: photo });
+    sendPostMessage('back', { type: 'imageSelected', imgSrc: photo });
+  }, [selectedPhoto, sendPostMessage, bigPhoto]);
 
   const updateIframeColor = useCallback(
     (side, colorHex) => {
