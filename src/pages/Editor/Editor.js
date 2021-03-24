@@ -323,7 +323,7 @@ export default function Editor() {
   };
 
   const navItems = [
-    { name: 'Pages', iconName: 'picture' },
+    { name: 'Pages', iconName: 'layers' },
     { name: 'Editor', iconName: 'edit outline' },
     { name: 'Uploads', iconName: 'cloud upload' },
   ];

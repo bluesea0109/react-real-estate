@@ -1,3 +1,5 @@
+import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import styled from 'styled-components';
 import { ButtonNoStyle, Icon } from '../../components/Base';
@@ -45,7 +47,11 @@ const StyledNavButton = styled(ButtonNoStyle)`
 export const NavButton = ({ className, iconName, onClick }) => {
   return (
     <StyledNavButton className={className} onClick={onClick}>
-      <Icon name={iconName} />
+      {iconName === 'layers' ? (
+        <FontAwesomeIcon icon={faLayerGroup} size="lg" />
+      ) : (
+        <Icon name={iconName} />
+      )}
     </StyledNavButton>
   );
 };
