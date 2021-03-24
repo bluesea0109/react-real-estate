@@ -40,6 +40,9 @@ export default function PhotoLibrary() {
 
   useEffect(() => {
     dispatch(getPhotoLibraryPending());
+    return () => {
+      dispatch(setBigPhoto(''));
+    };
   }, [dispatch]);
 
   const renderThumbnail = url => {
