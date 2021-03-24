@@ -84,7 +84,7 @@ function EditorSidebar({
             showCTA={showCTA}
           />
         )}
-        {activeTab === 'Pages' && (
+        {activeTab === 'Templates' && (
           <TemplatesTab handleSave={handleSave} mailoutDetails={mailoutDetails} />
         )}
         {activeTab === 'Uploads' && <PhotoLibrary />}
