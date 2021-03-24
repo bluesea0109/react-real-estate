@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import Loading from '../../components/Loading';
 import Loader from '../../components/Base/Loader';
-
 import { getPhotoLibraryPending } from '../../store/modules/pictures/actions';
 import { setSelectedPhoto } from '../../store/modules/liveEditor/actions';
 import { ImageOption } from './StyledComponents';
@@ -82,16 +80,14 @@ export default function PhotoLibrary() {
           <span>
             |{' '}
             {libraryPhotos?.global &&
-              Math.floor(
-                libraryPhotos?.global.filter(img => img.formats.includes('square')).length
-              )}{' '}
+              libraryPhotos?.global.filter(img => !img.formats.includes('story')).length}{' '}
             Photos
           </span>
         </h4>
         {libraryPhotos?.global ? (
           libraryPhotos.global.map(
             img =>
-              img.formats.includes('square') && (
+              !img.formats.includes('story') && (
                 <ImageOption
                   key={img.id}
                   current={renderThumbnail(img) === selectedPhoto}
