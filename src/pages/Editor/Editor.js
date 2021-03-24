@@ -323,7 +323,7 @@ export default function Editor() {
   };
 
   const navItems = [
-    { name: 'Pages', iconName: 'layers' },
+    { name: 'Templates', iconName: 'layers' },
     { name: 'Editor', iconName: 'edit outline' },
     { name: 'Uploads', iconName: 'cloud upload' },
   ];
@@ -394,6 +394,7 @@ export default function Editor() {
                 key={item.name}
                 className={`${ind === activeNavItem ? 'active' : null}`}
                 iconName={item.iconName}
+                tooltip={item.name}
                 onClick={() => {
                   setActiveNavItem(ind);
                   dispatch(setSidebarOpen(true));
