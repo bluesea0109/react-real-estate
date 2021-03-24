@@ -271,6 +271,9 @@ const directory = {
         get: () => ({ path: `/api/user/settings/photos/realtorPhoto`, method: 'get' }),
         set: () => ({ path: `/api/user/settings/photos/realtorPhoto`, method: 'postBlob' }),
       },
+      photoLibrary: {
+        get: () => ({ path: `/api/user/library/photos/search?scope=global|team`, method: 'get' }),
+      },
     },
     shortcode: {
       listed: {

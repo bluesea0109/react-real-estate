@@ -326,7 +326,6 @@ export default function Editor() {
     { name: 'Pages', iconName: 'picture' },
     { name: 'Editor', iconName: 'edit outline' },
     { name: 'Uploads', iconName: 'cloud upload' },
-    { name: 'Import', iconName: 'bolt' },
   ];
 
   const frontURL = peerId
