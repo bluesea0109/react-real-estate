@@ -15,6 +15,7 @@ export const SET_LIVE_EDIT_BRAND_COLOR = 'SET_LIVE_EDIT_BRAND_COLOR';
 export const SET_SELECTED_PHOTO = 'SET_SELECTED_PHOTO';
 export const SET_ZOOM_VALUE = 'SET_ZOOM_VALUE';
 export const SET_SELECTED_TEMPLATE = 'SET_SELECTED_TEMPLATE';
+export const SET_BIG_PHOTO = 'SET_BIG_PHOTO';
 
 export function setReloadIframes(payload) {
   return createAction(SET_RELOAD_IFRAMES, payload);
@@ -68,9 +69,14 @@ export function setSelectedPhoto(payload) {
   return createAction(SET_SELECTED_PHOTO, payload);
 }
 
+export function setBigPhoto(payload) {
+  return createAction(SET_BIG_PHOTO, payload);
+}
+
 export function setZoomValue(payload) {
   return createAction(SET_ZOOM_VALUE, payload);
 }
+
 export function setSelectedTemplate(payload) {
   return createAction(SET_SELECTED_TEMPLATE, payload);
 }

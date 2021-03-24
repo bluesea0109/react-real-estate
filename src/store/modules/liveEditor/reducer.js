@@ -14,6 +14,7 @@ import {
   SET_SELECTED_PHOTO,
   SET_ZOOM_VALUE,
   SET_SELECTED_TEMPLATE,
+  SET_BIG_PHOTO,
 } from './actions';
 
 const initialState = {
@@ -28,6 +29,7 @@ const initialState = {
   sidebarOpen: true,
   customUploadURL: '',
   selectedPhoto: '',
+  bigPhoto: '',
   zoomValue: 1,
   selectedTemplate: true,
   edits: {
@@ -108,6 +110,11 @@ export default function liveEditor(state = initialState, action) {
       return {
         ...state,
         selectedPhoto: action.payload,
+      };
+    case SET_BIG_PHOTO:
+      return {
+        ...state,
+        bigPhoto: action.payload,
       };
     case SET_ZOOM_VALUE:
       return {
