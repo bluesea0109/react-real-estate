@@ -20,6 +20,7 @@ Changes
  - The profile screen now will show the website url to help the ads process.
  - The postcards page filter is renamed from 'Approved' to 'Sent'
  - Ad campaigns and Postcard campaigns are all billed to a single Brivity Marketer subscription in chargify
+ - Ad campaigns can now timeout and show better status to users if ad publishing fails.
 
 ## Release 6.6.0 https://gitlab.rmcloud.com/groups/gabby/-/milestones/7
 Changes
