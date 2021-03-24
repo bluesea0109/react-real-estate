@@ -118,7 +118,7 @@ const BillingPage = () => {
   var date = new Date();
   var currentMonth = date.getMonth() + 1;
   var currentYear = date.getFullYear();
-  if (billingDetails && billingDetails.chargify.paymentProfile) {
+  if (billingDetails && billingDetails?.chargify?.paymentProfile) {
     const {
       first_name,
       last_name,
@@ -179,7 +179,7 @@ const BillingPage = () => {
       expired = 'expired';
     }
   }
-  if (billingDetails && billingDetails.chargify.hasOwnProperty('error')) {
+  if (billingDetails?.chargify?.hasOwnProperty('error')) {
     BillingInfo = (
       <span>
         Your credit card is not configured.{' '}
@@ -259,7 +259,7 @@ const BillingPage = () => {
         <BillingDetailsWrapper>
           <Segment style={{ padding: '20px' }}>
             <Header as="h2">Card Details</Header>
-            {billingDetails && billingDetails.chargify.paymentProfile ? (
+            {billingDetails?.chargify?.paymentProfile ? (
               <div className="flexWrap">
                 <div className="cardDetails">
                   <p>

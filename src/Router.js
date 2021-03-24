@@ -14,7 +14,6 @@ import PostcardsPage from './pages/PostcardsPage';
 import AdsPage from './pages/AdsPage';
 import Editor from './pages/Editor/Editor';
 import MailoutDetailsPage from './pages/MailoutDetailsPage/MailoutDetailsPage';
-import MailoutEditPage from './pages/MailoutEditPage';
 import MailoutDestinationsPage from './pages/MailoutDestinationsPage';
 import CustomizationPage from './pages/CustomizationPage';
 import CustomizationTeamPage from './pages/CustomizationTeamPage';
@@ -24,6 +23,7 @@ import BillingPage from './pages/BillingPage';
 import EmptyPage from './pages/EmptyPage';
 import ArchivedPage from './pages/ArchivedPage';
 import ReadyMadeDesignPage from './pages/ReadyMadeDesignPage';
+import MicroListingsPage from './pages/MicroListingsPage';
 import { CreatePostcard } from './pages/CreatePostcard';
 
 export default () => {
@@ -41,8 +41,7 @@ export default () => {
       <PrivateRoute exact path="/postcards" component={PostcardsPage} />
       <PrivateRoute exact path="/postcards/archived" component={ArchivedPage} />
       <PrivateRoute exact path="/postcards/:mailoutId" component={MailoutDetailsPage} />
-      <PrivateRoute exact path="/postcards/edit/:mailoutId" component={MailoutEditPage} />
-      <PrivateRoute exact path="/postcards/editor/:mailoutId" component={Editor} />
+      <PrivateRoute exact path="/postcards/edit/:mailoutId" component={Editor} />
       <PrivateRoute
         exact
         path="/postcards/edit/:mailoutId/destinations"
@@ -50,7 +49,7 @@ export default () => {
       />
       <PrivateRoute exact path="/dashboard/archived" component={ArchivedPage} />
       <PrivateRoute exact path="/dashboard/:mailoutId" component={MailoutDetailsPage} />
-      <PrivateRoute exact path="/dashboard/edit/:mailoutId" component={MailoutEditPage} />
+      <PrivateRoute exact path="/dashboard/edit/:mailoutId" component={Editor} />
       <PrivateRoute
         exact
         path="/dashboard/edit/:mailoutId/destinations"
@@ -64,6 +63,7 @@ export default () => {
       <PrivateRoute path="/billing" component={BillingPage} />
       <PrivateRoute exact path="/ready-made-designs" component={ReadyMadeDesignPage} />
       <PrivateRoute exact path="/create-postcard" component={CreatePostcard} />
+      <PrivateRoute exact path="/micro/listings" component={MicroListingsPage} />
       <Route path="*" component={EmptyPage} />
     </Switch>
   );

@@ -7,7 +7,7 @@ import { format } from 'date-fns';
 import { TableRow, TableCampaign } from '../../components/MailoutDetailsComponents/MailoutTable';
 import ModalPreview from '../../components/MailoutDetailsComponents/ModalPreview';
 import TableModal from '../../components/MailoutDetailsComponents/TableModal';
-import { revertMailoutEditPending, stopMailoutPending } from '../../store/modules/mailout/actions';
+import { stopMailoutPending } from '../../store/modules/mailout/actions';
 import { resolveMailoutStatus } from '../../components/MailoutListItem/utils/helpers';
 import { Grid, Message, Page, Segment } from '../../components/Base';
 import { getMailoutPending } from '../../store/modules/mailout/actions';
@@ -161,12 +161,8 @@ const MailoutDetailsPage = () => {
     dispatch(stopMailoutPending(mailoutId));
   };
 
-  const handleRevertEditedMailoutClick = () => {
-    dispatch(revertMailoutEditPending());
-  };
-
   const handleEditMailoutDetailsClick = () => {
-    history.push(`/dashboard/edit/${details._id}`);
+    history.push(`/postcards/edit/${details._id}`);
   };
 
   const renderDestinations = () => {
@@ -215,18 +211,22 @@ const MailoutDetailsPage = () => {
         dispatch={dispatch}
         frontCard={
           <FrontIframe
-            details={details}
+            campaignId={details?._id}
             frontLoaded={frontLoaded}
+            frontResourceUrl={details?.frontResourceUrl}
             frontURL={frontURL}
             handleOnload={handleOnload}
+            postcardSize={details?.postcardSize}
           />
         }
         backCard={
           <BackIframe
+            campaignId={details?._id}
             backLoaded={backLoaded}
+            backResourceUrl={details?.backResourceUrl}
             backURL={backURL}
-            details={details}
             handleOnload={handleOnload}
+            postcardSize={details?.postcardSize}
           />
         }
       />
@@ -251,7 +251,6 @@ const MailoutDetailsPage = () => {
                           onClickApproveAndSend={handleApproveAndSendMailoutDetailsClick}
                           onClickDelete={handleDeleteMailoutDetailsClick}
                           lockControls={working}
-                          onClickRevertEdit={handleRevertEditedMailoutClick}
                         />
                       }
                     </ContentBottomHeaderLayout>
@@ -273,17 +272,21 @@ const MailoutDetailsPage = () => {
                           }}
                         >
                           <FrontIframe
-                            details={details}
+                            campaignId={details?._id}
                             frontLoaded={frontLoaded}
+                            frontResourceUrl={details?.frontResourceUrl}
                             frontURL={frontURL}
                             handleOnload={handleOnload}
+                            postcardSize={details?.postcardSize}
                           />
                           <div style={{ padding: '16px' }}>
                             <BackIframe
+                              campaignId={details?._id}
                               backLoaded={backLoaded}
+                              backResourceUrl={details?.backResourceUrl}
                               backURL={backURL}
-                              details={details}
                               handleOnload={handleOnload}
+                              postcardSize={details?.postcardSize}
                             />
                           </div>
                         </div>

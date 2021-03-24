@@ -216,6 +216,10 @@ const directory = {
         get: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'get' }),
         update: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'put' }),
         revert: mailoutId => ({ path: `/api/user/mailout/${mailoutId}/edit`, method: 'del' }),
+        updateDisplayAgent: mailoutId => ({
+          path: `/api/user/mailout/${mailoutId}/edit/mailoutDisplayAgent`,
+          method: 'put',
+        }),
       },
       mailoutSize: mailoutId => ({
         path: `/api/user/mailout/${mailoutId}/edit/mailoutSize`,
@@ -266,6 +270,9 @@ const directory = {
       realtorPhoto: {
         get: () => ({ path: `/api/user/settings/photos/realtorPhoto`, method: 'get' }),
         set: () => ({ path: `/api/user/settings/photos/realtorPhoto`, method: 'postBlob' }),
+      },
+      photoLibrary: {
+        get: () => ({ path: `/api/user/library/photos/search?scope=global|team`, method: 'get' }),
       },
     },
     shortcode: {
@@ -347,6 +354,10 @@ const directory = {
         revert: (mailoutId, peerId) => ({
           path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit`,
           method: 'del',
+        }),
+        updateDisplayAgent: (mailoutId, peerId) => ({
+          path: `/api/user/peer/${peerId}/mailout/${mailoutId}/edit/mailoutDisplayAgent`,
+          method: 'put',
         }),
       },
       mailoutSize: (mailoutId, peerId) => ({

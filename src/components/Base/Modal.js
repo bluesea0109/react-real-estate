@@ -5,7 +5,8 @@ export default styled(Modal)`
   &&& {
     margin: 0;
     width: auto;
-    padding: 23px 30px 30px;
+    max-width: 90vw;
+    padding: 30px;
   }
   .description {
     color: #686868;

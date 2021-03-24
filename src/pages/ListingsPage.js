@@ -59,7 +59,6 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
       : '-';
 
     let userObj = userType === 'loggedIn' ? userInfo : userType === 'peer' && peerUser;
-
     let createQS = item => {
       let adType = null;
       listingItem.standardStatus === 'Closed'

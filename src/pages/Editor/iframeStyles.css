@@ -1,0 +1,13 @@
+img.can-select {
+  border: solid 2px green;
+  opacity: 0.5;
+  cursor: pointer !important;
+}
+
+img.can-select:hover {
+  opacity: 1;
+}
+
+img:focus {
+  outline: none;
+}

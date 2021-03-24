@@ -24,13 +24,11 @@ import {
   UPDATE_MAILOUT_EDIT_PENDING,
   UPDATE_MAILOUT_EDIT_SUCCESS,
   UPDATE_MAILOUT_EDIT_ERROR,
+  RESET_MAILOUT_EDIT_SUCCESS,
   UPDATE_MAILOUT_TEMPLATE_THEME_PENDING,
   UPDATE_MAILOUT_TEMPLATE_THEME_SUCCESS,
   UPDATE_MAILOUT_TEMPLATE_THEME_ERROR,
   UPDATE_MAILOUT_EDIT_POLYGON_COORDINATES,
-  REVERT_MAILOUT_EDIT_PENDING,
-  REVERT_MAILOUT_EDIT_SUCCESS,
-  REVERT_MAILOUT_EDIT_ERROR,
   ARCHIVE_MAILOUT_PENDING,
   ARCHIVE_MAILOUT_ERROR,
   ARCHIVE_MAILOUT_SUCCESS,
@@ -44,6 +42,7 @@ import {
   CLEAR_MAILOUT_ERROR,
   SET_ADD_MAILOUT_ERROR,
   CLEAR_ADD_MAILOUT_ERROR,
+  UPDATE_MAILOUT_EDIT_VALUES,
 } from './actions';
 
 const initialState = {
@@ -55,8 +54,8 @@ const initialState = {
   changeDisplayAgentPending: false,
   getMailoutEditPending: false,
   updateMailoutEditPending: false,
+  updateMailoutEditSuccess: null,
   updateMailoutTemplateThemePending: false,
-  revertMailoutEditPending: false,
   archivePending: false,
 
   mailoutPolygonCoordinates: null,
@@ -78,7 +77,6 @@ const initialState = {
   getMailoutEditError: null,
   updateMailoutEditError: null,
   updateMailoutTemplateThemeError: null,
-  revertMailoutEditError: null,
   archiveError: null,
 };
 
@@ -276,7 +274,6 @@ export default function mailout(state = initialState, action) {
       return {
         ...state,
         updateMailoutEditPending: true,
-        mailoutEdit: action.payload,
         updateMailoutEditError: null,
       };
 
@@ -285,7 +282,13 @@ export default function mailout(state = initialState, action) {
         ...state,
         details: action.payload,
         updateMailoutEditPending: false,
-        mailoutEdit: null,
+        updateMailoutEditSuccess: true,
+      };
+
+    case RESET_MAILOUT_EDIT_SUCCESS:
+      return {
+        ...state,
+        updateMailoutEditSuccess: null,
       };
 
     case UPDATE_MAILOUT_EDIT_ERROR:
@@ -333,29 +336,6 @@ export default function mailout(state = initialState, action) {
       return {
         ...state,
         mailoutPolygonCoordinates: action.payload,
-      };
-
-    case REVERT_MAILOUT_EDIT_PENDING:
-      return {
-        ...state,
-        revertMailoutEditPending: true,
-        revertMailoutEditError: null,
-      };
-
-    case REVERT_MAILOUT_EDIT_SUCCESS:
-      return {
-        ...state,
-        revertMailoutEditPending: false,
-        details: action.payload,
-        mailoutEdit: null,
-        revertMailoutEditError: null,
-      };
-
-    case REVERT_MAILOUT_EDIT_ERROR:
-      return {
-        ...state,
-        revertMailoutEditPending: false,
-        revertMailoutEditError: action.error,
       };
 
     case ARCHIVE_MAILOUT_PENDING:
@@ -443,6 +423,14 @@ export default function mailout(state = initialState, action) {
       return {
         ...state,
         addMailoutError: null,
+      };
+    case UPDATE_MAILOUT_EDIT_VALUES:
+      return {
+        ...state,
+        mailoutEdit: {
+          ...state.mailoutEdit,
+          ...action.payload,
+        },
       };
     default:
       return state;

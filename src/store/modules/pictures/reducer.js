@@ -8,6 +8,9 @@ import {
   DELETE_PHOTO_PENDING,
   DELETE_PHOTO_SUCCESS,
   DELETE_PHOTO_ERROR,
+  GET_PHOTO_LIBRARY_PENDING,
+  GET_PHOTO_LIBRARY_SUCCESS,
+  GET_PHOTO_LIBRARY_ERROR,
 } from './actions';
 import { DESELECT_PEER_ID, SELECT_PEER_ID } from '../peer/actions';
 
@@ -19,6 +22,9 @@ const initialState = {
   teamLogo: null,
   brokerageLogo: null,
   toDelete: null,
+  photoLibrary: null,
+  photoLibraryPending: null,
+  photoLibraryError: null,
 };
 
 export default function pictures(state = initialState, action) {
@@ -143,6 +149,26 @@ export default function pictures(state = initialState, action) {
         pending: false,
         toDelete: null,
         error: action.error,
+      };
+
+    case GET_PHOTO_LIBRARY_PENDING:
+      return {
+        ...state,
+        photoLibraryPending: true,
+      };
+
+    case GET_PHOTO_LIBRARY_SUCCESS:
+      return {
+        ...state,
+        photoLibraryPending: false,
+        photoLibrary: action.payload,
+      };
+
+    case GET_PHOTO_LIBRARY_ERROR:
+      return {
+        ...state,
+        photoLibraryPending: false,
+        photoLibraryError: action.error,
       };
 
     default:

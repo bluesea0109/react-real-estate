@@ -210,7 +210,7 @@ const PostcardsPage = () => {
         if (frontIframe && !frontIframe.src) {
           frontIframe.src = frontIframe.title;
         }
-        if (!backIframe.src) {
+        if (backIframe && !backIframe.src) {
           backIframe.src = backIframe.title;
         }
       }

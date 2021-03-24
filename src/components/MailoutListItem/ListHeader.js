@@ -91,7 +91,7 @@ const ApproveAndSendButton = ({
               </Dropdown.Menu>
             </StyledDropdown>
 
-            <Link to={`dashboard/edit/${data._id}/destinations`}>
+            <Link to={`postcards/edit/${data._id}/destinations`}>
               <Button primary>
                 <span>Choose Destinations</span>
               </Button>
@@ -125,7 +125,6 @@ const ListHeader = ({
   onClickApproveAndSend,
   onClickDelete,
   lockControls = false,
-  onClickRevertEdit,
 }) => {
   const dispatch = useDispatch();
   const archivePending = useSelector(state => state.mailout.archivePending);
@@ -155,13 +154,12 @@ const ListHeader = ({
     resolveMailoutStatus(data.mailoutStatus) !== 'Processing';
   const enableDelete = resolveMailoutStatus(data.mailoutStatus) === 'Sent';
   const activeWhen = new Date(Date.now()).toISOString().split('T')[0] < data.send_date;
-  const enableRevertEdit = data.edited;
   const isArchived = data.mailoutStatus === 'hide' || data.mailoutStatus === 'archived';
 
   // Redirect the user to the edit page from the dashboard
   const handleEditClickFromDropdown = id => {
     dispatch(resetMailout());
-    history.push(`/dashboard/edit/${id}`);
+    history.push(`/postcards/edit/${id}`);
   };
 
   const duplicateCampaign = id => {
@@ -236,20 +234,6 @@ const ListHeader = ({
         )}
       </span>
       <ItemHeaderMenuLayout>
-        {canSend(data.mailoutStatus) && mailoutDetailPage && enableRevertEdit && (
-          <span>
-            <Button
-              secondary
-              inverted
-              onClick={onClickRevertEdit}
-              disabled={lockControls}
-              loading={lockControls}
-            >
-              Revert & Unlock
-            </Button>
-          </span>
-        )}
-
         {mailoutDetailPage &&
           enableEdit &&
           ((!isArchived && data.mailoutStatus === 'sent') ||
@@ -267,17 +251,19 @@ const ListHeader = ({
           )}
 
         {mailoutDetailPage && enableEdit && (
-          <span>
-            <Button
-              primary
-              inverted
-              onClick={onClickEdit}
-              disabled={lockControls}
-              loading={lockControls}
-            >
-              Edit
-            </Button>
-          </span>
+          <>
+            <span>
+              <Button
+                primary
+                inverted
+                onClick={onClickEdit}
+                disabled={lockControls}
+                loading={lockControls}
+              >
+                Edit
+              </Button>
+            </span>
+          </>
         )}
         {data.mailoutStatus === 'archived' && (
           <Button

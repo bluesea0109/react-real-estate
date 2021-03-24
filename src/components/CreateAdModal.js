@@ -134,7 +134,6 @@ const ListingModal = ({ open, setOpen, selectedListing, setSelectedListing, adTy
   useEffect(() => {
     if (adstoolQS) {
       const adsQS = createQS(adstoolQS);
-
       const mls = selectedListing?.listing?.blueroofMlsId;
       const listing = selectedListing?.listing?.mlsNum;
       const finalUrl = adsToolUrl.concat(

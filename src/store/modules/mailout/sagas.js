@@ -28,9 +28,6 @@ import {
   UPDATE_MAILOUT_TEMPLATE_THEME_PENDING,
   updateMailoutTemplateThemeSuccess,
   updateMailoutTemplateThemeError,
-  REVERT_MAILOUT_EDIT_PENDING,
-  revertMailoutEditSuccess,
-  revertMailoutEditError,
   ARCHIVE_MAILOUT_PENDING,
   archiveMailoutSuccess,
   archiveMailoutError,
@@ -40,16 +37,24 @@ import {
   duplicateMailoutError,
   undoArchiveMailoutSuccess,
   undoArchiveMailoutError,
+  updateMailoutEditValues,
 } from './actions';
 import ApiService from '../../../services/api/index';
 import { getMailoutsPending } from '../mailouts/actions';
+import {
+  setReloadIframes,
+  setReloadIframesPending,
+  setReplaceFieldData,
+} from '../liveEditor/actions';
 
-export const getSelectedPeerId = state => state.peer.peerId;
-export const getMailoutId = state => state.mailout.mailoutId;
-export const getMailoutSize = state => state.mailout.mailoutSize;
-export const getMailoutName = state => state.mailout.details.name;
-export const getMailoutEdit = state => state.mailout.mailoutEdit;
-export const getMailoutDisplayAgent = state => state.mailout.mailoutDisplayAgent;
+export const getSelectedPeerId = state => state.peer?.peerId;
+export const getMailoutId = state => state.mailout?.mailoutId;
+export const getMailoutSize = state => state.mailout?.mailoutSize;
+export const getMailoutName = state => state.mailout?.details.name;
+export const getMailoutEdit = state => state.mailout?.mailoutEdit;
+export const getMailoutDisplayAgent = state => state.mailout?.mailoutDisplayAgent;
+export const getReloadIframesPending = state => state.liveEditor?.reloadIframesPending;
+export const getEditorFields = state => state.liveEditor?.edits?.fields;
 
 export function* getMailoutSaga({ peerId = null }) {
   try {
@@ -190,19 +195,51 @@ export function* getMailoutEditSaga({ peerId = null }) {
   }
 }
 
-export function* updateMailoutEditSaga({ peerId = null }) {
+export function* updateMailoutEditSaga({ peerId = null }, action) {
   try {
     const mailoutId = yield select(getMailoutId);
     const mailoutEdit = yield select(getMailoutEdit);
+    const editorFields = yield select(getEditorFields);
+    const { newData, mailoutDisplayAgent } = action.payload;
+    let apiData = {
+      postcardSize: mailoutEdit.postcardSize,
+      fields: editorFields || mailoutEdit.fields,
+      ctas: mailoutEdit.ctas,
+      brandColor: mailoutEdit.brandColor,
+      name: mailoutEdit.name,
+    };
+    apiData = { ...apiData, ...newData };
+    if (
+      !newData.hasOwnProperty('frontResourceUrl') &&
+      !newData.hasOwnProperty('backResourceUrl') &&
+      !newData.hasOwnProperty('templateTheme') &&
+      !mailoutEdit.hasOwnProperty('frontResourceUrl') &&
+      !mailoutEdit.hasOwnProperty('backResourceUrl')
+    ) {
+      apiData = { ...apiData, templateTheme: mailoutEdit.templateTheme };
+    }
+    const reloadIframesPending = yield select(getReloadIframesPending);
+    let updateEditValues = mailoutDisplayAgent ? { ...apiData, mailoutDisplayAgent } : apiData;
+    yield put(updateMailoutEditValues(updateEditValues));
     const { path, method } = peerId
       ? ApiService.directory.peer.mailout.edit.update(mailoutId, peerId)
       : ApiService.directory.user.mailout.edit.update(mailoutId);
-
-    const response = yield call(ApiService[method], path, mailoutEdit);
-
-    yield put(updateMailoutEditSuccess(response));
+    const apiResponse = yield call(ApiService[method], path, apiData);
+    let agentResponse = null;
+    if (mailoutDisplayAgent) {
+      const { path: agentPath, method: agentMethod } = peerId
+        ? ApiService.directory.peer.mailout.edit.updateDisplayAgent(mailoutId, peerId)
+        : ApiService.directory.user.mailout.edit.updateDisplayAgent(mailoutId);
+      agentResponse = yield call(ApiService[agentMethod], agentPath, { mailoutDisplayAgent });
+      yield put(updateMailoutEditValues(agentResponse));
+      yield put(setReplaceFieldData(agentResponse?.fields));
+    } else if (reloadIframesPending) {
+      yield put(setReloadIframes(true));
+    }
+    yield put(updateMailoutEditSuccess(apiResponse));
   } catch (err) {
     yield put(updateMailoutEditError(err));
+    yield put(setReloadIframesPending(false));
   }
 }
 
@@ -220,21 +257,6 @@ export function* updateMailoutTemplateThemeSaga() {
     yield put(updateMailoutTemplateThemeSuccess(response));
   } catch (err) {
     yield put(updateMailoutTemplateThemeError(err));
-  }
-}
-
-export function* revertMailoutEditSaga({ peerId = null }) {
-  try {
-    const mailoutId = yield select(getMailoutId);
-    const { path, method } = peerId
-      ? ApiService.directory.peer.mailout.edit.revert(mailoutId, peerId)
-      : ApiService.directory.user.mailout.edit.revert(mailoutId);
-
-    const response = yield call(ApiService[method], path);
-
-    yield put(revertMailoutEditSuccess(response));
-  } catch (err) {
-    yield put(revertMailoutEditError(err));
   }
 }
 
@@ -346,13 +368,12 @@ export function* checkIfPeerSelectedGetMailoutEditSaga() {
   }
 }
 
-export function* checkIfPeerSelectedUpdateMailoutEditSaga() {
+export function* checkIfPeerSelectedUpdateMailoutEditSaga(action) {
   const peerId = yield select(getSelectedPeerId);
-
   if (peerId) {
-    yield updateMailoutEditSaga({ peerId });
+    yield updateMailoutEditSaga({ peerId }, action);
   } else {
-    yield updateMailoutEditSaga({});
+    yield updateMailoutEditSaga({}, action);
   }
 }
 
@@ -363,16 +384,6 @@ export function* checkIfPeerSelectedUpdateMailoutTemplateThemeSaga() {
     yield updateMailoutTemplateThemeSaga({ peerId });
   } else {
     yield updateMailoutTemplateThemeSaga({});
-  }
-}
-
-export function* checkIfPeerSelectedRevertMailoutEditSaga() {
-  const peerId = yield select(getSelectedPeerId);
-
-  if (peerId) {
-    yield revertMailoutEditSaga({ peerId });
-  } else {
-    yield revertMailoutEditSaga({});
   }
 }
 
@@ -412,7 +423,6 @@ export default function*() {
     UPDATE_MAILOUT_TEMPLATE_THEME_PENDING,
     checkIfPeerSelectedUpdateMailoutTemplateThemeSaga
   );
-  yield takeLatest(REVERT_MAILOUT_EDIT_PENDING, checkIfPeerSelectedRevertMailoutEditSaga);
   yield takeLatest(ARCHIVE_MAILOUT_PENDING, checkIfPeerSelectedArchiveMailoutSaga);
   yield takeLatest(DUPLICATE_MAILOUT_PENDING, checkIfPeerSelectedDuplicateSaga);
   yield takeLatest(UNDO_ARCHIVE_MAILOUT_PENDING, checkIfPeerSelectedUndoArchiveMailoutSaga);

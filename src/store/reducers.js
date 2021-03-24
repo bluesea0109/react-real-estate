@@ -7,6 +7,7 @@ import content from './modules/content/reducer';
 import customization from './modules/customization/reducer';
 import initialize from './modules/initialize/reducer';
 import inviteUsers from './modules/inviteUsers/reducer';
+import liveEditor from './modules/liveEditor/reducer';
 import mailout from './modules/mailout/reducer';
 import mailouts from './modules/mailouts/reducer';
 import onboarded from './modules/onboarded/reducer';
@@ -32,6 +33,7 @@ const reducers = {
   customization,
   initialize,
   inviteUsers,
+  liveEditor,
   mailout,
   mailouts,
   onboarded,

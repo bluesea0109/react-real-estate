@@ -5,6 +5,7 @@ import Card from './Card';
 import Checkbox from './Checkbox';
 import Container from './Container';
 import Dropdown from './Dropdown';
+import DropdownCard from './DropdownCard';
 import Dimmer from './Dimmer';
 import Divider from './Divider';
 import Form from './Form';
@@ -25,6 +26,7 @@ import Modal from './Modal';
 import Page from './Page';
 import Pagination from './Pagination';
 import Popup from './Popup';
+import RangeInput from './RangeInput';
 import Responsive from './Responsive';
 import SectionHeader from './SectionHeader';
 import Segment from './Segment';
@@ -43,6 +45,7 @@ export {
   Checkbox,
   Container,
   Dropdown,
+  DropdownCard,
   Dimmer,
   Divider,
   Form,
@@ -63,6 +66,7 @@ export {
   Page,
   Pagination,
   Popup,
+  RangeInput,
   Responsive,
   Snackbar,
   SectionHeader,
