@@ -207,11 +207,10 @@ const Dashboard = ({ className }) => {
           ></DashboardItem>
           <DashboardItem
             name="home value ad"
-            soon
-            // linkTo={{
-            //   pathname: 'listings',
-            //   state: { filters: ['Active', 'Pending'], adsModal: true, adType: 'homeValue' },
-            // }}
+            linkTo={{
+              pathname: 'listings',
+              state: { filters: ['Active', 'Pending'], adsModal: true, adType: 'homeValue' },
+            }}
           ></DashboardItem>
           <DashboardItem
             name="buyer search ad"
