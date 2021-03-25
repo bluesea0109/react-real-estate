@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Progress } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -17,6 +17,7 @@ import Loading from '../components/Loading';
 import * as brandColors from '../components/utils/brandColors';
 import { Link, useHistory } from 'react-router-dom';
 import ReadyMadeContentSlider from '../components/ReadyMadeContentSlider';
+import CreateHomeValueAdModal from '../components/CreateHomeValueAdModal';
 import { useWindowSize } from '../components/Hooks/useWindowSize';
 import { DashboardItemContainer } from '../components/DashboardItemContainer';
 
@@ -56,7 +57,7 @@ const SectionGrid = styled.div`
 const getDashboardImg = fileName =>
   `https://stencil-alf-assets.s3.amazonaws.com/marketer/${fileName}`;
 
-const DashboardItem = ({ className, name, linkTo, external, soon }) => {
+const DashboardItem = ({ className, name, linkTo, external, soon, ...otherProps }) => {
   let imgFileName = `${name.replaceAll(' ', '_')}.jpg`;
   let imgSrc = getDashboardImg(`${imgFileName}`);
   const linkAttributes = external
@@ -87,7 +88,7 @@ const DashboardItem = ({ className, name, linkTo, external, soon }) => {
   }
   return (
     <DashboardItemContainer className={className}>
-      <Link to={linkTo}>
+      <Link to={linkTo} {...otherProps}>
         <img src={imgSrc} alt={`dashboard-item-${name}`} />
         <span className="item-name">{name}</span>
       </Link>
@@ -109,7 +110,21 @@ const Dashboard = ({ className }) => {
   const currentUserTotal = initiatingUserState && initiatingUserState.campaignsTotal;
   const currentUserCompleted = initiatingUserState && initiatingUserState.campaignsCompleted;
 
+  const [showAdsModal, setShowAdsModal] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(false);
+  const [selectedAdType, setSelectedAdType] = useState('');
+
   const error = useSelector(store => store.mailouts.error?.message);
+
+  const handleShowModal = () => {
+    setShowAdsModal(true);
+    setSelectedAdType('homeValue');
+  };
+
+  const handleCloseModal = () => {
+    setShowAdsModal(false);
+    setSelectedAdType('');
+  };
 
   return (
     <Page basic>
@@ -207,10 +222,8 @@ const Dashboard = ({ className }) => {
           ></DashboardItem>
           <DashboardItem
             name="home value ad"
-            linkTo={{
-              pathname: 'listings',
-              state: { filters: ['Active', 'Pending'], adsModal: true, adType: 'homeValue' },
-            }}
+            linkTo={{ pathname: 'dashboard' }}
+            onClick={() => handleShowModal()}
           ></DashboardItem>
           <DashboardItem
             name="buyer search ad"
@@ -292,6 +305,14 @@ const Dashboard = ({ className }) => {
       {error && <Snackbar error>{error}</Snackbar>}
       {/* show the loading state */}
       {false && <Loading />}
+
+      <CreateHomeValueAdModal
+        open={showAdsModal}
+        setOpen={handleCloseModal}
+        selectedAddress={selectedAddress}
+        adType={selectedAdType}
+        setSelectedAddress={setSelectedAddress}
+      />
     </Page>
   );
 };

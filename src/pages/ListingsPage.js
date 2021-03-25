@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import { Grid, Segment, Button, Popup, List, Icon, Card, Image } from 'semantic-ui-react';
 
 import CreateAdModal from '../components/CreateAdModal';
-import CreateHomeValueAdModal from '../components/CreateHomeValueAdModal';
 import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
 import { useWindowSize } from '../components/Hooks/useWindowSize';
@@ -317,11 +316,9 @@ const ListingsPage = () => {
   const [userType, setUserType] = useState('loggedIn');
   const [showAdsModal, setShowAdsModal] = useState(location?.state?.adsModal);
   const [selectedListing, setSelectedListing] = useState(false);
-  const [selectedAddress, setSelectedAddress] = useState(false);
   const peerId = useSelector(store => store.peer.peerId);
   const userProfile = useSelector(store => store.onLogin?.userProfile);
   const userProfileImgResized = useSelector(store => store.onLogin?.realtorPhoto?.resized);
-  const adType = location?.state?.adType;
 
   const userInfo = { ...userProfile, userProfileImgResized };
   const peerUser = useSelector(
@@ -510,23 +507,13 @@ const ListingsPage = () => {
           </Segment>
         )}
       </div>
-      {adType === 'homeValue' ? (
-        <CreateHomeValueAdModal
-          open={showAdsModal}
-          setOpen={setShowAdsModal}
-          selectedAddress={selectedAddress}
-          adType={adType}
-          setSelectedAddress={setSelectedAddress}
-        />
-      ) : (
-        <CreateAdModal
-          open={showAdsModal}
-          setOpen={setShowAdsModal}
-          selectedListing={selectedListing}
-          adType={adType}
-          setSelectedListing={setSelectedListing}
-        />
-      )}
+      <CreateAdModal
+        open={showAdsModal}
+        setOpen={setShowAdsModal}
+        selectedListing={selectedListing}
+        adType={location?.state?.adType}
+        setSelectedListing={setSelectedListing}
+      />
     </Page>
   );
 };
