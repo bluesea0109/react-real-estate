@@ -43,6 +43,7 @@ export default function PhotoLibrary() {
     const wrapperRef = useRef(null);
     useClickOutside(wrapperRef, () => {
       dispatch(setSelectedPhoto(''));
+      dispatch(setBigPhoto(''));
     });
     return (
       <div className="images" ref={wrapperRef}>
