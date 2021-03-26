@@ -2,7 +2,6 @@ import Cookies from 'js-cookie';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
-import { Redirect } from 'react-router';
 import Loading from '../components/Loading';
 import { Header, Menu, Page, Dropdown } from '../components/Base';
 import styled from 'styled-components';
@@ -313,8 +312,7 @@ const MicroListingsPage = () => {
   const location = useLocation();
   const dispatch = useDispatch();
 
-  const [cookie] = useState(Cookies.get('idToken'));
-
+  const [cookie, setCookie] = useState(null);
   const [listingDetails, setListingDetails] = useState(null);
   const [sortedListings, setsortedListings] = useState(null);
   const [filteredListings, setFitleredListings] = useState(null);
@@ -338,7 +336,9 @@ const MicroListingsPage = () => {
       let path = `/api/user/listings?forgeBlueroofToken=true`;
       if (peerId) path = `/api/user/peer/${peerId}/listings?forgeBlueroofToken=true`;
       const headers = {};
-      const accessToken = await auth.getAccessToken();
+      let accessToken = await auth.getAccessToken();
+      if (!accessToken) accessToken = Cookies.get('idToken');
+      setCookie(accessToken);
       headers['authorization'] = `Bearer ${accessToken}`;
       const response = await fetch(path, { headers, method: 'get', credentials: 'include' });
       const results = await api.handleResponse(response);
@@ -383,6 +383,11 @@ const MicroListingsPage = () => {
       setFitleredListings(newFilteredListings);
     }
   }, [activeFilters, sortedListings]);
+
+  useEffect(() => {
+    AuthService.cookieLogin(cookie);
+    dispatch(cookieAuthentication(cookie));
+  }, [cookie, dispatch]);
 
   const handleFilterSelected = val => {
     if (val === 'All') {
@@ -430,108 +435,98 @@ const MicroListingsPage = () => {
     return 4;
   };
 
-  if (cookie) {
-    AuthService.cookieLogin(cookie);
-    dispatch(cookieAuthentication(cookie));
-
-    return (
-      <Page basic>
-        <ContentTopHeaderLayout>
-          <PageTitleHeader>
-            <Menu borderless fluid secondary>
-              <Menu.Item>
-                <Header as="h1">Listings</Header>
-              </Menu.Item>
-              {listingDetails && (
-                <Menu.Menu position="right">
-                  <Popup
-                    content={
-                      <FilterList
-                        activeFilters={activeFilters}
-                        handleFilterSelected={handleFilterSelected}
-                      />
-                    }
-                    trigger={<Button primary content="FILTER" className="listingFilterButton" />}
-                    position="bottom right"
-                    on="click"
-                    hideOnScroll
-                  />
-                </Menu.Menu>
-              )}
-            </Menu>
-          </PageTitleHeader>
-        </ContentTopHeaderLayout>
-        <div>
-          {!listingDetails ? (
-            <ContentBottomHeaderLayout>
-              <Loading message="Loading Listings..." />
-            </ContentBottomHeaderLayout>
-          ) : listingDetails?.listings.length > 0 ? (
-            <Grid padded="vertically" columns={getColumns()}>
-              {filteredListings?.length > 0 ? (
-                filteredListings.map((item, i) => {
-                  return (
-                    <ListingCard
-                      key={i}
-                      listingDetails={listingDetails}
-                      listingItem={item}
-                      userInfo={userInfo}
-                      peerUser={peerUser}
-                      userType={userType}
+  return (
+    <Page basic>
+      <ContentTopHeaderLayout>
+        <PageTitleHeader>
+          <Menu borderless fluid secondary>
+            <Menu.Item>
+              <Header as="h1">Listings</Header>
+            </Menu.Item>
+            {listingDetails && (
+              <Menu.Menu position="right">
+                <Popup
+                  content={
+                    <FilterList
+                      activeFilters={activeFilters}
+                      handleFilterSelected={handleFilterSelected}
                     />
-                  );
-                })
-              ) : activeFilters.includes('All') ? (
-                undefined
-              ) : sortedListings?.length > 0 ? (
-                <Header
-                  as="h3"
-                  className="normalFontWeight noMargin cardFont noFilteredListingsText"
-                >
-                  No Listings meet the current filtering criteria.
-                </Header>
-              ) : (
-                undefined
-              )}
-            </Grid>
-          ) : (
-            <Segment>
-              <Card centered style={{ minWidth: '500px', boxShadow: 'none' }}>
-                <Image
-                  centered
-                  size="large"
-                  src={require('../assets/listings-page-empty.svg')}
-                  style={{ background: 'unset', marginTop: '2em', marginBottom: '1em' }}
+                  }
+                  trigger={<Button primary content="FILTER" className="listingFilterButton" />}
+                  position="bottom right"
+                  on="click"
+                  hideOnScroll
                 />
-                <Card.Content style={{ borderTop: 'none' }}>
-                  <Header as="h5" textAlign="center">
-                    <Header.Content style={{ textAlign: 'center', cursor: 'default' }}>
-                      <p>
-                        Your listings will appear here. If you haven't done so yet, <br />
-                        <Link to="/profile" className="briv-marketerLink">
-                          add your MLS and Agent ID on the &quot;Profile&quot; page
-                        </Link>
-                        .
-                      </p>
-                    </Header.Content>
-                  </Header>
-                </Card.Content>
-              </Card>
-            </Segment>
-          )}
-        </div>
-        <CreateAdModal
-          open={showAdsModal}
-          setOpen={setShowAdsModal}
-          selectedListing={selectedListing}
-          adType={location?.state?.adType}
-          setSelectedListing={setSelectedListing}
-        />
-      </Page>
-    );
-  } else {
-    return <Redirect to="/" />;
-  }
+              </Menu.Menu>
+            )}
+          </Menu>
+        </PageTitleHeader>
+      </ContentTopHeaderLayout>
+      <div>
+        {!listingDetails ? (
+          <ContentBottomHeaderLayout>
+            <Loading message="Loading Listings..." />
+          </ContentBottomHeaderLayout>
+        ) : listingDetails?.listings.length > 0 ? (
+          <Grid padded="vertically" columns={getColumns()}>
+            {filteredListings?.length > 0 ? (
+              filteredListings.map((item, i) => {
+                return (
+                  <ListingCard
+                    key={i}
+                    listingDetails={listingDetails}
+                    listingItem={item}
+                    userInfo={userInfo}
+                    peerUser={peerUser}
+                    userType={userType}
+                  />
+                );
+              })
+            ) : activeFilters.includes('All') ? (
+              undefined
+            ) : sortedListings?.length > 0 ? (
+              <Header as="h3" className="normalFontWeight noMargin cardFont noFilteredListingsText">
+                No Listings meet the current filtering criteria.
+              </Header>
+            ) : (
+              undefined
+            )}
+          </Grid>
+        ) : (
+          <Segment>
+            <Card centered style={{ minWidth: '500px', boxShadow: 'none' }}>
+              <Image
+                centered
+                size="large"
+                src={require('../assets/listings-page-empty.svg')}
+                style={{ background: 'unset', marginTop: '2em', marginBottom: '1em' }}
+              />
+              <Card.Content style={{ borderTop: 'none' }}>
+                <Header as="h5" textAlign="center">
+                  <Header.Content style={{ textAlign: 'center', cursor: 'default' }}>
+                    <p>
+                      Your listings will appear here. If you haven't done so yet, <br />
+                      <Link to="/profile" className="briv-marketerLink">
+                        add your MLS and Agent ID on the &quot;Profile&quot; page
+                      </Link>
+                      .
+                    </p>
+                  </Header.Content>
+                </Header>
+              </Card.Content>
+            </Card>
+          </Segment>
+        )}
+      </div>
+      <CreateAdModal
+        open={showAdsModal}
+        setOpen={setShowAdsModal}
+        selectedListing={selectedListing}
+        adType={location?.state?.adType}
+        setSelectedListing={setSelectedListing}
+      />
+    </Page>
+  );
 };
 
 export default MicroListingsPage;
