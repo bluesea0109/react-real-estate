@@ -35,7 +35,7 @@ const CardTitle = styled(Header)`
   text-overflow: ellipsis;
 `;
 
-const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType }) => {
+const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType, microMode }) => {
   const windowSize = useWindowSize();
   const adProduct = useSelector(store => store.onLogin.permissions?.adProduct);
   const onLoginMode = useSelector(store => store.onLogin.mode);
@@ -111,8 +111,10 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
               }
               onClick={
                 displayClick
-                  ? () =>
-                      (window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`)
+                  ? () => {
+                      let link = `${listingDetails.adProduct.url}?${createQS(listingItem)}`;
+                      microMode ? (window.top.location.href = link) : (window.location = link);
+                    }
                   : undefined
               }
             >
@@ -134,9 +136,10 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                 <CardTitle
                   as="h3"
                   className="cardFont listingCardTitle"
-                  onClick={() =>
-                    (window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`)
-                  }
+                  onClick={() => {
+                    let link = `${listingDetails.adProduct.url}?${createQS(listingItem)}`;
+                    microMode ? (window.top.location.href = link) : (window.location = link);
+                  }}
                 >
                   {listingItem.streetAddress}
                 </CardTitle>
@@ -219,11 +222,12 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                     <DotsDropDown.Menu>
                       {adProduct && (
                         <DotsDropDown.Item
-                          onClick={() =>
-                            (window.location = `${listingDetails.adProduct.url}?${createQS(
-                              listingItem
-                            )}`)
-                          }
+                          onClick={() => {
+                            let link = `${listingDetails.adProduct.url}?${createQS(listingItem)}`;
+                            microMode
+                              ? (window.top.location.href = link)
+                              : (window.location = link);
+                          }}
                         >
                           Create Ad
                         </DotsDropDown.Item>
@@ -231,9 +235,12 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
 
                       {listingItem.campaignInfo ? (
                         <DotsDropDown.Item
-                          onClick={() =>
-                            (window.location = `/dashboard/${listingItem.campaignInfo}`)
-                          }
+                          onClick={() => {
+                            let link = `/dashboard/${listingItem.campaignInfo}`;
+                            microMode
+                              ? (window.top.location.href = link)
+                              : (window.location = link);
+                          }}
                         >
                           View Postcard Campaign
                         </DotsDropDown.Item>
@@ -312,6 +319,7 @@ const MicroListingsPage = () => {
   const location = useLocation();
   const dispatch = useDispatch();
 
+  const [microMode] = useState(location.pathname.indexOf('micro') > 0 ? true : false);
   const [cookie, setCookie] = useState(null);
   const [listingDetails, setListingDetails] = useState(null);
   const [sortedListings, setsortedListings] = useState(null);
@@ -479,6 +487,7 @@ const MicroListingsPage = () => {
                     userInfo={userInfo}
                     peerUser={peerUser}
                     userType={userType}
+                    microMode={microMode}
                   />
                 );
               })
