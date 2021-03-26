@@ -1,5 +1,6 @@
+import Cookies from 'js-cookie';
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import Loading from '../components/Loading';
 import { Header, Menu, Page, Dropdown } from '../components/Base';
@@ -11,6 +12,8 @@ import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
 import { useWindowSize } from '../components/Hooks/useWindowSize';
 import StatusPill from '../components/StatusPill';
+import { cookieAuthentication } from '../store/modules/auth0/actions';
+import AuthService from '../services/auth';
 
 import auth from '../services/auth';
 import api from '../services/api';
@@ -307,6 +310,9 @@ const FilterList = ({ activeFilters, handleFilterSelected }) => {
 
 const MicroListingsPage = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
+
+  const [cookie, setCookie] = useState(null);
   const [listingDetails, setListingDetails] = useState(null);
   const [sortedListings, setsortedListings] = useState(null);
   const [filteredListings, setFitleredListings] = useState(null);
@@ -330,7 +336,9 @@ const MicroListingsPage = () => {
       let path = `/api/user/listings?forgeBlueroofToken=true`;
       if (peerId) path = `/api/user/peer/${peerId}/listings?forgeBlueroofToken=true`;
       const headers = {};
-      const accessToken = await auth.getAccessToken();
+      let accessToken = await auth.getAccessToken();
+      if (!accessToken) accessToken = Cookies.get('idToken');
+      setCookie(accessToken);
       headers['authorization'] = `Bearer ${accessToken}`;
       const response = await fetch(path, { headers, method: 'get', credentials: 'include' });
       const results = await api.handleResponse(response);
@@ -375,6 +383,11 @@ const MicroListingsPage = () => {
       setFitleredListings(newFilteredListings);
     }
   }, [activeFilters, sortedListings]);
+
+  useEffect(() => {
+    AuthService.cookieLogin(cookie);
+    dispatch(cookieAuthentication(cookie));
+  }, [cookie, dispatch]);
 
   const handleFilterSelected = val => {
     if (val === 'All') {
