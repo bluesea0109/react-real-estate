@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { Button, Icon, Modal } from './Base';
 import * as brandColors from './utils/brandColors';
 import { debounce } from 'lodash';
+import auth from '../services/auth';
 import { getAdsTool } from '../store/modules/ads/actions';
 import { useDispatch } from 'react-redux';
 
@@ -88,25 +89,43 @@ const ListingModal = ({ open, setOpen, selectedAddress, setSelectedAddress, adTy
   const [searchValue, setSearchValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState([]);
+  const [postalsOrCities, setPostalsOrCities] = useState(null);
   const [filteredResults, setFilteredResults] = useState([]);
   const adstoolQS = useSelector(store => store.ads?.adsTool?.adProduct.qs);
   const adsToolUrl = useSelector(store => store.ads?.adsTool?.adProduct.url);
 
   useEffect(() => {
     const newFilteredResults = results?.map(res => {
-      return { title: res.formatted_address };
+      return {
+        title:
+          postalsOrCities === 'postals'
+            ? `${res.city} ${res.state} ${res.postal}`
+            : postalsOrCities === 'cities'
+            ? `${res.city} ${res.state}`
+            : null,
+      };
     });
     setFilteredResults(newFilteredResults);
-  }, [results]);
+  }, [results, postalsOrCities]);
 
   const getListings = async value => {
     if (!value) return [];
-    const api_key = process.env.REACT_APP_GOOGLE_MAP_APP_KEY;
-    const path = `https://maps.googleapis.com/maps/api/geocode/json?key=${api_key}&address=${value}`;
-
-    const searchRes = await fetch(path);
+    const path = `/api/user/places?autocomplete=${value}`;
+    const headers = {};
+    const accessToken = await auth.getAccessToken();
+    headers['authorization'] = `Bearer ${accessToken}`;
+    const searchRes = await fetch(path, { headers, method: 'get', credentials: 'include' });
     const data = await searchRes.json();
-    return data.results;
+    if (data.postals.length > 0) {
+      setPostalsOrCities('postals');
+      return data.postals;
+    }
+    if (data.cities.length > 0) {
+      setPostalsOrCities('cities');
+      return data.cities;
+    }
+    setPostalsOrCities('');
+    return [];
   };
 
   const handleSearchChange = useCallback(
@@ -119,7 +138,19 @@ const ListingModal = ({ open, setOpen, selectedAddress, setSelectedAddress, adTy
   );
 
   const handleListingSelect = e => {
-    setSelectedAddress(results.find(result => result.formatted_address === e.target.innerHTML));
+    results.forEach(result => {
+      if (
+        postalsOrCities === 'postals' &&
+        `${result.city} ${result.state} ${result.postal}` === e.target.innerHTML
+      ) {
+        setSelectedAddress(result);
+        setSearchValue(`${result.city} ${result.state} ${result.postal}`);
+      }
+      if (postalsOrCities === 'cities' && `${result.city} ${result.state}` === e.target.innerHTML) {
+        setSelectedAddress(result);
+        setSearchValue(`${result.city} ${result.state}`);
+      }
+    });
   };
 
   let createQS = item => {
