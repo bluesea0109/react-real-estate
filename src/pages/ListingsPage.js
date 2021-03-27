@@ -1,5 +1,6 @@
+import Cookies from 'js-cookie';
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import Loading from '../components/Loading';
 import { Header, Menu, Page, Dropdown } from '../components/Base';
@@ -11,6 +12,8 @@ import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
 import { useWindowSize } from '../components/Hooks/useWindowSize';
 import StatusPill from '../components/StatusPill';
+import { cookieAuthentication } from '../store/modules/auth0/actions';
+import AuthService from '../services/auth';
 
 import auth from '../services/auth';
 import api from '../services/api';
@@ -32,7 +35,7 @@ const CardTitle = styled(Header)`
   text-overflow: ellipsis;
 `;
 
-const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType }) => {
+const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType, microMode }) => {
   const windowSize = useWindowSize();
   const adProduct = useSelector(store => store.onLogin.permissions?.adProduct);
   const history = useHistory();
@@ -109,8 +112,10 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
               }
               onClick={
                 displayClick
-                  ? () =>
-                      (window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`)
+                  ? () => {
+                      let link = `${listingDetails.adProduct.url}?${createQS(listingItem)}`;
+                      microMode ? (window.top.location.href = link) : (window.location = link);
+                    }
                   : undefined
               }
             >
@@ -132,9 +137,10 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                 <CardTitle
                   as="h3"
                   className="cardFont listingCardTitle"
-                  onClick={() =>
-                    (window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`)
-                  }
+                  onClick={() => {
+                    let link = `${listingDetails.adProduct.url}?${createQS(listingItem)}`;
+                    microMode ? (window.top.location.href = link) : (window.location = link);
+                  }}
                 >
                   {listingItem.streetAddress}
                 </CardTitle>
@@ -217,11 +223,12 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                     <DotsDropDown.Menu>
                       {adProduct && (
                         <DotsDropDown.Item
-                          onClick={() =>
-                            (window.location = `${listingDetails.adProduct.url}?${createQS(
-                              listingItem
-                            )}`)
-                          }
+                          onClick={() => {
+                            let link = `${listingDetails.adProduct.url}?${createQS(listingItem)}`;
+                            microMode
+                              ? (window.top.location.href = link)
+                              : (window.location = link);
+                          }}
                         >
                           Create Ad
                         </DotsDropDown.Item>
@@ -229,9 +236,12 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
 
                       {listingItem.campaignInfo ? (
                         <DotsDropDown.Item
-                          onClick={() =>
-                            (window.location = `/dashboard/${listingItem.campaignInfo}`)
-                          }
+                          onClick={() => {
+                            let link = `/dashboard/${listingItem.campaignInfo}`;
+                            microMode
+                              ? (window.top.location.href = link)
+                              : (window.location = link);
+                          }}
                         >
                           View Postcard Campaign
                         </DotsDropDown.Item>
@@ -240,13 +250,21 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                           onClick={() => {
                             let filter =
                               listingItem.standardStatus === 'Closed' ? 'sold' : 'listed';
-                            history.push({
-                              pathname: '/create-postcard',
-                              state: {
-                                mlsNum: listingItem.mlsNum,
-                                filter,
-                              },
-                            });
+                            if (microMode) {
+                              localStorage.setItem('mlsNum', listingItem.mlsNum);
+                              localStorage.setItem('filter', filter);
+
+                              const win = window.open('/create-postcard', '_blank');
+                              win.focus();
+                            } else {
+                              history.push({
+                                pathname: '/create-postcard',
+                                state: {
+                                  mlsNum: listingItem.mlsNum,
+                                  filter,
+                                },
+                              });
+                            }
                           }}
                         >
                           Create Postcard Campaign
@@ -309,6 +327,10 @@ const FilterList = ({ activeFilters, handleFilterSelected }) => {
 
 const ListingsPage = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
+
+  const [microMode] = useState(location.pathname.indexOf('micro') > 0 ? true : false);
+  const [cookie, setCookie] = useState(null);
   const [listingDetails, setListingDetails] = useState(null);
   const [sortedListings, setsortedListings] = useState(null);
   const [filteredListings, setFitleredListings] = useState(null);
@@ -332,7 +354,9 @@ const ListingsPage = () => {
       let path = `/api/user/listings?forgeBlueroofToken=true`;
       if (peerId) path = `/api/user/peer/${peerId}/listings?forgeBlueroofToken=true`;
       const headers = {};
-      const accessToken = await auth.getAccessToken();
+      let accessToken = await auth.getAccessToken();
+      if (!accessToken) accessToken = Cookies.get('idToken');
+      setCookie(accessToken);
       headers['authorization'] = `Bearer ${accessToken}`;
       const response = await fetch(path, { headers, method: 'get', credentials: 'include' });
       const results = await api.handleResponse(response);
@@ -377,6 +401,13 @@ const ListingsPage = () => {
       setFitleredListings(newFilteredListings);
     }
   }, [activeFilters, sortedListings]);
+
+  useEffect(() => {
+    if (microMode) {
+      AuthService.cookieLogin(cookie);
+      dispatch(cookieAuthentication(cookie));
+    }
+  }, [cookie, dispatch, microMode]);
 
   const handleFilterSelected = val => {
     if (val === 'All') {
@@ -468,6 +499,7 @@ const ListingsPage = () => {
                     userInfo={userInfo}
                     peerUser={peerUser}
                     userType={userType}
+                    microMode={microMode}
                   />
                 );
               })
