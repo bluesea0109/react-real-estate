@@ -93,7 +93,7 @@ const ListingModal = ({ open, setOpen, selectedAddress, setSelectedAddress, adTy
   const [filteredResults, setFilteredResults] = useState([]);
   const adstoolQS = useSelector(store => store.ads?.adsTool?.adProduct.qs);
   const adsToolUrl = useSelector(store => store.ads?.adsTool?.adProduct.url);
-  const [qsAddress, setQSAddress] = useState()
+  const [qsAddress, setQSAddress] = useState();
 
   useEffect(() => {
     const newFilteredResults = results?.map(res => {
@@ -146,12 +146,12 @@ const ListingModal = ({ open, setOpen, selectedAddress, setSelectedAddress, adTy
       ) {
         setSelectedAddress(result);
         setSearchValue(`${result.city} ${result.state} ${result.postal}`);
-        setQSAddress({city:results.city, state:result.state, postal:result.postal })
+        setQSAddress({ city: results.city, state: result.state, postal: result.postal });
       }
       if (postalsOrCities === 'cities' && `${result.city} ${result.state}` === e.target.innerHTML) {
         setSelectedAddress(result);
         setSearchValue(`${result.city} ${result.state}`);
-        setQSAddress({city:result.city, state:result.state })
+        setQSAddress({ city: result.city, state: result.state });
       }
     });
   };
@@ -165,7 +165,7 @@ const ListingModal = ({ open, setOpen, selectedAddress, setSelectedAddress, adTy
   useEffect(() => {
     if (adstoolQS) {
       const adsQS = createQS(adstoolQS);
-      const cityState = createQS(qsAddress)
+      const cityState = createQS(qsAddress);
       const finalUrl = adsToolUrl.concat(`?adType=homeValue&${adsQS}&${cityState}`);
 
       finalUrl.replace(/ /g, '%20');
