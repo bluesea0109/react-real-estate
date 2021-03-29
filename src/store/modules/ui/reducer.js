@@ -1,7 +1,8 @@
-import { CLOSE_ALERT } from './actions';
+import { CLOSE_ALERT, SHOW_BARS } from './actions';
 
 const initialState = {
   showAlert: true,
+  showBars: [],
 };
 
 export default function ui(state = initialState, action) {
@@ -10,6 +11,12 @@ export default function ui(state = initialState, action) {
       return {
         ...state,
         showAlert: false,
+      };
+
+    case SHOW_BARS:
+      return {
+        ...state,
+        showBars: action.payload,
       };
 
     default:

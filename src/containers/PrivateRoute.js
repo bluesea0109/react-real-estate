@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import React, { useEffect } from 'react';
 import { Route, useHistory } from 'react-router-dom';
 
@@ -8,6 +8,7 @@ import { ContentTopHeaderLayout } from '../layouts';
 import { Message, Page, Segment } from '../components/Base';
 import AuthService from '../services/auth';
 import { authenticate } from '../store/modules/auth0/actions';
+import { showBars } from '../store/modules/ui/actions';
 
 const PrivateRoute = ({
   component: Component,
@@ -15,51 +16,65 @@ const PrivateRoute = ({
   auth0,
   onLogin,
   templates,
+  middleware = false,
+  auth = false,
   states,
   boards,
   ...rest
 }) => {
   let history = useHistory();
   const dispatch = useDispatch();
+  const showBarsArray = useSelector(store => store.ui.showBars);
 
   useEffect(() => {
-    const fn = async () => {
-      if (
-        history.location.pathname !== '/callback' &&
-        history.location.pathname !== '/dashboard' &&
-        history.location.pathname !== '/onboard' &&
-        history.location.pathname !== '/'
-      ) {
-        localStorage.setItem('routerDestination', history.location.pathname);
-      }
-      const localToken = localStorage.getItem('localToken');
-      if (!auth0.authenticated && !auth0.error && !localToken) {
-        history.push('/');
-      } else if (localToken && !auth0.authenticated) {
-        AuthService.cookieLogin(localToken);
-        dispatch(authenticate());
-      } else {
-        if (!onLogin.pending && !onLogin.error) {
-          if (
-            !onLogin.teamProfile ||
-            !onLogin.teamBranding ||
-            !onLogin.userProfile ||
-            !onLogin.userBranding ||
-            (onLogin.userProfile && !onLogin.userProfile.setupComplete) ||
-            (onLogin.userBranding && !onLogin.userBranding.onboardingComplete)
-          ) {
-            return history.push('/onboard');
+    if (!middleware && middleware !== !!showBarsArray.length) {
+      dispatch(showBars([]));
+    }
+    if (middleware && JSON.stringify(middleware) !== JSON.stringify(showBarsArray)) {
+      dispatch(showBars(middleware));
+    }
+  }, [middleware, dispatch, showBarsArray]);
+
+  useEffect(() => {
+    if (auth) {
+      const fn = async () => {
+        if (
+          history.location.pathname !== '/callback' &&
+          history.location.pathname !== '/dashboard' &&
+          history.location.pathname !== '/onboard' &&
+          history.location.pathname !== '/'
+        ) {
+          localStorage.setItem('routerDestination', history.location.pathname);
+        }
+        const localToken = localStorage.getItem('localToken');
+        if (!auth0.authenticated && !auth0.error && !localToken) {
+          history.push('/');
+        } else if (localToken && !auth0.authenticated) {
+          AuthService.cookieLogin(localToken);
+          dispatch(authenticate());
+        } else {
+          if (!onLogin.pending && !onLogin.error) {
+            if (
+              !onLogin.teamProfile ||
+              !onLogin.teamBranding ||
+              !onLogin.userProfile ||
+              !onLogin.userBranding ||
+              (onLogin.userProfile && !onLogin.userProfile.setupComplete) ||
+              (onLogin.userBranding && !onLogin.userBranding.onboardingComplete)
+            ) {
+              return history.push('/onboard');
+            }
+          }
+          if (localStorage.getItem('routerDestination')) {
+            const routerDestination = await localStorage.getItem('routerDestination');
+            localStorage.removeItem('routerDestination');
+            return history.push(routerDestination);
           }
         }
-        if (localStorage.getItem('routerDestination')) {
-          const routerDestination = await localStorage.getItem('routerDestination');
-          localStorage.removeItem('routerDestination');
-          return history.push(routerDestination);
-        }
-      }
-    };
-    fn();
-  }, [auth0, history, onLogin, dispatch]);
+      };
+      fn();
+    }
+  }, [auth0, history, onLogin, dispatch, auth]);
 
   const render = props => {
     const isReady =
@@ -71,7 +86,8 @@ const PrivateRoute = ({
       !boards.pending &&
       !!templates.available &&
       !!states.available &&
-      !!boards.available;
+      !!boards.available &&
+      auth;
 
     return isReady ? (
       <Component {...props} />
@@ -93,7 +109,11 @@ const PrivateRoute = ({
       </Page>
     );
   };
-  return <Route path={path} render={render} {...rest} />;
+  return auth ? (
+    <Route path={path} render={render} {...rest} />
+  ) : (
+    <Route path={path} component={Component} {...rest} />
+  );
 };
 
 PrivateRoute.propTypes = {

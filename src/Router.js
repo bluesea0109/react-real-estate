@@ -33,37 +33,149 @@ export default () => {
       <Route path="/emailverified" component={EmailVerifiedPage} />
       <Route path="/callback" component={CallbackPage} />
       <Route path="/login" component={LoginPage} />
-      <PrivateRoute path="/onboard" component={OnboardPage} />
-      <PrivateRoute exact path="/dashboard" component={DashboardPage} />
-      <PrivateRoute exact path="/listings" component={ListingsPage} />
-      <PrivateRoute exact path="/ads" component={AdsPage} />
-      <PrivateRoute exact path="/postcards" component={PostcardsPage} />
-      <PrivateRoute exact path="/postcards/archived" component={ArchivedPage} />
-      <PrivateRoute exact path="/postcards/:mailoutId" component={MailoutDetailsPage} />
-      <PrivateRoute exact path="/postcards/edit/:mailoutId" component={Editor} />
+      <PrivateRoute
+        path="/onboard"
+        middleware={['showSidebar', 'showTopbar']}
+        auth={true}
+        component={OnboardPage}
+      />
+      <PrivateRoute
+        exact
+        path="/dashboard"
+        middleware={['showSidebar', 'showTopbar']}
+        auth={true}
+        component={DashboardPage}
+      />
+      <PrivateRoute
+        exact
+        path="/listings"
+        middleware={['showSidebar', 'showTopbar']}
+        auth={true}
+        component={ListingsPage}
+      />
+      <PrivateRoute
+        exact
+        path="/ads"
+        middleware={['showSidebar', 'showTopbar']}
+        auth={true}
+        component={AdsPage}
+      />
+      <PrivateRoute
+        exact
+        path="/postcards"
+        middleware={['showSidebar', 'showTopbar']}
+        auth={true}
+        component={PostcardsPage}
+      />
+      <PrivateRoute
+        exact
+        path="/postcards/archived"
+        middleware={['showSidebar', 'showTopbar']}
+        auth={true}
+        component={ArchivedPage}
+      />
+      <PrivateRoute
+        exact
+        path="/postcards/:mailoutId"
+        middleware={['showSidebar', 'showTopbar']}
+        auth={true}
+        component={MailoutDetailsPage}
+      />
+      <PrivateRoute
+        exact
+        path="/postcards/edit/:mailoutId"
+        middleware={['showTopbar']}
+        auth={true}
+        component={Editor}
+      />
       <PrivateRoute
         exact
         path="/postcards/edit/:mailoutId/destinations"
+        middleware={['showSidebar', 'showTopbar']}
+        auth={true}
         component={MailoutDestinationsPage}
       />
-      <PrivateRoute exact path="/dashboard/archived" component={ArchivedPage} />
-      <PrivateRoute exact path="/dashboard/:mailoutId" component={MailoutDetailsPage} />
-      <PrivateRoute exact path="/dashboard/edit/:mailoutId" component={Editor} />
+      <PrivateRoute
+        exact
+        path="/dashboard/archived"
+        middleware={['showSidebar', 'showTopbar']}
+        auth={true}
+        component={ArchivedPage}
+      />
+      <PrivateRoute
+        exact
+        path="/dashboard/:mailoutId"
+        middleware={['showSidebar', 'showTopbar']}
+        auth={true}
+        component={MailoutDetailsPage}
+      />
+      <PrivateRoute
+        exact
+        path="/dashboard/edit/:mailoutId"
+        middleware={['showSidebar', 'showTopbar']}
+        auth={true}
+        component={Editor}
+      />
       <PrivateRoute
         exact
         path="/dashboard/edit/:mailoutId/destinations"
+        middleware={['showSidebar', 'showTopbar']}
+        auth={true}
         component={MailoutDestinationsPage}
       />
 
-      <PrivateRoute exact path="/customization" component={CustomizationPage} />
-      <PrivateRoute path="/customization/team" component={CustomizationTeamPage} />
-      <PrivateRoute path="/profile" component={ProfilePage} />
-      <PrivateRoute path="/settings" component={SettingsPage} />
-      <PrivateRoute path="/billing" component={BillingPage} />
-      <PrivateRoute exact path="/ready-made-designs" component={ReadyMadeDesignPage} />
-      <PrivateRoute exact path="/create-postcard" component={CreatePostcard} />
-      <Route exact path="/micro/listings" component={ListingsPage} />
-      <Route path="*" component={EmptyPage} />
+      <PrivateRoute
+        exact
+        path="/customization"
+        middleware={['showSidebar', 'showTopbar']}
+        auth={true}
+        component={CustomizationPage}
+      />
+      <PrivateRoute
+        path="/customization/team"
+        middleware={['showSidebar', 'showTopbar']}
+        auth={true}
+        component={CustomizationTeamPage}
+      />
+      <PrivateRoute
+        path="/profile"
+        middleware={['showSidebar', 'showTopbar']}
+        auth={true}
+        component={ProfilePage}
+      />
+      <PrivateRoute
+        path="/settings"
+        middleware={['showSidebar', 'showTopbar']}
+        auth={true}
+        component={SettingsPage}
+      />
+      <PrivateRoute
+        path="/billing"
+        middleware={['showSidebar', 'showTopbar']}
+        auth={true}
+        component={BillingPage}
+      />
+      <PrivateRoute
+        exact
+        path="/ready-made-designs"
+        middleware={['showSidebar', 'showTopbar']}
+        auth={true}
+        component={ReadyMadeDesignPage}
+      />
+      <PrivateRoute
+        exact
+        path="/create-postcard"
+        middleware={['showSidebar', 'showTopbar']}
+        auth={true}
+        component={CreatePostcard}
+      />
+      <PrivateRoute exact path="/micro/listings" component={ListingsPage} />
+      <PrivateRoute
+        path="*"
+        middleware={['showSidebar', 'showTopbar']}
+        auth={true}
+        component={EmptyPage}
+      />
     </Switch>
   );
 };
