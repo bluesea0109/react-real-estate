@@ -1,31 +1,30 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { MainLayout, HeaderLayout, SidebarLayout, ContentLayout } from './layouts';
 import TopBarContainer from './containers/TopBarContainer';
 import { Navigation } from './components/Navigation/index';
 import Router from './Router';
-import { useLocation } from 'react-router';
 
 function App() {
-  const location = useLocation();
-  const [showSidebar, setShowSidebar] = useState(
-    (!location.pathname.includes('/micro/listings') &&
-      !location.pathname.includes('/postcards/edit/') &&
-      !location?.pathname?.includes('/dashboard/edit/')) ||
-      location?.pathname?.includes('destinations')
-  );
-  const [showTopbar, setShowTopbar] = useState(!location.pathname.includes('/micro/listings'));
+  const showBars = useSelector(store => store.auth0.showBars);
+
+  const [showSidebar, setShowSidebar] = useState(false);
+  const [showTopbar, setShowTopbar] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    setShowSidebar(
-      (!location.pathname.includes('/micro/listings') &&
-        !location.pathname.includes('/postcards/edit/') &&
-        !location?.pathname?.includes('/dashboard/edit/')) ||
-        location?.pathname?.includes('destinations')
-    );
-    setShowTopbar(!location.pathname.includes('/micro/listings'));
-  }, [location]);
+    if (showBars.indexOf('showTopbar') >= 0) {
+      setShowTopbar(true);
+    } else {
+      setShowTopbar(false);
+    }
+    if (showBars.indexOf('showSidebar') >= 0) {
+      setShowSidebar(true);
+    } else {
+      setShowSidebar(false);
+    }
+  }, [showBars]);
 
   return (
     <MainLayout showTopbar={showTopbar} showSidebar={showSidebar}>
