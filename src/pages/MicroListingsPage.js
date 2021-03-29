@@ -1,6 +1,7 @@
+import Cookies from 'js-cookie';
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
 import Loading from '../components/Loading';
 import { Header, Menu, Page, Dropdown } from '../components/Base';
 import styled from 'styled-components';
@@ -11,6 +12,8 @@ import PageTitleHeader from '../components/PageTitleHeader';
 import { ContentBottomHeaderLayout, ContentTopHeaderLayout } from '../layouts';
 import { useWindowSize } from '../components/Hooks/useWindowSize';
 import StatusPill from '../components/StatusPill';
+import { cookieAuthentication } from '../store/modules/auth0/actions';
+import AuthService from '../services/auth';
 
 import auth from '../services/auth';
 import api from '../services/api';
@@ -35,7 +38,6 @@ const CardTitle = styled(Header)`
 const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType }) => {
   const windowSize = useWindowSize();
   const adProduct = useSelector(store => store.onLogin.permissions?.adProduct);
-  const history = useHistory();
   const onLoginMode = useSelector(store => store.onLogin.mode);
   const multiUser = onLoginMode === 'multiuser';
 
@@ -109,8 +111,11 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
               }
               onClick={
                 displayClick
-                  ? () =>
-                      (window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`)
+                  ? () => {
+                      window.top.location.href = `${listingDetails.adProduct.url}?${createQS(
+                        listingItem
+                      )}`;
+                    }
                   : undefined
               }
             >
@@ -132,9 +137,11 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                 <CardTitle
                   as="h3"
                   className="cardFont listingCardTitle"
-                  onClick={() =>
-                    (window.location = `${listingDetails.adProduct.url}?${createQS(listingItem)}`)
-                  }
+                  onClick={() => {
+                    window.top.location.href = `${listingDetails.adProduct.url}?${createQS(
+                      listingItem
+                    )}`;
+                  }}
                 >
                   {listingItem.streetAddress}
                 </CardTitle>
@@ -217,11 +224,11 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                     <DotsDropDown.Menu>
                       {adProduct && (
                         <DotsDropDown.Item
-                          onClick={() =>
-                            (window.location = `${listingDetails.adProduct.url}?${createQS(
+                          onClick={() => {
+                            window.top.location.href = `${listingDetails.adProduct.url}?${createQS(
                               listingItem
-                            )}`)
-                          }
+                            )}`;
+                          }}
                         >
                           Create Ad
                         </DotsDropDown.Item>
@@ -229,9 +236,9 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
 
                       {listingItem.campaignInfo ? (
                         <DotsDropDown.Item
-                          onClick={() =>
-                            (window.location = `/dashboard/${listingItem.campaignInfo}`)
-                          }
+                          onClick={() => {
+                            window.top.location.href = `/dashboard/${listingItem.campaignInfo}`;
+                          }}
                         >
                           View Postcard Campaign
                         </DotsDropDown.Item>
@@ -240,13 +247,12 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
                           onClick={() => {
                             let filter =
                               listingItem.standardStatus === 'Closed' ? 'sold' : 'listed';
-                            history.push({
-                              pathname: '/create-postcard',
-                              state: {
-                                mlsNum: listingItem.mlsNum,
-                                filter,
-                              },
-                            });
+
+                            localStorage.setItem('mlsNum', listingItem.mlsNum);
+                            localStorage.setItem('filter', filter);
+
+                            const win = window.open('/create-postcard', '_blank');
+                            win.focus();
                           }}
                         >
                           Create Postcard Campaign
@@ -307,8 +313,11 @@ const FilterList = ({ activeFilters, handleFilterSelected }) => {
   );
 };
 
-const ListingsPage = () => {
+const MicroListingsPage = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
+
+  const [cookie, setCookie] = useState(null);
   const [listingDetails, setListingDetails] = useState(null);
   const [sortedListings, setsortedListings] = useState(null);
   const [filteredListings, setFitleredListings] = useState(null);
@@ -332,7 +341,9 @@ const ListingsPage = () => {
       let path = `/api/user/listings?forgeBlueroofToken=true`;
       if (peerId) path = `/api/user/peer/${peerId}/listings?forgeBlueroofToken=true`;
       const headers = {};
-      const accessToken = await auth.getAccessToken();
+      let accessToken = await auth.getAccessToken();
+      if (!accessToken) accessToken = Cookies.get('idToken');
+      setCookie(accessToken);
       headers['authorization'] = `Bearer ${accessToken}`;
       const response = await fetch(path, { headers, method: 'get', credentials: 'include' });
       const results = await api.handleResponse(response);
@@ -377,6 +388,11 @@ const ListingsPage = () => {
       setFitleredListings(newFilteredListings);
     }
   }, [activeFilters, sortedListings]);
+
+  useEffect(() => {
+    AuthService.cookieLogin(cookie);
+    dispatch(cookieAuthentication(cookie));
+  }, [cookie, dispatch]);
 
   const handleFilterSelected = val => {
     if (val === 'All') {
@@ -518,4 +534,4 @@ const ListingsPage = () => {
   );
 };
 
-export default ListingsPage;
+export default MicroListingsPage;
