@@ -23,7 +23,6 @@ import BillingPage from './pages/BillingPage';
 import EmptyPage from './pages/EmptyPage';
 import ArchivedPage from './pages/ArchivedPage';
 import ReadyMadeDesignPage from './pages/ReadyMadeDesignPage';
-import MicroListingsPage from './pages/MicroListingsPage';
 import { CreatePostcard } from './pages/CreatePostcard';
 
 export default () => {
@@ -63,7 +62,7 @@ export default () => {
       <PrivateRoute path="/billing" component={BillingPage} />
       <PrivateRoute exact path="/ready-made-designs" component={ReadyMadeDesignPage} />
       <PrivateRoute exact path="/create-postcard" component={CreatePostcard} />
-      <Route exact path="/micro/listings" component={MicroListingsPage} />
+      <Route exact path="/micro/listings" component={ListingsPage} />
       <Route path="*" component={EmptyPage} />
     </Switch>
   );
