@@ -81,7 +81,13 @@ export default () => {
         auth={true}
         component={MailoutDetailsPage}
       />
-      <PrivateRoute exact path="/postcards/edit/:mailoutId" auth={true} component={Editor} />
+      <PrivateRoute
+        exact
+        path="/postcards/edit/:mailoutId"
+        middleware={['showTopbar']}
+        auth={true}
+        component={Editor}
+      />
       <PrivateRoute
         exact
         path="/postcards/edit/:mailoutId/destinations"
@@ -103,7 +109,13 @@ export default () => {
         auth={true}
         component={MailoutDetailsPage}
       />
-      <PrivateRoute exact path="/dashboard/edit/:mailoutId" auth={true} component={Editor} />
+      <PrivateRoute
+        exact
+        path="/dashboard/edit/:mailoutId"
+        middleware={['showSidebar', 'showTopbar']}
+        auth={true}
+        component={Editor}
+      />
       <PrivateRoute
         exact
         path="/dashboard/edit/:mailoutId/destinations"
@@ -157,8 +169,13 @@ export default () => {
         auth={true}
         component={CreatePostcard}
       />
-      <Route exact path="/micro/listings" component={ListingsPage} />
-      <Route path="*" component={EmptyPage} />
+      <PrivateRoute exact path="/micro/listings" component={ListingsPage} />
+      <PrivateRoute
+        path="*"
+        middleware={['showSidebar', 'showTopbar']}
+        auth={true}
+        component={EmptyPage}
+      />
     </Switch>
   );
 };
