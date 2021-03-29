@@ -10,8 +10,6 @@ export const PASSWORD_RESET_PENDING = 'PASSWORD_RESET_PENDING';
 export const PASSWORD_RESET_SUCCESS = 'PASSWORD_RESET_SUCCESS';
 export const PASSWORD_RESET_ERROR = 'PASSWORD_RESET_ERROR';
 
-export const SHOW_BARS = 'SHOW_BARS';
-
 export function authenticate() {
   return createAction(AUTHENTICATION_PENDING);
 }
@@ -38,8 +36,4 @@ export function passwordResetSuccess(payload) {
 
 export function passwordResetError(error) {
   return createErrorAction(PASSWORD_RESET_ERROR, error);
-}
-
-export function showBars(payload) {
-  return createAction(SHOW_BARS, payload);
 }

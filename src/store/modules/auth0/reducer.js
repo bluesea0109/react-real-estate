@@ -6,7 +6,6 @@ import {
   PASSWORD_RESET_PENDING,
   PASSWORD_RESET_SUCCESS,
   PASSWORD_RESET_ERROR,
-  SHOW_BARS,
 } from './actions';
 
 const initialState = {
@@ -17,7 +16,6 @@ const initialState = {
   passwordResetDetails: null,
   error: null,
   passwordResetError: null,
-  showBars: [],
 };
 
 export default function auth0(state = initialState, action) {
@@ -72,12 +70,6 @@ export default function auth0(state = initialState, action) {
         ...state,
         passwordResetPending: false,
         passwordResetError: action.error,
-      };
-
-    case SHOW_BARS:
-      return {
-        ...state,
-        showBars: action.payload,
       };
 
     default:

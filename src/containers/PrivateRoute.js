@@ -7,7 +7,8 @@ import Loading from '../components/Loading';
 import { ContentTopHeaderLayout } from '../layouts';
 import { Message, Page, Segment } from '../components/Base';
 import AuthService from '../services/auth';
-import { authenticate, showBars } from '../store/modules/auth0/actions';
+import { authenticate } from '../store/modules/auth0/actions';
+import { showBars } from '../store/modules/ui/actions';
 
 const PrivateRoute = ({
   component: Component,
@@ -23,7 +24,7 @@ const PrivateRoute = ({
 }) => {
   let history = useHistory();
   const dispatch = useDispatch();
-  const showBarsArray = useSelector(store => store.auth0.showBars);
+  const showBarsArray = useSelector(store => store.ui.showBars);
 
   useEffect(() => {
     if (!middleware && middleware !== !!showBarsArray.length) {

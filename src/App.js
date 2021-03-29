@@ -7,7 +7,7 @@ import { Navigation } from './components/Navigation/index';
 import Router from './Router';
 
 function App() {
-  const showBars = useSelector(store => store.auth0.showBars);
+  const showBars = useSelector(store => store.ui.showBars);
 
   const [showSidebar, setShowSidebar] = useState(false);
   const [showTopbar, setShowTopbar] = useState(false);
