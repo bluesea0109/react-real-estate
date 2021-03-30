@@ -9,7 +9,6 @@ export const StyledFrame = styled.div`
   & > .scale-wrapper {
     transform: scale(${props => props.scale});
     transform-origin: 0 0;
-  
   }
-  transform: rotate(${props => props.rotate})
+  transform: rotate(${props => props.rotate});
 `;

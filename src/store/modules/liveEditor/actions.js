@@ -82,6 +82,6 @@ export function setSelectedTemplate(payload) {
   return createAction(SET_SELECTED_TEMPLATE, payload);
 }
 
-export function setRotation (payload) {
-  return createAction(SET_ROTATION, payload)
+export function setRotation(payload) {
+  return createAction(SET_ROTATION, payload);
 }

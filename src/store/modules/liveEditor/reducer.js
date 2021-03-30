@@ -32,7 +32,7 @@ const initialState = {
   selectedPhoto: '',
   bigPhoto: '',
   zoomValue: 1,
-  rotation:0,
+  rotation: 0,
   selectedTemplate: true,
   edits: {
     fields: null,
@@ -126,7 +126,7 @@ export default function liveEditor(state = initialState, action) {
     case SET_ROTATION:
       return {
         ...state,
-        rotation: action.payload
+        rotation: action.payload,
       };
     case SET_SELECTED_TEMPLATE:
       return {

@@ -28,8 +28,8 @@ const ZoomControls = styled.div`
 
 const styledRotate = {
   fontSize: '17px',
-  marginTop: "15px",
-  marginLeft: "20px",
+  marginTop: '15px',
+  marginLeft: '20px',
   // display: "-webkit-box",
   //   display: "-webkit-flex",
   //   display: "-ms-flexbox",
@@ -40,9 +40,7 @@ const styledRotate = {
   //   alignItems: "center",
   //   color: "#666666",
   //   margin: "0 1rem",
-}
-
-
+};
 
 export default function EditorToolbar() {
   const dispatch = useDispatch();
@@ -51,10 +49,10 @@ export default function EditorToolbar() {
 
   const handleRotate = () => {
     let tempDegree = rotation;
-    if (rotation <= -360) tempDegree = 0
-    let degree = tempDegree - 90
-    dispatch(setRotation(degree))
-  }
+    if (rotation <= -360) tempDegree = 0;
+    let degree = tempDegree - 90;
+    dispatch(setRotation(degree));
+  };
 
   return (
     <StyledToolbar>
@@ -70,9 +68,8 @@ export default function EditorToolbar() {
         />
         <span>{Math.round(zoomValue * 100)}%</span>
       </ZoomControls>
-   
-      <RotateIcon style={styledRotate} onClick={() => handleRotate()}/>
-    
+
+      <RotateIcon style={styledRotate} onClick={() => handleRotate()} />
     </StyledToolbar>
   );
 }
