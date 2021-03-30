@@ -170,7 +170,7 @@ export default () => {
         auth={true}
         component={CreatePostcard}
       />
-      <PrivateRoute exact path="/micro/listings" component={MicroListingsPage} />
+      <Route exact path="/micro/listings" component={MicroListingsPage} />
       <PrivateRoute
         path="*"
         middleware={['showSidebar', 'showTopbar']}
