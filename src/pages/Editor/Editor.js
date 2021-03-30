@@ -31,6 +31,7 @@ import {
   setFontSizeValue,
   updateElementCss,
   setEditingSide,
+  setStencilEdits,
 } from '../../store/modules/liveEditor/actions';
 import { sleep } from '../../components/utils/utils';
 import { CampaignNameDiv, EditorContent, EditorLayout, EditorPreview } from './StyledComponents';
@@ -81,6 +82,12 @@ export default function Editor() {
   const [newCTA, setNewCTA] = useState(defaultCTA);
   const [invalidCTA, setInvalidCTA] = useState(false);
   const [hideCTA, setHideCTA] = useState(false);
+
+  // set the stencilEdits on load
+  useEffect(() => {
+    if (mailoutEdit?.stencilEdits?.elements?.length)
+      dispatch(setStencilEdits(mailoutEdit.stencilEdits.elements));
+  }, [dispatch, mailoutEdit]);
 
   useEffect(() => {
     const deselectPhoto = e => {

@@ -124,7 +124,8 @@ const domLoaded = () => {
     } else if (e.data?.type === 'updateAllFields') {
       updateAllFields(e.data?.replaceFieldData);
     } else if (e.data?.type === 'customStyles') {
-      document.getElementById('custom-styles').innerHTML = e.data?.fullCssString;
+      let customStyles = document.getElementById('custom-styles');
+      if (customStyles) customStyles.innerHTML = e.data?.fullCssString;
     } else console.log(JSON.stringify(e.data));
   }
 
