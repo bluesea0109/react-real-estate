@@ -17,12 +17,13 @@ const BackIframe = forwardRef(
       postcardSize,
       reloadPending,
       scale,
+      rotate,
     },
     ref
   ) => {
     let scaleValue = scale || 1;
     return (
-      <StyledFrame postcardSize={postcardSize} scale={scaleValue}>
+      <StyledFrame postcardSize={postcardSize} scale={scaleValue} rotate={rotate}>
         <div className="scale-wrapper">
           {backResourceUrl && (
             <>

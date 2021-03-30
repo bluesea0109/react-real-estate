@@ -15,6 +15,7 @@ import {
   SET_ZOOM_VALUE,
   SET_SELECTED_TEMPLATE,
   SET_BIG_PHOTO,
+  SET_ROTATION,
 } from './actions';
 
 const initialState = {
@@ -31,6 +32,7 @@ const initialState = {
   selectedPhoto: '',
   bigPhoto: '',
   zoomValue: 1,
+  rotation:0,
   selectedTemplate: true,
   edits: {
     fields: null,
@@ -120,6 +122,11 @@ export default function liveEditor(state = initialState, action) {
       return {
         ...state,
         zoomValue: action.payload,
+      };
+    case SET_ROTATION:
+      return {
+        ...state,
+        rotation: action.payload
       };
     case SET_SELECTED_TEMPLATE:
       return {

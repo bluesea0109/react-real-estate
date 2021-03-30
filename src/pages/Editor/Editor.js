@@ -49,6 +49,7 @@ export default function Editor() {
   const selectedPhoto = useSelector(state => state.liveEditor?.selectedPhoto);
   const bigPhoto = useSelector(state => state.liveEditor?.bigPhoto);
   const zoomValue = useSelector(state => state.liveEditor?.zoomValue);
+  const rotation = useSelector(state => state.liveEditor?.rotation);
   const [activeNavItem, setActiveNavItem] = useState(1);
   const [frontLoaded, setFrontLoaded] = useState(false);
   const [backLoaded, setBackLoaded] = useState(false);
@@ -72,6 +73,8 @@ export default function Editor() {
   const [newCTA, setNewCTA] = useState(defaultCTA);
   const [invalidCTA, setInvalidCTA] = useState(false);
   const [hideCTA, setHideCTA] = useState(false);
+
+  let rotateStyle = `${rotation}deg`;
 
   useEffect(() => {
     const deselectPhoto = e => {
@@ -440,6 +443,7 @@ export default function Editor() {
                   ref={onFrontChange}
                   reloadPending={reloadIframesPending}
                   scale={zoomValue}
+                  rotate={rotateStyle}
                 />
                 <BackIframe
                   campaignId={details?._id}
@@ -451,6 +455,7 @@ export default function Editor() {
                   ref={onBackChange}
                   reloadPending={reloadIframesPending}
                   scale={zoomValue}
+                  rotate={rotateStyle}
                 />
               </EditorPreview>
             )}

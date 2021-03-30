@@ -16,6 +16,7 @@ export const SET_SELECTED_PHOTO = 'SET_SELECTED_PHOTO';
 export const SET_ZOOM_VALUE = 'SET_ZOOM_VALUE';
 export const SET_SELECTED_TEMPLATE = 'SET_SELECTED_TEMPLATE';
 export const SET_BIG_PHOTO = 'SET_BIG_PHOTO';
+export const SET_ROTATION = 'SET_ROTATION';
 
 export function setReloadIframes(payload) {
   return createAction(SET_RELOAD_IFRAMES, payload);
@@ -79,4 +80,8 @@ export function setZoomValue(payload) {
 
 export function setSelectedTemplate(payload) {
   return createAction(SET_SELECTED_TEMPLATE, payload);
+}
+
+export function setRotation (payload) {
+  return createAction(SET_ROTATION, payload)
 }
