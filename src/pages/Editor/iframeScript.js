@@ -91,6 +91,18 @@ const domLoaded = () => {
     });
   };
 
+  const setSelectedElement = e => {
+    document.querySelectorAll('[data-customizable]').forEach(el => el.classList.remove('editing'));
+    if (e.target?.dataset?.customizable) {
+      e.target.classList.add('editing');
+      const compStyles = window.getComputedStyle(e.target);
+      const fontSize = parseInt(compStyles.getPropertyValue('font-size'));
+      __parentWindow.postMessage({ type: 'setEditing', id: e.target.id, fontSize }, __parentOrigin);
+    } else {
+      __parentWindow.postMessage({ type: 'setEditing', id: '', fontSize: '' }, __parentOrigin);
+    }
+  };
+
   function receiver(e) {
     __parentWindow = e.source;
     __parentOrigin = e.origin;
@@ -111,6 +123,8 @@ const domLoaded = () => {
       insertCallToAction(CTA);
     } else if (e.data?.type === 'updateAllFields') {
       updateAllFields(e.data?.replaceFieldData);
+    } else if (e.data?.type === 'customStyles') {
+      document.getElementById('custom-styles').innerHTML = e.data?.fullCssString;
     } else console.log(JSON.stringify(e.data));
   }
 
@@ -121,6 +135,7 @@ const domLoaded = () => {
 
   window.addEventListener('message', receiver, false);
   document.addEventListener('drop', preventDefault);
+  document.addEventListener('click', setSelectedElement);
 
   Array.prototype.forEach.call(elements, function(el, i) {
     const name = el.getAttribute('title');

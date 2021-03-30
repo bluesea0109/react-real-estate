@@ -27,10 +27,15 @@ import {
   setSelectedPhoto,
   setSidebarOpen,
   setBigPhoto,
+  setEditingElement,
+  setFontSizeValue,
+  updateElementCss,
+  setEditingSide,
 } from '../../store/modules/liveEditor/actions';
 import { sleep } from '../../components/utils/utils';
 import { CampaignNameDiv, EditorContent, EditorLayout, EditorPreview } from './StyledComponents';
 import EditorToolbar from './EditorToolbar';
+import parse from 'style-to-object';
 
 export default function Editor() {
   const dispatch = useDispatch();
@@ -49,6 +54,10 @@ export default function Editor() {
   const selectedPhoto = useSelector(state => state.liveEditor?.selectedPhoto);
   const bigPhoto = useSelector(state => state.liveEditor?.bigPhoto);
   const zoomValue = useSelector(state => state.liveEditor?.zoomValue);
+  const fontSizeValue = useSelector(state => state.liveEditor?.fontSizeValue);
+  const editingElement = useSelector(state => state.liveEditor?.editingElement);
+  const editingSide = useSelector(state => state.liveEditor?.editingSide);
+  const stencilEdits = useSelector(state => state.liveEditor?.edits?.stencilEdits);
   const [activeNavItem, setActiveNavItem] = useState(1);
   const [frontLoaded, setFrontLoaded] = useState(false);
   const [backLoaded, setBackLoaded] = useState(false);
@@ -104,6 +113,7 @@ export default function Editor() {
       showSaveStatus();
     }
   }, [dispatch, saveSuccess]);
+
   useEffect(() => {
     if (isCTAHidden) {
       setHideCTA(true);
@@ -232,6 +242,11 @@ export default function Editor() {
   const handlePostMessage = useCallback(
     e => {
       if (e.data?.resetSelectedPhoto) dispatch(setSelectedPhoto(''));
+      if (e.data?.type === 'setEditing') {
+        dispatch(setEditingElement(e.data.id));
+        dispatch(setFontSizeValue(e.data.fontSize));
+        dispatch(setEditingSide(e.source?.frameElement?.name));
+      }
       if (e.source?.frameElement?.title?.includes('bm-iframe')) {
         let newFields = [];
         if (!liveEditorChanges.fields && Array.isArray(mailoutEdit?.fields)) {
@@ -290,6 +305,47 @@ export default function Editor() {
     [setFrontLoaded, setBackLoaded]
   );
 
+  useEffect(() => {
+    if (stencilEdits.length) {
+      const fullCssString = stencilEdits.reduce((acc, el) => {
+        if (el.type === 'cssOverride') {
+          return (acc += el.cssPartial);
+        } else return null;
+      }, '');
+      sendPostMessage(editingSide, { type: 'customStyles', fullCssString });
+    }
+  }, [dispatch, editingSide, stencilEdits, sendPostMessage]);
+
+  // watch for changes in font size and update the redux store and iframes
+  useEffect(() => {
+    if (fontSizeValue && editingElement && editingSide) {
+      dispatch(updateElementCss({ id: editingElement, css: `font-size:${fontSizeValue}px` }));
+    }
+    // eslint-disable-next-line
+  }, [dispatch, fontSizeValue, sendPostMessage]);
+
+  const testEdits = {
+    elements: [
+      {
+        id: 'test-edit',
+        type: 'text',
+        divPartial: '<div id="test-edit" editable="true">TESTING EDITING</div>',
+        cssPartial:
+          '#test-edit{color: var(--brand-color);position:fixed;top:30%;left:20%;font-size:4rem;font-weight:bold}',
+      },
+      {
+        id: 'test-edit-2',
+        type: 'text',
+        divPartial: '<div id="test-edit-2" editable="true">TESTING EDITING 2</div>',
+        cssPartial:
+          '#test-edit-2{color:blue;position:fixed;top:50%;left:20%;font-size:4rem;font-weight:bold}',
+      },
+    ],
+  };
+  let cssString = testEdits.elements[0].cssPartial.match(/\{(.*?)\}/)[1];
+  console.log(cssString);
+  console.log(parse(cssString));
+
   const handleSave = async ({
     postcardSize,
     mailoutDisplayAgent,
@@ -325,6 +381,7 @@ export default function Editor() {
     if (customizeCTA) newData.ctas = { cta: newCTA, shortenCTA: true, hideCTA: false };
     else if (hideCTA) newData.ctas = { cta: newCTA, hideCTA: true };
     else newData.ctas = { dontOverride: true };
+    if (stencilEdits.length) newData.stencilEdits = { elements: stencilEdits };
     dispatch(updateMailoutEditPending({ newData, mailoutDisplayAgent }));
     setEditingName(false);
   };

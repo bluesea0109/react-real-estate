@@ -15,6 +15,11 @@ import {
   SET_ZOOM_VALUE,
   SET_SELECTED_TEMPLATE,
   SET_BIG_PHOTO,
+  SET_EDITING_ELEMENT,
+  SET_EDITING_SIDE,
+  SET_FONT_SIZE_VALUE,
+  SET_STENCIL_EDITS,
+  UPDATE_ELEMENT_CSS,
 } from './actions';
 
 const initialState = {
@@ -32,9 +37,13 @@ const initialState = {
   bigPhoto: '',
   zoomValue: 1,
   selectedTemplate: true,
+  editingElement: null,
+  editingSide: null,
+  fontSizeValue: null,
   edits: {
     fields: null,
     brandColor: '',
+    stencilEdits: [],
   },
 };
 
@@ -125,6 +134,46 @@ export default function liveEditor(state = initialState, action) {
       return {
         ...state,
         selectedTemplate: action.payload,
+      };
+    case SET_EDITING_ELEMENT:
+      return {
+        ...state,
+        editingElement: action.payload,
+      };
+    case SET_EDITING_SIDE:
+      return {
+        ...state,
+        editingSide: action.payload,
+      };
+    case SET_FONT_SIZE_VALUE:
+      return {
+        ...state,
+        fontSizeValue: action.payload,
+      };
+    case SET_STENCIL_EDITS:
+      return {
+        ...state,
+        edits: {
+          ...state.edits,
+          stencilEdits: action.payload,
+        },
+      };
+    case UPDATE_ELEMENT_CSS:
+      const id = action.payload.id;
+      const cssPartial = `#${id}{${action.payload.css}}`;
+      const elementIndex = state.edits.stencilEdits.findIndex(el => el.id === id);
+      let newEdits = [...state.edits.stencilEdits];
+      if (elementIndex !== -1) {
+        newEdits[elementIndex].cssPartial = cssPartial;
+      } else {
+        newEdits.push({ id, type: 'cssOverride', cssPartial });
+      }
+      return {
+        ...state,
+        edits: {
+          ...state.edits,
+          stencilEdits: newEdits,
+        },
       };
     default:
       return state;
