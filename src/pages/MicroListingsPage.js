@@ -388,7 +388,7 @@ const MicroListingsPage = () => {
   }, [activeFilters, sortedListings]);
 
   useEffect(() => {
-    if (!cookie) return
+    if (!cookie) return;
     AuthService.cookieLogin(cookie);
     dispatch(cookieAuthentication(cookie));
   }, [cookie, dispatch]);
