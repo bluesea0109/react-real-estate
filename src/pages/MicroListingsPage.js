@@ -15,7 +15,6 @@ import StatusPill from '../components/StatusPill';
 import { cookieAuthentication } from '../store/modules/auth0/actions';
 import AuthService from '../services/auth';
 
-import auth from '../services/auth';
 import api from '../services/api';
 
 import * as brandColors from '../components/utils/brandColors';
@@ -341,8 +340,7 @@ const MicroListingsPage = () => {
       let path = `/api/user/listings?forgeBlueroofToken=true`;
       if (peerId) path = `/api/user/peer/${peerId}/listings?forgeBlueroofToken=true`;
       const headers = {};
-      let accessToken = await auth.getAccessToken();
-      if (!accessToken) accessToken = Cookies.get('idToken');
+      const accessToken = Cookies.get('idToken');
       setCookie(accessToken);
       headers['authorization'] = `Bearer ${accessToken}`;
       const response = await fetch(path, { headers, method: 'get', credentials: 'include' });
