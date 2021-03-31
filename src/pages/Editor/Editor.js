@@ -28,7 +28,8 @@ import {
   setSidebarOpen,
   setBigPhoto,
 } from '../../store/modules/liveEditor/actions';
-import { sleep } from '../../components/utils/utils';
+import { sleep, iframeDimensions } from '../../components/utils/utils';
+
 import { CampaignNameDiv, EditorContent, EditorLayout, EditorPreview } from './StyledComponents';
 import EditorToolbar from './EditorToolbar';
 
@@ -78,11 +79,17 @@ export default function Editor() {
 
   const calcMargin = rotation => {
     let margin = '2rem';
+    let postCardHeight = iframeDimensions(details?.postcardSize).height;
+    let postCardWidth = iframeDimensions(details?.postcardSize).width;
+    let marginTop, marginBottom;
+
+    marginTop = marginBottom = (postCardWidth - postCardHeight) / 2;
+
     switch (rotation) {
       case -90:
-        return (margin = '160px 0px 260px 0px');
+        return (margin = `${marginTop}px 0px ${marginBottom}px 0px`);
       case -270:
-        return (margin = '160px 0px 260px 0px');
+        return (margin = `${marginTop}px 0px ${marginBottom}px 0px`);
       default:
         return margin;
     }
@@ -469,6 +476,7 @@ export default function Editor() {
                   reloadPending={reloadIframesPending}
                   scale={zoomValue}
                   rotate={rotateStyle}
+                  margin={calcMargin(rotation)}
                 />
               </EditorPreview>
             )}
