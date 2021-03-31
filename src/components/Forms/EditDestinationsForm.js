@@ -598,7 +598,7 @@ const EditDestinationsForm = ({ mailoutDetails, handleBackClick }) => {
           </List>
           <SendToSourceAddress>
             <Checkbox
-              label="Send to source address(es)"
+              label="Send to listing address"
               name="sendToSourceAddresses"
               checked={sendToSourceAddresses}
               onClick={() => {
