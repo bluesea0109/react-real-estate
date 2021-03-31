@@ -5,7 +5,7 @@ import { Icon, RangeInput } from '../../components/Base';
 import { setZoomValue, setRotation } from '../../store/modules/liveEditor/actions';
 import * as brandColors from '../../components/utils/brandColors';
 import { ReactComponent as RotateIcon } from '../../assets/rotate-left.svg';
-import { ButtonNoStyle } from "../../components/Base"
+import { ButtonNoStyle } from '../../components/Base';
 
 export const StyledToolbar = styled.div`
   padding: 0.5rem 1rem;
@@ -28,21 +28,21 @@ const ZoomControls = styled.div`
 `;
 
 const RotateButton = styled(ButtonNoStyle)`
-    height: 26px;
-    padding: 0px 0px 0px 0px ;
-    width: 40px;
-    min-width: 30px ;
+  height: 26px;
+  padding: 0px 0px 0px 0px;
+  width: 40px;
+  min-width: 30px;
 
-    & :hover{
-      color: ${brandColors.brivityBlue};
-      }
+  & :hover {
+    color: ${brandColors.brivityBlue};
+  }
 `;
 
 const styledRotate = {
   fontSize: '17px',
-  color: "#8a8a8a",
-  webkitTransform: "scaleX(-1)",
-  transform: "scaleX(-1)",
+  color: '#8a8a8a',
+  webkitTransform: 'scaleX(-1)',
+  transform: 'scaleX(-1)',
 };
 
 const Tooltip = styled.div`
@@ -73,7 +73,6 @@ const Tooltip = styled.div`
   }
 `;
 
-
 export default function EditorToolbar() {
   const dispatch = useDispatch();
   const zoomValue = useSelector(state => state.liveEditor?.zoomValue);
@@ -100,8 +99,8 @@ export default function EditorToolbar() {
         />
         <span>{Math.round(zoomValue * 100)}%</span>
       </ZoomControls>
-      <Tooltip  data-tooltip="rotate" data-position="top left" data-inverted="">
-        <RotateButton onClick={() => handleRotate()} >
+      <Tooltip data-tooltip="rotate" data-position="top left" data-inverted="">
+        <RotateButton onClick={() => handleRotate()}>
           <RotateIcon style={styledRotate} />
         </RotateButton>
       </Tooltip>

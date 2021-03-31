@@ -26,7 +26,7 @@ export const EditorContent = styled.div`
 
 export const EditorPreview = styled.div`
   overflow: auto;
-  padding: ${props => (props.paddingTop)} 2rem 2rem 2rem;
+  padding: ${props => props.paddingTop} 2rem 2rem 2rem;
   display: grid;
   gap: 2em;
   grid-template-columns: 1fr;

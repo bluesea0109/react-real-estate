@@ -76,19 +76,19 @@ export default function Editor() {
 
   let rotateStyle = `${rotation}deg`;
 
-  const calcPaddingTop = (rotation) =>{
-    let padding = "2rem";
+  const calcPaddingTop = rotation => {
+    let padding = '2rem';
     switch (rotation) {
       case -90:
-        return padding = '240px'
+        return (padding = '240px');
       case -180:
-          return padding = '120px'
+        return (padding = '120px');
       case -270:
-        return padding = '240px'
-      default: 
-        return padding
+        return (padding = '240px');
+      default:
+        return padding;
     }
-  }
+  };
 
   useEffect(() => {
     const deselectPhoto = e => {
