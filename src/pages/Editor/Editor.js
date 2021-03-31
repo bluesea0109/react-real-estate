@@ -444,7 +444,7 @@ export default function Editor() {
           <EditorContent>
             <EditorToolbar />
             {details && (
-              <EditorPreview >
+              <EditorPreview>
                 <FrontIframe
                   campaignId={details?._id}
                   frontLoaded={frontLoaded}

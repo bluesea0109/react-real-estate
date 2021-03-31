@@ -18,7 +18,7 @@ const BackIframe = forwardRef(
       reloadPending,
       scale,
       rotate,
-      margin
+      margin,
     },
     ref
   ) => {

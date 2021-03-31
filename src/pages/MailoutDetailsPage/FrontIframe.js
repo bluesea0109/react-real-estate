@@ -16,7 +16,7 @@ const FrontIframe = forwardRef(
       reloadPending,
       scale,
       rotate,
-      margin
+      margin,
     },
     ref
   ) => {
