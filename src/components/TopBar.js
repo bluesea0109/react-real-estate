@@ -280,7 +280,7 @@ export default ({ auth0 }) => {
         style={{ borderBottom: '2px solid #E6E6E6', boxShadow: 'none', flexWrap: 'wrap' }}
       >
         <Menu.Item header>
-          <Link to="/dashboard">
+          <Link to={location.pathname.indexOf('/onboard') >= 0 ? '' : '/dashboard'}>
             <LogoImage />
           </Link>
         </Menu.Item>
