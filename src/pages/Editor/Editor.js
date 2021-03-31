@@ -326,7 +326,13 @@ export default function Editor() {
   // watch for changes in font size and update the redux store and iframes
   useEffect(() => {
     if (fontSizeValue && editingElement && editingSide) {
-      dispatch(updateElementCss({ id: editingElement, css: `font-size:${fontSizeValue}px` }));
+      dispatch(
+        updateElementCss({
+          id: editingElement,
+          css: `font-size:${fontSizeValue}px`,
+          page: editingSide,
+        })
+      );
     }
     // eslint-disable-next-line
   }, [dispatch, fontSizeValue, sendPostMessage]);

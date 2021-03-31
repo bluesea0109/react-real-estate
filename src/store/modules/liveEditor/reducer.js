@@ -159,14 +159,16 @@ export default function liveEditor(state = initialState, action) {
         },
       };
     case UPDATE_ELEMENT_CSS:
-      const id = action.payload.id;
+      const { id, page } = action.payload;
       const cssPartial = `#${id}{${action.payload.css}}`;
-      const elementIndex = state.edits.stencilEdits.findIndex(el => el.id === id);
+      const elementIndex = state.edits.stencilEdits.findIndex(
+        el => el.id === id && el.page === page
+      );
       let newEdits = [...state.edits.stencilEdits];
       if (elementIndex !== -1) {
         newEdits[elementIndex].cssPartial = cssPartial;
       } else {
-        newEdits.push({ id, type: 'cssOverride', cssPartial });
+        newEdits.push({ id, page, type: 'cssOverride', cssPartial });
       }
       return {
         ...state,
