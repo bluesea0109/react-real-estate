@@ -314,6 +314,15 @@ const ListHeader = ({
           />
         </span>
         <span>
+          {!isArchived && !mailoutDetailPage && data.mailoutStatus === 'sent' && (
+            <Link to={`dashboard/${data._id}`}>
+              <Button primary>
+                <span>View Campaign</span>
+              </Button>
+            </Link>
+          )}
+        </span>
+        <span>
           {mailoutDetailPage && enableDelete && activeWhen && (
             <Button
               primary
