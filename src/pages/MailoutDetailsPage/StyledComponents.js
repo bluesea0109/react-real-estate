@@ -12,5 +12,4 @@ export const StyledFrame = styled.div`
   }
   transform: rotate(${props => props.rotate});
   margin: ${props => props.margin};
-  transition: margin 1s;
 `;
