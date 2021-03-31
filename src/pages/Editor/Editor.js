@@ -83,7 +83,7 @@ export default function Editor() {
     let postCardWidth = iframeDimensions(details?.postcardSize).width;
     let marginTop, marginBottom;
 
-    marginTop = marginBottom = (postCardWidth - postCardHeight) / 2;
+    marginTop = marginBottom = (postCardWidth - postCardHeight) * 0.75;
 
     switch (rotation) {
       case -90:
