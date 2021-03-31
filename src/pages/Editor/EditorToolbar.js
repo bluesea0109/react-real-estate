@@ -97,8 +97,6 @@ export default function EditorToolbar() {
       </ZoomControls>
       <Tooltip data-tooltip="Rotate Pages" data-position="top left" data-inverted="">
         <RotateButton onClick={() => handleRotate()}>
-          {/* <RotateIcon style={styledRotate} /> */}
-
           <FontAwesomeIcon style={styledRotate} icon="sync" size="lg" />
         </RotateButton>
       </Tooltip>
