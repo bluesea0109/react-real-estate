@@ -76,17 +76,15 @@ export default function Editor() {
 
   let rotateStyle = `${rotation}deg`;
 
-  const calcPaddingTop = rotation => {
-    let padding = '2rem';
+  const calcMargin = rotation => {
+    let margin = '2rem';
     switch (rotation) {
       case -90:
-        return (padding = '240px');
-      case -180:
-        return (padding = '120px');
+        return (margin = '160px 0px 260px 0px');
       case -270:
-        return (padding = '240px');
+        return (margin = '160px 0px 260px 0px');
       default:
-        return padding;
+        return margin;
     }
   };
 
@@ -446,7 +444,7 @@ export default function Editor() {
           <EditorContent>
             <EditorToolbar />
             {details && (
-              <EditorPreview paddingTop={calcPaddingTop(rotation)}>
+              <EditorPreview >
                 <FrontIframe
                   campaignId={details?._id}
                   frontLoaded={frontLoaded}
@@ -458,6 +456,7 @@ export default function Editor() {
                   reloadPending={reloadIframesPending}
                   scale={zoomValue}
                   rotate={rotateStyle}
+                  margin={calcMargin(rotation)}
                 />
                 <BackIframe
                   campaignId={details?._id}

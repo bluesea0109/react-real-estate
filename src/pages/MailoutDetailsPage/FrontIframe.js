@@ -16,12 +16,13 @@ const FrontIframe = forwardRef(
       reloadPending,
       scale,
       rotate,
+      margin
     },
     ref
   ) => {
     let scaleValue = scale || 1;
     return (
-      <StyledFrame postcardSize={postcardSize} scale={scaleValue} rotate={rotate}>
+      <StyledFrame postcardSize={postcardSize} scale={scaleValue} rotate={rotate} margin={margin}>
         <div className="scale-wrapper">
           {frontResourceUrl && (
             <>
