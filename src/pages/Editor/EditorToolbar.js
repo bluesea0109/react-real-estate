@@ -36,7 +36,7 @@ const RotateButton = styled(ButtonNoStyle)`
 
 const styledRotate = {
   fontSize: '17px',
-  color: `${brandColors.brivityBlue}`,
+  color: `${brandColors.grey03}`,
   webkitTransform: 'scaleX(-1)',
   transform: 'scaleX(-1)',
 };
@@ -45,11 +45,11 @@ const Tooltip = styled.div`
   &[data-position='top left'][data-tooltip]:after {
     border-radius: 5px;
     background: #616161;
-    top: -7px;
-    left: 51px;
-    bottom: -11px;
+    top: 34px;
+    left: -27px;
+    bottom: -49px;
+    padding: 7px;
     height: auto;
-    padding: 8px;
   }
 
   &[data-inverted][data-position~='top'][data-tooltip]:before {
@@ -57,8 +57,8 @@ const Tooltip = styled.div`
   }
 
   &[data-position='top left'][data-tooltip]:before {
-    bottom: 6px;
-    left: 52px;
+    bottom: -17px;
+    left: 20px;
   }
   & p {
     width: 256px;
@@ -95,7 +95,7 @@ export default function EditorToolbar() {
         />
         <span>{Math.round(zoomValue * 100)}%</span>
       </ZoomControls>
-      <Tooltip data-tooltip="rotate" data-position="top left" data-inverted="">
+      <Tooltip data-tooltip="Rotate Pages" data-position="top left" data-inverted="">
         <RotateButton onClick={() => handleRotate()}>
           {/* <RotateIcon style={styledRotate} /> */}
 
