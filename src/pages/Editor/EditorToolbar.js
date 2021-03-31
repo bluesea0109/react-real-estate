@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import { Icon, RangeInput } from '../../components/Base';
 import { setZoomValue, setRotation } from '../../store/modules/liveEditor/actions';
 import * as brandColors from '../../components/utils/brandColors';
-import { ReactComponent as RotateIcon } from '../../assets/rotate-left.svg';
 import { ButtonNoStyle } from '../../components/Base';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const StyledToolbar = styled.div`
   padding: 0.5rem 1rem;
@@ -32,15 +32,11 @@ const RotateButton = styled(ButtonNoStyle)`
   padding: 0px 0px 0px 0px;
   width: 40px;
   min-width: 30px;
-
-  & :hover {
-    color: ${brandColors.brivityBlue};
-  }
 `;
 
 const styledRotate = {
   fontSize: '17px',
-  color: '#8a8a8a',
+  color: `${brandColors.brivityBlue}`,
   webkitTransform: 'scaleX(-1)',
   transform: 'scaleX(-1)',
 };
@@ -101,7 +97,9 @@ export default function EditorToolbar() {
       </ZoomControls>
       <Tooltip data-tooltip="rotate" data-position="top left" data-inverted="">
         <RotateButton onClick={() => handleRotate()}>
-          <RotateIcon style={styledRotate} />
+          {/* <RotateIcon style={styledRotate} /> */}
+
+          <FontAwesomeIcon style={styledRotate} icon="sync" size="lg" />
         </RotateButton>
       </Tooltip>
     </StyledToolbar>
