@@ -5,6 +5,7 @@ import { Icon, RangeInput } from '../../components/Base';
 import { setZoomValue, setRotation } from '../../store/modules/liveEditor/actions';
 import * as brandColors from '../../components/utils/brandColors';
 import { ReactComponent as RotateIcon } from '../../assets/rotate-left.svg';
+import { ButtonNoStyle } from "../../components/Base"
 
 export const StyledToolbar = styled.div`
   padding: 0.5rem 1rem;
@@ -26,21 +27,52 @@ const ZoomControls = styled.div`
   }
 `;
 
+const RotateButton = styled(ButtonNoStyle)`
+    height: 26px;
+    padding: 0px 0px 0px 0px ;
+    width: 40px;
+    min-width: 30px ;
+
+    & :hover{
+      color: ${brandColors.brivityBlue};
+      }
+`;
+
 const styledRotate = {
   fontSize: '17px',
-  marginTop: '15px',
-  marginLeft: '20px',
-  // display: "-webkit-box",
-  //   display: "-webkit-flex",
-  //   display: "-ms-flexbox",
-  //   /* display: flex; */
-  //   webkitAlignItems: "center",
-  //   webkitBoxAlign: "center",
-  //   msFlexAlign: "center",
-  //   alignItems: "center",
-  //   color: "#666666",
-  //   margin: "0 1rem",
+  color: "#8a8a8a",
+  webkitTransform: "scaleX(-1)",
+  transform: "scaleX(-1)",
 };
+
+const Tooltip = styled.div`
+  &[data-position='top left'][data-tooltip]:after {
+    border-radius: 5px;
+    background: #616161;
+    top: -7px;
+    left: 51px;
+    bottom: -11px;
+    height: auto;
+    padding: 8px;
+  }
+
+  &[data-inverted][data-position~='top'][data-tooltip]:before {
+    background: #616161;
+  }
+
+  &[data-position='top left'][data-tooltip]:before {
+    bottom: 6px;
+    left: 52px;
+  }
+  & p {
+    width: 256px;
+    padding-top: 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+`;
+
 
 export default function EditorToolbar() {
   const dispatch = useDispatch();
@@ -68,8 +100,11 @@ export default function EditorToolbar() {
         />
         <span>{Math.round(zoomValue * 100)}%</span>
       </ZoomControls>
-
-      <RotateIcon style={styledRotate} onClick={() => handleRotate()} />
+      <Tooltip  data-tooltip="rotate" data-position="top left" data-inverted="">
+        <RotateButton onClick={() => handleRotate()} >
+          <RotateIcon style={styledRotate} />
+        </RotateButton>
+      </Tooltip>
     </StyledToolbar>
   );
 }
