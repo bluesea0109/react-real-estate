@@ -10,4 +10,6 @@ export const StyledFrame = styled.div`
     transform: scale(${props => props.scale});
     transform-origin: 0 0;
   }
+  transform: rotate(${props => props.rotate});
+  margin: ${props => props.margin};
 `;

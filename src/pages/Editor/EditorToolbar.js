@@ -2,8 +2,10 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Icon, RangeInput } from '../../components/Base';
-import { setZoomValue } from '../../store/modules/liveEditor/actions';
+import { setZoomValue, setRotation } from '../../store/modules/liveEditor/actions';
 import * as brandColors from '../../components/utils/brandColors';
+import { ButtonNoStyle } from '../../components/Base';
+import { Popup } from '../../components/Base';
 
 export const StyledToolbar = styled.div`
   padding: 0.5rem 1rem;
@@ -25,9 +27,31 @@ const ZoomControls = styled.div`
   }
 `;
 
+const RotateButton = styled(ButtonNoStyle)`
+  height: 26px;
+  padding: 0px 0px 0px 0px;
+  width: 40px;
+  min-width: 30px;
+`;
+
+const styledRotate = {
+  fontSize: '17px',
+  color: `${brandColors.grey03}`,
+  transform: 'scaleX(-1)',
+};
+
 export default function EditorToolbar() {
   const dispatch = useDispatch();
   const zoomValue = useSelector(state => state.liveEditor?.zoomValue);
+  const rotation = useSelector(state => state.liveEditor?.rotation);
+
+  const handleRotate = () => {
+    let tempDegree = rotation;
+    if (rotation <= -360) tempDegree = 0;
+    let degree = tempDegree - 90;
+    dispatch(setRotation(degree));
+  };
+
   return (
     <StyledToolbar>
       <ZoomControls>
@@ -42,6 +66,17 @@ export default function EditorToolbar() {
         />
         <span>{Math.round(zoomValue * 100)}%</span>
       </ZoomControls>
+      <Popup
+        content="Rotate Pages"
+        inverted
+        position="bottom left"
+        open
+        trigger={
+          <RotateButton onClick={() => handleRotate()}>
+            <Icon name="sync" style={styledRotate} />
+          </RotateButton>
+        }
+      />
     </StyledToolbar>
   );
 }
