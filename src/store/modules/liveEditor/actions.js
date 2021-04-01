@@ -22,6 +22,7 @@ export const SET_CURRENT_STYLES = 'SET_CURRENT_STYLES';
 export const SET_FONT_SIZE_VALUE = 'SET_FONT_SIZE_VALUE';
 export const SET_STENCIL_EDITS = 'SET_STENCIL_EDITS';
 export const UPDATE_ELEMENT_CSS = 'UPDATE_ELEMENT_CSS';
+export const SET_ROTATION = 'SET_ROTATION';
 
 export function setReloadIframes(payload) {
   return createAction(SET_RELOAD_IFRAMES, payload);
@@ -109,4 +110,8 @@ export function setStencilEdits(payload) {
 
 export function updateElementCss(payload) {
   return createAction(UPDATE_ELEMENT_CSS, payload);
+}
+
+export function setRotation(payload) {
+  return createAction(SET_ROTATION, payload);
 }

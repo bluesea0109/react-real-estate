@@ -21,6 +21,7 @@ import {
   SET_FONT_SIZE_VALUE,
   SET_STENCIL_EDITS,
   UPDATE_ELEMENT_CSS,
+  SET_ROTATION,
 } from './actions';
 
 const initialState = {
@@ -37,6 +38,7 @@ const initialState = {
   selectedPhoto: '',
   bigPhoto: '',
   zoomValue: 1,
+  rotation: 0,
   selectedTemplate: true,
   editingElement: null,
   editingPage: null,
@@ -134,6 +136,11 @@ export default function liveEditor(state = initialState, action) {
       return {
         ...state,
         zoomValue: action.payload,
+      };
+    case SET_ROTATION:
+      return {
+        ...state,
+        rotation: action.payload,
       };
     case SET_SELECTED_TEMPLATE:
       return {

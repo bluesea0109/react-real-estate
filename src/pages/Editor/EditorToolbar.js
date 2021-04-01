@@ -4,10 +4,13 @@ import styled from 'styled-components';
 import { Dropdown, Icon, RangeInput } from '../../components/Base';
 import {
   setFontSize,
+  setRotation,
   setZoomValue,
   updateElementCss,
 } from '../../store/modules/liveEditor/actions';
 import * as brandColors from '../../components/utils/brandColors';
+import { ButtonNoStyle } from '../../components/Base';
+import { Popup } from '../../components/Base';
 
 export const StyledToolbar = styled.div`
   padding: 0 1rem;
@@ -76,6 +79,18 @@ const fontSizeOptions = [
   { key: 6, text: '32', value: 32 },
   { key: 7, text: '64', value: 64 },
 ];
+const RotateButton = styled(ButtonNoStyle)`
+  height: 26px;
+  padding: 0px 0px 0px 0px;
+  width: 40px;
+  min-width: 30px;
+`;
+
+const styledRotate = {
+  fontSize: '17px',
+  color: `${brandColors.grey03}`,
+  transform: 'scaleX(-1)',
+};
 
 export default function EditorToolbar() {
   const dispatch = useDispatch();
@@ -86,6 +101,15 @@ export default function EditorToolbar() {
   const fontWeight = useSelector(state => state.liveEditor?.fontWeight);
   const fontStyle = useSelector(state => state.liveEditor?.fontStyle);
   const textDecoration = useSelector(state => state.liveEditor?.textDecoration);
+  const rotation = useSelector(state => state.liveEditor?.rotation);
+
+  const handleRotate = () => {
+    let tempDegree = rotation;
+    if (rotation <= -360) tempDegree = 0;
+    let degree = tempDegree - 90;
+    dispatch(setRotation(degree));
+  };
+
   return (
     <StyledToolbar>
       <ZoomControls>
@@ -100,6 +124,16 @@ export default function EditorToolbar() {
         />
         <span>{Math.round(zoomValue * 100)}%</span>
       </ZoomControls>
+      <Popup
+        content="Rotate Pages"
+        inverted
+        position="bottom left"
+        trigger={
+          <RotateButton onClick={() => handleRotate()}>
+            <Icon name="sync" style={styledRotate} />
+          </RotateButton>
+        }
+      />
       {editingElement && (
         <TextEditMenu>
           <FontSizeMenu>

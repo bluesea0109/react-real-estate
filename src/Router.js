@@ -10,6 +10,7 @@ import CallbackPage from './containers/CallbackPage';
 import OnboardPage from './pages/OnboardPage';
 import DashboardPage from './pages/DashboardPage';
 import ListingsPage from './pages/ListingsPage';
+import MicroListingsPage from './pages/MicroListingsPage';
 import PostcardsPage from './pages/PostcardsPage';
 import AdsPage from './pages/AdsPage';
 import Editor from './pages/Editor/Editor';
@@ -169,7 +170,7 @@ export default () => {
         auth={true}
         component={CreatePostcard}
       />
-      <PrivateRoute exact path="/micro/listings" component={ListingsPage} />
+      <Route exact path="/micro/listings" component={MicroListingsPage} />
       <PrivateRoute
         path="*"
         middleware={['showSidebar', 'showTopbar']}

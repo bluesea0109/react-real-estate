@@ -32,7 +32,8 @@ import {
   setStencilEdits,
   setCurrentStyles,
 } from '../../store/modules/liveEditor/actions';
-import { sleep } from '../../components/utils/utils';
+import { sleep, iframeDimensions } from '../../components/utils/utils';
+
 import { CampaignNameDiv, EditorContent, EditorLayout, EditorPreview } from './StyledComponents';
 import EditorToolbar from './EditorToolbar';
 // import parse from 'style-to-object';
@@ -56,6 +57,7 @@ export default function Editor() {
   const zoomValue = useSelector(state => state.liveEditor?.zoomValue);
   const editingPage = useSelector(state => state.liveEditor?.editingPage);
   const stencilEdits = useSelector(state => state.liveEditor?.edits?.stencilEdits);
+  const rotation = useSelector(state => state.liveEditor?.rotation);
   const [activeNavItem, setActiveNavItem] = useState(1);
   const [frontLoaded, setFrontLoaded] = useState(false);
   const [backLoaded, setBackLoaded] = useState(false);
@@ -85,6 +87,25 @@ export default function Editor() {
     if (mailoutEdit?.stencilEdits?.elements?.length)
       dispatch(setStencilEdits(mailoutEdit.stencilEdits.elements));
   }, [dispatch, mailoutEdit]);
+  let rotateStyle = `${rotation}deg`;
+
+  const calcMargin = rotation => {
+    let margin = '2rem';
+    let postCardHeight = iframeDimensions(details?.postcardSize).height;
+    let postCardWidth = iframeDimensions(details?.postcardSize).width;
+    let marginTop, marginBottom;
+
+    marginTop = marginBottom = (postCardWidth - postCardHeight) * 0.5 * zoomValue;
+
+    switch (rotation) {
+      case -90:
+        return (margin = `${marginTop}px 0px ${marginBottom}px 0px`);
+      case -270:
+        return (margin = `${marginTop}px 0px ${marginBottom}px 0px`);
+      default:
+        return margin;
+    }
+  };
 
   useEffect(() => {
     const deselectPhoto = e => {
@@ -493,6 +514,8 @@ export default function Editor() {
                   ref={onFrontChange}
                   reloadPending={reloadIframesPending}
                   scale={zoomValue}
+                  rotate={rotateStyle}
+                  margin={calcMargin(rotation)}
                 />
                 <BackIframe
                   campaignId={details?._id}
@@ -504,6 +527,8 @@ export default function Editor() {
                   ref={onBackChange}
                   reloadPending={reloadIframesPending}
                   scale={zoomValue}
+                  rotate={rotateStyle}
+                  margin={calcMargin(rotation)}
                 />
               </EditorPreview>
             )}
