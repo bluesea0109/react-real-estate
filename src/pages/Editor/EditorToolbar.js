@@ -42,34 +42,6 @@ const styledRotate = {
   transform: 'scaleX(-1)',
 };
 
-const Tooltip = styled.div`
-  &[data-position='top left'][data-tooltip]:after {
-    border-radius: 5px;
-    background: #616161;
-    top: 34px;
-    left: -27px;
-    bottom: -49px;
-    padding: 7px;
-    height: auto;
-  }
-
-  &[data-inverted][data-position~='top'][data-tooltip]:before {
-    background: #616161;
-  }
-
-  &[data-position='top left'][data-tooltip]:before {
-    bottom: -17px;
-    left: 20px;
-  }
-  & p {
-    width: 256px;
-    padding-top: 1rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-`;
-
 export default function EditorToolbar() {
   const dispatch = useDispatch();
   const zoomValue = useSelector(state => state.liveEditor?.zoomValue);
