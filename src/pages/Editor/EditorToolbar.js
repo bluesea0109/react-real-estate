@@ -80,10 +80,8 @@ const fontSizeOptions = [
   { key: 7, text: '64', value: 64 },
 ];
 const RotateButton = styled(ButtonNoStyle)`
-  height: 26px;
-  padding: 0px 0px 0px 0px;
-  width: 40px;
-  min-width: 30px;
+  margin: 0;
+  padding: 4px 8px;
 `;
 
 const styledRotate = {
@@ -128,6 +126,7 @@ export default function EditorToolbar() {
         content="Rotate Pages"
         inverted
         position="bottom left"
+        on="hover"
         trigger={
           <RotateButton onClick={() => handleRotate()}>
             <Icon name="sync" style={styledRotate} />

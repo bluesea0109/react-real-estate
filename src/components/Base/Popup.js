@@ -1,12 +1,12 @@
 import { Popup } from 'semantic-ui-react';
 import styled from 'styled-components';
+import * as brandColors from '../utils/brandColors';
 
 export default styled(Popup)`
   &.ui.inverted.popup {
-    background-color: #616161;
-    left: -9px !important;
+    background-color: ${brandColors.grey03};
     ::before {
-      background-color: #616161;
+      background-color: ${brandColors.grey03};
     }
   }
 `;
