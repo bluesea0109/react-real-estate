@@ -37,7 +37,6 @@ const RotateButton = styled(ButtonNoStyle)`
 const styledRotate = {
   fontSize: '17px',
   color: `${brandColors.grey03}`,
-  webkitTransform: 'scaleX(-1)',
   transform: 'scaleX(-1)',
 };
 
@@ -71,9 +70,10 @@ export default function EditorToolbar() {
         content="Rotate Pages"
         inverted
         position="bottom left"
+        open
         trigger={
           <RotateButton onClick={() => handleRotate()}>
-            <Icon name="sync" style={styledRotate} size="lg" />
+            <Icon name="sync" style={styledRotate} />
           </RotateButton>
         }
       />
