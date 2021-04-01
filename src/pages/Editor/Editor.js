@@ -28,9 +28,9 @@ import {
   setSidebarOpen,
   setBigPhoto,
   setEditingElement,
-  setFontSizeValue,
   setEditingPage,
   setStencilEdits,
+  setCurrentStyles,
 } from '../../store/modules/liveEditor/actions';
 import { sleep } from '../../components/utils/utils';
 import { CampaignNameDiv, EditorContent, EditorLayout, EditorPreview } from './StyledComponents';
@@ -248,7 +248,7 @@ export default function Editor() {
       if (e.data?.resetSelectedPhoto) dispatch(setSelectedPhoto(''));
       if (e.data?.type === 'setEditing') {
         dispatch(setEditingElement(e.data.id));
-        dispatch(setFontSizeValue(e.data.fontSize));
+        dispatch(setCurrentStyles(e.data.currentStyles));
         dispatch(setEditingPage(e.source?.frameElement?.name));
       }
       if (e.source?.frameElement?.title?.includes('bm-iframe')) {

@@ -18,6 +18,7 @@ export const SET_SELECTED_TEMPLATE = 'SET_SELECTED_TEMPLATE';
 export const SET_BIG_PHOTO = 'SET_BIG_PHOTO';
 export const SET_EDITING_ELEMENT = 'SET_EDITING_ELEMENT';
 export const SET_EDITING_PAGE = 'SET_EDITING_PAGE';
+export const SET_CURRENT_STYLES = 'SET_CURRENT_STYLES';
 export const SET_FONT_SIZE_VALUE = 'SET_FONT_SIZE_VALUE';
 export const SET_STENCIL_EDITS = 'SET_STENCIL_EDITS';
 export const UPDATE_ELEMENT_CSS = 'UPDATE_ELEMENT_CSS';
@@ -94,7 +95,11 @@ export function setEditingPage(payload) {
   return createAction(SET_EDITING_PAGE, payload);
 }
 
-export function setFontSizeValue(payload) {
+export function setCurrentStyles(payload) {
+  return createAction(SET_CURRENT_STYLES, payload);
+}
+
+export function setFontSize(payload) {
   return createAction(SET_FONT_SIZE_VALUE, payload);
 }
 

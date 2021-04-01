@@ -96,10 +96,18 @@ const domLoaded = () => {
     if (e.target?.dataset?.customizable) {
       e.target.classList.add('editing');
       const compStyles = window.getComputedStyle(e.target);
-      const fontSize = parseInt(compStyles.getPropertyValue('font-size'));
-      __parentWindow.postMessage({ type: 'setEditing', id: e.target.id, fontSize }, __parentOrigin);
+      const currentStyles = {};
+      currentStyles.fontSize = parseInt(compStyles.getPropertyValue('font-size'));
+      currentStyles.textAlign = compStyles.getPropertyValue('text-align');
+      currentStyles.fontWeight = compStyles.getPropertyValue('font-weight');
+      currentStyles.fontStyle = compStyles.getPropertyValue('font-style');
+      currentStyles.textDecoration = compStyles.getPropertyValue('text-decoration');
+      __parentWindow.postMessage(
+        { type: 'setEditing', id: e.target.id, currentStyles },
+        __parentOrigin
+      );
     } else {
-      __parentWindow.postMessage({ type: 'setEditing', id: '', fontSize: '' }, __parentOrigin);
+      __parentWindow.postMessage({ type: 'setEditing', id: '', currentStyles: '' }, __parentOrigin);
     }
   };
 

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Dropdown, Icon, RangeInput } from '../../components/Base';
 import {
-  setFontSizeValue,
+  setFontSize,
   setZoomValue,
   updateElementCss,
 } from '../../store/modules/liveEditor/actions';
@@ -37,11 +37,16 @@ const TextEditMenu = styled.div`
   display: flex;
   align-items: center;
   > i {
-    margin: 0 0.75rem;
+    margin: 0 4px;
+    padding: 16px;
+    border-radius: 4px;
     font-size: 1.25rem;
     cursor: pointer;
     &.underline {
       transform: translateY(2px);
+    }
+    &.selected {
+      background-color: ${brandColors.grey08};
     }
   }
 `;
@@ -73,7 +78,11 @@ export default function EditorToolbar() {
   const dispatch = useDispatch();
   const editingElement = useSelector(state => state.liveEditor?.editingElement);
   const zoomValue = useSelector(state => state.liveEditor?.zoomValue);
-  const fontSizeValue = useSelector(state => state.liveEditor?.fontSizeValue);
+  const fontSize = useSelector(state => state.liveEditor?.fontSize);
+  const textAlign = useSelector(state => state.liveEditor?.textAlign);
+  const fontWeight = useSelector(state => state.liveEditor?.fontWeight);
+  const fontStyle = useSelector(state => state.liveEditor?.fontStyle);
+  const textDecoration = useSelector(state => state.liveEditor?.textDecoration);
   return (
     <StyledToolbar>
       <ZoomControls>
@@ -94,19 +103,22 @@ export default function EditorToolbar() {
             <span>Font Size</span>
             <Dropdown
               options={fontSizeOptions}
-              value={fontSizeValue}
+              value={fontSize}
               onChange={(e, { value }) => {
-                dispatch(setFontSizeValue(value));
+                dispatch(setFontSize(value));
                 dispatch(updateElementCss({ css: `font-size:${value}px` }));
               }}
             />
           </FontSizeMenu>
-          <Icon name="align left" />
-          <Icon name="align center" />
-          <Icon name="align right" />
-          <Icon name="bold" />
-          <Icon name="italic" />
-          <Icon name="underline" />
+          <Icon name="align left" className={textAlign === 'left' ? 'selected' : null} />
+          <Icon name="align center" className={textAlign === 'center' ? 'selected' : null} />
+          <Icon name="align right" className={textAlign === 'right' ? 'selected' : null} />
+          <Icon name="bold" className={fontWeight === 'bold' ? 'selected' : null} />
+          <Icon name="italic" className={fontStyle === 'italic' ? 'selected' : null} />
+          <Icon
+            name="underline"
+            className={textDecoration?.includes('underline') ? 'selected' : null}
+          />
         </TextEditMenu>
       )}
     </StyledToolbar>

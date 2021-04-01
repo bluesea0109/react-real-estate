@@ -17,6 +17,7 @@ import {
   SET_BIG_PHOTO,
   SET_EDITING_ELEMENT,
   SET_EDITING_PAGE,
+  SET_CURRENT_STYLES,
   SET_FONT_SIZE_VALUE,
   SET_STENCIL_EDITS,
   UPDATE_ELEMENT_CSS,
@@ -39,7 +40,11 @@ const initialState = {
   selectedTemplate: true,
   editingElement: null,
   editingPage: null,
-  fontSizeValue: null,
+  fontSize: null,
+  textAlign: null,
+  fontWeight: null,
+  fontStyle: null,
+  textDecoration: null,
   edits: {
     fields: null,
     brandColor: '',
@@ -145,10 +150,15 @@ export default function liveEditor(state = initialState, action) {
         ...state,
         editingPage: action.payload,
       };
+    case SET_CURRENT_STYLES:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case SET_FONT_SIZE_VALUE:
       return {
         ...state,
-        fontSizeValue: action.payload,
+        fontSize: action.payload,
       };
     case SET_STENCIL_EDITS:
       return {
