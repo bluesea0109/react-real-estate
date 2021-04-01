@@ -70,7 +70,6 @@ export default function EditorToolbar() {
         content="Rotate Pages"
         inverted
         position="bottom left"
-        open
         trigger={
           <RotateButton onClick={() => handleRotate()}>
             <Icon name="sync" style={styledRotate} />
