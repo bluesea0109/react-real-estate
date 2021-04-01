@@ -6,6 +6,7 @@ import { setZoomValue, setRotation } from '../../store/modules/liveEditor/action
 import * as brandColors from '../../components/utils/brandColors';
 import { ButtonNoStyle } from '../../components/Base';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Popup } from '../../components/Base';
 
 export const StyledToolbar = styled.div`
   padding: 0.5rem 1rem;
@@ -95,11 +96,16 @@ export default function EditorToolbar() {
         />
         <span>{Math.round(zoomValue * 100)}%</span>
       </ZoomControls>
-      <Tooltip data-tooltip="Rotate Pages" data-position="top left" data-inverted="">
-        <RotateButton onClick={() => handleRotate()}>
-          <FontAwesomeIcon style={styledRotate} icon="sync" size="lg" />
-        </RotateButton>
-      </Tooltip>
+      <Popup
+        content="Rotate Pages"
+        inverted
+        position="top left"
+        trigger={
+          <RotateButton onClick={() => handleRotate()}>
+            <FontAwesomeIcon style={styledRotate} icon="sync" size="lg" />
+          </RotateButton>
+        }
+      />
     </StyledToolbar>
   );
 }
