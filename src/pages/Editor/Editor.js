@@ -32,10 +32,10 @@ import {
   setStencilEdits,
   setCurrentStyles,
 } from '../../store/modules/liveEditor/actions';
-import { sleep, iframeDimensions } from '../../components/utils/utils';
-
 import { CampaignNameDiv, EditorContent, EditorLayout, EditorPreview } from './StyledComponents';
 import EditorToolbar from './EditorToolbar';
+import { calcMargin } from './utils/utils';
+import { sleep } from '../../components/utils/utils';
 // import parse from 'style-to-object';
 
 export default function Editor() {
@@ -88,24 +88,6 @@ export default function Editor() {
       dispatch(setStencilEdits(mailoutEdit.stencilEdits.elements));
   }, [dispatch, mailoutEdit]);
   let rotateStyle = `${rotation}deg`;
-
-  const calcMargin = rotation => {
-    let margin = '2rem';
-    let postCardHeight = iframeDimensions(details?.postcardSize).height;
-    let postCardWidth = iframeDimensions(details?.postcardSize).width;
-    let marginTop, marginBottom;
-
-    marginTop = marginBottom = (postCardWidth - postCardHeight) * 0.5 * zoomValue;
-
-    switch (rotation) {
-      case -90:
-        return (margin = `${marginTop}px 0px ${marginBottom}px 0px`);
-      case -270:
-        return (margin = `${marginTop}px 0px ${marginBottom}px 0px`);
-      default:
-        return margin;
-    }
-  };
 
   useEffect(() => {
     const deselectPhoto = e => {
@@ -515,7 +497,7 @@ export default function Editor() {
                   reloadPending={reloadIframesPending}
                   scale={zoomValue}
                   rotate={rotateStyle}
-                  margin={calcMargin(rotation)}
+                  margin={calcMargin(details?.postcardSize, rotation, zoomValue)}
                 />
                 <BackIframe
                   campaignId={details?._id}
@@ -528,7 +510,7 @@ export default function Editor() {
                   reloadPending={reloadIframesPending}
                   scale={zoomValue}
                   rotate={rotateStyle}
-                  margin={calcMargin(rotation)}
+                  margin={calcMargin(details?.postcardSize, rotation, zoomValue)}
                 />
               </EditorPreview>
             )}
