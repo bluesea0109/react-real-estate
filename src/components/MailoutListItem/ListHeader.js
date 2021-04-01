@@ -314,13 +314,18 @@ const ListHeader = ({
           />
         </span>
         <span>
-          {!isArchived && !mailoutDetailPage && data.mailoutStatus === 'sent' && (
-            <Link to={`dashboard/${data._id}`}>
-              <Button primary>
-                <span>View Campaign</span>
-              </Button>
-            </Link>
-          )}
+          {!isArchived &&
+            !mailoutDetailPage &&
+            !canSend(data.mailoutStatus) &&
+            !canPickDestinations(data.mailoutStatus) &&
+            data.mailoutStatus !== 'sent' &&
+            data.mailoutStatus !== 'calculated' && (
+              <Link to={`dashboard/${data._id}`}>
+                <Button primary>
+                  <span>View Campaign</span>
+                </Button>
+              </Link>
+            )}
         </span>
         <span>
           {mailoutDetailPage && enableDelete && activeWhen && (
