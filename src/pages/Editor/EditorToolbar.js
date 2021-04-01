@@ -5,7 +5,6 @@ import { Icon, RangeInput } from '../../components/Base';
 import { setZoomValue, setRotation } from '../../store/modules/liveEditor/actions';
 import * as brandColors from '../../components/utils/brandColors';
 import { ButtonNoStyle } from '../../components/Base';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Popup } from '../../components/Base';
 
 export const StyledToolbar = styled.div`
@@ -71,10 +70,10 @@ export default function EditorToolbar() {
       <Popup
         content="Rotate Pages"
         inverted
-        position="top left"
+        position="bottom left"
         trigger={
           <RotateButton onClick={() => handleRotate()}>
-            <FontAwesomeIcon style={styledRotate} icon="sync" size="lg" />
+            <Icon name="sync" style={styledRotate} size="lg" />
           </RotateButton>
         }
       />
