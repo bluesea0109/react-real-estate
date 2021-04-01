@@ -41,7 +41,7 @@ export default function PhotoLibrary() {
 
   const ImageOptionsWrapper = ({ children }) => {
     const wrapperRef = useRef(null);
-    useClickOutside(wrapperRef, () => {
+    useClickOutside(wrapperRef?.current, () => {
       dispatch(setSelectedPhoto(''));
       dispatch(setBigPhoto(''));
     });

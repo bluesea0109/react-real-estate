@@ -36,6 +36,7 @@ import { CampaignNameDiv, EditorContent, EditorLayout, EditorPreview } from './S
 import EditorToolbar from './EditorToolbar';
 import { calcMargin } from './utils/utils';
 import { sleep } from '../../components/utils/utils';
+import { useClickOutside } from '../../components/Hooks/useClickOutside';
 
 export default function Editor() {
   const dispatch = useDispatch();
@@ -219,6 +220,9 @@ export default function Editor() {
   const onBackChange = useCallback(node => {
     setBackIframeRef(node);
   }, []);
+
+  useClickOutside(frontIframeRef, () => sendPostMessage('front', { type: 'resetSelected' }));
+  useClickOutside(backIframeRef, () => sendPostMessage('back', { type: 'resetSelected' }));
 
   const sendInitMessage = useCallback(
     async side => {

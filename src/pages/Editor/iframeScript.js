@@ -93,8 +93,8 @@ const domLoaded = () => {
 
   const setSelectedElement = e => {
     document.querySelectorAll('[data-customizable]').forEach(el => el.classList.remove('editing'));
-    let editingElement = e.currentTarget?.activeElement;
-    if (editingElement.dataset?.customizable) {
+    let editingElement = e?.currentTarget?.activeElement;
+    if (editingElement?.dataset?.customizable) {
       editingElement.classList.add('editing');
       const compStyles = window.getComputedStyle(editingElement);
       const currentStyles = {};
@@ -135,6 +135,8 @@ const domLoaded = () => {
     } else if (e.data?.type === 'customStyles') {
       let customStyles = document.getElementById('custom-styles');
       if (customStyles) customStyles.innerHTML = e.data?.fullCssString;
+    } else if (e.data?.type === 'resetSelected') {
+      setSelectedElement(null);
     } else console.log(JSON.stringify(e.data));
   }
 

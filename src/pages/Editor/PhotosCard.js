@@ -22,7 +22,7 @@ export default function PhotosCard() {
 
   const ImageOptionsWrapper = ({ children }) => {
     const wrapperRef = useRef(null);
-    useClickOutside(wrapperRef, () => {
+    useClickOutside(wrapperRef?.current, () => {
       dispatch(setSelectedPhoto(''));
     });
     return (
