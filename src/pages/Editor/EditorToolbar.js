@@ -48,6 +48,9 @@ const TextEditMenu = styled.div`
     &.selected {
       background-color: ${brandColors.grey08};
     }
+    &:hover {
+      background-color: ${brandColors.grey09};
+    }
   }
 `;
 
