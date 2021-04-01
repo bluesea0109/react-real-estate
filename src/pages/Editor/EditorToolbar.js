@@ -176,7 +176,7 @@ export default function EditorToolbar() {
           />
           <Icon
             name="bold"
-            className={fontWeight === 'bold' ? 'selected' : null}
+            className={fontWeight === 'bold' || fontWeight === '700' ? 'selected' : null}
             onClick={() => {
               const newValue = fontWeight === 'bold' ? 'normal' : 'bold';
               dispatch(setFontWeight(newValue));
