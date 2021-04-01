@@ -318,7 +318,6 @@ const ListHeader = ({
             !mailoutDetailPage &&
             !canSend(data.mailoutStatus) &&
             !canPickDestinations(data.mailoutStatus) &&
-            data.mailoutStatus !== 'sent' &&
             data.mailoutStatus !== 'calculated' && (
               <Link to={`dashboard/${data._id}`}>
                 <Button primary>
