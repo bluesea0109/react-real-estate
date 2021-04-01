@@ -93,9 +93,10 @@ const domLoaded = () => {
 
   const setSelectedElement = e => {
     document.querySelectorAll('[data-customizable]').forEach(el => el.classList.remove('editing'));
-    if (e.target?.dataset?.customizable) {
-      e.target.classList.add('editing');
-      const compStyles = window.getComputedStyle(e.target);
+    let editingElement = e.currentTarget?.activeElement;
+    if (editingElement.dataset?.customizable) {
+      editingElement.classList.add('editing');
+      const compStyles = window.getComputedStyle(editingElement);
       const currentStyles = {};
       currentStyles.fontSize = parseInt(compStyles.getPropertyValue('font-size'));
       currentStyles.textAlign = compStyles.getPropertyValue('text-align');
@@ -103,7 +104,7 @@ const domLoaded = () => {
       currentStyles.fontStyle = compStyles.getPropertyValue('font-style');
       currentStyles.textDecoration = compStyles.getPropertyValue('text-decoration');
       __parentWindow.postMessage(
-        { type: 'setEditing', id: e.target.id, currentStyles },
+        { type: 'setEditing', id: editingElement.id, currentStyles },
         __parentOrigin
       );
     } else {

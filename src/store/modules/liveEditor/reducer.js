@@ -1,3 +1,4 @@
+import parse from 'style-to-object';
 import {
   SET_AGENT_OPEN,
   SET_BRAND_COLOR_OPEN,
@@ -18,7 +19,11 @@ import {
   SET_EDITING_ELEMENT,
   SET_EDITING_PAGE,
   SET_CURRENT_STYLES,
-  SET_FONT_SIZE_VALUE,
+  SET_FONT_SIZE,
+  SET_TEXT_ALIGN,
+  SET_FONT_WEIGHT,
+  SET_FONT_STYLE,
+  SET_TEXT_DECORATION,
   SET_STENCIL_EDITS,
   UPDATE_ELEMENT_CSS,
   SET_ROTATION,
@@ -162,10 +167,30 @@ export default function liveEditor(state = initialState, action) {
         ...state,
         ...action.payload,
       };
-    case SET_FONT_SIZE_VALUE:
+    case SET_FONT_SIZE:
       return {
         ...state,
         fontSize: action.payload,
+      };
+    case SET_TEXT_ALIGN:
+      return {
+        ...state,
+        textAlign: action.payload,
+      };
+    case SET_FONT_WEIGHT:
+      return {
+        ...state,
+        fontWeight: action.payload,
+      };
+    case SET_FONT_STYLE:
+      return {
+        ...state,
+        fontStyle: action.payload,
+      };
+    case SET_TEXT_DECORATION:
+      return {
+        ...state,
+        textDecoration: action.payload,
       };
     case SET_STENCIL_EDITS:
       return {
@@ -175,16 +200,32 @@ export default function liveEditor(state = initialState, action) {
           stencilEdits: action.payload,
         },
       };
+    /*
+    This is the reducer to update an elements styles. Every time the stencilEdits array
+    is updated the editor will run a useEffect hook to update the iframe styles in real time.
+    Payload takes a css property (string) and value (string)
+    */
     case UPDATE_ELEMENT_CSS:
       const { editingElement, editingPage } = state;
-      const cssPartial = `#${editingElement}{${action.payload.css}}`;
+      const { property, value } = action.payload;
+      // get the index of the element being edited in the stencilEdits array
       const elementIndex = state.edits.stencilEdits.findIndex(
         el => el.id === editingElement && el.page === editingPage
       );
       let newEdits = [...state.edits.stencilEdits];
       if (elementIndex !== -1) {
+        // found an existing entry parse the css edit and save
+        let cssString = newEdits[elementIndex].cssPartial.match(/\{(.*?)\}/)[1];
+        let styleObject = parse(cssString);
+        styleObject[property] = value;
+        cssString = Object.entries(styleObject)
+          .map(([property, value]) => `${property}:${value}`)
+          .join(';');
+        const cssPartial = `#${editingElement}{${cssString}}`;
         newEdits[elementIndex].cssPartial = cssPartial;
       } else {
+        // no edits found, push the edit as the first entry
+        const cssPartial = `#${editingElement}{${property}:${value}}`;
         newEdits.push({ id: editingElement, page: editingPage, type: 'cssOverride', cssPartial });
       }
       return {

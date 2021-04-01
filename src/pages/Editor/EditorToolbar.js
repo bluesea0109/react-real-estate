@@ -4,7 +4,11 @@ import styled from 'styled-components';
 import { Dropdown, Icon, RangeInput } from '../../components/Base';
 import {
   setFontSize,
+  setFontStyle,
+  setFontWeight,
   setRotation,
+  setTextAlign,
+  setTextDecoration,
   setZoomValue,
   updateElementCss,
 } from '../../store/modules/liveEditor/actions';
@@ -142,18 +146,70 @@ export default function EditorToolbar() {
               value={fontSize}
               onChange={(e, { value }) => {
                 dispatch(setFontSize(value));
-                dispatch(updateElementCss({ css: `font-size:${value}px` }));
+                dispatch(updateElementCss({ property: 'font-size', value: `${value}px` }));
               }}
             />
           </FontSizeMenu>
-          <Icon name="align left" className={textAlign === 'left' ? 'selected' : null} />
-          <Icon name="align center" className={textAlign === 'center' ? 'selected' : null} />
-          <Icon name="align right" className={textAlign === 'right' ? 'selected' : null} />
-          <Icon name="bold" className={fontWeight === 'bold' ? 'selected' : null} />
-          <Icon name="italic" className={fontStyle === 'italic' ? 'selected' : null} />
+          <Icon
+            name="align left"
+            className={textAlign === 'left' ? 'selected' : null}
+            onClick={() => {
+              dispatch(setTextAlign('left'));
+              dispatch(updateElementCss({ property: 'text-align', value: 'left' }));
+            }}
+          />
+          <Icon
+            name="align center"
+            className={textAlign === 'center' ? 'selected' : null}
+            onClick={() => {
+              dispatch(setTextAlign('center'));
+              dispatch(updateElementCss({ property: 'text-align', value: 'center' }));
+            }}
+          />
+          <Icon
+            name="align right"
+            className={textAlign === 'right' ? 'selected' : null}
+            onClick={() => {
+              dispatch(setTextAlign('right'));
+              dispatch(updateElementCss({ property: 'text-align', value: 'right' }));
+            }}
+          />
+          <Icon
+            name="bold"
+            className={fontWeight === 'bold' ? 'selected' : null}
+            onClick={() => {
+              const newValue = fontWeight === 'bold' ? 'normal' : 'bold';
+              dispatch(setFontWeight(newValue));
+              dispatch(
+                updateElementCss({
+                  property: 'font-weight',
+                  value: newValue,
+                })
+              );
+            }}
+          />
+          <Icon
+            name="italic"
+            className={fontStyle === 'italic' ? 'selected' : null}
+            onClick={() => {
+              const newValue = fontStyle === 'italic' ? 'none' : 'italic';
+              dispatch(setFontStyle(newValue));
+              dispatch(
+                updateElementCss({
+                  property: 'font-style',
+                  value: newValue,
+                })
+              );
+            }}
+          />
           <Icon
             name="underline"
             className={textDecoration?.includes('underline') ? 'selected' : null}
+            onClick={() => {
+              const newValue = textDecoration?.includes('underline') ? 'none' : 'underline';
+              dispatch(setTextDecoration(newValue));
+              dispatch(updateElementCss({ property: 'text-decoration', value: newValue }));
+            }}
           />
         </TextEditMenu>
       )}

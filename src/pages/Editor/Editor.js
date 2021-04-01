@@ -36,7 +36,6 @@ import { CampaignNameDiv, EditorContent, EditorLayout, EditorPreview } from './S
 import EditorToolbar from './EditorToolbar';
 import { calcMargin } from './utils/utils';
 import { sleep } from '../../components/utils/utils';
-// import parse from 'style-to-object';
 
 export default function Editor() {
   const dispatch = useDispatch();
@@ -322,28 +321,6 @@ export default function Editor() {
       sendPostMessage(editingPage, { type: 'customStyles', fullCssString });
     }
   }, [editingPage, stencilEdits, sendPostMessage]);
-
-  const testEdits = {
-    elements: [
-      {
-        id: 'test-edit',
-        type: 'text',
-        divPartial: '<div id="test-edit" editable="true">TESTING EDITING</div>',
-        cssPartial:
-          '#test-edit{color: var(--brand-color);position:fixed;top:30%;left:20%;font-size:4rem;font-weight:bold}',
-      },
-      {
-        id: 'test-edit-2',
-        type: 'text',
-        divPartial: '<div id="test-edit-2" editable="true">TESTING EDITING 2</div>',
-        cssPartial:
-          '#test-edit-2{color:blue;position:fixed;top:50%;left:20%;font-size:4rem;font-weight:bold}',
-      },
-    ],
-  };
-  let cssString = testEdits.elements[0].cssPartial.match(/\{(.*?)\}/)[1];
-  // console.log(cssString);
-  // console.log(parse(cssString));
 
   const handleSave = async ({
     postcardSize,
