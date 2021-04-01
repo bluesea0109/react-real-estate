@@ -17,7 +17,7 @@ export const SET_ZOOM_VALUE = 'SET_ZOOM_VALUE';
 export const SET_SELECTED_TEMPLATE = 'SET_SELECTED_TEMPLATE';
 export const SET_BIG_PHOTO = 'SET_BIG_PHOTO';
 export const SET_EDITING_ELEMENT = 'SET_EDITING_ELEMENT';
-export const SET_EDITING_SIDE = 'SET_EDITING_SIDE';
+export const SET_EDITING_PAGE = 'SET_EDITING_PAGE';
 export const SET_FONT_SIZE_VALUE = 'SET_FONT_SIZE_VALUE';
 export const SET_STENCIL_EDITS = 'SET_STENCIL_EDITS';
 export const UPDATE_ELEMENT_CSS = 'UPDATE_ELEMENT_CSS';
@@ -90,8 +90,8 @@ export function setEditingElement(payload) {
   return createAction(SET_EDITING_ELEMENT, payload);
 }
 
-export function setEditingSide(payload) {
-  return createAction(SET_EDITING_SIDE, payload);
+export function setEditingPage(payload) {
+  return createAction(SET_EDITING_PAGE, payload);
 }
 
 export function setFontSizeValue(payload) {

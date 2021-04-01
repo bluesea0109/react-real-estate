@@ -16,7 +16,7 @@ import {
   SET_SELECTED_TEMPLATE,
   SET_BIG_PHOTO,
   SET_EDITING_ELEMENT,
-  SET_EDITING_SIDE,
+  SET_EDITING_PAGE,
   SET_FONT_SIZE_VALUE,
   SET_STENCIL_EDITS,
   UPDATE_ELEMENT_CSS,
@@ -38,7 +38,7 @@ const initialState = {
   zoomValue: 1,
   selectedTemplate: true,
   editingElement: null,
-  editingSide: null,
+  editingPage: null,
   fontSizeValue: null,
   edits: {
     fields: null,
@@ -140,10 +140,10 @@ export default function liveEditor(state = initialState, action) {
         ...state,
         editingElement: action.payload,
       };
-    case SET_EDITING_SIDE:
+    case SET_EDITING_PAGE:
       return {
         ...state,
-        editingSide: action.payload,
+        editingPage: action.payload,
       };
     case SET_FONT_SIZE_VALUE:
       return {
@@ -159,16 +159,16 @@ export default function liveEditor(state = initialState, action) {
         },
       };
     case UPDATE_ELEMENT_CSS:
-      const { id, page } = action.payload;
-      const cssPartial = `#${id}{${action.payload.css}}`;
+      const { editingElement, editingPage } = state;
+      const cssPartial = `#${editingElement}{${action.payload.css}}`;
       const elementIndex = state.edits.stencilEdits.findIndex(
-        el => el.id === id && el.page === page
+        el => el.id === editingElement && el.page === editingPage
       );
       let newEdits = [...state.edits.stencilEdits];
       if (elementIndex !== -1) {
         newEdits[elementIndex].cssPartial = cssPartial;
       } else {
-        newEdits.push({ id, page, type: 'cssOverride', cssPartial });
+        newEdits.push({ id: editingElement, page: editingPage, type: 'cssOverride', cssPartial });
       }
       return {
         ...state,

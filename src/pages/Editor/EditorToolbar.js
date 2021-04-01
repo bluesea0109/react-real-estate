@@ -2,15 +2,23 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Dropdown, Icon, RangeInput } from '../../components/Base';
-import { setFontSizeValue, setZoomValue } from '../../store/modules/liveEditor/actions';
+import {
+  setFontSizeValue,
+  setZoomValue,
+  updateElementCss,
+} from '../../store/modules/liveEditor/actions';
 import * as brandColors from '../../components/utils/brandColors';
 
 export const StyledToolbar = styled.div`
-  padding: 0.5rem 1rem;
+  padding: 0 1rem;
   background-color: white;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   color: ${brandColors.grey03};
+  > * {
+    padding: 0.5rem 0;
+  }
 `;
 
 const ZoomControls = styled.div`
@@ -25,11 +33,24 @@ const ZoomControls = styled.div`
   }
 `;
 
+const TextEditMenu = styled.div`
+  display: flex;
+  align-items: center;
+  > i {
+    margin: 0 0.75rem;
+    font-size: 1.25rem;
+    cursor: pointer;
+    &.underline {
+      transform: translateY(2px);
+    }
+  }
+`;
+
 const FontSizeMenu = styled.div`
   display: flex;
+  margin: 0 0.75rem;
   > span {
     font-weight: bold;
-    margin-left: 1rem;
   }
   > .ui.dropdown {
     margin-left: 0.5rem;
@@ -68,14 +89,25 @@ export default function EditorToolbar() {
         <span>{Math.round(zoomValue * 100)}%</span>
       </ZoomControls>
       {editingElement && (
-        <FontSizeMenu>
-          <span>Font Size</span>
-          <Dropdown
-            options={fontSizeOptions}
-            value={fontSizeValue}
-            onChange={(e, { value }) => dispatch(setFontSizeValue(value))}
-          />
-        </FontSizeMenu>
+        <TextEditMenu>
+          <FontSizeMenu>
+            <span>Font Size</span>
+            <Dropdown
+              options={fontSizeOptions}
+              value={fontSizeValue}
+              onChange={(e, { value }) => {
+                dispatch(setFontSizeValue(value));
+                dispatch(updateElementCss({ css: `font-size:${value}px` }));
+              }}
+            />
+          </FontSizeMenu>
+          <Icon name="align left" />
+          <Icon name="align center" />
+          <Icon name="align right" />
+          <Icon name="bold" />
+          <Icon name="italic" />
+          <Icon name="underline" />
+        </TextEditMenu>
       )}
     </StyledToolbar>
   );

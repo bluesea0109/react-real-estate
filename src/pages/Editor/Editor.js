@@ -29,14 +29,13 @@ import {
   setBigPhoto,
   setEditingElement,
   setFontSizeValue,
-  updateElementCss,
-  setEditingSide,
+  setEditingPage,
   setStencilEdits,
 } from '../../store/modules/liveEditor/actions';
 import { sleep } from '../../components/utils/utils';
 import { CampaignNameDiv, EditorContent, EditorLayout, EditorPreview } from './StyledComponents';
 import EditorToolbar from './EditorToolbar';
-import parse from 'style-to-object';
+// import parse from 'style-to-object';
 
 export default function Editor() {
   const dispatch = useDispatch();
@@ -55,9 +54,7 @@ export default function Editor() {
   const selectedPhoto = useSelector(state => state.liveEditor?.selectedPhoto);
   const bigPhoto = useSelector(state => state.liveEditor?.bigPhoto);
   const zoomValue = useSelector(state => state.liveEditor?.zoomValue);
-  const fontSizeValue = useSelector(state => state.liveEditor?.fontSizeValue);
-  const editingElement = useSelector(state => state.liveEditor?.editingElement);
-  const editingSide = useSelector(state => state.liveEditor?.editingSide);
+  const editingPage = useSelector(state => state.liveEditor?.editingPage);
   const stencilEdits = useSelector(state => state.liveEditor?.edits?.stencilEdits);
   const [activeNavItem, setActiveNavItem] = useState(1);
   const [frontLoaded, setFrontLoaded] = useState(false);
@@ -252,7 +249,7 @@ export default function Editor() {
       if (e.data?.type === 'setEditing') {
         dispatch(setEditingElement(e.data.id));
         dispatch(setFontSizeValue(e.data.fontSize));
-        dispatch(setEditingSide(e.source?.frameElement?.name));
+        dispatch(setEditingPage(e.source?.frameElement?.name));
       }
       if (e.source?.frameElement?.title?.includes('bm-iframe')) {
         let newFields = [];
@@ -313,29 +310,15 @@ export default function Editor() {
   );
 
   useEffect(() => {
-    if (stencilEdits.length) {
+    if (stencilEdits.length && editingPage) {
       const fullCssString = stencilEdits.reduce((acc, el) => {
         if (el.type === 'cssOverride') {
           return (acc += el.cssPartial);
         } else return null;
       }, '');
-      sendPostMessage(editingSide, { type: 'customStyles', fullCssString });
+      sendPostMessage(editingPage, { type: 'customStyles', fullCssString });
     }
-  }, [dispatch, editingSide, stencilEdits, sendPostMessage]);
-
-  // watch for changes in font size and update the redux store and iframes
-  useEffect(() => {
-    if (fontSizeValue && editingElement && editingSide) {
-      dispatch(
-        updateElementCss({
-          id: editingElement,
-          css: `font-size:${fontSizeValue}px`,
-          page: editingSide,
-        })
-      );
-    }
-    // eslint-disable-next-line
-  }, [dispatch, fontSizeValue, sendPostMessage]);
+  }, [editingPage, stencilEdits, sendPostMessage]);
 
   const testEdits = {
     elements: [
@@ -356,8 +339,8 @@ export default function Editor() {
     ],
   };
   let cssString = testEdits.elements[0].cssPartial.match(/\{(.*?)\}/)[1];
-  console.log(cssString);
-  console.log(parse(cssString));
+  // console.log(cssString);
+  // console.log(parse(cssString));
 
   const handleSave = async ({
     postcardSize,
