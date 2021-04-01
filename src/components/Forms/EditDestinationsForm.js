@@ -109,6 +109,7 @@ const EditDestinationsForm = ({ mailoutDetails, handleBackClick }) => {
     mailoutDetails?.publishedTags?.includes('sphere') ||
     mailoutDetails?.intentPath?.includes('sphere');
   const isCalculationDeferred = mailoutDetails?.mailoutStatus === 'calculation-deferred';
+  const sentToSourceAddressShowing = mailoutDetails && mailoutDetails.mlsNum ? true : false;
 
   const [destinationsOptionsMode, setDestinationsOptionsMode] = useState(
     mailoutDetails?.destinationsOptions?.copy?.mailoutId
@@ -596,16 +597,18 @@ const EditDestinationsForm = ({ mailoutDetails, handleBackClick }) => {
               />
             </List.Item>
           </List>
-          <SendToSourceAddress>
-            <Checkbox
-              label="Send to listing address"
-              name="sendToSourceAddresses"
-              checked={sendToSourceAddresses}
-              onClick={() => {
-                setSendToSourceAddresses(!sendToSourceAddresses);
-              }}
-            />
-          </SendToSourceAddress>
+          {sentToSourceAddressShowing ? (
+            <SendToSourceAddress>
+              <Checkbox
+                label="Send to listing address"
+                name="sendToSourceAddresses"
+                checked={sendToSourceAddresses}
+                onClick={() => {
+                  setSendToSourceAddresses(!sendToSourceAddresses);
+                }}
+              />
+            </SendToSourceAddress>
+          ) : null}
           {destinationsOptionsMode === 'ai' && (
             <Form.Field
               label="Number of destinations"
