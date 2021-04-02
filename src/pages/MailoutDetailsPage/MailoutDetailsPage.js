@@ -150,7 +150,7 @@ const MailoutDetailsPage = () => {
   ]);
 
   const handleBackClick = () => {
-    history.push(`/postcards`);
+    window.location = `/postcards`;
   };
 
   const handleApproveAndSendMailoutDetailsClick = () => {
