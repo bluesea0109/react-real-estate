@@ -74,15 +74,8 @@ const FontSizeMenu = styled.div`
   }
 `;
 
-const fontSizeOptions = [
-  { key: 1, text: '8', value: 8 },
-  { key: 2, text: '10', value: 10 },
-  { key: 3, text: '12', value: 12 },
-  { key: 4, text: '16', value: 16 },
-  { key: 5, text: '24', value: 24 },
-  { key: 6, text: '32', value: 32 },
-  { key: 7, text: '64', value: 64 },
-];
+const fontSizeOptions = [8, 10, 12, 16, 20, 24, 28, 32, 40, 48, 64, 96, 128];
+
 const RotateButton = styled(ButtonNoStyle)`
   margin: 0;
   padding: 4px 8px;
@@ -142,7 +135,9 @@ export default function EditorToolbar() {
           <FontSizeMenu>
             <span>Font Size</span>
             <Dropdown
-              options={fontSizeOptions}
+              options={fontSizeOptions.map(option => {
+                return { key: option, text: option, value: option };
+              })}
               value={fontSize}
               onChange={(e, { value }) => {
                 dispatch(setFontSize(value));
@@ -178,7 +173,7 @@ export default function EditorToolbar() {
             name="bold"
             className={fontWeight === 'bold' || fontWeight === '700' ? 'selected' : null}
             onClick={() => {
-              const newValue = fontWeight === 'bold' ? 'normal' : 'bold';
+              const newValue = fontWeight === 'bold' || fontWeight === '700' ? 'normal' : 'bold';
               dispatch(setFontWeight(newValue));
               dispatch(
                 updateElementCss({
