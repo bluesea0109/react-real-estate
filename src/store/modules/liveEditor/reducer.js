@@ -209,13 +209,13 @@ export default function liveEditor(state = initialState, action) {
       const { editingElement, editingPage } = state;
       const { property, value } = action.payload;
       // get the index of the element being edited in the stencilEdits array
-      const elementIndex = state.edits.stencilEdits.findIndex(
+      let newEdits = [...state.edits.stencilEdits];
+      const elementIndex = newEdits.findIndex(
         el => el.id === editingElement && el.page === editingPage
       );
-      let newEdits = [...state.edits.stencilEdits];
       if (elementIndex !== -1) {
         // found an existing entry parse the css edit and save
-        let cssString = newEdits[elementIndex].cssPartial.match(/\{(.*?)\}/)[1];
+        let cssString = newEdits[elementIndex].cssPartial?.match(/\{(.*?)\}/)[1];
         let styleObject = parse(cssString);
         styleObject[property] = value;
         cssString = Object.entries(styleObject)
