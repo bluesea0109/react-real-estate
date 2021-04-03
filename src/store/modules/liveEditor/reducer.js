@@ -207,6 +207,7 @@ export default function liveEditor(state = initialState, action) {
     */
     case UPDATE_ELEMENT_CSS:
       const { editingElement, editingPage } = state;
+      if (!editingElement || !editingPage) return;
       const { property, value } = action.payload;
       // get the index of the element being edited in the stencilEdits array
       let newEdits = [...state.edits.stencilEdits];

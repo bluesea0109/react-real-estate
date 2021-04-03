@@ -147,7 +147,7 @@ export default function EditorToolbar() {
           </FontSizeMenu>
           <Icon
             name="align left"
-            className={textAlign === 'left' ? 'selected' : null}
+            className={textAlign === 'left' || textAlign === 'start' ? 'selected' : null}
             onClick={() => {
               dispatch(setTextAlign('left'));
               dispatch(updateElementCss({ property: 'text-align', value: 'left' }));
@@ -163,7 +163,7 @@ export default function EditorToolbar() {
           />
           <Icon
             name="align right"
-            className={textAlign === 'right' ? 'selected' : null}
+            className={textAlign === 'right' || textAlign === 'end' ? 'selected' : null}
             onClick={() => {
               dispatch(setTextAlign('right'));
               dispatch(updateElementCss({ property: 'text-align', value: 'right' }));
