@@ -31,6 +31,7 @@ import {
   setEditingPage,
   setStencilEdits,
   setCurrentStyles,
+  resetCurrentStyles,
 } from '../../store/modules/liveEditor/actions';
 import { CampaignNameDiv, EditorContent, EditorLayout, EditorPreview } from './StyledComponents';
 import EditorToolbar from './EditorToolbar';
@@ -98,6 +99,7 @@ export default function Editor() {
     document.addEventListener('keyup', deselectPhoto);
     return () => {
       document.removeEventListener('keyup', deselectPhoto);
+      dispatch(resetCurrentStyles());
     };
   }, [dispatch]);
 

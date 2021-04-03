@@ -19,6 +19,7 @@ import {
   SET_EDITING_ELEMENT,
   SET_EDITING_PAGE,
   SET_CURRENT_STYLES,
+  RESET_CURRENT_STYLES,
   SET_FONT_SIZE,
   SET_TEXT_ALIGN,
   SET_FONT_WEIGHT,
@@ -166,6 +167,15 @@ export default function liveEditor(state = initialState, action) {
       return {
         ...state,
         ...action.payload,
+      };
+    case RESET_CURRENT_STYLES:
+      return {
+        ...state,
+        fontSize: null,
+        fontWeight: null,
+        fontStyle: null,
+        textAlign: null,
+        textDecoration: null,
       };
     case SET_FONT_SIZE:
       return {
