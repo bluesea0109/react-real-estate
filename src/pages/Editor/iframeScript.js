@@ -93,7 +93,7 @@ const domLoaded = () => {
 
   const setSelectedElement = e => {
     document.querySelectorAll('[data-customizable]').forEach(el => el.classList.remove('editing'));
-    let editingElement = e?.currentTarget?.activeElement;
+    let editingElement = document.activeElement?.id ? document.activeElement : e?.target;
     if (editingElement?.dataset?.customizable) {
       editingElement.classList.add('editing');
       const compStyles = window.getComputedStyle(editingElement);
