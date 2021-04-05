@@ -82,12 +82,13 @@ export default function Editor() {
   const [invalidCTA, setInvalidCTA] = useState(false);
   const [hideCTA, setHideCTA] = useState(false);
 
+  let rotateStyle = `${rotation}deg`;
+
   // set the stencilEdits on load
   useEffect(() => {
     if (mailoutEdit?.stencilEdits?.elements?.length)
       dispatch(setStencilEdits(mailoutEdit.stencilEdits.elements));
   }, [dispatch, mailoutEdit]);
-  let rotateStyle = `${rotation}deg`;
 
   useEffect(() => {
     const deselectPhoto = e => {
@@ -316,9 +317,9 @@ export default function Editor() {
   useEffect(() => {
     if (stencilEdits.length && editingPage) {
       const fullCssString = stencilEdits.reduce((acc, el) => {
-        if (el.type === 'cssOverride') {
+        if (el.cssPartial) {
           return (acc += el.cssPartial);
-        } else return null;
+        } else return '';
       }, '');
       sendPostMessage(editingPage, { type: 'customStyles', fullCssString });
     }
