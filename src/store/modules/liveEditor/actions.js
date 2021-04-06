@@ -16,6 +16,17 @@ export const SET_SELECTED_PHOTO = 'SET_SELECTED_PHOTO';
 export const SET_ZOOM_VALUE = 'SET_ZOOM_VALUE';
 export const SET_SELECTED_TEMPLATE = 'SET_SELECTED_TEMPLATE';
 export const SET_BIG_PHOTO = 'SET_BIG_PHOTO';
+export const SET_EDITING_ELEMENT = 'SET_EDITING_ELEMENT';
+export const SET_EDITING_PAGE = 'SET_EDITING_PAGE';
+export const SET_CURRENT_STYLES = 'SET_CURRENT_STYLES';
+export const SET_FONT_SIZE = 'SET_FONT_SIZE';
+export const SET_TEXT_ALIGN = 'SET_TEXT_ALIGN';
+export const SET_FONT_WEIGHT = 'SET_FONT_WEIGHT';
+export const SET_FONT_STYLE = 'SET_FONT_STYLE';
+export const SET_TEXT_DECORATION = 'SET_TEXT_DECORATION';
+export const RESET_CURRENT_STYLES = 'RESET_CURRENT_STYLES';
+export const SET_STENCIL_EDITS = 'SET_STENCIL_EDITS';
+export const UPDATE_ELEMENT_CSS = 'UPDATE_ELEMENT_CSS';
 export const SET_ROTATION = 'SET_ROTATION';
 
 export function setReloadIframes(payload) {
@@ -80,6 +91,50 @@ export function setZoomValue(payload) {
 
 export function setSelectedTemplate(payload) {
   return createAction(SET_SELECTED_TEMPLATE, payload);
+}
+
+export function setEditingElement(payload) {
+  return createAction(SET_EDITING_ELEMENT, payload);
+}
+
+export function setEditingPage(payload) {
+  return createAction(SET_EDITING_PAGE, payload);
+}
+
+export function setCurrentStyles(payload) {
+  return createAction(SET_CURRENT_STYLES, payload);
+}
+
+export function setFontSize(payload) {
+  return createAction(SET_FONT_SIZE, payload);
+}
+
+export function setTextAlign(payload) {
+  return createAction(SET_TEXT_ALIGN, payload);
+}
+
+export function setFontWeight(payload) {
+  return createAction(SET_FONT_WEIGHT, payload);
+}
+
+export function setFontStyle(payload) {
+  return createAction(SET_FONT_STYLE, payload);
+}
+
+export function setTextDecoration(payload) {
+  return createAction(SET_TEXT_DECORATION, payload);
+}
+
+export function resetCurrentStyles() {
+  return createAction(RESET_CURRENT_STYLES);
+}
+
+export function setStencilEdits(payload) {
+  return createAction(SET_STENCIL_EDITS, payload);
+}
+
+export function updateElementCss(payload) {
+  return createAction(UPDATE_ELEMENT_CSS, payload);
 }
 
 export function setRotation(payload) {

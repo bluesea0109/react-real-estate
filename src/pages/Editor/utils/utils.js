@@ -1,3 +1,5 @@
+import { iframeDimensions } from '../../../components/utils/utils';
+
 export const validateFile = file => {
   if (!file) {
     return 'No File Found';
@@ -38,5 +40,23 @@ export const getMinImageSize = size => {
       return { width: 2775, height: 1875 };
     default:
       return { width: 1875, height: 1275 };
+  }
+};
+
+export const calcMargin = (postcardSize, rotation, zoomValue) => {
+  let margin = '2rem';
+  let postCardHeight = iframeDimensions(postcardSize).height;
+  let postCardWidth = iframeDimensions(postcardSize).width;
+  let marginTop, marginBottom;
+
+  marginTop = marginBottom = (postCardWidth - postCardHeight) * 0.5 * zoomValue;
+
+  switch (rotation) {
+    case -90:
+      return (margin = `${marginTop}px 0px ${marginBottom}px 0px`);
+    case -270:
+      return (margin = `${marginTop}px 0px ${marginBottom}px 0px`);
+    default:
+      return margin;
   }
 };

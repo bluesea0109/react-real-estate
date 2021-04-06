@@ -91,6 +91,27 @@ const domLoaded = () => {
     });
   };
 
+  const setSelectedElement = e => {
+    document.querySelectorAll('[data-customizable]').forEach(el => el.classList.remove('editing'));
+    let editingElement = document.activeElement?.id ? document.activeElement : e?.target;
+    if (editingElement?.dataset?.customizable) {
+      editingElement.classList.add('editing');
+      const compStyles = window.getComputedStyle(editingElement);
+      const currentStyles = {};
+      currentStyles.fontSize = parseInt(compStyles.getPropertyValue('font-size'));
+      currentStyles.textAlign = compStyles.getPropertyValue('text-align');
+      currentStyles.fontWeight = compStyles.getPropertyValue('font-weight');
+      currentStyles.fontStyle = compStyles.getPropertyValue('font-style');
+      currentStyles.textDecoration = compStyles.getPropertyValue('text-decoration');
+      __parentWindow.postMessage(
+        { type: 'setEditing', id: editingElement.id, currentStyles },
+        __parentOrigin
+      );
+    } else {
+      __parentWindow.postMessage({ type: 'setEditing', id: '', currentStyles: '' }, __parentOrigin);
+    }
+  };
+
   function receiver(e) {
     __parentWindow = e.source;
     __parentOrigin = e.origin;
@@ -111,6 +132,11 @@ const domLoaded = () => {
       insertCallToAction(CTA);
     } else if (e.data?.type === 'updateAllFields') {
       updateAllFields(e.data?.replaceFieldData);
+    } else if (e.data?.type === 'customStyles') {
+      let customStyles = document.getElementById('custom-styles');
+      if (customStyles) customStyles.innerHTML = e.data?.fullCssString;
+    } else if (e.data?.type === 'resetSelected') {
+      setSelectedElement(null);
     } else console.log(JSON.stringify(e.data));
   }
 
@@ -121,6 +147,7 @@ const domLoaded = () => {
 
   window.addEventListener('message', receiver, false);
   document.addEventListener('drop', preventDefault);
+  document.addEventListener('click', setSelectedElement);
 
   Array.prototype.forEach.call(elements, function(el, i) {
     const name = el.getAttribute('title');

@@ -11,3 +11,7 @@ img.can-select:hover {
 img:focus {
   outline: none;
 }
+
+[data-customizable]:not([contenteditable]) {
+  cursor: pointer;
+}

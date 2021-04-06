@@ -27,11 +27,16 @@ import {
   setSelectedPhoto,
   setSidebarOpen,
   setBigPhoto,
+  setEditingElement,
+  setEditingPage,
+  setStencilEdits,
+  setCurrentStyles,
+  resetCurrentStyles,
 } from '../../store/modules/liveEditor/actions';
-import { sleep, iframeDimensions } from '../../components/utils/utils';
-
 import { CampaignNameDiv, EditorContent, EditorLayout, EditorPreview } from './StyledComponents';
 import EditorToolbar from './EditorToolbar';
+import { calcMargin } from './utils/utils';
+import { sleep } from '../../components/utils/utils';
 
 export default function Editor() {
   const dispatch = useDispatch();
@@ -50,6 +55,8 @@ export default function Editor() {
   const selectedPhoto = useSelector(state => state.liveEditor?.selectedPhoto);
   const bigPhoto = useSelector(state => state.liveEditor?.bigPhoto);
   const zoomValue = useSelector(state => state.liveEditor?.zoomValue);
+  const editingPage = useSelector(state => state.liveEditor?.editingPage);
+  const stencilEdits = useSelector(state => state.liveEditor?.edits?.stencilEdits);
   const rotation = useSelector(state => state.liveEditor?.rotation);
   const [activeNavItem, setActiveNavItem] = useState(1);
   const [frontLoaded, setFrontLoaded] = useState(false);
@@ -77,23 +84,11 @@ export default function Editor() {
 
   let rotateStyle = `${rotation}deg`;
 
-  const calcMargin = rotation => {
-    let margin = '2rem';
-    let postCardHeight = iframeDimensions(details?.postcardSize).height;
-    let postCardWidth = iframeDimensions(details?.postcardSize).width;
-    let marginTop, marginBottom;
-
-    marginTop = marginBottom = (postCardWidth - postCardHeight) * 0.5 * zoomValue;
-
-    switch (rotation) {
-      case -90:
-        return (margin = `${marginTop}px 0px ${marginBottom}px 0px`);
-      case -270:
-        return (margin = `${marginTop}px 0px ${marginBottom}px 0px`);
-      default:
-        return margin;
-    }
-  };
+  // set the stencilEdits on load
+  useEffect(() => {
+    if (mailoutEdit?.stencilEdits?.elements?.length)
+      dispatch(setStencilEdits(mailoutEdit.stencilEdits.elements));
+  }, [dispatch, mailoutEdit]);
 
   useEffect(() => {
     const deselectPhoto = e => {
@@ -105,6 +100,7 @@ export default function Editor() {
     document.addEventListener('keyup', deselectPhoto);
     return () => {
       document.removeEventListener('keyup', deselectPhoto);
+      dispatch(resetCurrentStyles());
     };
   }, [dispatch]);
 
@@ -126,6 +122,7 @@ export default function Editor() {
       showSaveStatus();
     }
   }, [dispatch, saveSuccess]);
+
   useEffect(() => {
     if (isCTAHidden) {
       setHideCTA(true);
@@ -254,6 +251,11 @@ export default function Editor() {
   const handlePostMessage = useCallback(
     e => {
       if (e.data?.resetSelectedPhoto) dispatch(setSelectedPhoto(''));
+      if (e.data?.type === 'setEditing') {
+        dispatch(setEditingElement(e.data.id));
+        dispatch(setCurrentStyles(e.data.currentStyles));
+        dispatch(setEditingPage(e.source?.frameElement?.name));
+      }
       if (e.source?.frameElement?.title?.includes('bm-iframe')) {
         let newFields = [];
         if (!liveEditorChanges.fields && Array.isArray(mailoutEdit?.fields)) {
@@ -312,6 +314,17 @@ export default function Editor() {
     [setFrontLoaded, setBackLoaded]
   );
 
+  useEffect(() => {
+    if (stencilEdits.length && editingPage) {
+      const fullCssString = stencilEdits.reduce((acc, el) => {
+        if (el.cssPartial) {
+          return (acc += el.cssPartial);
+        } else return '';
+      }, '');
+      sendPostMessage(editingPage, { type: 'customStyles', fullCssString });
+    }
+  }, [editingPage, stencilEdits, sendPostMessage]);
+
   const handleSave = async ({
     postcardSize,
     mailoutDisplayAgent,
@@ -347,6 +360,7 @@ export default function Editor() {
     if (customizeCTA) newData.ctas = { cta: newCTA, shortenCTA: true, hideCTA: false };
     else if (hideCTA) newData.ctas = { cta: newCTA, hideCTA: true };
     else newData.ctas = { dontOverride: true };
+    if (stencilEdits.length) newData.stencilEdits = { elements: stencilEdits };
     dispatch(updateMailoutEditPending({ newData, mailoutDisplayAgent }));
     setEditingName(false);
   };
@@ -463,7 +477,7 @@ export default function Editor() {
                   reloadPending={reloadIframesPending}
                   scale={zoomValue}
                   rotate={rotateStyle}
-                  margin={calcMargin(rotation)}
+                  margin={calcMargin(details?.postcardSize, rotation, zoomValue)}
                 />
                 <BackIframe
                   campaignId={details?._id}
@@ -476,7 +490,7 @@ export default function Editor() {
                   reloadPending={reloadIframesPending}
                   scale={zoomValue}
                   rotate={rotateStyle}
-                  margin={calcMargin(rotation)}
+                  margin={calcMargin(details?.postcardSize, rotation, zoomValue)}
                 />
               </EditorPreview>
             )}
