@@ -221,9 +221,7 @@ export default function liveEditor(state = initialState, action) {
       const { property, value } = action.payload;
       // get the index of the element being edited in the stencilEdits array
       let newEdits = [...state.edits.stencilEdits];
-      const elementIndex = newEdits.findIndex(
-        el => el.id === editingElement && el.page === editingPage
-      );
+      const elementIndex = newEdits.findIndex(el => el.id === `${editingElement}-${editingPage}`);
       if (elementIndex !== -1) {
         // found an existing entry parse the css edit and save
         let cssString = newEdits[elementIndex].cssPartial?.match(/\{(.*?)\}/)[1];
@@ -237,7 +235,12 @@ export default function liveEditor(state = initialState, action) {
       } else {
         // no edits found, push the edit as the first entry
         const cssPartial = `#${editingElement}{${property}:${value}}`;
-        newEdits.push({ id: editingElement, page: editingPage, type: 'cssOverride', cssPartial });
+        newEdits.push({
+          id: `${editingElement}-${editingPage}`,
+          page: editingPage,
+          type: 'cssOverride',
+          cssPartial,
+        });
       }
       return {
         ...state,
