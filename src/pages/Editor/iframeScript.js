@@ -92,6 +92,7 @@ const domLoaded = () => {
 
   const setSelectedElement = e => {
     document.querySelectorAll('[data-customizable]').forEach(el => el.classList.remove('editing'));
+    if (e === null) return;
     let editingElement = document.activeElement?.id ? document.activeElement : e?.target;
     if (editingElement?.dataset?.customizable) {
       editingElement.classList.add('editing');

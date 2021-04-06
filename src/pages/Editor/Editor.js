@@ -315,6 +315,7 @@ export default function Editor() {
   );
 
   useEffect(() => {
+    sendPostMessage(editingPage === 'front' ? 'back' : 'front', { type: 'resetSelected' });
     if (stencilEdits.length && editingPage) {
       const fullCssString = stencilEdits.reduce((acc, el) => {
         if (el.cssPartial) {
