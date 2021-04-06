@@ -47,10 +47,11 @@ const ListingCard = ({ listingDetails, listingItem, userInfo, peerUser, userType
     );
   else {
     const subtitle = `${listingItem.city}, ${listingItem.state} ${listingItem.postalCode}`;
-    const price = `$${listingItem.price.toLocaleString('en', {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    })}`;
+    const price =
+      `$${listingItem.price?.toLocaleString('en', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })}` || '-';
     const bed = listingItem ? (listingItem.bedrooms ? listingItem.bedrooms : '-') : '-';
     const bath = listingItem
       ? listingItem.bathsTotalDecimal
