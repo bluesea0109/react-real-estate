@@ -31,7 +31,7 @@ import {
   setEditingPage,
   setStencilEdits,
   setCurrentStyles,
-  resetCurrentStyles,
+  resetLiveEdit,
 } from '../../store/modules/liveEditor/actions';
 import { CampaignNameDiv, EditorContent, EditorLayout, EditorPreview } from './StyledComponents';
 import EditorToolbar from './EditorToolbar';
@@ -100,7 +100,7 @@ export default function Editor() {
     document.addEventListener('keyup', deselectPhoto);
     return () => {
       document.removeEventListener('keyup', deselectPhoto);
-      dispatch(resetCurrentStyles());
+      dispatch(resetLiveEdit());
     };
   }, [dispatch]);
 
@@ -315,6 +315,7 @@ export default function Editor() {
   );
 
   useEffect(() => {
+    sendPostMessage(editingPage === 'front' ? 'back' : 'front', { type: 'resetSelected' });
     if (stencilEdits.length && editingPage) {
       const fullCssString = stencilEdits.reduce((acc, el) => {
         if (el.cssPartial) {

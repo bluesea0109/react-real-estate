@@ -24,7 +24,7 @@ export const SET_TEXT_ALIGN = 'SET_TEXT_ALIGN';
 export const SET_FONT_WEIGHT = 'SET_FONT_WEIGHT';
 export const SET_FONT_STYLE = 'SET_FONT_STYLE';
 export const SET_TEXT_DECORATION = 'SET_TEXT_DECORATION';
-export const RESET_CURRENT_STYLES = 'RESET_CURRENT_STYLES';
+export const RESET_LIVE_EDIT = 'RESET_LIVE_EDIT';
 export const SET_STENCIL_EDITS = 'SET_STENCIL_EDITS';
 export const UPDATE_ELEMENT_CSS = 'UPDATE_ELEMENT_CSS';
 export const SET_ROTATION = 'SET_ROTATION';
@@ -125,8 +125,8 @@ export function setTextDecoration(payload) {
   return createAction(SET_TEXT_DECORATION, payload);
 }
 
-export function resetCurrentStyles() {
-  return createAction(RESET_CURRENT_STYLES);
+export function resetLiveEdit() {
+  return createAction(RESET_LIVE_EDIT);
 }
 
 export function setStencilEdits(payload) {

@@ -2,7 +2,7 @@ const getAllEditableFieldsAsMergeVariables = function() {
   let mergeVariables = [];
   const elements = document.querySelectorAll('[contenteditable=true]');
   Array.prototype.forEach.call(elements, function(el, i) {
-    const name = el.getAttribute('title');
+    const name = el.id;
     const value = el.innerHTML;
     mergeVariables.push({ name: name, value: value });
   });
@@ -13,8 +13,7 @@ const setAllEditableFieldsAsMergeVariables = function(mergeVariables) {
   mergeVariables.forEach(function(item) {
     const name = item.name;
     const value = item.value;
-    const selector = 'span[title=' + name + ']';
-    const el = document.querySelector(selector);
+    const el = document.getElementById(name);
     if (!el) return;
     el.innerHTML = value;
   });
@@ -47,7 +46,7 @@ const domLoaded = () => {
   };
 
   const handleImgSwitchClick = e => {
-    const name = e.target.getAttribute('title');
+    const name = e.target.id;
     __parentWindow.postMessage(
       { name, value: newImgSrc, resetSelectedPhoto: true },
       __parentOrigin
@@ -85,7 +84,7 @@ const domLoaded = () => {
 
   const updateAllFields = newData => {
     newData.forEach(field => {
-      let node = document.querySelector(`[title="${field.name}"]`);
+      let node = document.getElementById(field.name);
       if (node?.nodeName === 'IMG') node.src = field.value;
       else if (node) node.innerHTML = field.value;
     });
@@ -93,6 +92,7 @@ const domLoaded = () => {
 
   const setSelectedElement = e => {
     document.querySelectorAll('[data-customizable]').forEach(el => el.classList.remove('editing'));
+    if (e === null) return;
     let editingElement = document.activeElement?.id ? document.activeElement : e?.target;
     if (editingElement?.dataset?.customizable) {
       editingElement.classList.add('editing');
@@ -150,7 +150,7 @@ const domLoaded = () => {
   document.addEventListener('click', setSelectedElement);
 
   Array.prototype.forEach.call(elements, function(el, i) {
-    const name = el.getAttribute('title');
+    const name = el.id;
     const value = el.innerHTML;
     let changed = false;
     let newValue = null;
